@@ -21,7 +21,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
     publishNonDefault true
     flavorDimensions "analytics"
 
@@ -31,8 +31,8 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion 23
+        targetSdkVersion 33
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField "String", "AMPLITUDE_API_KEY", "\"${System.getenv("AMPLITUDE_API_KEY")}\""
@@ -42,6 +42,7 @@ android {
         withAnalytics { dimension "analytics" }
         noAnalytics { dimension "analytics" }
     }
+    namespace 'com.moez.QKSMS.data'
 }
 
 dependencies {
@@ -50,6 +51,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidx_appcompat_version"
     implementation "androidx.core:core-ktx:$androidx_core_version"
     implementation "androidx.exifinterface:exifinterface:$androidx_exifinterface_version"
+    implementation "androidx.documentfile:documentfile:$androidx_documentfile_version"
 
     // glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
