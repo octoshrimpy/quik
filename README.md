@@ -5,11 +5,11 @@ This fork is attempting to be up to date with new features. Ultimately, we'd lik
 
 ![QKSMS](https://user-images.githubusercontent.com/4358785/39079306-a5a409b6-44e5-11e8-8589-b4acd63b636e.jpg)
 
+> **Warning**
+This image is outdated! Will be updating it soon.
+
 # QUIK
 
-
-> **Warning**
-this info is mostly outdated! we will be updating it slowly.
 
 [![Build Status](https://circleci.com/gh/moezbhatti/qksms/tree/master.svg?style=svg)](https://circleci.com/gh/moezbhatti/qksms/tree/master)
 [![Crowdin](https://badges.crowdin.net/qksms/localized.svg)](https://crowdin.com/project/qksms)
