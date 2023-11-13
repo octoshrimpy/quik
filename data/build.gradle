@@ -21,7 +21,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
     publishNonDefault true
     flavorDimensions "analytics"
 
@@ -62,7 +62,9 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    compileOnly "javax.annotation:jsr250-api:1.0"
+    //Resolve jdk8+ Generation Annotations - javax annotation does not exist
+    compileOnly 'com.github.pengrad:jdk9-deps:1.0'
+//    compileOnly "javax.annotation:jsr250-api:1.0"
 
     // rxjava
     implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"

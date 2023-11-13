@@ -23,7 +23,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
 
     compileOptions {
         sourceCompatibility 1.8
@@ -44,7 +44,8 @@ dependencies {
     // dagger
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    compileOnly "javax.annotation:jsr250-api:1.0"
+    //Resolve jdk8+ Generation Annotations - javax annotation does not exist
+    compileOnly 'com.github.pengrad:jdk9-deps:1.0'
 
     // realm
     kapt "io.realm:realm-annotations:$realm_version"
