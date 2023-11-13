@@ -21,6 +21,8 @@ QUIK is an open source replacement to the [stock messaging app](https://github.c
 
 QUIK is not yet available to download, but will be available as an installable APK from the releases tab and F-Droid.
 
+## Matrix Chat
+You can meet with the community over at [#quik-sms:matrix.org](https://matrix.to/#/#quik-sms:matrix.org)
 <!--
 <a href="https://play.google.com/store/apps/details?id=com.moez.QKSMS"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Download on Google Play" height="100"></a><a href="https://f-droid.org/repository/browse/?fdid=com.moez.QKSMS"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
 -->
