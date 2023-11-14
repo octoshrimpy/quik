@@ -41,6 +41,10 @@ jobs:
        uses: actions/download-artifact@v3
        with:
          name: apk
+         
+     - name: List files in the APK directory
+       run: ls -la presentation/build/outputs/apk/noAnalytics/debug/
+
      - name: Create and upload release
        uses: softprops/action-gh-release@v1
        with:
