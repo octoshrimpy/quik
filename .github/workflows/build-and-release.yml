@@ -43,7 +43,7 @@ jobs:
          name: apk
          
      - name: List files in the APK directory
-       run: ls -Rla presentation/
+       run: ls -Rla ./
 
      - name: Create and upload release
        uses: softprops/action-gh-release@v1
