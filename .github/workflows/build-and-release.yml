@@ -27,7 +27,8 @@ jobs:
        uses: actions/upload-artifact@v1
        with:
          name: apk
-         path: releases/app-debug.apk
+         path: presentation/build/outputs/apk/noAnalytics/debug/QKSMS-noAnalytics-debug.apk
+
 
  release:
    name: Release APK
