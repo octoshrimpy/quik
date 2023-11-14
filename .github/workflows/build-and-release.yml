@@ -48,6 +48,6 @@ jobs:
      - name: Create and upload release
        uses: softprops/action-gh-release@v1
        with:
-         files: presentation/build/outputs/apk/noAnalytics/debug/QKSMS-noAnalytics-debug.apk
+         files: QKSMS-noAnalytics-debug.apk
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
