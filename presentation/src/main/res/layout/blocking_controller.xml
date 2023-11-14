@@ -33,20 +33,20 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp">
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/blockingManager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/blocking_manager_title"
             tools:summary="@string/blocking_manager_qksms_title" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/blockedNumbers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/blocked_numbers_title" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/drop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             app:title="@string/blocking_drop_title"
             app:widget="@layout/settings_switch_widget" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/blockedMessages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

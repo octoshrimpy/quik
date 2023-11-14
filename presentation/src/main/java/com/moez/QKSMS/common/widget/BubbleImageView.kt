@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.widget
+package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
 import android.graphics.Canvas
@@ -24,7 +24,7 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.widget.ImageView
-import com.moez.QKSMS.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 
 class BubbleImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ImageView(context, attrs) {
 

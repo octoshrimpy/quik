@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.util
+package dev.octoshrimpy.quik.common.util
 
 import android.annotation.TargetApi
 import android.content.Context
@@ -25,13 +25,13 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
-import com.moez.QKSMS.R
-import com.moez.QKSMS.feature.compose.ComposeActivity
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
-import com.moez.QKSMS.util.GlideApp
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.feature.compose.ComposeActivity
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.util.GlideApp
+import dev.octoshrimpy.quik.util.tryOrNull
 import me.leolin.shortcutbadger.ShortcutBadger
 import javax.inject.Inject
 
@@ -39,7 +39,7 @@ class ShortcutManagerImpl @Inject constructor(
     private val context: Context,
     private val conversationRepo: ConversationRepository,
     private val messageRepo: MessageRepository
-) : com.moez.QKSMS.manager.ShortcutManager {
+) : dev.octoshrimpy.quik.manager.ShortcutManager {
 
     override fun updateBadge() {
         val count = messageRepo.getUnreadCount().toInt()

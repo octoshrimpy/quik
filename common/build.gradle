@@ -28,7 +28,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
-    namespace 'com.moez.QKSMS.common'
+    namespace 'dev.octoshrimpy.quik.common'
 }
 
 dependencies {

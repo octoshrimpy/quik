@@ -16,26 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
 import android.content.ContentUris
 import android.content.Context
 import android.provider.Telephony
-import com.moez.QKSMS.compat.TelephonyCompat
-import com.moez.QKSMS.extensions.anyOf
-import com.moez.QKSMS.extensions.asObservable
-import com.moez.QKSMS.extensions.map
-import com.moez.QKSMS.extensions.removeAccents
-import com.moez.QKSMS.filter.ConversationFilter
-import com.moez.QKSMS.mapper.CursorToConversation
-import com.moez.QKSMS.mapper.CursorToRecipient
-import com.moez.QKSMS.model.Contact
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.Recipient
-import com.moez.QKSMS.model.SearchResult
-import com.moez.QKSMS.util.PhoneNumberUtils
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.compat.TelephonyCompat
+import dev.octoshrimpy.quik.extensions.anyOf
+import dev.octoshrimpy.quik.extensions.asObservable
+import dev.octoshrimpy.quik.extensions.map
+import dev.octoshrimpy.quik.extensions.removeAccents
+import dev.octoshrimpy.quik.filter.ConversationFilter
+import dev.octoshrimpy.quik.mapper.CursorToConversation
+import dev.octoshrimpy.quik.mapper.CursorToRecipient
+import dev.octoshrimpy.quik.model.Contact
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.Recipient
+import dev.octoshrimpy.quik.model.SearchResult
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

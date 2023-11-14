@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.scheduled
+package dev.octoshrimpy.quik.feature.scheduled
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -24,12 +24,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.QkDialog
-import com.moez.QKSMS.common.base.QkThemedActivity
-import com.moez.QKSMS.common.util.FontProvider
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.setTint
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.QkDialog
+import dev.octoshrimpy.quik.common.base.QkThemedActivity
+import dev.octoshrimpy.quik.common.util.FontProvider
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.collapsing_toolbar.*
 import kotlinx.android.synthetic.main.scheduled_activity.*

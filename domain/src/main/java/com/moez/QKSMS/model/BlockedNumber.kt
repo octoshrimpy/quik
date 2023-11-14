@@ -1,4 +1,4 @@
-package com.moez.QKSMS.model
+package dev.octoshrimpy.quik.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

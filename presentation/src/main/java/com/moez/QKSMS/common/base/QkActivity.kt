@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.base
+package dev.octoshrimpy.quik.common.base
 
 import android.annotation.SuppressLint
 import android.os.Bundle

@@ -17,7 +17,7 @@
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moez.QKSMS.feature.widget
+package dev.octoshrimpy.quik.feature.widget
 
 import android.content.Intent
 import android.widget.RemoteViewsService

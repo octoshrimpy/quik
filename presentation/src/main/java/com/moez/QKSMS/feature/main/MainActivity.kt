@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.main
+package dev.octoshrimpy.quik.feature.main
 
 import android.Manifest
 import android.animation.ObjectAnimator
@@ -41,23 +41,23 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.androidxcompat.drawerOpen
-import com.moez.QKSMS.common.base.QkThemedActivity
-import com.moez.QKSMS.common.util.extensions.autoScrollToStart
-import com.moez.QKSMS.common.util.extensions.dismissKeyboard
-import com.moez.QKSMS.common.util.extensions.resolveThemeColor
-import com.moez.QKSMS.common.util.extensions.scrapViews
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.setTint
-import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.feature.blocking.BlockingDialog
-import com.moez.QKSMS.feature.changelog.ChangelogDialog
-import com.moez.QKSMS.feature.conversations.ConversationItemTouchCallback
-import com.moez.QKSMS.feature.conversations.ConversationsAdapter
-import com.moez.QKSMS.manager.ChangelogManager
-import com.moez.QKSMS.repository.SyncRepository
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.androidxcompat.drawerOpen
+import dev.octoshrimpy.quik.common.base.QkThemedActivity
+import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
+import dev.octoshrimpy.quik.common.util.extensions.dismissKeyboard
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.common.util.extensions.scrapViews
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.feature.blocking.BlockingDialog
+import dev.octoshrimpy.quik.feature.changelog.ChangelogDialog
+import dev.octoshrimpy.quik.feature.conversations.ConversationItemTouchCallback
+import dev.octoshrimpy.quik.feature.conversations.ConversationsAdapter
+import dev.octoshrimpy.quik.manager.ChangelogManager
+import dev.octoshrimpy.quik.repository.SyncRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection

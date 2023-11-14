@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.blocking.numbers
+package dev.octoshrimpy.quik.feature.blocking.numbers
 
-import com.moez.QKSMS.model.BlockedNumber
+import dev.octoshrimpy.quik.model.BlockedNumber
 import io.realm.RealmList
 import io.realm.RealmResults
 

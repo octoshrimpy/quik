@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.contacts
+package dev.octoshrimpy.quik.feature.contacts
 
 import android.app.Activity
 import android.content.Intent
@@ -27,19 +27,19 @@ import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.ViewModelFactory
-import com.moez.QKSMS.common.base.QkThemedActivity
-import com.moez.QKSMS.common.util.extensions.hideKeyboard
-import com.moez.QKSMS.common.util.extensions.resolveThemeColor
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.showKeyboard
-import com.moez.QKSMS.common.widget.QkDialog
-import com.moez.QKSMS.extensions.Optional
-import com.moez.QKSMS.feature.compose.editing.ComposeItem
-import com.moez.QKSMS.feature.compose.editing.ComposeItemAdapter
-import com.moez.QKSMS.feature.compose.editing.PhoneNumberAction
-import com.moez.QKSMS.feature.compose.editing.PhoneNumberPickerAdapter
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.ViewModelFactory
+import dev.octoshrimpy.quik.common.base.QkThemedActivity
+import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
+import dev.octoshrimpy.quik.common.widget.QkDialog
+import dev.octoshrimpy.quik.extensions.Optional
+import dev.octoshrimpy.quik.feature.compose.editing.ComposeItem
+import dev.octoshrimpy.quik.feature.compose.editing.ComposeItemAdapter
+import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberAction
+import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberPickerAdapter
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject

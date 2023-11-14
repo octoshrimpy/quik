@@ -23,7 +23,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.moez.QKSMS.feature.gallery.GalleryActivity">
+    tools:context="dev.octoshrimpy.quik.feature.gallery.GalleryActivity">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
@@ -44,7 +44,7 @@
             android:gravity="center_vertical"
             android:orientation="vertical">
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/toolbarTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 app:textSize="toolbar"
                 tools:text="Conversations" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/toolbarSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

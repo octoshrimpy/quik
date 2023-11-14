@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.widget
+package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
 import android.util.AttributeSet
@@ -24,11 +24,11 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.util.extensions.resolveThemeAttribute
-import com.moez.QKSMS.common.util.extensions.resolveThemeColorStateList
-import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.injection.appComponent
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeAttribute
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColorStateList
+import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.injection.appComponent
 import kotlinx.android.synthetic.main.preference_view.view.*
 
 class PreferenceView @JvmOverloads constructor(

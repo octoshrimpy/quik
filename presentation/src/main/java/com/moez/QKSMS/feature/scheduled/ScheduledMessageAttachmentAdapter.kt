@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.scheduled
+package dev.octoshrimpy.quik.feature.scheduled
 
 import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkAdapter
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.util.GlideApp
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkAdapter
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.util.GlideApp
 import kotlinx.android.synthetic.main.attachment_image_list_item.view.*
 import kotlinx.android.synthetic.main.scheduled_message_image_list_item.*
 import javax.inject.Inject

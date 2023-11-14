@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.androidxcompat;
+package dev.octoshrimpy.quik.common.androidxcompat;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;

@@ -16,20 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose.part
+package dev.octoshrimpy.quik.feature.compose.part
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.moez.QKSMS.common.base.QkAdapter
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.extensions.forwardTouches
-import com.moez.QKSMS.extensions.isSmil
-import com.moez.QKSMS.extensions.isText
-import com.moez.QKSMS.feature.compose.BubbleUtils.canGroup
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.MmsPart
+import dev.octoshrimpy.quik.common.base.QkAdapter
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
+import dev.octoshrimpy.quik.extensions.isSmil
+import dev.octoshrimpy.quik.extensions.isText
+import dev.octoshrimpy.quik.feature.compose.BubbleUtils.canGroup
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.MmsPart
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.message_list_item_in.*
 import javax.inject.Inject

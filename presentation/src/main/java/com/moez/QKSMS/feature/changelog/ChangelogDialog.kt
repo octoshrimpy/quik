@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.changelog
+package dev.octoshrimpy.quik.feature.changelog
 
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import com.moez.QKSMS.BuildConfig
-import com.moez.QKSMS.R
-import com.moez.QKSMS.feature.main.MainActivity
-import com.moez.QKSMS.manager.ChangelogManager
+import dev.octoshrimpy.quik.BuildConfig
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.feature.main.MainActivity
+import dev.octoshrimpy.quik.manager.ChangelogManager
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.changelog_dialog.view.*

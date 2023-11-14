@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.widget
+package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
 import android.os.Build
@@ -30,9 +30,9 @@ import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import com.google.android.mms.ContentType
-import com.moez.QKSMS.common.util.TextViewStyler
-import com.moez.QKSMS.injection.appComponent
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.common.util.TextViewStyler
+import dev.octoshrimpy.quik.injection.appComponent
+import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import javax.inject.Inject

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.notificationprefs
+package dev.octoshrimpy.quik.feature.notificationprefs
 
 import android.app.Activity
 import android.content.Intent
@@ -28,12 +28,12 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.QkDialog
-import com.moez.QKSMS.common.base.QkThemedActivity
-import com.moez.QKSMS.common.util.extensions.animateLayoutChanges
-import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.common.widget.PreferenceView
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.QkDialog
+import dev.octoshrimpy.quik.common.base.QkThemedActivity
+import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
+import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.common.widget.PreferenceView
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection

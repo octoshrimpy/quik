@@ -23,7 +23,7 @@
     android:layout_height="48dp"
     android:orientation="horizontal">
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/number"
         style="@style/TextPrimary"
         android:layout_width="0dp"

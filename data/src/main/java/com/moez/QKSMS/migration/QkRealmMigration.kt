@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.migration
+package dev.octoshrimpy.quik.migration
 
 import android.annotation.SuppressLint
-import com.moez.QKSMS.extensions.map
-import com.moez.QKSMS.mapper.CursorToContactImpl
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.extensions.map
+import dev.octoshrimpy.quik.mapper.CursorToContactImpl
+import dev.octoshrimpy.quik.util.Preferences
 import io.realm.DynamicRealm
 import io.realm.DynamicRealmObject
 import io.realm.FieldAttribute

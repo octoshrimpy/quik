@@ -76,7 +76,7 @@
         app:layout_constraintStart_toStartOf="@id/message"
         app:layout_constraintTop_toTopOf="@id/message" />
 
-    <com.moez.QKSMS.common.widget.QkEditText
+    <dev.octoshrimpy.quik.common.widget.QkEditText
         android:id="@+id/message"
         style="@style/TextPrimary"
         android:layout_width="0dp"
@@ -110,7 +110,7 @@
         app:layout_constraintBottom_toBottomOf="@id/message"
         app:layout_constraintEnd_toEndOf="@id/messageBackground" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/simIndex"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -125,7 +125,7 @@
         tools:ignore="SpUsage"
         tools:text="1" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/counter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1">
 
-        <com.moez.QKSMS.common.widget.QkTextView
+        <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/toolbarTitle"
             style="@style/ToolbarText"
             tools:text="Conversations" />

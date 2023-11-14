@@ -16,19 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose.part
+package dev.octoshrimpy.quik.feature.compose.part
 
 import android.content.Context
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.common.widget.BubbleImageView
-import com.moez.QKSMS.extensions.isImage
-import com.moez.QKSMS.extensions.isVideo
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.MmsPart
-import com.moez.QKSMS.util.GlideApp
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.common.widget.BubbleImageView
+import dev.octoshrimpy.quik.extensions.isImage
+import dev.octoshrimpy.quik.extensions.isVideo
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.MmsPart
+import dev.octoshrimpy.quik.util.GlideApp
 import kotlinx.android.synthetic.main.mms_preview_list_item.*
 import javax.inject.Inject
 

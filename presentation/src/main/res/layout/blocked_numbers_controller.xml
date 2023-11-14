@@ -34,7 +34,7 @@
         android:paddingBottom="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

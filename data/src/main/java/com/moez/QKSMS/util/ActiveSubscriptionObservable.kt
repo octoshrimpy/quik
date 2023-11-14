@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.util
+package dev.octoshrimpy.quik.util
 
-import com.moez.QKSMS.compat.SubscriptionInfoCompat
-import com.moez.QKSMS.compat.SubscriptionManagerCompat
+import dev.octoshrimpy.quik.compat.SubscriptionInfoCompat
+import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable

@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.extensions
+package dev.octoshrimpy.quik.extensions
 
 import com.google.android.mms.ContentType
-import com.moez.QKSMS.model.MmsPart
+import dev.octoshrimpy.quik.model.MmsPart
 
 fun MmsPart.isSmil() = ContentType.APP_SMIL == type
 

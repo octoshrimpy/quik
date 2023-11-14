@@ -24,7 +24,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.moez.QKSMS.feature.compose.ComposeActivity">
+    tools:context="dev.octoshrimpy.quik.feature.compose.ComposeActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contacts"
@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:animateLayoutChanges="true">
 
-            <com.moez.QKSMS.common.widget.QkEditText
+            <dev.octoshrimpy.quik.common.widget.QkEditText
                 android:id="@+id/search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

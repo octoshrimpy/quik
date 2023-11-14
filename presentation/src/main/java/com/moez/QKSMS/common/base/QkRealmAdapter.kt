@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.base
+package dev.octoshrimpy.quik.common.base
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.moez.QKSMS.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.OrderedRealmCollection

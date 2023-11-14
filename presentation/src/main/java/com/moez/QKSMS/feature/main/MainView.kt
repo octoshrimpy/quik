@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.main
+package dev.octoshrimpy.quik.feature.main
 
 import android.content.Intent
-import com.moez.QKSMS.common.base.QkView
-import com.moez.QKSMS.manager.ChangelogManager
+import dev.octoshrimpy.quik.common.base.QkView
+import dev.octoshrimpy.quik.manager.ChangelogManager
 import io.reactivex.Observable
 
 interface MainView : QkView<MainState> {

@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.settings.swipe
+package dev.octoshrimpy.quik.feature.settings.swipe
 
 import android.content.Context
 import androidx.annotation.DrawableRes
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkPresenter
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkPresenter
+import dev.octoshrimpy.quik.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign

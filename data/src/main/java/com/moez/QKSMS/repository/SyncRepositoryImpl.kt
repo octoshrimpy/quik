@@ -16,34 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.Telephony
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.moez.QKSMS.extensions.forEach
-import com.moez.QKSMS.extensions.insertOrUpdate
-import com.moez.QKSMS.extensions.map
-import com.moez.QKSMS.manager.KeyManager
-import com.moez.QKSMS.mapper.CursorToContact
-import com.moez.QKSMS.mapper.CursorToContactGroup
-import com.moez.QKSMS.mapper.CursorToContactGroupMember
-import com.moez.QKSMS.mapper.CursorToConversation
-import com.moez.QKSMS.mapper.CursorToMessage
-import com.moez.QKSMS.mapper.CursorToPart
-import com.moez.QKSMS.mapper.CursorToRecipient
-import com.moez.QKSMS.model.Contact
-import com.moez.QKSMS.model.ContactGroup
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.MmsPart
-import com.moez.QKSMS.model.PhoneNumber
-import com.moez.QKSMS.model.Recipient
-import com.moez.QKSMS.model.SyncLog
-import com.moez.QKSMS.util.PhoneNumberUtils
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.extensions.forEach
+import dev.octoshrimpy.quik.extensions.insertOrUpdate
+import dev.octoshrimpy.quik.extensions.map
+import dev.octoshrimpy.quik.manager.KeyManager
+import dev.octoshrimpy.quik.mapper.CursorToContact
+import dev.octoshrimpy.quik.mapper.CursorToContactGroup
+import dev.octoshrimpy.quik.mapper.CursorToContactGroupMember
+import dev.octoshrimpy.quik.mapper.CursorToConversation
+import dev.octoshrimpy.quik.mapper.CursorToMessage
+import dev.octoshrimpy.quik.mapper.CursorToPart
+import dev.octoshrimpy.quik.mapper.CursorToRecipient
+import dev.octoshrimpy.quik.model.Contact
+import dev.octoshrimpy.quik.model.ContactGroup
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.MmsPart
+import dev.octoshrimpy.quik.model.PhoneNumber
+import dev.octoshrimpy.quik.model.Recipient
+import dev.octoshrimpy.quik.model.SyncLog
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm

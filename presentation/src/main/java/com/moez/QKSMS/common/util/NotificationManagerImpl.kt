@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.util
+package dev.octoshrimpy.quik.common.util
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -38,25 +38,25 @@ import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.util.extensions.dpToPx
-import com.moez.QKSMS.extensions.isImage
-import com.moez.QKSMS.feature.compose.ComposeActivity
-import com.moez.QKSMS.feature.qkreply.QkReplyActivity
-import com.moez.QKSMS.manager.PermissionManager
-import com.moez.QKSMS.mapper.CursorToPartImpl
-import com.moez.QKSMS.receiver.BlockThreadReceiver
-import com.moez.QKSMS.receiver.DeleteMessagesReceiver
-import com.moez.QKSMS.receiver.MarkArchivedReceiver
-import com.moez.QKSMS.receiver.MarkReadReceiver
-import com.moez.QKSMS.receiver.MarkSeenReceiver
-import com.moez.QKSMS.receiver.RemoteMessagingReceiver
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
-import com.moez.QKSMS.util.GlideApp
-import com.moez.QKSMS.util.PhoneNumberUtils
-import com.moez.QKSMS.util.Preferences
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.extensions.isImage
+import dev.octoshrimpy.quik.feature.compose.ComposeActivity
+import dev.octoshrimpy.quik.feature.qkreply.QkReplyActivity
+import dev.octoshrimpy.quik.manager.PermissionManager
+import dev.octoshrimpy.quik.mapper.CursorToPartImpl
+import dev.octoshrimpy.quik.receiver.BlockThreadReceiver
+import dev.octoshrimpy.quik.receiver.DeleteMessagesReceiver
+import dev.octoshrimpy.quik.receiver.MarkArchivedReceiver
+import dev.octoshrimpy.quik.receiver.MarkReadReceiver
+import dev.octoshrimpy.quik.receiver.MarkSeenReceiver
+import dev.octoshrimpy.quik.receiver.RemoteMessagingReceiver
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.util.GlideApp
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -70,7 +70,7 @@ class NotificationManagerImpl @Inject constructor(
     private val messageRepo: MessageRepository,
     private val permissions: PermissionManager,
     private val phoneNumberUtils: PhoneNumberUtils
-) : com.moez.QKSMS.manager.NotificationManager {
+) : dev.octoshrimpy.quik.manager.NotificationManager {
 
     companion object {
         const val DEFAULT_CHANNEL_ID = "notifications_default"

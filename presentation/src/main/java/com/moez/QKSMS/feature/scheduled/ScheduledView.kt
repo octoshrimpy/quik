@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.scheduled
+package dev.octoshrimpy.quik.feature.scheduled
 
-import com.moez.QKSMS.common.base.QkView
+import dev.octoshrimpy.quik.common.base.QkView
 import io.reactivex.Observable
 
 interface ScheduledView : QkView<ScheduledState> {

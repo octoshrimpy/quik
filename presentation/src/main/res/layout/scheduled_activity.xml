@@ -42,7 +42,7 @@
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp">
 
-                <com.moez.QKSMS.common.widget.QkTextView
+                <dev.octoshrimpy.quik.common.widget.QkTextView
                     style="@style/TextPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,12 +54,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp" />
 
-                <com.moez.QKSMS.common.widget.TightTextView
+                <dev.octoshrimpy.quik.common.widget.TightTextView
                     style="@style/ScheduledSampleTextStyle"
                     android:layout_gravity="end"
                     android:text="@string/scheduled_empty_message_1" />
 
-                <com.moez.QKSMS.common.widget.TightTextView
+                <dev.octoshrimpy.quik.common.widget.TightTextView
                     android:id="@+id/sampleMessage"
                     style="@style/ScheduledSampleTextStyle"
                     android:layout_marginTop="16dp"
@@ -68,13 +68,13 @@
                     tools:backgroundTint="@color/tools_theme"
                     tools:textColor="@color/textPrimaryDark" />
 
-                <com.moez.QKSMS.common.widget.TightTextView
+                <dev.octoshrimpy.quik.common.widget.TightTextView
                     style="@style/ScheduledSampleTextStyle"
                     android:layout_gravity="end"
                     android:layout_marginTop="16dp"
                     android:text="@string/scheduled_empty_message_3" />
 
-                <com.moez.QKSMS.common.widget.QkTextView
+                <dev.octoshrimpy.quik.common.widget.QkTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -138,7 +138,7 @@
             android:src="@drawable/ic_star_black_24dp"
             tools:tint="@color/textPrimaryDark" />
 
-        <com.moez.QKSMS.common.widget.QkTextView
+        <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/upgradeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.manager
+package dev.octoshrimpy.quik.manager
 
 import android.content.Context
-import com.moez.QKSMS.common.util.extensions.versionCode
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.common.util.extensions.versionCode
+import dev.octoshrimpy.quik.util.Preferences
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi

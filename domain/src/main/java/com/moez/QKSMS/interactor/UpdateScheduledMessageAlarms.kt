@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.interactor
+package dev.octoshrimpy.quik.interactor
 
-import com.moez.QKSMS.manager.AlarmManager
-import com.moez.QKSMS.repository.ScheduledMessageRepository
+import dev.octoshrimpy.quik.manager.AlarmManager
+import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import io.reactivex.Flowable
 import javax.inject.Inject
 

@@ -34,7 +34,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 33
     }
-    namespace 'com.moez.QKSMS.domain'
+    namespace 'dev.octoshrimpy.quik.domain'
 }
 
 dependencies {

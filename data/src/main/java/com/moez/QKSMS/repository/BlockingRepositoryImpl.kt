@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
-import com.moez.QKSMS.extensions.anyOf
-import com.moez.QKSMS.model.BlockedNumber
-import com.moez.QKSMS.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.extensions.anyOf
+import dev.octoshrimpy.quik.model.BlockedNumber
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import io.realm.Realm
 import io.realm.RealmResults
 import javax.inject.Inject

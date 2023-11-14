@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose.editing
+package dev.octoshrimpy.quik.feature.compose.editing
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkAdapter
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.model.PhoneNumber
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkAdapter
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.model.PhoneNumber
 import kotlinx.android.synthetic.main.contact_number_list_item.*
 
 class PhoneNumberAdapter : QkAdapter<PhoneNumber>() {

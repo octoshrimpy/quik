@@ -16,22 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.qkreply
+package dev.octoshrimpy.quik.feature.qkreply
 
 import android.telephony.SmsMessage
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.base.QkViewModel
-import com.moez.QKSMS.compat.SubscriptionManagerCompat
-import com.moez.QKSMS.extensions.asObservable
-import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.interactor.DeleteMessages
-import com.moez.QKSMS.interactor.MarkRead
-import com.moez.QKSMS.interactor.SendMessage
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
-import com.moez.QKSMS.util.ActiveSubscriptionObservable
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkViewModel
+import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
+import dev.octoshrimpy.quik.extensions.asObservable
+import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.interactor.DeleteMessages
+import dev.octoshrimpy.quik.interactor.MarkRead
+import dev.octoshrimpy.quik.interactor.SendMessage
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.util.ActiveSubscriptionObservable
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.Observables

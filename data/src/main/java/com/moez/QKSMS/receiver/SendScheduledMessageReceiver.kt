@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.receiver
+package dev.octoshrimpy.quik.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.moez.QKSMS.interactor.SendScheduledMessage
-import com.moez.QKSMS.repository.MessageRepository
+import dev.octoshrimpy.quik.interactor.SendScheduledMessage
+import dev.octoshrimpy.quik.repository.MessageRepository
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 

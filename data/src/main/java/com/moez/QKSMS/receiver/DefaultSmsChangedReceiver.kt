@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.receiver
+package dev.octoshrimpy.quik.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -24,8 +24,8 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Telephony
 import androidx.annotation.RequiresApi
-import com.moez.QKSMS.interactor.SyncMessages
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.interactor.SyncMessages
+import dev.octoshrimpy.quik.util.Preferences
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 

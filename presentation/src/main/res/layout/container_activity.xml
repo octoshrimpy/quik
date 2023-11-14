@@ -28,7 +28,7 @@
         style="@style/Toolbar"
         android:elevation="8dp">
 
-        <com.moez.QKSMS.common.widget.QkTextView
+        <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/toolbarTitle"
             style="@style/ToolbarText"
             tools:text="Conversations" />

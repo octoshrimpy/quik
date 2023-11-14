@@ -1,6 +1,6 @@
-package com.moez.QKSMS.feature.blocking.manager
+package dev.octoshrimpy.quik.feature.blocking.manager
 
-import com.moez.QKSMS.common.base.QkViewContract
+import dev.octoshrimpy.quik.common.base.QkViewContract
 import io.reactivex.Observable
 import io.reactivex.Single
 

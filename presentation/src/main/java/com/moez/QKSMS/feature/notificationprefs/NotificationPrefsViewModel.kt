@@ -16,17 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.notificationprefs
+package dev.octoshrimpy.quik.feature.notificationprefs
 
 import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.base.QkViewModel
-import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkViewModel
+import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Flowable

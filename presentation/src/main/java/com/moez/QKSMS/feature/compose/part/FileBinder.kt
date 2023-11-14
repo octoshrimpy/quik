@@ -16,21 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose.part
+package dev.octoshrimpy.quik.feature.compose.part
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.Gravity
 import android.widget.FrameLayout
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.extensions.resolveThemeColor
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.setTint
-import com.moez.QKSMS.feature.compose.BubbleUtils
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.MmsPart
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.feature.compose.BubbleUtils
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.MmsPart
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

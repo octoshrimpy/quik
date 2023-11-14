@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.base
+package dev.octoshrimpy.quik.common.base
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
@@ -26,17 +26,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.iterator
 import androidx.lifecycle.Lifecycle
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.extensions.resolveThemeBoolean
-import com.moez.QKSMS.common.util.extensions.resolveThemeColor
-import com.moez.QKSMS.extensions.Optional
-import com.moez.QKSMS.extensions.asObservable
-import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
-import com.moez.QKSMS.util.PhoneNumberUtils
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeBoolean
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.extensions.Optional
+import dev.octoshrimpy.quik.extensions.asObservable
+import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable

@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
 import android.net.Uri
-import com.moez.QKSMS.model.Message
+import dev.octoshrimpy.quik.model.Message
 import io.reactivex.Observable
 
 interface SyncRepository {

@@ -16,28 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.injection.android
+package dev.octoshrimpy.quik.injection.android
 
-import com.moez.QKSMS.feature.widget.WidgetProvider
-import com.moez.QKSMS.injection.scope.ActivityScope
-import com.moez.QKSMS.receiver.BlockThreadReceiver
-import com.moez.QKSMS.receiver.BootReceiver
-import com.moez.QKSMS.receiver.DefaultSmsChangedReceiver
-import com.moez.QKSMS.receiver.DeleteMessagesReceiver
-import com.moez.QKSMS.receiver.MarkArchivedReceiver
-import com.moez.QKSMS.receiver.MarkReadReceiver
-import com.moez.QKSMS.receiver.MarkSeenReceiver
-import com.moez.QKSMS.receiver.MmsReceivedReceiver
-import com.moez.QKSMS.receiver.MmsReceiver
-import com.moez.QKSMS.receiver.MmsSentReceiver
-import com.moez.QKSMS.receiver.MmsUpdatedReceiver
-import com.moez.QKSMS.receiver.NightModeReceiver
-import com.moez.QKSMS.receiver.RemoteMessagingReceiver
-import com.moez.QKSMS.receiver.SendScheduledMessageReceiver
-import com.moez.QKSMS.receiver.SmsDeliveredReceiver
-import com.moez.QKSMS.receiver.SmsProviderChangedReceiver
-import com.moez.QKSMS.receiver.SmsReceiver
-import com.moez.QKSMS.receiver.SmsSentReceiver
+import dev.octoshrimpy.quik.feature.widget.WidgetProvider
+import dev.octoshrimpy.quik.injection.scope.ActivityScope
+import dev.octoshrimpy.quik.receiver.BlockThreadReceiver
+import dev.octoshrimpy.quik.receiver.BootReceiver
+import dev.octoshrimpy.quik.receiver.DefaultSmsChangedReceiver
+import dev.octoshrimpy.quik.receiver.DeleteMessagesReceiver
+import dev.octoshrimpy.quik.receiver.MarkArchivedReceiver
+import dev.octoshrimpy.quik.receiver.MarkReadReceiver
+import dev.octoshrimpy.quik.receiver.MarkSeenReceiver
+import dev.octoshrimpy.quik.receiver.MmsReceivedReceiver
+import dev.octoshrimpy.quik.receiver.MmsReceiver
+import dev.octoshrimpy.quik.receiver.MmsSentReceiver
+import dev.octoshrimpy.quik.receiver.MmsUpdatedReceiver
+import dev.octoshrimpy.quik.receiver.NightModeReceiver
+import dev.octoshrimpy.quik.receiver.RemoteMessagingReceiver
+import dev.octoshrimpy.quik.receiver.SendScheduledMessageReceiver
+import dev.octoshrimpy.quik.receiver.SmsDeliveredReceiver
+import dev.octoshrimpy.quik.receiver.SmsProviderChangedReceiver
+import dev.octoshrimpy.quik.receiver.SmsReceiver
+import dev.octoshrimpy.quik.receiver.SmsSentReceiver
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

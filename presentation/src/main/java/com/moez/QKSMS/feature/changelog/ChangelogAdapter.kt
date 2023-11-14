@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.changelog
+package dev.octoshrimpy.quik.feature.changelog
 
 import android.content.Context
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkAdapter
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.manager.ChangelogManager
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkAdapter
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.manager.ChangelogManager
 import kotlinx.android.synthetic.main.changelog_list_item.*
 
 class ChangelogAdapter(private val context: Context) : QkAdapter<ChangelogAdapter.ChangelogItem>() {

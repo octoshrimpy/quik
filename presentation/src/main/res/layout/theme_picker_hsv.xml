@@ -24,7 +24,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
-    <com.moez.QKSMS.feature.themepicker.HSVPickerView
+    <dev.octoshrimpy.quik.feature.themepicker.HSVPickerView
         android:id="@+id/picker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/hexLabel"
         style="@style/TextSecondary"
         android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toEndOf="@id/hexLabel"
         app:layout_constraintTop_toTopOf="@id/hexLabel" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/hexSign"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -72,7 +72,7 @@
         app:textSize="secondary"
         tools:ignore="HardcodedText" />
 
-    <com.moez.QKSMS.common.widget.QkEditText
+    <dev.octoshrimpy.quik.common.widget.QkEditText
         android:id="@+id/hex"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -112,7 +112,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/apply"
         style="@style/TextButton"
         android:layout_width="wrap_content"

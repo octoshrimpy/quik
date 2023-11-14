@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.widget
+package dev.octoshrimpy.quik.feature.widget
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -29,21 +29,21 @@ import android.widget.RemoteViewsService
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.DateFormatter
-import com.moez.QKSMS.common.util.extensions.dpToPx
-import com.moez.QKSMS.common.util.extensions.getColorCompat
-import com.moez.QKSMS.feature.compose.ComposeActivity
-import com.moez.QKSMS.feature.main.MainActivity
-import com.moez.QKSMS.injection.appComponent
-import com.moez.QKSMS.model.Contact
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.PhoneNumber
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.util.GlideApp
-import com.moez.QKSMS.util.Preferences
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.DateFormatter
+import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
+import dev.octoshrimpy.quik.feature.compose.ComposeActivity
+import dev.octoshrimpy.quik.feature.main.MainActivity
+import dev.octoshrimpy.quik.injection.appComponent
+import dev.octoshrimpy.quik.model.Contact
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.PhoneNumber
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.util.GlideApp
+import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.tryOrNull
 import javax.inject.Inject
 
 class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {

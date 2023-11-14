@@ -24,7 +24,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -35,7 +35,7 @@
         android:textStyle="bold"
         app:textSize="primary" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -63,7 +63,7 @@
         tools:itemCount="3"
         tools:listitem="@layout/backup_list_item" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

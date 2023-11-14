@@ -16,22 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.conversationinfo
+package dev.octoshrimpy.quik.feature.conversationinfo
 
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bluelinelabs.conductor.RouterTransaction
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.QkChangeHandler
-import com.moez.QKSMS.common.base.QkController
-import com.moez.QKSMS.common.util.extensions.scrapViews
-import com.moez.QKSMS.common.widget.TextInputDialog
-import com.moez.QKSMS.feature.blocking.BlockingDialog
-import com.moez.QKSMS.feature.conversationinfo.injection.ConversationInfoModule
-import com.moez.QKSMS.feature.themepicker.ThemePickerController
-import com.moez.QKSMS.injection.appComponent
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.QkChangeHandler
+import dev.octoshrimpy.quik.common.base.QkController
+import dev.octoshrimpy.quik.common.util.extensions.scrapViews
+import dev.octoshrimpy.quik.common.widget.TextInputDialog
+import dev.octoshrimpy.quik.feature.blocking.BlockingDialog
+import dev.octoshrimpy.quik.feature.conversationinfo.injection.ConversationInfoModule
+import dev.octoshrimpy.quik.feature.themepicker.ThemePickerController
+import dev.octoshrimpy.quik.injection.appComponent
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable

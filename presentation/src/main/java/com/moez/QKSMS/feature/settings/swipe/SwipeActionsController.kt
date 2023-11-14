@@ -16,19 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.settings.swipe
+package dev.octoshrimpy.quik.feature.settings.swipe
 
 import android.view.View
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.QkDialog
-import com.moez.QKSMS.common.base.QkController
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.extensions.animateLayoutChanges
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.setTint
-import com.moez.QKSMS.injection.appComponent
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.QkDialog
+import dev.octoshrimpy.quik.common.base.QkController
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.injection.appComponent
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable

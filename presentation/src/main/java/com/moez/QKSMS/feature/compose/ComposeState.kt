@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose
+package dev.octoshrimpy.quik.feature.compose
 
-import com.moez.QKSMS.compat.SubscriptionInfoCompat
-import com.moez.QKSMS.model.Attachment
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.Recipient
+import dev.octoshrimpy.quik.compat.SubscriptionInfoCompat
+import dev.octoshrimpy.quik.model.Attachment
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.Recipient
 import io.realm.RealmResults
 
 data class ComposeState(

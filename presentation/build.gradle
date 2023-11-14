@@ -27,7 +27,7 @@ android {
     flavorDimensions "analytics"
 
     defaultConfig {
-        applicationId "com.moez.QKSMS"
+        applicationId 'dev.octoshrimpy.quik'
         minSdkVersion 23
         targetSdkVersion 33
         versionCode 2220
@@ -68,7 +68,7 @@ android {
     lint {
         abortOnError false
     }
-    namespace 'com.moez.QKSMS'
+    namespace 'dev.octoshrimpy.quik'
 
     if (System.getenv("CI") == "true") {
         signingConfigs.release.storeFile = file("../keystore")

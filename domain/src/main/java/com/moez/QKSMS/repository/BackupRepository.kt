@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
-import com.moez.QKSMS.model.BackupFile
+import dev.octoshrimpy.quik.model.BackupFile
 import io.reactivex.Observable
 
 interface BackupRepository {

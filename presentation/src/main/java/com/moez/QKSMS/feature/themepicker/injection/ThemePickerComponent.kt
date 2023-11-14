@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.themepicker.injection
+package dev.octoshrimpy.quik.feature.themepicker.injection
 
-import com.moez.QKSMS.feature.themepicker.ThemePickerController
-import com.moez.QKSMS.injection.scope.ControllerScope
+import dev.octoshrimpy.quik.feature.themepicker.ThemePickerController
+import dev.octoshrimpy.quik.injection.scope.ControllerScope
 import dagger.Subcomponent
 
 @ControllerScope

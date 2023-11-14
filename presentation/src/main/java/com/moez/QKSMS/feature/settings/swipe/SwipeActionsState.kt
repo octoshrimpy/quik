@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.settings.swipe
+package dev.octoshrimpy.quik.feature.settings.swipe
 
 import androidx.annotation.DrawableRes
-import com.moez.QKSMS.R
+import dev.octoshrimpy.quik.R
 
 data class SwipeActionsState(
     @DrawableRes val rightIcon: Int = R.drawable.ic_archive_white_24dp,

@@ -18,7 +18,7 @@
  */
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.moez.QKSMS.common.androidxcompat
+package dev.octoshrimpy.quik.common.androidxcompat
 
 import androidx.annotation.CheckResult
 import androidx.drawerlayout.widget.DrawerLayout

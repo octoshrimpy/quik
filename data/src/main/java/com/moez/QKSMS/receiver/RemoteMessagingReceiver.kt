@@ -16,17 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.receiver
+package dev.octoshrimpy.quik.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
-import com.moez.QKSMS.compat.SubscriptionManagerCompat
-import com.moez.QKSMS.interactor.MarkRead
-import com.moez.QKSMS.interactor.SendMessage
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
+import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
+import dev.octoshrimpy.quik.interactor.MarkRead
+import dev.octoshrimpy.quik.interactor.SendMessage
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 

@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.blocking
+package dev.octoshrimpy.quik.blocking
 
-import com.moez.QKSMS.repository.BlockingRepository
+import dev.octoshrimpy.quik.repository.BlockingRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject

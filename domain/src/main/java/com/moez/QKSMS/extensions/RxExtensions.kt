@@ -17,7 +17,7 @@
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moez.QKSMS.extensions
+package dev.octoshrimpy.quik.extensions
 
 import io.reactivex.Flowable
 import io.reactivex.Observable

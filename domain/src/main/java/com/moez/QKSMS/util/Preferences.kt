@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.util
+package dev.octoshrimpy.quik.util
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -25,7 +25,7 @@ import android.os.Build
 import android.provider.Settings
 import com.f2prateek.rx.preferences2.Preference
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.moez.QKSMS.common.util.extensions.versionCode
+import dev.octoshrimpy.quik.common.util.extensions.versionCode
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton

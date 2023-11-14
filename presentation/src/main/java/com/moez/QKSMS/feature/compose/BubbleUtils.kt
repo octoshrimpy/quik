@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose
+package dev.octoshrimpy.quik.feature.compose
 
-import com.moez.QKSMS.R
-import com.moez.QKSMS.model.Message
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.model.Message
 import java.util.concurrent.TimeUnit
 
 object BubbleUtils {

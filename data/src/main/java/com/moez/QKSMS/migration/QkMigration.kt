@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.migration
+package dev.octoshrimpy.quik.migration
 
 import android.content.Context
-import com.moez.QKSMS.blocking.QksmsBlockingClient
-import com.moez.QKSMS.common.util.extensions.versionCode
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.blocking.QksmsBlockingClient
+import dev.octoshrimpy.quik.common.util.extensions.versionCode
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.util.Preferences
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

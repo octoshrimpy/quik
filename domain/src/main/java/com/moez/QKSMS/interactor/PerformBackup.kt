@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.interactor
+package dev.octoshrimpy.quik.interactor
 
-import com.moez.QKSMS.repository.BackupRepository
+import dev.octoshrimpy.quik.repository.BackupRepository
 import io.reactivex.Flowable
 import javax.inject.Inject
 

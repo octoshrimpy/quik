@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.backup
+package dev.octoshrimpy.quik.feature.backup
 
 import android.annotation.SuppressLint
 import android.app.Service
@@ -26,9 +26,9 @@ import android.net.Uri
 import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.moez.QKSMS.common.util.extensions.getLabel
-import com.moez.QKSMS.manager.NotificationManager
-import com.moez.QKSMS.repository.BackupRepository
+import dev.octoshrimpy.quik.common.util.extensions.getLabel
+import dev.octoshrimpy.quik.manager.NotificationManager
+import dev.octoshrimpy.quik.repository.BackupRepository
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -42,9 +42,9 @@ class RestoreBackupService : Service() {
     companion object {
         private const val NOTIFICATION_ID = -1
 
-        private const val ACTION_START = "com.moez.QKSMS.ACTION_START"
-        private const val ACTION_STOP = "com.moez.QKSMS.ACTION_STOP"
-        private const val EXTRA_FILE_URI = "com.moez.QKSMS.EXTRA_FILE_URI"
+        private const val ACTION_START = "dev.octoshrimpy.quik.ACTION_START"
+        private const val ACTION_STOP = "dev.octoshrimpy.quik.ACTION_STOP"
+        private const val EXTRA_FILE_URI = "dev.octoshrimpy.quik.EXTRA_FILE_URI"
 
         fun start(context: Context, backupFile: Uri) {
             val intent = Intent(context, RestoreBackupService::class.java)

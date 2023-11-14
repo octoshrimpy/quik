@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.notificationprefs
+package dev.octoshrimpy.quik.feature.notificationprefs
 
 import android.os.Build
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.util.Preferences
 
 data class NotificationPrefsState(
     val threadId: Long = 0,

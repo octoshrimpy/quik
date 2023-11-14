@@ -28,7 +28,7 @@
     android:paddingEnd="16dp"
     android:paddingBottom="8dp">
 
-    <com.moez.QKSMS.common.widget.AvatarView
+    <dev.octoshrimpy.quik.common.widget.AvatarView
         android:id="@+id/avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/name"
         style="@style/TextPrimary"
         android:layout_width="0dp"
@@ -51,7 +51,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Moez Bhatti" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/address"
         style="@style/TextSecondary"
         android:layout_width="0dp"

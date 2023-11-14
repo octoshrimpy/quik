@@ -41,7 +41,7 @@
                 android:src="@drawable/ic_inbox_black_24dp"
                 tools:tint="@color/tools_theme" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_inbox" />
 
@@ -57,7 +57,7 @@
                 android:src="@drawable/ic_archive_white_24dp"
                 tools:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_archived" />
 
@@ -79,11 +79,11 @@
                 android:src="@drawable/ic_import_export_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/backup_title" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/plusBadge1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,11 +106,11 @@
                 android:src="@drawable/ic_event_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_scheduled" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/plusBadge2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                 android:src="@drawable/ic_block_white_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_blocking" />
 
@@ -155,7 +155,7 @@
                 android:src="@drawable/ic_settings_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_settings" />
 
@@ -170,7 +170,7 @@
                 android:src="@drawable/ic_star_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_plus" />
 
@@ -185,7 +185,7 @@
                 android:src="@drawable/ic_help_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_help" />
 
@@ -200,7 +200,7 @@
                 android:src="@drawable/ic_people_black_24dp"
                 android:tint="?android:attr/textColorSecondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
                 android:text="@string/drawer_invite" />
 
@@ -228,7 +228,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:tint="@color/tools_theme" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/plusTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:textSize="primary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/plusSummary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -287,7 +287,7 @@
                 app:layout_constraintTop_toTopOf="@id/rateTitle"
                 tools:tint="@color/tools_theme" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/rateTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -302,7 +302,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:textSize="primary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/rateSummary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -315,7 +315,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rateTitle"
                 app:textSize="secondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/rateDismiss"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -331,7 +331,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
                 app:textSize="secondary" />
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/rateOkay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -17,7 +17,7 @@
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moez.QKSMS.common.util.extensions
+package dev.octoshrimpy.quik.common.util.extensions
 
 import ezvcard.VCard
 

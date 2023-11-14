@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.compat
+package dev.octoshrimpy.quik.compat
 
 import android.content.Context
 import android.os.Build
 import android.telephony.SubscriptionManager
-import com.moez.QKSMS.manager.PermissionManager
+import dev.octoshrimpy.quik.manager.PermissionManager
 import javax.inject.Inject
 
 class SubscriptionManagerCompat @Inject constructor(context: Context, private val permissions: PermissionManager) {

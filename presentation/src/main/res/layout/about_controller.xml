@@ -33,49 +33,49 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/about_version_title"
             tools:summary="3.0.8" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/developer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:summary="@string/about_developer"
             app:title="@string/about_developer_title" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/source"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:summary="@string/about_source"
             app:title="@string/about_source_title" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/changelog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:summary="@string/about_changelog"
             app:title="@string/about_changelog_title" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/contact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:summary="@string/about_contact"
             app:title="@string/about_contact_title" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/license"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:summary="@string/about_license"
             app:title="@string/about_license_title" />
 
-        <com.moez.QKSMS.common.widget.PreferenceView
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/copyright"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -23,9 +23,9 @@
     android:id="@+id/avatar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:parentTag="com.moez.QKSMS.common.widget.AvatarView">
+    tools:parentTag="dev.octoshrimpy.quik.common.widget.AvatarView">
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/initial"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

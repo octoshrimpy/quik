@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.util
+package dev.octoshrimpy.quik.common.util
 
 import android.content.Context
 import android.text.format.DateFormat
-import com.moez.QKSMS.common.util.extensions.isSameDay
-import com.moez.QKSMS.common.util.extensions.isSameWeek
-import com.moez.QKSMS.common.util.extensions.isSameYear
+import dev.octoshrimpy.quik.common.util.extensions.isSameDay
+import dev.octoshrimpy.quik.common.util.extensions.isSameWeek
+import dev.octoshrimpy.quik.common.util.extensions.isSameYear
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject

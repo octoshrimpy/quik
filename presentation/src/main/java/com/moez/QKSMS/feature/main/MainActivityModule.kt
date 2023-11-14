@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.main
+package dev.octoshrimpy.quik.feature.main
 
 import androidx.lifecycle.ViewModel
-import com.moez.QKSMS.injection.ViewModelKey
-import com.moez.QKSMS.injection.scope.ActivityScope
+import dev.octoshrimpy.quik.injection.ViewModelKey
+import dev.octoshrimpy.quik.injection.scope.ActivityScope
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap

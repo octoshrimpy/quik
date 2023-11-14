@@ -16,6 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.experiment
+package dev.octoshrimpy.quik.experiment
 
 data class Variant<T>(val key: String, val value: T)

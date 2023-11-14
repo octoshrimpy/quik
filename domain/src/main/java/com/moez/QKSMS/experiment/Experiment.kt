@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.experiment
+package dev.octoshrimpy.quik.experiment
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.moez.QKSMS.manager.AnalyticsManager
+import dev.octoshrimpy.quik.manager.AnalyticsManager
 import java.util.*
 
 abstract class Experiment<T>(val context: Context, val analytics: AnalyticsManager) {

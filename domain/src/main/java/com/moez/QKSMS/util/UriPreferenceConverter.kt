@@ -1,4 +1,4 @@
-package com.moez.QKSMS.util
+package dev.octoshrimpy.quik.util
 
 import android.net.Uri
 import com.f2prateek.rx.preferences2.Preference.Converter

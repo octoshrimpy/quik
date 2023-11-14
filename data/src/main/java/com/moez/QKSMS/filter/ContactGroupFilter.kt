@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.filter
+package dev.octoshrimpy.quik.filter
 
-import com.moez.QKSMS.extensions.removeAccents
-import com.moez.QKSMS.model.ContactGroup
+import dev.octoshrimpy.quik.extensions.removeAccents
+import dev.octoshrimpy.quik.model.ContactGroup
 import javax.inject.Inject
 
 class ContactGroupFilter @Inject constructor(private val contactFilter: ContactFilter) : Filter<ContactGroup>() {

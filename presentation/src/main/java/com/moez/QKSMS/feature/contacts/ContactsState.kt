@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.contacts
+package dev.octoshrimpy.quik.feature.contacts
 
-import com.moez.QKSMS.feature.compose.editing.ComposeItem
-import com.moez.QKSMS.model.Contact
+import dev.octoshrimpy.quik.feature.compose.editing.ComposeItem
+import dev.octoshrimpy.quik.model.Contact
 
 data class ContactsState(
     val query: String = "",

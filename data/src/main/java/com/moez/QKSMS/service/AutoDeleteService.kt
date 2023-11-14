@@ -1,4 +1,4 @@
-package com.moez.QKSMS.service
+package dev.octoshrimpy.quik.service
 
 import android.annotation.SuppressLint
 import android.app.job.JobInfo
@@ -7,8 +7,8 @@ import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
 import androidx.core.content.getSystemService
-import com.moez.QKSMS.common.util.extensions.jobScheduler
-import com.moez.QKSMS.interactor.DeleteOldMessages
+import dev.octoshrimpy.quik.common.util.extensions.jobScheduler
+import dev.octoshrimpy.quik.interactor.DeleteOldMessages
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign

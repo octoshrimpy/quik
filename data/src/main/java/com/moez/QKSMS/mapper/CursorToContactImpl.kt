@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.mapper
+package dev.octoshrimpy.quik.mapper
 
 import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract.CommonDataKinds.Phone
-import com.moez.QKSMS.manager.PermissionManager
-import com.moez.QKSMS.model.Contact
-import com.moez.QKSMS.model.PhoneNumber
+import dev.octoshrimpy.quik.manager.PermissionManager
+import dev.octoshrimpy.quik.model.Contact
+import dev.octoshrimpy.quik.model.PhoneNumber
 import javax.inject.Inject
 
 class CursorToContactImpl @Inject constructor(

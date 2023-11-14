@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.interactor
+package dev.octoshrimpy.quik.interactor
 
 import android.content.Context
-import com.moez.QKSMS.compat.TelephonyCompat
-import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.model.Attachment
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
+import dev.octoshrimpy.quik.compat.TelephonyCompat
+import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.model.Attachment
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.Flowable
 import javax.inject.Inject
 

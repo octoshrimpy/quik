@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose
+package dev.octoshrimpy.quik.feature.compose
 
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -33,29 +33,29 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkRealmAdapter
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.DateFormatter
-import com.moez.QKSMS.common.util.TextViewStyler
-import com.moez.QKSMS.common.util.extensions.dpToPx
-import com.moez.QKSMS.common.util.extensions.forwardTouches
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.setPadding
-import com.moez.QKSMS.common.util.extensions.setTint
-import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.compat.SubscriptionManagerCompat
-import com.moez.QKSMS.extensions.isSmil
-import com.moez.QKSMS.extensions.isText
-import com.moez.QKSMS.feature.compose.BubbleUtils.canGroup
-import com.moez.QKSMS.feature.compose.BubbleUtils.getBubble
-import com.moez.QKSMS.feature.compose.part.PartsAdapter
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.Recipient
-import com.moez.QKSMS.util.PhoneNumberUtils
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkRealmAdapter
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.DateFormatter
+import dev.octoshrimpy.quik.common.util.TextViewStyler
+import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.setPadding
+import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
+import dev.octoshrimpy.quik.extensions.isSmil
+import dev.octoshrimpy.quik.extensions.isText
+import dev.octoshrimpy.quik.feature.compose.BubbleUtils.canGroup
+import dev.octoshrimpy.quik.feature.compose.BubbleUtils.getBubble
+import dev.octoshrimpy.quik.feature.compose.part.PartsAdapter
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.Recipient
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults

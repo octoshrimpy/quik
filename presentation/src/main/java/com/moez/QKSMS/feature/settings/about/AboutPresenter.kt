@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.settings.about
+package dev.octoshrimpy.quik.feature.settings.about
 
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.base.QkPresenter
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkPresenter
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import javax.inject.Inject

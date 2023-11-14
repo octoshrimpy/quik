@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -27,10 +27,10 @@ import android.provider.Telephony
 import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
-import com.moez.QKSMS.common.util.extensions.now
-import com.moez.QKSMS.model.BackupFile
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.common.util.extensions.now
+import dev.octoshrimpy.quik.model.BackupFile
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.util.Preferences
 import com.squareup.moshi.Moshi
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject

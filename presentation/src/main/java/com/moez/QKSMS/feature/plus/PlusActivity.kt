@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.plus
+package dev.octoshrimpy.quik.feature.plus
 
 import android.graphics.Typeface
 import android.os.Bundle
@@ -24,18 +24,18 @@ import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.BuildConfig
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkThemedActivity
-import com.moez.QKSMS.common.util.FontProvider
-import com.moez.QKSMS.common.util.extensions.makeToast
-import com.moez.QKSMS.common.util.extensions.resolveThemeColor
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.setTint
-import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.common.widget.PreferenceView
-import com.moez.QKSMS.feature.plus.experiment.UpgradeButtonExperiment
-import com.moez.QKSMS.manager.BillingManager
+import dev.octoshrimpy.quik.BuildConfig
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkThemedActivity
+import dev.octoshrimpy.quik.common.util.FontProvider
+import dev.octoshrimpy.quik.common.util.extensions.makeToast
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.common.widget.PreferenceView
+import dev.octoshrimpy.quik.feature.plus.experiment.UpgradeButtonExperiment
+import dev.octoshrimpy.quik.manager.BillingManager
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.collapsing_toolbar.*
 import kotlinx.android.synthetic.main.preference_view.view.*

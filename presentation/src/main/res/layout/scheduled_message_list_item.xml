@@ -27,7 +27,7 @@
     android:orientation="horizontal"
     android:padding="12dp">
 
-    <com.moez.QKSMS.common.widget.GroupAvatarView
+    <dev.octoshrimpy.quik.common.widget.GroupAvatarView
         android:id="@+id/avatars"
         android:layout_width="56dp"
         android:layout_height="56dp"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/recipients"
         style="@style/TextPrimary"
         android:layout_width="0dp"
@@ -51,7 +51,7 @@
         app:textSize="secondary"
         tools:text="@tools:sample/full_names" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/date"
         style="@style/TextSecondary"
         android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@id/recipients"
         tools:text="Oct 11" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/body"
         style="@style/TextPrimary"
         android:layout_width="0dp"

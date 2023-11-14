@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.compat
+package dev.octoshrimpy.quik.compat
 
 import android.annotation.TargetApi
 import android.os.Build

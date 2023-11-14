@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.contacts
+package dev.octoshrimpy.quik.feature.contacts
 
 import androidx.lifecycle.ViewModel
-import com.moez.QKSMS.injection.ViewModelKey
+import dev.octoshrimpy.quik.injection.ViewModelKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap

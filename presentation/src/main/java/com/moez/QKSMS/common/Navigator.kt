@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common
+package dev.octoshrimpy.quik.common
 
 import android.app.Activity
 import android.app.role.RoleManager
@@ -30,20 +30,20 @@ import android.provider.Settings
 import android.provider.Telephony
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import com.moez.QKSMS.BuildConfig
-import com.moez.QKSMS.feature.backup.BackupActivity
-import com.moez.QKSMS.feature.blocking.BlockingActivity
-import com.moez.QKSMS.feature.compose.ComposeActivity
-import com.moez.QKSMS.feature.conversationinfo.ConversationInfoActivity
-import com.moez.QKSMS.feature.gallery.GalleryActivity
-import com.moez.QKSMS.feature.notificationprefs.NotificationPrefsActivity
-import com.moez.QKSMS.feature.plus.PlusActivity
-import com.moez.QKSMS.feature.scheduled.ScheduledActivity
-import com.moez.QKSMS.feature.settings.SettingsActivity
-import com.moez.QKSMS.manager.AnalyticsManager
-import com.moez.QKSMS.manager.BillingManager
-import com.moez.QKSMS.manager.NotificationManager
-import com.moez.QKSMS.manager.PermissionManager
+import dev.octoshrimpy.quik.BuildConfig
+import dev.octoshrimpy.quik.feature.backup.BackupActivity
+import dev.octoshrimpy.quik.feature.blocking.BlockingActivity
+import dev.octoshrimpy.quik.feature.compose.ComposeActivity
+import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoActivity
+import dev.octoshrimpy.quik.feature.gallery.GalleryActivity
+import dev.octoshrimpy.quik.feature.notificationprefs.NotificationPrefsActivity
+import dev.octoshrimpy.quik.feature.plus.PlusActivity
+import dev.octoshrimpy.quik.feature.scheduled.ScheduledActivity
+import dev.octoshrimpy.quik.feature.settings.SettingsActivity
+import dev.octoshrimpy.quik.manager.AnalyticsManager
+import dev.octoshrimpy.quik.manager.BillingManager
+import dev.octoshrimpy.quik.manager.NotificationManager
+import dev.octoshrimpy.quik.manager.PermissionManager
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -178,7 +178,7 @@ class Navigator @Inject constructor(
     }
 
     fun showRating() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.moez.QKSMS"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=dev.octoshrimpy.quik"))
                 .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
                         or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
                         or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
@@ -186,7 +186,7 @@ class Navigator @Inject constructor(
         try {
             startActivityExternal(intent)
         } catch (e: ActivityNotFoundException) {
-            val url = "http://play.google.com/store/apps/details?id=com.moez.QKSMS"
+            val url = "http://play.google.com/store/apps/details?id=dev.octoshrimpy.quik"
             startActivityExternal(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         }
     }

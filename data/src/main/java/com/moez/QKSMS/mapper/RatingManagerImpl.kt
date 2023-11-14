@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.mapper
+package dev.octoshrimpy.quik.mapper
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.moez.QKSMS.manager.AnalyticsManager
-import com.moez.QKSMS.manager.RatingManager
+import dev.octoshrimpy.quik.manager.AnalyticsManager
+import dev.octoshrimpy.quik.manager.RatingManager
 import io.reactivex.rxkotlin.Observables
 import javax.inject.Inject
 

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -43,24 +43,24 @@ import com.google.android.mms.pdu_alt.PduPersister
 import com.klinker.android.send_message.SmsManagerFactory
 import com.klinker.android.send_message.StripAccents
 import com.klinker.android.send_message.Transaction
-import com.moez.QKSMS.common.util.extensions.now
-import com.moez.QKSMS.compat.TelephonyCompat
-import com.moez.QKSMS.extensions.anyOf
-import com.moez.QKSMS.extensions.isImage
-import com.moez.QKSMS.extensions.isVideo
-import com.moez.QKSMS.manager.ActiveConversationManager
-import com.moez.QKSMS.manager.KeyManager
-import com.moez.QKSMS.model.Attachment
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.model.MmsPart
-import com.moez.QKSMS.receiver.SendSmsReceiver
-import com.moez.QKSMS.receiver.SmsDeliveredReceiver
-import com.moez.QKSMS.receiver.SmsSentReceiver
-import com.moez.QKSMS.util.ImageUtils
-import com.moez.QKSMS.util.PhoneNumberUtils
-import com.moez.QKSMS.util.Preferences
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.common.util.extensions.now
+import dev.octoshrimpy.quik.compat.TelephonyCompat
+import dev.octoshrimpy.quik.extensions.anyOf
+import dev.octoshrimpy.quik.extensions.isImage
+import dev.octoshrimpy.quik.extensions.isVideo
+import dev.octoshrimpy.quik.manager.ActiveConversationManager
+import dev.octoshrimpy.quik.manager.KeyManager
+import dev.octoshrimpy.quik.model.Attachment
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.MmsPart
+import dev.octoshrimpy.quik.receiver.SendSmsReceiver
+import dev.octoshrimpy.quik.receiver.SmsDeliveredReceiver
+import dev.octoshrimpy.quik.receiver.SmsSentReceiver
+import dev.octoshrimpy.quik.util.ImageUtils
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.tryOrNull
 import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults

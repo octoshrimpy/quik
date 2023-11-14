@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.conversationinfo.injection
+package dev.octoshrimpy.quik.feature.conversationinfo.injection
 
-import com.moez.QKSMS.feature.conversationinfo.ConversationInfoController
-import com.moez.QKSMS.injection.scope.ControllerScope
+import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoController
+import dev.octoshrimpy.quik.injection.scope.ControllerScope
 import dagger.Subcomponent
 
 @ControllerScope

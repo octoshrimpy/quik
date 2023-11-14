@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.plus
+package dev.octoshrimpy.quik.feature.plus
 
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.base.QkViewModel
-import com.moez.QKSMS.manager.AnalyticsManager
-import com.moez.QKSMS.manager.BillingManager
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkViewModel
+import dev.octoshrimpy.quik.manager.AnalyticsManager
+import dev.octoshrimpy.quik.manager.BillingManager
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable

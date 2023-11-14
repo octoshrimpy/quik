@@ -16,29 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.injection.android
+package dev.octoshrimpy.quik.injection.android
 
-import com.moez.QKSMS.feature.backup.BackupActivity
-import com.moez.QKSMS.feature.blocking.BlockingActivity
-import com.moez.QKSMS.feature.compose.ComposeActivity
-import com.moez.QKSMS.feature.compose.ComposeActivityModule
-import com.moez.QKSMS.feature.contacts.ContactsActivity
-import com.moez.QKSMS.feature.contacts.ContactsActivityModule
-import com.moez.QKSMS.feature.conversationinfo.ConversationInfoActivity
-import com.moez.QKSMS.feature.gallery.GalleryActivity
-import com.moez.QKSMS.feature.gallery.GalleryActivityModule
-import com.moez.QKSMS.feature.main.MainActivity
-import com.moez.QKSMS.feature.main.MainActivityModule
-import com.moez.QKSMS.feature.notificationprefs.NotificationPrefsActivity
-import com.moez.QKSMS.feature.notificationprefs.NotificationPrefsActivityModule
-import com.moez.QKSMS.feature.plus.PlusActivity
-import com.moez.QKSMS.feature.plus.PlusActivityModule
-import com.moez.QKSMS.feature.qkreply.QkReplyActivity
-import com.moez.QKSMS.feature.qkreply.QkReplyActivityModule
-import com.moez.QKSMS.feature.scheduled.ScheduledActivity
-import com.moez.QKSMS.feature.scheduled.ScheduledActivityModule
-import com.moez.QKSMS.feature.settings.SettingsActivity
-import com.moez.QKSMS.injection.scope.ActivityScope
+import dev.octoshrimpy.quik.feature.backup.BackupActivity
+import dev.octoshrimpy.quik.feature.blocking.BlockingActivity
+import dev.octoshrimpy.quik.feature.compose.ComposeActivity
+import dev.octoshrimpy.quik.feature.compose.ComposeActivityModule
+import dev.octoshrimpy.quik.feature.contacts.ContactsActivity
+import dev.octoshrimpy.quik.feature.contacts.ContactsActivityModule
+import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoActivity
+import dev.octoshrimpy.quik.feature.gallery.GalleryActivity
+import dev.octoshrimpy.quik.feature.gallery.GalleryActivityModule
+import dev.octoshrimpy.quik.feature.main.MainActivity
+import dev.octoshrimpy.quik.feature.main.MainActivityModule
+import dev.octoshrimpy.quik.feature.notificationprefs.NotificationPrefsActivity
+import dev.octoshrimpy.quik.feature.notificationprefs.NotificationPrefsActivityModule
+import dev.octoshrimpy.quik.feature.plus.PlusActivity
+import dev.octoshrimpy.quik.feature.plus.PlusActivityModule
+import dev.octoshrimpy.quik.feature.qkreply.QkReplyActivity
+import dev.octoshrimpy.quik.feature.qkreply.QkReplyActivityModule
+import dev.octoshrimpy.quik.feature.scheduled.ScheduledActivity
+import dev.octoshrimpy.quik.feature.scheduled.ScheduledActivityModule
+import dev.octoshrimpy.quik.feature.settings.SettingsActivity
+import dev.octoshrimpy.quik.injection.scope.ActivityScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.injection.scope
+package dev.octoshrimpy.quik.injection.scope
 
 import javax.inject.Scope
 

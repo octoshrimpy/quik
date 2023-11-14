@@ -16,18 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.backup
+package dev.octoshrimpy.quik.feature.backup
 
 import android.content.Context
 import androidx.core.net.toUri
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.base.QkPresenter
-import com.moez.QKSMS.common.util.DateFormatter
-import com.moez.QKSMS.common.util.extensions.makeToast
-import com.moez.QKSMS.interactor.PerformBackup
-import com.moez.QKSMS.manager.BillingManager
-import com.moez.QKSMS.repository.BackupRepository
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkPresenter
+import dev.octoshrimpy.quik.common.util.DateFormatter
+import dev.octoshrimpy.quik.common.util.extensions.makeToast
+import dev.octoshrimpy.quik.interactor.PerformBackup
+import dev.octoshrimpy.quik.manager.BillingManager
+import dev.octoshrimpy.quik.repository.BackupRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers

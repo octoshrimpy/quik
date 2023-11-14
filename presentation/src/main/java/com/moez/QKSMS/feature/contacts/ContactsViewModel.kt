@@ -16,25 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.contacts
+package dev.octoshrimpy.quik.feature.contacts
 
 import android.view.inputmethod.EditorInfo
-import com.moez.QKSMS.common.base.QkViewModel
-import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.extensions.removeAccents
-import com.moez.QKSMS.feature.compose.editing.ComposeItem
-import com.moez.QKSMS.feature.compose.editing.PhoneNumberAction
-import com.moez.QKSMS.filter.ContactFilter
-import com.moez.QKSMS.filter.ContactGroupFilter
-import com.moez.QKSMS.interactor.SetDefaultPhoneNumber
-import com.moez.QKSMS.model.Contact
-import com.moez.QKSMS.model.ContactGroup
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.PhoneNumber
-import com.moez.QKSMS.model.Recipient
-import com.moez.QKSMS.repository.ContactRepository
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.common.base.QkViewModel
+import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.extensions.removeAccents
+import dev.octoshrimpy.quik.feature.compose.editing.ComposeItem
+import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberAction
+import dev.octoshrimpy.quik.filter.ContactFilter
+import dev.octoshrimpy.quik.filter.ContactGroupFilter
+import dev.octoshrimpy.quik.interactor.SetDefaultPhoneNumber
+import dev.octoshrimpy.quik.model.Contact
+import dev.octoshrimpy.quik.model.ContactGroup
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.PhoneNumber
+import dev.octoshrimpy.quik.model.Recipient
+import dev.octoshrimpy.quik.repository.ContactRepository
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose.editing
+package dev.octoshrimpy.quik.feature.compose.editing
 
 import android.content.Context
 import android.os.Build
@@ -24,13 +24,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkAdapter
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.common.util.extensions.dpToPx
-import com.moez.QKSMS.common.util.extensions.resolveThemeColor
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.model.Recipient
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkAdapter
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.contact_chip.*
 import javax.inject.Inject

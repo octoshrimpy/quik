@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.interactor
+package dev.octoshrimpy.quik.interactor
 
 import android.telephony.SmsMessage
-import com.moez.QKSMS.blocking.BlockingClient
-import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.manager.NotificationManager
-import com.moez.QKSMS.manager.ShortcutManager
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.blocking.BlockingClient
+import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.manager.NotificationManager
+import dev.octoshrimpy.quik.manager.ShortcutManager
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.Flowable
 import timber.log.Timber
 import javax.inject.Inject

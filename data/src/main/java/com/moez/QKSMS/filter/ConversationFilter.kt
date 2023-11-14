@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.filter
+package dev.octoshrimpy.quik.filter
 
-import com.moez.QKSMS.model.Conversation
+import dev.octoshrimpy.quik.model.Conversation
 import javax.inject.Inject
 
 class ConversationFilter @Inject constructor(private val recipientFilter: RecipientFilter) : Filter<Conversation>() {

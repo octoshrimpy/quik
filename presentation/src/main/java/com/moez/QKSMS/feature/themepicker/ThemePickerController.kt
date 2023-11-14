@@ -16,21 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.themepicker
+package dev.octoshrimpy.quik.feature.themepicker
 
 import android.animation.ObjectAnimator
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkController
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.extensions.dpToPx
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.setVisible
-import com.moez.QKSMS.feature.themepicker.injection.ThemePickerModule
-import com.moez.QKSMS.injection.appComponent
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkController
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.feature.themepicker.injection.ThemePickerModule
+import dev.octoshrimpy.quik.injection.appComponent
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject

@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    tools:parentTag="com.moez.QKSMS.common.widget.RadioPreferenceView">
+    tools:parentTag="dev.octoshrimpy.quik.common.widget.RadioPreferenceView">
 
     <androidx.appcompat.widget.AppCompatRadioButton
         android:id="@+id/radioButton"
@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/titleView"
         style="@style/TextPrimary"
         android:layout_width="0dp"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Default SMS App" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/summaryView"
         style="@style/TextSecondary"
         android:layout_width="0dp"

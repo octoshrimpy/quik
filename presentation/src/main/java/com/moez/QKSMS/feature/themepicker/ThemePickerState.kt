@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.themepicker
+package dev.octoshrimpy.quik.feature.themepicker
 
 data class ThemePickerState(
     val recipientId: Long = 0,

@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.receiver
+package dev.octoshrimpy.quik.receiver
 
 import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.moez.QKSMS.interactor.MarkFailed
-import com.moez.QKSMS.interactor.MarkSent
+import dev.octoshrimpy.quik.interactor.MarkFailed
+import dev.octoshrimpy.quik.interactor.MarkSent
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 

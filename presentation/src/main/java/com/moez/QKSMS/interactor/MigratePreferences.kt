@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.interactor
+package dev.octoshrimpy.quik.interactor
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import com.moez.QKSMS.util.NightModeManager
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.util.NightModeManager
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.Flowable
 import javax.inject.Inject
 

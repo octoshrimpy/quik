@@ -16,24 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.settings
+package dev.octoshrimpy.quik.feature.settings
 
 import android.content.Context
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.base.QkPresenter
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.DateFormatter
-import com.moez.QKSMS.common.util.extensions.makeToast
-import com.moez.QKSMS.interactor.DeleteOldMessages
-import com.moez.QKSMS.interactor.SyncMessages
-import com.moez.QKSMS.manager.AnalyticsManager
-import com.moez.QKSMS.manager.BillingManager
-import com.moez.QKSMS.repository.MessageRepository
-import com.moez.QKSMS.repository.SyncRepository
-import com.moez.QKSMS.service.AutoDeleteService
-import com.moez.QKSMS.util.NightModeManager
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkPresenter
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.DateFormatter
+import dev.octoshrimpy.quik.common.util.extensions.makeToast
+import dev.octoshrimpy.quik.interactor.DeleteOldMessages
+import dev.octoshrimpy.quik.interactor.SyncMessages
+import dev.octoshrimpy.quik.manager.AnalyticsManager
+import dev.octoshrimpy.quik.manager.BillingManager
+import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.repository.SyncRepository
+import dev.octoshrimpy.quik.service.AutoDeleteService
+import dev.octoshrimpy.quik.util.NightModeManager
+import dev.octoshrimpy.quik.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign

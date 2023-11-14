@@ -22,7 +22,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:parentTag="com.moez.QKSMS.common.widget.GroupAvatarView">
+    tools:parentTag="dev.octoshrimpy.quik.common.widget.GroupAvatarView">
 
     <FrameLayout
         android:id="@+id/avatar2Frame"
@@ -38,7 +38,7 @@
         app:layout_constraintVertical_bias="0"
         app:layout_constraintWidth_percent=".75">
 
-        <com.moez.QKSMS.common.widget.AvatarView
+        <dev.octoshrimpy.quik.common.widget.AvatarView
             android:id="@+id/avatar2"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -61,7 +61,7 @@
         app:layout_constraintVertical_bias="1"
         app:layout_constraintWidth_percent=".75">
 
-        <com.moez.QKSMS.common.widget.AvatarView
+        <dev.octoshrimpy.quik.common.widget.AvatarView
             android:id="@+id/avatar1"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

@@ -17,7 +17,7 @@
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.moez.QKSMS.manager
+package dev.octoshrimpy.quik.manager
 
 import android.app.Activity
 import io.reactivex.Observable

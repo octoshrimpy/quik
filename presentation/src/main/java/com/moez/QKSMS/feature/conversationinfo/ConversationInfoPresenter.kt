@@ -16,26 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.conversationinfo
+package dev.octoshrimpy.quik.feature.conversationinfo
 
 import android.content.Context
 import androidx.lifecycle.Lifecycle
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.base.QkPresenter
-import com.moez.QKSMS.common.util.ClipboardUtils
-import com.moez.QKSMS.common.util.extensions.makeToast
-import com.moez.QKSMS.extensions.asObservable
-import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.feature.conversationinfo.ConversationInfoItem.ConversationInfoMedia
-import com.moez.QKSMS.feature.conversationinfo.ConversationInfoItem.ConversationInfoRecipient
-import com.moez.QKSMS.interactor.DeleteConversations
-import com.moez.QKSMS.interactor.MarkArchived
-import com.moez.QKSMS.interactor.MarkUnarchived
-import com.moez.QKSMS.manager.PermissionManager
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkPresenter
+import dev.octoshrimpy.quik.common.util.ClipboardUtils
+import dev.octoshrimpy.quik.common.util.extensions.makeToast
+import dev.octoshrimpy.quik.extensions.asObservable
+import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoItem.ConversationInfoMedia
+import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoItem.ConversationInfoRecipient
+import dev.octoshrimpy.quik.interactor.DeleteConversations
+import dev.octoshrimpy.quik.interactor.MarkArchived
+import dev.octoshrimpy.quik.interactor.MarkUnarchived
+import dev.octoshrimpy.quik.manager.PermissionManager
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers

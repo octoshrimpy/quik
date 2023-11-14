@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
 import android.net.Uri
-import com.moez.QKSMS.model.Contact
-import com.moez.QKSMS.model.ContactGroup
+import dev.octoshrimpy.quik.model.Contact
+import dev.octoshrimpy.quik.model.ContactGroup
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.realm.RealmResults

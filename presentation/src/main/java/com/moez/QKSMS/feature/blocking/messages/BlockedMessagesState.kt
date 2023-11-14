@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.blocking.messages
+package dev.octoshrimpy.quik.feature.blocking.messages
 
-import com.moez.QKSMS.model.Conversation
+import dev.octoshrimpy.quik.model.Conversation
 import io.realm.RealmResults
 
 data class BlockedMessagesState(

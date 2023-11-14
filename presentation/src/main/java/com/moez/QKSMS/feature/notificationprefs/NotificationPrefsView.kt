@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.notificationprefs
+package dev.octoshrimpy.quik.feature.notificationprefs
 
 import android.net.Uri
-import com.moez.QKSMS.common.base.QkView
-import com.moez.QKSMS.common.widget.PreferenceView
+import dev.octoshrimpy.quik.common.base.QkView
+import dev.octoshrimpy.quik.common.widget.PreferenceView
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
 

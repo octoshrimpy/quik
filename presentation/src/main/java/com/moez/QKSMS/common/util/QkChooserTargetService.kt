@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.util
+package dev.octoshrimpy.quik.common.util
 
 import android.content.ComponentName
 import android.content.IntentFilter
@@ -26,13 +26,13 @@ import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
-import com.moez.QKSMS.R
-import com.moez.QKSMS.feature.compose.ComposeActivity
-import com.moez.QKSMS.injection.appComponent
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.util.GlideApp
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.feature.compose.ComposeActivity
+import dev.octoshrimpy.quik.injection.appComponent
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.util.GlideApp
+import dev.octoshrimpy.quik.util.tryOrNull
 import javax.inject.Inject
 
 class QkChooserTargetService : ChooserTargetService() {

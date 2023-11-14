@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.blocking.numbers
+package dev.octoshrimpy.quik.feature.blocking.numbers
 
-import com.moez.QKSMS.common.base.QkPresenter
-import com.moez.QKSMS.interactor.MarkUnblocked
-import com.moez.QKSMS.repository.BlockingRepository
-import com.moez.QKSMS.repository.ConversationRepository
+import dev.octoshrimpy.quik.common.base.QkPresenter
+import dev.octoshrimpy.quik.interactor.MarkUnblocked
+import dev.octoshrimpy.quik.repository.BlockingRepository
+import dev.octoshrimpy.quik.repository.ConversationRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.schedulers.Schedulers

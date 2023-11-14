@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.gallery
+package dev.octoshrimpy.quik.feature.gallery
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -30,13 +30,13 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.google.android.mms.ContentType
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkRealmAdapter
-import com.moez.QKSMS.common.base.QkViewHolder
-import com.moez.QKSMS.extensions.isImage
-import com.moez.QKSMS.extensions.isVideo
-import com.moez.QKSMS.model.MmsPart
-import com.moez.QKSMS.util.GlideApp
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkRealmAdapter
+import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.extensions.isImage
+import dev.octoshrimpy.quik.extensions.isVideo
+import dev.octoshrimpy.quik.model.MmsPart
+import dev.octoshrimpy.quik.util.GlideApp
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.gallery_image_page.*

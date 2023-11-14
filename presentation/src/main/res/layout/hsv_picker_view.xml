@@ -22,7 +22,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:parentTag="com.moez.QKSMS.feature.themepicker.HSVPickerView">
+    tools:parentTag="dev.octoshrimpy.quik.feature.themepicker.HSVPickerView">
 
     <View
         android:layout_width="0dp"

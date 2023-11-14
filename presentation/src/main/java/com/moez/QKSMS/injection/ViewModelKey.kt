@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.injection
+package dev.octoshrimpy.quik.injection
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

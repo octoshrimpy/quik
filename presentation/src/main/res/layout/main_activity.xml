@@ -40,13 +40,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.moez.QKSMS.common.widget.QkTextView
+            <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/toolbarTitle"
                 style="@style/ToolbarText"
                 android:layout_marginStart="16dp"
                 android:visibility="gone" />
 
-            <com.moez.QKSMS.common.widget.QkEditText
+            <dev.octoshrimpy.quik.common.widget.QkEditText
                 android:id="@+id/toolbarSearch"
                 style="@style/ToolbarText"
                 android:layout_marginTop="8dp"
@@ -65,7 +65,7 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <com.moez.QKSMS.common.widget.QkTextView
+        <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/empty"
             style="@style/TextSecondary"
             android:layout_width="match_parent"

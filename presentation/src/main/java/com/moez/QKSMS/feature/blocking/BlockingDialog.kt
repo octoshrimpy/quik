@@ -16,17 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.blocking
+package dev.octoshrimpy.quik.feature.blocking
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import com.moez.QKSMS.R
-import com.moez.QKSMS.blocking.BlockingClient
-import com.moez.QKSMS.interactor.MarkBlocked
-import com.moez.QKSMS.interactor.MarkUnblocked
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.blocking.BlockingClient
+import dev.octoshrimpy.quik.interactor.MarkBlocked
+import dev.octoshrimpy.quik.interactor.MarkUnblocked
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.util.Preferences
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

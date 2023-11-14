@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.model
+package dev.octoshrimpy.quik.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

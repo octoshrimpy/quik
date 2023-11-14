@@ -16,18 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.gallery
+package dev.octoshrimpy.quik.feature.gallery
 
 import android.content.Context
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.Navigator
-import com.moez.QKSMS.common.base.QkViewModel
-import com.moez.QKSMS.common.util.extensions.makeToast
-import com.moez.QKSMS.extensions.mapNotNull
-import com.moez.QKSMS.interactor.SaveImage
-import com.moez.QKSMS.manager.PermissionManager
-import com.moez.QKSMS.repository.ConversationRepository
-import com.moez.QKSMS.repository.MessageRepository
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkViewModel
+import dev.octoshrimpy.quik.common.util.extensions.makeToast
+import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.interactor.SaveImage
+import dev.octoshrimpy.quik.manager.PermissionManager
+import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Flowable

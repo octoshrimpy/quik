@@ -23,7 +23,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:parentTag="com.moez.QKSMS.feature.blocking.manager.BlockingManagerPreferenceView">
+    tools:parentTag="dev.octoshrimpy.quik.feature.blocking.manager.BlockingManagerPreferenceView">
 
     <ImageView
         android:id="@+id/iconView"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@mipmap/ic_launcher" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/titleView"
         style="@style/TextPrimary"
         android:layout_width="0dp"
@@ -49,7 +49,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Default SMS App" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/summaryView"
         style="@style/TextSecondary"
         android:layout_width="0dp"

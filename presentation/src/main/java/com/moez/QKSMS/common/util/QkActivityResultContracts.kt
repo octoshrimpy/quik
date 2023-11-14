@@ -1,4 +1,4 @@
-package com.moez.QKSMS.common.util
+package dev.octoshrimpy.quik.common.util
 
 import android.app.Activity
 import android.content.Context

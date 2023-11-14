@@ -1,4 +1,4 @@
-package com.moez.QKSMS.feature.blocking.manager
+package dev.octoshrimpy.quik.feature.blocking.manager
 
 data class BlockingManagerState(
     val blockingManager: Int = 0,

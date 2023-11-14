@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.plus
+package dev.octoshrimpy.quik.feature.plus
 
-import com.moez.QKSMS.common.base.QkView
-import com.moez.QKSMS.manager.BillingManager
+import dev.octoshrimpy.quik.common.base.QkView
+import dev.octoshrimpy.quik.manager.BillingManager
 import io.reactivex.Observable
 
 interface PlusView : QkView<PlusState> {

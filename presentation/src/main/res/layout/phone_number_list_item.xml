@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.moez.QKSMS.common.widget.RadioPreferenceView
+    <dev.octoshrimpy.quik.common.widget.RadioPreferenceView
         android:id="@+id/number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

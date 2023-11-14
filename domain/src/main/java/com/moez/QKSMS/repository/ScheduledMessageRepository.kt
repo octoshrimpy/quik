@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.repository
+package dev.octoshrimpy.quik.repository
 
-import com.moez.QKSMS.model.ScheduledMessage
+import dev.octoshrimpy.quik.model.ScheduledMessage
 import io.realm.RealmResults
 
 interface ScheduledMessageRepository {

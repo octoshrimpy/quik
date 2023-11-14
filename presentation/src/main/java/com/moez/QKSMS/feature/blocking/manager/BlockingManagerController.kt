@@ -1,4 +1,4 @@
-package com.moez.QKSMS.feature.blocking.manager
+package dev.octoshrimpy.quik.feature.blocking.manager
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -6,12 +6,12 @@ import android.content.res.ColorStateList
 import android.view.View
 import androidx.core.view.isInvisible
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkController
-import com.moez.QKSMS.common.util.Colors
-import com.moez.QKSMS.common.util.extensions.resolveThemeColor
-import com.moez.QKSMS.injection.appComponent
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkController
+import dev.octoshrimpy.quik.common.util.Colors
+import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.injection.appComponent
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject

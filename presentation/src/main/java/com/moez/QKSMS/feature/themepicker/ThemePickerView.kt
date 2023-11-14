@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.themepicker
+package dev.octoshrimpy.quik.feature.themepicker
 
-import com.moez.QKSMS.common.base.QkViewContract
+import dev.octoshrimpy.quik.common.base.QkViewContract
 import io.reactivex.Observable
 
 interface ThemePickerView : QkViewContract<ThemePickerState> {

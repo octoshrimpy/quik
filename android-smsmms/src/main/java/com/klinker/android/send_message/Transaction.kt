@@ -56,12 +56,12 @@ class Transaction @JvmOverloads constructor(private val context: Context, settin
     companion object {
         var settings: Settings = Settings()
 
-        const val MMS_SENT = "com.moez.QKSMS.MMS_SENT"
+        const val MMS_SENT = "dev.octoshrimpy.quik.MMS_SENT"
         const val EXTRA_CONTENT_URI = "content_uri"
         const val EXTRA_FILE_PATH = "file_path"
 
-        const val NOTIFY_SMS_FAILURE = "com.moez.QKSMS.NOTIFY_SMS_FAILURE"
-        const val MMS_UPDATED = "com.moez.QKSMS.MMS_UPDATED"
+        const val NOTIFY_SMS_FAILURE = "dev.octoshrimpy.quik.NOTIFY_SMS_FAILURE"
+        const val MMS_UPDATED = "dev.octoshrimpy.quik.MMS_UPDATED"
         const val MMS_ERROR = "com.klinker.android.send_message.MMS_ERROR"
         const val REFRESH = "com.klinker.android.send_message.REFRESH"
         const val MMS_PROGRESS = "com.klinker.android.send_message.MMS_PROGRESS"

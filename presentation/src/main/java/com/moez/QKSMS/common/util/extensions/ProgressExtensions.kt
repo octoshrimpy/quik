@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.util.extensions
+package dev.octoshrimpy.quik.common.util.extensions
 
 import android.content.Context
-import com.moez.QKSMS.R
-import com.moez.QKSMS.repository.BackupRepository
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.repository.BackupRepository
 
 fun BackupRepository.Progress.getLabel(context: Context): String? {
     return when (this) {

@@ -16,15 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose
+package dev.octoshrimpy.quik.feature.compose
 
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.google.android.mms.ContentType
-import com.moez.QKSMS.injection.ViewModelKey
-import com.moez.QKSMS.model.Attachment
-import com.moez.QKSMS.model.Attachments
+import dev.octoshrimpy.quik.injection.ViewModelKey
+import dev.octoshrimpy.quik.model.Attachment
+import dev.octoshrimpy.quik.model.Attachments
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap

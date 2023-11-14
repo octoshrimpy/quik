@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.settings.autodelete
+package dev.octoshrimpy.quik.feature.settings.autodelete
 
 import android.app.Activity
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
-import com.moez.QKSMS.R
+import dev.octoshrimpy.quik.R
 import kotlinx.android.synthetic.main.settings_auto_delete_dialog.view.*
 
 class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog(context) {

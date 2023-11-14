@@ -16,9 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.backup
+package dev.octoshrimpy.quik.feature.backup
 
-import com.moez.QKSMS.repository.BackupRepository
+import dev.octoshrimpy.quik.repository.BackupRepository
 
 data class BackupState(
     val backupProgress: BackupRepository.Progress = BackupRepository.Progress.Idle(),

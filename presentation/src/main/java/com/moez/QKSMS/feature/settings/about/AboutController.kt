@@ -16,15 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.settings.about
+package dev.octoshrimpy.quik.feature.settings.about
 
 import android.view.View
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.BuildConfig
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkController
-import com.moez.QKSMS.common.widget.PreferenceView
-import com.moez.QKSMS.injection.appComponent
+import dev.octoshrimpy.quik.BuildConfig
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkController
+import dev.octoshrimpy.quik.common.widget.PreferenceView
+import dev.octoshrimpy.quik.injection.appComponent
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.about_controller.*
 import javax.inject.Inject

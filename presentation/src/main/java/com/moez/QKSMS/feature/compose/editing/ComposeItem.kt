@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose.editing
+package dev.octoshrimpy.quik.feature.compose.editing
 
-import com.moez.QKSMS.model.Contact
-import com.moez.QKSMS.model.ContactGroup
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.PhoneNumber
+import dev.octoshrimpy.quik.model.Contact
+import dev.octoshrimpy.quik.model.ContactGroup
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.PhoneNumber
 import io.realm.RealmList
 
 sealed class ComposeItem {

@@ -16,13 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.widget
+package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
 import android.util.AttributeSet
 import androidx.emoji.widget.EmojiAppCompatTextView
-import com.moez.QKSMS.common.util.TextViewStyler
-import com.moez.QKSMS.injection.appComponent
+import dev.octoshrimpy.quik.common.util.TextViewStyler
+import dev.octoshrimpy.quik.injection.appComponent
 import javax.inject.Inject
 
 open class QkTextView @JvmOverloads constructor(

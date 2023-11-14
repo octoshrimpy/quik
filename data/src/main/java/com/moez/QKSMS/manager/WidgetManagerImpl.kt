@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.manager
+package dev.octoshrimpy.quik.manager
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -33,7 +33,7 @@ class WidgetManagerImpl @Inject constructor(private val context: Context) : Widg
 
     override fun updateTheme() {
         val ids = AppWidgetManager.getInstance(context)
-                .getAppWidgetIds(ComponentName("com.moez.QKSMS", "com.moez.QKSMS.feature.widget.WidgetProvider"))
+                .getAppWidgetIds(ComponentName("dev.octoshrimpy.quik", "dev.octoshrimpy.quik.feature.widget.WidgetProvider"))
 
         val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
 

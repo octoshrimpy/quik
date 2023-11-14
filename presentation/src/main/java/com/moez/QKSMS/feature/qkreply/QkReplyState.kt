@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.qkreply
+package dev.octoshrimpy.quik.feature.qkreply
 
-import com.moez.QKSMS.compat.SubscriptionInfoCompat
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.Message
+import dev.octoshrimpy.quik.compat.SubscriptionInfoCompat
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.Message
 import io.realm.RealmResults
 
 data class QkReplyState(

@@ -1,6 +1,6 @@
-package com.moez.QKSMS.blocking
+package dev.octoshrimpy.quik.blocking
 
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject

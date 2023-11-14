@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.blocking.numbers
+package dev.octoshrimpy.quik.feature.blocking.numbers
 
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
-import com.moez.QKSMS.util.PhoneNumberUtils
+import dev.octoshrimpy.quik.util.PhoneNumberUtils
 
 class BlockedNumberTextWatcher(
     private val editText: EditText,

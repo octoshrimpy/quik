@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose
+package dev.octoshrimpy.quik.feature.compose
 
 import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.core.view.inputmethod.InputContentInfoCompat
-import com.moez.QKSMS.common.base.QkView
-import com.moez.QKSMS.model.Attachment
-import com.moez.QKSMS.model.Recipient
+import dev.octoshrimpy.quik.common.base.QkView
+import dev.octoshrimpy.quik.model.Attachment
+import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
 

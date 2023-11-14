@@ -24,7 +24,7 @@
     android:layout_height="wrap_content"
     android:paddingTop="2dp">
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
         app:textSize="secondary"
         tools:text="Mobile" />
 
-    <com.moez.QKSMS.common.widget.QkTextView
+    <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

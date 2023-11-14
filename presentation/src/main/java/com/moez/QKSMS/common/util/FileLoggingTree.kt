@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.util
+package dev.octoshrimpy.quik.common.util
 
 import android.os.Environment
 import android.util.Log
-import com.moez.QKSMS.util.Preferences
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.File

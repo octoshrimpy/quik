@@ -16,15 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common.util
+package dev.octoshrimpy.quik.common.util
 
 import android.content.Context
 import com.google.android.mms.pdu_alt.EncodedStringValue
 import com.google.android.mms.pdu_alt.MultimediaMessagePdu
 import com.google.android.mms.pdu_alt.PduPersister
-import com.moez.QKSMS.R
-import com.moez.QKSMS.model.Message
-import com.moez.QKSMS.util.tryOrNull
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.util.tryOrNull
 import javax.inject.Inject
 
 class MessageDetailsFormatter @Inject constructor(

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.common
+package dev.octoshrimpy.quik.common
 
 import android.app.Activity
 import android.app.Application
@@ -25,17 +25,17 @@ import android.content.BroadcastReceiver
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.util.CrashlyticsTree
-import com.moez.QKSMS.common.util.FileLoggingTree
-import com.moez.QKSMS.injection.AppComponentManager
-import com.moez.QKSMS.injection.appComponent
-import com.moez.QKSMS.manager.AnalyticsManager
-import com.moez.QKSMS.manager.BillingManager
-import com.moez.QKSMS.manager.ReferralManager
-import com.moez.QKSMS.migration.QkMigration
-import com.moez.QKSMS.migration.QkRealmMigration
-import com.moez.QKSMS.util.NightModeManager
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.util.CrashlyticsTree
+import dev.octoshrimpy.quik.common.util.FileLoggingTree
+import dev.octoshrimpy.quik.injection.AppComponentManager
+import dev.octoshrimpy.quik.injection.appComponent
+import dev.octoshrimpy.quik.manager.AnalyticsManager
+import dev.octoshrimpy.quik.manager.BillingManager
+import dev.octoshrimpy.quik.manager.ReferralManager
+import dev.octoshrimpy.quik.migration.QkMigration
+import dev.octoshrimpy.quik.migration.QkRealmMigration
+import dev.octoshrimpy.quik.util.NightModeManager
 import com.uber.rxdogtag.RxDogTag
 import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
 import dagger.android.AndroidInjector

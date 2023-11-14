@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.backup
+package dev.octoshrimpy.quik.feature.backup
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -29,18 +29,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkController
-import com.moez.QKSMS.common.util.QkActivityResultContracts
-import com.moez.QKSMS.common.util.extensions.getLabel
-import com.moez.QKSMS.common.util.extensions.setBackgroundTint
-import com.moez.QKSMS.common.util.extensions.setNegativeButton
-import com.moez.QKSMS.common.util.extensions.setPositiveButton
-import com.moez.QKSMS.common.util.extensions.setShowing
-import com.moez.QKSMS.common.util.extensions.setTint
-import com.moez.QKSMS.common.widget.PreferenceView
-import com.moez.QKSMS.injection.appComponent
-import com.moez.QKSMS.repository.BackupRepository
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkController
+import dev.octoshrimpy.quik.common.util.QkActivityResultContracts
+import dev.octoshrimpy.quik.common.util.extensions.getLabel
+import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
+import dev.octoshrimpy.quik.common.util.extensions.setNegativeButton
+import dev.octoshrimpy.quik.common.util.extensions.setPositiveButton
+import dev.octoshrimpy.quik.common.util.extensions.setShowing
+import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.common.widget.PreferenceView
+import dev.octoshrimpy.quik.injection.appComponent
+import dev.octoshrimpy.quik.repository.BackupRepository
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject

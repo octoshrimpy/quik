@@ -1,4 +1,4 @@
-package com.moez.QKSMS.manager
+package dev.octoshrimpy.quik.manager
 
 interface ReferralManager {
 

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.compose
+package dev.octoshrimpy.quik.feature.compose
 
 import android.app.Activity
 import android.graphics.Rect
@@ -32,7 +32,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import androidx.annotation.RequiresApi
-import com.moez.QKSMS.feature.compose.editing.DetailedChipView
+import dev.octoshrimpy.quik.feature.compose.editing.DetailedChipView
 
 class ComposeWindowCallback(
     private val localCallback: Window.Callback,

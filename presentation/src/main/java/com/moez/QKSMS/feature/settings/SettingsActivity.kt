@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.settings
+package dev.octoshrimpy.quik.feature.settings
 
 import android.os.Bundle
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import com.moez.QKSMS.R
-import com.moez.QKSMS.common.base.QkThemedActivity
+import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.container_activity.*
 

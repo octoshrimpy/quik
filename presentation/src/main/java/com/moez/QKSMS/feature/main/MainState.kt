@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.feature.main
+package dev.octoshrimpy.quik.feature.main
 
-import com.moez.QKSMS.model.Conversation
-import com.moez.QKSMS.model.SearchResult
-import com.moez.QKSMS.repository.SyncRepository
+import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.SearchResult
+import dev.octoshrimpy.quik.repository.SyncRepository
 import io.realm.RealmResults
 
 data class MainState(
