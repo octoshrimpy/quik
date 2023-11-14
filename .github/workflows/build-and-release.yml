@@ -54,6 +54,6 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        with:
          upload_url: ${{ steps.create_release.outputs.upload_url }}
-         asset_path: apk/app-debug.apk
+         asset_path: presentation/build/outputs/apk/noAnalytics/debug/QKSMS-v3.10.1-noAnalytics-debug.apk
          asset_name: ${{ github.event.repository.name }}.apk
          asset_content_type: application/zip
