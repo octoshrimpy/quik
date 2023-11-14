@@ -35,7 +35,7 @@ jobs:
    name: Release APK
    needs: apk
    runs-on: ubuntu-latest
-   if: startsWith(github.ref, 'refs/tags/v')
+   # if: startsWith(github.ref, 'refs/tags/v')
    steps:
      - name: Download APK from build
        uses: actions/download-artifact@v3
