@@ -13,46 +13,37 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Checkout
-       uses: actions/checkout@v2.4.0
+       uses: actions/checkout@v3
      - name: Setup JDK
-       uses: actions/setup-java@v2.5.0
+       uses: actions/setup-java@v3
        with:
-         distribution: temurin
-         java-version: "11"
+         distribution: 'temurin'
+         java-version: '17'
      - name: Set execution flag for gradlew
        run: chmod +x gradlew
      - name: Build APK
-       run: bash ./gradlew assembleDebug --stacktrace
+       run: ./gradlew assembleDebug --stacktrace
+     - name: Rename APK
+       run: mv presentation/build/outputs/apk/noAnalytics/debug/QKSMS-v*-noAnalytics-debug.apk presentation/build/outputs/apk/noAnalytics/debug/QKSMS-noAnalytics-debug.apk
      - name: Upload APK
-       uses: actions/upload-artifact@v1
+       uses: actions/upload-artifact@v3
        with:
          name: apk
-         path: app/build/outputs/apk/debug/app-debug.apk
+         path: presentation/build/outputs/apk/noAnalytics/debug/QKSMS-noAnalytics-debug.apk
 
  release:
    name: Release APK
    needs: apk
    runs-on: ubuntu-latest
+   if: startsWith(github.ref, 'refs/tags/v')
    steps:
      - name: Download APK from build
-       uses: actions/download-artifact@v1
+       uses: actions/download-artifact@v3
        with:
          name: apk
-     - name: Create Release
-       id: create_release
-       uses: actions/create-release@v1
+     - name: Create and upload release
+       uses: softprops/action-gh-release@v1
+       with:
+         files: presentation/build/outputs/apk/noAnalytics/debug/QKSMS-noAnalytics-debug.apk
        env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-         tag_name: ${{ github.run_number }}
-         release_name: ${{ github.event.repository.name }} v${{ github.run_number }}
-     - name: Upload Release APK
-       id: upload_release_asset
-       uses: actions/upload-release-asset@v1.0.1
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-         upload_url: ${{ steps.create_release.outputs.upload_url }}
-         asset_path: apk/app-debug.apk
-         asset_name: ${{ github.event.repository.name }}.apk
-         asset_content_type: application/zip
