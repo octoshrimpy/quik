@@ -27,7 +27,7 @@ jobs:
        uses: actions/upload-artifact@v1
        with:
          name: apk
-         path: app/build/outputs/apk/debug/app-debug.apk
+         path: releases/app-debug.apk
 
  release:
    name: Release APK
