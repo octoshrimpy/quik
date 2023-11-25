@@ -53,6 +53,19 @@ A giant thank you to Moez [moezbhatti](https://github.com/moezbhatti) for creati
 
 QUIK is developed and maintained by [Marcos Jones](https://github.com/octoshrimpy).
 
+---
+
+## Star History
+
+<a href="https://star-history.com/#octoshrimpy/quik&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=octoshrimpy/quik&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=octoshrimpy/quik&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=octoshrimpy/quik&type=Date" />
+  </picture>
+</a>
+
+
 ## License
 
 QUIK is released under the **The GNU General Public License v3.0 (GPLv3)**, which can be found in the `LICENSE` file in the root of this project.
