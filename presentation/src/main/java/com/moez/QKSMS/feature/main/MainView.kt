@@ -33,7 +33,7 @@ interface MainView : QkView<MainState> {
     val homeIntent: Observable<*>
     val navigationIntent: Observable<NavItem>
     val optionsItemIntent: Observable<Int>
-    val plusBannerIntent: Observable<*>
+//    val plusBannerIntent: Observable<*>
     val dismissRatingIntent: Observable<*>
     val rateIntent: Observable<*>
     val conversationsSelectedIntent: Observable<List<Long>>

@@ -142,22 +142,22 @@ class Navigator @Inject constructor(
     }
 
     fun showDeveloper() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octoshrimpy"))
         startActivityExternal(intent)
     }
 
     fun showSourceCode() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octoshrimpy/quik"))
         startActivityExternal(intent)
     }
 
     fun showChangelog() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms/releases"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octoshrimpy/quik/releases"))
         startActivityExternal(intent)
     }
 
     fun showLicense() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/moezbhatti/qksms/blob/master/LICENSE"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octoshrimpy/quik/blob/master/LICENSE"))
         startActivityExternal(intent)
     }
 
@@ -240,7 +240,7 @@ class Navigator @Inject constructor(
         analyticsManager.track("Clicked Invite")
         Intent(Intent.ACTION_SEND)
                 .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, "http://qklabs.com/download")
+                .putExtra(Intent.EXTRA_TEXT, "https://github.com/octoshrimpy/quik/releases/latest")
                 .let { Intent.createChooser(it, null) }
                 .let(::startActivityExternal)
     }

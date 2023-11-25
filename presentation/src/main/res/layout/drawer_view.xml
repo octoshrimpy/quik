@@ -161,35 +161,35 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/plus"
-            style="@style/DrawerRow">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/plus"-->
+<!--            style="@style/DrawerRow">-->
 
-            <ImageView
-                style="@style/DrawerIcon"
-                android:src="@drawable/ic_star_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+<!--            <ImageView-->
+<!--                style="@style/DrawerIcon"-->
+<!--                android:src="@drawable/ic_star_black_24dp"-->
+<!--                android:tint="?android:attr/textColorSecondary" />-->
 
-            <dev.octoshrimpy.quik.common.widget.QkTextView
-                style="@style/DrawerText"
-                android:text="@string/drawer_plus" />
+<!--            <dev.octoshrimpy.quik.common.widget.QkTextView-->
+<!--                style="@style/DrawerText"-->
+<!--                android:text="@string/drawer_plus" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/help"
-            style="@style/DrawerRow">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/help"-->
+<!--            style="@style/DrawerRow">-->
 
-            <ImageView
-                style="@style/DrawerIcon"
-                android:src="@drawable/ic_help_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+<!--            <ImageView-->
+<!--                style="@style/DrawerIcon"-->
+<!--                android:src="@drawable/ic_help_black_24dp"-->
+<!--                android:tint="?android:attr/textColorSecondary" />-->
 
-            <dev.octoshrimpy.quik.common.widget.QkTextView
-                style="@style/DrawerText"
-                android:text="@string/drawer_help" />
+<!--            <dev.octoshrimpy.quik.common.widget.QkTextView-->
+<!--                style="@style/DrawerText"-->
+<!--                android:text="@string/drawer_help" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/invite"
