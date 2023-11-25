@@ -218,11 +218,11 @@ class SettingsPresenter @Inject constructor(
 
         view.nightModeSelected()
                 .withLatestFrom(billingManager.upgradeStatus) { mode, upgraded ->
-                    if (!upgraded && mode == Preferences.NIGHT_MODE_AUTO) {
-                        view.showQksmsPlusSnackbar()
-                    } else {
+//                    if (!upgraded && mode == Preferences.NIGHT_MODE_AUTO) {
+//                        view.showQksmsPlusSnackbar()
+//                    } else {
                         nightModeManager.updateNightMode(mode)
-                    }
+//                    }
                 }
                 .autoDisposable(view.scope())
                 .subscribe()
@@ -245,11 +245,11 @@ class SettingsPresenter @Inject constructor(
 
         view.sendDelaySelected()
                 .withLatestFrom(billingManager.upgradeStatus) { duration, upgraded ->
-                    if (!upgraded && duration != 0) {
-                        view.showQksmsPlusSnackbar()
-                    } else {
+//                    if (!upgraded && duration != 0) {
+//                        view.showQksmsPlusSnackbar()
+//                    } else {
                         prefs.sendDelay.set(duration)
-                    }
+//                    }
                 }
                 .autoDisposable(view.scope())
                 .subscribe()

@@ -30,7 +30,7 @@
     <string name="title_theme">Theme</string>
     <string name="title_conversations">Search inbox…</string>
     <string name="title_compose">Type a name or number</string>
-    <string name="title_qksms_plus" translatable="false">QKSMS+</string>
+    <string name="title_qksms_plus" translatable="false">QKSMS+ - deprecated</string>
 
     <string name="setup_skip">Skip</string>
     <string name="setup_next">Continue</string>
@@ -66,9 +66,9 @@
     <string name="main_default_sms_message">Make QUIK your default SMS app</string>
     <string name="main_default_sms_change">Change</string>
     <string name="main_permission_required">Permission required</string>
-    <string name="main_permission_sms">QKSMS needs permission to send and view SMS messages</string>
-    <string name="main_permission_contacts">QKSMS needs permission to view your contacts</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK needs permission to send and view SMS messages</string>
+    <string name="main_permission_contacts">QUIK needs permission to view your contacts</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Allow</string>
 
     <string name="drawer_inbox">Inbox</string>
@@ -77,10 +77,10 @@
     <string name="drawer_blocking">Blocking</string>
     <string name="drawer_more">More</string>
     <string name="drawer_settings">Settings</string>
-    <string name="drawer_plus" translatable="false">QKSMS+</string>
+    <string name="drawer_plus" translatable="false">QKSMS+ - deprecated</string>
     <string name="drawer_help">Help &amp; feedback</string>
     <string name="drawer_invite">Invite friends</string>
-    <string name="drawer_plus_banner_title" translatable="false">QKSMS+</string>
+    <string name="drawer_plus_banner_title" translatable="false">QKSMS+ - deprecated</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
 
     <string name="rate_title">Enjoying QUIK?</string>
@@ -381,13 +381,13 @@
     <string name="qkreply_menu_view">Open conversation</string>
 
     <string name="theme_material">Material</string>
-    <string name="theme_plus" translatable="false">QKSMS+</string>
+    <string name="theme_plus" translatable="false">QKSMS+ - deprecated</string>
     <string name="theme_hex">HEX</string>
     <string name="theme_apply">Apply</string>
 
-    <string name="about_developer" translatable="false">Moez Bhatti</string>
-    <string name="about_source" translatable="false">https://github.com/moezbhatti/qksms</string>
-    <string name="about_changelog" translatable="false">https://github.com/moezbhatti/qksms/releases</string>
+    <string name="about_developer" translatable="false">Marcos Jones</string>
+    <string name="about_source" translatable="false">https://github.com/octoshrimpy/quik</string>
+    <string name="about_changelog" translatable="false">https://github.com/octoshrimpy/quik/releases</string>
     <string name="about_contact" translatable="false">moez@qklabs.com</string>
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
     <string name="about_copyright" translatable="false">© 2014–2019</string>
