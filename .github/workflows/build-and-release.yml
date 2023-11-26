@@ -27,6 +27,9 @@ jobs:
       - name: Decode Keystore File
         run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > ${{ github.workspace }}/my-release-key.keystore
         
+      - name: List files in the APK directory
+        run: ls -Rla ./
+        
       - name: Build APK
         run: |
           ./gradlew assembleDebug \
