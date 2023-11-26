@@ -30,8 +30,8 @@ android {
         applicationId 'dev.octoshrimpy.quik'
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 2220
-        versionName "3.10.1"
+        versionCode 2221
+        versionName "4.0.4"
         setProperty("archivesBaseName", "QKSMS-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
