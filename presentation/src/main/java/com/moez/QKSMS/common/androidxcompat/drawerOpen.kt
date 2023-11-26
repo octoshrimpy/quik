@@ -23,6 +23,7 @@ package dev.octoshrimpy.quik.common.androidxcompat
 import androidx.annotation.CheckResult
 import androidx.drawerlayout.widget.DrawerLayout
 import com.jakewharton.rxbinding2.InitialValueObservable
+import com.jakewharton.rxbinding2.support.v4.widget.RxDrawerLayout
 import io.reactivex.functions.Consumer
 
 /**

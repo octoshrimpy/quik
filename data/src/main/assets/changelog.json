@@ -2,7 +2,7 @@
 [
   {
     "versionCode": "2221",
-    "versionName": "4.0.0",
+    "versionName": "4.0.4",
     "fixed": [
       "Revived!",
       "Crash when deleting scheduled messages",
