@@ -19,7 +19,7 @@
 package dev.octoshrimpy.quik.feature.plus
 
 data class PlusState(
-    val upgraded: Boolean = false,
+    val upgraded: Boolean = true,
     val upgradePrice: String = "",
     val upgradeDonatePrice: String = "",
     val currency: String = ""

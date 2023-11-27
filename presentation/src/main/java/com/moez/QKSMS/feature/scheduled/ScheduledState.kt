@@ -23,5 +23,5 @@ import io.realm.RealmResults
 
 data class ScheduledState(
     val scheduledMessages: RealmResults<ScheduledMessage>? = null,
-    val upgraded: Boolean = false
+    val upgraded: Boolean = true
 )

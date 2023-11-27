@@ -112,9 +112,9 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="@string/scheduled_compose_cd"
-        android:src="@drawable/ic_add_black_24dp"
+        android:src="@drawable/ic_schedule_send_black_24dp"
         android:tint="@color/white"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:backgroundTint="@color/tools_theme" />
 
     <LinearLayout
@@ -127,8 +127,7 @@
         android:elevation="4dp"
         android:gravity="center"
         android:visibility="gone"
-        tools:backgroundTint="@color/tools_theme"
-        tools:visibility="visible">
+        tools:backgroundTint="@color/tools_theme">
 
         <ImageView
             android:id="@+id/upgradeIcon"
