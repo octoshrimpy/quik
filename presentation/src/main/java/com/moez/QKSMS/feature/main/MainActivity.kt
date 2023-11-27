@@ -275,6 +275,8 @@ class MainActivity : QkThemedActivity(), MainView {
                 itemTouchHelper.attachToRecyclerView(null)
                 empty.setText(R.string.archived_empty_text)
             }
+
+            else -> {}
         }
 
         inbox.isActivated = state.page is Inbox
