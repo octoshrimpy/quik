@@ -13,9 +13,7 @@ This image is outdated! Will be updating it soon.
 
 [![Build Status](https://circleci.com/gh/moezbhatti/qksms/tree/master.svg?style=svg)](https://circleci.com/gh/moezbhatti/qksms/tree/master)
 [![Crowdin](https://badges.crowdin.net/qksms/localized.svg)](https://crowdin.com/project/qksms)
-[![Liberapay donation](https://img.shields.io/badge/donate-liberapay-yellow.svg)](https://liberapay.com/moezbhatti/)
-[![Bitcoin donation](https://img.shields.io/badge/donate-bitcoin-yellow.svg)](https://qklabs.com/donate-btc/)
-[![PayPal donation](https://img.shields.io/badge/donate-paypal-yellow.svg)](https://qklabs.com/donate)
+
 
 QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation to [QKSMS](https://github.com/moezbhatti/qksms). 
 
@@ -64,6 +62,14 @@ QUIK is developed and maintained by [Marcos Jones](https://github.com/octoshrimp
     <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=octoshrimpy/quik&type=Date" />
   </picture>
 </a>
+
+---
+
+
+<a href="https://liberapay.com/octoshrimpy/donate"><img alt="Donate using Liberapay" src="https://img.shields.io/badge/Liberapay-F6C915?style=for-the-badge&logo=liberapay&logoColor=black"></a>
+<a style="background-color: #5e40c2;" href="https://ko-fi.com/octoshrimpy/donate"><img alt="Donate using Ko-Fi" src="https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
+<a href="https://patreon.com/octoshrimpy"><img alt="Donate using Patreon" src="https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white"></a>
+
 
 
 ## License
