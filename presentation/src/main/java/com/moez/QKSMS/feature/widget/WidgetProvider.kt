@@ -28,6 +28,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
@@ -35,7 +36,6 @@ import dev.octoshrimpy.quik.feature.compose.ComposeActivity
 import dev.octoshrimpy.quik.feature.main.MainActivity
 import dev.octoshrimpy.quik.manager.WidgetManager
 import dev.octoshrimpy.quik.util.Preferences
-import dagger.android.AndroidInjection
 import timber.log.Timber
 import javax.inject.Inject
 

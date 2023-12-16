@@ -441,6 +441,7 @@ class MainViewModel @Inject constructor(
                         }
 
                         is Searching -> {} // Ignore
+                        else -> {}
                     }
                 }
                 .autoDisposable(view.scope())
