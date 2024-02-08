@@ -1,12 +1,7 @@
-> **Note**
-This fork is attempting to be up to date with new features. Ultimately, we'd like one app that allows for discord, slack, sms, matrix, etc natively, instead of through server-oriented bridges. By loading these as plugins, the user can put together a messaging app that fits their needs. The base app will handle SMS like its predecessor, but also load and use plugins for other messaging platforms.  
-
----
-
 ![QKSMS](https://user-images.githubusercontent.com/4358785/39079306-a5a409b6-44e5-11e8-8589-b4acd63b636e.jpg)
 
-> **Warning**
-This image is outdated! Will be updating it soon.
+> **Note**
+This image is outdated! Nothing has changed as far as UI, so it should be okay for now.
 
 # QUIK
 
