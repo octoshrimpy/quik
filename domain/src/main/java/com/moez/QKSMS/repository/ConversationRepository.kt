@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.repository
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.SearchResult
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.realm.RealmResults
 
@@ -35,7 +36,7 @@ interface ConversationRepository {
      */
     fun getTopConversations(): List<Conversation>
 
-    fun setConversationName(id: Long, name: String)
+    fun setConversationName(id: Long, name: String): Completable
 
     fun searchConversations(query: CharSequence): List<SearchResult>
 

@@ -42,7 +42,8 @@ class DateFormatter @Inject constructor(val context: Context) {
             formattedPattern = formattedPattern
                     .replace("h", "HH")
                     .replace("K", "HH")
-                    .replace(" a".toRegex(), "")
+                    .replace("a", "")
+                    .trim()
         }
 
         return SimpleDateFormat(formattedPattern, Locale.getDefault())

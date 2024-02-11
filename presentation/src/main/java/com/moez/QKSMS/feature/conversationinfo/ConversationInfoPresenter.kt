@@ -42,6 +42,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import javax.inject.Inject
@@ -145,7 +146,10 @@ class ConversationInfoPresenter @Inject constructor(
         view.nameChanges()
                 .withLatestFrom(conversation) { name, conversation ->
                     conversationRepo.setConversationName(conversation.id, name)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                 }
+                .flatMapCompletable { it }
                 .autoDisposable(view.scope())
                 .subscribe()
 
