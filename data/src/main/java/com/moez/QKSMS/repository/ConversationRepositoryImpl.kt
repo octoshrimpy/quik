@@ -36,6 +36,7 @@ import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.SearchResult
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.tryOrNull
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -118,16 +119,28 @@ class ConversationRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun setConversationName(id: Long, name: String) {
-        Realm.getDefaultInstance().use { realm ->
-            realm.executeTransaction {
-                realm.where(Conversation::class.java)
-                        .equalTo("id", id)
-                        .findFirst()
-                        ?.name = name
-            }
+//    override fun setConversationName(id: Long, name: String) {
+//        Realm.getDefaultInstance().use { realm ->
+//            realm.executeTransaction {
+//                realm.where(Conversation::class.java)
+//                        .equalTo("id", id)
+//                        .findFirst()
+//                        ?.name = name
+//            }
+//        }
+//    }
+        override fun setConversationName(id: Long, name: String): Completable {
+            return Completable.fromAction {
+                Realm.getDefaultInstance().use { realm ->
+                    realm.executeTransaction {
+                        realm.where(Conversation::class.java)
+                            .equalTo("id", id)
+                            .findFirst()
+                            ?.name = name
+                    }
+                }
+            }.subscribeOn(Schedulers.io()) // Ensure the operation is performed on a background thread
         }
-    }
 
     override fun searchConversations(query: CharSequence): List<SearchResult> {
         val realm = Realm.getDefaultInstance()
