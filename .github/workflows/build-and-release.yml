@@ -40,13 +40,13 @@ jobs:
             --stacktrace
       
       - name: Rename APK
-        run: mv presentation/build/outputs/apk/noAnalytics/debug/QKSMS-v*-noAnalytics-debug.apk presentation/build/outputs/apk/noAnalytics/debug/QKSMS-noAnalytics-debug.apk
+        run: mv presentation/build/outputs/apk/noAnalytics/debug/QKSMS-v*-noAnalytics-debug.apk presentation/build/outputs/apk/noAnalytics/debug/QUIK-noAnalytics-debug.apk
       
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: apk
-          path: presentation/build/outputs/apk/noAnalytics/debug/QKSMS-noAnalytics-debug.apk
+          path: presentation/build/outputs/apk/noAnalytics/debug/QUIK-noAnalytics-debug.apk
 
   release:
     name: Release APK
@@ -65,6 +65,6 @@ jobs:
       - name: Create and upload release
         uses: softprops/action-gh-release@v1
         with:
-          files: QKSMS-noAnalytics-debug.apk
+          files: QUIK-noAnalytics-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
