@@ -1,0 +1,2 @@
+QUIK is an open source replacement to the stock messaging app on Android. It is a continuation to QKSMS.
+

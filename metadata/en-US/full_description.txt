@@ -1,0 +1,6 @@
+QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation to [QKSMS](https://github.com/moezbhatti/qksms). 
+
+QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases), but you can also keep track of updates with [Obtanium](https://github.com/ImranR98/Obtainium#-obtainium).
+
+## Matrix Chat
+You can chat with the community over at [#quik-sms:matrix.org](https://matrix.to/#/#quik-sms:matrix.org)
