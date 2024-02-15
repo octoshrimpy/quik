@@ -68,3 +68,7 @@ jobs:
           files: QUIK-noAnalytics-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Validate Fastlane Supply Metadata
+        uses: ashutoshgngwr/validate-fastlane-supply-metadata@v2.0.0
+    
