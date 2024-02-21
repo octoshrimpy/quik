@@ -32,7 +32,7 @@ jobs:
         
       - name: Build APK
         run: |
-          ./gradlew assembleRelease \
+          ./gradlew assembleDebug \
             -Pandroid.injected.signing.store.file=${{ github.workspace }}/my-release-key.keystore \
             -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
@@ -40,13 +40,13 @@ jobs:
             --stacktrace
       
       - name: Rename APK
-        run: mv presentation/build/outputs/apk/release/QUIK-v*-release.apk presentation/build/outputs/apk/release/QUIK-release.apk
-        
+        run: mv presentation/build/outputs/apk/noAnalytics/debug/QUIK-v*-noAnalytics-debug.apk presentation/build/outputs/apk/noAnalytics/debug/QUIK-noAnalytics-debug.apk
+      
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: apk
-          path: presentation/build/outputs/apk/release/QUIK-release.apk
+          path: presentation/build/outputs/apk/noAnalytics/debug/QUIK-noAnalytics-debug.apk
 
   release:
     name: Release APK
@@ -65,7 +65,7 @@ jobs:
       - name: Create and upload release
         uses: softprops/action-gh-release@v1
         with:
-          files: QUIK-release.apk
+          files: QUIK-noAnalytics-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
