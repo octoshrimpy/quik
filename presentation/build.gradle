@@ -39,7 +39,19 @@ android {
     }
 
     signingConfigs {
-        release
+        release {
+            def keystoreProps = new Properties()
+            def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
+            storeFile file('./my-release-key.keystore')
+            keyAlias 'quik_release'
+            if (keystorePropsFile.exists()) {
+                keystoreProps.load(new FileInputStream(keystorePropsFile))
+            } else {
+                throw new GradleException("Keystore properties file not found.")
+            }
+            storePassword keystoreProps['storePassword']
+            keyPassword keystoreProps['keyPassword']
+        }
     }
 
     buildTypes {
@@ -63,19 +75,14 @@ android {
 
     productFlavors {
         withAnalytics { dimension "analytics" }
-        noAnalytics { dimension "analytics" }
+        noAnalytics {
+            signingConfig signingConfigs.release
+        }
     }
     lint {
         abortOnError false
     }
     namespace 'dev.octoshrimpy.quik'
-
-    if (System.getenv("CI") == "true") {
-        signingConfigs.release.storeFile = file("../keystore")
-        signingConfigs.release.storePassword = System.getenv("keystore_password")
-        signingConfigs.release.keyAlias = System.getenv("key_alias")
-        signingConfigs.release.keyPassword = System.getenv("key_password")
-    }
 }
 
 androidExtensions {
