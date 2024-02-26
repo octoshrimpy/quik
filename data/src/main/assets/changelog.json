@@ -1,5 +1,13 @@
 
-[
+[  {
+    "versionCode": "2224",
+    "versionName": "4.0.7",
+    "removed": [
+      "Analytics trackers",
+      "android.INTERNET permission",
+      "Mentions of QKSMS user-side."
+    ]
+  },
   {
     "versionCode": "2223",
     "versionName": "4.0.6",
