@@ -6,8 +6,8 @@ This image is outdated! Nothing has changed as far as UI, so it should be okay f
 # QUIK
 
 
-[![Build Status](https://circleci.com/gh/octoshrimpy/quik/tree/master.svg?style=svg)](https://circleci.com/gh/octoshrimpy/quik/tree/master)
-[![Crowdin](https://badges.crowdin.net/quik/localized.svg)](https://crowdin.com/project/qksms)
+[![Build and Release](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml)
+
 
 
 QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation to [QKSMS](https://github.com/moezbhatti/qksms). 
