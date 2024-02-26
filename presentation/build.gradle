@@ -44,7 +44,7 @@ android {
             def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
             storeFile file('./my-release-key.keystore')
             keyAlias 'quik_release'
-            if (keystorePropsFile.exists()) {
+            if (keystorePropsFile.exists() && System.getenv("CI") != "true" ) {
                 keystoreProps.load(new FileInputStream(keystorePropsFile))
             } else {
                 throw new GradleException("Keystore properties file not found.")
