@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Arsip percakapan anda akan ditampilkan di sini</string>
     <string name="main_fab_cd">Mulai percakapan baru</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">Tetapkan QKSMS sebagai aplikasi SMS default anda</string>
+    <string name="main_default_sms_message">Tetapkan QUIK sebagai aplikasi SMS default anda</string>
     <string name="main_default_sms_change">Ubah</string>
     <string name="main_permission_required">Membutuhkan izin</string>
-    <string name="main_permission_sms">QKSMS membutuhkan izin untuk mengirim dan membaca pesan SMS</string>
-    <string name="main_permission_contacts">QKSMS membutuhkan izin untuk membaca kontak anda</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK membutuhkan izin untuk mengirim dan membaca pesan SMS</string>
+    <string name="main_permission_contacts">QUIK membutuhkan izin untuk membaca kontak anda</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Izinkan</string>
     <string name="drawer_inbox">Kotak masuk</string>
     <string name="drawer_archived">Diarsipkan</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Bantuan &amp; umpanbalik</string>
     <string name="drawer_invite">Undang teman</string>
     <string name="drawer_plus_banner_summary">Buka fitur-fitur baru yang menakjubkan, dan dukung pengembangan</string>
-    <string name="rate_title">Menikmati QKSMS?</string>
+    <string name="rate_title">Menikmati QUIK?</string>
     <string name="rate_summary">Share some love and rate us on Google Play!</string>
     <string name="rate_okay">OKE!</string>
     <string name="rate_dismiss">ABAIKAN</string>
@@ -97,7 +97,7 @@
     <string name="compose_vcard_label">Kartu nama</string>
     <string name="compose_scheduled_for">Jadwalkan pada</string>
     <string name="compose_scheduled_future">Waktu yang dipilih harus berada di masa depan!</string>
-    <string name="compose_scheduled_plus">Anda harus membuka akses QKSMS+ untuk menggunakan pesan terjadwal</string>
+    <string name="compose_scheduled_plus">Anda harus membuka akses QUIK+ untuk menggunakan pesan terjadwal</string>
     <string name="compose_scheduled_toast">Ditambahkan ke pesan terjadwal</string>
     <string name="compose_hint">Tulis pesan&#8230;</string>
     <string name="compose_menu_copy">Salin teks</string>
@@ -151,7 +151,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Pulihkan</string>
     <string name="backup_restore_summary">Pilih cadangan</string>
-    <string name="backup_restore_error_plus">Silakan buka akses QKSMS+ untuk menggunakan fitur cadangan dan pemulihan</string>
+    <string name="backup_restore_error_plus">Silakan buka akses QUIK+ untuk menggunakan fitur cadangan dan pemulihan</string>
     <string name="backup_restore_error_backup">Pencadangan sedang berlangsung&#8230;</string>
     <string name="backup_restore_error_restore">Pemulihan sedang berlangsung&#8230;</string>
     <string name="backup_restore_confirm_title">Pulihkan dari cadangan</string>
@@ -251,7 +251,7 @@
     <string name="settings_mms_size_title">Otomatis kompres lampiran MMS</string>
     <string name="settings_sync_title">Sinkronisasi pesan</string>
     <string name="settings_sync_summary">Sinkronisasi ulang pesan anda dengan basis data aplikasi SMS Android bawaan</string>
-    <string name="settings_about_title">Tentang QKSMS</string>
+    <string name="settings_about_title">Tentang QUIK</string>
     <string name="settings_version">Versi %s</string>
     <string name="settings_logging_enabled">Log awakutu diaktifkan</string>
     <string name="settings_logging_disabled">Log awakutu dinonaktifkan</string>
@@ -261,8 +261,8 @@
     <string name="blocking_drop_summary">Tolak pesan masuk dari pengirim yang diblokir</string>
     <string name="blocking_conversations">Percakapan diblokir</string>
     <string name="blocking_manager_title">Pengelola Pemblokiran</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Fitur pemblokiran pesan di dalam QKSMS</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">Fitur pemblokiran pesan di dalam QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Blokir pesan spam, nomor &amp; panggilan tak dikenal dengan daftar hitam &amp; Jadwal</string>
     <string name="blocking_manager_call_control_summary">Otomatis menyaring panggilan dan pesan di dalam satu tempat! Community IQ™ memungkinkan anda memblokir pesan yang tidak diinginkan dari daftar spammer</string>
     <string name="blocking_manager_sia_summary">Secara otomatis menyaring pesan dari nomor yang tidak diinginkan menggunakan aplikasi \"Should I Answer\"</string>
@@ -298,10 +298,10 @@
     <string name="qksms_plus_upgrade">Lifetime upgrade for %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Unlock + donate for %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Terima kasih telah mendukung QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Anda sekarang bisa mengakses semua fitur QKSMS+</string>
+    <string name="qksms_plus_thanks_title">Terima kasih telah mendukung QUIK!</string>
+    <string name="qksms_plus_thanks_summary">Anda sekarang bisa mengakses semua fitur QUIK+</string>
     <string name="qksms_plus_error">Telah terjadi kesalahan, silakan coba kembali</string>
-    <string name="qksms_plus_free_title">QKSMS+ selalu gratis untuk pengguna F-Droid! Jika anda ingin mendukung pengembangan, jangan ragu untuk donasi.</string>
+    <string name="qksms_plus_free_title">QUIK+ selalu gratis untuk pengguna F-Droid! Jika anda ingin mendukung pengembangan, jangan ragu untuk donasi.</string>
     <string name="qksms_plus_donate">Donasi via PayPal</string>
     <string name="qksms_plus_coming_soon">Segera hadir</string>
     <string name="qksms_plus_themes_title">Tema premium</string>
@@ -323,7 +323,7 @@
     <string name="qksms_plus_respond_title">Balasan otomatis</string>
     <string name="qksms_plus_respond_summary">Secara otomatis membalas pesan masuk dengan pesan balasan khusus</string>
     <string name="qksms_plus_more_title">Lainnya</string>
-    <string name="qksms_plus_more_summary">QKSMS sedang dalam pengembangan aktif, dan pembelian anda juga mencakup semua fitur QKSMS+ yang akan datang!</string>
+    <string name="qksms_plus_more_summary">QUIK sedang dalam pengembangan aktif, dan pembelian anda juga mencakup semua fitur QUIK+ yang akan datang!</string>
     <string name="widget_loading">Memuat&#8230;</string>
     <string name="widget_more">Lihat percakapan lainnya</string>
     <string name="qkreply_menu_read">Tandai dibaca</string>
@@ -355,7 +355,7 @@
     <string name="button_undo">Urungkan</string>
     <string name="toast_copied">Disalin</string>
     <string name="toast_archived">Percakapan diarsipkan</string>
-    <string name="toast_qksms_plus">Anda harus membuka akses QKSMS+ untuk menggunakan ini</string>
+    <string name="toast_qksms_plus">Anda harus membuka akses QUIK+ untuk menggunakan ini</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s pesan baru</item>
     </plurals>

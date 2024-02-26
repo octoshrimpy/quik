@@ -56,12 +56,12 @@
     <string name="archived_empty_text">您存檔的對話將出現在這裡</string>
     <string name="main_fab_cd">開始新對話</string>
     <string name="main_default_sms_title">愛上發訊息</string>
-    <string name="main_default_sms_message">將QKSMS設為預設信息應用程式</string>
+    <string name="main_default_sms_message">將QUIK設為預設信息應用程式</string>
     <string name="main_default_sms_change">更改</string>
     <string name="main_permission_required">需要授權</string>
-    <string name="main_permission_sms">需要允許QKSMS發送和查看SMS訊息</string>
-    <string name="main_permission_contacts">需要允許QKSMS查看您的連絡人</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">需要允許QUIK發送和查看SMS訊息</string>
+    <string name="main_permission_contacts">需要允許QUIK查看您的連絡人</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">允許</string>
     <string name="drawer_inbox">收件箱</string>
     <string name="drawer_archived">已存檔</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">幫助與反饋</string>
     <string name="drawer_invite">邀請朋友</string>
     <string name="drawer_plus_banner_summary">解鎖驚人的新特性並支持開發</string>
-    <string name="rate_title">喜歡 QKSMS？</string>
+    <string name="rate_title">喜歡 QUIK？</string>
     <string name="rate_summary">在 Google Play 分享您的感受，並給我們評分！</string>
     <string name="rate_okay">好！</string>
     <string name="rate_dismiss">放棄</string>
@@ -97,7 +97,7 @@
     <string name="compose_vcard_label">連絡人卡片</string>
     <string name="compose_scheduled_for">排程於</string>
     <string name="compose_scheduled_future">所選時間必須是未來時間</string>
-    <string name="compose_scheduled_plus">您必須解鎖 QKSMS+ 以使用排程簡訊</string>
+    <string name="compose_scheduled_plus">您必須解鎖 QUIK+ 以使用排程簡訊</string>
     <string name="compose_scheduled_toast">已新增至排程訊息</string>
     <string name="compose_hint">寫一條訊息&#8230;</string>
     <string name="compose_menu_copy">複製文本</string>
@@ -151,7 +151,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">還原</string>
     <string name="backup_restore_summary">選擇備份</string>
-    <string name="backup_restore_error_plus">請解鎖 QKSMS+ 以使用備份和還原功能</string>
+    <string name="backup_restore_error_plus">請解鎖 QUIK+ 以使用備份和還原功能</string>
     <string name="backup_restore_error_backup">正在進行備份&#8230;</string>
     <string name="backup_restore_error_restore">正在進行還原&#8230;</string>
     <string name="backup_restore_confirm_title">從備份還原</string>
@@ -251,7 +251,7 @@
     <string name="settings_mms_size_title">自動壓縮MMS附件</string>
     <string name="settings_sync_title">同步消息</string>
     <string name="settings_sync_summary">重新與安卓原生訊息數據庫進行同步</string>
-    <string name="settings_about_title">關於QKSMS</string>
+    <string name="settings_about_title">關於QUIK</string>
     <string name="settings_version">版本 %s</string>
     <string name="settings_logging_enabled">除錯日誌已啓用</string>
     <string name="settings_logging_disabled">出錯日誌已停用</string>
@@ -261,8 +261,8 @@
     <string name="blocking_drop_summary">直接刪除封鎖的簡訊，而非只有隱藏簡訊</string>
     <string name="blocking_conversations">封鎖的對話</string>
     <string name="blocking_manager_title">封鎖管理器</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">QKSMS內建封鎖功能</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">QUIK內建封鎖功能</string>
     <string name="blocking_manager_call_blocker_summary">使用黑名單與排程封鎖垃圾訊息、號碼和未知來電</string>
     <string name="blocking_manager_call_control_summary">自動過濾來電與簡訊！群眾智慧Community IQ™能讓你遠離不想要的垃圾簡訊</string>
     <string name="blocking_manager_sia_summary">使用\"Should I Answer\"應用過濾未知號碼的消息</string>
@@ -298,10 +298,10 @@
     <string name="qksms_plus_upgrade">終身升級只需 %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">解鎖並捐贈只需 %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">感謝您對 QKSMS 的支持！</string>
-    <string name="qksms_plus_thanks_summary">現在您可以使用 QKSMS+ 的全部功能！</string>
+    <string name="qksms_plus_thanks_title">感謝您對 QUIK 的支持！</string>
+    <string name="qksms_plus_thanks_summary">現在您可以使用 QUIK+ 的全部功能！</string>
     <string name="qksms_plus_error">發生錯誤，請再試一次</string>
-    <string name="qksms_plus_free_title">QKSMS+對F-Droid用戶免費！如果您想支持開發，可以隨意捐款。</string>
+    <string name="qksms_plus_free_title">QUIK+對F-Droid用戶免費！如果您想支持開發，可以隨意捐款。</string>
     <string name="qksms_plus_donate">使用PayPal捐贈</string>
     <string name="qksms_plus_coming_soon">即將推出</string>
     <string name="qksms_plus_themes_title">高級主題</string>
@@ -323,7 +323,7 @@
     <string name="qksms_plus_respond_title">自動回覆</string>
     <string name="qksms_plus_respond_summary">使用預設回應自動回覆傳入郵件</string>
     <string name="qksms_plus_more_title">更多</string>
-    <string name="qksms_plus_more_summary">QKSMS 正在積極開發中，您的購買將包含後續 QKSMS+ 的所有功能！</string>
+    <string name="qksms_plus_more_summary">QUIK 正在積極開發中，您的購買將包含後續 QUIK+ 的所有功能！</string>
     <string name="widget_loading">載入中&#8230;</string>
     <string name="widget_more">查看更多對話</string>
     <string name="qkreply_menu_read">標示已讀</string>
@@ -355,7 +355,7 @@
     <string name="button_undo">復原</string>
     <string name="toast_copied">已複製</string>
     <string name="toast_archived">存檔的對話</string>
-    <string name="toast_qksms_plus">您必須解鎖QKSMS+才能使用此功能</string>
+    <string name="toast_qksms_plus">您必須解鎖QUIK+才能使用此功能</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s條新訊息</item>
     </plurals>

@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Je gearchiveerde conversaties verschijnen hier</string>
     <string name="main_fab_cd">Start nieuwe conversatie</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">QKSMS uw standaard SMS app maken</string>
+    <string name="main_default_sms_message">QUIK uw standaard SMS app maken</string>
     <string name="main_default_sms_change">Wijzigen</string>
     <string name="main_permission_required">Toestemming vereist</string>
-    <string name="main_permission_sms">QKSMS machtigen voor het verzenden en bekijken van SMS-berichten</string>
-    <string name="main_permission_contacts">QKSMS machtigen om uw contactpersonen te bekijken</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK machtigen voor het verzenden en bekijken van SMS-berichten</string>
+    <string name="main_permission_contacts">QUIK machtigen om uw contactpersonen te bekijken</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Toestaan</string>
     <string name="drawer_inbox">Inbox</string>
     <string name="drawer_archived">Archief</string>
@@ -72,8 +72,8 @@
     <string name="drawer_help">Help &amp; feedback</string>
     <string name="drawer_invite">Vrienden uitnodigen</string>
     <string name="drawer_plus_banner_summary">Ontgrendel geweldig nieuwe functies en ondersteun verdere ontwikkeling</string>
-    <string name="rate_title">Aan het genieten van QKSMS?</string>
-    <string name="rate_summary">Deel je liefde voor QKSMS door een beoordeling op Google Play te plaatsen!</string>
+    <string name="rate_title">Aan het genieten van QUIK?</string>
+    <string name="rate_summary">Deel je liefde voor QUIK door een beoordeling op Google Play te plaatsen!</string>
     <string name="rate_okay">Ok</string>
     <string name="rate_dismiss">Sluiten</string>
     <string name="dialog_delete_title">Verwijderen</string>
@@ -98,7 +98,7 @@
     <string name="compose_vcard_label">Contactpersoonkaart</string>
     <string name="compose_scheduled_for">Gepland voor</string>
     <string name="compose_scheduled_future">De geselecteerde tijd moet in de toekomst liggen!</string>
-    <string name="compose_scheduled_plus">Je hebt QKSMS+ nodig om geplande berichten te gebruiken</string>
+    <string name="compose_scheduled_plus">Je hebt QUIK+ nodig om geplande berichten te gebruiken</string>
     <string name="compose_scheduled_toast">Toegevoegd aan geplande berichten</string>
     <string name="compose_hint">Type een bericht&#8230;</string>
     <string name="compose_menu_copy">Tekst kopiëren</string>
@@ -152,7 +152,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Herstellen</string>
     <string name="backup_restore_summary">Selecteer een back-up</string>
-    <string name="backup_restore_error_plus">Je dient QKSMS+ te hebben alvorens je gebruik kan maken van Back-up en herstellen</string>
+    <string name="backup_restore_error_plus">Je dient QUIK+ te hebben alvorens je gebruik kan maken van Back-up en herstellen</string>
     <string name="backup_restore_error_backup">Bezig met het maken van back-up&#8230;</string>
     <string name="backup_restore_error_restore">Bezig met herstellen&#8230;</string>
     <string name="backup_restore_confirm_title">Herstel van back-up</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Auto-compress MMS bijlagen</string>
     <string name="settings_sync_title">Synchroniseer berichten</string>
     <string name="settings_sync_summary">Hersynchroniseer jouw berichten vanuit de SMS database op je telefoon</string>
-    <string name="settings_about_title">Over QKSMS</string>
+    <string name="settings_about_title">Over QUIK</string>
     <string name="settings_version">Versie %s</string>
     <string name="settings_logging_enabled">Foutenregistratie ingeschakeld</string>
     <string name="settings_logging_disabled">Foutenregistratie uitgeschakeld</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Verwijder inkomende berichten van geblokkeerde afzenders in plaats van ze te verbergen</string>
     <string name="blocking_conversations">Geblokkeerde gesprekken</string>
     <string name="blocking_manager_title">Blokkeermanager</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Ingebouwde blokkeerfunctie in QKSMS</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">Ingebouwde blokkeerfunctie in QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Blokkeer spamberichten, nummers &amp; onbekende oproepen met blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Filter je oproepen en berichten automatisch op één handige plaats! Community IQ™ stelt je in staat om ongewenste berichten van de bij community bekende spammers te blokkeren</string>
     <string name="blocking_manager_sia_summary">Automatisch filteren van berichten van ongevraagde nummers met behulp van de app \"Should I Answer\"</string>
@@ -302,10 +302,10 @@
     <string name="qksms_plus_upgrade">Levenslange upgrade voor %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Ontgrendel en doneer voor %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Bedankt voor het onderhouden van QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Je hebt nu toegang tot alle QKSMS+ functies</string>
+    <string name="qksms_plus_thanks_title">Bedankt voor het onderhouden van QUIK!</string>
+    <string name="qksms_plus_thanks_summary">Je hebt nu toegang tot alle QUIK+ functies</string>
     <string name="qksms_plus_error">Er is een fout opgetreden, probeer het opnieuw</string>
-    <string name="qksms_plus_free_title">QKSMS+ is gratis voor F-Droid gebruikers. Als je verdere ontwikkelingen wilt helpen, kun je gerust een donatie overwegen.</string>
+    <string name="qksms_plus_free_title">QUIK+ is gratis voor F-Droid gebruikers. Als je verdere ontwikkelingen wilt helpen, kun je gerust een donatie overwegen.</string>
     <string name="qksms_plus_donate">Doneren via PayPal</string>
     <string name="qksms_plus_coming_soon">Binnenkort</string>
     <string name="qksms_plus_themes_title">Premium thema\'s</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Auto-antwoorden</string>
     <string name="qksms_plus_respond_summary">Automatisch reageren op inkomende berichten met een vooraf ingestelde reactie</string>
     <string name="qksms_plus_more_title">Meer</string>
-    <string name="qksms_plus_more_summary">QKSMS is in actieve ontwikkeling, uw aankoop bevat alle toekomstige nieuwigheden exclusief voor QKSMS+!</string>
+    <string name="qksms_plus_more_summary">QUIK is in actieve ontwikkeling, uw aankoop bevat alle toekomstige nieuwigheden exclusief voor QUIK+!</string>
     <string name="widget_loading">Laden&#8230;</string>
     <string name="widget_more">Bekijk meer conversaties</string>
     <string name="qkreply_menu_read">Markeren als gelezen</string>
@@ -359,7 +359,7 @@
     <string name="button_undo">Ongedaan maken</string>
     <string name="toast_copied">Gekopieerd</string>
     <string name="toast_archived">Conversatie gearchiveerd</string>
-    <string name="toast_qksms_plus">Je dient QKSMS+ te ontgrendelen om dit te gebruiken</string>
+    <string name="toast_qksms_plus">Je dient QUIK+ te ontgrendelen om dit te gebruiken</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nieuw bericht</item>
         <item quantity="other">%s nieuwe berichten</item>

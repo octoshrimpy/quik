@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Archivierte Unterhaltungen werden hier angezeigt</string>
     <string name="main_fab_cd">Neue Unterhaltung starten</string>
     <string name="main_default_sms_title">Liebe es wieder, SMS zu schreiben</string>
-    <string name="main_default_sms_message">QKSMS als Standard-SMS-App festlegen</string>
+    <string name="main_default_sms_message">QUIK als Standard-SMS-App festlegen</string>
     <string name="main_default_sms_change">Ändern</string>
     <string name="main_permission_required">Berechtigung erforderlich</string>
-    <string name="main_permission_sms">QKSMS benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
-    <string name="main_permission_contacts">QKSMS benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
-    <string name="main_permission_notifications">QKSMS benötigt die Berechtigung, um Benachrichtigungen anzuzeigen</string>
+    <string name="main_permission_sms">QUIK benötigt die Berechtigung zum Senden und Anzeigen von SMS-Nachrichten</string>
+    <string name="main_permission_contacts">QUIK benötigt die Berechtigung zum Zugreifen auf die Kontakte</string>
+    <string name="main_permission_notifications">QUIK benötigt die Berechtigung, um Benachrichtigungen anzuzeigen</string>
     <string name="main_permission_allow">Zulassen</string>
     <string name="drawer_inbox">Posteingang</string>
     <string name="drawer_archived">Archiviert</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Hilfe &amp; Feedback</string>
     <string name="drawer_invite">Freunde einladen</string>
     <string name="drawer_plus_banner_summary">Schalte erstaunliche Neue Funktionen frei und unterstütze die Entwicklung</string>
-    <string name="rate_title">Gefällt dir QKSMS?</string>
+    <string name="rate_title">Gefällt dir QUIK?</string>
     <string name="rate_summary">Teile etwas von deiner Liebe und Bewerte uns auf Google Play!</string>
     <string name="rate_okay">OKAY!</string>
     <string name="rate_dismiss">VERWERFEN</string>
@@ -98,7 +98,7 @@
     <string name="compose_vcard_label">Kontaktkarte</string>
     <string name="compose_scheduled_for">Geplant für</string>
     <string name="compose_scheduled_future">Gewählte Zeit muss in der Zukunft liegen!</string>
-    <string name="compose_scheduled_plus">Für diese Funktion muss QKSMS+ freigeschalten werden</string>
+    <string name="compose_scheduled_plus">Für diese Funktion muss QUIK+ freigeschalten werden</string>
     <string name="compose_scheduled_toast">Zu geplanten Nachrichten hinzugefügt</string>
     <string name="compose_hint">Schreibe eine Nachricht&#8230;</string>
     <string name="compose_menu_copy">Text kopieren</string>
@@ -152,7 +152,7 @@
     <string name="backup_location_summary">Ordner festlegen</string>
     <string name="backup_restore_title">Wiederherstellen</string>
     <string name="backup_restore_summary">Sicherung auswählen</string>
-    <string name="backup_restore_error_plus">Bitte QKSMS+ freischalten, um die Sicherung und Wiederherstellung zu nutzen</string>
+    <string name="backup_restore_error_plus">Bitte QUIK+ freischalten, um die Sicherung und Wiederherstellung zu nutzen</string>
     <string name="backup_restore_error_backup">Sicherung wird durchgeführt&#8230;</string>
     <string name="backup_restore_error_restore">Wiederherstellung wird durchgeführt&#8230;</string>
     <string name="backup_restore_confirm_title">Aus einer Sicherung wiederherstellen</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">MMS-Anhänge automatisch komprimieren</string>
     <string name="settings_sync_title">Nachrichten synchronisieren</string>
     <string name="settings_sync_summary">Nachrichten mit der Android SMS-Datenbank abgleichen</string>
-    <string name="settings_about_title">Über QKSMS</string>
+    <string name="settings_about_title">Über QUIK</string>
     <string name="settings_version">Version %s</string>
     <string name="settings_logging_enabled">Protokollierung zur Fehlerbehebung aktiviert</string>
     <string name="settings_logging_disabled">Protokollierung zur Fehlerbehebung deaktiviert</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Eingehende Nachrichten von blockierten Absendern verwefen anstatt sie auszublenden</string>
     <string name="blocking_conversations">Blockierte Unterhaltungen</string>
     <string name="blocking_manager_title">Blockiermanager</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">In QKSMS integrierte Blockierfunktion</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">In QUIK integrierte Blockierfunktion</string>
     <string name="blocking_manager_call_blocker_summary">Spam-Nachrichten und Nummern &amp; unbekannte Anrufe mit Sperrliste &amp; Zeitplan blockieren</string>
     <string name="blocking_manager_call_control_summary">Filtern Sie automatisch Ihre Anrufe und Nachrichten in einer geeigneten Umgeben! Community IQ™ erlaubt es Ihnen unerwünschte Nachrichten von bekannten Spamnern zu unterbinden</string>
     <string name="blocking_manager_sia_summary">Nachrichten von unerwünschten Nummern automatisch mit Hilfe der App \"Should I Answer?\" filtern</string>
@@ -302,10 +302,10 @@
     <string name="qksms_plus_upgrade">Lebenslanges Upgrade für %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Entsperren &amp; Spenden für %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Vielen Dank für die Unterstützung von QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Du kannst jetzt alle QKSMS+ Funktionen verwenden</string>
+    <string name="qksms_plus_thanks_title">Vielen Dank für die Unterstützung von QUIK!</string>
+    <string name="qksms_plus_thanks_summary">Du kannst jetzt alle QUIK+ Funktionen verwenden</string>
     <string name="qksms_plus_error">Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut</string>
-    <string name="qksms_plus_free_title">QKSMS+ ist für Nutzer von F-Droid kostenfrei! Spende gerne um die Entwicklung zu Unterstützen.</string>
+    <string name="qksms_plus_free_title">QUIK+ ist für Nutzer von F-Droid kostenfrei! Spende gerne um die Entwicklung zu Unterstützen.</string>
     <string name="qksms_plus_donate">Spenden per PayPal</string>
     <string name="qksms_plus_coming_soon">Demnächst verfügbar</string>
     <string name="qksms_plus_themes_title">Premium-Erscheinungsbilder</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Automatische Antwort</string>
     <string name="qksms_plus_respond_summary">Eingehende Nachrichten werden mit einer voreingestellten Antwort beantwortet</string>
     <string name="qksms_plus_more_title">Mehr</string>
-    <string name="qksms_plus_more_summary">QKSMS wird aktiv weiterentwickelt und Dein Erwerb wird alle zukünftigen Funktionen enthalten!</string>
+    <string name="qksms_plus_more_summary">QUIK wird aktiv weiterentwickelt und Dein Erwerb wird alle zukünftigen Funktionen enthalten!</string>
     <string name="widget_loading">Lädt&#8230;</string>
     <string name="widget_more">Weitere Unterhaltungen anzeigen</string>
     <string name="qkreply_menu_read">Als gelesen markieren</string>
@@ -359,7 +359,7 @@
     <string name="button_undo">Rückgängig</string>
     <string name="toast_copied">Kopiert</string>
     <string name="toast_archived">Archivierte Unterhaltung</string>
-    <string name="toast_qksms_plus">Für diese Funktion muss QKSMS+ freigeschalten werden</string>
+    <string name="toast_qksms_plus">Für diese Funktion muss QUIK+ freigeschalten werden</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Neue Nachricht</item>
         <item quantity="other">%s neue Nachrichten</item>

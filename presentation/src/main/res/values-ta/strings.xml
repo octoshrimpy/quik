@@ -56,12 +56,12 @@
     <string name="archived_empty_text">உம் காப்பகப்படுத்திய உரையாடல்கள் இங்கு தோன்றும்</string>
     <string name="main_fab_cd">புதிய உரையாடலைத் தொடங்கு</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">QKSMS-ஐ உம் இயல்புநிலை குறுஞ்செய்தி செயலியாக்கு</string>
+    <string name="main_default_sms_message">QUIK-ஐ உம் இயல்புநிலை குறுஞ்செய்தி செயலியாக்கு</string>
     <string name="main_default_sms_change">மாற்று</string>
     <string name="main_permission_required">அனுமதி தேவை</string>
-    <string name="main_permission_sms">SMS செய்திகளை அனுப்பவும் பார்க்கவும் QKSMS க்கு அனுமதி தேவை</string>
-    <string name="main_permission_contacts">உங்கள் தொடர்புகளைக் காண QKSMS க்கு அனுமதி தேவை</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">SMS செய்திகளை அனுப்பவும் பார்க்கவும் QUIK க்கு அனுமதி தேவை</string>
+    <string name="main_permission_contacts">உங்கள் தொடர்புகளைக் காண QUIK க்கு அனுமதி தேவை</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">அனுமதி</string>
     <string name="drawer_inbox">உட்பெட்டி</string>
     <string name="drawer_archived">காப்பகப்படுத்தப்பட்டது</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">உதவி &amp; மீள்கருத்து</string>
     <string name="drawer_invite">நண்பர்களை அழைப்பிடு</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-    <string name="rate_title">QKSMSஐ அனுபவித்து மகிழ்கிறீரா?</string>
+    <string name="rate_title">QUIKஐ அனுபவித்து மகிழ்கிறீரா?</string>
     <string name="rate_summary">Google Play இல் சில அன்பைப் பகிர்ந்துகொண்டு எங்களை மதிப்பிடுக!</string>
     <string name="rate_okay">சரி</string>
     <string name="rate_dismiss">நிராகரி</string>
@@ -98,7 +98,7 @@
     <string name="compose_vcard_label">தொடர்பு அட்டை</string>
     <string name="compose_scheduled_for">குறித்த நேரம்</string>
     <string name="compose_scheduled_future">தேர்ந்தெடுக்கப்பட்ட நேரம் எதிர்காலத்தில் இருக்க வேண்டும்!</string>
-    <string name="compose_scheduled_plus">நேரங்குறித்த தகவல்களை பயன்படுத்த QKSMS+ஐ நீங்கள் பூட்டவிழ்க்க வேண்டும்</string>
+    <string name="compose_scheduled_plus">நேரங்குறித்த தகவல்களை பயன்படுத்த QUIK+ஐ நீங்கள் பூட்டவிழ்க்க வேண்டும்</string>
     <string name="compose_scheduled_toast">நேரங்குறிக்கப்பட்ட தகவல்களுக்கு சேர்க்கப்பட்டது</string>
     <string name="compose_hint">ஒரு தகவலை எழுது&#8230;</string>
     <string name="compose_menu_copy">சொற்சரத்தை நகலெடு</string>
@@ -152,7 +152,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">மீட்டமை</string>
     <string name="backup_restore_summary">காப்புப்பிரதியைத் தேர்ந்தெடு</string>
-    <string name="backup_restore_error_plus">காப்புப்பிரதி மற்றும் மீட்டமைப்பை பயன்படுத்த QKSMS+ஐ பூட்டவிழ்க்கவும்</string>
+    <string name="backup_restore_error_plus">காப்புப்பிரதி மற்றும் மீட்டமைப்பை பயன்படுத்த QUIK+ஐ பூட்டவிழ்க்கவும்</string>
     <string name="backup_restore_error_backup"> செயலில் காப்புப்பிரதி&#8230;</string>
     <string name="backup_restore_error_restore">செயலில் மீட்டெடுப்பு&#8230;</string>
     <string name="backup_restore_confirm_title">காப்புப்பிரதியிலிருந்து மீட்டமை</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
     <string name="settings_sync_title">தகவல்களை ஒத்திசை</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
-    <string name="settings_about_title">QKSMS பற்றி</string>
+    <string name="settings_about_title">QUIK பற்றி</string>
     <string name="settings_version">பதிப்பு %s</string>
     <string name="settings_logging_enabled">பிழைத்திருத்த பதிவுசெய்தல் இயக்கப்பட்டது</string>
     <string name="settings_logging_disabled">பிழைத்திருத்த பதிவுசெய்தல் முடக்கப்பட்டது</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">தடுத்த அனுப்புநர்களிடமிருந்து வரும் தகவல்களை மறைப்பதற்கு பதிலாக கைவிடு</string>
     <string name="blocking_conversations">தடுக்கப்பட்ட உரையாடல்கள்</string>
     <string name="blocking_manager_title">தடுத்தல் மேலாளர்</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QKSMS</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">Automatically filter messages from unsolicited numbers by using the \"Should I Answer\" app</string>
@@ -302,10 +302,10 @@
     <string name="qksms_plus_upgrade">%1$s %2$s க்கு வாழ்நாள் தரமுயர்த்தல்</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">%1$s %2$s க்கு நன்கொடையளி + பூட்டவிழ்</string>
-    <string name="qksms_plus_thanks_title">QKSMSஐ ஆதரித்ததற்கு நன்றி!</string>
-    <string name="qksms_plus_thanks_summary">எல்லா QKSMS+ அம்சங்களுக்கும் இப்போது உமக்கு அனுகல் உண்டு</string>
+    <string name="qksms_plus_thanks_title">QUIKஐ ஆதரித்ததற்கு நன்றி!</string>
+    <string name="qksms_plus_thanks_summary">எல்லா QUIK+ அம்சங்களுக்கும் இப்போது உமக்கு அனுகல் உண்டு</string>
     <string name="qksms_plus_error">பிழை ஏற்பட்டது, மீண்டும் முயலவும்</string>
-    <string name="qksms_plus_free_title">QKSMS+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
+    <string name="qksms_plus_free_title">QUIK+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
     <string name="qksms_plus_donate">PayPal மூலம் நன்கொடையளி</string>
     <string name="qksms_plus_coming_soon">விரைவில் வருகிறது</string>
     <string name="qksms_plus_themes_title">உயர்தர தோற்றங்கள்</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">தானாக-விடையளி</string>
     <string name="qksms_plus_respond_summary">முன்னே அமைத்த விடையுடன் உள்வருங் குறுந்தகவல்களுக்கு தானாக விடையளி</string>
     <string name="qksms_plus_more_title">மேலும்</string>
-    <string name="qksms_plus_more_summary">QKSMS is under active development, and your purchase will include all future QKSMS+ features!</string>
+    <string name="qksms_plus_more_summary">QUIK is under active development, and your purchase will include all future QUIK+ features!</string>
     <string name="widget_loading">ஏற்றுகிறது...</string>
     <string name="widget_more">மேலும் உரையாடல்களை பார்</string>
     <string name="qkreply_menu_read">படித்ததாகக் குறி</string>
@@ -359,7 +359,7 @@
     <string name="button_undo">செயல்தவிர்</string>
     <string name="toast_copied">நகலெடுக்கப்பட்டது</string>
     <string name="toast_archived">காப்பகப்படுத்திய உரையாடல்</string>
-    <string name="toast_qksms_plus">இதைப் பயன்படுத்த கட்டாயம் QKSMS+ ஐப் பூட்டவிழ்க்க வேண்டும்</string>
+    <string name="toast_qksms_plus">இதைப் பயன்படுத்த கட்டாயம் QUIK+ ஐப் பூட்டவிழ்க்க வேண்டும்</string>
     <plurals name="notification_new_messages">
         <item quantity="one">புது தகவல்</item>
         <item quantity="other">%s புது தகவல்கள்</item>
