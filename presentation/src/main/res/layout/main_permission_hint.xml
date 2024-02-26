@@ -43,7 +43,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="2dp"
         android:paddingBottom="16dp"
         android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +50,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:textSize="secondary"
-        tools:text="Make QKSMS your default SMS app" />
+        tools:text="Make QUIK your default SMS app" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/snackbarButton"
