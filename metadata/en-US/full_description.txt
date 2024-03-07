@@ -1,6 +1,3 @@
 Open source replacement to the stock SMS app on Android. A revival of QKSMS.
 
-QUIK is available to download from the official <a href="https://github.com/octoshrimpy/quik/releases">github releases page</a>, but you can also keep track of updates with 
-<a href="https://github.com/ImranR98/Obtainium#-obtainium">Obtanium</a>.
-
 You can chat with the community over at <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>
