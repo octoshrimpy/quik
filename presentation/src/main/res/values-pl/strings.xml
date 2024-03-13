@@ -145,7 +145,7 @@
     <string name="info_delete">Usuń rozmowę</string>
     <string name="gallery_error">Nie można wczytać multimediów</string>
     <string name="gallery_toast_saved">Zapisano w galerii</string>
-    <string name="backup_title">Kopia zap. i przywr.</string>
+    <string name="backup_title">Kopia zapasowa i przywracanie</string>
     <string name="backup_backing_up">Tworzenie kopii zapasowej wiadomości</string>
     <string name="backup_restoring">Przywracanie z kopii zapasowej</string>
     <string name="backup_loading">Wcztywanie&#8230;</string>
