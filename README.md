@@ -5,21 +5,20 @@ This image is outdated! Nothing has changed as far as UI, so it should be okay f
 
 # QUIK
 
-
 [![Build and Release](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml)
-
-
 
 QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation to [QKSMS](https://github.com/moezbhatti/qksms). 
 
 QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases), but you can also keep track of updates with [Obtainium](https://github.com/ImranR98/Obtainium#-obtainium).
 
+
+<a href="https://f-droid.org/repository/browse/?fdid=dev.octoshrimpy.quik"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
+<!--
+</a><a href="https://play.google.com/store/apps/details?id=dev.octoshrimpy.quik"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Download on Google Play" height="100">
+-->
+
 ## Matrix Chat
 You can chat with the community over at [#quik-sms:matrix.org](https://matrix.to/#/#quik-sms:matrix.org)
-
-<!--
-<a href="https://play.google.com/store/apps/details?id=dev.octoshrimpy.quik"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Download on Google Play" height="100"></a><a href="https://f-droid.org/repository/browse/?fdid=dev.octoshrimpy.quik"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
--->
 
 ## Reporting bugs
 
@@ -60,12 +59,9 @@ QUIK is developed and maintained by [Marcos Jones](https://github.com/octoshrimp
 
 ---
 
-
 <a href="https://liberapay.com/octoshrimpy/donate"><img alt="Donate using Liberapay" src="https://img.shields.io/badge/Liberapay-F6C915?style=for-the-badge&logo=liberapay&logoColor=black"></a>
 <a style="background-color: #5e40c2;" href="https://ko-fi.com/octoshrimpy/donate"><img alt="Donate using Ko-Fi" src="https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
 <a href="https://patreon.com/octoshrimpy"><img alt="Donate using Patreon" src="https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white"></a>
-
-
 
 ## License
 
