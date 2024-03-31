@@ -9,7 +9,8 @@ This image is outdated! Nothing has changed as far as UI, so it should be okay f
 
 QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation to [QKSMS](https://github.com/moezbhatti/qksms). 
 
-QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases/latest), but you can also keep track of updates with [Obtanium](https://github.com/ImranR98/Obtainium#-obtainium).
+QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases), but you can also keep track of updates with [Obtainium](https://github.com/ImranR98/Obtainium#-obtainium).
+
 
 <a href="https://f-droid.org/repository/browse/?fdid=dev.octoshrimpy.quik"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
 <!--
