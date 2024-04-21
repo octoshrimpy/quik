@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Your archived conversations will appear here</string>
     <string name="main_fab_cd">Start new conversation</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">Make QKSMS your default SMS app</string>
+    <string name="main_default_sms_message">Make QUIK your default SMS app</string>
     <string name="main_default_sms_change">Change</string>
     <string name="main_permission_required">Permission required</string>
-    <string name="main_permission_sms">QKSMS needs permission to send and view SMS messages</string>
-    <string name="main_permission_contacts">QKSMS needs permission to view your contacts</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK needs permission to send and view SMS messages</string>
+    <string name="main_permission_contacts">QUIK needs permission to view your contacts</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Allow</string>
     <string name="drawer_inbox">Inbox</string>
     <string name="drawer_archived">Archived</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Help &amp; feedback</string>
     <string name="drawer_invite">Invite friends</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-    <string name="rate_title">Enjoying QKSMS?</string>
+    <string name="rate_title">Enjoying QUIK?</string>
     <string name="rate_summary">Share some love and rate us on Google Play!</string>
     <string name="rate_okay">OKAY!</string>
     <string name="rate_dismiss">DISMISS</string>
@@ -98,7 +98,7 @@
     <string name="compose_vcard_label">Contact card</string>
     <string name="compose_scheduled_for">Scheduled for</string>
     <string name="compose_scheduled_future">Selected time must be in the future!</string>
-    <string name="compose_scheduled_plus">You must unlock QKSMS+ to use scheduled messaging</string>
+    <string name="compose_scheduled_plus">You must unlock QUIK+ to use scheduled messaging</string>
     <string name="compose_scheduled_toast">Added to scheduled messages</string>
     <string name="compose_hint">Write a message&#8230;</string>
     <string name="compose_menu_copy">Copy text</string>
@@ -152,7 +152,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Restore</string>
     <string name="backup_restore_summary">Select a backup</string>
-    <string name="backup_restore_error_plus">Please unlock QKSMS+ to use backup and restore</string>
+    <string name="backup_restore_error_plus">Please unlock QUIK+ to use backup and restore</string>
     <string name="backup_restore_error_backup">Backup in progress&#8230;</string>
     <string name="backup_restore_error_restore">Restore in progress&#8230;</string>
     <string name="backup_restore_confirm_title">Restore from backup</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
     <string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
-    <string name="settings_about_title">About QKSMS</string>
+    <string name="settings_about_title">About QUIK</string>
     <string name="settings_version">Version %s</string>
     <string name="settings_logging_enabled">Debug logging enabled</string>
     <string name="settings_logging_disabled">Debug logging disabled</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Drop incoming messages from blocked senders instead of hiding them</string>
     <string name="blocking_conversations">Blocked conversations</string>
     <string name="blocking_manager_title">Blocking Manager</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QKSMS</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">Automatically filter messages from unsolicited numbers by using the \"Should I Answer\" app</string>
@@ -302,10 +302,10 @@
     <string name="qksms_plus_upgrade">Lifetime upgrade for %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Unlock + donate for %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Thank you for supporting QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">You now have access to all QKSMS+ features</string>
+    <string name="qksms_plus_thanks_title">Thank you for supporting QUIK!</string>
+    <string name="qksms_plus_thanks_summary">You now have access to all QUIK+ features</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
+    <string name="qksms_plus_free_title">QUIK+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
     <string name="qksms_plus_donate">Donate via PayPal</string>
     <string name="qksms_plus_coming_soon">Coming soon</string>
     <string name="qksms_plus_themes_title">Premium themes</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Auto-respond</string>
     <string name="qksms_plus_respond_summary">Automatically respond to incoming messages with a preset response</string>
     <string name="qksms_plus_more_title">More</string>
-    <string name="qksms_plus_more_summary">QKSMS is under active development, and your purchase will include all future QKSMS+ features!</string>
+    <string name="qksms_plus_more_summary">QUIK is under active development, and your purchase will include all future QUIK+ features!</string>
     <string name="widget_loading">Loading&#8230;</string>
     <string name="widget_more">View more conversations</string>
     <string name="qkreply_menu_read">Mark read</string>
@@ -359,7 +359,7 @@
     <string name="button_undo">Undo</string>
     <string name="toast_copied">Copied</string>
     <string name="toast_archived">Archived conversation</string>
-    <string name="toast_qksms_plus">You must unlock QKSMS+ to use this</string>
+    <string name="toast_qksms_plus">You must unlock QUIK+ to use this</string>
     <plurals name="notification_new_messages">
         <item quantity="one">New message</item>
         <item quantity="other">%s new messages</item>

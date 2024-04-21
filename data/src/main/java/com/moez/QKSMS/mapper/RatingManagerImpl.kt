@@ -50,12 +50,12 @@ class RatingManagerImpl @Inject constructor(
     }
 
     override fun rate() {
-        analyticsManager.track("Clicked Rate")
+//        analyticsManager.track("Clicked Rate")
         rated.set(true)
     }
 
     override fun dismiss() {
-        analyticsManager.track("Clicked Rate (Dismiss)")
+//        analyticsManager.track("Clicked Rate (Dismiss)")
         dismissed.set(true)
     }
 

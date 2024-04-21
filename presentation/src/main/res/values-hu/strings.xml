@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Az archivált beszélgetéseid itt jelennek meg</string>
     <string name="main_fab_cd">Új beszélgetés kezdeményezése</string>
     <string name="main_default_sms_title">Szeresd újból az SMS-ezést</string>
-    <string name="main_default_sms_message">A QKSMS beállítása alapértelmezett SMS alkalmazásként</string>
+    <string name="main_default_sms_message">A QUIK beállítása alapértelmezett SMS alkalmazásként</string>
     <string name="main_default_sms_change">Módosít</string>
     <string name="main_permission_required">Engedély szükséges</string>
-    <string name="main_permission_sms">A QKSMS-nek engedélyt kell kapnia az SMS üzenetek küldésére és megtekintésére</string>
-    <string name="main_permission_contacts">A QKSMS-nek engedélyt kell kapnia a telefonkönyv megtekintésére</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">A QUIK-nek engedélyt kell kapnia az SMS üzenetek küldésére és megtekintésére</string>
+    <string name="main_permission_contacts">A QUIK-nek engedélyt kell kapnia a telefonkönyv megtekintésére</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Engedélyez</string>
     <string name="drawer_inbox">Bejövő üzenetek</string>
     <string name="drawer_archived">Archivált</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Súgó és visszajelzés</string>
     <string name="drawer_invite">Ismerősök meghívása</string>
     <string name="drawer_plus_banner_summary">Juss érdekes, új lehetőségekhez és támogasd fejlesztést</string>
-    <string name="rate_title">Tetszik a QKSMS?</string>
+    <string name="rate_title">Tetszik a QUIK?</string>
     <string name="rate_summary">Oszd meg a szeretetet és értékelj minket a Google Playen!</string>
     <string name="rate_okay">OKÉ!</string>
     <string name="rate_dismiss">MELLŐZÉS</string>
@@ -98,7 +98,7 @@
     <string name="compose_vcard_label">Névjegy</string>
     <string name="compose_scheduled_for">Várakozik</string>
     <string name="compose_scheduled_future">A kiválasztott időpontnak a jövőben kell lennie!</string>
-    <string name="compose_scheduled_plus">Aktiválnod kell a QKSMS+-t hogy időzített üzeneteteket tudj használni</string>
+    <string name="compose_scheduled_plus">Aktiválnod kell a QUIK+-t hogy időzített üzeneteteket tudj használni</string>
     <string name="compose_scheduled_toast">Hozzáadva az időzített üzenetekhez</string>
     <string name="compose_hint">Írj egy üzenetet&#8230;</string>
     <string name="compose_menu_copy">Szöveg másolás</string>
@@ -152,7 +152,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Visszaállítás</string>
     <string name="backup_restore_summary">Válassz egy mentést</string>
-    <string name="backup_restore_error_plus">Oldd fel a QKSMS+-t a mentés és visszaállítás használatához</string>
+    <string name="backup_restore_error_plus">Oldd fel a QUIK+-t a mentés és visszaállítás használatához</string>
     <string name="backup_restore_error_backup">Mentés folyamatban&#8230;</string>
     <string name="backup_restore_error_restore">Visszaállítás folyamatban&#8230;</string>
     <string name="backup_restore_confirm_title">Visszaállítás mentésből</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">MMS-mellékletek automatikus tömörítése</string>
     <string name="settings_sync_title">Üzenetek szinkronizálása</string>
     <string name="settings_sync_summary">Üzenetek újra-szinkronizálása a natív Android SMS-adatbázissal</string>
-    <string name="settings_about_title">A QKSMS-ről</string>
+    <string name="settings_about_title">A QUIK-ről</string>
     <string name="settings_version">%s verzió</string>
     <string name="settings_logging_enabled">Hibanaplózás engedélyezve</string>
     <string name="settings_logging_disabled">Hibanaplózás tiltva</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Üzenetek eldobása a blokkolt küldőktől az elrejtésük helyett</string>
     <string name="blocking_conversations">Tiltott társalgások</string>
     <string name="blocking_manager_title">Tiltáskezelő</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">A QKSMS beépített tiltási funkciója</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">A QUIK beépített tiltási funkciója</string>
     <string name="blocking_manager_call_blocker_summary">Spam üzenetek blokkolása, számok &amp; ismeretlek hívások feketelistával &amp; Ütemezés</string>
     <string name="blocking_manager_call_control_summary">Egy kényelmesen kezelhető helyen a hívások és üzenetek szűrése! A Community IQ™ megakadályozza a közösség által ismert spammerek üzeneteit</string>
     <string name="blocking_manager_sia_summary">Automatikusan szűrheti az üzeneteket a nem kívánt számok alapján a \"Should I Answer\" alkalmazás használatával</string>
@@ -302,10 +302,10 @@
     <string name="qksms_plus_upgrade">Életre szóló upgrade %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Minden funkció engedélyezése + adomány %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Köszönjük, hogy támogatot a QKSMS-t!</string>
-    <string name="qksms_plus_thanks_summary">MOst hozzáférsz minden QKSMS+ funkcióhoz</string>
+    <string name="qksms_plus_thanks_title">Köszönjük, hogy támogatot a QUIK-t!</string>
+    <string name="qksms_plus_thanks_summary">MOst hozzáférsz minden QUIK+ funkcióhoz</string>
     <string name="qksms_plus_error">Hiba történt, kérjük próbáld újra</string>
-    <string name="qksms_plus_free_title">A QKSMS+ minden F-Droid felhasználónak ingyenes. Ha támogatni szeretnéd a fejlesztést az alábbi módon megteheted.</string>
+    <string name="qksms_plus_free_title">A QUIK+ minden F-Droid felhasználónak ingyenes. Ha támogatni szeretnéd a fejlesztést az alábbi módon megteheted.</string>
     <string name="qksms_plus_donate">Támogatás PayPalon keresztül</string>
     <string name="qksms_plus_coming_soon">Hamarosan</string>
     <string name="qksms_plus_themes_title">Prémium témák</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Automatikus válasz</string>
     <string name="qksms_plus_respond_summary">Előre megadott sablonok küldése bejövő üzenetekre</string>
     <string name="qksms_plus_more_title">Tovább</string>
-    <string name="qksms_plus_more_summary">A QKSMS folyamatos fejlesztés alatt áll és a vásárlásod a jövőbeni QKSMS+ funkciókat is tartalmazza!</string>
+    <string name="qksms_plus_more_summary">A QUIK folyamatos fejlesztés alatt áll és a vásárlásod a jövőbeni QUIK+ funkciókat is tartalmazza!</string>
     <string name="widget_loading">Betöltés&#8230;</string>
     <string name="widget_more">További társalgások megtekintése</string>
     <string name="qkreply_menu_read">Megjelölés olvasottként</string>
@@ -359,7 +359,7 @@
     <string name="button_undo">Visszavonás</string>
     <string name="toast_copied">Átmásolva</string>
     <string name="toast_archived">Archivált beszélgetés</string>
-    <string name="toast_qksms_plus">Ehhez ki kell nyitnod a QKSMS+-t</string>
+    <string name="toast_qksms_plus">Ehhez ki kell nyitnod a QUIK+-t</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Új üzenet</item>
         <item quantity="other">%s új üzenet</item>

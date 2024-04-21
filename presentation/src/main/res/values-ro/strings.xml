@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Conversațiile tale arhivate vor apărea aici</string>
     <string name="main_fab_cd">Începe o conversație nouă</string>
     <string name="main_default_sms_title">Îndrăgosteștete iar de SMS-uri</string>
-    <string name="main_default_sms_message">Faceți QKSMS aplicația dvs. prestabilită pentru SMS</string>
+    <string name="main_default_sms_message">Faceți QUIK aplicația dvs. prestabilită pentru SMS</string>
     <string name="main_default_sms_change">Schimbă</string>
     <string name="main_permission_required">Permisiune necesară</string>
-    <string name="main_permission_sms">QKSMS are nevoie de permisiunea de a trimite și vizualiza mesaje SMS</string>
-    <string name="main_permission_contacts">QKSMS are nevoie de permisiunea de a vizualiza contactele</string>
-    <string name="main_permission_notifications">QKSMS are nevoie de permisiuni pentru a afișa notificări</string>
+    <string name="main_permission_sms">QUIK are nevoie de permisiunea de a trimite și vizualiza mesaje SMS</string>
+    <string name="main_permission_contacts">QUIK are nevoie de permisiunea de a vizualiza contactele</string>
+    <string name="main_permission_notifications">QUIK are nevoie de permisiuni pentru a afișa notificări</string>
     <string name="main_permission_allow">Permite</string>
     <string name="drawer_inbox">Mesaje primite</string>
     <string name="drawer_archived">Arhivat</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Ajutor &amp; feedback</string>
     <string name="drawer_invite">Invită prieteni</string>
     <string name="drawer_plus_banner_summary">Deblochează funcții noi uimitoare și sprijină dezvoltarea</string>
-    <string name="rate_title">Îți place QKSMS?</string>
+    <string name="rate_title">Îți place QUIK?</string>
     <string name="rate_summary">Împărtășește-ne niște dragoste și dă-ne o notă pe Google Play!</string>
     <string name="rate_okay">OKAY!</string>
     <string name="rate_dismiss">RESPINGEȚI</string>
@@ -99,7 +99,7 @@
     <string name="compose_vcard_label">Carte de contact</string>
     <string name="compose_scheduled_for">Programat pentru</string>
     <string name="compose_scheduled_future">Timpul selectat trebuie să fie în viitor!</string>
-    <string name="compose_scheduled_plus">Trebuie să deblocați QKSMS+ pentru a utiliza mesajele programate</string>
+    <string name="compose_scheduled_plus">Trebuie să deblocați QUIK+ pentru a utiliza mesajele programate</string>
     <string name="compose_scheduled_toast">Adăugat la mesajele programate</string>
     <string name="compose_hint">Scrie un mesaj&#8230;</string>
     <string name="compose_menu_copy">Copiază textul</string>
@@ -153,7 +153,7 @@
     <string name="backup_location_summary">Locație dosar</string>
     <string name="backup_restore_title">Restabilire</string>
     <string name="backup_restore_summary">Selectaţi un backup</string>
-    <string name="backup_restore_error_plus">Vă rugăm să deblocați QKSMS+ pentru a utiliza copia de rezervă și a restabili</string>
+    <string name="backup_restore_error_plus">Vă rugăm să deblocați QUIK+ pentru a utiliza copia de rezervă și a restabili</string>
     <string name="backup_restore_error_backup">Backup în desfășurare&#8230;</string>
     <string name="backup_restore_error_restore">Restabilire în desfășurare&#8230;</string>
     <string name="backup_restore_confirm_title">Restaurează din backup</string>
@@ -255,7 +255,7 @@
     <string name="settings_mms_size_title">Auto-comprimare atașamente MMS</string>
     <string name="settings_sync_title">Sincronizare mesaje</string>
     <string name="settings_sync_summary">Re-sincronizați mesajele cu baza de date Android SMS</string>
-    <string name="settings_about_title">Despre QKSMS</string>
+    <string name="settings_about_title">Despre QUIK</string>
     <string name="settings_version">Versiunea %s</string>
     <string name="settings_logging_enabled">Jurnalizare pentru depanare activată</string>
     <string name="settings_logging_disabled">Jurnalizare pentru depanare dezactivată</string>
@@ -265,8 +265,8 @@
     <string name="blocking_drop_summary">Șterge mesajele primite de la expeditorii blocați în loc să le ascunzi</string>
     <string name="blocking_conversations">Conversații blocate</string>
     <string name="blocking_manager_title">Manager de blocări</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Funcționalitate de blocare încorporată în QKSMS</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">Funcționalitate de blocare încorporată în QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Blocare mesaje spam, numere &amp; apeluri necunoscute din lista neagră &amp; Planificare</string>
     <string name="blocking_manager_call_control_summary">Filtrează automat apelurile și mesajele într-un loc convenabil! Community IQ™ îți permite să previi mesajele nedorite de la spamerii cunoscuți de comunitate</string>
     <string name="blocking_manager_sia_summary">Filtrează automat mesajele de la numere nesolicitate folosind aplicația \"Trebuie să răspund\"</string>
@@ -306,10 +306,10 @@
     <string name="qksms_plus_upgrade">Upgrade pe viață pentru %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Deblochează + donează pentru %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Vă mulțumim pentru sprijinul acordat QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Acum ai acces la toate caracteristicile QKSMS+</string>
+    <string name="qksms_plus_thanks_title">Vă mulțumim pentru sprijinul acordat QUIK!</string>
+    <string name="qksms_plus_thanks_summary">Acum ai acces la toate caracteristicile QUIK+</string>
     <string name="qksms_plus_error">A apărut o eroare, încercați din nou</string>
-    <string name="qksms_plus_free_title">QKSMS+ este gratuit pentru utilizatorii F-Droid! Dacă doriți să sprijiniți dezvoltarea, o donație ar fi foarte apreciată.</string>
+    <string name="qksms_plus_free_title">QUIK+ este gratuit pentru utilizatorii F-Droid! Dacă doriți să sprijiniți dezvoltarea, o donație ar fi foarte apreciată.</string>
     <string name="qksms_plus_donate">Donează prin PayPal</string>
     <string name="qksms_plus_coming_soon">În curând</string>
     <string name="qksms_plus_themes_title">Teme premium</string>
@@ -331,7 +331,7 @@
     <string name="qksms_plus_respond_title">Răspuns automat</string>
     <string name="qksms_plus_respond_summary">Răspuns automat la mesajele primite cu un răspuns presetat</string>
     <string name="qksms_plus_more_title">Mai mult</string>
-    <string name="qksms_plus_more_summary">QKSMS este în dezvoltare activă, și achiziția dvs. va include toate funcțiile viitoare QKSMS+!</string>
+    <string name="qksms_plus_more_summary">QUIK este în dezvoltare activă, și achiziția dvs. va include toate funcțiile viitoare QUIK+!</string>
     <string name="widget_loading">Se încarcă...</string>
     <string name="widget_more">Vezi mai multe conversații</string>
     <string name="qkreply_menu_read">Marchează ca citit</string>
@@ -363,7 +363,7 @@
     <string name="button_undo">Anulează</string>
     <string name="toast_copied">Copiat</string>
     <string name="toast_archived">Conversație arhivată</string>
-    <string name="toast_qksms_plus">Trebuie să deblocați QKSMS+ pentru a utiliza acest lucru</string>
+    <string name="toast_qksms_plus">Trebuie să deblocați QUIK+ pentru a utiliza acest lucru</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Mesaj nou</item>
         <item quantity="few">%s mesaje noi</item>

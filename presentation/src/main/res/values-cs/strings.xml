@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Zde se objeví vaše archivované konverzace</string>
     <string name="main_fab_cd">Zahájit novou konverzaci</string>
     <string name="main_default_sms_title">Zamilujte si znovu psaní</string>
-    <string name="main_default_sms_message">Nastavte si QKSMS jako výchozí SMS aplikaci</string>
+    <string name="main_default_sms_message">Nastavte si QUIK jako výchozí SMS aplikaci</string>
     <string name="main_default_sms_change">Nastavit</string>
     <string name="main_permission_required">Vyžadováno oprávnění</string>
-    <string name="main_permission_sms">QKSMS potřebuje oprávnění pro odesílání a zobrazení SMS zpráv</string>
-    <string name="main_permission_contacts">QKSMS potřebuje oprávnění pro zobrazení vašich kontaktů</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK potřebuje oprávnění pro odesílání a zobrazení SMS zpráv</string>
+    <string name="main_permission_contacts">QUIK potřebuje oprávnění pro zobrazení vašich kontaktů</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Povolit</string>
     <string name="drawer_inbox">Příchozí zprávy</string>
     <string name="drawer_archived">Archivováno</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Nápověda a zpětná vazba</string>
     <string name="drawer_invite">Pozvat přátele</string>
     <string name="drawer_plus_banner_summary">Odemkněte úžasné nové funkce a podpořte vývoj</string>
-    <string name="rate_title">Líbí se Vám QKSMS?</string>
+    <string name="rate_title">Líbí se Vám QUIK?</string>
     <string name="rate_summary">Sdílejte trochu lásky a ohodnoťte nás na Google Play!</string>
     <string name="rate_okay">Tak určitě!</string>
     <string name="rate_dismiss">ZAVŘÍT</string>
@@ -100,7 +100,7 @@
     <string name="compose_vcard_label">Karta kontaktu</string>
     <string name="compose_scheduled_for">Naplánováno na</string>
     <string name="compose_scheduled_future">Vybraný čas musí teprve nastat (musí být v budoucnu).</string>
-    <string name="compose_scheduled_plus">Pro použití plánování zpráv je třeba povýšit na QKSMS+</string>
+    <string name="compose_scheduled_plus">Pro použití plánování zpráv je třeba povýšit na QUIK+</string>
     <string name="compose_scheduled_toast">Přidáno do naplánovaných zpráv</string>
     <string name="compose_hint">Napsat zprávu&#8230;</string>
     <string name="compose_menu_copy">Kopírovat text</string>
@@ -154,7 +154,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Obnovit</string>
     <string name="backup_restore_summary">Vybrat zálohu</string>
-    <string name="backup_restore_error_plus">Odemkněte QKSMS+ pro použití funkce zálohování a obnovení</string>
+    <string name="backup_restore_error_plus">Odemkněte QUIK+ pro použití funkce zálohování a obnovení</string>
     <string name="backup_restore_error_backup">Zálohování&#8230;</string>
     <string name="backup_restore_error_restore">Probíhá obnova&#8230;</string>
     <string name="backup_restore_confirm_title">Obnovit ze zálohy</string>
@@ -257,7 +257,7 @@
     <string name="settings_mms_size_title">Automaticky komprimovat MMS přílohy</string>
     <string name="settings_sync_title">Synchronizovat zprávy</string>
     <string name="settings_sync_summary">Opětovná synchronizace zpráv s nativní Android SMS databází</string>
-    <string name="settings_about_title">O aplikaci QKSMS</string>
+    <string name="settings_about_title">O aplikaci QUIK</string>
     <string name="settings_version">Verze %s</string>
     <string name="settings_logging_enabled">Ladící protokolování zapnuto</string>
     <string name="settings_logging_disabled">Ladící protokolování vypnuto</string>
@@ -267,8 +267,8 @@
     <string name="blocking_drop_summary">Zahodit příchozí zprávy od blokovaných odesílatelů namísto jejich skrytí</string>
     <string name="blocking_conversations">Blokované konverzace</string>
     <string name="blocking_manager_title">Správce blokování</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Vestavěné blokování v QKSMS</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">Vestavěné blokování v QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatické filtrování hovorů a zpráv na jednom místě. Community IQ™ poskytuje ochranu před nevyžádanými zprávami od komunitou označených spammerů.</string>
     <string name="blocking_manager_sia_summary">Automaticky filtrovat zprávy od nevyžádaných čísel pomocí aplikace „Můžu to zvednout?“</string>
@@ -310,10 +310,10 @@
     <string name="qksms_plus_upgrade">Doživotní aktualizace za %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Odemknout + darovat %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Děkujeme za podporu QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Nyní máte přístup ke všem funkcím QKSMS+</string>
+    <string name="qksms_plus_thanks_title">Děkujeme za podporu QUIK!</string>
+    <string name="qksms_plus_thanks_summary">Nyní máte přístup ke všem funkcím QUIK+</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS + je zdarma pro uživatele F-Droid! Pokud byste chtěli podpořit vývoj, neváhejte přispět.</string>
+    <string name="qksms_plus_free_title">QUIK + je zdarma pro uživatele F-Droid! Pokud byste chtěli podpořit vývoj, neváhejte přispět.</string>
     <string name="qksms_plus_donate">Darovat pomocí PayPal</string>
     <string name="qksms_plus_coming_soon">Připravujeme</string>
     <string name="qksms_plus_themes_title">Prémiové motivy vzhledu</string>
@@ -335,7 +335,7 @@
     <string name="qksms_plus_respond_title">Automatická odpověď</string>
     <string name="qksms_plus_respond_summary">Automatické odpovídání na příchozí zprávy přednastavenou odpovědí</string>
     <string name="qksms_plus_more_title">Více</string>
-    <string name="qksms_plus_more_summary">QKSMS je v aktivním vývoji a váš nákup bude obsahovat i všechny budoucí funkce QKSMS+!</string>
+    <string name="qksms_plus_more_summary">QUIK je v aktivním vývoji a váš nákup bude obsahovat i všechny budoucí funkce QUIK+!</string>
     <string name="widget_loading">Načítání&#8230;</string>
     <string name="widget_more">Zobrazit další konverzace</string>
     <string name="qkreply_menu_read">Označit jako přečtené</string>
@@ -367,7 +367,7 @@
     <string name="button_undo">Zpět</string>
     <string name="toast_copied">Zkopírováno</string>
     <string name="toast_archived">Archivované konverzace</string>
-    <string name="toast_qksms_plus">Pro použití musíte odemknout verzi QKSMS +</string>
+    <string name="toast_qksms_plus">Pro použití musíte odemknout verzi QUIK +</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nová zpráva</item>
         <item quantity="few">%s nových zpráv</item>

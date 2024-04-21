@@ -75,7 +75,7 @@ class Navigator @Inject constructor(
      * one of [main_menu, compose_schedule, settings_night, settings_theme]
      */
     fun showQksmsPlusActivity(source: String) {
-        analyticsManager.track("Viewed QKSMS+", Pair("source", source))
+//        analyticsManager.track("Viewed QKSMS+", Pair("source", source))
         val intent = Intent(context, PlusActivity::class.java)
         startActivity(intent)
     }
@@ -126,12 +126,12 @@ class Navigator @Inject constructor(
     }
 
     fun showBackup() {
-        analyticsManager.track("Viewed Backup")
+//        analyticsManager.track("Viewed Backup")
         startActivity(Intent(context, BackupActivity::class.java))
     }
 
     fun showScheduled() {
-        analyticsManager.track("Viewed Scheduled")
+//        analyticsManager.track("Viewed Scheduled")
         val intent = Intent(context, ScheduledActivity::class.java)
         startActivity(intent)
     }
@@ -173,12 +173,12 @@ class Navigator @Inject constructor(
     }
 
     fun showDonation() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://bit.ly/QKSMSDonation"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octoshrimpy/quik"))
         startActivityExternal(intent)
     }
 
     fun showRating() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=dev.octoshrimpy.quik"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octoshrimpy/quik"))
                 .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY
                         or Intent.FLAG_ACTIVITY_NEW_DOCUMENT
                         or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
@@ -186,7 +186,7 @@ class Navigator @Inject constructor(
         try {
             startActivityExternal(intent)
         } catch (e: ActivityNotFoundException) {
-            val url = "http://play.google.com/store/apps/details?id=dev.octoshrimpy.quik"
+            val url = "https://github.com/octoshrimpy/quik"
             startActivityExternal(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         }
     }
@@ -221,8 +221,8 @@ class Navigator @Inject constructor(
     fun showSupport() {
         val intent = Intent(Intent.ACTION_SENDTO)
         intent.data = Uri.parse("mailto:")
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("moez@qklabs.com"))
-        intent.putExtra(Intent.EXTRA_SUBJECT, "QKSMS Support")
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("octoshrimpy@gmail.com"))
+        intent.putExtra(Intent.EXTRA_SUBJECT, "QUIK Support")
         intent.putExtra(Intent.EXTRA_TEXT, StringBuilder("\n\n")
                 .append("\n\n--- Please write your message above this line ---\n\n")
                 .append("Package: ${context.packageName}\n")
@@ -237,7 +237,7 @@ class Navigator @Inject constructor(
     }
 
     fun showInvite() {
-        analyticsManager.track("Clicked Invite")
+//        analyticsManager.track("Clicked Invite")
         Intent(Intent.ACTION_SEND)
                 .setType("text/plain")
                 .putExtra(Intent.EXTRA_TEXT, "https://github.com/octoshrimpy/quik/releases/latest")

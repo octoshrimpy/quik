@@ -1,0 +1,3 @@
+Open source replacement to the stock SMS app on Android. A revival of QKSMS.
+
+You can chat with the community over at <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>

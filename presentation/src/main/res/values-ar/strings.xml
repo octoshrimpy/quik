@@ -56,12 +56,12 @@
     <string name="archived_empty_text">ستظهر المحادثات المؤرشفة الخاصة بك هنا</string>
     <string name="main_fab_cd">بدء محادثة جديدة</string>
     <string name="main_default_sms_title">ستحب المراسلة ثانية</string>
-    <string name="main_default_sms_message">جعل QKSMS تطبيق الرسائل النصية الافتراضي لديك</string>
+    <string name="main_default_sms_message">جعل QUIK تطبيق الرسائل النصية الافتراضي لديك</string>
     <string name="main_default_sms_change">تغيير</string>
     <string name="main_permission_required">الإذن مطلوب</string>
-    <string name="main_permission_sms">QKSMS يحتاج إلى إذن لإرسال وعرض الرسائل النصية</string>
-    <string name="main_permission_contacts">QKSMS يحتاج إلى إذن لعرض جهات الاتصال لديك</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK يحتاج إلى إذن لإرسال وعرض الرسائل النصية</string>
+    <string name="main_permission_contacts">QUIK يحتاج إلى إذن لعرض جهات الاتصال لديك</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">سماح</string>
     <string name="drawer_inbox">صندوق الوارد</string>
     <string name="drawer_archived">المؤرشفة</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">المساعدة والتواصل مع المبرمج</string>
     <string name="drawer_invite">دعوة الأصدقاء</string>
     <string name="drawer_plus_banner_summary">فتح ميزات رائعة جديدة ، و دعم التطوير</string>
-    <string name="rate_title">هل QKSMS ممتع ؟</string>
+    <string name="rate_title">هل QUIK ممتع ؟</string>
     <string name="rate_summary">أظهر محبتك وقيّمنا على متجر Google Play!</string>
     <string name="rate_okay">حسناً</string>
     <string name="rate_dismiss">استبعاد</string>
@@ -102,7 +102,7 @@
     <string name="compose_vcard_label">بطاقة جهة الاتصال</string>
     <string name="compose_scheduled_for">مجدولة لـ</string>
     <string name="compose_scheduled_future">الوقت المحدّد يجب أن يكون مستقبلاً!</string>
-    <string name="compose_scheduled_plus">يلزمك فك QKSMS+ لاستخدام التراسل المجدول</string>
+    <string name="compose_scheduled_plus">يلزمك فك QUIK+ لاستخدام التراسل المجدول</string>
     <string name="compose_scheduled_toast">أضيفت إلى الرسائل المجدولة</string>
     <string name="compose_hint">كتابة رسالة&#8230;</string>
     <string name="compose_menu_copy">نسخ النص</string>
@@ -156,7 +156,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">استعادة</string>
     <string name="backup_restore_summary">اختر نسخة احتياطية</string>
-    <string name="backup_restore_error_plus">يرجى إلغاء تأمين QKSMS+ للتمكن من استخدام النسخ الاحتياطي والاستعادة</string>
+    <string name="backup_restore_error_plus">يرجى إلغاء تأمين QUIK+ للتمكن من استخدام النسخ الاحتياطي والاستعادة</string>
     <string name="backup_restore_error_backup">النسخ الاحتياطي قيد التقدم&#8230;</string>
     <string name="backup_restore_error_restore">الاستعادة قيد التقدُّم&#8230;</string>
     <string name="backup_restore_confirm_title">الاستعادة من النسخ الاحتياطي</string>
@@ -182,8 +182,8 @@
     <string name="scheduled_empty_description">الإرسال الآلي لأي رسالة في الوقت الذي ترغب بالضبط</string>
     <string name="scheduled_empty_message_1">مهلاً..متى عيد ميلادك؟</string>
     <string name="scheduled_empty_message_2">إنه في 23 ديسمبر</string>
-    <string name="scheduled_empty_message_3">عيد ميلاد سعيد! أنظر ما أجمل صديقك QKSMS ، يتذكر عيد ميلادك</string>
-    <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
+    <string name="scheduled_empty_message_3">عيد ميلاد سعيد! أنظر ما أجمل صديقك QUIK ، يتذكر عيد ميلادك</string>
+    <!--&#x200A; is a special character required at the end of this string to fix its formatting in the app -->
     <string name="scheduled_empty_message_3_timestamp">الإرسال في 23 ديسمبر</string>
     <string name="scheduled_compose_cd">جدولة رسالة</string>
     <string name="scheduled_options_title">الرسالة المجدولة</string>
@@ -261,7 +261,7 @@
     <string name="settings_mms_size_title">الضغط التلقائي لمرفقات رسائل الوسائط</string>
     <string name="settings_sync_title">مزامنة الرسائل</string>
     <string name="settings_sync_summary">إعادة مزامنة رسائلك مع قاعدة البيانات الأصلية للرسائل في النظام</string>
-    <string name="settings_about_title">حول QKSMS</string>
+    <string name="settings_about_title">حول QUIK</string>
     <string name="settings_version">النسخة %s</string>
     <string name="settings_logging_enabled">تسجيل التصحيح مفعَّل</string>
     <string name="settings_logging_disabled">تسجيل التصحيح معطَّل</string>
@@ -272,7 +272,7 @@
     <string name="blocking_conversations">المحادثات المحظورة</string>
     <string name="blocking_manager_title">مدير المحظورات</string>
     <string name="blocking_manager_qksms_title">كيو كي اس ام اس </string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QKSMS</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">الترشيح التلقائي للرسائل من الأرقام غير المرغوبة باستخدام تطبيق \"Should I Answer\"</string>
@@ -318,10 +318,10 @@
     <string name="qksms_plus_upgrade">ترقية مدى الحياة ل %1$s%2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">افتح + التبرع ل %1$s%2$s</string>
-    <string name="qksms_plus_thanks_title">شكراً لكم على دعم QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">جميع ميزات QKSMS+ متاحة لك الآن</string>
+    <string name="qksms_plus_thanks_title">شكراً لكم على دعم QUIK!</string>
+    <string name="qksms_plus_thanks_summary">جميع ميزات QUIK+ متاحة لك الآن</string>
     <string name="qksms_plus_error">حدث خطا, يرجى اعادة المحاولة</string>
-    <string name="qksms_plus_free_title">QKSMS+ مجاني لمستخدمي متجر ف-درويد! لا تتردد في التبرع إن كنت ترغب دعم تطوير هذا التطبيق.</string>
+    <string name="qksms_plus_free_title">QUIK+ مجاني لمستخدمي متجر ف-درويد! لا تتردد في التبرع إن كنت ترغب دعم تطوير هذا التطبيق.</string>
     <string name="qksms_plus_donate">التبرع عن طريق بي بال</string>
     <string name="qksms_plus_coming_soon">قريباً</string>
     <string name="qksms_plus_themes_title">سمات فاخرة</string>
@@ -344,7 +344,7 @@
     <string name="qksms_plus_respond_title">الرد التلقائي</string>
     <string name="qksms_plus_respond_summary">الرد تلقائياً على الرسائل الواردة برسالة محددة مسبقاً</string>
     <string name="qksms_plus_more_title">المزيد</string>
-    <string name="qksms_plus_more_summary">QKSMS قيد التطوير النشط ، مشتراك سيتضمن كل ميزات QKSMS+ المستقبلية!</string>
+    <string name="qksms_plus_more_summary">QUIK قيد التطوير النشط ، مشتراك سيتضمن كل ميزات QUIK+ المستقبلية!</string>
     <string name="widget_loading">تحميل&#8230;</string>
     <string name="widget_more">عرض المزيد من المحادثات</string>
     <string name="qkreply_menu_read">مقروء</string>
@@ -376,7 +376,7 @@
     <string name="button_undo">تراجع</string>
     <string name="toast_copied">تم النسخ</string>
     <string name="toast_archived">تم حفظ المحادثة</string>
-    <string name="toast_qksms_plus">استخدام هذه الميزة يتطلب فتح QKSMS+</string>
+    <string name="toast_qksms_plus">استخدام هذه الميزة يتطلب فتح QUIK+</string>
     <plurals name="notification_new_messages">
         <item quantity="zero">لا رسائل جديدة</item>
         <item quantity="one">رسالة جديدة</item>

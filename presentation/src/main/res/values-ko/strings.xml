@@ -56,12 +56,12 @@
     <string name="archived_empty_text">보관된 메시지가 여기 나타납니다</string>
     <string name="main_fab_cd">새로운 대화 시작하기</string>
     <string name="main_default_sms_title">메시지의 매력에 다시 빠지세요</string>
-    <string name="main_default_sms_message">QKSMS 앱을 기본 메시지 앱으로 설정하기</string>
+    <string name="main_default_sms_message">QUIK 앱을 기본 메시지 앱으로 설정하기</string>
     <string name="main_default_sms_change">변경하기</string>
     <string name="main_permission_required">권한을 부여해 주세요</string>
-    <string name="main_permission_sms">QKSMS 앱은 메시지를 보내고 읽을 수 있는 권한이 필요합니다</string>
-    <string name="main_permission_contacts">QKSMS 앱은 연락처를 읽을 수 있는 권한이 필요합니다</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK 앱은 메시지를 보내고 읽을 수 있는 권한이 필요합니다</string>
+    <string name="main_permission_contacts">QUIK 앱은 연락처를 읽을 수 있는 권한이 필요합니다</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">허용</string>
     <string name="drawer_inbox">수신함</string>
     <string name="drawer_archived">보관됨</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">도움말 &amp; 피드백</string>
     <string name="drawer_invite">친구 초대하기</string>
     <string name="drawer_plus_banner_summary">새롭고 놀라운 기능을 사용할 수 있고, 개발자에게 지원도 할 수 있습니다</string>
-    <string name="rate_title">QKSMS 앱을 잘 사용하고 계신가요?</string>
+    <string name="rate_title">QUIK 앱을 잘 사용하고 계신가요?</string>
     <string name="rate_summary">Google Play 스토어에 리뷰를 남겨주세요!</string>
     <string name="rate_okay">좋아요!</string>
     <string name="rate_dismiss">안할래요</string>
@@ -97,7 +97,7 @@
     <string name="compose_vcard_label">연락처</string>
     <string name="compose_scheduled_for">예정</string>
     <string name="compose_scheduled_future">선택한 시간은 반드시 현재 이후의 시간으로 설정해야 합니다</string>
-    <string name="compose_scheduled_plus">메시지 예약 전송 기능을 사용하려면 QKSMS+를 구입해야 합니다</string>
+    <string name="compose_scheduled_plus">메시지 예약 전송 기능을 사용하려면 QUIK+를 구입해야 합니다</string>
     <string name="compose_scheduled_toast">예약된 메시지에 저장됨</string>
     <string name="compose_hint">메시지 작성 중...</string>
     <string name="compose_menu_copy">문자 복사하기</string>
@@ -151,7 +151,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">복원</string>
     <string name="backup_restore_summary">백업 선택하기</string>
-    <string name="backup_restore_error_plus">QKSMS+을 구입하여 백업과 복원기능을 사용하세요</string>
+    <string name="backup_restore_error_plus">QUIK+을 구입하여 백업과 복원기능을 사용하세요</string>
     <string name="backup_restore_error_backup">백업 중...</string>
     <string name="backup_restore_error_restore">복원 중...</string>
     <string name="backup_restore_confirm_title">복원을 할까요?</string>
@@ -251,7 +251,7 @@
     <string name="settings_mms_size_title">자동으로 MMS 첨부 파일 압축하기</string>
     <string name="settings_sync_title">메시지 동기화하기</string>
     <string name="settings_sync_summary">기본 안드로이드 SMS 데이터베이스에 다시 동기화하기</string>
-    <string name="settings_about_title">QKSMS에 대해...</string>
+    <string name="settings_about_title">QUIK에 대해...</string>
     <string name="settings_version">버전 정보 %s</string>
     <string name="settings_logging_enabled">디버그 로깅 설정됨</string>
     <string name="settings_logging_disabled">디버그 로깅 해제됨</string>
@@ -261,7 +261,7 @@
     <string name="blocking_drop_summary">차단된 사람으로부터 오는 메시지를 가리는 대신 삭제합니다</string>
     <string name="blocking_conversations">차단된 대화</string>
     <string name="blocking_manager_title">차단 메니저</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">빌트인 차단기능이 있는 기본 필터.</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">자동으오 전화와 메시지를 한 곳에서 필터링하세요! Community IQ™는 커뮤니티 기반으로 원하지 않는 스팸 메시지를 차단해줍니다.</string>
@@ -298,10 +298,10 @@
     <string name="qksms_plus_upgrade">%1$s %2$s 으로 평생 업그레이드</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">%1$s %2$s 으로 프리미엄 기능 잠금 해제 및 기부</string>
-    <string name="qksms_plus_thanks_title">QKSMS를 지원해 주셔서 감사합니다!</string>
-    <string name="qksms_plus_thanks_summary">이제 모든 QKSMS+ 기능에 액세스할 수 있습니다</string>
+    <string name="qksms_plus_thanks_title">QUIK를 지원해 주셔서 감사합니다!</string>
+    <string name="qksms_plus_thanks_summary">이제 모든 QUIK+ 기능에 액세스할 수 있습니다</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">QKSMS+는 F-Droid 사용자들에게 무료입니다! 만약 여러분이 개발을 지원하고 싶으시다면, 기부해 주시기 바랍니다.</string>
+    <string name="qksms_plus_free_title">QUIK+는 F-Droid 사용자들에게 무료입니다! 만약 여러분이 개발을 지원하고 싶으시다면, 기부해 주시기 바랍니다.</string>
     <string name="qksms_plus_donate">페이팔을 통해 기부</string>
     <string name="qksms_plus_coming_soon">출시 예정</string>
     <string name="qksms_plus_themes_title">프리미엄 테마</string>
@@ -323,7 +323,7 @@
     <string name="qksms_plus_respond_title">자동 응답</string>
     <string name="qksms_plus_respond_summary">미리 설정된 응답으로 받은 메시지에 자동으로 응답합니다</string>
     <string name="qksms_plus_more_title">더보기</string>
-    <string name="qksms_plus_more_summary">QKSMS는 개발이 활성화되어 있고 여러분의 구입이 모든 미래의 QKSMS+ 기능들이 포함될 것입니다!</string>
+    <string name="qksms_plus_more_summary">QUIK는 개발이 활성화되어 있고 여러분의 구입이 모든 미래의 QUIK+ 기능들이 포함될 것입니다!</string>
     <string name="widget_loading">불러오는 중&#8230;</string>
     <string name="widget_more">더 많은 대화 보기</string>
     <string name="qkreply_menu_read">읽음으로 표시</string>
@@ -355,7 +355,7 @@
     <string name="button_undo">되돌리기</string>
     <string name="toast_copied">복사됨</string>
     <string name="toast_archived">보관된 대화</string>
-    <string name="toast_qksms_plus">이 기능을 사용하려면 QKSMS+ 를 잠금 해제해야 합니다.</string>
+    <string name="toast_qksms_plus">이 기능을 사용하려면 QUIK+ 를 잠금 해제해야 합니다.</string>
     <plurals name="notification_new_messages">
         <item quantity="other">새로운 메세지
 

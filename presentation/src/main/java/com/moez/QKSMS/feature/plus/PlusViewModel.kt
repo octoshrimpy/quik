@@ -55,7 +55,7 @@ class PlusViewModel @Inject constructor(
         Observable.merge(
                 view.upgradeIntent.map { BillingManager.SKU_PLUS },
                 view.upgradeDonateIntent.map { BillingManager.SKU_PLUS_DONATE })
-                .doOnNext { sku -> analyticsManager.track("Clicked Upgrade", Pair("sku", sku)) }
+//                .doOnNext { sku -> analyticsManager.track("Clicked Upgrade", Pair("sku", sku)) }
                 .autoDisposable(view.scope())
                 .subscribe { sku -> view.initiatePurchaseFlow(billingManager, sku) }
 

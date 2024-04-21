@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Овде ће се појавити твоји сачувани разговори</string>
     <string name="main_fab_cd">Започни нов разговор</string>
     <string name="main_default_sms_title">Поново заволите СМС.</string>
-    <string name="main_default_sms_message">Постави QKSMS као подразумевану СМС апликацију</string>
+    <string name="main_default_sms_message">Постави QUIK као подразумевану СМС апликацију</string>
     <string name="main_default_sms_change">Промени</string>
     <string name="main_permission_required">Потребна је дозвола</string>
-    <string name="main_permission_sms">QKSMS тражи дозволу да шаље и прима СМС поруке</string>
-    <string name="main_permission_contacts">QKSMS тражи приступ твојим контактима</string>
-    <string name="main_permission_notifications">QKSMS needs permission to display notifications</string>
+    <string name="main_permission_sms">QUIK тражи дозволу да шаље и прима СМС поруке</string>
+    <string name="main_permission_contacts">QUIK тражи приступ твојим контактима</string>
+    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Дозволи</string>
     <string name="drawer_inbox">Примљено</string>
     <string name="drawer_archived">Сачувано</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Помоћ и повратне информације</string>
     <string name="drawer_invite">Позови пријатеље</string>
     <string name="drawer_plus_banner_summary">Откључај нове могућности и подржи развој апликације</string>
-    <string name="rate_title">Да ли уживаш уз QKSMS?</string>
+    <string name="rate_title">Да ли уживаш уз QUIK?</string>
     <string name="rate_summary">Покажи мало љубави и оцени нас на Google Play!</string>
     <string name="rate_okay">ВАЖИ!</string>
     <string name="rate_dismiss">ОТКАЖИ</string>
@@ -99,7 +99,7 @@
     <string name="compose_vcard_label">Контакт картица</string>
     <string name="compose_scheduled_for">Заказано за</string>
     <string name="compose_scheduled_future">Изабрано време мора бити у будућности!</string>
-    <string name="compose_scheduled_plus">Да би заказивао поруке мораш откључати QKSMS+</string>
+    <string name="compose_scheduled_plus">Да би заказивао поруке мораш откључати QUIK+</string>
     <string name="compose_scheduled_toast">Додато у заказане поруке</string>
     <string name="compose_hint">Напиши поруку&#8230;</string>
     <string name="compose_menu_copy">Копирај текст</string>
@@ -153,7 +153,7 @@
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Поврати копију</string>
     <string name="backup_restore_summary">Изабери резервну копију</string>
-    <string name="backup_restore_error_plus">Молимо откључајте QKSMS+ да бисте користили опцију за прављење резервне копије</string>
+    <string name="backup_restore_error_plus">Молимо откључајте QUIK+ да бисте користили опцију за прављење резервне копије</string>
     <string name="backup_restore_error_backup">Правим резервну копију&#8230;</string>
     <string name="backup_restore_error_restore">Враћам резервну копију&#8230;</string>
     <string name="backup_restore_confirm_title">Поврати резервну копију</string>
@@ -265,8 +265,8 @@
     <string name="blocking_drop_summary">Одбиј поруке које стижу са блокираних бројева уместо да их сакријеш</string>
     <string name="blocking_conversations">Блокирани разговори</string>
     <string name="blocking_manager_title">Апликација за блокирање</string>
-    <string name="blocking_manager_qksms_title">QKSMS</string>
-    <string name="blocking_manager_qksms_summary">Уграђена могућност блокирања у QKSMS</string>
+    <string name="blocking_manager_qksms_title">QUIK</string>
+    <string name="blocking_manager_qksms_summary">Уграђена могућност блокирања у QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Блокирај нежељене поруке, бројеве и непознате позиве помоћу листе непожељних бројева</string>
     <string name="blocking_manager_call_control_summary">Аутоматски филтрирај позиве и поруке на једном месту! Community IQ™ ти омогућује да блокираш нежељене поруке од \"спамера\" познатих заједници</string>
     <string name="blocking_manager_sia_summary">Аутоматски фитрирај поруке са непожељних бројева користећи \"Should I Answer\" апликацију</string>
@@ -306,10 +306,10 @@
     <string name="qksms_plus_upgrade">Трајна надоградња за само %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Откључавање + добровољни прилог за %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Хвала што подржавате QKSMS!</string>
-    <string name="qksms_plus_thanks_summary">Сада имате приступ свим QKSMS+ могућностима</string>
+    <string name="qksms_plus_thanks_title">Хвала што подржавате QUIK!</string>
+    <string name="qksms_plus_thanks_summary">Сада имате приступ свим QUIK+ могућностима</string>
     <string name="qksms_plus_error">Дошло је до грешке! Молимо покушајте поново.</string>
-    <string name="qksms_plus_free_title">QKSMS+ је бесплатан за кориснике F-Droid-а! Ако желиш да подржиш развој апликације, били бисмо ти захвални на добровољном прилогу.</string>
+    <string name="qksms_plus_free_title">QUIK+ је бесплатан за кориснике F-Droid-а! Ако желиш да подржиш развој апликације, били бисмо ти захвални на добровољном прилогу.</string>
     <string name="qksms_plus_donate">Добровољни прилог путем PayPal-а</string>
     <string name="qksms_plus_coming_soon">Ускоро</string>
     <string name="qksms_plus_themes_title">Премијум теме</string>
@@ -331,7 +331,7 @@
     <string name="qksms_plus_respond_title">Аутоматски одговори</string>
     <string name="qksms_plus_respond_summary">Предефинисани аутоматски одговор на долазне поруке</string>
     <string name="qksms_plus_more_title">Још</string>
-    <string name="qksms_plus_more_summary">QKSMS се активно развија и једнократним плаћањем добијаш и све будуће QKSMS+ могућности!</string>
+    <string name="qksms_plus_more_summary">QUIK се активно развија и једнократним плаћањем добијаш и све будуће QUIK+ могућности!</string>
     <string name="widget_loading">Учитавање&#8230;</string>
     <string name="widget_more">Прикажи више разговора</string>
     <string name="qkreply_menu_read">Означи као прочитано</string>
@@ -363,7 +363,7 @@
     <string name="button_undo">Опозови</string>
     <string name="toast_copied">Копирано</string>
     <string name="toast_archived">Сачувани разговори</string>
-    <string name="toast_qksms_plus">Откључај QKSMS+ за приступ овој опцији</string>
+    <string name="toast_qksms_plus">Откључај QUIK+ за приступ овој опцији</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Нова порука</item>
         <item quantity="few">%s нове/нових порука</item>
