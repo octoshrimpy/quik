@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mms_config version="1">
+    <bool name="allowEnablingWapPushSI">true</bool>
+    <bool name="enableWapPushSI">false</bool>
+    <bool name="enableGroupMms">true</bool>
+    <bool name="groupChatDefaultsToMMS">false</bool>
+</mms_config>
