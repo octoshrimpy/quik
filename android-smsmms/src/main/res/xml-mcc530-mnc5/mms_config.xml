@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mms_config version="4">
+    <int name="maxMessageSize">614400</int>
+    <int name="maxImageHeight">1944</int>
+    <int name="maxImageWidth">2592</int>
+    <bool name="supportMmsContentDisposition">false</bool>
+    <bool name="enableGroupMms">true</bool>
+    <bool name="groupChatDefaultsToMMS">true</bool>
+    <string name="spamForwardingNumber">7726</string>
+</mms_config>

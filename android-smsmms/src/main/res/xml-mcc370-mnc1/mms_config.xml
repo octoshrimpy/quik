@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mms_config version="1">
+    <bool name="enabledMMS">false</bool>
+    <bool name="enableGroupMms">false</bool>
+    <bool name="enableMMSDeliveryReports">false</bool>
+    <bool name="enableMMSReadReports">false</bool>
+    <bool name="enableMultipartSMS">false</bool>
+    <bool name="sendMultipartSmsAsSeparateMessages">true</bool>
+    <bool name="groupChatDefaultsToMMS">false</bool>
+    <bool name="mms_auto_retrieve_enabled_bool">false</bool>
+    <bool name="supportMmsPriority">false</bool>
+    <bool name="smsUsesSimpleCharactersOnly">false</bool>
+</mms_config>
