@@ -78,11 +78,18 @@
     <string name="rate_dismiss">ODMAWIAM</string>
     <string name="dialog_delete_title">Usuń</string>
     <plurals name="dialog_delete_message">
-        <item quantity="one">Czy na pewno chcesz usunąć tą rozmowę?</item>
+        <item quantity="one">Czy na pewno chcesz usunąć tę rozmowę?</item>
         <item quantity="few">Czy na pewno chcesz usunąć te %d rozmowy?</item>
         <item quantity="many">Czy na pewno chcesz usunąć te %d rozmów?</item>
         <item quantity="other">Czy na pewno chcesz usunąć te %d rozmów?</item>
     </plurals>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Czy na pewno chcesz usunąć tę wiadomość?</item>
+        <item quantity="few">Czy na pewno chcesz usunąć te %d wiadomości?</item>
+        <item quantity="many">Czy na pewno chcesz usunąć te %d wiadomości?</item>
+        <item quantity="other">Czy na pewno chcesz usunąć te %d wiadomości?</item>
+    </plurals>
+
     <string-array name="message_options">
         <item>Kopiuj tekst</item>
         <item>Przekaż dalej</item>
@@ -305,7 +312,7 @@
     <string name="about_license_title">Licencja</string>
     <string name="about_copyright_title">Prawa autorskie</string>
     <string name="qksms_plus_description_title">Wesprzyj rozwój, odblokuj wszystko</string>
-    <string name="qksms_plus_description_summary">Możesz wesprzeć głodującego programistę za jedyne %s</string>
+    <string name="qksms_plus_description_summary">Możesz wesprzeć programistę za jedyne %s</string>
     <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
     <string name="qksms_plus_upgrade">Dożywotnie aktualizacja za %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
