@@ -7,7 +7,7 @@ This image is outdated! Nothing has changed as far as UI, so it should be okay f
 
 [![Build and Release](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml)
 
-QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation to [QKSMS](https://github.com/moezbhatti/qksms). 
+QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation of [QKSMS](https://github.com/moezbhatti/qksms). 
 
 QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases), but you can also keep track of updates with [Obtainium](https://github.com/ImranR98/Obtainium#-obtainium).
 
