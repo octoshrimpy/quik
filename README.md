@@ -7,12 +7,13 @@ This image is outdated! Nothing has changed as far as UI, so it should be okay f
 
 [![Build and Release](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml)
 
-QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation to [QKSMS](https://github.com/moezbhatti/qksms). 
+QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation of [QKSMS](https://github.com/moezbhatti/qksms). 
 
 QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases), but you can also keep track of updates with [Obtainium](https://github.com/ImranR98/Obtainium#-obtainium).
 
 
 <a href="https://f-droid.org/repository/browse/?fdid=dev.octoshrimpy.quik"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
+<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/{%22id%22:%22dev.octoshrimpy.quik%22,%22url%22:%22https://github.com/octoshrimpy/quik%22,%22author%22:%22octoshrimpy%22,%22name%22:%22QUIK%22,%22additionalSettings%22:%22{\%22apkFilterRegEx\%22:\%22release\%22,\%22invertAPKFilter\%22:false,\%22about\%22:\%22QUIK%20is%20an%20open%20source%20replacement%20for%20the%20stock%20messaging%20app%20on%20Android.%20It%20is%20a%20continuation%20of%20QKSMS.\%22}%22}"><img src="https://raw.githubusercontent.com/ImranR98/Obtainium/b1c8ac6f2ab08497189721a788a5763e28ff64cd/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="100"></a>
 <!--
 </a><a href="https://play.google.com/store/apps/details?id=dev.octoshrimpy.quik"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Download on Google Play" height="100">
 -->
