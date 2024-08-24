@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mms_config version="6">
+    <bool name="enabledMMS">true</bool>
+    <bool name="enableGroupMms">true</bool>
+    <bool name="groupChatDefaultsToMMS">true</bool>
+    <bool name="allowEditingSmscAddress">false</bool>
+</mms_config>
