@@ -53,18 +53,6 @@
          to indicate default value -->
     <int name="maxMessageTextSize">-1</int>
 
-    <!--
-         User-Agent and UA Profile URL should be obtained via system API since Kitkat.
-         The following values provide a fallback in the rare case that system API
-         returns empty.
-    -->
-    <!-- User-Agent parameter used in MMS http request -->
-    <string name="userAgent">Android Messaging</string>
-
-    <!-- UAProf URL -->
-    <string name="uaProfUrl">http://www.gstatic.com/android/hangouts/hangouts_mms_ua_profile.xml</string>
-
-
     <!-- UAProf parameter tag name -->
     <!-- this is default to "x-wap-profile". Override if necessary. Optional -->
     <!--
