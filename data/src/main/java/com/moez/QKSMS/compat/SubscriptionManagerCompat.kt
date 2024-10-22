@@ -31,7 +31,18 @@ class SubscriptionManagerCompat @Inject constructor(context: Context, private va
 
     val activeSubscriptionInfoList: List<SubscriptionInfoCompat>
         get() {
-            return subscriptionManager?.activeSubscriptionInfoList?.map { SubscriptionInfoCompat(it) } ?: listOf()
+            return if (permissions.hasPhone()) {
+                try {
+                    subscriptionManager?.activeSubscriptionInfoList?.map {
+                        SubscriptionInfoCompat(it)
+                    } ?: listOf()
+                } catch (e: SecurityException) {
+                    // Handle exception if permission is not granted
+                    listOf()
+                }
+            } else {
+                listOf()
+            }
         }
 
     init {

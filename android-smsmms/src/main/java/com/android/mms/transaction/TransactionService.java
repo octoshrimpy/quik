@@ -55,6 +55,12 @@ import timber.log.Timber;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.net.Network;
+import android.net.NetworkRequest;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.os.Build;
+
 /**
  * The TransactionService of the MMS Client is responsible for handling requests
  * to initiate client-transactions sent from:
@@ -181,6 +187,7 @@ public class TransactionService extends Service implements Observer {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(mReceiver, intentFilter);
+        mConnMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     private void initServiceHandler() {
@@ -458,8 +465,10 @@ public class TransactionService extends Service implements Observer {
     private synchronized void createWakeLock() {
         // Create a new wake lock if we haven't made one yet.
         if (mWakeLock == null) {
-            PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MMS Connectivity");
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+            // Use a unique tag with a prefix followed by a colon for better debugging
+            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "myapp:MMSConnectivity");
             mWakeLock.setReferenceCounted(false);
         }
     }
@@ -481,30 +490,67 @@ public class TransactionService extends Service implements Observer {
 
     protected int beginMmsConnectivity() throws IOException {
         Timber.v("beginMmsConnectivity");
+
         // Take a wake lock so we don't fall asleep before the message is downloaded.
         createWakeLock();
 
         if (Utils.isMmsOverWifiEnabled(this)) {
-            NetworkInfo niWF = mConnMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            if ((niWF != null) && (niWF.isConnected())) {
-                Timber.v("beginMmsConnectivity: Wifi active");
-                return 0;
+            Network[] networks = mConnMgr.getAllNetworks();
+            for (Network network : networks) {
+                NetworkCapabilities capabilities = mConnMgr.getNetworkCapabilities(network);
+                if (capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+                        Timber.v("beginMmsConnectivity: Wifi active");
+                        return 0;
+                    }
+                }
             }
         }
 
-        int result = mConnMgr.startUsingNetworkFeature(ConnectivityManager.TYPE_MOBILE, "enableMMS");
+        // Request the mobile network for MMS connectivity
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            NetworkRequest.Builder builder = new NetworkRequest.Builder();
 
-        Timber.v("beginMmsConnectivity: result=" + result);
+            // Specify MMS capability and cellular transport
+            builder.addCapability(NetworkCapabilities.NET_CAPABILITY_MMS);
+            builder.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
 
-        switch (result) {
-            case 0:
-            case 1:
-                acquireWakeLock();
-                return result;
+            NetworkRequest networkRequest = builder.build();
+
+            mConnMgr.requestNetwork(networkRequest, new ConnectivityManager.NetworkCallback() {
+                @Override
+                public void onAvailable(Network network) {
+                    // Bind the process to the network once it's available
+                    mConnMgr.bindProcessToNetwork(network);
+                    Timber.v("beginMmsConnectivity: Mobile network available for MMS");
+
+                    // Acquire wake lock once the network is available
+                    acquireWakeLock();
+                }
+
+                @Override
+                public void onUnavailable() {
+                    Timber.e("beginMmsConnectivity: Unable to establish MMS connectivity");
+                    // You can handle this by throwing an IOException if necessary
+                }
+
+                @Override
+                public void onLost(Network network) {
+                    Timber.e("beginMmsConnectivity: Mobile network for MMS lost");
+                    // Handle losing the network if needed
+                }
+            });
+
+            // You may need to block or wait until the network becomes available before proceeding.
+            // Using something like a CountDownLatch can help block until onAvailable() is called.
+            // Here we return 1 to indicate the request has been initiated.
+            return 1;
         }
 
         throw new IOException("Cannot establish MMS connectivity");
     }
+
 
     protected void endMmsConnectivity() {
         try {

@@ -388,7 +388,7 @@
     <string name="about_developer" translatable="false">Marcos Jones</string>
     <string name="about_source" translatable="false">https://github.com/octoshrimpy/quik</string>
     <string name="about_changelog" translatable="false">https://github.com/octoshrimpy/quik/releases</string>
-    <string name="about_contact" translatable="false">octoshrimpy@gmail.com</string>
+    <string name="about_contact" translatable="false">quik@octo.sh</string>
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
     <string name="about_copyright" translatable="false">© 2014–2024</string>
 

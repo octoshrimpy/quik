@@ -28,14 +28,15 @@ android {
 
     defaultConfig {
         applicationId 'dev.octoshrimpy.quik'
-        minSdkVersion 23
+        minSdkVersion 26
         targetSdkVersion 33
         versionCode 2224
-        versionName "4.0.7"
+        versionName '4.0.7'
         setProperty("archivesBaseName", "QUIK-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         setProperty("archivesBaseName", "QUIK-v${versionName}")
+        versionNameSuffix '-testing'
     }
 
     signingConfigs {
@@ -125,8 +126,8 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     // exoplayer
-    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-    implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayer_version", {
+    implementation "com.github.google.ExoPlayer:exoplayer-core:$exoplayer_version"
+    implementation("com.github.google.ExoPlayer:exoplayer-ui:$exoplayer_version", {
         exclude group: "com.android.support", module: "support-media-compat"
     })
 
@@ -148,8 +149,10 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 //    compileOnly "javax.annotation:jsr250-api:1.0"
     //Resolve jdk8+ Generation Annotations - javax annotation does not exist
-    compileOnly 'com.github.pengrad:jdk9-deps:1.0'
-//    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'com.github.pengrad:jdk9-deps:1ffe84c468'
+
+//    look into jakarta.annotation-api when switching to java 9
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     // ezvcard
     implementation('com.googlecode.ez-vcard:ez-vcard:0.10.4', {
@@ -159,7 +162,8 @@ dependencies {
     })
 
     // realm
-    implementation("io.realm:android-adapters:$realm_adapters_version") { transitive = false }
+    implementation "com.github.realm:realm-android-adapters:$realm_adapters_version"
+//    implementation("io.realm:android-adapters:$realm_adapters_version") { transitive = false }
     kapt "io.realm:realm-annotations:$realm_version"
     kapt "io.realm:realm-annotations-processor:$realm_version"
 
@@ -191,9 +195,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutines_version"
 
-    implementation "com.github.chrisbanes:PhotoView:2.0.0"
+    implementation "com.github.chrisbanes:photoview:2.1.4"
     implementation "com.f2prateek.rx.preferences2:rx-preferences:$rx_preferences_version"
-    implementation "com.google.android:flexbox:0.3.1"
+    implementation "com.github.google:flexbox-layout:0.3.1"
     implementation "com.jakewharton.timber:timber:$timber_version"
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "me.leolin:ShortcutBadger:1.1.22"
