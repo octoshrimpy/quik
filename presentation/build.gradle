@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId 'dev.octoshrimpy.quik'
-        minSdkVersion 26
+        minSdkVersion 23
         targetSdkVersion 33
         versionCode 2224
         versionName '4.0.7'

@@ -23,7 +23,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        minSdkVersion 26
+        minSdkVersion 23
         targetSdkVersion 33
     }
 

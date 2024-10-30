@@ -59,22 +59,42 @@
 
             <dev.octoshrimpy.quik.common.widget.QkEditText
                 android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/ToolbarText"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
+                android:minHeight="40dp"
                 android:background="@drawable/rounded_rectangle_24dp"
                 android:backgroundTint="?attr/bubbleColor"
                 android:hint="@string/title_compose"
-                android:imeOptions="flagNoExtractUi"
                 android:inputType="textFilter|textNoSuggestions"
-                android:paddingStart="16dp"
-                android:paddingEnd="40dp"
                 android:privateImeOptions="nm"
-                android:textColor="?android:attr/textColorPrimary"
+                android:maxLines="1"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:textColorHint="?android:attr/textColorTertiary"
-                app:textSize="primary" />
+                app:textSize="primary"
+                tools:textSize="16sp" />
+
+<!--            <dev.octoshrimpy.quik.common.widget.QkEditText-->
+<!--                android:id="@+id/search"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:background="@drawable/rounded_rectangle_24dp"-->
+<!--                android:backgroundTint="?attr/bubbleColor"-->
+<!--                android:hint="@string/title_compose"-->
+<!--                android:imeOptions="flagNoExtractUi"-->
+<!--                android:inputType="textFilter|textNoSuggestions"-->
+<!--                android:padding="8dp"-->
+<!--                android:paddingStart="16dp"-->
+<!--                android:paddingEnd="40dp"-->
+<!--                android:privateImeOptions="nm"-->
+<!--                android:textColor="?android:attr/textColorPrimary"-->
+<!--                android:textColorHint="?android:attr/textColorTertiary"-->
+<!--                app:textSize="primary" />-->
 
             <ImageView
                 android:id="@+id/cancel"
@@ -85,8 +105,8 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
                 android:src="@drawable/ic_cancel_black_24dp"
-                android:tint="?android:attr/textColorSecondary"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:tint="?android:attr/textColorSecondary" />
 
         </FrameLayout>
 
