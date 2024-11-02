@@ -49,6 +49,11 @@ class ChangelogAdapter(private val context: Context) : QkAdapter<ChangelogAdapte
             changes += changelog.fixed.map { change -> ChangelogItem(1, "• $change") }
             changes += ChangelogItem(0, "")
         }
+        if (changelog.removed.isNotEmpty()) {
+            changes += ChangelogItem(0, context.getString(R.string.changelog_removed))
+            changes += changelog.removed.map { change -> ChangelogItem(1, "• $change") }
+            changes += ChangelogItem(0, "")
+        }
         data = changes
     }
 

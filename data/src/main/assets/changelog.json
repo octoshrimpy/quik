@@ -1,16 +1,17 @@
 
 [  {
-    "versionCode": "2225",
+    "versionCode": 2225,
     "versionName": "4.0.8",
     "fixed": [
       "Padding on number input field for new message",
       "Clean up telephony permissions",
       "min SDK version support: 23",
-      "registers as APP_MESSAGING"
+      "registers as APP_MESSAGING",
+      "refactors changelog and version handling"
     ]
   },
   {
-    "versionCode": "2224",
+    "versionCode": 2224,
     "versionName": "4.0.7",
     "removed": [
       "Analytics trackers",
@@ -19,14 +20,14 @@
     ]
   },
   {
-    "versionCode": "2223",
+    "versionCode": 2223,
     "versionName": "4.0.6",
     "fixed": [
       "Renaming conversations has been patched."
     ]
   },
   {
-    "versionCode": "2222",
+    "versionCode": 2222,
     "versionName": "4.0.5",
     "fixed": [
     ],
@@ -34,7 +35,7 @@
     ]
   },
   {
-    "versionCode": "2221",
+    "versionCode": 2221,
     "versionName": "4.0.4",
     "fixed": [
       "Revived!",
@@ -48,14 +49,14 @@
     ]
   },
   {
-    "versionCode": "2220",
+    "versionCode": 2220,
     "versionName": "3.10.1",
     "fixed": [
       "Crash when launching the app"
     ]
   },
   {
-    "versionCode": "2219",
+    "versionCode": 2219,
     "versionName": "3.10.0",
     "added": [
       "Support for Call Blocker (blocking manager)"
@@ -70,28 +71,28 @@
     ]
   },
   {
-    "versionCode": "2218",
+    "versionCode": 2218,
     "versionName": "3.9.4",
     "fixed": [
       "Incorrect handling of shared text that contains a question mark"
     ]
   },
   {
-    "versionCode": "2217",
+    "versionCode": 2217,
     "versionName": "3.9.3",
     "improved": [
       "Message sync is now 2x faster"
     ]
   },
   {
-    "versionCode": "2216",
+    "versionCode": 2216,
     "versionName": "3.9.2",
     "fixed": [
       "Crash when launching app in 3.9.1"
     ]
   },
   {
-    "versionCode": "2215",
+    "versionCode": 2215,
     "versionName": "3.9.1",
     "improved": [
       "Support SMS URIs that only have a body"
@@ -101,7 +102,7 @@
     ]
   },
   {
-    "versionCode": "2214",
+    "versionCode": 2214,
     "versionName": "3.9.0",
     "added": [
       "Auto-delete old messages",
@@ -140,7 +141,7 @@
     ]
   },
   {
-    "versionCode": "2213",
+    "versionCode": 2213,
     "versionName": "3.8.1",
     "fixed": [
       "MMS not sending",
@@ -150,14 +151,14 @@
     ]
   },
   {
-    "versionCode": "2212",
+    "versionCode": 2212,
     "versionName": "3.8.0",
     "improved": [
       "Updated translations"
     ]
   },
   {
-    "versionCode": "2211",
+    "versionCode": 2211,
     "versionName": "3.8.0-beta2",
     "fixed": [
       "Crash when starting new conversation",
@@ -165,7 +166,7 @@
     ]
   },
   {
-    "versionCode": "2210",
+    "versionCode": 2210,
     "versionName": "3.8.0-beta1",
     "added": [
       "Support for Contact Groups and Starred Contacts",
@@ -203,7 +204,7 @@
     ]
   },
   {
-    "versionCode": "2209",
+    "versionCode": 2209,
     "versionName": "3.7.10",
     "improved": [
       "Include archived conversations in search results",
@@ -215,7 +216,7 @@
     ]
   },
   {
-    "versionCode": "2208",
+    "versionCode": 2208,
     "versionName": "3.7.9",
     "improved": [
       "Better reliability for sending MMS"
@@ -225,7 +226,7 @@
     ]
   },
   {
-    "versionCode": "2207",
+    "versionCode": 2207,
     "versionName": "3.7.8",
     "fixed": [
       "Contact not always linked to conversation",
@@ -234,14 +235,14 @@
     ]
   },
   {
-    "versionCode": "2206",
+    "versionCode": 2206,
     "versionName": "3.7.7",
     "fixed": [
       "New conversations may not appear in inbox"
     ]
   },
   {
-    "versionCode": "2204",
+    "versionCode": 2204,
     "versionName": "3.7.5",
     "added": [
       "Added ability to retry sending failed MMS"
@@ -259,7 +260,7 @@
     ]
   },
   {
-    "versionCode": "2203",
+    "versionCode": 2203,
     "versionName": "3.7.4",
     "added": [
       "Support for Android Q Roles"
@@ -274,7 +275,7 @@
     ]
   },
   {
-    "versionCode": "2202",
+    "versionCode": 2202,
     "versionName": "3.7.3",
     "added": [
       "You can now view attachments of any filetype"
@@ -297,21 +298,21 @@
     ]
   },
   {
-    "versionCode": "2201",
+    "versionCode": 2201,
     "versionName": "3.7.2",
     "fixed": [
       "Various crashes from 3.7.1"
     ]
   },
   {
-    "versionCode": "2200",
+    "versionCode": 2200,
     "versionName": "3.7.1",
     "fixed": [
       "Various crashes from 3.7.0"
     ]
   },
   {
-    "versionCode": "2198",
+    "versionCode": 2198,
     "versionName": "3.6.8",
     "fixed": [
       "Messages can't be sent or received on older devices",
@@ -319,7 +320,7 @@
     ]
   },
   {
-    "versionCode": "2197",
+    "versionCode": 2197,
     "versionName": "3.6.7",
     "added": [
       "Signature support",

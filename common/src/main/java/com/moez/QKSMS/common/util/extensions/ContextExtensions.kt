@@ -20,8 +20,10 @@ package dev.octoshrimpy.quik.common.util.extensions
 
 import android.app.job.JobScheduler
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -85,7 +87,12 @@ fun Context.isInstalled(packageName: String): Boolean {
 }
 
 val Context.versionCode: Int
-    get() = packageManager.getPackageInfo(packageName, 0).versionCode
-
+    get() {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).longVersionCode.toInt()
+        } else {
+            packageManager.getPackageInfo(packageName, 0).versionCode
+        }
+    }
 val Context.jobScheduler: JobScheduler
     get() = getSystemService()!!

@@ -60,6 +60,11 @@
 }
 
 # Retain generated JsonAdapters if annotated type is retained.
+-keep class **JsonAdapter {
+    <init>(...);
+    <fields>;
+}
+
 -if @com.squareup.moshi.JsonClass class *
 -keep class <1>JsonAdapter {
     <init>(...);

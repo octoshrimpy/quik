@@ -397,6 +397,7 @@
     <string name="changelog_added" translatable="false">Added</string>
     <string name="changelog_improved" translatable="false">Improved</string>
     <string name="changelog_fixed" translatable="false">Fixed</string>
+    <string name="changelog_removed" translatable="false">Removed</string>
     <string name="changelog_more" translatable="false">More</string>
     <string name="changelog_dismiss" translatable="false">Dismiss</string>
 

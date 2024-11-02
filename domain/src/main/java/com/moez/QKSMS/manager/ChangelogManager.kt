@@ -23,6 +23,7 @@ interface ChangelogManager {
     data class CumulativeChangelog(
         val added: List<String>,
         val improved: List<String>,
+        val removed: List<String>,
         val fixed: List<String>
     )
 

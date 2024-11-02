@@ -187,7 +187,7 @@ dependencies {
     // moshi
     implementation "com.squareup.moshi:moshi:$moshi_version"
     debugImplementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
-    kaptRelease "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
