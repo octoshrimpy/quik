@@ -1,5 +1,15 @@
 
 [  {
+    "versionCode": "2225",
+    "versionName": "4.0.8",
+    "fixed": [
+      "Padding on number input field for new message",
+      "Clean up telephony permissions",
+      "min SDK version support: 23",
+      "registers as APP_MESSAGING"
+    ]
+  },
+  {
     "versionCode": "2224",
     "versionName": "4.0.7",
     "removed": [
