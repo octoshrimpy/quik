@@ -40,6 +40,22 @@
             app:title="@string/about_version_title"
             tools:summary="3.0.8" />
 
+        <!-- UP Open Source -->
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/up_open_source_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:summary="@string/up_open_source_link"
+            app:title="@string/up_open_source_link_title" />
+
+        <!-- Open Source Credit Header -->
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/openSourceHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:summary="Tap to expand"
+            app:title="@string/open_source_credit_title" />
+
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/developer"
             android:layout_width="match_parent"
