@@ -83,7 +83,7 @@
                 style="@style/DrawerText"
                 android:text="@string/backup_title" />
 
-            <dev.octoshrimpy.quik.common.widget.QkTextView
+            <!--<dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/plusBadge1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                 android:textStyle="bold"
                 app:textSize="tertiary"
                 tools:backgroundTint="@color/tools_theme"
-                tools:textColor="@color/textPrimaryDark" />
+                tools:textColor="@color/textPrimaryDark" />-->
 
         </LinearLayout>
 
@@ -110,7 +110,7 @@
                 style="@style/DrawerText"
                 android:text="@string/drawer_scheduled" />
 
-            <dev.octoshrimpy.quik.common.widget.QkTextView
+            <!--<dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/plusBadge2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                 android:textStyle="bold"
                 app:textSize="tertiary"
                 tools:backgroundTint="@color/tools_theme"
-                tools:textColor="@color/textPrimaryDark" />
+                tools:textColor="@color/textPrimaryDark" />-->
 
         </LinearLayout>
 
@@ -191,7 +191,7 @@
 
 <!--        </LinearLayout>-->
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/invite"
             style="@style/DrawerRow">
 
@@ -204,9 +204,9 @@
                 style="@style/DrawerText"
                 android:text="@string/drawer_invite" />
 
-        </LinearLayout>
+        </LinearLayout>-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!--<androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/plusBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -264,9 +264,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!--<androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/rateLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -346,7 +346,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rateSummary"
                 app:textSize="secondary" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     </LinearLayout>
 

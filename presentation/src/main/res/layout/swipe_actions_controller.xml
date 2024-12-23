@@ -60,7 +60,7 @@
                 app:layout_constraintStart_toStartOf="@id/rightTitle"
                 app:layout_constraintTop_toBottomOf="@id/rightTitle"
                 app:textSize="secondary"
-                tools:text="Archive" />
+                tools:text="Delete" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/rightChange"
@@ -104,7 +104,7 @@
                 app:layout_constraintStart_toStartOf="@id/rightBackground"
                 app:layout_constraintTop_toTopOf="@id/rightBackground"
                 tools:backgroundTint="@color/tools_theme"
-                tools:src="@drawable/ic_archive_white_24dp"
+                tools:src="@drawable/ic_delete_white_24dp"
                 tools:tint="@color/textPrimaryDark" />
 
             <ImageView
@@ -116,7 +116,7 @@
                 android:backgroundTint="?android:attr/divider"
                 android:padding="8dp"
                 android:src="@drawable/ic_person_black_24dp"
-                android:tint="?android:attr/textColorTertiary"
+                app:tint="?android:attr/textColorTertiary"
                 app:layout_constraintBottom_toBottomOf="@id/rightBackground"
                 app:layout_constraintStart_toEndOf="@id/rightIcon"
                 app:layout_constraintTop_toTopOf="@id/rightBackground" />
