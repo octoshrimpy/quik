@@ -36,8 +36,6 @@ class AboutPresenter @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { preference ->
                     when (preference.id) {
-                        R.id.openSourceHeader -> view.toggleOpenSourceContentVisibility()
-
                         R.id.up_open_source_link -> navigator.showUpOpenSourceLink()
 
                         R.id.developer -> navigator.showDeveloper()

@@ -48,21 +48,6 @@
             app:summary="@string/up_open_source_link"
             app:title="@string/up_open_source_link_title" />
 
-        <!-- Open Source Credit Header -->
-        <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/openSourceHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:summary="Tap to expand"
-            app:title="@string/open_source_credit_title" />
-
-        <LinearLayout
-            android:id="@+id/open_source_content"
-            android:visibility="gone"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
             <dev.octoshrimpy.quik.common.widget.PreferenceView
                 android:id="@+id/developer"
                 android:layout_width="match_parent"
@@ -106,8 +91,4 @@
                 app:title="@string/about_copyright_title" />
 
         </LinearLayout>
-
-
-    </LinearLayout>
-
 </ScrollView>

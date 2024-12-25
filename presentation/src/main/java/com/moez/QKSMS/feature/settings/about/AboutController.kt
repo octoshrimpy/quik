@@ -49,11 +49,6 @@ class AboutController : QkController<AboutView, Unit, AboutPresenter>(), AboutVi
         showBackButton(true)
     }
 
-    override fun toggleOpenSourceContentVisibility() {
-        val isVisible = open_source_content.visibility == View.VISIBLE
-        open_source_content.visibility = if (isVisible) View.GONE else View.VISIBLE
-        openSourceHeader.summary = if (isVisible) "Tap to expand" else "Tap to collapse"
-    }
 
     override fun preferenceClicks(): Observable<PreferenceView> = (0 until preferences.childCount)
             .map { index -> preferences.getChildAt(index) }
