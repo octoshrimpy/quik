@@ -33,12 +33,12 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp">
 
-        <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/blockingManager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="@string/blocking_manager_title"
-            tools:summary="@string/blocking_manager_qksms_title" />
+<!--        <dev.octoshrimpy.quik.common.widget.PreferenceView-->
+<!--            android:id="@+id/blockingManager"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:title="@string/blocking_manager_title"-->
+<!--            tools:summary="@string/blocking_manager_qksms_title" />-->
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/blockedNumbers"

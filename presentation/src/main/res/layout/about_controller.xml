@@ -33,6 +33,7 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
+        <!-- Version -->
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/version"
             android:layout_width="match_parent"
@@ -53,15 +54,18 @@
             android:id="@+id/openSourceHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:summary="Tap to expand"
-            app:title="@string/open_source_credit_title" />
+            app:title="@string/open_source_credit_title"
+            app:summary="Tap to expand" />
 
+        <!-- Expandable Content -->
         <LinearLayout
             android:id="@+id/open_source_content"
-            android:visibility="gone"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
             <dev.octoshrimpy.quik.common.widget.PreferenceView
                 android:id="@+id/developer"
@@ -106,7 +110,6 @@
                 app:title="@string/about_copyright_title" />
 
         </LinearLayout>
-
 
     </LinearLayout>
 
