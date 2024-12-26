@@ -18,7 +18,7 @@
   -->
 <resources>
 
-    <string name="app_name" translatable="false">UP Sms</string>
+    <string name="app_name" translatable="false">UP SMS</string>
 
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>
@@ -63,12 +63,12 @@
     <string name="archived_empty_text">Your archived conversations will appear here</string>
     <string name="main_fab_cd">Start new conversation</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">Make UP Sms your default SMS app</string>
+    <string name="main_default_sms_message">Make UP SMS your default SMS app</string>
     <string name="main_default_sms_change">Change</string>
     <string name="main_permission_required">Permission required</string>
-    <string name="main_permission_sms">UP Sms needs permission to send and view SMS messages</string>
-    <string name="main_permission_contacts">UP Sms needs permission to view your contacts</string>
-    <string name="main_permission_notifications">UP Sms needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS needs permission to send and view SMS messages</string>
+    <string name="main_permission_contacts">UP SMS needs permission to view your contacts</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Allow</string>
 
     <string name="drawer_inbox">Inbox</string>
@@ -83,7 +83,7 @@
     <string name="drawer_plus_banner_title" translatable="false">DEPRECATED - drawer_plus_banner_title</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
 
-    <string name="rate_title">Enjoying UP Sms?</string>
+    <string name="rate_title">Enjoying UP SMS?</string>
     <string name="rate_summary">Share some love and rate us on Google Play!</string>
     <string name="rate_okay">OKAY!</string>
     <string name="rate_dismiss">DISMISS</string>
@@ -280,7 +280,7 @@
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
     <string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
-    <string name="settings_about_title">About UP Sms</string>
+    <string name="settings_about_title">About UP SMS</string>
     <string name="settings_version">Version %s</string>
     <string name="settings_logging_enabled">Debug logging enabled</string>
     <string name="settings_logging_disabled">Debug logging disabled</string>
@@ -293,8 +293,8 @@
     <string name="blocking_conversations">Blocked conversations</string>
 
     <string name="blocking_manager_title">Blocking Manager</string>
-    <string name="blocking_manager_qksms_title">UP Sms</string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in UP Sms</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in UP SMS</string>
     <string name="blocking_manager_call_blocker_title" translatable="false">Call Blocker - Incoming/Outgoing</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_title" translatable="false">Call Control</string>
@@ -343,10 +343,10 @@
     <string name="qksms_plus_upgrade_d" translatable="false">One-time purchase of %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Unlock + donate for %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Thank you for supporting UP Sms!</string>
-    <string name="qksms_plus_thanks_summary">You now have access to all UP Sms+ features</string>
+    <string name="qksms_plus_thanks_title">Thank you for supporting UP SMS!</string>
+    <string name="qksms_plus_thanks_summary">You now have access to all UP SMS+ features</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
-    <string name="qksms_plus_free_title">UP Sms+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
+    <string name="qksms_plus_free_title">UP SMS+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
     <string name="qksms_plus_donate">Donate via PayPal</string>
     <string name="qksms_plus_coming_soon">Coming soon</string>
     <string name="qksms_plus_themes_title">Premium themes</string>
@@ -368,7 +368,7 @@
     <string name="qksms_plus_respond_title">Auto-respond</string>
     <string name="qksms_plus_respond_summary">Automatically respond to incoming messages with a preset response</string>
     <string name="qksms_plus_more_title">More</string>
-    <string name="qksms_plus_more_summary">UP Sms is under active development, and your purchase will include all future UP Sms+ features!</string>
+    <string name="qksms_plus_more_summary">UP SMS is under active development, and your purchase will include all future UP SMS+ features!</string>
 
     <string name="widget_loading">Loading…</string>
     <string name="widget_more">View more conversations</string>
@@ -392,7 +392,7 @@
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
     <string name="about_copyright" translatable="false">© 2014–2024</string>
 
-    <string name="changelog_title" translatable="false">New in UP Sms</string>
+    <string name="changelog_title" translatable="false">New in UP SMS</string>
     <string name="changelog_version" translatable="false">Version %s</string>
     <string name="changelog_added" translatable="false">Added</string>
     <string name="changelog_improved" translatable="false">Improved</string>
@@ -427,7 +427,7 @@
 
     <string name="toast_copied">Copied</string>
     <string name="toast_archived">Archived conversation</string>
-    <string name="toast_qksms_plus">You must unlock UP Sms+ to use this</string>
+    <string name="toast_qksms_plus">You must unlock UP SMS+ to use this</string>
 
     <plurals name="notification_new_messages">
         <item quantity="one">New message</item>
