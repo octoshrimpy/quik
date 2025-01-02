@@ -33,7 +33,7 @@ class WidgetManagerImpl @Inject constructor(private val context: Context) : Widg
 
     override fun updateTheme() {
         val ids = AppWidgetManager.getInstance(context)
-                .getAppWidgetIds(ComponentName("dev.octoshrimpy.quik", "dev.octoshrimpy.quik.feature.widget.WidgetProvider"))
+                .getAppWidgetIds(ComponentName("com.unplugged.sms", "dev.octoshrimpy.quik.feature.widget.WidgetProvider"))
 
         val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
 

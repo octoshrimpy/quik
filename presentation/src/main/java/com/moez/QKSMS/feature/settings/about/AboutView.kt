@@ -25,5 +25,6 @@ import io.reactivex.Observable
 interface AboutView : QkViewContract<Unit> {
 
     fun preferenceClicks(): Observable<PreferenceView>
+    fun toggleOpenSourceContentVisibility()
 
 }

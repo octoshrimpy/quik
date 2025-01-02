@@ -79,6 +79,8 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         Realm.init(this)
         Realm.setDefaultConfiguration(RealmConfiguration.Builder()
                 .compactOnLaunch()
+                .allowWritesOnUiThread(true)
+                // TODO remove this allowWritesOnUiThread after the fix is merged from the open source
                 .migration(realmMigration)
                 .schemaVersion(QkRealmMigration.SchemaVersion)
                 .build())

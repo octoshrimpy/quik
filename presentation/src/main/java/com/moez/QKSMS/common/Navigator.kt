@@ -146,6 +146,11 @@ class Navigator @Inject constructor(
         startActivityExternal(intent)
     }
 
+    fun showUpOpenSourceLink() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/werunplugged/up_sms"))
+        startActivityExternal(intent)
+    }
+
     fun showSourceCode() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/octoshrimpy/quik"))
         startActivityExternal(intent)

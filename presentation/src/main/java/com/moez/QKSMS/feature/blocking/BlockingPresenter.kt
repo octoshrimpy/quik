@@ -54,9 +54,9 @@ class BlockingPresenter @Inject constructor(
     override fun bindIntents(view: BlockingView) {
         super.bindIntents(view)
 
-        view.blockingManagerIntent
-                .autoDisposable(view.scope())
-                .subscribe { view.openBlockingManager() }
+//        view.blockingManagerIntent
+//                .autoDisposable(view.scope())
+//                .subscribe { view.openBlockingManager() }
 
         view.blockedNumbersIntent
                 .autoDisposable(view.scope())

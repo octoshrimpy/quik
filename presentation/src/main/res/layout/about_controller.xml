@@ -33,6 +33,7 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
+        <!-- Version -->
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/version"
             android:layout_width="match_parent"
@@ -40,47 +41,75 @@
             app:title="@string/about_version_title"
             tools:summary="3.0.8" />
 
+        <!-- UP Open Source -->
         <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/developer"
+            android:id="@+id/up_open_source_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:summary="@string/about_developer"
-            app:title="@string/about_developer_title" />
+            app:summary="@string/up_open_source_link"
+            app:title="@string/up_open_source_link_title" />
 
+        <!-- Open Source Credit Header -->
         <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/source"
+            android:id="@+id/openSourceHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:summary="@string/about_source"
-            app:title="@string/about_source_title" />
+            app:title="@string/open_source_credit_title"
+            app:summary="Tap to expand" />
 
-        <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/changelog"
+        <!-- Expandable Content -->
+        <LinearLayout
+            android:id="@+id/open_source_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:summary="@string/about_changelog"
-            app:title="@string/about_changelog_title" />
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/contact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:summary="@string/about_contact"
-            app:title="@string/about_contact_title" />
+            <dev.octoshrimpy.quik.common.widget.PreferenceView
+                android:id="@+id/developer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/about_developer"
+                app:title="@string/about_developer_title" />
 
-        <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/license"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:summary="@string/about_license"
-            app:title="@string/about_license_title" />
+            <dev.octoshrimpy.quik.common.widget.PreferenceView
+                android:id="@+id/source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/about_source"
+                app:title="@string/about_source_title" />
 
-        <dev.octoshrimpy.quik.common.widget.PreferenceView
-            android:id="@+id/copyright"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:summary="@string/about_copyright"
-            app:title="@string/about_copyright_title" />
+            <dev.octoshrimpy.quik.common.widget.PreferenceView
+                android:id="@+id/changelog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/about_changelog"
+                app:title="@string/about_changelog_title" />
+
+            <dev.octoshrimpy.quik.common.widget.PreferenceView
+                android:id="@+id/contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/about_contact"
+                app:title="@string/about_contact_title" />
+
+            <dev.octoshrimpy.quik.common.widget.PreferenceView
+                android:id="@+id/license"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/about_license"
+                app:title="@string/about_license_title" />
+
+            <dev.octoshrimpy.quik.common.widget.PreferenceView
+                android:id="@+id/copyright"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:summary="@string/about_copyright"
+                app:title="@string/about_copyright_title" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

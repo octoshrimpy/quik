@@ -27,33 +27,25 @@ android {
     flavorDimensions "analytics"
 
     defaultConfig {
-        applicationId 'dev.octoshrimpy.quik'
+        applicationId 'com.unplugged.sms'
         minSdkVersion 23
         targetSdkVersion 33
         versionCode 2225
         versionName '4.0.8'
-        setProperty("archivesBaseName", "QUIK-v${versionName}")
+        setProperty("archivesBaseName", "UPSms-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        setProperty("archivesBaseName", "QUIK-v${versionName}")
+        setProperty("archivesBaseName", "UPSms-v${versionName}")
         versionNameSuffix '-alpha'
     }
 
     signingConfigs {
-        release {
-            def keystoreProps = new Properties()
-            def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
-            storeFile file('./my-release-key.keystore')
-            keyAlias 'quik_release'
-            if (keystorePropsFile.exists()) {
-                keystoreProps.load(new FileInputStream(keystorePropsFile))
-            } else if (System.getenv("CI") == "true") {
-//                do nothing
-            } else {
-                throw new GradleException("Keystore properties file not found.")
-            }
-            storePassword keystoreProps['storePassword']
-            keyPassword keystoreProps['keyPassword']
+        debug {
+            keyAlias 'up_dev_key'
+            keyPassword 'ntH_pmn23f$5'
+            storeFile file('./signature/up_dev.keystore')
+            storePassword 'ntH_pmn23f$5'
+            v2SigningEnabled true
         }
     }
 
@@ -62,7 +54,6 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
 
@@ -79,18 +70,13 @@ android {
     productFlavors {
         withAnalytics { dimension "analytics" }
         noAnalytics {
-            signingConfig signingConfigs.release
+
         }
     }
     lint {
         abortOnError false
     }
     namespace 'dev.octoshrimpy.quik'
-    if (System.getenv("CI") == "true") {
-        signingConfigs.release.storePassword = System.getenv("keystore_password")
-        signingConfigs.release.keyAlias = System.getenv("key_alias")
-        signingConfigs.release.keyPassword = System.getenv("key_password")
-    }
 }
 
 androidExtensions {
