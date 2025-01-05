@@ -255,6 +255,7 @@
         <item>Call</item>
         <item>Mark read</item>
         <item>Mark unread</item>
+        <item>Speak</item>
     </string-array>
     <string name="settings_delivery_title">Delivery confirmations</string>
     <string name="settings_delivery_summary">Confirm that messages were sent successfully</string>
@@ -450,7 +451,6 @@
         <item>Normal</item>
         <item>Large</item>
         <item>Larger</item>
-        <item>Super</item>
     </string-array>
 
     <string-array name="delayed_sending_labels">
@@ -496,5 +496,6 @@
         <item>LOL</item>
         <item>That\'s okay</item>
     </string-array>
-
+    <string name="speak_no_messages">No Messages</string>
+    <string name="speak_unseen_messages">Speak unseen messages</string>
 </resources>

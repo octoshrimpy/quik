@@ -47,7 +47,6 @@ class Preferences @Inject constructor(
         const val TEXT_SIZE_NORMAL = 1
         const val TEXT_SIZE_LARGE = 2
         const val TEXT_SIZE_LARGER = 3
-        const val TEXT_SIZE_SUPER = 4
 
         const val NOTIFICATION_PREVIEWS_ALL = 0
         const val NOTIFICATION_PREVIEWS_NAME = 1
@@ -73,6 +72,7 @@ class Preferences @Inject constructor(
         const val SWIPE_ACTION_CALL = 4
         const val SWIPE_ACTION_READ = 5
         const val SWIPE_ACTION_UNREAD = 6
+        const val SWIPE_ACTION_SPEAK = 7
 
         const val BLOCKING_MANAGER_QKSMS = 0
         const val BLOCKING_MANAGER_CC = 1
