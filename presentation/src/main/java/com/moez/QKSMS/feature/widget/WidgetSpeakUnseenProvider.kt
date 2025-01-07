@@ -24,10 +24,9 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.widget.ImageView
 import android.widget.RemoteViews
 import dev.octoshrimpy.quik.R
-import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
+import dev.octoshrimpy.quik.receiver.SpeakThreadsReceiver
 
 class WidgetSpeakUnseenProvider : AppWidgetProvider() {
 
@@ -42,7 +41,7 @@ class WidgetSpeakUnseenProvider : AppWidgetProvider() {
             updateWidget(context, appWidgetId)
     }
 
-    fun updateWidget(context: Context?, appWidgetId: Int) {
+    private fun updateWidget(context: Context?, appWidgetId: Int) {
         super.onEnabled(context)
 
         if (context == null)
@@ -53,14 +52,10 @@ class WidgetSpeakUnseenProvider : AppWidgetProvider() {
         remoteViews.setImageViewResource(R.id.speakUnseenImage, R.drawable.ic_speak_unseen_widget)
 
         // speak unseen intent
-        val speakUnseenIntent = Intent("dev.octoshrimpy.quik.intent.action.ACTION_SPEAK_MESSAGES")
-            .setPackage(context.packageName)
+        val speakUnseenIntent = Intent(context, SpeakThreadsReceiver::class.java)
             .putExtra("threadId", -1L)
-        val speakUnseenPendingIntent = PendingIntent.getBroadcast(
-            context,
-            0,
-            speakUnseenIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val speakUnseenPendingIntent = PendingIntent.getBroadcast(context,0,
+            speakUnseenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         remoteViews.setOnClickPendingIntent(R.id.speakUnseenImage, speakUnseenPendingIntent)
 
         AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews)
