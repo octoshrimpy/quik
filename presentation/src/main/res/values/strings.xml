@@ -410,6 +410,7 @@
         <item>Call</item>
         <item>Mark read</item>
         <item>Reply</item>
+        <item>Speak</item>
     </string-array>
 
     <string name="button_yes">Yes</string>

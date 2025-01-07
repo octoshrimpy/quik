@@ -59,6 +59,7 @@ class Preferences @Inject constructor(
         const val NOTIFICATION_ACTION_CALL = 4
         const val NOTIFICATION_ACTION_READ = 5
         const val NOTIFICATION_ACTION_REPLY = 6
+        const val NOTIFICATION_ACTION_SPEAK = 7
 
         const val SEND_DELAY_NONE = 0
         const val SEND_DELAY_SHORT = 1
