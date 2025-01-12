@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">தோற்றம்</string>
     <string name="settings_category_general">பொது</string>
-    <string name="settings_category_qkreply">QK பதில்</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">நிற அமைப்பு</string>
     <string name="settings_night_title">இரவு பயன்முறை</string>
     <string name="settings_black_title">தூய கருப்பு இரவு பயன்முறை</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">அதிர்வு</string>
     <string name="settings_ringtone_title">ஒலி</string>
     <string name="settings_ringtone_none">ஏதுமில்லை</string>
-    <string name="settings_qkreply_title">QK பதிலளிப்பு</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">புது தகவல்களுக்கு பாப்அப்</string>
     <string name="settings_qkreply_tap_dismiss_title">நிராகரிக்க தட்டு</string>
     <string name="settings_qkreply_tap_dismiss_summary">பாப்அப்பை மூட அதன் வெளியே தட்டு</string>

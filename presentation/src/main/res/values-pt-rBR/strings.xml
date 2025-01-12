@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Aparência</string>
     <string name="settings_category_general">Geral</string>
-    <string name="settings_category_qkreply">Responder via QUIK</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Modo noturno</string>
     <string name="settings_black_title">Modo noturno preto puro</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Vibração</string>
     <string name="settings_ringtone_title">Som</string>
     <string name="settings_ringtone_none">Nenhum</string>
-    <string name="settings_qkreply_title">Responder via QUIK</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Popup para novas mensagens</string>
     <string name="settings_qkreply_tap_dismiss_title">Toque para descartar</string>
     <string name="settings_qkreply_tap_dismiss_summary">Toque fora do popup para fechá-lo</string>

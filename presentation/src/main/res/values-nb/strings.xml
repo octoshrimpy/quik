@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generelt</string>
-    <string name="settings_category_qkreply">Raskt svar</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Drakt</string>
     <string name="settings_night_title">Nattmodus</string>
     <string name="settings_black_title">Ren svart nattmodus</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Vibrasjon</string>
     <string name="settings_ringtone_title">Lyd</string>
     <string name="settings_ringtone_none">Ingen</string>
-    <string name="settings_qkreply_title">Raskt svar</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Sprettopp-vindu ved nye meldinger</string>
     <string name="settings_qkreply_tap_dismiss_title">Trykk for å forkaste</string>
     <string name="settings_qkreply_tap_dismiss_summary">Trykk hvor som helst utenfor sprettopp-vinduet for å lukke det</string>

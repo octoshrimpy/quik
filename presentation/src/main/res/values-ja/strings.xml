@@ -189,7 +189,7 @@
     </string-array>
     <string name="settings_category_appearance">外観</string>
     <string name="settings_category_general">全般</string>
-    <string name="settings_category_qkreply">QK Reply</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">テーマ</string>
     <string name="settings_night_title">夜間モード</string>
     <string name="settings_black_title">ピュアブラック夜間モード</string>
@@ -210,7 +210,7 @@
     <string name="settings_vibration_title">バイブレーション</string>
     <string name="settings_ringtone_title">音</string>
     <string name="settings_ringtone_none">なし</string>
-    <string name="settings_qkreply_title">QK Reply</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">新しいメッセージをポップアップ</string>
     <string name="settings_qkreply_tap_dismiss_title">タップして閉じる</string>
     <string name="settings_qkreply_tap_dismiss_summary">ポップアップの外側をタップすると閉じます</string>

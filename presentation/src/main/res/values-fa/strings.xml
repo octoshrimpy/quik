@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">ظاهر</string>
     <string name="settings_category_general">عمومی</string>
-    <string name="settings_category_qkreply">پاسخ سریع</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">پوسته</string>
     <string name="settings_night_title">حالت شب</string>
     <string name="settings_black_title">حالت شب کامل</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">لرزش</string>
     <string name="settings_ringtone_title">صدا</string>
     <string name="settings_ringtone_none">هیچی</string>
-    <string name="settings_qkreply_title">پاسخ سریع</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">پنجره پیام های جدید</string>
     <string name="settings_qkreply_tap_dismiss_title">برای رد کردن ضربه بزنید</string>
     <string name="settings_qkreply_tap_dismiss_summary">برای بستن آن ، به بیرون پنجره ضربه بزنید</string>

@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">दिखावट</string>
     <string name="settings_category_general">सामान्य</string>
-    <string name="settings_category_qkreply">QK उत्तर</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">थीम</string>
     <string name="settings_night_title">रात्रि अंदाज़</string>
     <string name="settings_black_title">शुद्ध काली रात अंदाज़</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">कंपन</string>
     <string name="settings_ringtone_title">ध्वनियाँ</string>
     <string name="settings_ringtone_none">कुछ नहीं</string>
-    <string name="settings_qkreply_title">QK जवाब</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">नए संदेशों के लिए पॉपअप</string>
     <string name="settings_qkreply_tap_dismiss_title">खारिज करने के लिए टैप करें</string>
     <string name="settings_qkreply_tap_dismiss_summary">पॉपअप को बंद करने के लिए उसके बाहर टैप करें</string>

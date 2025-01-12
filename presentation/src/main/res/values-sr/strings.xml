@@ -191,7 +191,7 @@
     </string-array>
     <string name="settings_category_appearance">Уреди изглед</string>
     <string name="settings_category_general">Опште</string>
-    <string name="settings_category_qkreply">Брзи одговор</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Тема</string>
     <string name="settings_night_title">Ноћни мод</string>
     <string name="settings_black_title">Потпуно црни ноћни мод</string>
@@ -212,7 +212,7 @@
     <string name="settings_vibration_title">Вибрација</string>
     <string name="settings_ringtone_title">Звук</string>
     <string name="settings_ringtone_none">Ниједна</string>
-    <string name="settings_qkreply_title">Брзи одговор</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Искачући прозор за нове поруке</string>
     <string name="settings_qkreply_tap_dismiss_title">Додирни да уклониш</string>
     <string name="settings_qkreply_tap_dismiss_summary">Додирни екран изван искачућег прозора да га уклониш</string>

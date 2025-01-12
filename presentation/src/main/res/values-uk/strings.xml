@@ -192,7 +192,7 @@
     </string-array>
     <string name="settings_category_appearance">Зовнішній вигляд</string>
     <string name="settings_category_general">Загальні</string>
-    <string name="settings_category_qkreply">Швидка відповідь</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Тема</string>
     <string name="settings_night_title">Нічний режим</string>
     <string name="settings_black_title">Повністю чорний нічний режим</string>
@@ -213,7 +213,7 @@
     <string name="settings_vibration_title">Вібро</string>
     <string name="settings_ringtone_title">Звук</string>
     <string name="settings_ringtone_none">Ні</string>
-    <string name="settings_qkreply_title">QK Відповідь</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Виринаюче вікно для нових повідомлень</string>
     <string name="settings_qkreply_tap_dismiss_title">Торкніться, щоб вимкнути</string>
     <string name="settings_qkreply_tap_dismiss_summary">Торкніться за межами виринаючого вікна, щоб закрити його</string>

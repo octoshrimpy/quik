@@ -192,7 +192,7 @@
     </string-array>
     <string name="settings_category_appearance">Внешний вид</string>
     <string name="settings_category_general">Общее</string>
-    <string name="settings_category_qkreply">QK-ответ</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Тема</string>
     <string name="settings_night_title">Ночной режим</string>
     <string name="settings_black_title">Полностью чёрный ночной режим</string>
@@ -213,7 +213,7 @@
     <string name="settings_vibration_title">Вибросигнал</string>
     <string name="settings_ringtone_title">Звук</string>
     <string name="settings_ringtone_none">Нет</string>
-    <string name="settings_qkreply_title">QK-ответ</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Всплывающее окно для новых сообщений</string>
     <string name="settings_qkreply_tap_dismiss_title">Нажмите, чтобы отклонить</string>
     <string name="settings_qkreply_tap_dismiss_summary">Нажмите за пределами всплывающего окна, чтобы закрыть его</string>

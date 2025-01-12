@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Udseende</string>
     <string name="settings_category_general">Generelt</string>
-    <string name="settings_category_qkreply">QK-svar</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Nattilstand</string>
     <string name="settings_black_title">Ren sort nattilstand</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Lyd</string>
     <string name="settings_ringtone_none">Ingen</string>
-    <string name="settings_qkreply_title">QK-besvarelse</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Popup ved nye SMS\'er</string>
     <string name="settings_qkreply_tap_dismiss_title">Tryk for at afvise</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tryk udenfor popup-vinduet for at lukke det</string>

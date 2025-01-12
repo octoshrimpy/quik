@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Εμφάνιση</string>
     <string name="settings_category_general">Γενικά</string>
-    <string name="settings_category_qkreply">Γρήγορη απάντηση</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Θέμα εμφάνισης</string>
     <string name="settings_night_title">Νυχτερινή λειτουργία</string>
     <string name="settings_black_title">Νυχτερινή λειτουργία καθαρού μαύρου</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Δόνηση</string>
     <string name="settings_ringtone_title">Ήχος</string>
     <string name="settings_ringtone_none">Κανένα</string>
-    <string name="settings_qkreply_title">Γρήγορη απάντηση</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Αναδυόμενο παράθυρο για νέα μηνύματα</string>
     <string name="settings_qkreply_tap_dismiss_title">Πατήστε για αγνόηση</string>
     <string name="settings_qkreply_tap_dismiss_summary">Πατήστε εκτός του παραθύρου για να το κλείσετε</string>

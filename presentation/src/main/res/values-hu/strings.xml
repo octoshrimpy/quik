@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Megjelenés</string>
     <string name="settings_category_general">Általános</string>
-    <string name="settings_category_qkreply">QK válasz</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Téma</string>
     <string name="settings_night_title">Éjszakai mód</string>
     <string name="settings_black_title">Éjfekete mód</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Rezgés</string>
     <string name="settings_ringtone_title">Hang</string>
     <string name="settings_ringtone_none">Nincs</string>
-    <string name="settings_qkreply_title">QK válasz</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Felugró új üzenetek</string>
     <string name="settings_qkreply_tap_dismiss_title">Érintsd meg az eltüntetéshez</string>
     <string name="settings_qkreply_tap_dismiss_summary">Érintsd meg a felugró ablakon kívül a lezáráshoz</string>

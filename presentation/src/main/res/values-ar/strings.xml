@@ -194,7 +194,7 @@
     </string-array>
     <string name="settings_category_appearance">المظهر</string>
     <string name="settings_category_general">عام</string>
-    <string name="settings_category_qkreply">رد QK</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">السمة</string>
     <string name="settings_night_title">الوضع الليلي</string>
     <string name="settings_black_title">وضع ليلي بسوادٍ حالك</string>
@@ -215,7 +215,7 @@
     <string name="settings_vibration_title">الاهتزاز</string>
     <string name="settings_ringtone_title">الصوت</string>
     <string name="settings_ringtone_none">بدون نغمة </string>
-    <string name="settings_qkreply_title">رد QK</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">نافذة منبثقة للرسائل الجديدة</string>
     <string name="settings_qkreply_tap_dismiss_title">إلمس للاستبعاد</string>
     <string name="settings_qkreply_tap_dismiss_summary">إلمس خارج المنبثقة لإغلاقها</string>

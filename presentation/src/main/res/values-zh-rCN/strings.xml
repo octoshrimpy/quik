@@ -189,7 +189,7 @@
     </string-array>
     <string name="settings_category_appearance">外观</string>
     <string name="settings_category_general">通用</string>
-    <string name="settings_category_qkreply">快速回复</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">主题</string>
     <string name="settings_night_title">夜间模式</string>
     <string name="settings_black_title">纯黑夜间模式</string>
@@ -210,7 +210,7 @@
     <string name="settings_vibration_title">振动</string>
     <string name="settings_ringtone_title">铃声</string>
     <string name="settings_ringtone_none">无</string>
-    <string name="settings_qkreply_title">快速回复</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">弹出新消息</string>
     <string name="settings_qkreply_tap_dismiss_title">点击忽略</string>
     <string name="settings_qkreply_tap_dismiss_summary">点击弹窗外部以关闭</string>

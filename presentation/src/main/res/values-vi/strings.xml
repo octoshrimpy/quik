@@ -189,7 +189,7 @@
     </string-array>
     <string name="settings_category_appearance">Giao diện</string>
     <string name="settings_category_general">Chung</string>
-    <string name="settings_category_qkreply">Trả lời nhanh</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Chủ đề</string>
     <string name="settings_night_title">Giao diện tối</string>
     <string name="settings_black_title">Giao diện tối AMOLED</string>
@@ -210,7 +210,7 @@
     <string name="settings_vibration_title">Rung</string>
     <string name="settings_ringtone_title">Âm thanh</string>
     <string name="settings_ringtone_none">Không dùng</string>
-    <string name="settings_qkreply_title">Trả lời nhanh</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Hiển thị popup khi có tin nhắn mới</string>
     <string name="settings_qkreply_tap_dismiss_title">Chạm để bỏ qua</string>
     <string name="settings_qkreply_tap_dismiss_summary">Chạm vào phía ngoài của hộp thoại để đóng</string>

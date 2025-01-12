@@ -199,7 +199,7 @@
     </string-array>
     <string name="settings_category_appearance">Wygląd</string>
     <string name="settings_category_general">Ogólne</string>
-    <string name="settings_category_qkreply">Szybka odpowiedź</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Motyw</string>
     <string name="settings_night_title">Tryb nocny</string>
     <string name="settings_black_title">Czarne tło w trybie nocnym</string>
@@ -220,7 +220,7 @@
     <string name="settings_vibration_title">Wibracje</string>
     <string name="settings_ringtone_title">Dźwięki</string>
     <string name="settings_ringtone_none">Brak</string>
-    <string name="settings_qkreply_title">Szybka odpowiedź</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Powiadomienia o nowych wiadomościach</string>
     <string name="settings_qkreply_tap_dismiss_title">Dotknij, aby odrzucić</string>
     <string name="settings_qkreply_tap_dismiss_summary">Dotknij gdziekolwiek poza okienkiem, aby zamknąć</string>

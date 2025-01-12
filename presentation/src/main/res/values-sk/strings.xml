@@ -192,7 +192,7 @@
     </string-array>
     <string name="settings_category_appearance">Vzhľad</string>
     <string name="settings_category_general">Všeobecné</string>
-    <string name="settings_category_qkreply">Rýchla odpoveď</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Motív</string>
     <string name="settings_night_title">Nočný režim</string>
     <string name="settings_black_title">Čisto čierny nočný režim</string>
@@ -213,7 +213,7 @@
     <string name="settings_vibration_title">Vybrácie</string>
     <string name="settings_ringtone_title">Zvuk</string>
     <string name="settings_ringtone_none">Žiadny</string>
-    <string name="settings_qkreply_title">Rýchla odpoveď</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Vyskakovacie okno pre nové správy</string>
     <string name="settings_qkreply_tap_dismiss_title">Klepnutím zavriete</string>
     <string name="settings_qkreply_tap_dismiss_summary">Zavriete klepnutím mimo vyskakovacie okno</string>

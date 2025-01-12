@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Görünüm</string>
     <string name="settings_category_general">Genel</string>
-    <string name="settings_category_qkreply">QK Yanıt</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Gece Modu</string>
     <string name="settings_black_title">Saf siyah gece modu</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Titreşim</string>
     <string name="settings_ringtone_title">Ses</string>
     <string name="settings_ringtone_none">Hiçbiri</string>
-    <string name="settings_qkreply_title">QK Yanıt</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Yeni iletiler için açılan menü</string>
     <string name="settings_qkreply_tap_dismiss_title">Kapatmak için dokunun</string>
     <string name="settings_qkreply_tap_dismiss_summary">Açılır pencereyi kapatmak için pencere dışındaki herhangi bir yere dokunun</string>

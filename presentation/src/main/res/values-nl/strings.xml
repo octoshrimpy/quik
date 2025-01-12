@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Uiterlijk</string>
     <string name="settings_category_general">Algemeen</string>
-    <string name="settings_category_qkreply">QK Reply</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Thema</string>
     <string name="settings_night_title">Nachtmodus</string>
     <string name="settings_black_title">Pure zwarte nachtmodus</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Trillen</string>
     <string name="settings_ringtone_title">Geluid</string>
     <string name="settings_ringtone_none">Geen</string>
-    <string name="settings_qkreply_title">QK Reply</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Popup voor nieuwe berichten</string>
     <string name="settings_qkreply_tap_dismiss_title">Tik om te sluiten</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tik buiten de popup om deze te sluiten</string>

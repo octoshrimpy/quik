@@ -189,7 +189,7 @@
     </string-array>
     <string name="settings_category_appearance">ลักษณะที่ปรากฏ</string>
     <string name="settings_category_general">ทั่วไป</string>
-    <string name="settings_category_qkreply">QK ตอบกลับ</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">รูปแบบการแสดงผล</string>
     <string name="settings_night_title">โหมดกลางคืน</string>
     <string name="settings_black_title">โหมดกลางคืนแบบมืดสนิท</string>
@@ -210,7 +210,7 @@
     <string name="settings_vibration_title">การสั่น</string>
     <string name="settings_ringtone_title">เสียง</string>
     <string name="settings_ringtone_none">ไม่มี</string>
-    <string name="settings_qkreply_title">QK ตอบกลับ</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">ป๊อปอัพข้อความใหม่</string>
     <string name="settings_qkreply_tap_dismiss_title">แตะเพื่อยกเลิก</string>
     <string name="settings_qkreply_tap_dismiss_summary">แตะนอกป๊อปอัพเพื่อปิด</string>

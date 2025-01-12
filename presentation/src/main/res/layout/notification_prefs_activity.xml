@@ -72,12 +72,12 @@
                 app:title="@string/settings_notification_previews_title"
                 tools:summary="Show name and message" />
 
-            <dev.octoshrimpy.quik.common.widget.PreferenceView
-                android:id="@+id/wake"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:title="@string/settings_notification_wake_title"
-                app:widget="@layout/settings_switch_widget" />
+<!--            <dev.octoshrimpy.quik.common.widget.PreferenceView-->
+<!--                android:id="@+id/wake"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:title="@string/settings_notification_wake_title"-->
+<!--                app:widget="@layout/settings_switch_widget" />-->
 
             <dev.octoshrimpy.quik.common.widget.PreferenceView
                 android:id="@+id/vibration"

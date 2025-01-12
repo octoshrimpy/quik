@@ -191,7 +191,7 @@
     </string-array>
     <string name="settings_category_appearance">Izgled</string>
     <string name="settings_category_general">Općenito</string>
-    <string name="settings_category_qkreply">QK odgovor</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Noćni način</string>
     <string name="settings_black_title">Potpuno crni noćni način</string>
@@ -212,7 +212,7 @@
     <string name="settings_vibration_title">Vibracija</string>
     <string name="settings_ringtone_title">Zvuk</string>
     <string name="settings_ringtone_none">Nema</string>
-    <string name="settings_qkreply_title">QK odgovor</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Skočni prozor za nove poruke</string>
     <string name="settings_qkreply_tap_dismiss_title">Dodirnite za odbacivanje</string>
     <string name="settings_qkreply_tap_dismiss_summary">Dodirnite izvan skočnog prozora za zatvaranje</string>

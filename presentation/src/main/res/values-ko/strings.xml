@@ -189,7 +189,7 @@
     </string-array>
     <string name="settings_category_appearance">디자인</string>
     <string name="settings_category_general">일반 설정</string>
-    <string name="settings_category_qkreply">빠른 응답</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">테마</string>
     <string name="settings_night_title">나이트 모드</string>
     <string name="settings_black_title">완전한 블랙 테마</string>
@@ -210,7 +210,7 @@
     <string name="settings_vibration_title">진동</string>
     <string name="settings_ringtone_title">소리</string>
     <string name="settings_ringtone_none">없음</string>
-    <string name="settings_qkreply_title">QK Reply</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">새로운 메시지에 대한 팝업</string>
     <string name="settings_qkreply_tap_dismiss_title">탭해서 닫기</string>
     <string name="settings_qkreply_tap_dismiss_summary">아무데나 탭하면 팝업이 닫힙니다.</string>

@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Aussehen</string>
     <string name="settings_category_general">Allgemein</string>
-    <string name="settings_category_qkreply">Schnellantwort</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Erscheinungsbild</string>
     <string name="settings_night_title">Nachtmodus</string>
     <string name="settings_black_title">Rein schwarzer Nachtmodus</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Ton</string>
     <string name="settings_ringtone_none">Keine</string>
-    <string name="settings_qkreply_title">Schnellantwort</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Popup für neue Nachrichten</string>
     <string name="settings_qkreply_tap_dismiss_title">Zum Verwerfen tippen</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tippe außerhalb des Popup um es zu schließen</string>

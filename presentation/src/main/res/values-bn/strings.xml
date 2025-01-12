@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">উপস্থিতি</string>
     <string name="settings_category_general">সাধারণ</string>
-    <string name="settings_category_qkreply">QK উত্তর</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">থিম</string>
     <string name="settings_night_title">নাইট মোড</string>
     <string name="settings_black_title">সম্পূর্ণ কালো রাত্রি মোড</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">কম্পন</string>
     <string name="settings_ringtone_title">শব্দ</string>
     <string name="settings_ringtone_none">কোনোটা না</string>
-    <string name="settings_qkreply_title">QK উত্তর</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">নতুন বার্তার জন্য পপ-আপ</string>
     <string name="settings_qkreply_tap_dismiss_title">সরিয়ে দিতে ট্যাপ করুন</string>
     <string name="settings_qkreply_tap_dismiss_summary">এটি বন্ধ করার জন্য পপআপের বাইরে ট্যাপ করুন</string>

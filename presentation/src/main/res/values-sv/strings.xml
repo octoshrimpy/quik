@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generellt</string>
-    <string name="settings_category_qkreply">QK svar</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Nattläge</string>
     <string name="settings_black_title">Svart nattläge</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Ljud</string>
     <string name="settings_ringtone_none">Ingen</string>
-    <string name="settings_qkreply_title">QK-svar</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Popup för nya meddelanden</string>
     <string name="settings_qkreply_tap_dismiss_title">Tryck för att avfärda</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tryck var som helst utanför popupen för att stänga den</string>

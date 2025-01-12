@@ -192,7 +192,7 @@
     </string-array>
     <string name="settings_category_appearance">Išvaizda</string>
     <string name="settings_category_general">Bendra</string>
-    <string name="settings_category_qkreply">Greitas atsakas</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Nakties tema</string>
     <string name="settings_black_title">Visiškai juoda nakties tema</string>
@@ -213,7 +213,7 @@
     <string name="settings_vibration_title">Vibracija</string>
     <string name="settings_ringtone_title">Garas</string>
     <string name="settings_ringtone_none">None</string>
-    <string name="settings_qkreply_title">Greitas atsakas</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Iššokantis langas naujiems pranešimams</string>
     <string name="settings_qkreply_tap_dismiss_title">Spustelėkite, kad atmestumėte</string>
     <string name="settings_qkreply_tap_dismiss_summary">Spustelėkite bet kur už iššokamo lango, kad išjungtumėte</string>

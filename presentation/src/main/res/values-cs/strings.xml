@@ -192,7 +192,7 @@
     </string-array>
     <string name="settings_category_appearance">Vzhled</string>
     <string name="settings_category_general">Obecné</string>
-    <string name="settings_category_qkreply">Rychlá odpověď</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
     <string name="settings_theme_title">Motiv vzhledu</string>
     <string name="settings_night_title">Noční režim</string>
     <string name="settings_black_title">Čistá černá, noční režim</string>
@@ -213,7 +213,7 @@
     <string name="settings_vibration_title">Vibrace</string>
     <string name="settings_ringtone_title">Vyzvánění</string>
     <string name="settings_ringtone_none">Žádný</string>
-    <string name="settings_qkreply_title">Rychlá odpověď</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Vyskakovací okno pro nové zprávy</string>
     <string name="settings_qkreply_tap_dismiss_title">Klepnutím zavřít</string>
     <string name="settings_qkreply_tap_dismiss_summary">Pro ukončení klepněte kamkoli mimo okno zprávy</string>
