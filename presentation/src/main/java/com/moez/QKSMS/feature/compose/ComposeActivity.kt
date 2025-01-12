@@ -30,9 +30,11 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.speech.RecognizerIntent
 import android.text.format.DateFormat
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -62,6 +64,7 @@ import dev.octoshrimpy.quik.model.Recipient
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.common.widget.QkEditText
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -121,6 +124,26 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     private var cameraDestination: Uri? = null
 
+    private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK)
+            return@registerForActivityResult
+
+        // check returned results are good
+        val match = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+        if ((match === null) || (match.size < 1) || (match[0].isNullOrEmpty()))
+            return@registerForActivityResult
+
+        // get the edit text view
+        val message = findViewById<QkEditText>(R.id.message)
+        if (message === null)
+            return@registerForActivityResult
+
+        // populate message box with data returned by STT, set cursor to end, and focus
+        message.append(match[0])
+        message.setSelection(message.text.length)
+        message.requestFocus()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -154,6 +177,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .doOnNext { messageAdapter.theme = it }
                 .autoDisposable(scope())
                 .subscribe()
+
+        findViewById<QkEditText>(R.id.message)?.setOnLongClickListener {
+            val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            speechRecognizerIntent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+// include if want a custom message that the STT can (optionally) display           speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dictate your message")
+            speechResultLauncher.launch(speechRecognizerIntent)
+            true
+        }
 
         window.callback = ComposeWindowCallback(window.callback, this)
     }

@@ -18,13 +18,17 @@
  */
 package dev.octoshrimpy.quik.feature.qkreply
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +42,7 @@ import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.feature.compose.MessagesAdapter
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.common.widget.QkEditText
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.qkreply_activity.*
@@ -54,6 +59,26 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
     override val sendIntent by lazy { send.clicks() }
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[QkReplyViewModel::class.java] }
+
+    private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK)
+            return@registerForActivityResult
+
+        // check returned results are good
+        val match = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+        if ((match === null) || (match.size < 1) || (match[0].isNullOrEmpty()))
+            return@registerForActivityResult
+
+        // get the edit text view
+        val message = findViewById<QkEditText>(R.id.message)
+        if (message === null)
+            return@registerForActivityResult
+
+        // populate message box with data returned by STT, set cursor to end, and focus
+        message.setText(match[0])
+        message.setSelection(message.text.length)
+        message.requestFocus()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -74,6 +99,17 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
         messages.adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() = messages.scrollToPosition(adapter.itemCount - 1)
         })
+
+        findViewById<QkEditText>(R.id.message)?.setOnLongClickListener {
+            val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            speechRecognizerIntent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+// include if want a custom message that the STT can (optionally) display           speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dictate your message")
+            speechResultLauncher.launch(speechRecognizerIntent)
+            true
+        }
     }
 
     override fun render(state: QkReplyState) {
