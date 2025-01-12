@@ -51,6 +51,7 @@ import dev.octoshrimpy.quik.receiver.MarkArchivedReceiver
 import dev.octoshrimpy.quik.receiver.MarkReadReceiver
 import dev.octoshrimpy.quik.receiver.MarkSeenReceiver
 import dev.octoshrimpy.quik.receiver.RemoteMessagingReceiver
+import dev.octoshrimpy.quik.receiver.SpeakThreadsReceiver
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.util.GlideApp
@@ -292,6 +293,14 @@ class NotificationManagerImpl @Inject constructor(
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_call_white_24dp, actionLabels[action], pi)
                                     .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_CALL).build()
+                        }
+
+                        Preferences.NOTIFICATION_ACTION_SPEAK -> {
+                            val intent = Intent(context, SpeakThreadsReceiver::class.java).putExtra("threadId", threadId)
+                            val pi = PendingIntent.getBroadcast(context, 0, intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                            NotificationCompat.Action.Builder(R.drawable.ic_speaker_black_24dp, actionLabels[action], pi)
+                                .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_NONE).build()
                         }
 
                         else -> null

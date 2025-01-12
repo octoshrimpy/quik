@@ -48,6 +48,7 @@ import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import dev.octoshrimpy.quik.interactor.SpeakThreads
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
@@ -75,6 +76,7 @@ class MainViewModel @Inject constructor(
     private val markUnarchived: MarkUnarchived,
     private val markUnpinned: MarkUnpinned,
     private val markUnread: MarkUnread,
+    private val speakThreads: SpeakThreads,
     private val navigator: Navigator,
     private val permissionManager: PermissionManager,
     private val prefs: Preferences,
@@ -466,6 +468,7 @@ class MainViewModel @Inject constructor(
                         Preferences.SWIPE_ACTION_CALL -> conversationRepo.getConversation(threadId)?.recipients?.firstOrNull()?.address?.let(navigator::makePhoneCall)
                         Preferences.SWIPE_ACTION_READ -> markRead.execute(listOf(threadId))
                         Preferences.SWIPE_ACTION_UNREAD -> markUnread.execute(listOf(threadId))
+                        Preferences.SWIPE_ACTION_SPEAK -> speakThreads.execute(listOf(threadId))
                     }
                 }
 

@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.repository
 import android.content.ContentUris
 import android.content.Context
 import android.provider.Telephony
+import android.view.View.OnLongClickListener
 import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.anyOf
 import dev.octoshrimpy.quik.extensions.asObservable
@@ -201,10 +202,69 @@ class ConversationRepositoryImpl @Inject constructor(
 
     override fun getConversation(threadId: Long): Conversation? {
         return Realm.getDefaultInstance()
-                .apply { refresh() }
-                .where(Conversation::class.java)
-                .equalTo("id", threadId)
-                .findFirst()
+            .apply { refresh() }
+            .where(Conversation::class.java)
+            .equalTo("id", threadId)
+            .findFirst()
+    }
+
+    override fun getUnseenIds(archived: Boolean): List<Long> {
+        val conversationIds = ArrayList<Long>()
+
+        Realm.getDefaultInstance()
+            .where(Conversation::class.java)
+            .notEqualTo("id", 0L)
+            .equalTo("archived", archived)
+            .equalTo("blocked", false)
+            .equalTo("lastMessage.seen", false)
+            .sort(
+                arrayOf("lastMessage.date"),
+                arrayOf(Sort.DESCENDING)
+            )
+            .findAllAsync()
+            .forEach { conversation -> conversationIds.add(conversation.id) }
+
+        return conversationIds
+    }
+
+    override fun getUnreadIds(archived: Boolean): List<Long> {
+        val conversationIds = ArrayList<Long>()
+
+        Realm.getDefaultInstance()
+            .where(Conversation::class.java)
+            .notEqualTo("id", 0L)
+            .equalTo("archived", archived)
+            .equalTo("blocked", false)
+            .equalTo("lastMessage.read", false)
+            .sort(
+                arrayOf("lastMessage.date"),
+                arrayOf(Sort.DESCENDING)
+            )
+            .findAllAsync()
+            .forEach { conversation -> conversationIds.add(conversation.id) }
+
+        return conversationIds
+    }
+
+    override fun getConversationAndLastSenderContactName(threadId: Long): Pair<Conversation?, String?>? {
+        val conversation = Realm.getDefaultInstance()
+            .apply { refresh() }
+            .where(Conversation::class.java)
+            .equalTo("id", threadId)
+            .findFirst()
+
+        if (conversation === null)
+            return null
+
+        var conversationLastSmsSender: String? = null
+
+        if (conversation !== null) {
+            conversationLastSmsSender = conversation?.recipients?.find { recipient ->
+                phoneNumberUtils.compare(recipient.address, conversation.lastMessage!!.address)
+            }?.contact?.name
+        }
+
+        return return Pair(conversation, conversationLastSmsSender)
     }
 
     override fun getConversations(vararg threadIds: Long): RealmResults<Conversation> {

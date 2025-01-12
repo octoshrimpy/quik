@@ -25,6 +25,7 @@ import android.content.BroadcastReceiver
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
+import com.moez.QKSMS.manager.SpeakManager
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.CrashlyticsTree
 import dev.octoshrimpy.quik.common.util.FileLoggingTree
@@ -43,6 +44,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.HasServiceInjector
+import dev.octoshrimpy.quik.interactor.SpeakThreads
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +74,12 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
     override fun onCreate() {
         super.onCreate()
+
+        // set application context for SpeakManager
+        SpeakManager.setContext(this)
+
+        // set translated "no messages" string for speakThreads interactor
+        SpeakThreads.setNoMessagesString(getString(R.string.speak_no_messages))
 
         AppComponentManager.init(this)
         appComponent.inject(this)
