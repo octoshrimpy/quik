@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Arkiverte samtaler vises her</string>
     <string name="main_fab_cd">Start ny samtale</string>
     <string name="main_default_sms_title">Elsk teksting igjen</string>
-    <string name="main_default_sms_message">Gjør QUIK til standard SMS-app</string>
+    <string name="main_default_sms_message">Gjør UP SMS til standard SMS-app</string>
     <string name="main_default_sms_change">Endre</string>
     <string name="main_permission_required">Tillatelse kreves</string>
-    <string name="main_permission_sms">QUIK trenger tillatelse til å sende og vise tekstmeldinger</string>
-    <string name="main_permission_contacts">QUIK trenger tillatelse til å lese kontaktene dine</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS trenger tillatelse til å sende og vise tekstmeldinger</string>
+    <string name="main_permission_contacts">UP SMS trenger tillatelse til å lese kontaktene dine</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Tillat</string>
     <string name="drawer_inbox">Innboks</string>
     <string name="drawer_archived">Arkivert</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Hjelp og tilbakemelding</string>
     <string name="drawer_invite">Inviter venner</string>
     <string name="drawer_plus_banner_summary">Aktiver fantastiske nye funksjoner og støtt utviklingen</string>
-    <string name="rate_title">Liker du QUIK?</string>
+    <string name="rate_title">Liker du UP SMS?</string>
     <string name="rate_summary">Del litt kjærlighet og vurder oss på Google Play!</string>
     <string name="rate_okay">Ok!</string>
     <string name="rate_dismiss">Avvis</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generelt</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Rask svar</string>
     <string name="settings_theme_title">Drakt</string>
     <string name="settings_night_title">Nattmodus</string>
     <string name="settings_black_title">Ren svart nattmodus</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Vibrasjon</string>
     <string name="settings_ringtone_title">Lyd</string>
     <string name="settings_ringtone_none">Ingen</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Rask svar</string>
     <string name="settings_qkreply_summary">Sprettopp-vindu ved nye meldinger</string>
     <string name="settings_qkreply_tap_dismiss_title">Trykk for å forkaste</string>
     <string name="settings_qkreply_tap_dismiss_summary">Trykk hvor som helst utenfor sprettopp-vinduet for å lukke det</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Komprimer MMS-vedlegg</string>
     <string name="settings_sync_title">Synkroniser meldinger</string>
     <string name="settings_sync_summary">Resynkroniser meldinger med Androids interne meldingslager</string>
-    <string name="settings_about_title">Om QUIK</string>
+    <string name="settings_about_title">Om UP SMS</string>
     <string name="settings_version">Versjon %s</string>
     <string name="settings_logging_enabled">Feillogg aktivert</string>
     <string name="settings_logging_disabled">Feillogg deaktivert</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Forkast meldinger fra blokkerte sendere istedenfor å skjule dem</string>
     <string name="blocking_conversations">Blokkerte samtaler</string>
     <string name="blocking_manager_title">Blokkeringer</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Innebygd blokkeringsfunksjon i QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Innebygd blokkeringsfunksjon i UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Filtrer anrop og meldinger automatisk. Fellesskapets intelligens™ hjelper med å forhindre uønskede henvendelser fra plageånder</string>
     <string name="blocking_manager_sia_summary">Filtrer meldinger fra ukjente numre automatisk med \"Skal jeg svare\"-appen</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">Oppdateringer på livstid for %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Aktiver + donér for %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Takk for at du støtter QUIK!</string>
+    <string name="qksms_plus_thanks_title">Takk for at du støtter UP SMS!</string>
     <string name="qksms_plus_thanks_summary">Du har nå tilgang til alle funksjoner i QUIK+</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
     <string name="qksms_plus_free_title">QUIK+ er gratis for F-Droid-brukere. Om du ønsker å støtte utviklingen, kan du gjerne donere.</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Auto-svar</string>
     <string name="qksms_plus_respond_summary">Svar på innkommende meldinger automatisk med et forhåndsdefinert svar</string>
     <string name="qksms_plus_more_title">Mer</string>
-    <string name="qksms_plus_more_summary">QUIK er i stadig utvikling og ditt kjøp inkluderer alle fremtidige QUIK+ funksjoner!</string>
+    <string name="qksms_plus_more_summary">UP SMS er i stadig utvikling og ditt kjøp inkluderer alle fremtidige QUIK+ funksjoner!</string>
     <string name="widget_loading">Laster inn &#8230;</string>
     <string name="widget_more">Last inn flere samtaler</string>
     <string name="qkreply_menu_read">Mark read</string>

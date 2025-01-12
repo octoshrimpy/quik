@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Arşivlenmiş konuşmalarınız burada görünür</string>
     <string name="main_fab_cd">Yeni konuşma başlat</string>
     <string name="main_default_sms_title">Yine mesajlaşmayı seviyorum</string>
-    <string name="main_default_sms_message">QUIK varsayılan SMS uygulaması yap</string>
+    <string name="main_default_sms_message">UP SMS varsayılan SMS uygulaması yap</string>
     <string name="main_default_sms_change">Değiştir</string>
     <string name="main_permission_required">İzin gerekli</string>
-    <string name="main_permission_sms">QUIK göndermek ve SMS mesajları görüntülemek için izni olması gerekir.</string>
-    <string name="main_permission_contacts">QUIK kişilerinizi görüntülemek için izni olması gerekir.</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS göndermek ve SMS mesajları görüntülemek için izni olması gerekir.</string>
+    <string name="main_permission_contacts">UP SMS kişilerinizi görüntülemek için izni olması gerekir.</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">İzin ver</string>
     <string name="drawer_inbox">Gelen Kutusu</string>
     <string name="drawer_archived">Arşivle</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Yardım &amp; Geri bildirim</string>
     <string name="drawer_invite">Arkadaşlarınızı davet edin</string>
     <string name="drawer_plus_banner_summary">İnanılmaz yeni özelliklerin kilidini aç ve geliştirmeye destek ol</string>
-    <string name="rate_title">QUIK tadını çıkarıyor musun?</string>
+    <string name="rate_title">UP SMS tadını çıkarıyor musun?</string>
     <string name="rate_summary">Biraz sevgi paylaş ve Google Playden bizi oyla!</string>
     <string name="rate_okay">TAMAM!</string>
     <string name="rate_dismiss">GÖREVDEN</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Görünüm</string>
     <string name="settings_category_general">Genel</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Hızlı Yanıt</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Gece Modu</string>
     <string name="settings_black_title">Saf siyah gece modu</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Titreşim</string>
     <string name="settings_ringtone_title">Ses</string>
     <string name="settings_ringtone_none">Hiçbiri</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Hızlı Yanıt</string>
     <string name="settings_qkreply_summary">Yeni iletiler için açılan menü</string>
     <string name="settings_qkreply_tap_dismiss_title">Kapatmak için dokunun</string>
     <string name="settings_qkreply_tap_dismiss_summary">Açılır pencereyi kapatmak için pencere dışındaki herhangi bir yere dokunun</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Otomatik-MMS ekleri sıkıştır</string>
     <string name="settings_sync_title"> İletileri eşitle</string>
     <string name="settings_sync_summary">İletilerinizi  Android SMS veritabanı ile yeniden senkronize edin</string>
-    <string name="settings_about_title">QUIK Hakkında</string>
+    <string name="settings_about_title">UP SMS Hakkında</string>
     <string name="settings_version">Sürüm %s</string>
     <string name="settings_logging_enabled">Hata ayıklama günlüğü etkin</string>
     <string name="settings_logging_disabled">Hata ayıklama günlüğü devre dışı</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Engellenen gönderenlerden gelen mesajları gizlemek yerine bırakın</string>
     <string name="blocking_conversations">Engellenen konuşmalar</string>
     <string name="blocking_manager_title">Engelleme Yöneticisi</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">QUIK\'de yerleşik engelleme işlevi</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">UP SMS\'de yerleşik engelleme işlevi</string>
     <string name="blocking_manager_call_blocker_summary">İstenmeyen mesajları, numaraları &amp; kara listede olan bilinmeyen çağrılar &amp; Zamanlanmış</string>
     <string name="blocking_manager_call_control_summary">Aramalarınızı ve mesajlarınızı uygun bir yerde otomatik olarak filtreleyin! Topluluk IQ™ bilinen spam istenmeyen mesajları önlemek için izin verir
 
@@ -304,7 +304,7 @@ BAĞLAM İSTEĞİ</string>
     <string name="qksms_plus_upgrade">Süresiz kullanmak 1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Kilidi aç ve Satın Al %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">QUIK desteği için teşekkür ederiz!!</string>
+    <string name="qksms_plus_thanks_title">UP SMS desteği için teşekkür ederiz!!</string>
     <string name="qksms_plus_thanks_summary">Şimdi tüm QUIK+ özellikleri açıldı!</string>
     <string name="qksms_plus_error">Bir hata oluştu. Lütfen tekrar deneyin</string>
     <string name="qksms_plus_free_title">QUIK+ F-Droid kullanıcıları için ücretsizdir! Eğer gelişmeyi desteklemek istiyorsanız, bağış yapmakta özgürsünüz.</string>
@@ -329,7 +329,7 @@ BAĞLAM İSTEĞİ</string>
     <string name="qksms_plus_respond_title">Otomatik yanıtla</string>
     <string name="qksms_plus_respond_summary">Önceden ayarlanmış bir yanıt ile gelen iletilere otomatik olarak yanıtla</string>
     <string name="qksms_plus_more_title">Daha fazla</string>
-    <string name="qksms_plus_more_summary">QUIK etkin geliştirme altında ve satın alırsan tüm gelecek QUIK+ özellikleri dahil olacaktır!</string>
+    <string name="qksms_plus_more_summary">UP SMS etkin geliştirme altında ve satın alırsan tüm gelecek QUIK+ özellikleri dahil olacaktır!</string>
     <string name="widget_loading">Yükleniyor...</string>
     <string name="widget_more">Daha fazla konuşma göster</string>
     <string name="qkreply_menu_read">Okundu olarak işaretle</string>

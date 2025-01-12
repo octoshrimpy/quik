@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Vaši arhivirani razgovori će se pojaviti ovdje</string>
     <string name="main_fab_cd">Započni novi razgovor</string>
     <string name="main_default_sms_title">Ponovno zavolite poruke</string>
-    <string name="main_default_sms_message">Postavite QUIK kao zadanu aplikaciju za SMS-ove</string>
+    <string name="main_default_sms_message">Postavite UP SMS kao zadanu aplikaciju za SMS-ove</string>
     <string name="main_default_sms_change">Promijeni</string>
     <string name="main_permission_required">Potrebne su dozvole</string>
-    <string name="main_permission_sms">QUIK treba dozvolu za slanje i pregledavanje SMS poruka</string>
-    <string name="main_permission_contacts">QUIK treba dozvolu za pregledavanje vaših kontakata</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS treba dozvolu za slanje i pregledavanje SMS poruka</string>
+    <string name="main_permission_contacts">UP SMS treba dozvolu za pregledavanje vaših kontakata</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Dopusti</string>
     <string name="drawer_inbox">Poruke</string>
     <string name="drawer_archived">Arhivirano</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Pomoć i povratne informacije</string>
     <string name="drawer_invite">Pozovi prijatelje</string>
     <string name="drawer_plus_banner_summary">Otključajte čudesne nove značajke i podržite razvoj</string>
-    <string name="rate_title">Uživate u QUIK?</string>
+    <string name="rate_title">Uživate u UP SMS?</string>
     <string name="rate_summary">Podijelite malo ljubavi i ocijenite nas na Google Playu!</string>
     <string name="rate_okay">U REDU!</string>
     <string name="rate_dismiss">ODBACI</string>
@@ -191,7 +191,7 @@
     </string-array>
     <string name="settings_category_appearance">Izgled</string>
     <string name="settings_category_general">Općenito</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Brzi odgovor</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Noćni način</string>
     <string name="settings_black_title">Potpuno crni noćni način</string>
@@ -212,7 +212,7 @@
     <string name="settings_vibration_title">Vibracija</string>
     <string name="settings_ringtone_title">Zvuk</string>
     <string name="settings_ringtone_none">Nema</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Brzi odgovor</string>
     <string name="settings_qkreply_summary">Skočni prozor za nove poruke</string>
     <string name="settings_qkreply_tap_dismiss_title">Dodirnite za odbacivanje</string>
     <string name="settings_qkreply_tap_dismiss_summary">Dodirnite izvan skočnog prozora za zatvaranje</string>
@@ -255,7 +255,7 @@
     <string name="settings_mms_size_title">Automatski kompresiraj MMS priloge</string>
     <string name="settings_sync_title">Uskladi poruke</string>
     <string name="settings_sync_summary">Ponovno uskladite svoje poruke s Androidovom nativnom bazom SMS-ova</string>
-    <string name="settings_about_title">O QUIK-u</string>
+    <string name="settings_about_title">O UP SMS-u</string>
     <string name="settings_version">Verzija %s</string>
     <string name="settings_logging_enabled">Omogućen zapisnik za ispravljanje grešaka</string>
     <string name="settings_logging_disabled">Onemogućen zapisnik za ispravljanje grešaka</string>
@@ -265,8 +265,8 @@
     <string name="blocking_drop_summary">Odbacite dolazne poruke od blokiranih pošiljatelja umjesto da ih samo sakrivate</string>
     <string name="blocking_conversations">Blokirani razgovori</string>
     <string name="blocking_manager_title">Upravitelj za blokiranje</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Ugrađena funkcionalnost blokiranja u QUIK-u</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Ugrađena funkcionalnost blokiranja u UP SMS-u</string>
     <string name="blocking_manager_call_blocker_summary">Blokirajte neželjene poruke, brojeve i nepoznate pozive pomoću crne liste i zakazivanja</string>
     <string name="blocking_manager_call_control_summary">Automatski filtrirajte svoje pozive i poruke na jednom mjestu! Community IQ™ omogućuje vam filtriranje neželjenih poruka od spammera poznatih zajednici</string>
     <string name="blocking_manager_sia_summary">Automatski filtrirajte poruke od neželjenih brojeva pomoću aplikacije \"Should I Answer\"</string>
@@ -306,7 +306,7 @@
     <string name="qksms_plus_upgrade">Doživotna nadogradnja za %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Otključajte + donirajte za %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Hvala vam za podržavanje QUIK!</string>
+    <string name="qksms_plus_thanks_title">Hvala vam za podržavanje UP SMS!</string>
     <string name="qksms_plus_thanks_summary">Sada imate pristup svim QUIK+ značajkama</string>
     <string name="qksms_plus_error">Dogodila se greška, pokušajte ponovno</string>
     <string name="qksms_plus_free_title">QUIK+ ke besplatan za korisnike F-Droida! Ako želite podržati razvoj, vrlo smo zahvalni na donacijama.</string>
@@ -331,7 +331,7 @@
     <string name="qksms_plus_respond_title">Automatsko odgovaranje</string>
     <string name="qksms_plus_respond_summary">Automatski odgovorite na poruke sa prilagođenim odgovorima</string>
     <string name="qksms_plus_more_title"> Više</string>
-    <string name="qksms_plus_more_summary">QUIK aktivno se razvija i vaša kupnja sadržat će sve buduće QUIK+ značajke!</string>
+    <string name="qksms_plus_more_summary">UP SMS aktivno se razvija i vaša kupnja sadržat će sve buduće QUIK+ značajke!</string>
     <string name="widget_loading">Učitavanje&#8230;</string>
     <string name="widget_more">Prikaži više razgovora</string>
     <string name="qkreply_menu_read">Označi kao pročitano</string>

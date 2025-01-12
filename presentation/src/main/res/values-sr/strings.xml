@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Овде ће се појавити твоји сачувани разговори</string>
     <string name="main_fab_cd">Започни нов разговор</string>
     <string name="main_default_sms_title">Поново заволите СМС.</string>
-    <string name="main_default_sms_message">Постави QUIK као подразумевану СМС апликацију</string>
+    <string name="main_default_sms_message">Постави UP SMS као подразумевану СМС апликацију</string>
     <string name="main_default_sms_change">Промени</string>
     <string name="main_permission_required">Потребна је дозвола</string>
-    <string name="main_permission_sms">QUIK тражи дозволу да шаље и прима СМС поруке</string>
-    <string name="main_permission_contacts">QUIK тражи приступ твојим контактима</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS тражи дозволу да шаље и прима СМС поруке</string>
+    <string name="main_permission_contacts">UP SMS тражи приступ твојим контактима</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Дозволи</string>
     <string name="drawer_inbox">Примљено</string>
     <string name="drawer_archived">Сачувано</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Помоћ и повратне информације</string>
     <string name="drawer_invite">Позови пријатеље</string>
     <string name="drawer_plus_banner_summary">Откључај нове могућности и подржи развој апликације</string>
-    <string name="rate_title">Да ли уживаш уз QUIK?</string>
+    <string name="rate_title">Да ли уживаш уз UP SMS?</string>
     <string name="rate_summary">Покажи мало љубави и оцени нас на Google Play!</string>
     <string name="rate_okay">ВАЖИ!</string>
     <string name="rate_dismiss">ОТКАЖИ</string>
@@ -191,7 +191,7 @@
     </string-array>
     <string name="settings_category_appearance">Уреди изглед</string>
     <string name="settings_category_general">Опште</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Куицк Репли</string>
     <string name="settings_theme_title">Тема</string>
     <string name="settings_night_title">Ноћни мод</string>
     <string name="settings_black_title">Потпуно црни ноћни мод</string>
@@ -212,7 +212,7 @@
     <string name="settings_vibration_title">Вибрација</string>
     <string name="settings_ringtone_title">Звук</string>
     <string name="settings_ringtone_none">Ниједна</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Куицк Репли</string>
     <string name="settings_qkreply_summary">Искачући прозор за нове поруке</string>
     <string name="settings_qkreply_tap_dismiss_title">Додирни да уклониш</string>
     <string name="settings_qkreply_tap_dismiss_summary">Додирни екран изван искачућег прозора да га уклониш</string>
@@ -265,8 +265,8 @@
     <string name="blocking_drop_summary">Одбиј поруке које стижу са блокираних бројева уместо да их сакријеш</string>
     <string name="blocking_conversations">Блокирани разговори</string>
     <string name="blocking_manager_title">Апликација за блокирање</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Уграђена могућност блокирања у QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Уграђена могућност блокирања у UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Блокирај нежељене поруке, бројеве и непознате позиве помоћу листе непожељних бројева</string>
     <string name="blocking_manager_call_control_summary">Аутоматски филтрирај позиве и поруке на једном месту! Community IQ™ ти омогућује да блокираш нежељене поруке од \"спамера\" познатих заједници</string>
     <string name="blocking_manager_sia_summary">Аутоматски фитрирај поруке са непожељних бројева користећи \"Should I Answer\" апликацију</string>
@@ -306,7 +306,7 @@
     <string name="qksms_plus_upgrade">Трајна надоградња за само %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Откључавање + добровољни прилог за %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Хвала што подржавате QUIK!</string>
+    <string name="qksms_plus_thanks_title">Хвала што подржавате UP SMS!</string>
     <string name="qksms_plus_thanks_summary">Сада имате приступ свим QUIK+ могућностима</string>
     <string name="qksms_plus_error">Дошло је до грешке! Молимо покушајте поново.</string>
     <string name="qksms_plus_free_title">QUIK+ је бесплатан за кориснике F-Droid-а! Ако желиш да подржиш развој апликације, били бисмо ти захвални на добровољном прилогу.</string>
@@ -331,7 +331,7 @@
     <string name="qksms_plus_respond_title">Аутоматски одговори</string>
     <string name="qksms_plus_respond_summary">Предефинисани аутоматски одговор на долазне поруке</string>
     <string name="qksms_plus_more_title">Још</string>
-    <string name="qksms_plus_more_summary">QUIK се активно развија и једнократним плаћањем добијаш и све будуће QUIK+ могућности!</string>
+    <string name="qksms_plus_more_summary">UP SMS се активно развија и једнократним плаћањем добијаш и све будуће QUIK+ могућности!</string>
     <string name="widget_loading">Учитавање&#8230;</string>
     <string name="widget_more">Прикажи више разговора</string>
     <string name="qkreply_menu_read">Означи као прочитано</string>

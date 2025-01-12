@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Arkistoimasi keskustelut näkyvät tässä</string>
     <string name="main_fab_cd">Aloita uusi keskustelu</string>
     <string name="main_default_sms_title">Rakastu tekstaamiseen uudelleen</string>
-    <string name="main_default_sms_message">Tee QUIK:stä oletusviestintäsovelluksesi</string>
+    <string name="main_default_sms_message">Tee UP SMS:stä oletusviestintäsovelluksesi</string>
     <string name="main_default_sms_change">Muuta</string>
     <string name="main_permission_required">Käyttöoikeus tarvitaan</string>
-    <string name="main_permission_sms">QUIK tarvitsee oikeuden tekstiviestien lähettämiseen ja tarkastelemiseen</string>
-    <string name="main_permission_contacts">QUIK tarvitsee oikeuden yhteystietojesi tarkatelemiseen</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS tarvitsee oikeuden tekstiviestien lähettämiseen ja tarkastelemiseen</string>
+    <string name="main_permission_contacts">UP SMS tarvitsee oikeuden yhteystietojesi tarkatelemiseen</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Salli</string>
     <string name="drawer_inbox">Saapuneet</string>
     <string name="drawer_archived">Arkistoidut</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Apu ja palaute</string>
     <string name="drawer_invite">Kutsu kavereita</string>
     <string name="drawer_plus_banner_summary">Avaa mahtavia uusia ominaisuuksia ja tue kehitystä</string>
-    <string name="rate_title">Tykkäätkö QUIK:tä?</string>
+    <string name="rate_title">Tykkäätkö UP SMS:tä?</string>
     <string name="rate_summary">Jaa rakkautta ja arvostele meidät Google Playssä!</string>
     <string name="rate_okay">OKEI!</string>
     <string name="rate_dismiss">HYLKÄÄ</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Ulkonäkö</string>
     <string name="settings_category_general">Yleiset</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Nopea vastaus</string>
     <string name="settings_theme_title">Teema</string>
     <string name="settings_night_title">Yötila</string>
     <string name="settings_black_title">Musta yötilä</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Värinä</string>
     <string name="settings_ringtone_title">Ääni</string>
     <string name="settings_ringtone_none">Ei mitään</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Nopea vastaus</string>
     <string name="settings_qkreply_summary">Ponnahdusikkuna uusille viesteille</string>
     <string name="settings_qkreply_tap_dismiss_title">Sulje napauttamalla</string>
     <string name="settings_qkreply_tap_dismiss_summary">Sulje ponnahdusikkuna napauttamalla sen ulkopuolelle</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Pakkaa multimediaviestien liitteet automaattisesti</string>
     <string name="settings_sync_title">Synkronoi viestit</string>
     <string name="settings_sync_summary">Synkronoi viestisi uudelleen Androidin oman SMS-tietokannan kanssa</string>
-    <string name="settings_about_title">Tietoja QUIK:tä</string>
+    <string name="settings_about_title">Tietoja UP SMS:tä</string>
     <string name="settings_version">Versio %s</string>
     <string name="settings_logging_enabled">Virheenkorjauslokien kirjaaminen käytössä</string>
     <string name="settings_logging_disabled">Virheenkorjauslokien kirjaaminen pois käytöstä</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Pudottaa estettyjen yhteystietojen lähettämät viestit, niiden piilottamisen sijasta</string>
     <string name="blocking_conversations">Estetyt keskustelut</string>
     <string name="blocking_manager_title">Estojen hallinta</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">QUIK:ään sisäänrakennettu esto-toiminto</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">UP SMS:ään sisäänrakennettu esto-toiminto</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Suodata puhelusi ja soittosi automaattisesti, yhdessä kätevässä paikassa! Community IQ™ antaa sinun estää haluamattomia viestejä, yhteisölle tutuilta roskapostin lähettäjiltä</string>
     <string name="blocking_manager_sia_summary">Suodata haluamattomien numeroin lähettämät viestit automaattisesti, \"Should I Answer\" -sovellusta käyttämällä</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">Elinikäinen päivitys hintaan %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Ominaisuuksien avaus + lahjoitus hintaan %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Kiitos, kun tuit QUIK:ää!</string>
+    <string name="qksms_plus_thanks_title">Kiitos, kun tuit UP SMS:ää!</string>
     <string name="qksms_plus_thanks_summary">Olet nyt oikeutettu käyttämään kaikkia QUIK+ -ominaisuuksia</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
     <string name="qksms_plus_free_title">QUIK+ on ilmainen F-Droidin käyttäjille! Jos haluaisit tukea kehitystyötä tulevaisuudessa, arvostaisimme lahjoitustasi todella paljon.</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Automaattinen vastaus</string>
     <string name="qksms_plus_respond_summary">Vastaa saapuviin viesteihin automaattisesti, etukäteen luoduilla vastauksilla</string>
     <string name="qksms_plus_more_title">Lisää</string>
-    <string name="qksms_plus_more_summary">QUIK:ää kehitetään aktiivisesti, ja ostoksesi sisältää kaikki tulevat QUIK+ -ominaisuudet!</string>
+    <string name="qksms_plus_more_summary">UP SMS:ää kehitetään aktiivisesti, ja ostoksesi sisältää kaikki tulevat QUIK+ -ominaisuudet!</string>
     <string name="widget_loading">Ladataan&#8230;</string>
     <string name="widget_more">Näytä lisää keskusteluja</string>
     <string name="qkreply_menu_read">Merkitse luetuksi</string>

@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Vos conversations archivées apparaîtront ici</string>
     <string name="main_fab_cd">Débuter une nouvelle conversation</string>
     <string name="main_default_sms_title">Réapprenez à aimer les textos</string>
-    <string name="main_default_sms_message">Faire de QUIK votre application SMS par défaut</string>
+    <string name="main_default_sms_message">Faire de UP SMS votre application SMS par défaut</string>
     <string name="main_default_sms_change">Changer</string>
     <string name="main_permission_required">Autorisation requise</string>
-    <string name="main_permission_sms">QUIK a besoin de l\'autorisation d’envoyer et de consulter des messages SMS</string>
-    <string name="main_permission_contacts">QUIK a besoin de l\'autorisation d\'accéder aux contacts</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS a besoin de l\'autorisation d’envoyer et de consulter des messages SMS</string>
+    <string name="main_permission_contacts">UP SMS a besoin de l\'autorisation d\'accéder aux contacts</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Autoriser</string>
     <string name="drawer_inbox">Boite de réception</string>
     <string name="drawer_archived">Archivées</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Aide &amp; commentaire</string>
     <string name="drawer_invite">Inviter des amis</string>
     <string name="drawer_plus_banner_summary">Débloquer les nouvelles fonctions sensationnelles et soutenir le développement</string>
-    <string name="rate_title">Vous aimez QUIK ?</string>
+    <string name="rate_title">Vous aimez UP SMS ?</string>
     <string name="rate_summary">Partagez un peu d’amour et évaluez-nous sur le Play Store !</string>
     <string name="rate_okay">OK !</string>
     <string name="rate_dismiss">ANNULER</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Apparence</string>
     <string name="settings_category_general">Général</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Réponse Rapide</string>
     <string name="settings_theme_title">Thème</string>
     <string name="settings_night_title">Mode nuit</string>
     <string name="settings_black_title">Mode noir pur</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Son</string>
     <string name="settings_ringtone_none">Aucun</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Réponse Rapide</string>
     <string name="settings_qkreply_summary">Fenêtre pour les nouveaux messages</string>
     <string name="settings_qkreply_tap_dismiss_title">Appuyer pour annuler</string>
     <string name="settings_qkreply_tap_dismiss_summary">Appuyer en dehors de la fenêtre pour la fermer</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Compresser automatiquement les pièces jointes des MMS</string>
     <string name="settings_sync_title">Synchroniser les messages</string>
     <string name="settings_sync_summary">Resynchroniser les messages avec la base de données Android native</string>
-    <string name="settings_about_title">À propos de QUIK</string>
+    <string name="settings_about_title">À propos de UP SMS</string>
     <string name="settings_version">Version %s</string>
     <string name="settings_logging_enabled">Journal de débogage activé</string>
     <string name="settings_logging_disabled">Journal de débogage désactivé</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Supprimer les messages entrants des expéditeurs bloqués au lieu de les masquer</string>
     <string name="blocking_conversations">Conversations bloquées</string>
     <string name="blocking_manager_title">Gestionnaire de blocage</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Fonction de blocage intégrée dans QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Fonction de blocage intégrée dans UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Bloquer les spams, les numéros &amp; les appels inconnus avec une liste noire &amp; Planifier</string>
     <string name="blocking_manager_call_control_summary">Filtrez automatiquement vos appels et vos messages dans un seul endroit pratique ! La communauté IQ™ vous permet d\'éviter les messages indésirables des spammeurs connus de celle-ci</string>
     <string name="blocking_manager_sia_summary">Filtrer automatiquement les messages de numéros non sollicités à l’aide de l’application « Devrais-je répondre »</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">Mise à niveau à vie pour %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Déverrouiller + faire un don pour %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Merci de soutenir QUIK !</string>
+    <string name="qksms_plus_thanks_title">Merci de soutenir UP SMS !</string>
     <string name="qksms_plus_thanks_summary">Vous avez maintenant accès à toutes les fonctionnalités de QUIK+</string>
     <string name="qksms_plus_error">Une erreur s\'est produite. Merci de réessayer.</string>
     <string name="qksms_plus_free_title">QUIK + est gratuit pour les utilisateurs de F-Droid ! Si vous souhaitez soutenir le développement, n’hésitez pas à faire un don.</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Réponse automatique</string>
     <string name="qksms_plus_respond_summary">Répondre automatiquement aux messages entrants avec une réponse prédéfinie</string>
     <string name="qksms_plus_more_title">Plus</string>
-    <string name="qksms_plus_more_summary">QUIK est en cours de développement actif, et votre achat comprendra toutes les futures fonctionnalités QUIK + !</string>
+    <string name="qksms_plus_more_summary">UP SMS est en cours de développement actif, et votre achat comprendra toutes les futures fonctionnalités QUIK + !</string>
     <string name="widget_loading">Chargement&#8230;</string>
     <string name="widget_more">Afficher plus de conversations</string>
     <string name="qkreply_menu_read">Marquer comme lu</string>

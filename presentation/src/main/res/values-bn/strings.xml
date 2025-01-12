@@ -56,12 +56,12 @@
     <string name="archived_empty_text">তোমার আর্কাইভ করা আলাপ এখানে দেখা যাবে</string>
     <string name="main_fab_cd">নতুন আলাপ শুরু করো</string>
     <string name="main_default_sms_title">আবার বার্তাকে ভালবাসুন</string>
-    <string name="main_default_sms_message">QUIK-কে তোমার ডিফল্ট এসএমএস অ্যাপ করো</string>
+    <string name="main_default_sms_message">UP SMS-কে তোমার ডিফল্ট এসএমএস অ্যাপ করো</string>
     <string name="main_default_sms_change">পরিবর্তন করো</string>
     <string name="main_permission_required">অনুমতি প্রয়োজন</string>
-    <string name="main_permission_sms">QUIK-এর এসএমএস বার্তাগুলো পাঠানোর এবং দেখার অনুমতি প্রয়োজন</string>
-    <string name="main_permission_contacts">QUIK-এর তোমার পরিচিতিগুলি দেখার জন্য অনুমতি প্রয়োজন</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS-এর এসএমএস বার্তাগুলো পাঠানোর এবং দেখার অনুমতি প্রয়োজন</string>
+    <string name="main_permission_contacts">UP SMS-এর তোমার পরিচিতিগুলি দেখার জন্য অনুমতি প্রয়োজন</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">মঞ্জুর করো</string>
     <string name="drawer_inbox">ইনবক্স</string>
     <string name="drawer_archived">আর্কাইভকৃত</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">সাহায্য &amp; প্রতিক্রিয়া</string>
     <string name="drawer_invite">বন্ধুদের আমন্ত্রণ জানাও</string>
     <string name="drawer_plus_banner_summary">অসাধারণ সব নতুন বৈশিষ্ট্য পাও এবং উন্নয়নে সাহায্য করো</string>
-    <string name="rate_title">QUIK উপভোগ করছো?</string>
+    <string name="rate_title">UP SMS উপভোগ করছো?</string>
     <string name="rate_summary">আমাদের প্রতি ভালবাসে দেখাতে Google Play-এ আমাদের মূল্যায়ন করো!</string>
     <string name="rate_okay">ঠিক আছে!</string>
     <string name="rate_dismiss">বাতিল করো</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">উপস্থিতি</string>
     <string name="settings_category_general">সাধারণ</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">দ্রুত উত্তর</string>
     <string name="settings_theme_title">থিম</string>
     <string name="settings_night_title">নাইট মোড</string>
     <string name="settings_black_title">সম্পূর্ণ কালো রাত্রি মোড</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">কম্পন</string>
     <string name="settings_ringtone_title">শব্দ</string>
     <string name="settings_ringtone_none">কোনোটা না</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">দ্রুত উত্তর</string>
     <string name="settings_qkreply_summary">নতুন বার্তার জন্য পপ-আপ</string>
     <string name="settings_qkreply_tap_dismiss_title">সরিয়ে দিতে ট্যাপ করুন</string>
     <string name="settings_qkreply_tap_dismiss_summary">এটি বন্ধ করার জন্য পপআপের বাইরে ট্যাপ করুন</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">এমএমএসের সংযুক্তি সক্রিয়ভাবে সংকোচন করুন</string>
     <string name="settings_sync_title">বার্তাগুলি সিঙ্ক করো</string>
     <string name="settings_sync_summary">তোমার বার্তাগুলি অ্যান্ড্রয়েডের নিজস্ব এসএমএস এর ডাটাবেসের সাথে পুনরায় সিঙ্ক করো</string>
-    <string name="settings_about_title">QUIK সম্পর্কে</string>
+    <string name="settings_about_title">UP SMS সম্পর্কে</string>
     <string name="settings_version">সংস্করণ %s</string>
     <string name="settings_logging_enabled">ডিবাগ লগিং চালু করা হয়ছে</string>
     <string name="settings_logging_disabled">ডিবাগ লগিং বন্ধ করা হয়ছে</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">অবরোধকৃত প্রেরকদের বার্তা লুকানোর জায়গায় ফেলে দাও</string>
     <string name="blocking_conversations">অবরুদ্ধ কথাবার্তা</string>
     <string name="blocking_manager_title">অবরুদ্ধকরণ ব্যবস্থাপক</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">QUIK-এর অন্তর্ভুক্ত অবরোধী সক্ষমতা(blocking)</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">UP SMS-এর অন্তর্ভুক্ত অবরোধী সক্ষমতা(blocking)</string>
     <string name="blocking_manager_call_blocker_summary">স্প্যাম বার্তা, নম্বর &amp; অজানা কল অবরোধ তালিকা দিয়ে থামাও &amp; সময়সূচী</string>
     <string name="blocking_manager_call_control_summary">তোমার কল আর বার্তা একটাই সুবিধাজনক জায়গা থেকে ফিল্টার করো বা ছাঁকো! Community IQ™ দিয়ে অবাঞ্ছিত বার্তা আটকানো যায় সমাজে পরিচিত স্প্যামারদের থেকে</string>
     <string name="blocking_manager_sia_summary">স্বয়ংক্রিয়ভাবে \"Should I Answer\"(আমার কি উত্তর দেয়া উচিত?) অ্যাপ্লিকেশন ব্যবহার করে অযাচিত নম্বর-এর বার্তাগুলি ফিল্টার করো</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">সারা জীবনের জন্য আপগ্রেড করুন %1$s %2$s দিয়ে</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">%1$s %2$s দান করুন, + আনলক করুন</string>
-    <string name="qksms_plus_thanks_title">QUIK সমর্থনের জন্য আপনাকে ধন্যবাদ!</string>
+    <string name="qksms_plus_thanks_title">UP SMS সমর্থনের জন্য আপনাকে ধন্যবাদ!</string>
     <string name="qksms_plus_thanks_summary">আপনি এখন QUIK+-এর সব বৈশিষ্ট্যেের সুবিধা পাচ্ছেন</string>
     <string name="qksms_plus_error">একটি ত্রুটি আছে, আবার চেষ্টা করো।</string>
     <string name="qksms_plus_free_title">F-Droid ব্যবহারকারীরা QUIK+ বিনামূল্যে ব্যবহার করতে পারবেন! যদি আপনি উন্নয়ন সমর্থন করতে মুক্ত মনে অনুদান করুন।</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">স্বয়ংক্রিয়-উত্তর</string>
     <string name="qksms_plus_respond_summary">আগত বার্তার জন্য স্বয়ংক্রিয়ভাবে পূর্বনির্ধারিত প্রতিক্রিয়া পাঠাও</string>
     <string name="qksms_plus_more_title">আরও</string>
-    <string name="qksms_plus_more_summary">QUIK সক্রিয় উন্নয়ন অধীনে এবং QUIK+ এর সকাল ভবিষ্যত ফিচার আপনার কেনা অ্যাপেে অন্তর্ভুক্ত থাকবে!</string>
+    <string name="qksms_plus_more_summary">UP SMS সক্রিয় উন্নয়ন অধীনে এবং QUIK+ এর সকাল ভবিষ্যত ফিচার আপনার কেনা অ্যাপেে অন্তর্ভুক্ত থাকবে!</string>
     <string name="widget_loading">লোড হচ্ছে&#8230;</string>
     <string name="widget_more">আরও আলাপ দেখো</string>
     <string name="qkreply_menu_read">পড়া হয়েছে</string>

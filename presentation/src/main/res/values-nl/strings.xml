@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Je gearchiveerde conversaties verschijnen hier</string>
     <string name="main_fab_cd">Start nieuwe conversatie</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">QUIK uw standaard SMS app maken</string>
+    <string name="main_default_sms_message">UP SMS uw standaard SMS app maken</string>
     <string name="main_default_sms_change">Wijzigen</string>
     <string name="main_permission_required">Toestemming vereist</string>
-    <string name="main_permission_sms">QUIK machtigen voor het verzenden en bekijken van SMS-berichten</string>
-    <string name="main_permission_contacts">QUIK machtigen om uw contactpersonen te bekijken</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS machtigen voor het verzenden en bekijken van SMS-berichten</string>
+    <string name="main_permission_contacts">UP SMS machtigen om uw contactpersonen te bekijken</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Toestaan</string>
     <string name="drawer_inbox">Inbox</string>
     <string name="drawer_archived">Archief</string>
@@ -72,8 +72,8 @@
     <string name="drawer_help">Help &amp; feedback</string>
     <string name="drawer_invite">Vrienden uitnodigen</string>
     <string name="drawer_plus_banner_summary">Ontgrendel geweldig nieuwe functies en ondersteun verdere ontwikkeling</string>
-    <string name="rate_title">Aan het genieten van QUIK?</string>
-    <string name="rate_summary">Deel je liefde voor QUIK door een beoordeling op Google Play te plaatsen!</string>
+    <string name="rate_title">Aan het genieten van UP SMS?</string>
+    <string name="rate_summary">Deel je liefde voor UP SMS door een beoordeling op Google Play te plaatsen!</string>
     <string name="rate_okay">Ok</string>
     <string name="rate_dismiss">Sluiten</string>
     <string name="dialog_delete_title">Verwijderen</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Uiterlijk</string>
     <string name="settings_category_general">Algemeen</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Snelle reactie</string>
     <string name="settings_theme_title">Thema</string>
     <string name="settings_night_title">Nachtmodus</string>
     <string name="settings_black_title">Pure zwarte nachtmodus</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Trillen</string>
     <string name="settings_ringtone_title">Geluid</string>
     <string name="settings_ringtone_none">Geen</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Snelle reactie</string>
     <string name="settings_qkreply_summary">Popup voor nieuwe berichten</string>
     <string name="settings_qkreply_tap_dismiss_title">Tik om te sluiten</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tik buiten de popup om deze te sluiten</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Auto-compress MMS bijlagen</string>
     <string name="settings_sync_title">Synchroniseer berichten</string>
     <string name="settings_sync_summary">Hersynchroniseer jouw berichten vanuit de SMS database op je telefoon</string>
-    <string name="settings_about_title">Over QUIK</string>
+    <string name="settings_about_title">Over UP SMS</string>
     <string name="settings_version">Versie %s</string>
     <string name="settings_logging_enabled">Foutenregistratie ingeschakeld</string>
     <string name="settings_logging_disabled">Foutenregistratie uitgeschakeld</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Verwijder inkomende berichten van geblokkeerde afzenders in plaats van ze te verbergen</string>
     <string name="blocking_conversations">Geblokkeerde gesprekken</string>
     <string name="blocking_manager_title">Blokkeermanager</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Ingebouwde blokkeerfunctie in QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Ingebouwde blokkeerfunctie in UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Blokkeer spamberichten, nummers &amp; onbekende oproepen met blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Filter je oproepen en berichten automatisch op één handige plaats! Community IQ™ stelt je in staat om ongewenste berichten van de bij community bekende spammers te blokkeren</string>
     <string name="blocking_manager_sia_summary">Automatisch filteren van berichten van ongevraagde nummers met behulp van de app \"Should I Answer\"</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">Levenslange upgrade voor %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Ontgrendel en doneer voor %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Bedankt voor het onderhouden van QUIK!</string>
+    <string name="qksms_plus_thanks_title">Bedankt voor het onderhouden van UP SMS!</string>
     <string name="qksms_plus_thanks_summary">Je hebt nu toegang tot alle QUIK+ functies</string>
     <string name="qksms_plus_error">Er is een fout opgetreden, probeer het opnieuw</string>
     <string name="qksms_plus_free_title">QUIK+ is gratis voor F-Droid gebruikers. Als je verdere ontwikkelingen wilt helpen, kun je gerust een donatie overwegen.</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Auto-antwoorden</string>
     <string name="qksms_plus_respond_summary">Automatisch reageren op inkomende berichten met een vooraf ingestelde reactie</string>
     <string name="qksms_plus_more_title">Meer</string>
-    <string name="qksms_plus_more_summary">QUIK is in actieve ontwikkeling, uw aankoop bevat alle toekomstige nieuwigheden exclusief voor QUIK+!</string>
+    <string name="qksms_plus_more_summary">UP SMS is in actieve ontwikkeling, uw aankoop bevat alle toekomstige nieuwigheden exclusief voor QUIK+!</string>
     <string name="widget_loading">Laden&#8230;</string>
     <string name="widget_more">Bekijk meer conversaties</string>
     <string name="qkreply_menu_read">Markeren als gelezen</string>

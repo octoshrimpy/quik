@@ -56,12 +56,12 @@
     <string name="archived_empty_text">بایگانی‌هایتان اینجا نمایش داده می‌شود</string>
     <string name="main_fab_cd">شروع گفتگوی جدید</string>
     <string name="main_default_sms_title">دوباره عاشق پیامک‌ شوید</string>
-    <string name="main_default_sms_message">QUIK را به‌عنوان برنامه پیش‌فرض پیامک انتخاب کنید</string>
+    <string name="main_default_sms_message">UP SMS را به‌عنوان برنامه پیش‌فرض پیامک انتخاب کنید</string>
     <string name="main_default_sms_change">تغییر</string>
     <string name="main_permission_required">نیاز به اجازه</string>
-    <string name="main_permission_sms">QUIK برای ارسال و مشاهده پیام‌ها نیاز به اجازه دارد</string>
-    <string name="main_permission_contacts">QUIK نیاز به اجازه برای مشاهده مخاطبین شما دارد</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS برای ارسال و مشاهده پیام‌ها نیاز به اجازه دارد</string>
+    <string name="main_permission_contacts">UP SMS نیاز به اجازه برای مشاهده مخاطبین شما دارد</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">اجازه</string>
     <string name="drawer_inbox">صندوق ورودی</string>
     <string name="drawer_archived">بایگانی شده</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">راهنما &amp; بازخورد</string>
     <string name="drawer_invite">دعوت دوستان</string>
     <string name="drawer_plus_banner_summary">ویژگی های جدید شگفت انگیز را باز کرده و از توسعه نرم‌افزار پشتیبانی کنید</string>
-    <string name="rate_title">از QUIK لذت می برید؟</string>
+    <string name="rate_title">از UP SMS لذت می برید؟</string>
     <string name="rate_summary">علاقه ی خود رابا امتیاز دادن به ما در گوگل پلی به اشتراک بگذارید</string>
     <string name="rate_okay">باشه!</string>
     <string name="rate_dismiss">رد شدن</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">ظاهر</string>
     <string name="settings_category_general">عمومی</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">پاسخ سریع</string>
     <string name="settings_theme_title">پوسته</string>
     <string name="settings_night_title">حالت شب</string>
     <string name="settings_black_title">حالت شب کامل</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">لرزش</string>
     <string name="settings_ringtone_title">صدا</string>
     <string name="settings_ringtone_none">هیچی</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">پاسخ سریع</string>
     <string name="settings_qkreply_summary">پنجره پیام های جدید</string>
     <string name="settings_qkreply_tap_dismiss_title">برای رد کردن ضربه بزنید</string>
     <string name="settings_qkreply_tap_dismiss_summary">برای بستن آن ، به بیرون پنجره ضربه بزنید</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">فشرده سازی خودکار پیوست ها</string>
     <string name="settings_sync_title">همگام‌سازی پیام‌ها</string>
     <string name="settings_sync_summary">همگام‌سازی مجدد پیام‌ها با پایگاه‌داده بومی پیامک اندروید</string>
-    <string name="settings_about_title">درباره QUIK</string>
+    <string name="settings_about_title">درباره UP SMS</string>
     <string name="settings_version">نگارش %s</string>
     <string name="settings_logging_enabled">گزارش‌گیری اشکال‌زدایی فعال است</string>
     <string name="settings_logging_disabled">گزارش‌گیری اشکال‌زدایی غیرفعال است</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">پیام های ورودی را از فرستنده های مسدود شده به جای مخفی کردن آنها دور بیندازید</string>
     <string name="blocking_conversations">گفتگوهای مسدود شده</string>
     <string name="blocking_manager_title">مدیریت انسداد</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">عملکرد مسدود کننده داخلی در QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">عملکرد مسدود کننده داخلی در UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">مسدود کردن پیام های هرزنامه، شماره ها و تماس های ناشناخته توسط لیست سیاه و  جدول زمان بندی</string>
     <string name="blocking_manager_call_control_summary">تماس ها و پیام های خود را بطور خودکار فیلتر کنید! IQ Community به شما اجازه می دهد تا از پیام های ناخواسته توسط اسپمرهای شناخته شده در جامعه جلوگیری کنید</string>
     <string name="blocking_manager_sia_summary">با استفاده از برنامه «آیا باید جواب بدم»، پیام‌ها را از شماره های ناخواسته به طور خودکار فیلتر کنید</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">ارتقا مادام العمر به‌ازای %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">نسخه پیشرفته و حمایت به‌ازای %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">سپاس از شما برای حمایت از QUIK! </string>
+    <string name="qksms_plus_thanks_title">سپاس از شما برای حمایت از UP SMS! </string>
     <string name="qksms_plus_thanks_summary">حال شما به همه امکانات QUIK+ دسترسی دارید</string>
     <string name="qksms_plus_error">خطایی رخ داده است، لطفاً دوباره امتحان کنید</string>
     <string name="qksms_plus_free_title">QUIK+ برای کاربران F-Droid رایگان است! اگر می‌خواهید از توسعه حمایت کنید، از کمک مالی بسیار قدردانی می‌شود. </string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">پاسخ خودکار</string>
     <string name="qksms_plus_respond_summary">پاسخ خودکار به پیام‌های دریافتی با پاسخ از پیش تعیین شده</string>
     <string name="qksms_plus_more_title">بیشتر</string>
-    <string name="qksms_plus_more_summary">QUIK در حال توسعه فعال است، و خرید شما شامل تمام ویژگی های آینده QUIK + نیز هست !</string>
+    <string name="qksms_plus_more_summary">UP SMS در حال توسعه فعال است، و خرید شما شامل تمام ویژگی های آینده QUIK + نیز هست !</string>
     <string name="widget_loading">درحال بارگذاری&#8230;</string>
     <string name="widget_more">مشاهده گفتگوهای بیشتر</string>
     <string name="qkreply_menu_read">نشان به‌عنوان خوانده شده</string>

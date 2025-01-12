@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Tu sa zobrazia vaše archivované konverzácie</string>
     <string name="main_fab_cd">Začať novú konverzáciu</string>
     <string name="main_default_sms_title">Opäť si zamilujte písanie</string>
-    <string name="main_default_sms_message">Nastavte QUIK ako predvolenú SMS aplikáciu</string>
+    <string name="main_default_sms_message">Nastavte UP SMS ako predvolenú SMS aplikáciu</string>
     <string name="main_default_sms_change">Zmeniť</string>
     <string name="main_permission_required">Vyžadované povolenie</string>
-    <string name="main_permission_sms">QUIK potrebuje povolenie posielať a zobrazovať správy SMS</string>
-    <string name="main_permission_contacts">QUIK potrebuje povolenie na zobrazenie kontaktov</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS potrebuje povolenie posielať a zobrazovať správy SMS</string>
+    <string name="main_permission_contacts">UP SMS potrebuje povolenie na zobrazenie kontaktov</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Povoliť</string>
     <string name="drawer_inbox">Doručené</string>
     <string name="drawer_archived">Archivované</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Nápoveda &amp; spätná väzba</string>
     <string name="drawer_invite">Pozvať priateľov</string>
     <string name="drawer_plus_banner_summary">Odomknutie úžasné nové funkcie a podporte vývoj</string>
-    <string name="rate_title">Máte radi QUIK?</string>
+    <string name="rate_title">Máte radi UP SMS?</string>
     <string name="rate_summary">Podeľte sa o trochu lásky a ohodnoťte nás na Google Play!</string>
     <string name="rate_okay">OUKEJ!</string>
     <string name="rate_dismiss">ODMIETNUŤ</string>
@@ -192,7 +192,7 @@
     </string-array>
     <string name="settings_category_appearance">Vzhľad</string>
     <string name="settings_category_general">Všeobecné</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Rýchla odpoveď</string>
     <string name="settings_theme_title">Motív</string>
     <string name="settings_night_title">Nočný režim</string>
     <string name="settings_black_title">Čisto čierny nočný režim</string>
@@ -213,7 +213,7 @@
     <string name="settings_vibration_title">Vybrácie</string>
     <string name="settings_ringtone_title">Zvuk</string>
     <string name="settings_ringtone_none">Žiadny</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Rýchla odpoveď</string>
     <string name="settings_qkreply_summary">Vyskakovacie okno pre nové správy</string>
     <string name="settings_qkreply_tap_dismiss_title">Klepnutím zavriete</string>
     <string name="settings_qkreply_tap_dismiss_summary">Zavriete klepnutím mimo vyskakovacie okno</string>
@@ -257,7 +257,7 @@
     <string name="settings_mms_size_title">Automaticky komprimovať MMS prílohy</string>
     <string name="settings_sync_title">Synchronizovať správy</string>
     <string name="settings_sync_summary">Opätovne synchronizovať vaše správy s natívnou SMS databázou</string>
-    <string name="settings_about_title">O aplikácii QUIK</string>
+    <string name="settings_about_title">O aplikácii UP SMS</string>
     <string name="settings_version">Verzia %s</string>
     <string name="settings_logging_enabled">Ladiace záznamy povolené</string>
     <string name="settings_logging_disabled">Ladiace záznamy vypnuté</string>
@@ -267,8 +267,8 @@
     <string name="blocking_drop_summary">Zahodiť prichádzajúce správy od blokovaných odosielateľov namiesto ich skrytia.</string>
     <string name="blocking_conversations">Blokované konverzácie</string>
     <string name="blocking_manager_title">Správca blokovaní</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Vstavané blokovanie v QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Vstavané blokovanie v UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automaticky filtrujte svoje hovory a správy na jednom mieste! Community IQ™ vám poskytuje ochranu pred spamom od komunitou označených spammerov.</string>
     <string name="blocking_manager_sia_summary">Automaticky filtrovať správy od nevyžiadaných čísiel pomocou aplikácie \"Should I Answer?\"</string>
@@ -310,7 +310,7 @@
     <string name="qksms_plus_upgrade">Doživotná aktivácia za %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Odomknúť + darovať za %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Ďakujeme, že ste podporili  QUIK!</string>
+    <string name="qksms_plus_thanks_title">Ďakujeme, že ste podporili  UP SMS!</string>
     <string name="qksms_plus_thanks_summary">Odteraz máte prístup ku všetkým QUIK+ funkciám</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
     <string name="qksms_plus_free_title">QUIK+ je zdarma pre používateľov F-Droid! Ak si prajete podporiť vývoj, neváhajte prispieť.</string>
@@ -335,7 +335,7 @@
     <string name="qksms_plus_respond_title">Automatická odpoveď</string>
     <string name="qksms_plus_respond_summary">Automaticky odpovedať na príchodzie správy s prednastavenou odpoveďou</string>
     <string name="qksms_plus_more_title">Viac</string>
-    <string name="qksms_plus_more_summary">QUIK je v aktívnom vývoji a váš nákup bude obsahovať aj všetky budúce QUIK+ funkcie!</string>
+    <string name="qksms_plus_more_summary">UP SMS je v aktívnom vývoji a váš nákup bude obsahovať aj všetky budúce QUIK+ funkcie!</string>
     <string name="widget_loading">Načítavanie&#8230;</string>
     <string name="widget_more">Zobraziť viacej konverácií</string>
     <string name="qkreply_menu_read">Označiť ako prečítané</string>

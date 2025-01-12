@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Dina arkiverade konversationer kommer att dyka upp här</string>
     <string name="main_fab_cd">Starta en ny konversation</string>
     <string name="main_default_sms_title">Älska att skicka SMS igen</string>
-    <string name="main_default_sms_message">Gör QUIK till din standard-app för SMS</string>
+    <string name="main_default_sms_message">Gör UP SMS till din standard-app för SMS</string>
     <string name="main_default_sms_change">Ändra</string>
     <string name="main_permission_required">Tillstånd krävs</string>
-    <string name="main_permission_sms">QUIK behöver tillåtelse att skicka och visa SMS-meddelanden</string>
-    <string name="main_permission_contacts">QUIK behöver tillåtelse för att kunna se dina kontakter</string>
-    <string name="main_permission_notifications">QUIK behöver behörighet för att visa aviseringar</string>
+    <string name="main_permission_sms">UP SMS behöver tillåtelse att skicka och visa SMS-meddelanden</string>
+    <string name="main_permission_contacts">UP SMS behöver tillåtelse för att kunna se dina kontakter</string>
+    <string name="main_permission_notifications">UP SMS behöver behörighet för att visa aviseringar</string>
     <string name="main_permission_allow">Tillåt</string>
     <string name="drawer_inbox">Inkorg</string>
     <string name="drawer_archived">Arkiverat</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Hjälp &amp; återgivning</string>
     <string name="drawer_invite">Bjud in vänner</string>
     <string name="drawer_plus_banner_summary">Lås upp nya spännande funktioner och stötta utvecklingen</string>
-    <string name="rate_title">Tycker du om QUIK?</string>
+    <string name="rate_title">Tycker du om UP SMS?</string>
     <string name="rate_summary">Dela lite kärlek och betygsätt oss på Google Play!</string>
     <string name="rate_okay">OKEJ!</string>
     <string name="rate_dismiss">AVFÄRDA</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Utseende</string>
     <string name="settings_category_general">Generellt</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Snabbt svar</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Nattläge</string>
     <string name="settings_black_title">Svart nattläge</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Ljud</string>
     <string name="settings_ringtone_none">Ingen</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Snabbt svar</string>
     <string name="settings_qkreply_summary">Popup för nya meddelanden</string>
     <string name="settings_qkreply_tap_dismiss_title">Tryck för att avfärda</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tryck var som helst utanför popupen för att stänga den</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Komprimera MMS-bilagor automatiskt</string>
     <string name="settings_sync_title">Synkronisera meddelanden</string>
     <string name="settings_sync_summary">Synkronisera dina meddelanden med telefonens SMS-databas</string>
-    <string name="settings_about_title">Om QUIK</string>
+    <string name="settings_about_title">Om UP SMS</string>
     <string name="settings_version">Version %s</string>
     <string name="settings_logging_enabled">Felsökningsloggning aktiverades</string>
     <string name="settings_logging_disabled">Felsökningsloggning inaktiverad</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Avvisa inkommande meddelanden från blockerade avsändare istället för att dölja dem</string>
     <string name="blocking_conversations">Blockerade konversationer</string>
     <string name="blocking_manager_title">Blockerings-hanterare</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Inbyggd blockeringsfunktion i QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Inbyggd blockeringsfunktion i UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Blockera spam, nummer &amp; okända samtal med svartlista &amp; schema</string>
     <string name="blocking_manager_call_control_summary">Filtrera automatiskt dina samtal och meddelanden på ett bekvämt ställe! Med Community IQ™ kan du förhindra oönskade meddelanden från gemenskapens kända spammare</string>
     <string name="blocking_manager_sia_summary">Filtrera automatiskt meddelanden från oönskade nummer genom att använda appen \"Borde jag svara\"</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">Livstidsuppgradering för %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Lås upp + donera för %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Tack för att du stöttar QUIK!</string>
+    <string name="qksms_plus_thanks_title">Tack för att du stöttar UP SMS!</string>
     <string name="qksms_plus_thanks_summary">Du har nu tillgång till alla funktioner i QUIK+</string>
     <string name="qksms_plus_error">Ett fel har inträffat, försök igen</string>
     <string name="qksms_plus_free_title">QUIK + är gratis för F-Droid användare! Om du vill stödja utvecklingen, Så får du gärna donationera.</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Auto-svara</string>
     <string name="qksms_plus_respond_summary">Svara automatiskt på inkommande meddelanden med ett förinställt svar</string>
     <string name="qksms_plus_more_title">Mer</string>
-    <string name="qksms_plus_more_summary">QUIK är under aktiv utveckling, och dina köp kommer att inkludera alla kommande QUIK+-funktioner!</string>
+    <string name="qksms_plus_more_summary">UP SMS är under aktiv utveckling, och dina köp kommer att inkludera alla kommande QUIK+-funktioner!</string>
     <string name="widget_loading">Laddar&#8230;</string>
     <string name="widget_more">Visa fler konversationer</string>
     <string name="qkreply_menu_read">Markera som läst</string>

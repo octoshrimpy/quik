@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Zde se objeví vaše archivované konverzace</string>
     <string name="main_fab_cd">Zahájit novou konverzaci</string>
     <string name="main_default_sms_title">Zamilujte si znovu psaní</string>
-    <string name="main_default_sms_message">Nastavte si QUIK jako výchozí SMS aplikaci</string>
+    <string name="main_default_sms_message">Nastavte si UP SMS jako výchozí SMS aplikaci</string>
     <string name="main_default_sms_change">Nastavit</string>
     <string name="main_permission_required">Vyžadováno oprávnění</string>
-    <string name="main_permission_sms">QUIK potřebuje oprávnění pro odesílání a zobrazení SMS zpráv</string>
-    <string name="main_permission_contacts">QUIK potřebuje oprávnění pro zobrazení vašich kontaktů</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS potřebuje oprávnění pro odesílání a zobrazení SMS zpráv</string>
+    <string name="main_permission_contacts">UP SMS potřebuje oprávnění pro zobrazení vašich kontaktů</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Povolit</string>
     <string name="drawer_inbox">Příchozí zprávy</string>
     <string name="drawer_archived">Archivováno</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Nápověda a zpětná vazba</string>
     <string name="drawer_invite">Pozvat přátele</string>
     <string name="drawer_plus_banner_summary">Odemkněte úžasné nové funkce a podpořte vývoj</string>
-    <string name="rate_title">Líbí se Vám QUIK?</string>
+    <string name="rate_title">Líbí se Vám UP SMS?</string>
     <string name="rate_summary">Sdílejte trochu lásky a ohodnoťte nás na Google Play!</string>
     <string name="rate_okay">Tak určitě!</string>
     <string name="rate_dismiss">ZAVŘÍT</string>
@@ -192,7 +192,7 @@
     </string-array>
     <string name="settings_category_appearance">Vzhled</string>
     <string name="settings_category_general">Obecné</string>
-    <string name="settings_category_qkreply">Quick Reply</string>
+    <string name="settings_category_qkreply">Rychlá odpověď</string>
     <string name="settings_theme_title">Motiv vzhledu</string>
     <string name="settings_night_title">Noční režim</string>
     <string name="settings_black_title">Čistá černá, noční režim</string>
@@ -213,7 +213,7 @@
     <string name="settings_vibration_title">Vibrace</string>
     <string name="settings_ringtone_title">Vyzvánění</string>
     <string name="settings_ringtone_none">Žádný</string>
-    <string name="settings_qkreply_title">Quick Reply</string>
+    <string name="settings_qkreply_title">Rychlá odpověď</string>
     <string name="settings_qkreply_summary">Vyskakovací okno pro nové zprávy</string>
     <string name="settings_qkreply_tap_dismiss_title">Klepnutím zavřít</string>
     <string name="settings_qkreply_tap_dismiss_summary">Pro ukončení klepněte kamkoli mimo okno zprávy</string>
@@ -257,7 +257,7 @@
     <string name="settings_mms_size_title">Automaticky komprimovat MMS přílohy</string>
     <string name="settings_sync_title">Synchronizovat zprávy</string>
     <string name="settings_sync_summary">Opětovná synchronizace zpráv s nativní Android SMS databází</string>
-    <string name="settings_about_title">O aplikaci QUIK</string>
+    <string name="settings_about_title">O aplikaci UP SMS</string>
     <string name="settings_version">Verze %s</string>
     <string name="settings_logging_enabled">Ladící protokolování zapnuto</string>
     <string name="settings_logging_disabled">Ladící protokolování vypnuto</string>
@@ -267,8 +267,8 @@
     <string name="blocking_drop_summary">Zahodit příchozí zprávy od blokovaných odesílatelů namísto jejich skrytí</string>
     <string name="blocking_conversations">Blokované konverzace</string>
     <string name="blocking_manager_title">Správce blokování</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Vestavěné blokování v QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Vestavěné blokování v UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatické filtrování hovorů a zpráv na jednom místě. Community IQ™ poskytuje ochranu před nevyžádanými zprávami od komunitou označených spammerů.</string>
     <string name="blocking_manager_sia_summary">Automaticky filtrovat zprávy od nevyžádaných čísel pomocí aplikace „Můžu to zvednout?“</string>
@@ -310,7 +310,7 @@
     <string name="qksms_plus_upgrade">Doživotní aktualizace za %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Odemknout + darovat %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Děkujeme za podporu QUIK!</string>
+    <string name="qksms_plus_thanks_title">Děkujeme za podporu UP SMS!</string>
     <string name="qksms_plus_thanks_summary">Nyní máte přístup ke všem funkcím QUIK+</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
     <string name="qksms_plus_free_title">QUIK + je zdarma pro uživatele F-Droid! Pokud byste chtěli podpořit vývoj, neváhejte přispět.</string>
