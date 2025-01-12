@@ -150,7 +150,10 @@ class NotificationManagerImpl @Inject constructor(
                 .setVibrate(if (prefs.vibration(threadId).get()) VIBRATE_PATTERN else longArrayOf(0))
 
         // Tell the notification if it's a group message
-        val messagingStyle = NotificationCompat.MessagingStyle("Me")
+        val sender = Person.Builder()
+            .setName("Me")
+            .build()
+        val messagingStyle = NotificationCompat.MessagingStyle(sender)
         if (conversation.recipients.size >= 2) {
             messagingStyle.isGroupConversation = true
             messagingStyle.conversationTitle = conversation.getTitle()
@@ -316,7 +319,7 @@ class NotificationManagerImpl @Inject constructor(
             context.getSystemService<PowerManager>()?.let { powerManager ->
                 if (!powerManager.isInteractive) {
                     val flags = PowerManager.SCREEN_DIM_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP
-                    val wakeLock = powerManager.newWakeLock(flags, context.packageName)
+                    val wakeLock = powerManager.newWakeLock(flags, "${context.packageName}:WakeScreen")
                     wakeLock.acquire(5000)
                 }
             }
