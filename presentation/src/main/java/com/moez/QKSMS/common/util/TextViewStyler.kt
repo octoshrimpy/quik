@@ -153,6 +153,7 @@ class TextViewStyler @Inject constructor(
                 Preferences.TEXT_SIZE_NORMAL -> 16f
                 Preferences.TEXT_SIZE_LARGE -> 18f
                 Preferences.TEXT_SIZE_LARGER -> 20f
+                Preferences.TEXT_SIZE_SUPER -> 40f
                 else -> 16f
             }
 
@@ -161,6 +162,7 @@ class TextViewStyler @Inject constructor(
                 Preferences.TEXT_SIZE_NORMAL -> 14f
                 Preferences.TEXT_SIZE_LARGE -> 16f
                 Preferences.TEXT_SIZE_LARGER -> 18f
+                Preferences.TEXT_SIZE_SUPER -> 36f
                 else -> 14f
             }
 
@@ -169,6 +171,7 @@ class TextViewStyler @Inject constructor(
                 Preferences.TEXT_SIZE_NORMAL -> 12f
                 Preferences.TEXT_SIZE_LARGE -> 14f
                 Preferences.TEXT_SIZE_LARGER -> 16f
+                Preferences.TEXT_SIZE_SUPER -> 32f
                 else -> 12f
             }
 
@@ -177,6 +180,7 @@ class TextViewStyler @Inject constructor(
                 Preferences.TEXT_SIZE_NORMAL -> 20f
                 Preferences.TEXT_SIZE_LARGE -> 22f
                 Preferences.TEXT_SIZE_LARGER -> 26f
+                Preferences.TEXT_SIZE_SUPER -> 52f
                 else -> 20f
             }
 
@@ -185,6 +189,7 @@ class TextViewStyler @Inject constructor(
                 Preferences.TEXT_SIZE_NORMAL -> 18f
                 Preferences.TEXT_SIZE_LARGE -> 20f
                 Preferences.TEXT_SIZE_LARGER -> 24f
+                Preferences.TEXT_SIZE_SUPER -> 48f
                 else -> 18f
             }
 
@@ -193,6 +198,7 @@ class TextViewStyler @Inject constructor(
                 Preferences.TEXT_SIZE_NORMAL -> 32f
                 Preferences.TEXT_SIZE_LARGE -> 36f
                 Preferences.TEXT_SIZE_LARGER -> 40f
+                Preferences.TEXT_SIZE_SUPER -> 80f
                 else -> 32f
             }
         }
