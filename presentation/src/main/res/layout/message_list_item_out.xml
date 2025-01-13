@@ -92,6 +92,7 @@
         android:backgroundTint="?attr/bubbleColor"
         android:gravity="start|center_vertical"
         android:minHeight="36dp"
+        android:textIsSelectable="true"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1"
