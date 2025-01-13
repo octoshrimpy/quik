@@ -76,6 +76,7 @@ class SwipeActionsPresenter @Inject constructor(
         Preferences.SWIPE_ACTION_CALL -> R.drawable.ic_call_white_24dp
         Preferences.SWIPE_ACTION_READ -> R.drawable.ic_check_white_24dp
         Preferences.SWIPE_ACTION_UNREAD -> R.drawable.ic_markunread_black_24dp
+        Preferences.SWIPE_ACTION_SPEAK -> R.drawable.ic_speaker_black_24dp
         else -> 0
     }
 

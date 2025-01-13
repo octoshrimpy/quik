@@ -48,6 +48,12 @@ interface ConversationRepository {
 
     fun getConversation(threadId: Long): Conversation?
 
+    fun getUnseenIds(archived: Boolean = false): List<Long>
+
+    fun getUnreadIds(archived: Boolean = false): List<Long>
+
+    fun getConversationAndLastSenderContactName(threadId: Long): Pair<Conversation?, String?>?
+
     /**
      * Returns all conversations with an id in [threadIds]
      */
