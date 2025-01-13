@@ -20,11 +20,15 @@ package dev.octoshrimpy.quik.feature.qkreply
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
@@ -37,14 +41,14 @@ import com.jakewharton.rxbinding2.widget.textChanges
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
-import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
-import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.feature.compose.MessagesAdapter
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.QkEditText
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.compose_activity.message
 import kotlinx.android.synthetic.main.qkreply_activity.*
 import javax.inject.Inject
 
@@ -100,16 +104,34 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
             override fun onChanged() = messages.scrollToPosition(adapter.itemCount - 1)
         })
 
-        findViewById<QkEditText>(R.id.message)?.setOnLongClickListener {
-            val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            speechRecognizerIntent.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            )
-// include if want a custom message that the STT can (optionally) display           speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dictate your message")
-            speechResultLauncher.launch(speechRecognizerIntent)
-            true
-        }
+        message.setOnTouchListener(object : OnTouchListener {
+            private val gestureDetector =
+                GestureDetector(this@QkReplyActivity, object : SimpleOnGestureListener() {
+                    override fun onDoubleTap(e: MotionEvent): Boolean {
+                        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                            .putExtra(
+                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                            )
+                            // include if want a custom message that the STT can (optionally) display   .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
+                        speechResultLauncher.launch(speechRecognizerIntent)
+                        return true
+                    }
+
+                    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                        message.showKeyboard()
+                        return true
+                    }
+
+                    override fun onSingleTapUp(e: MotionEvent): Boolean {
+                        return true     // don't show soft keyboard on this event
+                    }
+                })
+
+            override fun onTouch(v: View, e: MotionEvent): Boolean {
+                return gestureDetector.onTouchEvent(e)
+            }
+        })
     }
 
     override fun render(state: QkReplyState) {
