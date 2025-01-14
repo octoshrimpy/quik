@@ -1,72 +1,96 @@
-![QKSMS](https://user-images.githubusercontent.com/4358785/39079306-a5a409b6-44e5-11e8-8589-b4acd63b636e.jpg)
+# **UP SMS**
 
-> **Note**
-This image is outdated! Nothing has changed as far as UI, so it should be okay for now.
+**A branded and customized version of the QuikSMS Android project, tailored specifically for the UP Phone to provide an enhanced SMS experience.**
 
-# QUIK
+## **Table of Contents**
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Reporting Bugs](#reporting-bugs)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+- [Contact](#contact)
 
-[![Build and Release](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml)
 
-QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation of [QKSMS](https://github.com/moezbhatti/qksms). 
+## **Introduction**
 
-QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases), but you can also keep track of updates with [Obtainium](https://github.com/ImranR98/Obtainium#-obtainium).
+UP SMS is a next-generation SMS app designed exclusively for the UP Phone. By building on the foundation of [QuikSMS](https://github.com/octoshrimpy/quik), this application provides seamless communication with added features, a branded interface, and performance optimizations.
 
 
-<a href="https://f-droid.org/repository/browse/?fdid=dev.octoshrimpy.quik"><img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"></a>
-<a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/{%22id%22:%22dev.octoshrimpy.quik%22,%22url%22:%22https://github.com/octoshrimpy/quik%22,%22author%22:%22octoshrimpy%22,%22name%22:%22QUIK%22,%22additionalSettings%22:%22{\%22apkFilterRegEx\%22:\%22release\%22,\%22invertAPKFilter\%22:false,\%22about\%22:\%22QUIK%20is%20an%20open%20source%20replacement%20for%20the%20stock%20messaging%20app%20on%20Android.%20It%20is%20a%20continuation%20of%20QKSMS.\%22}%22}"><img src="https://raw.githubusercontent.com/ImranR98/Obtainium/b1c8ac6f2ab08497189721a788a5763e28ff64cd/assets/graphics/badge_obtainium.png" alt="Get it on Obtainium" height="100"></a>
-<a href="https://github.com/octoshrimpy/quik/releases">
-<img src="https://user-images.githubusercontent.com/69304392/148696068-0cfea65d-b18f-4685-82b5-329a330b1c0d.png"
-alt="Download from GitHub releases" height="100" /></a>
-<!--
-</a><a href="https://play.google.com/store/apps/details?id=dev.octoshrimpy.quik"><img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Download on Google Play" height="100">
--->
+## **Features**
 
-## Matrix Chat
-You can chat with the community over at [#quik-sms:matrix.org](https://matrix.to/#/#quik-sms:matrix.org)
+- **Custom Branding:** User interface aligned with Unplugged's branding.
+- **Enhanced Security:** Advanced measures to protect user data and messages.
+- **Group Messaging:** Effortlessly send messages to multiple contacts.
+- **Quick Reply:** Respond directly from notifications.
+
+
+## **Installation**
+
+### **Prerequisites**
+- Android Studio.
+- Android phone or an Android Simulator.
+
+### **Steps to Install**
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/werunplugged/up_sms
+   ```
+2. Open the project in Android Studio.
+3. Sync the project with Gradle files.
+4. Build and install the app on your Android phone or simulator.
+
 
 ## Reporting bugs
 
-A great bug report contains a description of the problem and steps to reproduce the problem. We need to know what we're looking for and where to look for it.
-
+A great bug report contains a description of the problem and steps to reproduce it. We need to know what to look for and where to look for it.
 When reporting a bug, please make sure to provide the following information:
-- Steps to reproduce the issue
-- QUIK version
-- Device / OS information
+- A full description of the issue, including screenshots if possible.
+- Steps to reproduce the issue.
+- UP SMS version.
+- Device / OS information.
 
-<!--
-## Translations
 
-If you'd like to add translations to QUIK, please join the project on [Crowdin](https://crowdin.com/project/qksms). Translations that are committed directly to source files will not be accepted.
--->
+## **Usage**
 
-## Thank you
+1. **Send a Message:**
+   - Open the app and tap the **Plus** button.
+   - Enter the recipient's number or select from contacts.
+   - Type your message and tap **Send**.
 
-A special thank you to Jake ([@klinker41](https://github.com/klinker41)) and Luke Klinker ([@klinker24](https://github.com/klinker24)) for their work on [android-smsmms](https://github.com/klinker41/android-smsmms), which has been an unspeakably large help in implementing MMS into QKSMS.
+2. **Group Messaging:**
+   - Tap the **Plus** button.
+   - Select multiple contacts.
+   - Type your message and tap **Send**.
 
-A giant thank you to Moez [moezbhatti](https://github.com/moezbhatti) for creating and maintaining QKSMS, of which QUIK would not exist without.
+3. **Quick Reply:**
+   - When a new message arrives, pull down the notification and tap **Reply**.
 
-## Contact
+4. **Search Messages:**
+   - Use the search bar to quickly find messages or contacts.
 
-QUIK is developed and maintained by [Marcos Jones](https://github.com/octoshrimpy).
 
----
+## **Contributing**
 
-## Star History
+We welcome contributions to UP SMS. To contribute:
+1. Fork the repository and create a new branch for your feature or fix.
+2. Ensure your code adheres to the project's coding standards.
+3. Submit a pull request with a clear description of your changes.
 
-<a href="https://star-history.com/#octoshrimpy/quik&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=octoshrimpy/quik&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=octoshrimpy/quik&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=octoshrimpy/quik&type=Date" />
-  </picture>
-</a>
 
----
+## **License**
 
-<a href="https://liberapay.com/octoshrimpy/donate"><img alt="Donate using Liberapay" src="https://img.shields.io/badge/Liberapay-F6C915?style=for-the-badge&logo=liberapay&logoColor=black"></a>
-<a style="background-color: #5e40c2;" href="https://ko-fi.com/octoshrimpy/donate"><img alt="Donate using Ko-Fi" src="https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white"></a>
-<a href="https://patreon.com/octoshrimpy"><img alt="Donate using Patreon" src="https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white"></a>
+This project is licensed under the [MIT License](LICENSE).
 
-## License
 
-QUIK is released under the **The GNU General Public License v3.0 (GPLv3)**, which can be found in the [LICENSE](LICENSE) file in the root of this project.
+## **Acknowledgments**
+
+- **QuikSMS**: The original open-source project this app is based on.
+- The open-source community for their support.
+
+
+## **Contact**
+
+For inquiries or support, please contact [support@upphone.com](mailto:support@upphone.com).

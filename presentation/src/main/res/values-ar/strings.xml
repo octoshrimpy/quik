@@ -56,12 +56,12 @@
     <string name="archived_empty_text">ستظهر المحادثات المؤرشفة الخاصة بك هنا</string>
     <string name="main_fab_cd">بدء محادثة جديدة</string>
     <string name="main_default_sms_title">ستحب المراسلة ثانية</string>
-    <string name="main_default_sms_message">جعل QUIK تطبيق الرسائل النصية الافتراضي لديك</string>
+    <string name="main_default_sms_message">جعل UP SMS تطبيق الرسائل النصية الافتراضي لديك</string>
     <string name="main_default_sms_change">تغيير</string>
     <string name="main_permission_required">الإذن مطلوب</string>
-    <string name="main_permission_sms">QUIK يحتاج إلى إذن لإرسال وعرض الرسائل النصية</string>
-    <string name="main_permission_contacts">QUIK يحتاج إلى إذن لعرض جهات الاتصال لديك</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS يحتاج إلى إذن لإرسال وعرض الرسائل النصية</string>
+    <string name="main_permission_contacts">UP SMS يحتاج إلى إذن لعرض جهات الاتصال لديك</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">سماح</string>
     <string name="drawer_inbox">صندوق الوارد</string>
     <string name="drawer_archived">المؤرشفة</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">المساعدة والتواصل مع المبرمج</string>
     <string name="drawer_invite">دعوة الأصدقاء</string>
     <string name="drawer_plus_banner_summary">فتح ميزات رائعة جديدة ، و دعم التطوير</string>
-    <string name="rate_title">هل QUIK ممتع ؟</string>
+    <string name="rate_title">هل UP SMS ممتع ؟</string>
     <string name="rate_summary">أظهر محبتك وقيّمنا على متجر Google Play!</string>
     <string name="rate_okay">حسناً</string>
     <string name="rate_dismiss">استبعاد</string>
@@ -182,7 +182,7 @@
     <string name="scheduled_empty_description">الإرسال الآلي لأي رسالة في الوقت الذي ترغب بالضبط</string>
     <string name="scheduled_empty_message_1">مهلاً..متى عيد ميلادك؟</string>
     <string name="scheduled_empty_message_2">إنه في 23 ديسمبر</string>
-    <string name="scheduled_empty_message_3">عيد ميلاد سعيد! أنظر ما أجمل صديقك QUIK ، يتذكر عيد ميلادك</string>
+    <string name="scheduled_empty_message_3">عيد ميلاد سعيد! أنظر ما أجمل صديقك UP SMS ، يتذكر عيد ميلادك</string>
     <!--&#x200A; is a special character required at the end of this string to fix its formatting in the app -->
     <string name="scheduled_empty_message_3_timestamp">الإرسال في 23 ديسمبر</string>
     <string name="scheduled_compose_cd">جدولة رسالة</string>
@@ -194,7 +194,7 @@
     </string-array>
     <string name="settings_category_appearance">المظهر</string>
     <string name="settings_category_general">عام</string>
-    <string name="settings_category_qkreply">رد QK</string>
+    <string name="settings_category_qkreply">الرد السريع</string>
     <string name="settings_theme_title">السمة</string>
     <string name="settings_night_title">الوضع الليلي</string>
     <string name="settings_black_title">وضع ليلي بسوادٍ حالك</string>
@@ -215,7 +215,7 @@
     <string name="settings_vibration_title">الاهتزاز</string>
     <string name="settings_ringtone_title">الصوت</string>
     <string name="settings_ringtone_none">بدون نغمة </string>
-    <string name="settings_qkreply_title">رد QK</string>
+    <string name="settings_qkreply_title">الرد السريع</string>
     <string name="settings_qkreply_summary">نافذة منبثقة للرسائل الجديدة</string>
     <string name="settings_qkreply_tap_dismiss_title">إلمس للاستبعاد</string>
     <string name="settings_qkreply_tap_dismiss_summary">إلمس خارج المنبثقة لإغلاقها</string>
@@ -261,7 +261,7 @@
     <string name="settings_mms_size_title">الضغط التلقائي لمرفقات رسائل الوسائط</string>
     <string name="settings_sync_title">مزامنة الرسائل</string>
     <string name="settings_sync_summary">إعادة مزامنة رسائلك مع قاعدة البيانات الأصلية للرسائل في النظام</string>
-    <string name="settings_about_title">حول QUIK</string>
+    <string name="settings_about_title">حول UP SMS</string>
     <string name="settings_version">النسخة %s</string>
     <string name="settings_logging_enabled">تسجيل التصحيح مفعَّل</string>
     <string name="settings_logging_disabled">تسجيل التصحيح معطَّل</string>
@@ -272,7 +272,7 @@
     <string name="blocking_conversations">المحادثات المحظورة</string>
     <string name="blocking_manager_title">مدير المحظورات</string>
     <string name="blocking_manager_qksms_title">كيو كي اس ام اس </string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">الترشيح التلقائي للرسائل من الأرقام غير المرغوبة باستخدام تطبيق \"Should I Answer\"</string>
@@ -318,8 +318,8 @@
     <string name="qksms_plus_upgrade">ترقية مدى الحياة ل %1$s%2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">افتح + التبرع ل %1$s%2$s</string>
-    <string name="qksms_plus_thanks_title">شكراً لكم على دعم QUIK!</string>
     <string name="qksms_plus_thanks_summary">جميع ميزات QUIK+ متاحة لك الآن</string>
+    <string name="qksms_plus_thanks_title">شكراً لكم على دعم UP SMS!</string>
     <string name="qksms_plus_error">حدث خطا, يرجى اعادة المحاولة</string>
     <string name="qksms_plus_free_title">QUIK+ مجاني لمستخدمي متجر ف-درويد! لا تتردد في التبرع إن كنت ترغب دعم تطوير هذا التطبيق.</string>
     <string name="qksms_plus_donate">التبرع عن طريق بي بال</string>

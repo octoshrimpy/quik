@@ -215,7 +215,7 @@
 
     <string name="settings_category_appearance">Appearance</string>
     <string name="settings_category_general">General</string>
-    <string name="settings_category_qkreply">QK Reply</string>
+    <string name="settings_category_qkreply">Quick Reply</string>
 
     <string name="settings_theme_title">Theme</string>
     <string name="settings_night_title">Night mode</string>
@@ -237,7 +237,7 @@
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Sound</string>
     <string name="settings_ringtone_none">None</string>
-    <string name="settings_qkreply_title">QK Reply</string>
+    <string name="settings_qkreply_title">Quick Reply</string>
     <string name="settings_qkreply_summary">Popup for new messages</string>
     <string name="settings_qkreply_tap_dismiss_title">Tap to dismiss</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tap outside of the popup to close it</string>

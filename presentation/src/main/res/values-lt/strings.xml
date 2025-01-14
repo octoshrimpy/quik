@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Tavo archyvuoti pokalbiai bus čia</string>
     <string name="main_fab_cd">Pradėti naują pokalbį</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">Make QUIK your default SMS app</string>
+    <string name="main_default_sms_message">Make UP SMS your default SMS app</string>
     <string name="main_default_sms_change">Change</string>
     <string name="main_permission_required">Permission required</string>
-    <string name="main_permission_sms">QUIK needs permission to send and view SMS messages</string>
-    <string name="main_permission_contacts">QUIK needs permission to view your contacts</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">UP SMS needs permission to send and view SMS messages</string>
+    <string name="main_permission_contacts">UP SMS needs permission to view your contacts</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Allow</string>
     <string name="drawer_inbox">Žinutės</string>
     <string name="drawer_archived">Archyvas</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Pagalba ir atsiliepimai</string>
     <string name="drawer_invite">Invite friends</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-    <string name="rate_title">Patinka QUIK?</string>
+    <string name="rate_title">Patinka UP SMS?</string>
     <string name="rate_summary">Įvertink mūsų programėlę Google Play!</string>
     <string name="rate_okay">OK!</string>
     <string name="rate_dismiss">ATMESTI</string>
@@ -192,7 +192,7 @@
     </string-array>
     <string name="settings_category_appearance">Išvaizda</string>
     <string name="settings_category_general">Bendra</string>
-    <string name="settings_category_qkreply">Greitas atsakas</string>
+    <string name="settings_category_qkreply">Greitas Atsakymas</string>
     <string name="settings_theme_title">Tema</string>
     <string name="settings_night_title">Nakties tema</string>
     <string name="settings_black_title">Visiškai juoda nakties tema</string>
@@ -213,7 +213,7 @@
     <string name="settings_vibration_title">Vibracija</string>
     <string name="settings_ringtone_title">Garas</string>
     <string name="settings_ringtone_none">None</string>
-    <string name="settings_qkreply_title">Greitas atsakas</string>
+    <string name="settings_qkreply_title">Greitas Atsakymas</string>
     <string name="settings_qkreply_summary">Iššokantis langas naujiems pranešimams</string>
     <string name="settings_qkreply_tap_dismiss_title">Spustelėkite, kad atmestumėte</string>
     <string name="settings_qkreply_tap_dismiss_summary">Spustelėkite bet kur už iššokamo lango, kad išjungtumėte</string>
@@ -257,7 +257,7 @@
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
     <string name="settings_sync_title">Sinchronizuoti pranešimus</string>
     <string name="settings_sync_summary">Iš naujo sinchronizuoti Android pranešimų duomenų bazę</string>
-    <string name="settings_about_title">Apie QUIK</string>
+    <string name="settings_about_title">Apie UP SMS</string>
     <string name="settings_version">Versija %s</string>
     <string name="settings_logging_enabled">Debug logging enabled</string>
     <string name="settings_logging_disabled">Debug logging disabled</string>
@@ -267,8 +267,8 @@
     <string name="blocking_drop_summary">Drop incoming messages from blocked senders instead of hiding them</string>
     <string name="blocking_conversations">Blocked conversations</string>
     <string name="blocking_manager_title">Blocking Manager</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">Automatiškai filtruoti žinutes nuo nežinomų numerių su „Ar reikia atsakyti“ programėle</string>
@@ -335,7 +335,7 @@
     <string name="qksms_plus_respond_title">Automatiškai atsakyti</string>
     <string name="qksms_plus_respond_summary">Automatiškai atsakyti į žinutes su tam tikru atsaku</string>
     <string name="qksms_plus_more_title">Daugiau</string>
-    <string name="qksms_plus_more_summary">QUIK is under active development, and your purchase will include all future QUIK+ features!</string>
+    <string name="qksms_plus_more_summary">UP SMS is under active development, and your purchase will include all future QUIK+ features!</string>
     <string name="widget_loading">Kraunama&#8230;</string>
     <string name="widget_more">Žiūrėti daugiau pokalbių</string>
     <string name="qkreply_menu_read">Mark read</string>

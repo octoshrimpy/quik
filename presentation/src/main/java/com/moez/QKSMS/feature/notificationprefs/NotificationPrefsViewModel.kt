@@ -111,7 +111,7 @@ class NotificationPrefsViewModel @Inject constructor(
 
                         R.id.previews -> view.showPreviewModeDialog()
 
-                        R.id.wake -> wake.set(!wake.get())
+                        //R.id.wake -> wake.set(!wake.get())
 
                         R.id.vibration -> vibration.set(!vibration.get())
 

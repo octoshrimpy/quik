@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Οι αρχειοθετημένες συζητήσεις σας θα εμφανίζονται εδώ</string>
     <string name="main_fab_cd">Έναρξη νέας συνομιλίας</string>
     <string name="main_default_sms_title">Αγαπήστε και πάλι τα SMS</string>
-    <string name="main_default_sms_message">Ορίστε το QUIK ως προκαθορισμένη εφαρμογή SMS</string>
+    <string name="main_default_sms_message">Ορίστε το UP SMS ως προκαθορισμένη εφαρμογή SMS</string>
     <string name="main_default_sms_change">Αλλαγή</string>
     <string name="main_permission_required">Απαιτείται άδεια</string>
-    <string name="main_permission_sms">Το QUIK απαιτεί την άδεια αποστολής και ανάγνωσης μηνυμάτων SMS</string>
-    <string name="main_permission_contacts">Το QUIK απαιτεί την άδεια ανάγνωσης των επαφών σας</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">Το UP SMS απαιτεί την άδεια αποστολής και ανάγνωσης μηνυμάτων SMS</string>
+    <string name="main_permission_contacts">Το UP SMS απαιτεί την άδεια ανάγνωσης των επαφών σας</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Να επιτραπεί</string>
     <string name="drawer_inbox">Εισερχόμενα</string>
     <string name="drawer_archived">Αρχείο</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Βοήθεια &amp; αποστολή σχολίων</string>
     <string name="drawer_invite">Πρόσκληση φίλων</string>
     <string name="drawer_plus_banner_summary">Ξεκλειδώστε φανταστικές νέες λειτουργίες και συμβάλετε στην ανάπτυξη</string>
-    <string name="rate_title">Σας αρέσει το QUIK;</string>
+    <string name="rate_title">Σας αρέσει το UP SMS;</string>
     <string name="rate_summary">Δείξτε μας την αγάπη σας και βαθμολογήστε μας στο Google Play!</string>
     <string name="rate_okay">ΕΝΤΑΞΕΙ!</string>
     <string name="rate_dismiss">ΠΑΡΑΛΕΙΨΗ</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
     <string name="settings_sync_title">Συγχρονισμός μηνυμάτων</string>
     <string name="settings_sync_summary">Επανασυγχρονισμός μηνυμάτων με τη βάση δεδομένων SMS του Android</string>
-    <string name="settings_about_title">Σχετικά με το QUIK</string>
+    <string name="settings_about_title">Σχετικά με το UP SMS</string>
     <string name="settings_version">Έκδοση %s</string>
     <string name="settings_logging_enabled">Η καταγραφή σφαλμάτων ενεργοποιήθηκε</string>
     <string name="settings_logging_disabled">Η καταγραφή σφαλμάτων απενεργοποιήθηκε</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Απόρριψη αντί για απόκρυψη μηνυμάτων από αποστολείς σε φραγή</string>
     <string name="blocking_conversations">Συζητήσεις σε φραγή</string>
     <string name="blocking_manager_title">Διαχειριστής φραγής</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Ενσωματωμένη λειτουργία φραγής του QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Ενσωματωμένη λειτουργία φραγής του UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">Automatically filter messages from unsolicited numbers by using the \"Should I Answer\" app</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">Lifetime upgrade for %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Unlock + donate for %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Thank you for supporting QUIK!</string>
+    <string name="qksms_plus_thanks_title">Thank you for supporting UP SMS!</string>
     <string name="qksms_plus_thanks_summary">You now have access to all QUIK+ features</string>
     <string name="qksms_plus_error">An error has occurred, please try again</string>
     <string name="qksms_plus_free_title">QUIK+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>

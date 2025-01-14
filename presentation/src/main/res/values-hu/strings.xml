@@ -56,12 +56,12 @@
     <string name="archived_empty_text">Az archivált beszélgetéseid itt jelennek meg</string>
     <string name="main_fab_cd">Új beszélgetés kezdeményezése</string>
     <string name="main_default_sms_title">Szeresd újból az SMS-ezést</string>
-    <string name="main_default_sms_message">A QUIK beállítása alapértelmezett SMS alkalmazásként</string>
+    <string name="main_default_sms_message">A UP SMS beállítása alapértelmezett SMS alkalmazásként</string>
     <string name="main_default_sms_change">Módosít</string>
     <string name="main_permission_required">Engedély szükséges</string>
-    <string name="main_permission_sms">A QUIK-nek engedélyt kell kapnia az SMS üzenetek küldésére és megtekintésére</string>
-    <string name="main_permission_contacts">A QUIK-nek engedélyt kell kapnia a telefonkönyv megtekintésére</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">A UP SMS-nek engedélyt kell kapnia az SMS üzenetek küldésére és megtekintésére</string>
+    <string name="main_permission_contacts">A UP SMS-nek engedélyt kell kapnia a telefonkönyv megtekintésére</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">Engedélyez</string>
     <string name="drawer_inbox">Bejövő üzenetek</string>
     <string name="drawer_archived">Archivált</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">Súgó és visszajelzés</string>
     <string name="drawer_invite">Ismerősök meghívása</string>
     <string name="drawer_plus_banner_summary">Juss érdekes, új lehetőségekhez és támogasd fejlesztést</string>
-    <string name="rate_title">Tetszik a QUIK?</string>
+    <string name="rate_title">Tetszik a UP SMS?</string>
     <string name="rate_summary">Oszd meg a szeretetet és értékelj minket a Google Playen!</string>
     <string name="rate_okay">OKÉ!</string>
     <string name="rate_dismiss">MELLŐZÉS</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">Megjelenés</string>
     <string name="settings_category_general">Általános</string>
-    <string name="settings_category_qkreply">QK válasz</string>
+    <string name="settings_category_qkreply">Gyors Válasz</string>
     <string name="settings_theme_title">Téma</string>
     <string name="settings_night_title">Éjszakai mód</string>
     <string name="settings_black_title">Éjfekete mód</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">Rezgés</string>
     <string name="settings_ringtone_title">Hang</string>
     <string name="settings_ringtone_none">Nincs</string>
-    <string name="settings_qkreply_title">QK válasz</string>
+    <string name="settings_qkreply_title">Gyors Válasz</string>
     <string name="settings_qkreply_summary">Felugró új üzenetek</string>
     <string name="settings_qkreply_tap_dismiss_title">Érintsd meg az eltüntetéshez</string>
     <string name="settings_qkreply_tap_dismiss_summary">Érintsd meg a felugró ablakon kívül a lezáráshoz</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">MMS-mellékletek automatikus tömörítése</string>
     <string name="settings_sync_title">Üzenetek szinkronizálása</string>
     <string name="settings_sync_summary">Üzenetek újra-szinkronizálása a natív Android SMS-adatbázissal</string>
-    <string name="settings_about_title">A QUIK-ről</string>
+    <string name="settings_about_title">A UP SMS-ről</string>
     <string name="settings_version">%s verzió</string>
     <string name="settings_logging_enabled">Hibanaplózás engedélyezve</string>
     <string name="settings_logging_disabled">Hibanaplózás tiltva</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">Üzenetek eldobása a blokkolt küldőktől az elrejtésük helyett</string>
     <string name="blocking_conversations">Tiltott társalgások</string>
     <string name="blocking_manager_title">Tiltáskezelő</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">A QUIK beépített tiltási funkciója</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">A UP SMS beépített tiltási funkciója</string>
     <string name="blocking_manager_call_blocker_summary">Spam üzenetek blokkolása, számok &amp; ismeretlek hívások feketelistával &amp; Ütemezés</string>
     <string name="blocking_manager_call_control_summary">Egy kényelmesen kezelhető helyen a hívások és üzenetek szűrése! A Community IQ™ megakadályozza a közösség által ismert spammerek üzeneteit</string>
     <string name="blocking_manager_sia_summary">Automatikusan szűrheti az üzeneteket a nem kívánt számok alapján a \"Should I Answer\" alkalmazás használatával</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">Életre szóló upgrade %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Minden funkció engedélyezése + adomány %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Köszönjük, hogy támogatot a QUIK-t!</string>
+    <string name="qksms_plus_thanks_title">Köszönjük, hogy támogatot a UP SMS-t!</string>
     <string name="qksms_plus_thanks_summary">MOst hozzáférsz minden QUIK+ funkcióhoz</string>
     <string name="qksms_plus_error">Hiba történt, kérjük próbáld újra</string>
     <string name="qksms_plus_free_title">A QUIK+ minden F-Droid felhasználónak ingyenes. Ha támogatni szeretnéd a fejlesztést az alábbi módon megteheted.</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">Automatikus válasz</string>
     <string name="qksms_plus_respond_summary">Előre megadott sablonok küldése bejövő üzenetekre</string>
     <string name="qksms_plus_more_title">Tovább</string>
-    <string name="qksms_plus_more_summary">A QUIK folyamatos fejlesztés alatt áll és a vásárlásod a jövőbeni QUIK+ funkciókat is tartalmazza!</string>
+    <string name="qksms_plus_more_summary">A UP SMS folyamatos fejlesztés alatt áll és a vásárlásod a jövőbeni QUIK+ funkciókat is tartalmazza!</string>
     <string name="widget_loading">Betöltés&#8230;</string>
     <string name="widget_more">További társalgások megtekintése</string>
     <string name="qkreply_menu_read">Megjelölés olvasottként</string>

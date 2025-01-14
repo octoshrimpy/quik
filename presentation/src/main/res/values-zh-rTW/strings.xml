@@ -56,12 +56,12 @@
     <string name="archived_empty_text">您封存的對話將出現在這裡</string>
     <string name="main_fab_cd">開始新對話</string>
     <string name="main_default_sms_title">再次愛上發訊息</string>
-    <string name="main_default_sms_message">將 QUIK 設為預設簡訊應用程式</string>
+    <string name="main_default_sms_message">將 UP SMS 設為預設簡訊應用程式</string>
     <string name="main_default_sms_change">變更</string>
     <string name="main_permission_required">需要權限</string>
-    <string name="main_permission_sms">需要允許 QUIK 傳送和檢視簡訊</string>
-    <string name="main_permission_contacts">需要允許 QUIK 檢視您的聯絡人</string>
-    <string name="main_permission_notifications">需要允許 QUIK 顯示通知</string>
+    <string name="main_permission_sms">需要允許 UP SMS 傳送和檢視簡訊</string>
+    <string name="main_permission_contacts">需要允許 UP SMS 檢視您的聯絡人</string>
+    <string name="main_permission_notifications">需要允許 UP SMS 顯示通知</string>
     <string name="main_permission_allow">允許</string>
     <string name="drawer_inbox">收件箱</string>
     <string name="drawer_archived">封存</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">幫助與回饋</string>
     <string name="drawer_invite">邀請朋友</string>
     <string name="drawer_plus_banner_summary">解鎖驚人的新特性並支持開發</string>
-    <string name="rate_title">喜歡 QUIK嗎？</string>
+    <string name="rate_title">喜歡 UP SMS嗎？</string>
     <string name="rate_summary">在 Google Play 分享您的感受，並給我們評分！</string>
     <string name="rate_okay">好！</string>
     <string name="rate_dismiss">放棄</string>
@@ -189,7 +189,7 @@
     </string-array>
     <string name="settings_category_appearance">外觀</string>
     <string name="settings_category_general">一般</string>
-    <string name="settings_category_qkreply">快速答覆</string>
+    <string name="settings_category_qkreply">快速回覆</string>
     <string name="settings_theme_title">主題</string>
     <string name="settings_night_title">夜間模式</string>
     <string name="settings_black_title">純黑色夜間模式</string>
@@ -210,7 +210,7 @@
     <string name="settings_vibration_title">震動</string>
     <string name="settings_ringtone_title">音效</string>
     <string name="settings_ringtone_none">無</string>
-    <string name="settings_qkreply_title">快速答覆</string>
+    <string name="settings_qkreply_title">快速回覆</string>
     <string name="settings_qkreply_summary">彈出新訊息</string>
     <string name="settings_qkreply_tap_dismiss_title">點擊忽略</string>
     <string name="settings_qkreply_tap_dismiss_summary">在快顯視窗外點擊以關閉它</string>
@@ -251,7 +251,7 @@
     <string name="settings_mms_size_title">自動壓縮 MMS 附件</string>
     <string name="settings_sync_title">同步訊息</string>
     <string name="settings_sync_summary">重新與 Android 原生訊息資料庫進行同步</string>
-    <string name="settings_about_title">關於 QUIK</string>
+    <string name="settings_about_title">關於 UP SMS</string>
     <string name="settings_version">版本 %s</string>
     <string name="settings_logging_enabled">除錯日誌已啟用</string>
     <string name="settings_logging_disabled">除錯日誌已停用</string>
@@ -261,8 +261,8 @@
     <string name="blocking_drop_summary">直接刪除封鎖的簡訊，而非只有隱藏簡訊</string>
     <string name="blocking_conversations">封鎖的對話</string>
     <string name="blocking_manager_title">封鎖管理器</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">QUIK 內建封鎖功能</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">UP SMS 內建封鎖功能</string>
     <string name="blocking_manager_call_blocker_summary">使用黑名單與排程封鎖垃圾訊息、號碼和未知來電</string>
     <string name="blocking_manager_call_control_summary">自動過濾來電與簡訊！Community IQ™ 能讓你遠離不想要的垃圾簡訊</string>
     <string name="blocking_manager_sia_summary">使用「Should I Answer」應用程式過濾未知號碼的訊息</string>
@@ -300,7 +300,7 @@
     <string name="qksms_plus_upgrade">終身升級只需 %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">解鎖並捐贈只需 %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">感謝您對 QUIK 的支持！</string>
+    <string name="qksms_plus_thanks_title">感謝您對 UP SMS 的支持！</string>
     <string name="qksms_plus_thanks_summary">現在您可以使用 QUIK+ 的全部功能！</string>
     <string name="qksms_plus_error">發生錯誤，請再試一次</string>
     <string name="qksms_plus_free_title">F-Droid 使用者可免費使用 QUIK+！如果您想支持開發，可以隨意捐款。</string>
@@ -325,7 +325,7 @@
     <string name="qksms_plus_respond_title">自動回覆</string>
     <string name="qksms_plus_respond_summary">使用預設回應自動回覆收到的訊息</string>
     <string name="qksms_plus_more_title">更多</string>
-    <string name="qksms_plus_more_summary">QUIK 正在積極開發中，您的購買將包含後續 QUIK+ 的所有功能！</string>
+    <string name="qksms_plus_more_summary">UP SMS 正在積極開發中，您的購買將包含後續 QUIK+ 的所有功能！</string>
     <string name="widget_loading">載入中…</string>
     <string name="widget_more">檢視更多對話</string>
     <string name="qkreply_menu_read">標示已讀</string>

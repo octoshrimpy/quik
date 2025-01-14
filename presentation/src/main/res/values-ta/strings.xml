@@ -56,12 +56,12 @@
     <string name="archived_empty_text">உம் காப்பகப்படுத்திய உரையாடல்கள் இங்கு தோன்றும்</string>
     <string name="main_fab_cd">புதிய உரையாடலைத் தொடங்கு</string>
     <string name="main_default_sms_title">Love texting again</string>
-    <string name="main_default_sms_message">QUIK-ஐ உம் இயல்புநிலை குறுஞ்செய்தி செயலியாக்கு</string>
+    <string name="main_default_sms_message">UP SMS-ஐ உம் இயல்புநிலை குறுஞ்செய்தி செயலியாக்கு</string>
     <string name="main_default_sms_change">மாற்று</string>
     <string name="main_permission_required">அனுமதி தேவை</string>
-    <string name="main_permission_sms">SMS செய்திகளை அனுப்பவும் பார்க்கவும் QUIK க்கு அனுமதி தேவை</string>
-    <string name="main_permission_contacts">உங்கள் தொடர்புகளைக் காண QUIK க்கு அனுமதி தேவை</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_sms">SMS செய்திகளை அனுப்பவும் பார்க்கவும் UP SMS க்கு அனுமதி தேவை</string>
+    <string name="main_permission_contacts">உங்கள் தொடர்புகளைக் காண UP SMS க்கு அனுமதி தேவை</string>
+    <string name="main_permission_notifications">UP SMS needs permission to display notifications</string>
     <string name="main_permission_allow">அனுமதி</string>
     <string name="drawer_inbox">உட்பெட்டி</string>
     <string name="drawer_archived">காப்பகப்படுத்தப்பட்டது</string>
@@ -72,7 +72,7 @@
     <string name="drawer_help">உதவி &amp; மீள்கருத்து</string>
     <string name="drawer_invite">நண்பர்களை அழைப்பிடு</string>
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
-    <string name="rate_title">QUIKஐ அனுபவித்து மகிழ்கிறீரா?</string>
+    <string name="rate_title">UP SMSஐ அனுபவித்து மகிழ்கிறீரா?</string>
     <string name="rate_summary">Google Play இல் சில அன்பைப் பகிர்ந்துகொண்டு எங்களை மதிப்பிடுக!</string>
     <string name="rate_okay">சரி</string>
     <string name="rate_dismiss">நிராகரி</string>
@@ -190,7 +190,7 @@
     </string-array>
     <string name="settings_category_appearance">தோற்றம்</string>
     <string name="settings_category_general">பொது</string>
-    <string name="settings_category_qkreply">QK பதில்</string>
+    <string name="settings_category_qkreply">விரைவான பதில்</string>
     <string name="settings_theme_title">நிற அமைப்பு</string>
     <string name="settings_night_title">இரவு பயன்முறை</string>
     <string name="settings_black_title">தூய கருப்பு இரவு பயன்முறை</string>
@@ -211,7 +211,7 @@
     <string name="settings_vibration_title">அதிர்வு</string>
     <string name="settings_ringtone_title">ஒலி</string>
     <string name="settings_ringtone_none">ஏதுமில்லை</string>
-    <string name="settings_qkreply_title">QK பதிலளிப்பு</string>
+    <string name="settings_qkreply_title">விரைவான பதில்</string>
     <string name="settings_qkreply_summary">புது தகவல்களுக்கு பாப்அப்</string>
     <string name="settings_qkreply_tap_dismiss_title">நிராகரிக்க தட்டு</string>
     <string name="settings_qkreply_tap_dismiss_summary">பாப்அப்பை மூட அதன் வெளியே தட்டு</string>
@@ -253,7 +253,7 @@
     <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
     <string name="settings_sync_title">தகவல்களை ஒத்திசை</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
-    <string name="settings_about_title">QUIK பற்றி</string>
+    <string name="settings_about_title">UP SMS பற்றி</string>
     <string name="settings_version">பதிப்பு %s</string>
     <string name="settings_logging_enabled">பிழைத்திருத்த பதிவுசெய்தல் இயக்கப்பட்டது</string>
     <string name="settings_logging_disabled">பிழைத்திருத்த பதிவுசெய்தல் முடக்கப்பட்டது</string>
@@ -263,8 +263,8 @@
     <string name="blocking_drop_summary">தடுத்த அனுப்புநர்களிடமிருந்து வரும் தகவல்களை மறைப்பதற்கு பதிலாக கைவிடு</string>
     <string name="blocking_conversations">தடுக்கப்பட்ட உரையாடல்கள்</string>
     <string name="blocking_manager_title">தடுத்தல் மேலாளர்</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
-    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
+    <string name="blocking_manager_qksms_title">UP SMS</string>
+    <string name="blocking_manager_qksms_summary">Built-in blocking functionality in UP SMS</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
     <string name="blocking_manager_sia_summary">Automatically filter messages from unsolicited numbers by using the \"Should I Answer\" app</string>
@@ -302,7 +302,7 @@
     <string name="qksms_plus_upgrade">%1$s %2$s க்கு வாழ்நாள் தரமுயர்த்தல்</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">%1$s %2$s க்கு நன்கொடையளி + பூட்டவிழ்</string>
-    <string name="qksms_plus_thanks_title">QUIKஐ ஆதரித்ததற்கு நன்றி!</string>
+    <string name="qksms_plus_thanks_title">UP SMSஐ ஆதரித்ததற்கு நன்றி!</string>
     <string name="qksms_plus_thanks_summary">எல்லா QUIK+ அம்சங்களுக்கும் இப்போது உமக்கு அனுகல் உண்டு</string>
     <string name="qksms_plus_error">பிழை ஏற்பட்டது, மீண்டும் முயலவும்</string>
     <string name="qksms_plus_free_title">QUIK+ is free for F-Droid users! If you\'d like to support development, a donation would be highly appreciated.</string>
@@ -327,7 +327,7 @@
     <string name="qksms_plus_respond_title">தானாக-விடையளி</string>
     <string name="qksms_plus_respond_summary">முன்னே அமைத்த விடையுடன் உள்வருங் குறுந்தகவல்களுக்கு தானாக விடையளி</string>
     <string name="qksms_plus_more_title">மேலும்</string>
-    <string name="qksms_plus_more_summary">QUIK is under active development, and your purchase will include all future QUIK+ features!</string>
+    <string name="qksms_plus_more_summary">UP SMS is under active development, and your purchase will include all future QUIK+ features!</string>
     <string name="widget_loading">ஏற்றுகிறது...</string>
     <string name="widget_more">மேலும் உரையாடல்களை பார்</string>
     <string name="qkreply_menu_read">படித்ததாகக் குறி</string>

@@ -50,7 +50,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:textSize="secondary"
-        tools:text="Make QUIK your default SMS app" />
+        tools:text="Make UP SMS your default SMS app" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/snackbarButton"
