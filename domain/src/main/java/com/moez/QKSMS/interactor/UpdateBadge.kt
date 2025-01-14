@@ -31,7 +31,7 @@ class UpdateBadge @Inject constructor(
     override fun buildObservable(params: Unit): Flowable<*> {
         return Flowable.just(params)
                 .doOnNext { shortcutManager.updateBadge() }
-                .doOnNext { widgetManager.updateUnreadCount() }
+                .doOnNext { widgetManager.sendDatasetChanged() }
     }
 
 }

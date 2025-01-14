@@ -136,7 +136,7 @@ class ComposeViewModel @Inject constructor(
                     }
 
                     // Otherwise, we'll monitor the conversations until our expected conversation is created
-                    conversationRepo.getConversations().asObservable()
+                    conversationRepo.getConversations(prefs.unreadAtTop.get()).asObservable()
                             .filter { it.isLoaded }
                             .observeOn(Schedulers.io())
                             .map { conversationRepo.getOrCreateConversation(addresses)?.id ?: 0 }

@@ -56,7 +56,15 @@ class ConversationRepositoryImpl @Inject constructor(
     private val phoneNumberUtils: PhoneNumberUtils
 ) : ConversationRepository {
 
-    override fun getConversations(archived: Boolean): RealmResults<Conversation> {
+    override fun getConversations(unreadAtTop: Boolean, archived: Boolean): RealmResults<Conversation> {
+        val sortOrder: MutableList<String> = arrayListOf("pinned", "draft", "lastMessage.date")
+        val sortDirections: MutableList<Sort> = arrayListOf(Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING)
+
+        if (unreadAtTop) {
+            sortOrder.add(0, "lastMessage.read")
+            sortDirections.add(0, Sort.ASCENDING)
+        }
+
         return Realm.getDefaultInstance()
                 .where(Conversation::class.java)
                 .notEqualTo("id", 0L)
@@ -69,13 +77,21 @@ class ConversationRepositoryImpl @Inject constructor(
                 .isNotEmpty("draft")
                 .endGroup()
                 .sort(
-                        arrayOf("pinned", "draft", "lastMessage.date"),
-                        arrayOf(Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING)
+                    sortOrder.toTypedArray(),
+                    sortDirections.toTypedArray()
                 )
                 .findAllAsync()
     }
 
-    override fun getConversationsSnapshot(): List<Conversation> {
+    override fun getConversationsSnapshot(unreadAtTop: Boolean): List<Conversation> {
+        val sortOrder: MutableList<String> = arrayListOf("pinned", "draft", "lastMessage.date")
+        val sortDirections: MutableList<Sort> = arrayListOf(Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING)
+
+        if (unreadAtTop) {
+            sortOrder.add(0, "lastMessage.read")
+            sortDirections.add(0, Sort.ASCENDING)
+        }
+
         return Realm.getDefaultInstance().use { realm ->
             realm.refresh()
             realm.copyFromRealm(realm.where(Conversation::class.java)
@@ -89,8 +105,8 @@ class ConversationRepositoryImpl @Inject constructor(
                     .isNotEmpty("draft")
                     .endGroup()
                     .sort(
-                            arrayOf("pinned", "draft", "lastMessage.date"),
-                            arrayOf(Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING)
+                        sortOrder.toTypedArray(),
+                        sortDirections.toTypedArray()
                     )
                     .findAll())
         }

@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.feature.widget
 
 import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.text.SpannableStringBuilder
@@ -34,8 +33,6 @@ import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.common.util.extensions.getColorCompat
-import dev.octoshrimpy.quik.feature.compose.ComposeActivity
-import dev.octoshrimpy.quik.feature.main.MainActivity
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.model.Contact
 import dev.octoshrimpy.quik.model.Conversation
@@ -85,7 +82,7 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
     }
 
     override fun onDataSetChanged() {
-        conversations = conversationRepo.getConversationsSnapshot()
+        conversations = conversationRepo.getConversationsSnapshot(prefs.unreadAtTop.get())
 
         val remoteViews = RemoteViews(context.packageName, R.layout.widget)
         appWidgetManager.partiallyUpdateAppWidget(appWidgetId, remoteViews)

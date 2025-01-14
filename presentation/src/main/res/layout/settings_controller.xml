@@ -153,6 +153,15 @@
             app:widget="@layout/settings_switch_widget" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/unreadAtTop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_unreadattop_all_black_24dp"
+            app:summary="@string/settings_unread_at_top_summary"
+            app:title="@string/settings_unread_at_top_title"
+            app:widget="@layout/settings_switch_widget" />
+
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/signature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
