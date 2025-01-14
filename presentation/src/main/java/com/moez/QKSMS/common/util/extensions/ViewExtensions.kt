@@ -21,15 +21,17 @@ package dev.octoshrimpy.quik.common.util.extensions
 import android.animation.LayoutTransition
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
-import android.os.Build
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 
@@ -83,29 +85,53 @@ fun View.setVisible(visible: Boolean, invisible: Int = View.GONE) {
  */
 fun View.forwardTouches(parent: View) {
     var isLongClick = false
+    var textInitiallySelectable = false
+    if (this@forwardTouches is TextView)
+        textInitiallySelectable = this@forwardTouches.isTextSelectable
 
-    setOnLongClickListener {
-        isLongClick = true
-        true
-    }
+    setOnTouchListener(object : OnTouchListener {
+        private val gestureDetector =
+            GestureDetector(parent.context, object : SimpleOnGestureListener() {
+                private var lastUpEvent: MotionEvent? = null
 
-    setOnTouchListener { v, event ->
-        parent.onTouchEvent(event)
+                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                    parent.onTouchEvent(e)
+                    if (lastUpEvent !== null) {
+                        parent.onTouchEvent(lastUpEvent)
+                        lastUpEvent = null
+                    }
 
-        when {
-            event.action == MotionEvent.ACTION_UP && isLongClick -> {
-                isLongClick = true
-                true
-            }
+                    return true
+                }
 
-            event.action == MotionEvent.ACTION_DOWN -> {
-                isLongClick = false
-                v.onTouchEvent(event)
-            }
+                override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    onTouchEvent(e)
+                    lastUpEvent = e
+                    return true
+                }
 
-            else -> v.onTouchEvent(event)
+                override fun onDown(e: MotionEvent): Boolean {
+                    isLongClick = false
+                    onTouchEvent(e)
+                    return true
+                }
+
+                override fun onLongPress(e: MotionEvent) {
+                    parent.onTouchEvent(e)
+                    isLongClick = true
+                    // this is kinda odd but we have to 'bounce' the text selectable value so it doesn't
+                    // start selecting text on a long press, but will start selecting it on the next double-tap
+                    if (this@forwardTouches is TextView) {
+                        (this@forwardTouches as TextView).setTextIsSelectable(false)
+                        (this@forwardTouches as TextView).setTextIsSelectable(textInitiallySelectable)
+                    }
+                }
+            })
+
+        override fun onTouch(v: View, e: MotionEvent): Boolean {
+            return gestureDetector.onTouchEvent(e)
         }
-    }
+    })
 }
 
 fun ViewPager.addOnPageChangeListener(listener: (Int) -> Unit) {
