@@ -98,7 +98,10 @@ class SettingsPresenter @Inject constructor(
                 .subscribe { id -> newState { copy(sendDelaySummary = delayedSendingLabels[id], sendDelayId = id) } }
 
         disposables += prefs.delivery.asObservable()
-                .subscribe { enabled -> newState { copy(deliveryEnabled = enabled) } }
+            .subscribe { enabled -> newState { copy(deliveryEnabled = enabled) } }
+
+        disposables += prefs.unreadAtTop.asObservable()
+            .subscribe { enabled -> newState { copy(unreadAtTopEnabled = enabled) } }
 
         disposables += prefs.signature.asObservable()
                 .subscribe { signature -> newState { copy(signature = signature) } }
@@ -177,6 +180,8 @@ class SettingsPresenter @Inject constructor(
                         R.id.delayed -> view.showDelayDurationDialog()
 
                         R.id.delivery -> prefs.delivery.set(!prefs.delivery.get())
+
+                        R.id.unreadAtTop -> prefs.unreadAtTop.set(!prefs.unreadAtTop.get())
 
                         R.id.signature -> view.showSignatureDialog(prefs.signature.get())
 

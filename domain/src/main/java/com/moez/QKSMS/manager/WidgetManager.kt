@@ -24,7 +24,7 @@ interface WidgetManager {
         const val ACTION_NOTIFY_DATASET_CHANGED = "dev.octoshrimpy.quik.intent.action.ACTION_NOTIFY_DATASET_CHANGED"
     }
 
-    fun updateUnreadCount()
+    fun sendDatasetChanged()
 
     fun updateTheme()
 
