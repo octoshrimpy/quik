@@ -24,6 +24,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/ripple"
+    android:clickable="false"
     android:gravity="center_vertical|start"
     android:orientation="horizontal"
     android:paddingLeft="16dp"
@@ -36,12 +37,14 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="16dp"
+        android:clickable="false"
         tools:background="@color/tools_theme">
 
         <TextView
             android:id="@+id/initial"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clickable="false"
             android:gravity="center"
             android:textAllCaps="true"
             android:textSize="20sp"
@@ -53,6 +56,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
+            android:clickable="false"
             android:src="@drawable/ic_person_black_24dp"
             tools:tint="@color/textPrimaryDark" />
 
@@ -60,19 +64,22 @@
             android:id="@+id/photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clickable="false"
             tools:src="@tools:sample/avatars" />
 
         <ImageView
             android:id="@+id/avatarMask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clickable="false"
             android:src="@drawable/circle_mask" />
 
     </FrameLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="false">
 
         <TextView
             android:id="@+id/name"
@@ -80,6 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_toStartOf="@+id/date"
+            android:clickable="false"
             android:singleLine="true"
             android:textSize="16sp"
             tools:text="@tools:sample/full_names" />
@@ -91,6 +99,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="16dp"
+            android:clickable="false"
             android:textSize="12sp"
             tools:text="@tools:sample/date/day_of_week" />
 
@@ -100,6 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
             android:layout_alignParentStart="true"
+            android:clickable="false"
             android:lines="1"
             android:singleLine="true"
             android:textSize="14sp"
