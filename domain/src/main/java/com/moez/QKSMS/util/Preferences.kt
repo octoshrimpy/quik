@@ -47,6 +47,7 @@ class Preferences @Inject constructor(
         const val TEXT_SIZE_NORMAL = 1
         const val TEXT_SIZE_LARGE = 2
         const val TEXT_SIZE_LARGER = 3
+        const val TEXT_SIZE_SUPER = 4
 
         const val NOTIFICATION_PREVIEWS_ALL = 0
         const val NOTIFICATION_PREVIEWS_NAME = 1
@@ -123,6 +124,7 @@ class Preferences @Inject constructor(
     val longAsMms = rxPrefs.getBoolean("longAsMms", false)
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
     val logging = rxPrefs.getBoolean("logging", false)
+    val unreadAtTop = rxPrefs.getBoolean("unreadAtTop", false)
 
     init {
         // Migrate from old night mode preference to new one, now that we support android Q night mode

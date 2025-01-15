@@ -83,7 +83,7 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
     }
 
     override fun onDataSetChanged() {
-        conversations = conversationRepo.getConversationsSnapshot()
+        conversations = conversationRepo.getConversationsSnapshot(prefs.unreadAtTop.get())
 
         val remoteViews = RemoteViews(context.packageName, R.layout.widget)
         appWidgetManager.partiallyUpdateAppWidget(appWidgetId, remoteViews)

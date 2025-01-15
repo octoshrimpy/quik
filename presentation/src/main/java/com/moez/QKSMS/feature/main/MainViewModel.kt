@@ -83,7 +83,7 @@ class MainViewModel @Inject constructor(
     private val ratingManager: RatingManager,
     private val syncContacts: SyncContacts,
     private val syncMessages: SyncMessages
-) : QkViewModel<MainView, MainState>(MainState(page = Inbox(data = conversationRepo.getConversations()))) {
+) : QkViewModel<MainView, MainState>(MainState(page = Inbox(data = conversationRepo.getConversations(prefs.unreadAtTop.get())))) {
 
     init {
         disposables += deleteConversations
@@ -139,6 +139,25 @@ class MainViewModel @Inject constructor(
             !permissionManager.isDefaultSms() -> view.requestDefaultSms()
             !permissionManager.hasReadSms() || !permissionManager.hasContacts() -> view.requestPermissions()
         }
+
+
+        // when unreadAtTop preference changes, reload the model view data to refresh view
+        prefs.unreadAtTop.asObservable()
+            .skip(1)
+            .debounce(400, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .withLatestFrom(state) { _, state ->
+                if (state.page is Inbox)
+                    newState {
+                        copy(page = Inbox(data = conversationRepo.getConversations(prefs.unreadAtTop.get())))
+                    }
+                else if (state.page is Archived)
+                    newState {
+                        copy(page = Inbox(data = conversationRepo.getConversations(prefs.unreadAtTop.get(), true)))
+                    }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         // If the default SMS state changes, reflect it in the State
         view.activityResumedIntent
@@ -226,7 +245,7 @@ class MainViewModel @Inject constructor(
                 .map { query -> query.trim() }
                 .withLatestFrom(state) { query, state ->
                     if (query.isEmpty() && state.page is Searching) {
-                        newState { copy(page = Inbox(data = conversationRepo.getConversations())) }
+                        newState { copy(page = Inbox(data = conversationRepo.getConversations(prefs.unreadAtTop.get()))) }
                     }
                     query
                 }
@@ -288,7 +307,7 @@ class MainViewModel @Inject constructor(
                             state.page is Inbox && state.page.selected > 0 -> view.clearSelection()
                             state.page is Archived && state.page.selected > 0 -> view.clearSelection()
                             state.page !is Inbox -> {
-                                newState { copy(page = Inbox(data = conversationRepo.getConversations())) }
+                                newState { copy(page = Inbox(data = conversationRepo.getConversations(prefs.unreadAtTop.get()))) }
                             }
                             else -> newState { copy(hasError = true) }
                         }
@@ -306,8 +325,8 @@ class MainViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .doOnNext { drawerItem ->
                     when (drawerItem) {
-                        NavItem.INBOX -> newState { copy(page = Inbox(data = conversationRepo.getConversations())) }
-                        NavItem.ARCHIVED -> newState { copy(page = Archived(data = conversationRepo.getConversations(true))) }
+                        NavItem.INBOX -> newState { copy(page = Inbox(data = conversationRepo.getConversations(prefs.unreadAtTop.get()))) }
+                        NavItem.ARCHIVED -> newState { copy(page = Archived(data = conversationRepo.getConversations(prefs.unreadAtTop.get(), true))) }
                         else -> Unit
                     }
                 }
