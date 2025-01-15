@@ -82,7 +82,7 @@ We welcome contributions to UP SMS. To contribute:
 
 ## **License**
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [AGPL License](LICENSE).
 
 
 ## **Acknowledgments**
