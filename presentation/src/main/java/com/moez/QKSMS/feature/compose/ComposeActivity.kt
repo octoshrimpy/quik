@@ -183,6 +183,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         message.setOnTouchListener(object : OnTouchListener {
             private val gestureDetector =
                 GestureDetector(this@ComposeActivity, object : SimpleOnGestureListener() {
+                    private var lastUpEvent: MotionEvent? = null
+
                     override fun onDoubleTap(e: MotionEvent): Boolean {
                         val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                             .putExtra(
@@ -195,11 +197,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     }
 
                     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                        message.showKeyboard()
+                        if (lastUpEvent !== null) {
+                            message.onTouchEvent(lastUpEvent)
+                            lastUpEvent?.recycle()
+                            lastUpEvent = null
+                        }
                         return true
                     }
 
                     override fun onSingleTapUp(e: MotionEvent): Boolean {
+                        lastUpEvent = MotionEvent.obtain(e)
                         return true     // don't show soft keyboard on this event
                     }
                 })

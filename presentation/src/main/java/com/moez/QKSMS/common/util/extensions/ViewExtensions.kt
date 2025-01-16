@@ -98,15 +98,15 @@ fun View.forwardTouches(parent: View) {
                     parent.onTouchEvent(e)
                     if (lastUpEvent !== null) {
                         parent.onTouchEvent(lastUpEvent)
+                        lastUpEvent?.recycle()
                         lastUpEvent = null
                     }
-
                     return true
                 }
 
                 override fun onSingleTapUp(e: MotionEvent): Boolean {
                     onTouchEvent(e)
-                    lastUpEvent = e
+                    lastUpEvent = MotionEvent.obtain(e)
                     return true
                 }
 
