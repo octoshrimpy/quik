@@ -43,7 +43,7 @@ UP SMS is a next-generation SMS app designed exclusively for the UP Phone. By bu
 4. Build and install the app on your Android phone or simulator.
 
 
-## Reporting bugs
+## **Reporting bugs**
 
 A great bug report contains a description of the problem and steps to reproduce it. We need to know what to look for and where to look for it.
 When reporting a bug, please make sure to provide the following information:
@@ -82,15 +82,15 @@ We welcome contributions to UP SMS. To contribute:
 
 ## **License**
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [AGPL 3.0 License](LICENSE).
 
 
 ## **Acknowledgments**
 
-- **QuikSMS**: The original open-source project this app is based on.
+- **[QuikSMS](https://github.com/octoshrimpy/quik)**: The original open-source project this app is based on.
 - The open-source community for their support.
 
 
 ## **Contact**
 
-For inquiries or support, please contact [support@upphone.com](mailto:support@upphone.com).
+For inquiries or support, please contact [support@unplugged.com](mailto:support@unplugged.com).
