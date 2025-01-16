@@ -40,6 +40,8 @@ import android.view.View
 import android.view.View.OnTouchListener
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -289,6 +291,26 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         send.isEnabled = state.canSend
         send.imageAlpha = if (state.canSend) 255 else 128
+
+        // if not in editing mode, and there are no non-me participants that can be sent to,
+        // hide controls that allow constructing a reply and inform user no valid recipients
+        if (!state.editingMode && (state.validRecipientNumbers == 0)) {
+            composeBar.visibility = View.GONE
+            noValidRecipients.visibility = View.VISIBLE
+
+            // change constraint of messageList to constrain bottom to top of noValidRecipients
+            val constraintLayout = findViewById<ConstraintLayout>(R.id.contentView)
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(constraintLayout)
+            constraintSet.connect(
+                R.id.messageList,
+                ConstraintSet.BOTTOM,
+                R.id.noValidRecipients,
+                ConstraintSet.TOP,
+                0
+            )
+            constraintSet.applyTo(constraintLayout)
+        }
     }
 
     override fun clearSelection() = messageAdapter.clearSelection()

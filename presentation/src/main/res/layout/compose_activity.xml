@@ -353,12 +353,14 @@
     </androidx.appcompat.widget.Toolbar>
 
     <View
+        android:id="@+id/titleBarShadow"
         android:layout_width="match_parent"
         android:layout_height="8dp"
         android:background="@drawable/ab_shadow"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <View
+        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/divider"
@@ -532,5 +534,19 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:backgroundTint="@color/tools_theme"
         tools:tint="@color/textPrimaryDark" />
+
+    <TextView
+        android:id="@+id/noValidRecipients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:gravity="center"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:text="@string/compose_no_valid_recipients"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

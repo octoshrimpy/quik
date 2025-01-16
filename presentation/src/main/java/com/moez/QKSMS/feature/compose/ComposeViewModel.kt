@@ -207,6 +207,23 @@ class ComposeViewModel @Inject constructor(
                 .filter { messages -> messages.isValid }
                 .subscribe(searchResults::onNext)
 
+        // on conversation change/init, work out how many non-me participants of the conversation
+        // have a valid address (subscriber number) for replying/sending to
+        disposables += conversation
+            .distinctUntilChanged { conversation -> conversation.id }
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { conversation ->
+                var possibleNumbers = 0
+                conversation.recipients.forEach { recipient ->
+                    if (phoneNumberUtils.isPossibleNumber(recipient.address))
+                        ++possibleNumbers
+                }
+                possibleNumbers
+            }
+            .subscribe { validRecipientNumbers ->
+                newState { copy(validRecipientNumbers = validRecipientNumbers) }
+            }
+
         disposables += Observables.combineLatest(searchSelection, searchResults) { selected, messages ->
             if (selected == -1L) {
                 messages.lastOrNull()?.let { message -> searchSelection.onNext(message.id) }
