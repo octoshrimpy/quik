@@ -37,6 +37,7 @@ import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.model.Contact
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.PhoneNumber
+import dev.octoshrimpy.quik.receiver.StartActivityFromWidgetReceiver
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.util.GlideApp
 import dev.octoshrimpy.quik.util.Preferences
@@ -160,11 +161,13 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
         remoteViews.setTextColor(R.id.snippet, if (conversation.unread) textPrimary else textTertiary)
         remoteViews.setTextViewText(R.id.snippet, boldText(snippet, conversation.unread))
 
-        // Launch conversation on click
-        val clickIntent = Intent()
-                .putExtra("screen", "compose")
+        // set fill-in intent to be used for current item
+        remoteViews.setOnClickFillInIntent(
+            R.id.conversation,
+            Intent()
+                .putExtra("activityToStart", StartActivityFromWidgetReceiver.COMPOSE_ACTIVITY)
                 .putExtra("threadId", conversation.id)
-        remoteViews.setOnClickFillInIntent(R.id.conversation, clickIntent)
+        )
 
         return remoteViews
     }
@@ -173,7 +176,11 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
         val view = RemoteViews(context.packageName, R.layout.widget_loading)
         view.setTextColor(R.id.loadingText, textSecondary)
         view.setTextViewText(R.id.loadingText, context.getString(R.string.widget_more))
-        view.setOnClickFillInIntent(R.id.loading, Intent())
+        view.setOnClickFillInIntent(
+            R.id.loadingText,
+            Intent()
+                .putExtra("activityToStart", StartActivityFromWidgetReceiver.MAIN_ACTIVITY)
+        )
         return view
     }
 

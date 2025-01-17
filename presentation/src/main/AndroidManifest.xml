@@ -219,6 +219,7 @@
                 android:resource="@xml/widget_info" />
         </receiver>
         <receiver android:name=".receiver.SendSmsReceiver" />
+        <receiver android:name=".receiver.StartActivityFromWidgetReceiver" />
 
         <service android:name="com.android.mms.transaction.TransactionService" />
         <service android:name=".feature.backup.RestoreBackupService" />
