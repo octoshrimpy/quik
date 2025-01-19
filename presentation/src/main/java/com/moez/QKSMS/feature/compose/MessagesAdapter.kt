@@ -33,6 +33,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.view.longClicks
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
@@ -68,6 +69,7 @@ import kotlinx.android.synthetic.main.message_list_item_in.status
 import kotlinx.android.synthetic.main.message_list_item_in.timestamp
 import kotlinx.android.synthetic.main.message_list_item_in.view.*
 import kotlinx.android.synthetic.main.message_list_item_out.*
+import kotlinx.android.synthetic.main.message_list_item_out.view.cancel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -98,6 +100,7 @@ class MessagesAdapter @Inject constructor(
     val clicks: Subject<Long> = PublishSubject.create()
     val partClicks: Subject<Long> = PublishSubject.create()
     val cancelSending: Subject<Long> = PublishSubject.create()
+    val sendNow: Subject<Long> = PublishSubject.create()
 
     var data: Pair<Conversation, RealmResults<Message>>? = null
         set(value) {
@@ -148,6 +151,7 @@ class MessagesAdapter @Inject constructor(
             view = layoutInflater.inflate(R.layout.message_list_item_out, parent, false)
             view.findViewById<ImageView>(R.id.cancelIcon).setTint(theme.theme)
             view.findViewById<ProgressBar>(R.id.cancel).setTint(theme.theme)
+            view.findViewById<ImageView>(R.id.sendNowIcon).setTint(theme.theme)
         } else {
             view = layoutInflater.inflate(R.layout.message_list_item_in, parent, false)
         }
@@ -194,25 +198,37 @@ class MessagesAdapter @Inject constructor(
         // Update the selected state
         holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
 
-        // Bind the cancel view
-        holder.cancel?.let { cancel ->
-            val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
-            cancel.setVisible(isCancellable)
-            cancel.clicks().subscribe { cancelSending.onNext(message.id) }
-            cancel.progress = 2
+        // Bind the cancelFrame (cancel button) view
+        if (holder.cancelFrame != null) {
+            holder.cancelFrame.let { cancelFrame ->
+                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
+                cancelFrame.visibility = if (isCancellable) View.VISIBLE else View.GONE
+                cancelFrame.clicks().subscribe { cancelSending.onNext(message.id) }
+                cancelFrame.cancel.progress = 2
 
-            if (isCancellable) {
-                val delay = when (prefs.sendDelay.get()) {
-                    Preferences.SEND_DELAY_SHORT -> 3000
-                    Preferences.SEND_DELAY_MEDIUM -> 5000
-                    Preferences.SEND_DELAY_LONG -> 10000
-                    else -> 0
-                }
-                val progress = (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+                if (isCancellable) {
+                    val delay = when (prefs.sendDelay.get()) {
+                        Preferences.SEND_DELAY_SHORT -> 3000
+                        Preferences.SEND_DELAY_MEDIUM -> 5000
+                        Preferences.SEND_DELAY_LONG -> 10000
+                        else -> 0
+                    }
+                    val progress =
+                        (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
 
-                ObjectAnimator.ofInt(cancel, "progress", progress.toInt(), 100)
+                    ObjectAnimator.ofInt(cancelFrame.cancel, "progress", progress.toInt(), 100)
                         .setDuration(message.date - System.currentTimeMillis())
                         .start()
+                }
+            }
+        }
+
+        // Bind the send now icon view
+        if (holder.sendNowIcon != null) {
+            holder.sendNowIcon.let { sendNowIcon ->
+                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
+                sendNowIcon.visibility = if (isCancellable) View.VISIBLE else View.GONE
+                sendNowIcon.longClicks().subscribe { sendNow.onNext(message.id) }
             }
         }
 

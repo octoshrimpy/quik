@@ -471,6 +471,26 @@ class ComposeViewModel @Inject constructor(
                     cancelMessage.execute(CancelDelayedMessage.Params(message.id, message.threadId))
                 }
 
+        // send a delayed message now
+        view.sendNowIntent
+                .mapNotNull(messageRepo::getMessage)
+                .autoDisposable(view.scope())
+                .subscribe { message ->
+                    cancelMessage.execute(CancelDelayedMessage.Params(message.id, message.threadId))
+                    val address = listOf(conversationRepo
+                        .getConversation(threadId)?.recipients?.firstOrNull()?.address ?: message.address)
+                    sendMessage.execute(
+                        SendMessage.Params(
+                            message.subId,
+                            message.threadId,
+                            address,
+                            message.body,
+                            listOf(),       // sms with attachments (mms) can't be delayed so we can know attachments are empty for a 'send now' delayed sms
+                            0
+                        )
+                    )
+                }
+
         // Set the current conversation
         Observables
                 .combineLatest(

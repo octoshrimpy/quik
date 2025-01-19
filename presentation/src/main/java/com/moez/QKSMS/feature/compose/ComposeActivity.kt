@@ -106,6 +106,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
     override val messagesSelectedIntent by lazy { messageAdapter.selectionChanges }
     override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSending }
+    override val sendNowIntent: Subject<Long> by lazy { messageAdapter.sendNow }
     override val attachmentDeletedIntent: Subject<Attachment> by lazy { attachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
     override val attachIntent by lazy { Observable.merge(attach.clicks(), attachingBackground.clicks()) }

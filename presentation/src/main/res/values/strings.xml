@@ -148,6 +148,12 @@
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Send message</string>
 
+    <string name="compose_message_cancel">Cancel</string>
+    <string name="compose_message_send_now">Send now</string>
+    <string name="compose_message_sim">SIM number</string>
+    <string name="compose_message_item">Message item</string>
+    <string name="compose_message_attachment">Attachment</string>
+
     <string name="message_status_sending">Sending…</string>
     <string name="message_status_delivered">Delivered %s</string>
     <string name="message_status_failed">Failed to send. Tap to try again</string>
