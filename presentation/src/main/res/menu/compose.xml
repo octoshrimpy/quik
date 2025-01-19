@@ -35,6 +35,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/select_all"
+        android:icon="?attr/actionModeSelectAllDrawable"
+        android:title="@string/main_menu_select_all"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/info"
         android:icon="@drawable/ic_more_vert_black_24dp"
         android:title="@string/menu_info"
@@ -46,14 +53,14 @@
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/compose_menu_copy"
         android:visible="false"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/delete"
         android:icon="@drawable/ic_delete_white_24dp"
         android:title="@string/compose_menu_delete"
         android:visible="false"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/copy"
@@ -66,6 +73,13 @@
         android:id="@+id/forward"
         android:icon="@drawable/ic_forward_black_24dp"
         android:title="@string/compose_menu_forward"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/show_status"
+        android:icon="@android:drawable/ic_menu_more"
+        android:title="@string/compose_menu_show_status"
         android:visible="false"
         app:showAsAction="ifRoom" />
 

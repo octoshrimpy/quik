@@ -130,4 +130,28 @@ class ConversationsAdapter @Inject constructor(
     override fun getItemViewType(position: Int): Int {
         return if (getItem(position)?.unread == false) 0 else 1
     }
+
+    fun toggleSelectAll() {
+        var needToSelectAll = false
+
+        // if a non-selected item is found, then we need to select all, otherwise deselect all
+        for (position in 0 until itemCount)
+            if (!isSelected(getItemId(position))) {
+                needToSelectAll = true
+                break
+            }
+
+        // select or deselect item based on if toggling all selected of deselected
+        for (position in 0 until itemCount) {
+            val threadId = getItemId(position)
+            // if deselecting all then toggle selection (we know all items are selected)
+            if (!needToSelectAll)
+                toggleSelection(threadId)
+            // else, selecting all, toggle if not already selected
+            else if (!isSelected(threadId))
+                toggleSelection(threadId)
+        }
+
+        notifyDataSetChanged()
+    }
 }

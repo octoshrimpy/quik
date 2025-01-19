@@ -310,6 +310,12 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { newState { copy() } }
 
+        // toggle select all / select none
+        view.optionsItemIntent
+            .filter { it == R.id.select_all }
+            .autoDisposable(view.scope())
+            .subscribe { view.toggleSelectAll() }
+
         // Open the phone dialer if the call button is clicked
         view.optionsItemIntent
                 .filter { it == R.id.call }
@@ -369,15 +375,25 @@ class ComposeViewModel @Inject constructor(
 
         // Forward the message
         view.optionsItemIntent
-                .filter { it == R.id.forward }
-                .withLatestFrom(view.messagesSelectedIntent) { _, messages ->
-                    messages?.firstOrNull()?.let { messageRepo.getMessage(it) }?.let { message ->
-                        val images = message.parts.filter { it.isImage() }.mapNotNull { it.getUri() }
-                        navigator.showCompose(message.getText(), images)
-                    }
+            .filter { it == R.id.forward }
+            .withLatestFrom(view.messagesSelectedIntent) { _, messages ->
+                messages?.firstOrNull()?.let { messageRepo.getMessage(it) }?.let { message ->
+                    val images = message.parts.filter { it.isImage() }.mapNotNull { it.getUri() }
+                    navigator.showCompose(message.getText(), images)
                 }
-                .autoDisposable(view.scope())
-                .subscribe { view.clearSelection() }
+            }
+            .autoDisposable(view.scope())
+            .subscribe { view.clearSelection() }
+
+        // expand message to show additional info
+        view.optionsItemIntent
+            .filter { it == R.id.show_status }
+            .withLatestFrom(view.messagesSelectedIntent) { _, messages -> messages }
+            .autoDisposable(view.scope())
+            .subscribe { messageIds ->
+                view.expandMessages(messageIds, true)
+                view.clearSelection()
+            }
 
         // Show the previous search result
         view.optionsItemIntent

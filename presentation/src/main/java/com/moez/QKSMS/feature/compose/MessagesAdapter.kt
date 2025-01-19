@@ -21,7 +21,6 @@ package dev.octoshrimpy.quik.feature.compose
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
-import android.os.Build
 import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
@@ -315,12 +314,45 @@ class MessagesAdapter @Inject constructor(
         })
     }
 
+    override fun getItemId(position: Int): Long {
+        return getItem(position)?.id ?: -1
+    }
+
     override fun getItemViewType(position: Int): Int {
         val message = getItem(position) ?: return -1
         return when (message.isMe()) {
             true -> VIEW_TYPE_MESSAGE_OUT
             false -> VIEW_TYPE_MESSAGE_IN
         }
+    }
+
+    fun toggleSelectAll() {
+        var needToSelectAll = false
+
+        // if a non-selected item is found, then we need to select all, otherwise deselect all
+        for (position in 0 until itemCount)
+            if (!isSelected(getItemId(position))) {
+                needToSelectAll = true
+                break
+            }
+
+        // select or deselect item based on if toggling all selected of deselected
+        for (position in 0 until itemCount) {
+            val messageId = getItemId(position)
+            // if deselecting all then toggle selection (we know all items are selected)
+            if (!needToSelectAll)
+                toggleSelection(messageId)
+            // else, selecting all, toggle if not already selected
+            else if (!isSelected(messageId))
+                toggleSelection(messageId)
+        }
+
+        notifyDataSetChanged()
+    }
+
+    fun expandMessages(messageIds: List<Long>, expand: Boolean) {
+        messageIds.forEach { messageId -> expanded[messageId] = expand }
+        notifyDataSetChanged()
     }
 
     /**

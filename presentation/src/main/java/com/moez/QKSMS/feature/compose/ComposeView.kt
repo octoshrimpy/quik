@@ -58,6 +58,8 @@ interface ComposeView : QkView<ComposeState> {
     val confirmDeleteIntent: Observable<List<Long>>
 
     fun clearSelection()
+    fun toggleSelectAll()
+    fun expandMessages(messageIds: List<Long>, expand: Boolean)
     fun showDetails(details: String)
     fun requestDefaultSms()
     fun requestStoragePermission()
