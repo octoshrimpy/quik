@@ -44,6 +44,7 @@
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d selected</string>
     <string name="main_menu_clear">Clear</string>
+    <string name="main_menu_select_all">Select all</string>
     <string name="main_menu_archive">Archive</string>
     <string name="main_menu_unarchive">Unarchive</string>
     <string name="main_menu_delete">Delete</string>
@@ -122,6 +123,7 @@
     <string name="compose_no_valid_recipients">Can\'t send to other participants</string>
     <string name="compose_menu_copy">Copy text</string>
     <string name="compose_menu_forward">Forward</string>
+    <string name="compose_menu_show_status">Show status</string>
     <string name="compose_menu_delete">Delete</string>
     <string name="compose_menu_previous">Previous</string>
     <string name="compose_menu_next">Next</string>
@@ -427,7 +429,11 @@
     <string name="button_undo">Undo</string>
 
     <string name="toast_copied">Copied</string>
-    <string name="toast_archived">Archived conversation</string>
+    <plurals name="toast_archived">
+        <item quantity="one">Archived conversation</item>
+        <item quantity="other">Archived %d conversations</item>
+    </plurals>
+
     <string name="toast_qksms_plus">You must unlock QUIK+ to use this</string>
 
     <plurals name="notification_new_messages">
