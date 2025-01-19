@@ -199,6 +199,10 @@ class ConversationRepositoryImpl @Inject constructor(
         return Realm.getDefaultInstance()
                 .where(Conversation::class.java)
                 .equalTo("blocked", true)
+                .sort(
+                    arrayOf("lastMessage.date"),
+                    arrayOf(Sort.DESCENDING)
+                )
                 .findAll()
     }
 
@@ -206,6 +210,10 @@ class ConversationRepositoryImpl @Inject constructor(
         return Realm.getDefaultInstance()
                 .where(Conversation::class.java)
                 .equalTo("blocked", true)
+                .sort(
+                    arrayOf("lastMessage.date"),
+                    arrayOf(Sort.DESCENDING)
+                )
                 .findAllAsync()
     }
 
