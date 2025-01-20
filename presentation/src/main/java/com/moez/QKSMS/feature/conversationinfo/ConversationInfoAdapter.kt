@@ -94,7 +94,6 @@ class ConversationInfoAdapter @Inject constructor(
             }
 
             is ConversationInfoSettings -> {
-                holder.groupName.isVisible = item.recipients.size > 1
                 holder.groupName.summary = item.name
 
                 holder.notifications.isEnabled = !item.blocked

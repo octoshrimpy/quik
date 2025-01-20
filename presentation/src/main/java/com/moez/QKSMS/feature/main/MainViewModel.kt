@@ -18,9 +18,6 @@
  */
 package dev.octoshrimpy.quik.feature.main
 
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.recyclerview.widget.ItemTouchHelper
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
@@ -420,6 +417,13 @@ class MainViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe()
 
+        view.optionsItemIntent
+            .filter { itemId -> itemId == R.id.rename }
+            .withLatestFrom(view.conversationsSelectedIntent) { _, conversationIds -> conversationIds.first() }
+            .mapNotNull { conversationId -> conversationRepo.getConversation(conversationId) }
+            .autoDisposable(view.scope())
+            .subscribe { conversation -> view.showRenameDialog(conversation.name) }
+
 //        view.plusBannerIntent
 //                .autoDisposable(view.scope())
 //                .subscribe {
@@ -475,6 +479,23 @@ class MainViewModel @Inject constructor(
                     deleteConversations.execute(conversations)
                     view.clearSelection()
                 }
+
+        view.renameConversationIntent
+            .withLatestFrom(view.conversationsSelectedIntent) { newConversationName, selectedConversationIds ->
+                Pair(newConversationName, selectedConversationIds.first())
+            }
+            .doOnNext { view.clearSelection() }
+            .map { newNameAndConversationId ->
+                conversationRepo.setConversationName(
+                    newNameAndConversationId.second,
+                    newNameAndConversationId.first
+                )
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+            }
+            .flatMapCompletable { it }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         view.swipeConversationIntent
                 .autoDisposable(view.scope())
