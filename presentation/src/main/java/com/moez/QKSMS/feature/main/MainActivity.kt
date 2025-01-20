@@ -61,6 +61,7 @@ import dev.octoshrimpy.quik.repository.SyncRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.common.widget.TextInputDialog
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -111,6 +112,7 @@ class MainActivity : QkThemedActivity(), MainView {
     override val rateIntent by lazy { rateOkay.clicks() }
     override val conversationsSelectedIntent by lazy { conversationsAdapter.selectionChanges }
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
+    override val renameConversationIntent: Subject<String> = PublishSubject.create()
     override val swipeConversationIntent by lazy { itemTouchCallback.swipes }
     override val changelogMoreIntent by lazy { changelogDialog.moreClicks }
     override val undoArchiveIntent: Subject<Unit> = PublishSubject.create()
@@ -234,6 +236,7 @@ class MainActivity : QkThemedActivity(), MainView {
         toolbar.menu.findItem(R.id.read)?.isVisible = markRead && selectedConversations != 0
         toolbar.menu.findItem(R.id.unread)?.isVisible = !markRead && selectedConversations != 0
         toolbar.menu.findItem(R.id.block)?.isVisible = selectedConversations != 0
+        toolbar.menu.findItem(R.id.rename)?.isVisible = selectedConversations == 1
 
         listOf(plusBadge1, plusBadge2).forEach { badge ->
             badge.isVisible = drawerBadgesExperiment.variant && !state.upgraded
@@ -396,6 +399,14 @@ class MainActivity : QkThemedActivity(), MainView {
                 .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
+    }
+
+    override fun showRenameDialog(conversationName: String) {
+        TextInputDialog(
+            this,
+            getString(R.string.info_name),
+            renameConversationIntent::onNext
+        ).setText(conversationName).show()
     }
 
     override fun showChangelog(changelog: ChangelogManager.CumulativeChangelog) {

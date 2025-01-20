@@ -29,5 +29,4 @@
     android:padding="24dp"
     android:singleLine="true"
     android:textStyle="bold"
-    app:textSize="dialog"
-    tools:hint="Enter something" />
+    app:textSize="dialog" />
