@@ -83,4 +83,11 @@
         android:visible="false"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/rename"
+        android:icon="@drawable/ic_people_black_24dp"
+        android:title="@string/main_menu_rename_conversation"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
+
 </menu>
