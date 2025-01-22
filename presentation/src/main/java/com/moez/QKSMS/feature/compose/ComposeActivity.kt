@@ -74,6 +74,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.*
+import kotlinx.android.synthetic.main.main_activity.toolbar
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -265,6 +266,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         // Don't set the adapters unless needed
         if (state.editingMode && chips.adapter == null) chips.adapter = chipsAdapter
 
+        toolbar.menu.findItem(R.id.select_all)?.isVisible = !state.editingMode && (messageAdapter.itemCount > 1) && state.selectedMessages != 0
         toolbar.menu.findItem(R.id.add)?.isVisible = state.editingMode
         toolbar.menu.findItem(R.id.call)?.isVisible = !state.editingMode && state.selectedMessages == 0
                 && state.query.isEmpty()
@@ -274,6 +276,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
+        toolbar.menu.findItem(R.id.show_status)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
         toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
@@ -330,6 +333,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun clearSelection() = messageAdapter.clearSelection()
+
+    override fun toggleSelectAll() {
+        messageAdapter.toggleSelectAll()
+    }
+
+    override fun expandMessages(messageIds: List<Long>, expand: Boolean) {
+        messageAdapter.expandMessages(messageIds, expand)
+    }
 
     override fun showDetails(details: String) {
         AlertDialog.Builder(this)

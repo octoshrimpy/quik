@@ -81,6 +81,7 @@ class MainViewModel @Inject constructor(
     private val syncContacts: SyncContacts,
     private val syncMessages: SyncMessages
 ) : QkViewModel<MainView, MainState>(MainState(page = Inbox(data = conversationRepo.getConversations(prefs.unreadAtTop.get())))) {
+    private val lastArchivedThreadIds = ArrayList<Long>()
 
     init {
         disposables += deleteConversations
@@ -331,9 +332,17 @@ class MainViewModel @Inject constructor(
                 .subscribe()
 
         view.optionsItemIntent
+            .filter { itemId -> itemId == R.id.select_all }
+            .autoDisposable(view.scope())
+            .subscribe { view.toggleSelectAll() }
+
+        view.optionsItemIntent
                 .filter { itemId -> itemId == R.id.archive }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markArchived.execute(conversations)
+                    lastArchivedThreadIds.clear()
+                    conversations.forEach { conversation -> lastArchivedThreadIds.add(conversation) }
+                    view.showArchivedSnackbar(conversations.count())
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -343,6 +352,7 @@ class MainViewModel @Inject constructor(
                 .filter { itemId -> itemId == R.id.unarchive }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markUnarchived.execute(conversations)
+                    view.showArchivedSnackbar(conversations.count())
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -502,7 +512,12 @@ class MainViewModel @Inject constructor(
                 .subscribe { (threadId, direction) ->
                     val action = if (direction == ItemTouchHelper.RIGHT) prefs.swipeRight.get() else prefs.swipeLeft.get()
                     when (action) {
-                        Preferences.SWIPE_ACTION_ARCHIVE -> markArchived.execute(listOf(threadId)) { view.showArchivedSnackbar() }
+                        Preferences.SWIPE_ACTION_ARCHIVE -> markArchived.execute(listOf(threadId))
+                        {
+                            lastArchivedThreadIds.clear()
+                            lastArchivedThreadIds.add(threadId)
+                            view.showArchivedSnackbar(1)
+                        }
                         Preferences.SWIPE_ACTION_DELETE -> view.showDeleteDialog(listOf(threadId))
                         Preferences.SWIPE_ACTION_BLOCK -> view.showBlockingDialog(listOf(threadId), true)
                         Preferences.SWIPE_ACTION_CALL -> conversationRepo.getConversation(threadId)?.recipients?.firstOrNull()?.address?.let(navigator::makePhoneCall)
@@ -513,9 +528,11 @@ class MainViewModel @Inject constructor(
                 }
 
         view.undoArchiveIntent
-                .withLatestFrom(view.swipeConversationIntent) { _, pair -> pair.first }
                 .autoDisposable(view.scope())
-                .subscribe { threadId -> markUnarchived.execute(listOf(threadId)) }
+                .subscribe {
+                    markUnarchived.execute(lastArchivedThreadIds)
+                    lastArchivedThreadIds.clear()
+                }
 
         view.snackbarButtonIntent
                 .withLatestFrom(state) { _, state ->

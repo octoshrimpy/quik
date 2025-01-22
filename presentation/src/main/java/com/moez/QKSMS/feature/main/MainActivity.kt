@@ -227,6 +227,7 @@ class MainActivity : QkThemedActivity(), MainView {
         toolbarSearch.setVisible(state.page is Inbox && state.page.selected == 0 || state.page is Searching)
         toolbarTitle.setVisible(toolbarSearch.visibility != View.VISIBLE)
 
+        toolbar.menu.findItem(R.id.select_all)?.isVisible = (conversationsAdapter.itemCount > 1) && selectedConversations != 0
         toolbar.menu.findItem(R.id.archive)?.isVisible = state.page is Inbox && selectedConversations != 0
         toolbar.menu.findItem(R.id.unarchive)?.isVisible = state.page is Archived && selectedConversations != 0
         toolbar.menu.findItem(R.id.delete)?.isVisible = selectedConversations != 0
@@ -383,6 +384,10 @@ class MainActivity : QkThemedActivity(), MainView {
         conversationsAdapter.clearSelection()
     }
 
+    override fun toggleSelectAll() {
+        conversationsAdapter.toggleSelectAll()
+    }
+
     override fun themeChanged() {
         recyclerView.scrapViews()
     }
@@ -413,8 +418,12 @@ class MainActivity : QkThemedActivity(), MainView {
         changelogDialog.show(changelog)
     }
 
-    override fun showArchivedSnackbar() {
-        Snackbar.make(drawerLayout, R.string.toast_archived, Snackbar.LENGTH_LONG).apply {
+    override fun showArchivedSnackbar(countConversationsArchived: Int) {
+        Snackbar.make(
+            drawerLayout,
+            resources.getQuantityString(R.plurals.toast_archived, countConversationsArchived, countConversationsArchived),
+            if (countConversationsArchived < 10) Snackbar.LENGTH_LONG else Snackbar.LENGTH_INDEFINITE
+        ).apply {
             setAction(R.string.button_undo) { undoArchiveIntent.onNext(Unit) }
             setActionTextColor(colors.theme().theme)
             show()
