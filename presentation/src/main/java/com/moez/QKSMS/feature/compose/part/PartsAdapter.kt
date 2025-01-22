@@ -37,11 +37,12 @@ import javax.inject.Inject
 class PartsAdapter @Inject constructor(
     colors: Colors,
     fileBinder: FileBinder,
-    mediaBinder: MediaBinder,
+    imageBinder: ImageBinder,
+    audioBinder: AudioBinder,
     vCardBinder: VCardBinder
 ) : QkAdapter<MmsPart>() {
 
-    private val partBinders = listOf(mediaBinder, vCardBinder, fileBinder)
+    private val partBinders = listOf(audioBinder, imageBinder, vCardBinder, fileBinder)
 
     var theme: Colors.Theme = colors.theme()
         set(value) {

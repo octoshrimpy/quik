@@ -29,12 +29,12 @@ import dev.octoshrimpy.quik.extensions.isVideo
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.util.GlideApp
-import kotlinx.android.synthetic.main.mms_preview_list_item.*
+import kotlinx.android.synthetic.main.mms_image_preview_list_item.*
 import javax.inject.Inject
 
-class MediaBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
+class ImageBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
 
-    override val partLayout = R.layout.mms_preview_list_item
+    override val partLayout = R.layout.mms_image_preview_list_item
     override var theme = colors.theme()
 
     override fun canBindPart(part: MmsPart) = part.isImage() || part.isVideo()
