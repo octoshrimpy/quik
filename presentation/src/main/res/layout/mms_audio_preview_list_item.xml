@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
+  ~
+  ~ This file is part of QKSMS.
+  ~
+  ~ QKSMS is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ QKSMS is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame"
+    android:layout_width="280dp"
+    android:layout_height="280dp"
+    android:layout_marginTop="2dp"
+    android:clipChildren="false">
+
+    <dev.octoshrimpy.quik.common.widget.BubbleImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="false"
+        android:minHeight="140dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/rectangle" />
+
+    <ImageView
+        android:id="@+id/soundWave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/audio_preview_foreground" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:max="10"
+        android:progress="5"
+        android:progressTint="@color/tools_theme"
+        android:thumbTint="@color/tools_theme" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="12dp"
+        android:clipChildren="false"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/playPause"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/circle"
+            android:elevation="4dp"
+            android:padding="6dp"
+            app:srcCompat="@drawable/exo_icon_play"
+            app:tint="@color/tools_theme" />
+
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            android:id="@+id/metadataTitle"
+            style="@style/TextPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/rounded_rectangle_22dp"
+            android:backgroundTint="@color/tools_theme"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:padding="4dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:text="@tools:sample/lorem/random[0]"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+</FrameLayout>

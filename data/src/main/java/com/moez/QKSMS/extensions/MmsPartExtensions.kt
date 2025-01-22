@@ -27,6 +27,8 @@ fun MmsPart.isImage() = ContentType.isImageType(type)
 
 fun MmsPart.isVideo() = ContentType.isVideoType(type)
 
+fun MmsPart.isAudio() = ContentType.isAudioType(type)
+
 fun MmsPart.isText() = ContentType.TEXT_PLAIN == type
 
 fun MmsPart.isVCard() = ContentType.TEXT_VCARD == type
