@@ -1,6 +1,6 @@
 # **UP SMS**
 
-**A branded and customized version of the QuikSMS Android project, tailored specifically for the UP Phone to provide an enhanced SMS experience.**
+**A branded and customized SMS application, designed for the UP Phone and based on the QuikSMS Android project.**
 
 ## **Table of Contents**
 - [Introduction](#introduction)
@@ -16,13 +16,13 @@
 
 ## **Introduction**
 
-UP SMS is a next-generation SMS app designed exclusively for the UP Phone. By building on the foundation of [QuikSMS](https://github.com/octoshrimpy/quik), this application provides seamless communication with added features, a branded interface, and performance optimizations.
+UP SMS is a new SMS app designed for the UP Phone. By building on the foundation of [QuikSMS](https://github.com/octoshrimpy/quik), this application provides seamless communication with added features, a branded interface, and  customizations.
 
 
 ## **Features**
 
 - **Custom Branding:** User interface aligned with Unplugged's branding.
-- **Enhanced Security:** Advanced measures to protect user data and messages.
+- **Privacy:** Follows Unplugged's privacy policy.
 - **Group Messaging:** Effortlessly send messages to multiple contacts.
 - **Quick Reply:** Respond directly from notifications.
 
