@@ -1,4 +1,4 @@
-name: Build on Pull Request
+name: Build and Test on Pull Request
 
 on:
   pull_request:
@@ -20,3 +20,12 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build
+
+    - name: Run Tests
+      run: ./gradlew test
+
+    - name: Deploy Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifacts
+        path: build/libs/
