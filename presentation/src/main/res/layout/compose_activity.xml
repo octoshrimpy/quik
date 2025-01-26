@@ -204,7 +204,7 @@
         android:layout_height="56dp"
         android:padding="10dp"
         android:src="@drawable/ic_cancel_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toTopOf="@id/scheduledSeparator"
         app:layout_constraintEnd_toEndOf="@id/messageBackground" />
 
@@ -230,7 +230,7 @@
         app:layout_constraintBottom_toTopOf="@id/message"
         app:layout_constraintEnd_toEndOf="@id/messageBackground"
         app:layout_constraintStart_toStartOf="@id/messageBackground"
-        tools:listitem="@layout/attachment_image_list_item" />
+        tools:listitem="@layout/attachment_file_list_item" />
 
     <dev.octoshrimpy.quik.common.widget.QkEditText
         android:id="@+id/message"
@@ -262,7 +262,7 @@
         android:contentDescription="@string/compose_sim_cd"
         android:padding="8dp"
         android:src="@drawable/ic_sim_card_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="@id/messageBackground" />
@@ -304,7 +304,7 @@
         android:contentDescription="@string/compose_send_cd"
         android:padding="10dp"
         android:src="@drawable/ic_send_black_24dp"
-        android:tint="?android:textColorSecondary"
+        app:tint="?android:textColorSecondary"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -371,7 +371,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="contact,contactLabel,schedule,scheduleLabel,gallery,galleryLabel,camera,cameraLabel,attachingBackground" />
+        app:constraint_referenced_ids="contact,contactLabel,schedule,scheduleLabel,gallery,galleryLabel,attachAFileIcon,attachAFileLabel,camera,cameraLabel,attachingBackground" />
 
     <View
         android:id="@+id/attachingBackground"
@@ -395,7 +395,7 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_person_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/schedule"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -429,9 +429,9 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_event_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/gallery"
+        app:layout_constraintBottom_toTopOf="@id/attachAFileIcon"
         app:layout_constraintEnd_toEndOf="@id/attach"
         app:layout_constraintStart_toStartOf="@id/attach" />
 
@@ -452,6 +452,43 @@
         app:layout_constraintStart_toEndOf="@id/schedule"
         app:layout_constraintTop_toTopOf="@id/schedule" />
 
+
+    <ImageView
+        android:id="@+id/attachAFileIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?attr/bubbleColor"
+        android:contentDescription="@string/compose_attach_file_cd"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:rotation="-45"
+        android:src="@drawable/ic_attachment_black_24dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/gallery"
+        app:layout_constraintEnd_toEndOf="@id/attach"
+        app:layout_constraintStart_toStartOf="@id/attach"
+        app:tint="?android:attr/textColorSecondary" />
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/attachAFileLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_rectangle_4dp"
+        android:backgroundTint="?attr/bubbleColor"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="@string/compose_attach_file_cd"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/attachAFileIcon"
+        app:layout_constraintStart_toEndOf="@id/attachAFileIcon"
+        app:layout_constraintTop_toTopOf="@id/attachAFileIcon" />
+
+
     <ImageView
         android:id="@+id/gallery"
         android:layout_width="40dp"
@@ -463,7 +500,7 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_insert_photo_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/camera"
         app:layout_constraintEnd_toEndOf="@id/attach"
@@ -497,7 +534,7 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_camera_alt_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/attach"
         app:layout_constraintEnd_toEndOf="@id/attach"

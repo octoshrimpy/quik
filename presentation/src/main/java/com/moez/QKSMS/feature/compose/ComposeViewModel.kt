@@ -536,11 +536,17 @@ class ComposeViewModel @Inject constructor(
                     }
                 }
 
-        // Attach a photo from gallery
-        view.galleryIntent
-                .doOnNext { newState { copy(attaching = false) } }
-                .autoDisposable(view.scope())
-                .subscribe { view.requestGallery() }
+        // pick a photo (specifically) from image provider apps
+        view.attachImageFileIntent
+            .doOnNext { newState { copy(attaching = false) } }
+            .autoDisposable(view.scope())
+            .subscribe { view.requestGallery("image/*", ComposeView.AttachAFileRequestCode) }
+
+        // pick any file from any provider apps
+        view.attachAnyFileIntent
+            .doOnNext { newState { copy(attaching = false) } }
+            .autoDisposable(view.scope())
+            .subscribe { view.requestGallery("*/*", ComposeView.AttachAFileRequestCode) }
 
         // Choose a time to schedule the message
         view.scheduleIntent
@@ -552,15 +558,15 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { view.requestDatePicker() }
 
-        // A photo was selected
+        // a file, photo or otherwise, was picked by the user
         Observable.merge(
-                view.attachmentSelectedIntent.map { uri -> Attachment.Image(uri) },
-                view.inputContentIntent.map { inputContent -> Attachment.Image(inputContent = inputContent) })
-                .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
-                .doOnNext(attachments::onNext)
-                .autoDisposable(view.scope())
-                .subscribe { newState { copy(attaching = false) } }
-
+            view.attachAnyFileSelectedIntent.map { uri -> Attachment(uri) },
+            view.inputContentIntent.map { inputContent -> Attachment(inputContent = inputContent) }
+        )
+            .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
+            .doOnNext(attachments::onNext)
+            .autoDisposable(view.scope())
+            .subscribe { newState { copy(attaching = false) } }
         // Set the scheduled time
         view.scheduleSelectedIntent
                 .filter { scheduled ->
@@ -579,7 +585,7 @@ class ComposeViewModel @Inject constructor(
 
         // Contact was selected for attachment
         view.contactSelectedIntent
-                .map { uri -> Attachment.Contact(getVCard(uri)!!) }
+                .map { uri -> Attachment(getFullVCardUri(uri)) }
                 .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
                 .subscribeOn(Schedulers.io())
                 .autoDisposable(view.scope())
@@ -704,7 +710,6 @@ class ComposeViewModel @Inject constructor(
                         state.scheduled != 0L -> {
                             newState { copy(scheduled = 0) }
                             val uris = attachments
-                                    .mapNotNull { it as? Attachment.Image }
                                     .map { it.getUri() }
                                     .map { it.toString() }
                             val params = AddScheduledMessage
@@ -784,17 +789,17 @@ class ComposeViewModel @Inject constructor(
 
     }
 
-    private fun getVCard(contactData: Uri): String? {
-        val lookupKey = context.contentResolver.query(contactData, null, null, null, null)?.use { cursor ->
-            cursor.moveToFirst()
-            cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
+    private fun getFullVCardUri(contactData: Uri): Uri {
+        val lookupKey = context.contentResolver.query(contactData, null, null, null, null)?.use {
+            it.moveToFirst()
+            val index = it.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)
+            if (index >= 0)
+                it.getString(index)
+            else
+                ""
         }
 
-        val vCardUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey)
-        return context.contentResolver.openAssetFileDescriptor(vCardUri, "r")
-                ?.createInputStream()
-                ?.readBytes()
-                ?.let { bytes -> String(bytes) }
+        return Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey)
     }
 
 }
