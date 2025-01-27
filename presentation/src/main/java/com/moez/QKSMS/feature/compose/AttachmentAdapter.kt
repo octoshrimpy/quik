@@ -19,7 +19,11 @@
 package dev.octoshrimpy.quik.feature.compose
 
 import android.content.Context
+import android.content.Intent
+import android.media.MediaMetadataRetriever
+import android.provider.MediaStore.MATCH_DEFAULT
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -27,25 +31,22 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.extensions.getDisplayName
-import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.extensions.resourceExists
 import dev.octoshrimpy.quik.model.Attachment
 import ezvcard.Ezvcard
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.attachment_file_list_item.*
 import kotlinx.android.synthetic.main.attachment_contact_list_item.*
-import kotlinx.android.synthetic.main.attachment_image_list_item.*
-import kotlinx.android.synthetic.main.attachment_image_list_item.view.*
 import javax.inject.Inject
+
 
 class AttachmentAdapter @Inject constructor(
     private val context: Context
 ) : QkAdapter<Attachment>() {
 
     companion object {
-        private const val VIEW_TYPE_IMAGE = 0
+        private const val VIEW_TYPE_FILE = 0
         private const val VIEW_TYPE_CONTACT = 1
     }
 
@@ -53,14 +54,13 @@ class AttachmentAdapter @Inject constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = when (viewType) {
-            VIEW_TYPE_IMAGE -> inflater.inflate(R.layout.attachment_image_list_item, parent, false)
-                    .apply { thumbnailBounds.clipToOutline = true }
 
-            VIEW_TYPE_CONTACT -> inflater.inflate(R.layout.attachment_contact_list_item, parent, false)
-
-            else -> null!! // Impossible
-        }
+        val view = inflater.inflate(
+            if (viewType == VIEW_TYPE_CONTACT) R.layout.attachment_contact_list_item
+            else R.layout.attachment_file_list_item,
+            parent,
+            false
+        )
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
@@ -73,26 +73,81 @@ class AttachmentAdapter @Inject constructor(
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val attachment = getItem(position)
 
-        when (attachment) {
-            is Attachment.Image -> Glide.with(context)
-                    .load(attachment.getUri())
-                    .into(holder.thumbnail)
-
-            is Attachment.Contact -> Observable.just(attachment.vCard)
-                    .mapNotNull { vCard -> Ezvcard.parse(vCard).first() }
-                    .map { vcard -> vcard.getDisplayName() ?: "" }
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { displayName ->
-                        holder.name?.text = displayName
-                        holder.name?.isVisible = displayName.isNotEmpty()
-                    }
+        if (attachment.isVCard(context)) {
+            val displayName = Ezvcard.parse(
+                String(attachment.getResourceBytes(context))
+            ).first().getDisplayName() ?: ""
+            holder.name.text = displayName
+            holder.name.isVisible = displayName.isNotEmpty()
+            return
         }
+
+        // if attachment uri is missing
+        if (!attachment.getUri().resourceExists(context)) {
+            holder.thumbnail.setImageResource(android.R.drawable.ic_delete)
+            holder.fileName.text = context.getString(R.string.attachment_missing)
+            holder.fileName.visibility = View.VISIBLE
+            return
+        }
+
+        val uri = attachment.getUri()
+        val mimeType = attachment.getType(context)
+
+        // if attachment mime type is image/* or video/*, use image/frame
+        if (attachment.hasDisplayableImage(context)) {
+            Glide
+                .with(context)
+                .load(uri)
+                .into(holder.thumbnail)
+            return
+        }
+
+        // if audio mime type, try and use embedded image if one exists
+        if (attachment.isAudio(context)) {
+            val metaDataRetriever = MediaMetadataRetriever()
+            metaDataRetriever.setDataSource(context, uri)
+            val embeddedPicture = metaDataRetriever.embeddedPicture
+            if (embeddedPicture != null) {
+                Glide
+                    .with(context)
+                    .load(embeddedPicture)
+                    .into(holder.thumbnail)
+                return
+            }
+        }
+
+        // try and use icon from default app for type
+        val intent = Intent(Intent.ACTION_VIEW).setDataAndType(uri, mimeType)
+        val appIcon = context
+            .packageManager
+            .resolveActivity(intent, MATCH_DEFAULT)
+            ?.loadIcon(context.packageManager)
+        if (appIcon != null)
+            Glide
+                .with(context)
+                .load(appIcon)
+                .into(holder.thumbnail)
+        else if (mimeType?.startsWith("audio/") == true)
+            // else, if audio, use default local audio icon
+            Glide
+                .with(context)
+                .load(R.drawable.ic_round_volume_up_24)
+                .into(holder.thumbnail)
+        else
+            // else, use default attachment icon
+            Glide
+                .with(context)
+                .load(R.drawable.ic_attachment_black_24dp)
+                .into(holder.thumbnail)
+
+        // else, show file name
+        holder.fileName.text = attachment.getName(context)
+        holder.fileName.visibility = View.VISIBLE
     }
 
-    override fun getItemViewType(position: Int) = when (getItem(position)) {
-        is Attachment.Image -> VIEW_TYPE_IMAGE
-        is Attachment.Contact -> VIEW_TYPE_CONTACT
+    override fun getItemViewType(position: Int) = when (getItem(position).isVCard(context)) {
+        true -> VIEW_TYPE_CONTACT
+        else -> VIEW_TYPE_FILE
     }
 
 }

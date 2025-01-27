@@ -19,32 +19,112 @@
 package dev.octoshrimpy.quik.feature.scheduled
 
 import android.content.Context
+import android.content.Intent
+import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.provider.MediaStore.MATCH_DEFAULT
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
-import dev.octoshrimpy.quik.util.GlideApp
-import kotlinx.android.synthetic.main.attachment_image_list_item.view.*
-import kotlinx.android.synthetic.main.scheduled_message_image_list_item.*
+import dev.octoshrimpy.quik.extensions.resourceExists
+import kotlinx.android.synthetic.main.scheduled_message_image_list_item.fileName
+import kotlinx.android.synthetic.main.scheduled_message_image_list_item.thumbnail
 import javax.inject.Inject
+
 
 class ScheduledMessageAttachmentAdapter @Inject constructor(
     private val context: Context
 ) : QkAdapter<Uri>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.scheduled_message_image_list_item, parent, false)
-        view.thumbnail.clipToOutline = true
-
-        return QkViewHolder(view)
+        return QkViewHolder(
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.scheduled_message_image_list_item, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
-        val attachment = getItem(position)
+        val uri = getItem(position)
 
-        GlideApp.with(context).load(attachment).into(holder.thumbnail)
+        // if uri target doesn't exist anymore
+        if (!uri.resourceExists(context)) {
+            holder.thumbnail.setImageResource(android.R.drawable.ic_delete)
+            holder.fileName.text = context.getString(R.string.attachment_missing)
+            holder.fileName.visibility = View.VISIBLE
+            return
+        }
+
+        val mimeType = context.contentResolver.getType(uri)
+
+        // if attachment mime type is image/* or video/*, use image/video-frame
+        if ((mimeType?.startsWith("image/") == true) ||
+            (mimeType?.startsWith("video/") == true)
+        ) {
+            Glide
+                .with(context)
+                .load(uri)
+                .into(holder.thumbnail)
+            return
+        }
+
+        // if audio mime type, try and use embedded image if one exists
+        if (mimeType?.startsWith("audio/") == true) {
+            val metaDataRetriever = MediaMetadataRetriever()
+            metaDataRetriever.setDataSource(context, uri)
+            val embeddedPicture = metaDataRetriever.embeddedPicture
+            if (embeddedPicture != null) {
+                Glide
+                    .with(context)
+                    .load(embeddedPicture)
+                    .into(holder.thumbnail)
+                return
+            }
+        }
+
+        // try and use icon from default app for type
+        val intent = Intent(Intent.ACTION_VIEW).setDataAndType(uri, mimeType)
+        val appIcon = context
+            .packageManager
+            .resolveActivity(intent, MATCH_DEFAULT)
+            ?.loadIcon(context.packageManager)
+        if (appIcon != null)
+            Glide
+                .with(context)
+                .load(appIcon)
+                .into(holder.thumbnail)
+        else if (mimeType?.startsWith("audio/") == true)
+            // else, if audio, use default local audio icon
+            Glide
+                .with(context)
+                .load(R.drawable.ic_round_volume_up_24)
+                .into(holder.thumbnail)
+        else
+            // else, use default attachment icon
+            Glide
+                .with(context)
+                .load(R.drawable.ic_attachment_black_24dp)
+                .into(holder.thumbnail)
+
+        // else, show file name
+        val cursor = context.contentResolver.query(
+            uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null
+        )
+        cursor?.use {
+            try {
+                cursor.moveToFirst()
+                holder.fileName.text = cursor.getString(
+                    cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME) ?: 0
+                )
+                holder.fileName.visibility = View.VISIBLE
+            } catch (e: Exception) {
+            }
+        }
     }
 
 }

@@ -40,11 +40,13 @@ open class MmsPart : RealmObject() {
     fun getUri() = "content://mms/part/$id".toUri()
 
     fun getSummary(): String? = when {
+        type == "application/smil" -> null
         type == "text/plain" -> text
-        type == "text/x-vCard" -> "Contact card"
+        type == "text/x-vcard" -> "Contact card"
         type.startsWith("image") -> "Photo"
         type.startsWith("video") -> "Video"
-        else -> null
+        type.startsWith("audio") -> "Audio"
+        else -> type.substring(type.indexOf('/') + 1)
     }
 
 }
