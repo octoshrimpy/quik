@@ -136,7 +136,6 @@ class MessagesAdapter @Inject constructor(
 
     private val contactCache = ContactCache()
     private val expanded = HashMap<Long, Boolean>()
-    private val partsViewPool = RecyclerView.RecycledViewPool()
     private val subs = subscriptionManager.activeSubscriptionInfoList
 
     var theme: Colors.Theme = colors.theme()
@@ -167,7 +166,6 @@ class MessagesAdapter @Inject constructor(
         val partsAdapter = partsAdapterProvider.get()
         partsAdapter.clicks.subscribe(partClicks)
         view.attachments.adapter = partsAdapter
-        view.attachments.setRecycledViewPool(partsViewPool)
         view.body.forwardTouches(view)
 
         return QkViewHolder(view).apply {

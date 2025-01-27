@@ -169,6 +169,8 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
             }
         }
 
+        holder.containerView.setOnClickListener { clicks.onNext(part.id) }
+
         // if this item is the active active audio item update the active view holder
         if (audioState.partId == part.id)
             audioState.viewHolder = holder
