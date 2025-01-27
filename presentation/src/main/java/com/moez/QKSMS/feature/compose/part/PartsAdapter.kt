@@ -28,6 +28,7 @@ import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
 import dev.octoshrimpy.quik.extensions.isSmil
 import dev.octoshrimpy.quik.extensions.isText
 import dev.octoshrimpy.quik.feature.compose.BubbleUtils.canGroup
+import dev.octoshrimpy.quik.feature.compose.MessagesAdapter
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import io.reactivex.Observable
@@ -39,7 +40,7 @@ class PartsAdapter @Inject constructor(
     fileBinder: FileBinder,
     imageBinder: ImageBinder,
     audioBinder: AudioBinder,
-    vCardBinder: VCardBinder
+    vCardBinder: VCardBinder,
 ) : QkAdapter<MmsPart>() {
 
     private val partBinders = listOf(audioBinder, imageBinder, vCardBinder, fileBinder)
@@ -57,14 +58,22 @@ class PartsAdapter @Inject constructor(
     private var next: Message? = null
     private var holder: QkViewHolder? = null
     private var bodyVisible: Boolean = true
+    private var audioState: MessagesAdapter.AudioState? = null
 
-    fun setData(message: Message, previous: Message?, next: Message?, holder: QkViewHolder) {
+    fun setData(
+        message: Message,
+        previous: Message?,
+        next: Message?,
+        holder: QkViewHolder,
+        audioState: MessagesAdapter.AudioState?
+    ) {
         this.message = message
         this.previous = previous
         this.next = next
         this.holder = holder
         this.bodyVisible = holder.body.visibility == View.VISIBLE
         this.data = message.parts.filter { !it.isSmil() && !it.isText() }
+        this.audioState = audioState
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
@@ -80,9 +89,13 @@ class PartsAdapter @Inject constructor(
         val canGroupWithPrevious = canGroup(message, previous) || position > 0
         val canGroupWithNext = canGroup(message, next) || position < itemCount - 1 || bodyVisible
 
-        partBinders
-                .firstOrNull { it.canBindPart(part) }
-                ?.bindPart(holder, part, message, canGroupWithPrevious, canGroupWithNext)
+        val binder = partBinders.firstOrNull { it.canBindPart(part) }
+
+        // if audioState is set and binder is audio type, set audioState into it
+        if ((audioState != null) && (binder is AudioBinder))
+            binder.audioState = audioState!!
+
+        binder?.bindPart(holder, part, message, canGroupWithPrevious, canGroupWithNext)
     }
 
     override fun getItemViewType(position: Int): Int {

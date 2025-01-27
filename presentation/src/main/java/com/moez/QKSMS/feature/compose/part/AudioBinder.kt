@@ -33,16 +33,14 @@ import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.widget.BubbleImageView
 import dev.octoshrimpy.quik.extensions.isAudio
+import dev.octoshrimpy.quik.feature.compose.MessagesAdapter
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.util.GlideApp
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.mms_audio_preview_list_item.*
-import kotlinx.android.synthetic.main.mms_audio_preview_list_item.view.playPause
-import kotlinx.android.synthetic.main.mms_audio_preview_list_item.view.seekBar
 import kotlinx.android.synthetic.main.mms_image_preview_list_item.thumbnail
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -53,91 +51,132 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
 
     override val partLayout = R.layout.mms_audio_preview_list_item
     override var theme = colors.theme()
-    private var thisPlayingState = QkMediaPlayer.PlayingState.Stopped
 
     override fun canBindPart(part: MmsPart) = part.isAudio()
+
+    var audioState = MessagesAdapter.AudioState(-1, QkMediaPlayer.PlayingState.Stopped)
+
+    private fun startSeekBarUpdateTimer() {
+        audioState.apply {
+            seekBarUpdater?.dispose()
+            seekBarUpdater = Observable.interval(500, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.single())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext {
+                    viewHolder?.seekBar?.progress = QkMediaPlayer.currentPosition
+                }
+                .subscribe()
+        }
+    }
+
+    private fun uiToPlaying(viewHolder: QkViewHolder) {
+        viewHolder.seekBar.max = QkMediaPlayer.duration
+        viewHolder.seekBar.isEnabled = true
+        viewHolder.seekBar.progress = QkMediaPlayer.currentPosition
+        viewHolder.playPause.setImageResource(R.drawable.exo_icon_pause)
+        viewHolder.playPause.tag = QkMediaPlayer.PlayingState.Playing
+        viewHolder.metadataTitle.isSelected = true     // start marquee
+    }
+
+    private fun uiToPaused(viewHolder: QkViewHolder) {
+        viewHolder.playPause.setImageResource(R.drawable.exo_icon_play)
+        viewHolder.playPause.tag = QkMediaPlayer.PlayingState.Paused
+    }
+
+    private fun uiToStopped(viewHolder: QkViewHolder) {
+        viewHolder.seekBar.progress = 0
+        viewHolder.seekBar.max = 0
+        viewHolder.seekBar.isEnabled = false
+        viewHolder.playPause.setImageResource(R.drawable.exo_icon_play)
+        viewHolder.playPause.tag = QkMediaPlayer.PlayingState.Stopped
+        viewHolder.metadataTitle.isSelected = false   // stop marquee
+    }
 
     override fun bindPart(
         holder: QkViewHolder,
         part: MmsPart,
         message: Message,
         canGroupWithPrevious: Boolean,
-        canGroupWithNext: Boolean
+        canGroupWithNext: Boolean,
     ) {
         // play/pause button click handling
-        holder.playPause.setOnClickListener { view ->
-            var seekBarUpdater: Disposable? = null
+        holder.playPause.setOnClickListener {
+            when (holder.playPause.tag) {
+                QkMediaPlayer.PlayingState.Playing -> {
+                    if (audioState.partId == part.id) {
+                        QkMediaPlayer.pause()
+                        uiToPaused(holder)
+                        audioState.state = QkMediaPlayer.PlayingState.Paused
 
-            when (thisPlayingState) {
-                QkMediaPlayer.PlayingState.Stopped -> {
-                    QkMediaPlayer.apply {
-                        reset() // make sure reset before trying to (re-)use
-
-                        setAudioAttributes(
-                            AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)     // music, maybe?? could be voice. don't want to use CONTENT_TYPE_UNKNOWN though
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .build()
-                        )
-
-                        setDataSource(context, part.getUri())
-
-                        setOnPreparedListener {
-                            // start timer to update seek bar
-                            seekBarUpdater = Observable.interval(500, TimeUnit.MILLISECONDS)
-                                .subscribeOn(Schedulers.single())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .map { System.nanoTime() }
-                                .doOnNext { holder.seekBar.progress = QkMediaPlayer.currentPosition }
-                                .subscribe()
-
-                            // set seek bar max value
-                            holder.seekBar.max = QkMediaPlayer.duration
-
-                            start()
-
-                            thisPlayingState = QkMediaPlayer.PlayingState.Playing
-                            view.playPause.setImageResource(R.drawable.exo_icon_pause)
-                            holder.containerView.seekBar.isEnabled = true
-                            holder.metadataTitle.isSelected = true
-                        }
-
-                        setOnCompletionListener {   // also called on error because we don't have an onerrorlistener
-                            seekBarUpdater?.dispose()   // stop timer
-
-                            thisPlayingState = QkMediaPlayer.PlayingState.Stopped
-                            holder.containerView.seekBar.seekBar.isEnabled = false
-                            holder.containerView.seekBar.seekBar.progress = 0
-                            view.playPause.setImageResource(R.drawable.exo_icon_play)
-                            holder.metadataTitle.isSelected = false
-                        }
-
-                        // prepare to play
-                        prepareAsync()
+                        // stop progress bar update timer
+                        audioState.seekBarUpdater?.dispose()
                     }
                 }
-                QkMediaPlayer.PlayingState.Playing -> {
-                    QkMediaPlayer.pause()
-                    view.playPause.setImageResource(R.drawable.exo_icon_play)
-                    thisPlayingState = QkMediaPlayer.PlayingState.Paused
-                }
                 QkMediaPlayer.PlayingState.Paused -> {
-                    QkMediaPlayer.start()
-                    view.playPause.setImageResource(R.drawable.exo_icon_pause)
-                    thisPlayingState = QkMediaPlayer.PlayingState.Playing
+                    if (audioState.partId == part.id) {
+                        QkMediaPlayer.start()
+                        uiToPlaying(holder)
+                        audioState.state = QkMediaPlayer.PlayingState.Playing
+
+                        // start progress bar update timer
+                        startSeekBarUpdateTimer()
+                    }
+                }
+                else -> {
+                    QkMediaPlayer.reset() // make sure reset before trying to (re-)use
+
+                    QkMediaPlayer.setOnPreparedListener {
+                        // start media playing
+                        QkMediaPlayer.start()
+
+                        uiToPlaying(holder)
+
+                        // set current view holder and part as active
+                        audioState.apply {
+                            audioState.state = QkMediaPlayer.PlayingState.Playing
+                            partId = part.id
+                            viewHolder = holder
+                        }
+
+                        // start progress bar update timer
+                        startSeekBarUpdateTimer()
+                    }
+
+                    QkMediaPlayer.setOnCompletionListener {   // also called on error because we don't have an onerrorlistener
+                        audioState.apply {
+                            // if this part is currently active, set it to stopped and inactive
+                            if ((partId == part.id) && (viewHolder != null))
+                                uiToStopped(viewHolder!!)
+
+                            state = QkMediaPlayer.PlayingState.Stopped
+                            partId = -1
+                            viewHolder = null
+                        }
+                    }
+
+                    // start the media player play sequence
+                    QkMediaPlayer.setAudioAttributes(
+                        AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)     // music, maybe?? could be voice. don't want to use CONTENT_TYPE_UNKNOWN though
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+                    )
+
+                    QkMediaPlayer.setDataSource(context, part.getUri())
+
+                    QkMediaPlayer.prepareAsync()
                 }
             }
         }
 
-        holder.thumbnail.bubbleStyle = when {
-            !canGroupWithPrevious && canGroupWithNext ->
-                if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
-            canGroupWithPrevious && canGroupWithNext ->
-                if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
-            canGroupWithPrevious && !canGroupWithNext ->
-                if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
-            else -> BubbleImageView.Style.ONLY
-        }
+        holder.containerView.setOnClickListener { clicks.onNext(part.id) }
+
+        // if this item is the active active audio item update the active view holder
+        if (audioState.partId == part.id)
+            audioState.viewHolder = holder
+        // else, this is not the active item so ensure the stored view holder is not this one
+        else if (audioState.viewHolder == holder)
+            audioState.viewHolder = null
 
         // tint colours
         val secondaryColor =
@@ -151,9 +190,6 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
             else
                 holder.containerView.context.resolveThemeColor(android.R.attr.textColorPrimary)
 
-        val metaDataRetriever = MediaMetadataRetriever()
-        metaDataRetriever.setDataSource(context, part.getUri())
-
         // sound wave
         holder.soundWave.setTint(primaryColor)
 
@@ -161,11 +197,11 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
         holder.seekBar.apply {
             setTint(secondaryColor)
             thumbTintList = ColorStateList.valueOf(secondaryColor)
-            max = 0
-            isEnabled = false
+
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if ((thisPlayingState != QkMediaPlayer.PlayingState.Stopped) && fromUser)
+                    // if seek was initiated by the user and this part is currently playing
+                    if (fromUser)
                         QkMediaPlayer.seekTo(progress)
                 }
                 override fun onStartTrackingTouch(p0: SeekBar?) { /* nothing */ }
@@ -175,35 +211,65 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
 
         // playPause button
         holder.playPause. apply {
+            if ((audioState.partId == part.id) &&
+                (audioState.state == QkMediaPlayer.PlayingState.Playing))
+                uiToPlaying(holder)
+            else if ((audioState.partId == part.id) &&
+                (audioState.state == QkMediaPlayer.PlayingState.Paused))
+                uiToPaused(holder)
+            else
+                uiToStopped(holder)
+
             setTint(secondaryColor)
             setBackgroundTint(primaryColor)
         }
 
-        holder.metadataTitle.apply {
-            // metadata title
-            text = metaDataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) ?: ""
+        MediaMetadataRetriever().use {
+            it.setDataSource(context, part.getUri())
 
-            if (text == "")
-                visibility = View.GONE
-            else {
-                setTextColor(primaryColor)
-                setBackgroundTint(0xccffffff.toInt() and secondaryColor)    // hex value is alpha
+            // metadata title
+            holder.metadataTitle.apply {
+                text = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+
+                if (text.isEmpty())
+                    visibility = View.GONE
+                else {
+                    visibility = View.VISIBLE
+                    setTextColor(primaryColor)
+                    setBackgroundTint(0xccffffff.toInt() and secondaryColor)    // hex value is alpha
+                }
+            }
+
+            // bubble / embedded image
+            holder.thumbnail.apply {
+                bubbleStyle = when {
+                    !canGroupWithPrevious && canGroupWithNext ->
+                        if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
+                    canGroupWithPrevious && canGroupWithNext ->
+                        if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
+                    canGroupWithPrevious && !canGroupWithNext ->
+                        if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
+                    else -> BubbleImageView.Style.ONLY
+                }
+
+                val embeddedPicture = it.embeddedPicture
+                if (embeddedPicture == null) {
+                    holder.frame.layoutParams.height = (holder.frame.layoutParams.width / 2)
+                    setTint(secondaryColor)
+                    setImageResource(R.drawable.rectangle)
+                } else {
+                    holder.frame.layoutParams.height = holder.frame.layoutParams.width
+                    setTint(null)
+                    GlideApp.with(context)
+                        .asBitmap()
+                        .load(embeddedPicture)
+                        .override(
+                            holder.frame.layoutParams.width,
+                            holder.frame.layoutParams.height
+                        )
+                        .into(this)
+                }
             }
         }
-
-        // embedded image
-        val embeddedPicture = metaDataRetriever.embeddedPicture
-        if (embeddedPicture == null) {
-            holder.thumbnail.setTint(secondaryColor)
-            holder.frame.layoutParams.height /= 2
-            holder.thumbnail.requestLayout()
-        } else {
-            GlideApp.with(context)
-                .asBitmap()
-                .load(embeddedPicture)
-                .into(holder.thumbnail)
-        }
-
-        metaDataRetriever.close()
     }
 }

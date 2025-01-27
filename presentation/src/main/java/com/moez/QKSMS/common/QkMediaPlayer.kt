@@ -9,6 +9,7 @@ object QkMediaPlayer : MediaPlayer() {
     private var onCompletionListener: OnCompletionListener? = null
 
     enum class PlayingState {
+        None,
         Stopped,
         Playing,
         Paused
