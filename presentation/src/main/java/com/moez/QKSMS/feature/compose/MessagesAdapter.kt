@@ -32,6 +32,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
+import com.moez.QKSMS.common.QkMediaPlayer
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
@@ -55,6 +56,7 @@ import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
@@ -82,6 +84,13 @@ class MessagesAdapter @Inject constructor(
     private val prefs: Preferences,
     private val textViewStyler: TextViewStyler
 ) : QkRealmAdapter<Message>() {
+
+    class AudioState(
+        var partId: Long = -1,
+        var state: QkMediaPlayer.PlayingState = QkMediaPlayer.PlayingState.Stopped,
+        var seekBarUpdater: Disposable? = null,
+        var viewHolder: QkViewHolder? = null
+    )
 
     companion object {
         private const val VIEW_TYPE_MESSAGE_IN = 0
@@ -131,6 +140,8 @@ class MessagesAdapter @Inject constructor(
     private val subs = subscriptionManager.activeSubscriptionInfoList
 
     var theme: Colors.Theme = colors.theme()
+
+    private val audioState = AudioState()
 
     /**
      * If the viewType is negative, then the viewHolder has an attachment. We'll consider
@@ -283,7 +294,7 @@ class MessagesAdapter @Inject constructor(
         // Bind the attachments
         val partsAdapter = holder.attachments.adapter as PartsAdapter
         partsAdapter.theme = theme
-        partsAdapter.setData(message, previous, next, holder)
+        partsAdapter.setData(message, previous, next, holder, audioState)
     }
 
     private fun bindStatus(holder: QkViewHolder, message: Message, next: Message?) {

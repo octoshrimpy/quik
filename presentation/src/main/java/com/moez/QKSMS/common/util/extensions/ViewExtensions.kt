@@ -53,20 +53,29 @@ fun EditText.hideKeyboard() {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
-fun ImageView.setTint(color: Int) {
-    imageTintList = ColorStateList.valueOf(color)
+fun ImageView.setTint(color: Int?) {
+    imageTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
 }
 
-fun ProgressBar.setTint(color: Int) {
-    indeterminateTintList = ColorStateList.valueOf(color)
-    progressTintList = ColorStateList.valueOf(color)
+fun ProgressBar.setTint(color: Int?) {
+    indeterminateTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
+    progressTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
+
 }
 
-fun View.setBackgroundTint(color: Int) {
+fun View.setBackgroundTint(color: Int?) {
 
     // API 21 doesn't support this
 
-    backgroundTintList = ColorStateList.valueOf(color)
+    backgroundTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
 }
 
 fun View.setPadding(left: Int? = null, top: Int? = null, right: Int? = null, bottom: Int? = null) {

@@ -22,7 +22,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frame"
     android:layout_width="280dp"
-    android:layout_height="280dp"
+    android:layout_height="140dp"
     android:layout_marginTop="2dp"
     android:clipChildren="false">
 
