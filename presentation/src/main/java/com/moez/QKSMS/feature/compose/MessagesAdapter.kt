@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.feature.compose
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
+import android.os.Build
 import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
@@ -32,7 +33,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.view.longClicks
 import com.moez.QKSMS.common.QkMediaPlayer
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
