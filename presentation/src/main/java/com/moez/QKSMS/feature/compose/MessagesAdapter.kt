@@ -236,7 +236,7 @@ class MessagesAdapter @Inject constructor(
             holder.sendNowIcon.let { sendNowIcon ->
                 val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
                 sendNowIcon.visibility = if (isCancellable) View.VISIBLE else View.GONE
-                sendNowIcon.longClicks().subscribe { sendNow.onNext(message.id) }
+                sendNowIcon.clicks().subscribe { sendNow.onNext(message.id) }
             }
         }
 

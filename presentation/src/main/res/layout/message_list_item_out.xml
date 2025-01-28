@@ -138,17 +138,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <ImageView
-            android:id="@+id/sendNowIcon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="@drawable/circle"
-            android:contentDescription="@string/compose_message_send_now"
-            android:elevation="4dp"
-            android:padding="6dp"
-            android:src="@drawable/ic_send_black_24dp"
-            tools:tint="@color/tools_theme" />
-
         <dev.octoshrimpy.quik.common.widget.TightTextView
             android:id="@+id/body"
             style="@style/TextPrimary"
@@ -165,6 +154,18 @@
             android:textIsSelectable="true"
             app:layout_constrainedWidth="true"
             tools:text="Hey! How's it going?" />
+
+        <ImageView
+            android:id="@+id/sendNowIcon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/compose_message_send_now"
+            android:elevation="4dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_send_black_24dp"
+            tools:tint="@color/tools_theme" />
     </LinearLayout>
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
