@@ -1,5 +1,36 @@
 
-[  {
+[      
+    {
+    "versionCode": 2226,
+    "versionName": "4.0.9",
+      "added": [
+    "Basic speech to text for compose (and qkreply)",
+    "Text to speech",
+    "Add 'super' font size setting",
+    "Basic speech to text for compose (and qkreply) take 2",
+    "Make unread conversations float at the top of conversation lists",
+    "Select and copy a text part",
+    "Add 'super' font size setting - take 2",
+    "Main widget launch appropriate app activities",
+    "Change convo name from main convo activity",
+    "Play audio attachments",
+    "Select all on conversations and compose screens. New compose 'show status' option",
+    "Build on pull request",
+    "Update French translation",
+    "Changes to allow attaching *any* type of file",
+    "Update French translation"
+  ],
+  "fixed": [
+    "Bug fix for motion events being used after recycled",
+    "Disable reply ability to non-replyable messages/conversations",
+    "Sort blocked messages by lastmessage.date desc",
+    "Fix fr strings from pr 226. Fixes build",
+    "Fix pr 225 render issue",
+    "Fix unblock number bug",
+    "Silent notifications if no recipients are a contact"
+  ]
+  },
+    {
     "versionCode": 2225,
     "versionName": "4.0.8",
     "fixed": [
