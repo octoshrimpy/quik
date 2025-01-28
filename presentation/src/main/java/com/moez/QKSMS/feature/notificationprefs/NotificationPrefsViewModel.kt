@@ -79,6 +79,9 @@ class NotificationPrefsViewModel @Inject constructor(
         disposables += wake.asObservable()
                 .subscribe { enabled -> newState { copy(wakeEnabled = enabled) } }
 
+        disposables += prefs.silentNotContact.asObservable()
+                .subscribe { enabled -> newState { copy(silentNotContact = enabled) } }
+
         disposables += vibration.asObservable()
                 .subscribe { enabled -> newState { copy(vibrationEnabled = enabled) } }
 
@@ -112,6 +115,8 @@ class NotificationPrefsViewModel @Inject constructor(
                         R.id.previews -> view.showPreviewModeDialog()
 
                         R.id.wake -> wake.set(!wake.get())
+
+                        R.id.silentNotContact -> prefs.silentNotContact.set(!prefs.silentNotContact.get())
 
                         R.id.vibration -> vibration.set(!vibration.get())
 

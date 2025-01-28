@@ -33,6 +33,8 @@ interface ContactRepository {
 
     fun getUnmanagedContact(lookupKey: String): Contact?
 
+    fun getUnmanagedAllContacts(): List<Contact>
+
     fun getUnmanagedContacts(starred: Boolean = false): Observable<List<Contact>>
 
     fun getUnmanagedContactGroups(): Observable<List<ContactGroup>>
