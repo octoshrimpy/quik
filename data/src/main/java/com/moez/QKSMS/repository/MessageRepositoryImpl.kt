@@ -429,8 +429,8 @@ class MessageRepositoryImpl @Inject constructor(
 
                         attempts++
                         scaledBytes = when (attachment.getType(context) == "image/gif") {
-                            true -> ImageUtils.getScaledGif(context, attachment.getUri(), maxWidth, maxHeight)
-                            false -> ImageUtils.getScaledImage(context, attachment.getUri(), maxWidth, maxHeight)
+                            true -> ImageUtils.getScaledGif(context, attachment.getUri(), newWidth, newHeight)
+                            false -> ImageUtils.getScaledImage(context, attachment.getUri(), newWidth, newHeight)
                         }
 
                         Timber.d("Compression attempt $attempts: ${scaledBytes.size / 1024}/${maxBytes.toInt() / 1024}Kb ($width*$height -> $newWidth*$newHeight)")
