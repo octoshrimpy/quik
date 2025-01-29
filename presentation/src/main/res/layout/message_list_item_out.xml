@@ -22,6 +22,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="36dp"
+    android:layout_marginEnd="12dp"
     android:background="?attr/selectableItemBackground"
     android:orientation="vertical">
 
@@ -69,41 +71,35 @@
             app:textSize="tertiary"
             tools:text="1" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/attachments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginStart="60dp"
-            android:layout_marginEnd="12dp"
-            android:gravity="end"
-            android:nestedScrollingEnabled="false"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintTop_toBottomOf="@id/timestamp"
-            tools:itemCount="1"
-            tools:listitem="@layout/mms_preview_list_item" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/attachments"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_gravity="end"
+        android:layout_marginBottom="2dp"
+        android:gravity="end"
+        android:nestedScrollingEnabled="false"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="1"
+        tools:listitem="@layout/mms_image_preview_list_item" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:id="@+id/cancelFrame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_alignBottom="@id/bodyBox"
+            android:layout_alignParentStart="true"
             android:layout_marginEnd="12dp"
             android:clipToPadding="false"
-            android:paddingBottom="6dp">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <ProgressBar
                 android:id="@+id/cancel"
@@ -113,12 +109,12 @@
                 android:background="@drawable/circle"
                 android:backgroundTint="?attr/bubbleColor"
                 android:clickable="false"
-                android:elevation="4dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:indeterminate="false"
                 android:progressDrawable="@drawable/circular_progress_bar"
                 tools:progress="45"
-                tools:progressTint="@color/tools_theme" />
+                tools:progressTint="@color/tools_theme"
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/cancelIcon"
@@ -126,59 +122,69 @@
                 android:layout_height="36dp"
                 android:clickable="false"
                 android:contentDescription="@string/compose_message_cancel"
-                android:elevation="4dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_stop_black_24dp"
                 tools:tint="@color/tools_theme" />
 
         </FrameLayout>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <dev.octoshrimpy.quik.common.widget.TightTextView
-            android:id="@+id/body"
-            style="@style/TextPrimary"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/bodyBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="12dp"
-            android:autoLink="email|phone|web"
-            android:background="@drawable/message_only"
-            android:backgroundTint="?attr/bubbleColor"
-            android:gravity="start|center_vertical"
-            android:minHeight="36dp"
-            android:textIsSelectable="true"
-            app:layout_constrainedWidth="true"
-            tools:text="Hey! How's it going?" />
+            android:layout_toStartOf="@id/sendNowIcon"
+            android:layout_toEndOf="@id/cancelFrame"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <dev.octoshrimpy.quik.common.widget.TightTextView
+                android:id="@+id/body"
+                style="@style/TextPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="email|phone|web"
+                android:background="@drawable/message_only"
+                android:backgroundTint="?attr/bubbleColor"
+                android:gravity="start|center_vertical"
+                android:minHeight="36dp"
+                android:textIsSelectable="true"
+                tools:text="@tools:sample/lorem/random[0]" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/sendNowIcon"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
+            android:layout_alignBottom="@id/bodyBox"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="12dp"
             android:background="@drawable/circle"
+            android:backgroundTint="?attr/bubbleColor"
+            android:baselineAlignBottom="true"
             android:contentDescription="@string/compose_message_send_now"
-            android:elevation="4dp"
             android:padding="6dp"
             android:src="@drawable/ic_send_black_24dp"
-            tools:tint="@color/tools_theme" />
-    </LinearLayout>
+            android:visibility="gone"
+            tools:tint="@color/tools_theme"
+            tools:visibility="visible" />
+
+    </RelativeLayout>
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="4dp"
         android:contentDescription="@string/compose_message_attachment"
         android:textColor="?android:attr/textColorSecondary"
         app:textSize="tertiary"
         tools:text="Sending..." />
-
 
 </LinearLayout>
