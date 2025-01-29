@@ -528,12 +528,8 @@ class ComposeViewModel @Inject constructor(
         view.cameraIntent
                 .autoDisposable(view.scope())
                 .subscribe {
-                    if (permissionManager.hasStorage()) {
-                        newState { copy(attaching = false) }
-                        view.requestCamera()
-                    } else {
-                        view.requestStoragePermission()
-                    }
+                    newState { copy(attaching = false) }
+                    view.requestCamera()
                 }
 
         // pick a photo (specifically) from image provider apps
