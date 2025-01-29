@@ -181,9 +181,9 @@ class MessageRepositoryImpl @Inject constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             values.put(MediaStore.MediaColumns.IS_PENDING, 1)
             values.put(MediaStore.MediaColumns.RELATIVE_PATH, when {
-                part.isImage() -> "${Environment.DIRECTORY_PICTURES}/QKSMS"
-                part.isVideo() -> "${Environment.DIRECTORY_MOVIES}/QKSMS"
-                else -> "${Environment.DIRECTORY_DOWNLOADS}/QKSMS"
+                part.isImage() -> "${Environment.DIRECTORY_PICTURES}/QUIK"
+                part.isVideo() -> "${Environment.DIRECTORY_MOVIES}/QUIK"
+                else -> "${Environment.DIRECTORY_DOWNLOADS}/QUIK"
             })
         }
 
