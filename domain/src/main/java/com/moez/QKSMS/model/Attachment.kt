@@ -110,7 +110,7 @@ class Attachment(
         if (resourceBytes != null)
             return resourceBytes!!
 
-            resourceBytes = ByteArray(0)
+        resourceBytes = ByteArray(0)
 
         try {
             context.contentResolver.openInputStream(getUri())?.use {
