@@ -18,120 +18,125 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="36dp"
-    android:background="?attr/selectableItemBackground"
-    android:orientation="vertical">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground">
-
-        <dev.octoshrimpy.quik.common.widget.QkTextView
-            android:id="@+id/timestamp"
-            style="@style/TextSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="8dp"
-            app:layout_constraintEnd_toStartOf="@id/sim"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Tue at 11:39pm" />
-
-        <ImageView
-            android:id="@+id/sim"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="2dp"
-            android:src="@drawable/ic_sim_card_black_24dp"
-            app:layout_constraintBottom_toBottomOf="@id/timestamp"
-            app:layout_constraintEnd_toStartOf="@id/simIndex"
-            app:layout_constraintStart_toEndOf="@id/timestamp"
-            app:layout_constraintTop_toTopOf="@id/timestamp"
-            app:tint="?android:attr/textColorSecondary" />
-
-        <dev.octoshrimpy.quik.common.widget.QkTextView
-            android:id="@+id/simIndex"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?android:attr/textColorSecondary"
-            app:layout_constraintBottom_toBottomOf="@id/timestamp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/sim"
-            app:layout_constraintTop_toTopOf="@id/timestamp"
-            app:textSize="tertiary"
-            tools:text="1" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    android:background="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginEnd="36dp"
+        android:orientation="vertical">
 
-        <dev.octoshrimpy.quik.common.widget.AvatarView
-            android:id="@+id/avatar"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="bottom"
-            app:layout_constraintBottom_toBottomOf="@id/body"
-            app:layout_constraintStart_toStartOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/timestamp"
+                style="@style/TextSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                app:layout_constraintEnd_toStartOf="@id/sim"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Tue at 11:39pm" />
+
+            <ImageView
+                android:id="@+id/sim"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/ic_sim_card_black_24dp"
+                app:layout_constraintBottom_toBottomOf="@id/timestamp"
+                app:layout_constraintEnd_toStartOf="@id/simIndex"
+                app:layout_constraintStart_toEndOf="@id/timestamp"
+                app:layout_constraintTop_toTopOf="@id/timestamp"
+                app:tint="?android:attr/textColorSecondary" />
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/simIndex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintBottom_toBottomOf="@id/timestamp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/sim"
+                app:layout_constraintTop_toTopOf="@id/timestamp"
+                app:textSize="tertiary"
+                tools:text="1" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/attachments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="1"
-                tools:listitem="@layout/mms_image_preview_list_item" />
+            <dev.octoshrimpy.quik.common.widget.AvatarView
+                android:id="@+id/avatar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="bottom"
+                app:layout_constraintBottom_toBottomOf="@id/body"
+                app:layout_constraintStart_toStartOf="parent" />
 
-            <dev.octoshrimpy.quik.common.widget.TightTextView
-                android:id="@+id/body"
-                style="@style/TextPrimary"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:autoLink="email|phone|web"
-                android:background="@drawable/message_only"
-                android:gravity="start|center_vertical"
-                android:minHeight="36dp"
-                android:textIsSelectable="true"
-                tools:backgroundTint="@color/tools_theme"
-                tools:text="@tools:sample/lorem/random" />
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/attachments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/mms_image_preview_list_item" />
+
+                <dev.octoshrimpy.quik.common.widget.TightTextView
+                    android:id="@+id/body"
+                    style="@style/TextPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:autoLink="email|phone|web"
+                    android:background="@drawable/message_only"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="36dp"
+                    android:textIsSelectable="true"
+                    tools:backgroundTint="@color/tools_theme"
+                    tools:text="@tools:sample/lorem/random" />
+            </LinearLayout>
+
         </LinearLayout>
+
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="72dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/body"
+            app:textSize="tertiary"
+            tools:text="Sending..." />
 
     </LinearLayout>
 
-    <dev.octoshrimpy.quik.common.widget.QkTextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:textColor="?android:attr/textColorSecondary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/body"
-        app:textSize="tertiary"
-        tools:text="Sending..." />
-
-</LinearLayout>
+</FrameLayout>
