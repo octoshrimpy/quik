@@ -71,10 +71,12 @@ import dev.octoshrimpy.quik.feature.contacts.ContactsActivity
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.*
 import kotlinx.android.synthetic.main.main_activity.toolbar
+import kotlinx.coroutines.reactive.publish
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -94,6 +96,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val chipDeletedIntent: Subject<Recipient> by lazy { chipsAdapter.chipDeleted }
     override val menuReadyIntent: Observable<Unit> = menu.map { Unit }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
+    override val scheduleAction: Subject<Boolean> = PublishSubject.create()
     override val sendAsGroupIntent by lazy { sendAsGroupBackground.clicks() }
     override val messageClickIntent: Subject<Long> by lazy { messageAdapter.clicks }
     override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
@@ -323,6 +326,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             )
             constraintSet.applyTo(constraintLayout)
         }
+
+        // if scheduling mode is set, show schedule dialog
+        if (state.scheduling)
+            scheduleAction.onNext(true)
     }
 
     override fun clearSelection() = messageAdapter.clearSelection()

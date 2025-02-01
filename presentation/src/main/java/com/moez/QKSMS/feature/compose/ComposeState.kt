@@ -42,6 +42,7 @@ data class ComposeState(
     val scheduled: Long = 0,
     val attachments: List<Attachment> = ArrayList(),
     val attaching: Boolean = false,
+    val scheduling: Boolean = false,
     val remaining: String = "",
     val subscription: SubscriptionInfoCompat? = null,
     val canSend: Boolean = false,

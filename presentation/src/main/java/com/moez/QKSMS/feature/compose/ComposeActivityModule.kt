@@ -83,6 +83,12 @@ class ComposeActivityModule {
     }
 
     @Provides
+    @Named("mode")
+    fun provideSharedAction(activity: ComposeActivity): String {
+        return activity.intent.getStringExtra("mode") ?: "";
+    }
+
+    @Provides
     @IntoMap
     @ViewModelKey(ComposeViewModel::class)
     fun provideComposeViewModel(viewModel: ComposeViewModel): ViewModel = viewModel

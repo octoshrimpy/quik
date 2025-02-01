@@ -56,6 +56,7 @@ interface ComposeView : QkView<ComposeState> {
     val attachAnyFileIntent: Observable<*>
     val attachImageFileIntent: Observable<*>
     val scheduleIntent: Observable<*>
+    val scheduleAction: Observable<*>
     val attachContactIntent: Observable<*>
     val attachAnyFileSelectedIntent: Observable<Uri>
     val contactSelectedIntent: Observable<Uri>

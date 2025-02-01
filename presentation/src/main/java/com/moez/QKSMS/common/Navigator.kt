@@ -95,9 +95,10 @@ class Navigator @Inject constructor(
         }
     }
 
-    fun showCompose(body: String? = null, attachments: List<Uri>? = null) {
+    fun showCompose(body: String? = null, attachments: List<Uri>? = null, mode: String? = null) {
         val intent = Intent(context, ComposeActivity::class.java)
         intent.putExtra(Intent.EXTRA_TEXT, body)
+        intent.putExtra("mode", mode)
 
         attachments?.takeIf { it.isNotEmpty() }?.let {
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(attachments))
