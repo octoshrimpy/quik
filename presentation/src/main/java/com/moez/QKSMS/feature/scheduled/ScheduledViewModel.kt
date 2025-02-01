@@ -70,7 +70,7 @@ class ScheduledViewModel @Inject constructor(
 
         view.composeIntent
             .autoDisposable(view.scope())
-            .subscribe { navigator.showCompose() }
+            .subscribe { navigator.showCompose(mode = "scheduling") }
 
         view.upgradeIntent
             .autoDisposable(view.scope())

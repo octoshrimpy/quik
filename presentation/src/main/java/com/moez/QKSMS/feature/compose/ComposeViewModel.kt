@@ -79,6 +79,7 @@ class ComposeViewModel @Inject constructor(
     @Named("addresses") private val addresses: List<String>,
     @Named("text") private val sharedText: String,
     @Named("attachments") private val sharedAttachments: Attachments,
+    @Named("mode") private val mode: String,
     private val contactRepo: ContactRepository,
     private val context: Context,
     private val activeConversationManager: ActiveConversationManager,
@@ -242,6 +243,10 @@ class ComposeViewModel @Inject constructor(
             val sub = if (subs.size > 1) subs.firstOrNull { it.subscriptionId == subId } ?: subs[0] else null
             newState { copy(subscription = sub) }
         }.subscribe()
+
+        // actions
+        if (mode == "scheduling")
+            newState { copy(scheduling = true) }
     }
 
     override fun bindView(view: ComposeView) {
@@ -573,6 +578,12 @@ class ComposeViewModel @Inject constructor(
                 }
                 .autoDisposable(view.scope())
                 .subscribe { view.requestDatePicker() }
+
+        view.scheduleAction
+            .take(1)
+            .doOnNext{ newState { copy(scheduling = false) } }
+            .autoDisposable(view.scope())
+            .subscribe { view.requestDatePicker() }
 
         // a file, photo or otherwise, was picked by the user
         Observable.merge(
