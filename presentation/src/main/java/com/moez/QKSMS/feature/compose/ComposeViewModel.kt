@@ -59,6 +59,7 @@ import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import dev.octoshrimpy.quik.extensions.isSmil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -383,8 +384,8 @@ class ComposeViewModel @Inject constructor(
             .filter { it == R.id.forward }
             .withLatestFrom(view.messagesSelectedIntent) { _, messages ->
                 messages?.firstOrNull()?.let { messageRepo.getMessage(it) }?.let { message ->
-                    val images = message.parts.filter { it.isImage() }.mapNotNull { it.getUri() }
-                    navigator.showCompose(message.getText(), images)
+                    val attachments = message.parts.filter { !it.isSmil() }.mapNotNull { it.getUri() }
+                    navigator.showCompose(message.getText(), attachments)
                 }
             }
             .autoDisposable(view.scope())
