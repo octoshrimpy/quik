@@ -78,22 +78,14 @@ class ComposeActivityModule {
         val uris = mutableListOf<Uri>()
         activity.intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::add)
         activity.intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::addAll)
-        return Attachments(uris.mapNotNull { uri ->
-            val mimeType = activity.contentResolver.getType(uri)
-            when {
-                ContentType.isImageType(mimeType) -> {
-                    Attachment.Image(uri)
-                }
 
-                ContentType.TEXT_VCARD.equals(mimeType, true) -> {
-                    val inputStream = activity.contentResolver.openInputStream(uri)
-                    val text = inputStream?.reader(Charset.forName("utf-8"))?.readText()
-                    text?.let(Attachment::Contact)
-                }
+        return Attachments(uris.mapNotNull { Attachment(it) })
+    }
 
-                else -> null
-            }
-        })
+    @Provides
+    @Named("mode")
+    fun provideSharedAction(activity: ComposeActivity): String {
+        return activity.intent.getStringExtra("mode") ?: "";
     }
 
     @Provides

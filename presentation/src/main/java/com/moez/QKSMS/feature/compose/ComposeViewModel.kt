@@ -59,6 +59,7 @@ import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import dev.octoshrimpy.quik.extensions.isSmil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -79,6 +80,7 @@ class ComposeViewModel @Inject constructor(
     @Named("addresses") private val addresses: List<String>,
     @Named("text") private val sharedText: String,
     @Named("attachments") private val sharedAttachments: Attachments,
+    @Named("mode") private val mode: String,
     private val contactRepo: ContactRepository,
     private val context: Context,
     private val activeConversationManager: ActiveConversationManager,
@@ -242,6 +244,10 @@ class ComposeViewModel @Inject constructor(
             val sub = if (subs.size > 1) subs.firstOrNull { it.subscriptionId == subId } ?: subs[0] else null
             newState { copy(subscription = sub) }
         }.subscribe()
+
+        // actions
+        if (mode == "scheduling")
+            newState { copy(scheduling = true) }
     }
 
     override fun bindView(view: ComposeView) {
@@ -378,8 +384,8 @@ class ComposeViewModel @Inject constructor(
             .filter { it == R.id.forward }
             .withLatestFrom(view.messagesSelectedIntent) { _, messages ->
                 messages?.firstOrNull()?.let { messageRepo.getMessage(it) }?.let { message ->
-                    val images = message.parts.filter { it.isImage() }.mapNotNull { it.getUri() }
-                    navigator.showCompose(message.getText(), images)
+                    val attachments = message.parts.filter { !it.isSmil() }.mapNotNull { it.getUri() }
+                    navigator.showCompose(message.getText(), attachments)
                 }
             }
             .autoDisposable(view.scope())
@@ -487,6 +493,31 @@ class ComposeViewModel @Inject constructor(
                     cancelMessage.execute(CancelDelayedMessage.Params(message.id, message.threadId))
                 }
 
+        // send a delayed message now
+        view.sendNowIntent
+                .mapNotNull(messageRepo::getMessage)
+                .autoDisposable(view.scope())
+                .subscribe { message ->
+                    cancelMessage.execute(CancelDelayedMessage.Params(message.id, message.threadId))
+                    val address = listOf(conversationRepo
+                        .getConversation(threadId)?.recipients?.firstOrNull()?.address ?: message.address)
+                    sendMessage.execute(
+                        SendMessage.Params(
+                            message.subId,
+                            message.threadId,
+                            address,
+                            message.body,
+                            listOf(),       // sms with attachments (mms) can't be delayed so we can know attachments are empty for a 'send now' delayed sms
+                            0
+                        )
+                    )
+                }
+
+        // Show the message details
+        view.messageLinkAskIntent
+            .autoDisposable(view.scope())
+            .subscribe { view.showMessageLinkAskDialog(it) }
+
         // Set the current conversation
         Observables
                 .combineLatest(
@@ -528,19 +559,21 @@ class ComposeViewModel @Inject constructor(
         view.cameraIntent
                 .autoDisposable(view.scope())
                 .subscribe {
-                    if (permissionManager.hasStorage()) {
-                        newState { copy(attaching = false) }
-                        view.requestCamera()
-                    } else {
-                        view.requestStoragePermission()
-                    }
+                    newState { copy(attaching = false) }
+                    view.requestCamera()
                 }
 
-        // Attach a photo from gallery
-        view.galleryIntent
-                .doOnNext { newState { copy(attaching = false) } }
-                .autoDisposable(view.scope())
-                .subscribe { view.requestGallery() }
+        // pick a photo (specifically) from image provider apps
+        view.attachImageFileIntent
+            .doOnNext { newState { copy(attaching = false) } }
+            .autoDisposable(view.scope())
+            .subscribe { view.requestGallery("image/*", ComposeView.AttachAFileRequestCode) }
+
+        // pick any file from any provider apps
+        view.attachAnyFileIntent
+            .doOnNext { newState { copy(attaching = false) } }
+            .autoDisposable(view.scope())
+            .subscribe { view.requestGallery("*/*", ComposeView.AttachAFileRequestCode) }
 
         // Choose a time to schedule the message
         view.scheduleIntent
@@ -552,15 +585,21 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { view.requestDatePicker() }
 
-        // A photo was selected
-        Observable.merge(
-                view.attachmentSelectedIntent.map { uri -> Attachment.Image(uri) },
-                view.inputContentIntent.map { inputContent -> Attachment.Image(inputContent = inputContent) })
-                .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
-                .doOnNext(attachments::onNext)
-                .autoDisposable(view.scope())
-                .subscribe { newState { copy(attaching = false) } }
+        view.scheduleAction
+            .take(1)
+            .doOnNext{ newState { copy(scheduling = false) } }
+            .autoDisposable(view.scope())
+            .subscribe { view.requestDatePicker() }
 
+        // a file, photo or otherwise, was picked by the user
+        Observable.merge(
+            view.attachAnyFileSelectedIntent.map { uri -> Attachment(uri) },
+            view.inputContentIntent.map { inputContent -> Attachment(inputContent = inputContent) }
+        )
+            .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
+            .doOnNext(attachments::onNext)
+            .autoDisposable(view.scope())
+            .subscribe { newState { copy(attaching = false) } }
         // Set the scheduled time
         view.scheduleSelectedIntent
                 .filter { scheduled ->
@@ -579,7 +618,7 @@ class ComposeViewModel @Inject constructor(
 
         // Contact was selected for attachment
         view.contactSelectedIntent
-                .map { uri -> Attachment.Contact(getVCard(uri)!!) }
+                .map { uri -> Attachment(getFullVCardUri(uri)) }
                 .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
                 .subscribeOn(Schedulers.io())
                 .autoDisposable(view.scope())
@@ -704,7 +743,6 @@ class ComposeViewModel @Inject constructor(
                         state.scheduled != 0L -> {
                             newState { copy(scheduled = 0) }
                             val uris = attachments
-                                    .mapNotNull { it as? Attachment.Image }
                                     .map { it.getUri() }
                                     .map { it.toString() }
                             val params = AddScheduledMessage
@@ -784,17 +822,17 @@ class ComposeViewModel @Inject constructor(
 
     }
 
-    private fun getVCard(contactData: Uri): String? {
-        val lookupKey = context.contentResolver.query(contactData, null, null, null, null)?.use { cursor ->
-            cursor.moveToFirst()
-            cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY))
+    private fun getFullVCardUri(contactData: Uri): Uri {
+        val lookupKey = context.contentResolver.query(contactData, null, null, null, null)?.use {
+            it.moveToFirst()
+            val index = it.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)
+            if (index >= 0)
+                it.getString(index)
+            else
+                ""
         }
 
-        val vCardUri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey)
-        return context.contentResolver.openAssetFileDescriptor(vCardUri, "r")
-                ?.createInputStream()
-                ?.readBytes()
-                ?.let { bytes -> String(bytes) }
+        return Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey)
     }
 
 }

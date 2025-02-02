@@ -143,6 +143,11 @@ public class RetryScheduler implements Observer {
                             case PduHeaders.RESPONSE_STATUS_ERROR_PERMANENT_MESSAGE_NOT_FOUND:
                                 errorString = R.string.service_message_not_found;
                                 break;
+                            case PduHeaders.RESPONSE_STATUS_ERROR_CONTENT_NOT_ACCEPTED:
+                            case PduHeaders.RESPONSE_STATUS_ERROR_PERMANENT_CONTENT_NOT_ACCEPTED:
+                                errorString = R.string.service_message_content_not_accepted;
+                                break;
+
                         }
                         if (errorString != 0) {
                             DownloadManager.init(mContext.getApplicationContext());

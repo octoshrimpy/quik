@@ -21,17 +21,23 @@ package dev.octoshrimpy.quik.feature.compose
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
+import android.net.Uri
 import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.text.style.URLSpan
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
-import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
+import com.moez.QKSMS.common.QkMediaPlayer
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
@@ -55,6 +61,7 @@ import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
@@ -67,6 +74,7 @@ import kotlinx.android.synthetic.main.message_list_item_in.status
 import kotlinx.android.synthetic.main.message_list_item_in.timestamp
 import kotlinx.android.synthetic.main.message_list_item_in.view.*
 import kotlinx.android.synthetic.main.message_list_item_out.*
+import kotlinx.android.synthetic.main.message_list_item_out.view.cancel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -83,6 +91,13 @@ class MessagesAdapter @Inject constructor(
     private val textViewStyler: TextViewStyler
 ) : QkRealmAdapter<Message>() {
 
+    class AudioState(
+        var partId: Long = -1,
+        var state: QkMediaPlayer.PlayingState = QkMediaPlayer.PlayingState.Stopped,
+        var seekBarUpdater: Disposable? = null,
+        var viewHolder: QkViewHolder? = null
+    )
+
     companion object {
         private const val VIEW_TYPE_MESSAGE_IN = 0
         private const val VIEW_TYPE_MESSAGE_OUT = 1
@@ -96,7 +111,9 @@ class MessagesAdapter @Inject constructor(
 
     val clicks: Subject<Long> = PublishSubject.create()
     val partClicks: Subject<Long> = PublishSubject.create()
+    val messageLinkClicks: Subject<Uri> = PublishSubject.create()
     val cancelSending: Subject<Long> = PublishSubject.create()
+    val sendNow: Subject<Long> = PublishSubject.create()
 
     var data: Pair<Conversation, RealmResults<Message>>? = null
         set(value) {
@@ -127,10 +144,11 @@ class MessagesAdapter @Inject constructor(
 
     private val contactCache = ContactCache()
     private val expanded = HashMap<Long, Boolean>()
-    private val partsViewPool = RecyclerView.RecycledViewPool()
     private val subs = subscriptionManager.activeSubscriptionInfoList
 
     var theme: Colors.Theme = colors.theme()
+
+    private val audioState = AudioState()
 
     /**
      * If the viewType is negative, then the viewHolder has an attachment. We'll consider
@@ -147,6 +165,7 @@ class MessagesAdapter @Inject constructor(
             view = layoutInflater.inflate(R.layout.message_list_item_out, parent, false)
             view.findViewById<ImageView>(R.id.cancelIcon).setTint(theme.theme)
             view.findViewById<ProgressBar>(R.id.cancel).setTint(theme.theme)
+            view.findViewById<ImageView>(R.id.sendNowIcon).setTint(theme.theme)
         } else {
             view = layoutInflater.inflate(R.layout.message_list_item_in, parent, false)
         }
@@ -156,8 +175,6 @@ class MessagesAdapter @Inject constructor(
         val partsAdapter = partsAdapterProvider.get()
         partsAdapter.clicks.subscribe(partClicks)
         view.attachments.adapter = partsAdapter
-        view.attachments.setRecycledViewPool(partsViewPool)
-        view.body.forwardTouches(view)
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
@@ -193,27 +210,41 @@ class MessagesAdapter @Inject constructor(
         // Update the selected state
         holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
 
-        // Bind the cancel view
-        holder.cancel?.let { cancel ->
-            val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
-            cancel.setVisible(isCancellable)
-            cancel.clicks().subscribe { cancelSending.onNext(message.id) }
-            cancel.progress = 2
+        // Bind the cancelFrame (cancel button) view
+        if (holder.cancelFrame != null) {
+            holder.cancelFrame.let { cancelFrame ->
+                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
+                cancelFrame.visibility = if (isCancellable) View.VISIBLE else View.GONE
+                cancelFrame.clicks().subscribe { cancelSending.onNext(message.id) }
+                cancelFrame.cancel.progress = 2
 
-            if (isCancellable) {
-                val delay = when (prefs.sendDelay.get()) {
-                    Preferences.SEND_DELAY_SHORT -> 3000
-                    Preferences.SEND_DELAY_MEDIUM -> 5000
-                    Preferences.SEND_DELAY_LONG -> 10000
-                    else -> 0
-                }
-                val progress = (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+                if (isCancellable) {
+                    val delay = when (prefs.sendDelay.get()) {
+                        Preferences.SEND_DELAY_SHORT -> 3000
+                        Preferences.SEND_DELAY_MEDIUM -> 5000
+                        Preferences.SEND_DELAY_LONG -> 10000
+                        else -> 0
+                    }
+                    val progress =
+                        (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
 
-                ObjectAnimator.ofInt(cancel, "progress", progress.toInt(), 100)
+                    ObjectAnimator.ofInt(cancelFrame.cancel, "progress", progress.toInt(), 100)
                         .setDuration(message.date - System.currentTimeMillis())
                         .start()
+                }
             }
         }
+
+        // Bind the send now icon view
+        if (holder.sendNowIcon != null) {
+            holder.sendNowIcon.let { sendNowIcon ->
+                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
+                sendNowIcon.visibility = if (isCancellable) View.VISIBLE else View.GONE
+                sendNowIcon.clicks().subscribe { sendNow.onNext(message.id) }
+            }
+        }
+
+        val cancelableSimpleOnGestureListener = holder.body.forwardTouches(holder.containerView)
 
         // Bind the message status
         bindStatus(holder, message, next)
@@ -272,8 +303,48 @@ class MessagesAdapter @Inject constructor(
             false -> TextViewStyler.SIZE_PRIMARY
         })
 
-        holder.body.text = messageText
-        holder.body.setVisible(message.isSms() || messageText.isNotBlank())
+        val spanString = SpannableStringBuilder(messageText)
+
+        when (prefs.messageLinkHandling.get()) {
+            Preferences.MESSAGE_LINK_HANDLING_BLOCK -> holder.body.autoLinkMask = 0
+            Preferences.MESSAGE_LINK_HANDLING_ASK -> {
+                //  manually handle link clicks if user has set to ask before opening links
+                holder.body.isClickable = false
+                holder.body.linksClickable = false
+                holder.body.movementMethod = LinkMovementMethod.getInstance()
+
+                Linkify.addLinks(spanString, holder.body.autoLinkMask)
+
+                for (span in spanString.getSpans(
+                    0,
+                    spanString.length,
+                    URLSpan::class.java)
+                ) {
+                    // set handler for when user touches a link into new span
+                    spanString.setSpan(
+                        object : ClickableSpan() {
+                            override fun onClick(widget: View) {
+                                messageLinkClicks.onNext(Uri.parse(span.url))
+
+                                // interrupt the upcoming click event on the body view
+                                cancelableSimpleOnGestureListener.cancelCurrentClick()
+                            }
+                        },
+                        spanString.getSpanStart(span),
+                        spanString.getSpanEnd(span),
+                        spanString.getSpanFlags(span)
+                    )
+
+                    // remove original span
+                    spanString.removeSpan(span)
+                }
+            }
+            else -> holder.body.movementMethod = LinkMovementMethod.getInstance()
+        }
+
+        holder.body.text = spanString
+        holder.body.setVisible(message.isSms() || spanString.isNotBlank())
+
         holder.body.setBackgroundResource(getBubble(
                 emojiOnly = emojiOnly,
                 canGroupWithPrevious = canGroup(message, previous) || media.isNotEmpty(),
@@ -283,7 +354,7 @@ class MessagesAdapter @Inject constructor(
         // Bind the attachments
         val partsAdapter = holder.attachments.adapter as PartsAdapter
         partsAdapter.theme = theme
-        partsAdapter.setData(message, previous, next, holder)
+        partsAdapter.setData(message, previous, next, holder, audioState)
     }
 
     private fun bindStatus(holder: QkViewHolder, message: Message, next: Message?) {

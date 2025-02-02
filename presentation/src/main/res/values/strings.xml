@@ -141,6 +141,7 @@
     <string name="compose_details_delivered">Delivered: %s</string>
     <string name="compose_details_error_code">Error code: %d</string>
     <string name="compose_attach_cd">Add an attachment</string>
+    <string name="compose_attach_file_cd">Attach any file</string>
     <string name="compose_gallery_cd">Attach a photo</string>
     <string name="compose_camera_cd">Take a photo</string>
     <string name="compose_schedule_cd">Schedule message</string>
@@ -150,6 +151,12 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Send message</string>
+
+    <string name="compose_message_cancel">Cancel</string>
+    <string name="compose_message_send_now">Send now</string>
+    <string name="compose_message_sim">SIM number</string>
+    <string name="compose_message_item">Message item</string>
+    <string name="compose_message_attachment">Attachment</string>
 
     <string name="message_status_sending">Sending…</string>
     <string name="message_status_delivered">Delivered %s</string>
@@ -211,6 +218,7 @@
     <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd&#x200A;</string>
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
+    <string name="attachment_missing">Missing</string>
     <string-array name="scheduled_options">
         <item>Send now</item>
         <item>Copy text</item>
@@ -237,7 +245,10 @@
     <string name="settings_notification_action_2">Button 2</string>
     <string name="settings_notification_action_3">Button 3</string>
     <string name="settings_notification_previews_title">Notification previews</string>
+    <string name="settings_notification_previews_summary">Show name and message</string>
     <string name="settings_notification_wake_title">Wake screen</string>
+    <string name="settings_notification_silent_title">Silent if not a contact</string>
+    <string name="settings_notification_silent_summary">Silences notifications for messages without recipients in your contacts</string>
     <string name="settings_vibration_title">Vibration</string>
     <string name="settings_ringtone_title">Sound</string>
     <string name="settings_ringtone_none">None</string>
@@ -284,7 +295,8 @@
     </plurals>
     <string name="settings_long_as_mms_title">Send long messages as MMS</string>
     <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
-    <string name="settings_mms_size_title">Auto-compress MMS attachments</string>
+    <string name="settings_mms_size_title">Auto-compress MMS image attachments</string>
+    <string name="settings_mms_weblink_title">Link handling in messages</string>
     <string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
     <string name="settings_about_title">About QUIK</string>
@@ -494,6 +506,18 @@
         <item>0</item>
     </integer-array>
 
+    <string-array name="messageLinkHandlings">
+        <item>Block</item>
+        <item>Allow</item>
+        <item>Ask before opening</item>
+    </string-array>
+
+    <integer-array name="messageLinkHandling_ids">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
+
     <string-array name="qk_responses">
         <item>Okay</item>
         <item>Give me a moment</item>
@@ -510,4 +534,8 @@
     </string-array>
     <string name="speak_no_messages">No Messages</string>
     <string name="speak_unseen_messages">Speak unseen messages</string>
+    <string name="messageLinkHandling_dialog_title">External Link Warning</string>
+    <string name="messageLinkHandling_dialog_body">Some links may be unsafe or redirect you unexpectedly. Review the link below before proceeding:\n\n%1$s\n\nDo you want to continue?</string>
+    <string name="messageLinkHandling_dialog_positive">Yes, open the link</string>
+    <string name="messageLinkHandling_dialog_negative">No</string>
 </resources>

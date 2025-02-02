@@ -25,7 +25,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -65,14 +64,7 @@ import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort
-import okio.buffer
-import okio.source
 import timber.log.Timber
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -189,9 +181,9 @@ class MessageRepositoryImpl @Inject constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             values.put(MediaStore.MediaColumns.IS_PENDING, 1)
             values.put(MediaStore.MediaColumns.RELATIVE_PATH, when {
-                part.isImage() -> "${Environment.DIRECTORY_PICTURES}/QKSMS"
-                part.isVideo() -> "${Environment.DIRECTORY_MOVIES}/QKSMS"
-                else -> "${Environment.DIRECTORY_DOWNLOADS}/QKSMS"
+                part.isImage() -> "${Environment.DIRECTORY_PICTURES}/QUIK"
+                part.isVideo() -> "${Environment.DIRECTORY_MOVIES}/QUIK"
+                else -> "${Environment.DIRECTORY_DOWNLOADS}/QUIK"
             })
         }
 
@@ -376,27 +368,37 @@ class MessageRepositoryImpl @Inject constructor(
                 parts += MMSPart("text", ContentType.TEXT_PLAIN, bytes)
             }
 
-            // Attach contacts
+            // Attach those that can't be compressed (ie. everything but not images)
             parts += attachments
-                    .mapNotNull { attachment -> attachment as? Attachment.Contact }
-                    .map { attachment -> attachment.vCard.toByteArray() }
-                    .map { vCard ->
-                        remainingBytes -= vCard.size
-                        MMSPart("contact", ContentType.TEXT_VCARD, vCard)
-                    }
+                // filter out images
+                .filter { !it.isImage(context) }
+                // filter out items that have no data available (ie user may have deleted
+                // the file from storage)
+                .filter { it.getResourceBytes(context).isNotEmpty() }
+                .map {
+                    remainingBytes -= it.getResourceBytes(context).size
+                    MMSPart(
+                        it.getName(context),
+                        it.getType(context),
+                        it.getResourceBytes(context)
+                    )
+                }
 
             val imageBytesByAttachment = attachments
-                    .mapNotNull { attachment -> attachment as? Attachment.Image }
-                    .associateWith { attachment ->
-                        val uri = attachment.getUri() ?: return@associateWith byteArrayOf()
-                        when (attachment.isGif(context)) {
-                            true -> ImageUtils.getScaledGif(context, uri, maxWidth, maxHeight)
-                            false -> ImageUtils.getScaledImage(context, uri, maxWidth, maxHeight)
-                        }
+                // filter out non-images
+                .filter { it.isImage(context) }
+                // filter out items that have no data available (ie user may have deleted
+                // the file from storage)
+                .filter { it.getResourceBytes(context).isNotEmpty() }
+                .associateWith {
+                    when (it.getType(context) == "image/gif") {
+                        true -> ImageUtils.getScaledGif(context, it.getUri(), maxWidth, maxHeight)
+                        false -> ImageUtils.getScaledImage(context, it.getUri(), maxWidth, maxHeight)
                     }
-                    .toMutableMap()
+                }
+                .toMutableMap()
 
-            val imageByteCount = imageBytesByAttachment.values.sumBy { byteArray -> byteArray.size }
+            val imageByteCount = imageBytesByAttachment.values.sumOf { it.size }
             if (imageByteCount > remainingBytes) {
                 imageBytesByAttachment.forEach { (attachment, originalBytes) ->
                     val uri = attachment.getUri() ?: return@forEach
@@ -426,9 +428,9 @@ class MessageRepositoryImpl @Inject constructor(
                         val newHeight = (newWidth / aspectRatio).toInt()
 
                         attempts++
-                        scaledBytes = when (attachment.isGif(context)) {
-                            true -> ImageUtils.getScaledGif(context, uri, newWidth, newHeight, 80)
-                            false -> ImageUtils.getScaledImage(context, uri, newWidth, newHeight, 80)
+                        scaledBytes = when (attachment.getType(context) == "image/gif") {
+                            true -> ImageUtils.getScaledGif(context, attachment.getUri(), newWidth, newHeight)
+                            false -> ImageUtils.getScaledImage(context, attachment.getUri(), newWidth, newHeight)
                         }
 
                         Timber.d("Compression attempt $attempts: ${scaledBytes.size / 1024}/${maxBytes.toInt() / 1024}Kb ($width*$height -> $newWidth*$newHeight)")
@@ -440,7 +442,7 @@ class MessageRepositoryImpl @Inject constructor(
             }
 
             imageBytesByAttachment.forEach { (attachment, bytes) ->
-                parts += when (attachment.isGif(context)) {
+                parts += when (attachment.getType(context) == "image/gif") {
                     true -> MMSPart("image", ContentType.IMAGE_GIF, bytes)
                     false -> MMSPart("image", ContentType.IMAGE_JPEG, bytes)
                 }

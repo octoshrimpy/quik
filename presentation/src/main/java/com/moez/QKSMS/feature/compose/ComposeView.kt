@@ -29,6 +29,15 @@ import io.reactivex.subjects.Subject
 
 interface ComposeView : QkView<ComposeState> {
 
+    companion object {
+        const val SelectContactRequestCode = 0
+        const val TakePhotoRequestCode = 1
+        const val AttachAFileRequestCode = 4
+        const val AttachContactRequestCode = 3
+
+        const val CameraDestinationKey = "camera_destination"
+    }
+
     val activityVisibleIntent: Observable<Boolean>
     val chipsSelectedIntent: Subject<HashMap<String, String?>>
     val chipDeletedIntent: Subject<Recipient>
@@ -39,14 +48,17 @@ interface ComposeView : QkView<ComposeState> {
     val messagePartClickIntent: Subject<Long>
     val messagesSelectedIntent: Observable<List<Long>>
     val cancelSendingIntent: Subject<Long>
+    val sendNowIntent: Subject<Long>
     val attachmentDeletedIntent: Subject<Attachment>
     val textChangedIntent: Observable<CharSequence>
     val attachIntent: Observable<Unit>
     val cameraIntent: Observable<*>
-    val galleryIntent: Observable<*>
+    val attachAnyFileIntent: Observable<*>
+    val attachImageFileIntent: Observable<*>
     val scheduleIntent: Observable<*>
+    val scheduleAction: Observable<*>
     val attachContactIntent: Observable<*>
-    val attachmentSelectedIntent: Observable<Uri>
+    val attachAnyFileSelectedIntent: Observable<Uri>
     val contactSelectedIntent: Observable<Uri>
     val inputContentIntent: Observable<InputContentInfoCompat>
     val scheduleSelectedIntent: Observable<Long>
@@ -56,11 +68,13 @@ interface ComposeView : QkView<ComposeState> {
     val viewQksmsPlusIntent: Subject<Unit>
     val backPressedIntent: Observable<Unit>
     val confirmDeleteIntent: Observable<List<Long>>
+    val messageLinkAskIntent: Observable<Uri>
 
     fun clearSelection()
     fun toggleSelectAll()
     fun expandMessages(messageIds: List<Long>, expand: Boolean)
     fun showDetails(details: String)
+    fun showMessageLinkAskDialog(uri: Uri)
     fun requestDefaultSms()
     fun requestStoragePermission()
     fun requestSmsPermission()
@@ -68,7 +82,7 @@ interface ComposeView : QkView<ComposeState> {
     fun themeChanged()
     fun showKeyboard()
     fun requestCamera()
-    fun requestGallery()
+    fun requestGallery(mimeType: String, requestCode: Int)
     fun requestDatePicker()
     fun requestContact()
     fun setDraft(draft: String)

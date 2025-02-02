@@ -37,7 +37,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/backgrounds/scenic[0]" />
+
+        <TextView
+            android:id="@+id/fileName"
+            style="@style/TextPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ddffffff"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </FrameLayout>
 

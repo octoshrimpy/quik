@@ -53,20 +53,29 @@ fun EditText.hideKeyboard() {
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
-fun ImageView.setTint(color: Int) {
-    imageTintList = ColorStateList.valueOf(color)
+fun ImageView.setTint(color: Int?) {
+    imageTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
 }
 
-fun ProgressBar.setTint(color: Int) {
-    indeterminateTintList = ColorStateList.valueOf(color)
-    progressTintList = ColorStateList.valueOf(color)
+fun ProgressBar.setTint(color: Int?) {
+    indeterminateTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
+    progressTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
+
 }
 
-fun View.setBackgroundTint(color: Int) {
+fun View.setBackgroundTint(color: Int?) {
 
     // API 21 doesn't support this
 
-    backgroundTintList = ColorStateList.valueOf(color)
+    backgroundTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
 }
 
 fun View.setPadding(left: Int? = null, top: Int? = null, right: Int? = null, bottom: Int? = null) {
@@ -83,55 +92,67 @@ fun View.setVisible(visible: Boolean, invisible: Int = View.GONE) {
  * the view no longer work. Also problematic when we try to long press on an image in the message
  * view
  */
-fun View.forwardTouches(parent: View) {
-    var isLongClick = false
-    var textInitiallySelectable = false
-    if (this@forwardTouches is TextView)
-        textInitiallySelectable = this@forwardTouches.isTextSelectable
+
+class CancelableSimpleOnGestureListener(view: View, parentView: View) : SimpleOnGestureListener() {
+    private var lastUpEvent: MotionEvent? = null
+    private val parent = parentView
+    private val thisView = view
+    private var textInitiallySelectable = false
+
+    init {
+        if (thisView is TextView)
+            textInitiallySelectable = thisView.isTextSelectable
+    }
+
+    fun cancelCurrentClick() {
+        lastUpEvent?.recycle()
+        lastUpEvent = null
+    }
+
+    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+        if (lastUpEvent !== null) {
+            parent.onTouchEvent(e)
+            parent.onTouchEvent(lastUpEvent)
+            lastUpEvent?.recycle()
+            lastUpEvent = null
+        }
+        return true
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        lastUpEvent = MotionEvent.obtain(e)
+        thisView.onTouchEvent(e)
+        return true
+    }
+
+    override fun onDown(e: MotionEvent): Boolean {
+        thisView.onTouchEvent(e)
+        return true
+    }
+
+    override fun onLongPress(e: MotionEvent) {
+        parent.onTouchEvent(e)
+        // this is kinda odd but we have to 'bounce' the text selectable value so it doesn't
+        // start selecting text on a long press, but will start selecting it on the next double-tap
+        if (thisView is TextView) {
+            thisView.setTextIsSelectable(false)
+            thisView.setTextIsSelectable(textInitiallySelectable)
+        }
+    }
+}
+
+fun View.forwardTouches(parent: View): CancelableSimpleOnGestureListener {
+    val gestureListener = CancelableSimpleOnGestureListener(this, parent)
 
     setOnTouchListener(object : OnTouchListener {
-        private val gestureDetector =
-            GestureDetector(parent.context, object : SimpleOnGestureListener() {
-                private var lastUpEvent: MotionEvent? = null
-
-                override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                    parent.onTouchEvent(e)
-                    if (lastUpEvent !== null) {
-                        parent.onTouchEvent(lastUpEvent)
-                        lastUpEvent?.recycle()
-                        lastUpEvent = null
-                    }
-                    return true
-                }
-
-                override fun onSingleTapUp(e: MotionEvent): Boolean {
-                    onTouchEvent(e)
-                    lastUpEvent = MotionEvent.obtain(e)
-                    return true
-                }
-
-                override fun onDown(e: MotionEvent): Boolean {
-                    isLongClick = false
-                    onTouchEvent(e)
-                    return true
-                }
-
-                override fun onLongPress(e: MotionEvent) {
-                    parent.onTouchEvent(e)
-                    isLongClick = true
-                    // this is kinda odd but we have to 'bounce' the text selectable value so it doesn't
-                    // start selecting text on a long press, but will start selecting it on the next double-tap
-                    if (this@forwardTouches is TextView) {
-                        (this@forwardTouches as TextView).setTextIsSelectable(false)
-                        (this@forwardTouches as TextView).setTextIsSelectable(textInitiallySelectable)
-                    }
-                }
-            })
+        val gestureDetector = GestureDetector(parent.context, gestureListener)
 
         override fun onTouch(v: View, e: MotionEvent): Boolean {
             return gestureDetector.onTouchEvent(e)
         }
     })
+
+    return gestureListener
 }
 
 fun ViewPager.addOnPageChangeListener(listener: (Int) -> Unit) {

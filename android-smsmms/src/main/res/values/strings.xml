@@ -20,6 +20,7 @@ limitations under the License.
     <string name="invalid_destination">Invalid destination address.</string>
     <string name="service_not_activated">Service not activated on network.</string>
     <string name="service_message_not_found">Message expired or not available.</string>
+    <string name="service_message_content_not_accepted">Message content is not accepted.</string>
     <string name="service_network_problem">Couldn\'t send due to network problem.</string>
     <string name="message_queued">Currently can\'t send your message. It will be sent when the service becomes available.</string>
     <string name="download_later">Can\'t download right now. Try again later.</string>

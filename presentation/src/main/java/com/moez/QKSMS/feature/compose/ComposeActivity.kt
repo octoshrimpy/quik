@@ -43,6 +43,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -71,25 +72,18 @@ import dev.octoshrimpy.quik.feature.contacts.ContactsActivity
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.*
 import kotlinx.android.synthetic.main.main_activity.toolbar
+import kotlinx.coroutines.reactive.publish
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 
 class ComposeActivity : QkThemedActivity(), ComposeView {
-
-    companion object {
-        private const val SelectContactRequestCode = 0
-        private const val TakePhotoRequestCode = 1
-        private const val AttachPhotoRequestCode = 2
-        private const val AttachContactRequestCode = 3
-
-        private const val CameraDestinationKey = "camera_destination"
-    }
 
     @Inject lateinit var attachmentAdapter: AttachmentAdapter
     @Inject lateinit var chipsAdapter: ChipsAdapter
@@ -103,19 +97,22 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val chipDeletedIntent: Subject<Recipient> by lazy { chipsAdapter.chipDeleted }
     override val menuReadyIntent: Observable<Unit> = menu.map { Unit }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
+    override val scheduleAction: Subject<Boolean> = PublishSubject.create()
     override val sendAsGroupIntent by lazy { sendAsGroupBackground.clicks() }
     override val messageClickIntent: Subject<Long> by lazy { messageAdapter.clicks }
     override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
     override val messagesSelectedIntent by lazy { messageAdapter.selectionChanges }
     override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSending }
+    override val sendNowIntent: Subject<Long> by lazy { messageAdapter.sendNow }
     override val attachmentDeletedIntent: Subject<Attachment> by lazy { attachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
     override val attachIntent by lazy { Observable.merge(attach.clicks(), attachingBackground.clicks()) }
     override val cameraIntent by lazy { Observable.merge(camera.clicks(), cameraLabel.clicks()) }
-    override val galleryIntent by lazy { Observable.merge(gallery.clicks(), galleryLabel.clicks()) }
+    override val attachImageFileIntent by lazy { Observable.merge(gallery.clicks(), galleryLabel.clicks()) }
+    override val attachAnyFileIntent by lazy { Observable.merge(attachAFileIcon.clicks(), attachAFileLabel.clicks()) }
     override val scheduleIntent by lazy { Observable.merge(schedule.clicks(), scheduleLabel.clicks()) }
     override val attachContactIntent by lazy { Observable.merge(contact.clicks(), contactLabel.clicks()) }
-    override val attachmentSelectedIntent: Subject<Uri> = PublishSubject.create()
+    override val attachAnyFileSelectedIntent: Subject<Uri> = PublishSubject.create()
     override val contactSelectedIntent: Subject<Uri> = PublishSubject.create()
     override val inputContentIntent by lazy { message.inputContentSelected }
     override val scheduleSelectedIntent: Subject<Long> = PublishSubject.create()
@@ -125,6 +122,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
+    override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
@@ -330,6 +328,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             )
             constraintSet.applyTo(constraintLayout)
         }
+
+        // if scheduling mode is set, show schedule dialog
+        if (state.scheduling)
+            scheduleAction.onNext(true)
     }
 
     override fun clearSelection() = messageAdapter.clearSelection()
@@ -348,6 +350,23 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .setMessage(details)
                 .setCancelable(true)
                 .show()
+    }
+
+    override fun showMessageLinkAskDialog(uri: Uri) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.messageLinkHandling_dialog_title)
+            .setMessage(getString(R.string.messageLinkHandling_dialog_body, uri.toString()))
+            .setPositiveButton(
+                R.string.messageLinkHandling_dialog_positive
+            ) { _, _ ->
+                ContextCompat.startActivity(
+                    this,
+                    Intent(Intent.ACTION_VIEW).setData(uri),
+                    null
+                )
+            }
+            .setNegativeButton(R.string.messageLinkHandling_dialog_negative) { _, _ -> { } }
+            .show()
     }
 
     override fun requestDefaultSms() {
@@ -386,7 +405,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         val intent = Intent(Intent.ACTION_PICK)
                 .setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE)
 
-        startActivityForResult(Intent.createChooser(intent, null), AttachContactRequestCode)
+        startActivityForResult(Intent.createChooser(intent, null), ComposeView.AttachContactRequestCode)
     }
 
     override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
@@ -395,7 +414,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         val intent = Intent(this, ContactsActivity::class.java)
                 .putExtra(ContactsActivity.SharingKey, sharing)
                 .putExtra(ContactsActivity.ChipsKey, serialized)
-        startActivityForResult(intent, SelectContactRequestCode)
+        startActivityForResult(intent, ComposeView.SelectContactRequestCode)
     }
 
     override fun themeChanged() {
@@ -415,17 +434,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
-        startActivityForResult(Intent.createChooser(intent, null), TakePhotoRequestCode)
+        startActivityForResult(Intent.createChooser(intent, null), ComposeView.TakePhotoRequestCode)
     }
 
-    override fun requestGallery() {
+    override fun requestGallery(mimeType: String, requestCode: Int) {
         val intent = Intent(Intent.ACTION_PICK)
                 .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
                 .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                .setType("image/*")
-        startActivityForResult(Intent.createChooser(intent, null), AttachPhotoRequestCode)
+                .setType(mimeType)
+        startActivityForResult(Intent.createChooser(intent, null), requestCode)
     }
 
     override fun setDraft(draft: String) {
@@ -473,36 +492,43 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when {
-            requestCode == SelectContactRequestCode -> {
+        if (resultCode != Activity.RESULT_OK)
+            return
+
+        when (requestCode) {
+            ComposeView.SelectContactRequestCode -> {
                 chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.ChipsKey)
                         ?.let { serializable -> serializable as? HashMap<String, String?> }
                         ?: hashMapOf())
             }
-            requestCode == TakePhotoRequestCode && resultCode == Activity.RESULT_OK -> {
-                cameraDestination?.let(attachmentSelectedIntent::onNext)
+
+            ComposeView.TakePhotoRequestCode -> {
+                cameraDestination?.let(attachAnyFileSelectedIntent::onNext)
             }
-            requestCode == AttachPhotoRequestCode && resultCode == Activity.RESULT_OK -> {
+
+            ComposeView.AttachAFileRequestCode -> {
                 data?.clipData?.itemCount
-                        ?.let { count -> 0 until count }
-                        ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
-                        ?.forEach(attachmentSelectedIntent::onNext)
-                        ?: data?.data?.let(attachmentSelectedIntent::onNext)
+                    ?.let { count -> 0 until count }
+                    ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
+                    ?.forEach(attachAnyFileSelectedIntent::onNext)
+                    ?: data?.data?.let(attachAnyFileSelectedIntent::onNext)
             }
-            requestCode == AttachContactRequestCode && resultCode == Activity.RESULT_OK -> {
+
+            ComposeView.AttachContactRequestCode -> {
                 data?.data?.let(contactSelectedIntent::onNext)
             }
+
             else -> super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(CameraDestinationKey, cameraDestination)
+        outState.putParcelable(ComposeView.CameraDestinationKey, cameraDestination)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        cameraDestination = savedInstanceState.getParcelable(CameraDestinationKey)
+        cameraDestination = savedInstanceState.getParcelable(ComposeView.CameraDestinationKey)
         super.onRestoreInstanceState(savedInstanceState)
     }
 
