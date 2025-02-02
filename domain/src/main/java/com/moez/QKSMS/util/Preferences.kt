@@ -80,6 +80,10 @@ class Preferences @Inject constructor(
         const val BLOCKING_MANAGER_CC = 1
         const val BLOCKING_MANAGER_SIA = 2
         const val BLOCKING_MANAGER_CB = 3
+
+        const val MESSAGE_LINK_HANDLING_BLOCK = 0
+        const val MESSAGE_LINK_HANDLING_ALLOW = 1
+        const val MESSAGE_LINK_HANDLING_ASK = 2
     }
 
     // Internal
@@ -124,6 +128,7 @@ class Preferences @Inject constructor(
     val autoDelete = rxPrefs.getInteger("autoDelete", 0)
     val longAsMms = rxPrefs.getBoolean("longAsMms", false)
     val mmsSize = rxPrefs.getInteger("mmsSize", 300)
+    val messageLinkHandling = rxPrefs.getInteger("messageLinkHandling", MESSAGE_LINK_HANDLING_ASK)
     val logging = rxPrefs.getBoolean("logging", false)
     val unreadAtTop = rxPrefs.getBoolean("unreadAtTop", false)
 

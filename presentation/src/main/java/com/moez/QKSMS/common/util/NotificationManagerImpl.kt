@@ -206,6 +206,12 @@ class NotificationManagerImpl @Inject constructor(
             }
         }
 
+        // remove system generated contextual actions (they're generated from message links) unless
+        // the user has explicitly set to allow message links
+        notification.setAllowSystemGeneratedContextualActions(
+            (prefs.messageLinkHandling.get() == Preferences.MESSAGE_LINK_HANDLING_ALLOW)
+        )
+
         // Set the large icon
         val avatar = conversation.recipients.takeIf { it.size == 1 }
                 ?.first()?.contact?.photoUri

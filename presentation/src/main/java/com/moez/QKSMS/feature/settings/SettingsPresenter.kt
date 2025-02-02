@@ -138,6 +138,19 @@ class SettingsPresenter @Inject constructor(
                     newState { copy(maxMmsSizeSummary = mmsSizeLabels[index], maxMmsSizeId = maxMmsSize) }
                 }
 
+        val messageLinkHandlingLabels = context.resources.getStringArray(R.array.messageLinkHandlings)
+        val messageLinkHandlingIds = context.resources.getIntArray(R.array.messageLinkHandling_ids)
+        disposables += prefs.messageLinkHandling.asObservable()
+            .subscribe { messageLinkHandlingId ->
+                val index = messageLinkHandlingIds.indexOf(messageLinkHandlingId)
+                newState {
+                    copy(
+                        messageLinkHandlingSummary = messageLinkHandlingLabels[index],
+                        messageLinkHandlingId = messageLinkHandlingId
+                    )
+                }
+            }
+
         disposables += syncRepo.syncProgress
                 .sample(16, TimeUnit.MILLISECONDS)
                 .distinctUntilChanged()
@@ -203,6 +216,8 @@ class SettingsPresenter @Inject constructor(
                         R.id.longAsMms -> prefs.longAsMms.set(!prefs.longAsMms.get())
 
                         R.id.mmsSize -> view.showMmsSizePicker()
+
+                        R.id.messsageLinkHandling -> view.showMessageLinkHandlingDialogPicker()
 
                         R.id.sync -> syncMessages.execute(Unit)
 
@@ -294,6 +309,10 @@ class SettingsPresenter @Inject constructor(
         view.mmsSizeSelected()
                 .autoDisposable(view.scope())
                 .subscribe(prefs.mmsSize::set)
+
+        view.messageLinkHandlingSelected()
+            .autoDisposable(view.scope())
+            .subscribe(prefs.messageLinkHandling::set)
     }
 
 }

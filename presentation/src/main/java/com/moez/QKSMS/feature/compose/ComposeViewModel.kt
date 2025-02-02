@@ -513,6 +513,11 @@ class ComposeViewModel @Inject constructor(
                     )
                 }
 
+        // Show the message details
+        view.messageLinkAskIntent
+            .autoDisposable(view.scope())
+            .subscribe { view.showMessageLinkAskDialog(it) }
+
         // Set the current conversation
         Observables
                 .combineLatest(

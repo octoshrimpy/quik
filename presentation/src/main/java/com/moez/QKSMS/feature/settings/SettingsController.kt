@@ -41,7 +41,6 @@ import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.widget.PreferenceView
-import dev.octoshrimpy.quik.common.widget.QkSwitch
 import dev.octoshrimpy.quik.common.widget.TextInputDialog
 import dev.octoshrimpy.quik.feature.settings.about.AboutController
 import dev.octoshrimpy.quik.feature.settings.autodelete.AutoDeleteDialog
@@ -73,6 +72,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     @Inject lateinit var textSizeDialog: QkDialog
     @Inject lateinit var sendDelayDialog: QkDialog
     @Inject lateinit var mmsSizeDialog: QkDialog
+    @Inject lateinit var messageLinkHandlingDialog: QkDialog
 
     @Inject override lateinit var presenter: SettingsPresenter
 
@@ -113,6 +113,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
         textSizeDialog.adapter.setData(R.array.text_sizes)
         sendDelayDialog.adapter.setData(R.array.delayed_sending_labels)
         mmsSizeDialog.adapter.setData(R.array.mms_sizes, R.array.mms_sizes_ids)
+        messageLinkHandlingDialog.adapter.setData(R.array.messageLinkHandlings, R.array.messageLinkHandling_ids)
 
         about.summary = context.getString(R.string.settings_version, BuildConfig.VERSION_NAME)
     }
@@ -149,6 +150,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun autoDeleteChanged(): Observable<Int> = autoDeleteSubject
 
     override fun mmsSizeSelected(): Observable<Int> = mmsSizeDialog.adapter.menuItemClicks
+
+    override fun messageLinkHandlingSelected(): Observable<Int> = messageLinkHandlingDialog.adapter.menuItemClicks
 
     override fun render(state: SettingsState) {
         themePreview.setBackgroundTint(state.theme)
@@ -194,6 +197,9 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         mmsSize.summary = state.maxMmsSizeSummary
         mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
+
+        messsageLinkHandling.summary = state.messageLinkHandlingSummary
+        messageLinkHandlingDialog.adapter.selectedItem = state.messageLinkHandlingId
 
         when (state.syncProgress) {
             is SyncRepository.SyncProgress.Idle -> syncingProgress.isVisible = false
@@ -253,6 +259,8 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     }
 
     override fun showMmsSizePicker() = mmsSizeDialog.show(activity!!)
+
+    override fun showMessageLinkHandlingDialogPicker() = messageLinkHandlingDialog.show(activity!!)
 
     override fun showSwipeActions() {
         router.pushController(RouterTransaction.with(SwipeActionsController())

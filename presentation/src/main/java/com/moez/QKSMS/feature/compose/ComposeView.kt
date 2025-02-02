@@ -68,11 +68,13 @@ interface ComposeView : QkView<ComposeState> {
     val viewQksmsPlusIntent: Subject<Unit>
     val backPressedIntent: Observable<Unit>
     val confirmDeleteIntent: Observable<List<Long>>
+    val messageLinkAskIntent: Observable<Uri>
 
     fun clearSelection()
     fun toggleSelectAll()
     fun expandMessages(messageIds: List<Long>, expand: Boolean)
     fun showDetails(details: String)
+    fun showMessageLinkAskDialog(uri: Uri)
     fun requestDefaultSms()
     fun requestStoragePermission()
     fun requestSmsPermission()
