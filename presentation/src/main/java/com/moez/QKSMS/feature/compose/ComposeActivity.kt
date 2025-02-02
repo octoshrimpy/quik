@@ -43,6 +43,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -121,6 +122,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
+    override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
@@ -348,6 +350,23 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .setMessage(details)
                 .setCancelable(true)
                 .show()
+    }
+
+    override fun showMessageLinkAskDialog(uri: Uri) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.messageLinkHandling_dialog_title)
+            .setMessage(getString(R.string.messageLinkHandling_dialog_body, uri.toString()))
+            .setPositiveButton(
+                R.string.messageLinkHandling_dialog_positive
+            ) { _, _ ->
+                ContextCompat.startActivity(
+                    this,
+                    Intent(Intent.ACTION_VIEW).setData(uri),
+                    null
+                )
+            }
+            .setNegativeButton(R.string.messageLinkHandling_dialog_negative) { _, _ -> { } }
+            .show()
     }
 
     override fun requestDefaultSms() {

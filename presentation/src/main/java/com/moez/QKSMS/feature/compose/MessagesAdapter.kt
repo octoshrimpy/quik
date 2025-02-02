@@ -21,17 +21,21 @@ package dev.octoshrimpy.quik.feature.compose
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
-import android.os.Build
+import android.net.Uri
 import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.StyleSpan
+import android.text.style.URLSpan
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
-import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.common.QkMediaPlayer
 import dev.octoshrimpy.quik.R
@@ -107,6 +111,7 @@ class MessagesAdapter @Inject constructor(
 
     val clicks: Subject<Long> = PublishSubject.create()
     val partClicks: Subject<Long> = PublishSubject.create()
+    val messageLinkClicks: Subject<Uri> = PublishSubject.create()
     val cancelSending: Subject<Long> = PublishSubject.create()
     val sendNow: Subject<Long> = PublishSubject.create()
 
@@ -170,7 +175,6 @@ class MessagesAdapter @Inject constructor(
         val partsAdapter = partsAdapterProvider.get()
         partsAdapter.clicks.subscribe(partClicks)
         view.attachments.adapter = partsAdapter
-        view.body.forwardTouches(view)
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
@@ -240,6 +244,8 @@ class MessagesAdapter @Inject constructor(
             }
         }
 
+        val cancelableSimpleOnGestureListener = holder.body.forwardTouches(holder.containerView)
+
         // Bind the message status
         bindStatus(holder, message, next)
 
@@ -297,8 +303,47 @@ class MessagesAdapter @Inject constructor(
             false -> TextViewStyler.SIZE_PRIMARY
         })
 
-        holder.body.text = messageText
-        holder.body.setVisible(message.isSms() || messageText.isNotBlank())
+        val spanString = SpannableStringBuilder(messageText)
+
+        when (prefs.messageLinkHandling.get()) {
+            Preferences.MESSAGE_LINK_HANDLING_BLOCK -> holder.body.autoLinkMask = 0
+            Preferences.MESSAGE_LINK_HANDLING_ASK -> {
+                //  manually handle link clicks if user has set to ask before opening links
+                holder.body.isClickable = false
+                holder.body.linksClickable = false
+                holder.body.movementMethod = LinkMovementMethod.getInstance()
+
+                Linkify.addLinks(spanString, holder.body.autoLinkMask)
+
+                for (span in spanString.getSpans(
+                    0,
+                    spanString.length,
+                    URLSpan::class.java)
+                ) {
+                    // set handler for when user touches a link into new span
+                    spanString.setSpan(
+                        object : ClickableSpan() {
+                            override fun onClick(widget: View) {
+                                messageLinkClicks.onNext(Uri.parse(span.url))
+
+                                // interrupt the upcoming click event on the body view
+                                cancelableSimpleOnGestureListener.cancelCurrentClick()
+                            }
+                        },
+                        spanString.getSpanStart(span),
+                        spanString.getSpanEnd(span),
+                        spanString.getSpanFlags(span)
+                    )
+
+                    // remove original span
+                    spanString.removeSpan(span)
+                }
+            }
+        }
+
+        holder.body.text = spanString
+        holder.body.setVisible(message.isSms() || spanString.isNotBlank())
+
         holder.body.setBackgroundResource(getBubble(
                 emojiOnly = emojiOnly,
                 canGroupWithPrevious = canGroup(message, previous) || media.isNotEmpty(),
