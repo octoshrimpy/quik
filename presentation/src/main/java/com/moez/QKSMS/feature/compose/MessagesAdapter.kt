@@ -339,6 +339,7 @@ class MessagesAdapter @Inject constructor(
                     spanString.removeSpan(span)
                 }
             }
+            else -> holder.body.movementMethod = LinkMovementMethod.getInstance()
         }
 
         holder.body.text = spanString
