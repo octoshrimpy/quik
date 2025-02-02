@@ -430,7 +430,7 @@
     <string name="button_undo">Annuler</string>
   
     <string name="toast_copied">Copié</string>
-    <string name="toast_archived">Conversation archivée</string>
+    <plurals name="toast_archived">
         <item quantity="one">Conversation archivée</item>
         <item quantity="other">%d Conversations archivées</item>
     </plurals>
