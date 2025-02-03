@@ -18,12 +18,17 @@
  */
 package dev.octoshrimpy.quik.model
 
+import android.content.ContentResolver
+import android.content.ContentResolver.MimeTypeInfo
+import android.net.Uri
+import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 import io.realm.annotations.PrimaryKey
+import java.io.File
 
 open class MmsPart : RealmObject() {
 
@@ -37,13 +42,23 @@ open class MmsPart : RealmObject() {
     @LinkingObjects("parts")
     val messages: RealmResults<Message>? = null
 
-    fun getUri() = "content://mms/part/$id".toUri()
+    fun getUri(): Uri = Uri
+        .Builder()
+        .scheme(ContentResolver.SCHEME_CONTENT)
+        .authority("mms")
+        .encodedPath("part/$id")
+        .build()
+
+    fun getBestFilename(): String =
+        if (File(name).extension.isNotEmpty()) name ?: "unknown"
+        else "$name." + (MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+            ?: type.substringAfter("/"))
 
     fun getSummary(): String? = when {
         type == "application/smil" -> null
         type == "text/plain" -> text
         type == "text/x-vcard" -> "Contact card"
-        type.startsWith("image") -> "Photo"
+        type.startsWith("image") -> "Picture"
         type.startsWith("video") -> "Video"
         type.startsWith("audio") -> "Audio"
         else -> type.substring(type.indexOf('/') + 1)

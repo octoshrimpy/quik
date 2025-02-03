@@ -25,7 +25,9 @@ import android.media.MediaMetadataRetriever
 import android.view.View
 import android.widget.SeekBar
 import com.moez.QKSMS.common.QkMediaPlayer
+import com.moez.QKSMS.contentproviders.MmsPartProvider
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
@@ -48,6 +50,12 @@ import javax.inject.Inject
 
 class AudioBinder @Inject constructor(colors: Colors, private val context: Context) :
     PartBinder() {
+
+    companion object {
+        const val DEFAULT_SHARE_FILENAME = "quik-audio-attachment.mp3"
+    }
+
+    @Inject lateinit var navigator: Navigator
 
     override val partLayout = R.layout.mms_audio_preview_list_item
     override var theme = colors.theme()
@@ -169,7 +177,13 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
             }
         }
 
-        holder.containerView.setOnClickListener { clicks.onNext(part.id) }
+        // share button click handling
+        holder.share.setOnClickListener {
+            navigator.shareFile(
+                MmsPartProvider.getUriForMmsPartId(part.id, part.getBestFilename()),
+                part.type
+            )
+        }
 
         // if this item is the active active audio item update the active view holder
         if (audioState.partId == part.id)
@@ -223,6 +237,10 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
             setTint(secondaryColor)
             setBackgroundTint(primaryColor)
         }
+
+        // share button
+        holder.share.setTint(secondaryColor)
+        holder.share.setBackgroundTint(primaryColor)
 
         MediaMetadataRetriever().use {
             it.setDataSource(context, part.getUri())
