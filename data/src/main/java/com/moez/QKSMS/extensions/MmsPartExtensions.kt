@@ -21,14 +21,14 @@ package dev.octoshrimpy.quik.extensions
 import com.google.android.mms.ContentType
 import dev.octoshrimpy.quik.model.MmsPart
 
-fun MmsPart.isSmil() = ContentType.APP_SMIL == type
+fun MmsPart.isSmil() = ContentType.APP_SMIL.lowercase() == type.lowercase()
 
-fun MmsPart.isImage() = ContentType.isImageType(type)
+fun MmsPart.isImage() = ContentType.isImageType(type.lowercase())
 
-fun MmsPart.isVideo() = ContentType.isVideoType(type)
+fun MmsPart.isVideo() = ContentType.isVideoType(type.lowercase())
 
-fun MmsPart.isAudio() = ContentType.isAudioType(type)
+fun MmsPart.isAudio() = ContentType.isAudioType(type.lowercase())
 
-fun MmsPart.isText() = ContentType.TEXT_PLAIN == type
+fun MmsPart.isText() = ContentType.TEXT_PLAIN.lowercase() == type.lowercase()
 
-fun MmsPart.isVCard() = ContentType.TEXT_VCARD == type
+fun MmsPart.isVCard() = ContentType.TEXT_VCARD.lowercase() == type.lowercase()

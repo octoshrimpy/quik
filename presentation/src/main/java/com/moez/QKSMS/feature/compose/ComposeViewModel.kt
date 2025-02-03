@@ -24,6 +24,7 @@ import android.os.Vibrator
 import android.provider.ContactsContract
 import android.telephony.SmsMessage
 import androidx.core.content.getSystemService
+import com.moez.QKSMS.contentproviders.MmsPartProvider
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
@@ -470,12 +471,11 @@ class ComposeViewModel @Inject constructor(
                 .mapNotNull(messageRepo::getPart)
                 .filter { part -> !part.isImage() && !part.isVideo() }
                 .autoDisposable(view.scope())
-                .subscribe { part ->
-                    if (permissionManager.hasStorage()) {
-                        messageRepo.savePart(part.id)?.let { navigator.viewFile(it, part.type) }
-                    } else {
-                        view.requestStoragePermission()
-                    }
+                .subscribe {
+                    navigator.viewFile(
+                        MmsPartProvider.getUriForMmsPartId(it.id, it.getBestFilename()),
+                        it.type
+                    )
                 }
 
         // Update the State when the message selected count changes

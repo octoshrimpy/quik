@@ -53,30 +53,29 @@
         android:progressTint="@color/tools_theme"
         android:thumbTint="@color/tools_theme" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="12dp"
-        android:clipChildren="false"
-        android:orientation="horizontal">
+        android:layout_marginBottom="12dp">
 
         <ImageView
             android:id="@+id/playPause"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_gravity="bottom"
             android:layout_marginStart="12dp"
             android:background="@drawable/circle"
             android:elevation="4dp"
             android:padding="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/exo_icon_play"
             app:tint="@color/tools_theme" />
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
             android:id="@+id/metadataTitle"
             style="@style/TextPrimary"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="12dp"
@@ -91,8 +90,24 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@tools:sample/lorem/random[0]"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/share"
+            app:layout_constraintStart_toEndOf="@id/playPause" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="bottom"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/circle"
+            android:elevation="4dp"
+            android:padding="6dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="?attr/actionModeShareDrawable"
+            app:tint="@color/tools_theme" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -16,4 +16,14 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<manifest />
+<manifest  xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <provider
+            android:name="com.moez.QKSMS.contentproviders.MmsPartProvider"
+            android:authorities="dev.octoshrimpy.quik.mmspart"
+            android:enabled="true"
+            android:exported="false"
+            android:grantUriPermissions="true">
+        </provider>
+    </application>
+</manifest>

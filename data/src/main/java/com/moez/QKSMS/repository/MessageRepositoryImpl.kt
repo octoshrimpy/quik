@@ -443,8 +443,8 @@ class MessageRepositoryImpl @Inject constructor(
 
             imageBytesByAttachment.forEach { (attachment, bytes) ->
                 parts += when (attachment.getType(context) == "image/gif") {
-                    true -> MMSPart("image", ContentType.IMAGE_GIF, bytes)
-                    false -> MMSPart("image", ContentType.IMAGE_JPEG, bytes)
+                    true -> MMSPart(attachment.getName(context), ContentType.IMAGE_GIF, bytes)
+                    false -> MMSPart(attachment.getName(context), ContentType.IMAGE_JPEG, bytes)
                 }
             }
 

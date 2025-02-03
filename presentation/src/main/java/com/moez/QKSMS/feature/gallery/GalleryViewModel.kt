@@ -19,6 +19,7 @@
 package dev.octoshrimpy.quik.feature.gallery
 
 import android.content.Context
+import com.moez.QKSMS.contentproviders.MmsPartProvider
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
@@ -45,6 +46,9 @@ class GalleryViewModel @Inject constructor(
     private val saveImage: SaveImage,
     private val permissions: PermissionManager
 ) : QkViewModel<GalleryView, GalleryState>(GalleryState()) {
+    companion object {
+        const val DEFAULT_SHARE_FILENAME = "quik-media-attachment.jpg"
+    }
 
     init {
         disposables += Flowable.just(partId)
@@ -80,11 +84,13 @@ class GalleryViewModel @Inject constructor(
         // Share image externally
         view.optionsItemSelected()
                 .filter { itemId -> itemId == R.id.share }
-                .filter { permissions.hasStorage().also { if (!it) view.requestStoragePermission() } }
                 .withLatestFrom(view.pageChanged()) { _, part -> part }
                 .autoDisposable(view.scope())
-                .subscribe { part ->
-                    messageRepo.savePart(part.id)?.let { navigator.shareFile(it, part.type) }
+                .subscribe {
+                    navigator.shareFile(
+                        MmsPartProvider.getUriForMmsPartId(it.id, it.getBestFilename()),
+                        it.type
+                    )
                 }
     }
 
