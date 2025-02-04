@@ -1,5 +1,23 @@
 
-[      
+[  
+    {
+        "versionCode": 2227,
+        "versionName": "4.0.10-beta",
+        "added": [
+            "Send delayed sms immediately",
+            "Fully select message backgrounds in compose screen",
+            "Disable auto hyperlink (warn link on press)"
+        ],
+        "fixed": [
+            "Scheduled messages click doesnt schedule",
+            "Fix update Attachment.kt",
+            "Fix 'take a photo' not working",
+            "Fix mms image compression bug not compressing",
+            "Fix bug that disabled download/view of mms attachments",
+            "Fix only images attached to forwarded messages",
+            "Fix strings in French Translation"
+        ]
+    },
     {
     "versionCode": 2226,
     "versionName": "4.0.9",
