@@ -62,9 +62,15 @@ jobs:
       - name: List files in the APK directory
         run: ls -Rla ./
 
+      - name: set release datetime
+        run: |
+          echo "DATETIME=$(date +'%d-%m-%y_$(date +%s)')" >> ${GITHUB_ENV}
+    
       - name: Create and upload release
         uses: softprops/action-gh-release@v1
         with:
+          prerelease: true
+          tag: v${{ env.DATETIME }}
           files: QUIK-noAnalytics-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
