@@ -54,6 +54,19 @@ jobs:
     needs: apk
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Set release datetime
+        run: echo "DATETIME=$(date +'%d-%m-%y_%s')" >> $GITHUB_ENV
+    
+      - name: Create and push tag
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git tag "v${{ env.DATETIME }}"
+          git push origin "v${{ env.DATETIME }}"
+
       - name: Download APK from build
         uses: actions/download-artifact@v4
         with:
@@ -62,24 +75,16 @@ jobs:
       - name: List files in the APK directory
         run: ls -Rla ./
 
-      - name: set release datetime
-        run: |
-          echo "DATETIME=$(date +'%d-%m-%y_$(date +%s)')" >> ${GITHUB_ENV}
-    
       - name: Create and upload release
         uses: softprops/action-gh-release@v1
         with:
           prerelease: true
-          tag: v${{ env.DATETIME }}
+          tag_name: "v${{ env.DATETIME }}"
           files: QUIK-noAnalytics-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Checkout
-        uses: actions/checkout@v3
       
       - name: Validate Fastlane Supply Metadata
         uses: ashutoshgngwr/validate-fastlane-supply-metadata@v2.0.0
         with:
           fastlaneDir: ./metadata 
-    
