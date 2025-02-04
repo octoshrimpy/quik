@@ -1,6 +1,7 @@
 name: Build and Release
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
@@ -43,7 +44,7 @@ jobs:
         run: mv presentation/build/outputs/apk/noAnalytics/release/QUIK-v*-noAnalytics-release.apk presentation/build/outputs/apk/noAnalytics/release/QUIK-noAnalytics-release.apk
       
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: apk
           path: presentation/build/outputs/apk/noAnalytics/release/QUIK-noAnalytics-release.apk
