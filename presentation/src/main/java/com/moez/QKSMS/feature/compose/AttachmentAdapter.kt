@@ -73,8 +73,6 @@ class AttachmentAdapter @Inject constructor(
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val attachment = getItem(position)
 
-        holder.fileName.visibility = View.GONE
-
         if (attachment.isVCard(context)) {
             val displayName = Ezvcard.parse(
                 String(attachment.getResourceBytes(context))
@@ -83,6 +81,8 @@ class AttachmentAdapter @Inject constructor(
             holder.name.isVisible = displayName.isNotEmpty()
             return
         }
+
+        holder.fileName.visibility = View.GONE
 
         // if attachment uri is missing
         if (!attachment.getUri().resourceExists(context)) {
