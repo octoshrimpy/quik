@@ -74,11 +74,19 @@ class AttachmentAdapter @Inject constructor(
         val attachment = getItem(position)
 
         if (attachment.isVCard(context)) {
-            val displayName = Ezvcard.parse(
-                String(attachment.getResourceBytes(context))
-            ).first().getDisplayName() ?: ""
-            holder.name.text = displayName
-            holder.name.isVisible = displayName.isNotEmpty()
+            try {
+                val displayName = Ezvcard.parse(
+                    String(attachment.getResourceBytes(context))
+                ).first().getDisplayName() ?: ""
+                holder.name.text = displayName
+                holder.name.isVisible = displayName.isNotEmpty()
+            } catch (e: Exception) {
+                // npe from Ezvcard first() call above can be thrown if resource bytes cannot
+                // be retrieved from contact resource provider
+                holder.vCardAvatar.setImageResource(android.R.drawable.ic_delete)
+                holder.name.text = context.getString(R.string.attachment_missing)
+                holder.name.isVisible = true
+            }
             return
         }
 
