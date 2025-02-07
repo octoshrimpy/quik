@@ -90,6 +90,8 @@ class AttachmentAdapter @Inject constructor(
             return
         }
 
+        holder.fileName.visibility = View.GONE
+
         // if attachment uri is missing
         if (!attachment.getUri().resourceExists(context)) {
             holder.thumbnail.setImageResource(android.R.drawable.ic_delete)
