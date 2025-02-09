@@ -23,9 +23,9 @@ jobs:
         java-version: '17'
 
     - name: Build with Gradle
-      run: ./gradlew build \
-            -Dandroid.injected.signing.store.file=${{ github.workspace }}/my-release-key.keystore
-
+      run: |
+        ./gradlew build \
+          -Dandroid.injected.signing.store.file=${{ github.workspace }}/my-release-key.keystore
     - name: Run Tests
       run: ./gradlew test
 
