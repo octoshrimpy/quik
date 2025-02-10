@@ -211,49 +211,53 @@ class MessagesAdapter @Inject constructor(
         holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
 
         // Bind the cancelFrame (cancel button) view
-        holder.cancelFrame.let { cancelFrame ->
-            val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
-            cancelFrame.visibility = if (isCancellable) View.VISIBLE else View.GONE
-            cancelFrame.clicks().subscribe { cancelSendingClicks.onNext(message.id) }
-            cancelFrame.cancel.progress = 2
+        if (holder.cancelFrame != null) {
+            holder.cancelFrame.let { cancelFrame ->
+                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
+                cancelFrame.visibility = if (isCancellable) View.VISIBLE else View.GONE
+                cancelFrame.clicks().subscribe { cancelSendingClicks.onNext(message.id) }
+                cancelFrame.cancel.progress = 2
 
-            if (isCancellable) {
-                val delay = when (prefs.sendDelay.get()) {
-                    Preferences.SEND_DELAY_SHORT -> 3000
-                    Preferences.SEND_DELAY_MEDIUM -> 5000
-                    Preferences.SEND_DELAY_LONG -> 10000
-                    else -> 0
+                if (isCancellable) {
+                    val delay = when (prefs.sendDelay.get()) {
+                        Preferences.SEND_DELAY_SHORT -> 3000
+                        Preferences.SEND_DELAY_MEDIUM -> 5000
+                        Preferences.SEND_DELAY_LONG -> 10000
+                        else -> 0
+                    }
+                    val progress =
+                        (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+
+                    ObjectAnimator.ofInt(cancelFrame.cancel, "progress", progress.toInt(), 100)
+                        .setDuration(message.date - System.currentTimeMillis())
+                        .start()
                 }
-                val progress =
-                    (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
-
-                ObjectAnimator.ofInt(cancelFrame.cancel, "progress", progress.toInt(), 100)
-                    .setDuration(message.date - System.currentTimeMillis())
-                    .start()
             }
         }
 
         // bind the send now icon view
-        holder.sendNowIcon.let { sendNowIcon ->
-            if (message.isSending() && message.date > System.currentTimeMillis()) {
-                sendNowIcon.visibility = View.VISIBLE
-                sendNowIcon.clicks().subscribe { sendNowClicks.onNext(message.id) }
+        if (holder.sendNowIcon != null) {
+            holder.sendNowIcon.let { sendNowIcon ->
+                if (message.isSending() && message.date > System.currentTimeMillis()) {
+                    sendNowIcon.visibility = View.VISIBLE
+                    sendNowIcon.clicks().subscribe { sendNowClicks.onNext(message.id) }
+                } else
+                    sendNowIcon.visibility = View.GONE
             }
-            else
-                sendNowIcon.visibility = View.GONE
         }
 
         // bind the resend icon view
-        holder.resendIcon.let { resendIcon ->
-            if (message.isFailedMessage()) {
-                resendIcon.visibility = View.VISIBLE
-                resendIcon.clicks().subscribe {
-                    resendClicks.onNext(message.id)
+        if (holder.resendIcon != null) {
+            holder.resendIcon.let { resendIcon ->
+                if (message.isFailedMessage()) {
+                    resendIcon.visibility = View.VISIBLE
+                    resendIcon.clicks().subscribe {
+                        resendClicks.onNext(message.id)
+                        resendIcon.visibility = View.GONE
+                    }
+                } else
                     resendIcon.visibility = View.GONE
-                }
             }
-            else
-                resendIcon.visibility = View.GONE
         }
 
         // Bind the message status
