@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
+  ~ Copyright (C) 2025
   ~
-  ~ This file is part of QKSMS.
+  ~ This file is part of QUIK.
   ~
-  ~ QKSMS is free software: you can redistribute it and/or modify
+  ~ QUIK is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
   ~ the Free Software Foundation, either version 3 of the License, or
   ~ (at your option) any later version.
   ~
-  ~ QKSMS is distributed in the hope that it will be useful,
+  ~ QUIK is distributed in the hope that it will be useful,
   ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
   ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   ~ GNU General Public License for more details.
   ~
   ~ You should have received a copy of the GNU General Public License
-  ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+  ~ along with QUIK.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/save"
-        android:title="@string/menu_save" />
+        android:title="@string/menu_mms_part_save" />
 
     <item
         android:id="@+id/share"
-        android:title="@string/menu_share" />
+        android:title="@string/menu_mms_part_share" />
+
+    <item
+        android:id="@+id/forward"
+        android:title="@string/menu_mms_part_forward" />
+
+    <item
+        android:id="@+id/openExternally"
+        android:title="@string/menu_mms_part_open" />
 
 </menu>

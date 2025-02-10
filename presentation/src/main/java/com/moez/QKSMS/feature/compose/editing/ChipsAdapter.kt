@@ -35,7 +35,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.contact_chip.*
 import javax.inject.Inject
 
-class ChipsAdapter @Inject constructor() : QkAdapter<Recipient>() {
+class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkViewHolder>() {
 
     var view: RecyclerView? = null
     val chipDeleted: PublishSubject<Recipient> = PublishSubject.create<Recipient>()

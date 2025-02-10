@@ -38,8 +38,11 @@
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">Call</string>
     <string name="menu_info">Details</string>
-    <string name="menu_save">Save to gallery</string>
-    <string name="menu_share">Share</string>
+
+    <string name="menu_mms_part_save">Save to gallery</string>
+    <string name="menu_mms_part_share">Share</string>
+    <string name="menu_mms_part_forward">Forward</string>
+    <string name="menu_mms_part_open">Open externally</string>
 
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d selected</string>

@@ -24,7 +24,7 @@ import javax.inject.Inject
 class ConversationInfoAdapter @Inject constructor(
     private val context: Context,
     private val colors: Colors
-) : QkAdapter<ConversationInfoItem>() {
+) : QkAdapter<ConversationInfoItem, QkViewHolder>() {
 
     val recipientClicks: Subject<Long> = PublishSubject.create()
     val recipientLongClicks: Subject<Long> = PublishSubject.create()

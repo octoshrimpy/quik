@@ -28,7 +28,7 @@ import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.manager.ChangelogManager
 import kotlinx.android.synthetic.main.changelog_list_item.*
 
-class ChangelogAdapter(private val context: Context) : QkAdapter<ChangelogAdapter.ChangelogItem>() {
+class ChangelogAdapter(private val context: Context) : QkAdapter<ChangelogAdapter.ChangelogItem, QkViewHolder>() {
 
     data class ChangelogItem(val type: Int, val label: String)
 

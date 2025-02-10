@@ -77,8 +77,8 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/attachments"
+        <dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerViewLongMmsPart
+            android:id="@+id/parts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -155,8 +155,7 @@
                     android:backgroundTint="?attr/bubbleColor"
                     android:gravity="start|center_vertical"
                     android:minHeight="36dp"
-                    android:textIsSelectable="true"
-                    tools:text="@tools:sample/lorem/random[0]" />
+                    android:textIsSelectable="true" />
             </LinearLayout>
 
             <ImageView
@@ -178,18 +177,38 @@
 
         </RelativeLayout>
 
-        <dev.octoshrimpy.quik.common.widget.QkTextView
-            android:id="@+id/status"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="4dp"
-            android:contentDescription="@string/compose_message_attachment"
-            android:textColor="?android:attr/textColorSecondary"
-            app:textSize="tertiary"
-            tools:text="Sending..." />
+            android:orientation="horizontal">
+
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/compose_message_attachment"
+                android:textColor="?android:attr/textColorSecondary"
+                app:textSize="tertiary"
+                tools:text="Sending..." />
+
+            <ImageView
+                android:id="@+id/resendIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/circle"
+                android:backgroundTint="?attr/bubbleColor"
+                android:baselineAlignBottom="false"
+                android:contentDescription="@string/compose_message_send_now"
+                android:padding="6dp"
+                android:src="@drawable/ic_sync_black_24dp"
+                android:visibility="gone"
+                tools:tint="@color/tools_theme"
+                tools:visibility="visible" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

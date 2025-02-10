@@ -43,7 +43,7 @@ import javax.inject.Inject
 class ThemeAdapter @Inject constructor(
     private val context: Context,
     private val colors: Colors
-) : QkAdapter<List<Int>>() {
+) : QkAdapter<List<Int>, QkViewHolder>() {
 
     val colorSelected: Subject<Int> = PublishSubject.create()
 

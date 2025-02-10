@@ -18,13 +18,13 @@
  */
 package dev.octoshrimpy.quik.feature.compose.part
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
-import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
+import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
 import dev.octoshrimpy.quik.extensions.isSmil
 import dev.octoshrimpy.quik.extensions.isText
 import dev.octoshrimpy.quik.feature.compose.BubbleUtils.canGroup
@@ -35,13 +35,14 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.message_list_item_in.*
 import javax.inject.Inject
 
+
 class PartsAdapter @Inject constructor(
     colors: Colors,
     fileBinder: FileBinder,
     imageBinder: ImageBinder,
     audioBinder: AudioBinder,
     vCardBinder: VCardBinder,
-) : QkAdapter<MmsPart>() {
+) : QkContextMenuRecyclerView.Adapter<Long, MmsPart, QkContextMenuRecyclerView.ViewHolder<MmsPart>>() {
 
     private val partBinders = listOf(audioBinder, imageBinder, vCardBinder, fileBinder)
 
@@ -56,7 +57,6 @@ class PartsAdapter @Inject constructor(
     private lateinit var message: Message
     private var previous: Message? = null
     private var next: Message? = null
-    private var holder: QkViewHolder? = null
     private var bodyVisible: Boolean = true
     private var audioState: MessagesAdapter.AudioState? = null
 
@@ -70,37 +70,39 @@ class PartsAdapter @Inject constructor(
         this.message = message
         this.previous = previous
         this.next = next
-        this.holder = holder
         this.bodyVisible = holder.body.visibility == View.VISIBLE
         this.data = message.parts.filter { !it.isSmil() && !it.isText() }
         this.audioState = audioState
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
+        : QkContextMenuRecyclerView.ViewHolder<MmsPart> {
         val layout = partBinders.getOrNull(viewType)?.partLayout ?: 0
         val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
-        holder?.containerView?.let(view::forwardTouches)
-        return QkViewHolder(view)
+        return QkContextMenuRecyclerView.ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkContextMenuRecyclerView.ViewHolder<MmsPart>, position: Int) {
         val part = data[position]
+
+        holder.contextMenuValue = part
 
         val canGroupWithPrevious = canGroup(message, previous) || position > 0
         val canGroupWithNext = canGroup(message, next) || position < itemCount - 1 || bodyVisible
 
         val binder = partBinders.firstOrNull { it.canBindPart(part) }
+        if (binder == null)
+            return
 
-        // if audioState is set and binder is audio type, set audioState into it
+        // if audioState is set and binder is audio type, set it's audioState ref
         if ((audioState != null) && (binder is AudioBinder))
             binder.audioState = audioState!!
 
-        binder?.bindPart(holder, part, message, canGroupWithPrevious, canGroupWithNext)
+        binder.bindPart(holder, part, message, canGroupWithPrevious, canGroupWithNext)
     }
 
     override fun getItemViewType(position: Int): Int {
-        val part = data[position]
-        return partBinders.indexOfFirst { it.canBindPart(part) }
+        return partBinders.indexOfFirst { it.canBindPart(data[position]) }
     }
 
 }

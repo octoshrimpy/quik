@@ -59,7 +59,7 @@ class QkDialog(private val context: Activity) : AlertDialog(context) {
             view.subtitle.isVisible = !value.isNullOrBlank()
         }
 
-    var adapter: QkAdapter<*>? = null
+    var adapter: QkAdapter<*, *>? = null
         set(value) {
             field = value
             view.list.isVisible = value != null

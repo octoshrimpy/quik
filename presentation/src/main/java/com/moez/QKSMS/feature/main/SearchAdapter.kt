@@ -42,7 +42,7 @@ class SearchAdapter @Inject constructor(
     private val context: Context,
     private val dateFormatter: DateFormatter,
     private val navigator: Navigator
-) : QkAdapter<SearchResult>() {
+) : QkAdapter<SearchResult, QkViewHolder>() {
 
     private val highlightColor: Int by lazy { colors.theme().highlight }
 
