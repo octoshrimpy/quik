@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 class PhoneNumberPickerAdapter @Inject constructor(
     private val context: Context
-) : QkAdapter<PhoneNumber>() {
+) : QkAdapter<PhoneNumber, QkViewHolder>() {
 
     val selectedItemChanges: Subject<Optional<Long>> = BehaviorSubject.create()
 

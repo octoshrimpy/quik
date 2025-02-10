@@ -39,7 +39,7 @@ import javax.inject.Inject
 
 class ScheduledMessageAttachmentAdapter @Inject constructor(
     private val context: Context
-) : QkAdapter<Uri>() {
+) : QkAdapter<Uri, QkViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         return QkViewHolder(

@@ -19,6 +19,8 @@
 package dev.octoshrimpy.quik.feature.compose
 
 import android.net.Uri
+import android.view.MenuItem
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import dev.octoshrimpy.quik.common.base.QkView
@@ -43,12 +45,14 @@ interface ComposeView : QkView<ComposeState> {
     val chipDeletedIntent: Subject<Recipient>
     val menuReadyIntent: Observable<Unit>
     val optionsItemIntent: Observable<Int>
+    val contextItemIntent: Observable<MenuItem>
     val sendAsGroupIntent: Observable<*>
-    val messageClickIntent: Subject<Long>
     val messagePartClickIntent: Subject<Long>
+    val messagePartContextMenuRegistrar: Subject<View>
     val messagesSelectedIntent: Observable<List<Long>>
     val cancelSendingIntent: Subject<Long>
     val sendNowIntent: Subject<Long>
+    val resendIntent: Subject<Long>
     val attachmentDeletedIntent: Subject<Attachment>
     val textChangedIntent: Observable<CharSequence>
     val attachIntent: Observable<Unit>

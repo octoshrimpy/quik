@@ -60,7 +60,10 @@ import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
 import dev.octoshrimpy.quik.extensions.isSmil
+import dev.octoshrimpy.quik.interactor.SaveImage
+import dev.octoshrimpy.quik.model.MmsPart
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -99,7 +102,8 @@ class ComposeViewModel @Inject constructor(
     private val prefs: Preferences,
     private val retrySending: RetrySending,
     private val sendMessage: SendMessage,
-    private val subscriptionManager: SubscriptionManagerCompat
+    private val subscriptionManager: SubscriptionManagerCompat,
+    private val saveImage: SaveImage,
 ) : QkViewModel<ComposeView, ComposeState>(ComposeState(
         editingMode = threadId == 0L && addresses.isEmpty(),
         threadId = threadId,
@@ -432,6 +436,61 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { newState { copy(query = "", searchSelectionId = -1) } }
 
+        // message part context menu item selected - save
+        view.contextItemIntent
+            .filter { it.itemId == R.id.save }
+            .filter { permissionManager.hasStorage().also { if (!it) view.requestStoragePermission() } }
+            .autoDisposable(view.scope())
+            .subscribe {
+                val menuInfo = it.menuInfo as QkContextMenuRecyclerView.ContextMenuInfo<Long, MmsPart>
+                if (menuInfo.viewHolderValue != null)
+                    saveImage.execute(menuInfo.viewHolderValue.id) {
+                        context.makeToast(R.string.gallery_toast_saved)
+                    }
+            }
+
+        // message part context menu item selected - share
+        view.contextItemIntent
+            .filter { it.itemId == R.id.share }
+            .autoDisposable(view.scope())
+            .subscribe {
+                val menuInfo = it.menuInfo as QkContextMenuRecyclerView.ContextMenuInfo<Long, MmsPart>
+                if (menuInfo.viewHolderValue != null)
+                    navigator.shareFile(
+                        MmsPartProvider.getUriForMmsPartId(
+                            menuInfo.viewHolderValue.id,
+                            menuInfo.viewHolderValue.getBestFilename()
+                        ),
+                        menuInfo.viewHolderValue.type
+                    )
+            }
+
+        // message part context menu item selected - forward
+        view.contextItemIntent
+            .filter { it.itemId == R.id.forward }
+            .autoDisposable(view.scope())
+            .subscribe {
+                val menuInfo = it.menuInfo as QkContextMenuRecyclerView.ContextMenuInfo<Long, MmsPart>
+                if (menuInfo.viewHolderValue != null)
+                    navigator.showCompose("", listOf(menuInfo.viewHolderValue.getUri()))
+            }
+
+        // message part context menu item selected - open externally
+        view.contextItemIntent
+            .filter { it.itemId == R.id.openExternally }
+            .autoDisposable(view.scope())
+            .subscribe {
+                val menuInfo = it.menuInfo as QkContextMenuRecyclerView.ContextMenuInfo<Long, MmsPart>
+                if (menuInfo.viewHolderValue != null)
+                    navigator.viewFile(
+                        MmsPartProvider.getUriForMmsPartId(
+                            menuInfo.viewHolderValue.id,
+                            menuInfo.viewHolderValue.getBestFilename()
+                        ),
+                        menuInfo.viewHolderValue.type
+                    )
+            }
+
         // Toggle the group sending mode
         view.sendAsGroupIntent
                 .autoDisposable(view.scope())
@@ -448,14 +507,6 @@ class ComposeViewModel @Inject constructor(
         prefs.keyChanges
                 .filter { key -> key.contains("theme") }
                 .doOnNext { view.themeChanged() }
-                .autoDisposable(view.scope())
-                .subscribe()
-
-        // Retry sending
-        view.messageClickIntent
-                .mapNotNull(messageRepo::getMessage)
-                .filter { message -> message.isFailedMessage() }
-                .doOnNext { message -> retrySending.execute(message.id) }
                 .autoDisposable(view.scope())
                 .subscribe()
 
@@ -495,23 +546,31 @@ class ComposeViewModel @Inject constructor(
 
         // send a delayed message now
         view.sendNowIntent
-                .mapNotNull(messageRepo::getMessage)
-                .autoDisposable(view.scope())
-                .subscribe { message ->
-                    cancelMessage.execute(CancelDelayedMessage.Params(message.id, message.threadId))
-                    val address = listOf(conversationRepo
-                        .getConversation(threadId)?.recipients?.firstOrNull()?.address ?: message.address)
-                    sendMessage.execute(
-                        SendMessage.Params(
-                            message.subId,
-                            message.threadId,
-                            address,
-                            message.body,
-                            listOf(),       // sms with attachments (mms) can't be delayed so we can know attachments are empty for a 'send now' delayed sms
-                            0
-                        )
+            .mapNotNull(messageRepo::getMessage)
+            .autoDisposable(view.scope())
+            .subscribe { message ->
+                cancelMessage.execute(CancelDelayedMessage.Params(message.id, message.threadId))
+                val address = listOf(conversationRepo
+                    .getConversation(threadId)?.recipients?.firstOrNull()?.address ?: message.address)
+                sendMessage.execute(
+                    SendMessage.Params(
+                        message.subId,
+                        message.threadId,
+                        address,
+                        message.body,
+                        listOf(),       // sms with attachments (mms) can't be delayed so we can know attachments are empty for a 'send now' delayed sms
+                        0
                     )
-                }
+                )
+            }
+
+        // resend a failed message
+        view.resendIntent
+            .mapNotNull(messageRepo::getMessage)
+            .filter { message -> message.isFailedMessage() }
+            .doOnNext { message -> retrySending.execute(message.id) }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         // Show the message details
         view.messageLinkAskIntent

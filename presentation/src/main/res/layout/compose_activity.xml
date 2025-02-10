@@ -133,7 +133,7 @@
         android:id="@+id/composeBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="messageBackground,attachments,attach,message,counter,send" />
+        app:constraint_referenced_ids="messageBackground,parts,attach,message,counter,send" />
 
     <View
         android:id="@+id/composeDivider"
@@ -211,12 +211,12 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="?android:attr/divider"
-        app:layout_constraintBottom_toTopOf="@id/attachments"
+        app:layout_constraintBottom_toTopOf="@id/parts"
         app:layout_constraintEnd_toEndOf="@id/messageBackground"
         app:layout_constraintStart_toStartOf="@id/messageBackground" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/attachments"
+        android:id="@+id/parts"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clipChildren="false"

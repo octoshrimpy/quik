@@ -43,7 +43,7 @@ import javax.inject.Inject
 
 class AttachmentAdapter @Inject constructor(
     private val context: Context
-) : QkAdapter<Attachment>() {
+) : QkAdapter<Attachment, QkViewHolder>() {
 
     companion object {
         private const val VIEW_TYPE_FILE = 0

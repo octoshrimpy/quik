@@ -17,56 +17,60 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="2dp">
+    android:id="@+id/vCardBackground"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/vCardBackground"
+<ImageView
+    android:id="@+id/vCardAvatar"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginStart="6dp"
+    android:src="@drawable/ic_person_black_24dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:tint="?android:attr/textColorSecondary" />
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:paddingStart="12dp"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp">
+        android:paddingEnd="12dp"
+        android:singleLine="true"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:textSize="primary"
+        tools:text="Person Name" />
 
-        <ImageView
-            android:id="@+id/vCardAvatar"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_person_black_24dp"
-            android:tint="?android:attr/textColorSecondary"
-            app:layout_constraintBottom_toBottomOf="@id/vCardBackground"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/vCardBackground" />
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"
+        android:singleLine="true"
+        android:text="@string/compose_vcard_label"
+        android:textColor="?android:attr/textColorTertiary"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintTop_toBottomOf="@id/filename"
+        app:textSize="secondary" />
+</LinearLayout>
 
-        <dev.octoshrimpy.quik.common.widget.QkTextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:textColor="?android:attr/textColorPrimary"
-            app:layout_constraintStart_toEndOf="@id/vCardAvatar"
-            app:layout_constraintTop_toTopOf="parent"
-            app:textSize="primary"
-            tools:text="@tools:sample/full_names" />
-
-        <dev.octoshrimpy.quik.common.widget.QkTextView
-            android:id="@+id/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:text="@string/compose_vcard_label"
-            android:textColor="?android:attr/textColorTertiary"
-            app:layout_constraintStart_toStartOf="@id/name"
-            app:layout_constraintTop_toBottomOf="@id/name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:textSize="secondary" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</FrameLayout>
+</LinearLayout>

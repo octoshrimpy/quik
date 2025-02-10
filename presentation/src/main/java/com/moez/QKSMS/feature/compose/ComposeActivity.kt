@@ -31,6 +31,7 @@ import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.format.DateFormat
+import android.view.ContextMenu
 import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.Menu
@@ -67,19 +68,53 @@ import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.QkEditText
+import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.feature.compose.editing.ChipsAdapter
 import dev.octoshrimpy.quik.feature.contacts.ContactsActivity
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.compose_activity.*
+import kotlinx.android.synthetic.main.compose_activity.attach
+import kotlinx.android.synthetic.main.compose_activity.attachAFileIcon
+import kotlinx.android.synthetic.main.compose_activity.attachAFileLabel
+import kotlinx.android.synthetic.main.compose_activity.attaching
+import kotlinx.android.synthetic.main.compose_activity.attachingBackground
+import kotlinx.android.synthetic.main.compose_activity.camera
+import kotlinx.android.synthetic.main.compose_activity.cameraLabel
+import kotlinx.android.synthetic.main.compose_activity.chips
+import kotlinx.android.synthetic.main.compose_activity.composeBar
+import kotlinx.android.synthetic.main.compose_activity.contact
+import kotlinx.android.synthetic.main.compose_activity.contactLabel
+import kotlinx.android.synthetic.main.compose_activity.contentView
+import kotlinx.android.synthetic.main.compose_activity.counter
+import kotlinx.android.synthetic.main.compose_activity.gallery
+import kotlinx.android.synthetic.main.compose_activity.galleryLabel
+import kotlinx.android.synthetic.main.compose_activity.loading
+import kotlinx.android.synthetic.main.compose_activity.message
+import kotlinx.android.synthetic.main.compose_activity.messageList
+import kotlinx.android.synthetic.main.compose_activity.messagesEmpty
+import kotlinx.android.synthetic.main.compose_activity.noValidRecipients
+import kotlinx.android.synthetic.main.compose_activity.parts
+import kotlinx.android.synthetic.main.compose_activity.schedule
+import kotlinx.android.synthetic.main.compose_activity.scheduleLabel
+import kotlinx.android.synthetic.main.compose_activity.scheduledCancel
+import kotlinx.android.synthetic.main.compose_activity.scheduledGroup
+import kotlinx.android.synthetic.main.compose_activity.scheduledTime
+import kotlinx.android.synthetic.main.compose_activity.send
+import kotlinx.android.synthetic.main.compose_activity.sendAsGroup
+import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
+import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSwitch
+import kotlinx.android.synthetic.main.compose_activity.sim
+import kotlinx.android.synthetic.main.compose_activity.simIndex
+import kotlinx.android.synthetic.main.compose_activity.toolbarSubtitle
+import kotlinx.android.synthetic.main.compose_activity.toolbarTitle
 import kotlinx.android.synthetic.main.main_activity.toolbar
-import kotlinx.coroutines.reactive.publish
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -97,13 +132,15 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val chipDeletedIntent: Subject<Recipient> by lazy { chipsAdapter.chipDeleted }
     override val menuReadyIntent: Observable<Unit> = menu.map { Unit }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
+    override val contextItemIntent: Subject<MenuItem> = PublishSubject.create()
     override val scheduleAction: Subject<Boolean> = PublishSubject.create()
     override val sendAsGroupIntent by lazy { sendAsGroupBackground.clicks() }
-    override val messageClickIntent: Subject<Long> by lazy { messageAdapter.clicks }
     override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
+    override val messagePartContextMenuRegistrar: Subject<View> by lazy { messageAdapter.partContextMenuRegistrar }
     override val messagesSelectedIntent by lazy { messageAdapter.selectionChanges }
-    override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSending }
-    override val sendNowIntent: Subject<Long> by lazy { messageAdapter.sendNow }
+    override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSendingClicks }
+    override val sendNowIntent: Subject<Long> by lazy { messageAdapter.sendNowClicks }
+    override val resendIntent: Subject<Long> by lazy { messageAdapter.resendClicks }
     override val attachmentDeletedIntent: Subject<Attachment> by lazy { attachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
     override val attachIntent by lazy { Observable.merge(attach.clicks(), attachingBackground.clicks()) }
@@ -170,7 +207,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         messageList.setHasFixedSize(true)
         messageList.adapter = messageAdapter
 
-        attachments.adapter = attachmentAdapter
+        parts.adapter = attachmentAdapter
 
         message.supportsInputContent = true
 
@@ -217,6 +254,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 return gestureDetector.onTouchEvent(e)
             }
         })
+
+        // context menu registration for message parts
+        messagePartContextMenuRegistrar
+            .mapNotNull { it }
+            .autoDisposable(scope())
+            .subscribe { registerForContextMenu(it) }
 
         window.callback = ComposeWindowCallback(window.callback, this)
     }
@@ -293,7 +336,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         scheduledGroup.isVisible = state.scheduled != 0L
         scheduledTime.text = dateFormatter.getScheduledTimestamp(state.scheduled)
 
-        attachments.setVisible(state.attachments.isNotEmpty())
+        parts.setVisible(state.attachments.isNotEmpty())
         attachmentAdapter.data = state.attachments
 
         attach.animate().rotation(if (state.attaching) 135f else 0f).start()
@@ -489,6 +532,21 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun getColoredMenuItems(): List<Int> {
         return super.getColoredMenuItems() + R.id.call
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.mms_part_menu, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        super.onContextItemSelected(item)
+        contextItemIntent.onNext(item)
+        return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

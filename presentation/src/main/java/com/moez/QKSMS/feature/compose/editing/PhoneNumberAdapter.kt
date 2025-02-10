@@ -26,7 +26,7 @@ import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.model.PhoneNumber
 import kotlinx.android.synthetic.main.contact_number_list_item.*
 
-class PhoneNumberAdapter : QkAdapter<PhoneNumber>() {
+class PhoneNumberAdapter : QkAdapter<PhoneNumber, QkViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val inflater = LayoutInflater.from(parent.context)

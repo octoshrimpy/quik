@@ -30,7 +30,7 @@ import io.reactivex.subjects.Subject
  * Base RecyclerView.Adapter that provides some convenience when creating a new Adapter, such as
  * data list handing and item animations
  */
-abstract class QkAdapter<T> : RecyclerView.Adapter<QkViewHolder>() {
+abstract class QkAdapter<T, VHT : RecyclerView.ViewHolder> : RecyclerView.Adapter<VHT>() {
 
     var data: List<T> = ArrayList()
         set(value) {

@@ -92,22 +92,9 @@
             android:text="@tools:sample/lorem/random[0]"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/share"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/playPause" />
 
-        <ImageView
-            android:id="@+id/share"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="bottom"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/circle"
-            android:elevation="4dp"
-            android:padding="6dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="?attr/actionModeShareDrawable"
-            app:tint="@color/tools_theme" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

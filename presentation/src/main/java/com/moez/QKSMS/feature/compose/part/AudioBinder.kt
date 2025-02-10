@@ -107,6 +107,9 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
         canGroupWithPrevious: Boolean,
         canGroupWithNext: Boolean,
     ) {
+        // click on background - passes back to compose view model
+        holder.containerView.setOnClickListener { clicks.onNext(part.id) }
+
         // play/pause button click handling
         holder.playPause.setOnClickListener {
             when (holder.playPause.tag) {
@@ -177,14 +180,6 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
             }
         }
 
-        // share button click handling
-        holder.share.setOnClickListener {
-            navigator.shareFile(
-                MmsPartProvider.getUriForMmsPartId(part.id, part.getBestFilename()),
-                part.type
-            )
-        }
-
         // if this item is the active active audio item update the active view holder
         if (audioState.partId == part.id)
             audioState.viewHolder = holder
@@ -237,10 +232,6 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
             setTint(secondaryColor)
             setBackgroundTint(primaryColor)
         }
-
-        // share button
-        holder.share.setTint(secondaryColor)
-        holder.share.setBackgroundTint(primaryColor)
 
         MediaMetadataRetriever().use {
             it.setDataSource(context, part.getUri())
