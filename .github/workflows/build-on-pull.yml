@@ -11,21 +11,27 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
-
+      uses: actions/checkout@v4
+      
+    - name: Decode Keystore File
+      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > ${{ github.workspace }}/my-release-key.keystore
+        
     - name: Set up JDK 17
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4
       with:
+        distribution: 'temurin'
         java-version: '17'
 
     - name: Build with Gradle
-      run: ./gradlew build
-
+      run: |
+        ./gradlew assembleNoAnalyticsDebug \
+          -Dandroid.injected.signing.store.file=${{ github.workspace }}/my-release-key.keystore
+  
     - name: Run Tests
       run: ./gradlew test
 
     - name: Deploy Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: build-artifacts
         path: build/libs/
