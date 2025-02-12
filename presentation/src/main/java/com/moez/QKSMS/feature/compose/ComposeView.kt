@@ -34,8 +34,9 @@ interface ComposeView : QkView<ComposeState> {
     companion object {
         const val SelectContactRequestCode = 0
         const val TakePhotoRequestCode = 1
-        const val AttachAFileRequestCode = 4
         const val AttachContactRequestCode = 3
+        const val AttachAFileRequestCode = 4
+        const val SpeechRecognitionRequestCode = 5
 
         const val CameraDestinationKey = "camera_destination"
     }
@@ -73,6 +74,7 @@ interface ComposeView : QkView<ComposeState> {
     val backPressedIntent: Observable<Unit>
     val confirmDeleteIntent: Observable<List<Long>>
     val messageLinkAskIntent: Observable<Uri>
+    val speechRecogniserIntent: Observable<*>
 
     fun clearSelection()
     fun toggleSelectAll()
@@ -93,5 +95,6 @@ interface ComposeView : QkView<ComposeState> {
     fun scrollToMessage(id: Long)
     fun showQksmsPlusSnackbar(@StringRes message: Int)
     fun showDeleteDialog( messages: List<Long>)
+    fun startSpeechRecognition()
 
 }

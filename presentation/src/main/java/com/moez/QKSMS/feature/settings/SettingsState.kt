@@ -39,6 +39,7 @@ data class SettingsState(
     val textSizeSummary: String = "",
     val textSizeId: Int = Preferences.TEXT_SIZE_NORMAL,
     val systemFontEnabled: Boolean = false,
+    val showStt: Boolean = true,
     val splitSmsEnabled: Boolean = false,
     val stripUnicodeEnabled: Boolean = false,
     val mobileOnly: Boolean = false,

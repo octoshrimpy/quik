@@ -108,6 +108,9 @@ import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSwitch
 import kotlinx.android.synthetic.main.compose_activity.sim
 import kotlinx.android.synthetic.main.compose_activity.simIndex
+import kotlinx.android.synthetic.main.compose_activity.speechToTextFrame
+import kotlinx.android.synthetic.main.compose_activity.speechToTextIcon
+import kotlinx.android.synthetic.main.compose_activity.speechToTextIconBorder
 import kotlinx.android.synthetic.main.compose_activity.toolbarSubtitle
 import kotlinx.android.synthetic.main.compose_activity.toolbarTitle
 import kotlinx.android.synthetic.main.main_activity.toolbar
@@ -160,30 +163,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
+    override val speechRecogniserIntent by lazy { speechToTextIconBorder.clicks() }
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
     private var cameraDestination: Uri? = null
-
-    private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode != Activity.RESULT_OK)
-            return@registerForActivityResult
-
-        // check returned results are good
-        val match = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-        if ((match === null) || (match.size < 1) || (match[0].isNullOrEmpty()))
-            return@registerForActivityResult
-
-        // get the edit text view
-        val message = findViewById<QkEditText>(R.id.message)
-        if (message === null)
-            return@registerForActivityResult
-
-        // populate message box with data returned by STT, set cursor to end, and focus
-        message.append(match[0])
-        message.setSelection(message.text.length)
-        message.requestFocus()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -215,45 +199,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .doOnNext { loading.setTint(it.theme) }
                 .doOnNext { attach.setBackgroundTint(it.theme) }
                 .doOnNext { attach.setTint(it.textPrimary) }
+                .doOnNext { speechToTextIconBorder.setBackgroundTint(it.theme) }
+                .doOnNext { speechToTextIcon.setBackgroundTint(it.textPrimary) }
+                .doOnNext { speechToTextIcon.setTint(it.theme) }
                 .doOnNext { messageAdapter.theme = it }
                 .autoDisposable(scope())
                 .subscribe()
-
-        message.setOnTouchListener(object : OnTouchListener {
-            private val gestureDetector =
-                GestureDetector(this@ComposeActivity, object : SimpleOnGestureListener() {
-                    private var lastUpEvent: MotionEvent? = null
-
-                    override fun onDoubleTap(e: MotionEvent): Boolean {
-                        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                            .putExtra(
-                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                            )
-                            // include if want a custom message that the STT can (optionally) display   .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
-                        speechResultLauncher.launch(speechRecognizerIntent)
-                        return true
-                    }
-
-                    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                        if (lastUpEvent !== null) {
-                            message.onTouchEvent(lastUpEvent)
-                            lastUpEvent?.recycle()
-                            lastUpEvent = null
-                        }
-                        return true
-                    }
-
-                    override fun onSingleTapUp(e: MotionEvent): Boolean {
-                        lastUpEvent = MotionEvent.obtain(e)
-                        return true     // don't show soft keyboard on this event
-                    }
-                })
-
-            override fun onTouch(v: View, e: MotionEvent): Boolean {
-                return gestureDetector.onTouchEvent(e)
-            }
-        })
 
         // context menu registration for message parts
         messagePartContextMenuRegistrar
@@ -375,6 +326,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         // if scheduling mode is set, show schedule dialog
         if (state.scheduling)
             scheduleAction.onNext(true)
+
+        speechToTextFrame.isVisible = (prefs.showStt.get())
     }
 
     override fun clearSelection() = messageAdapter.clearSelection()
@@ -458,6 +411,18 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .putExtra(ContactsActivity.SharingKey, sharing)
                 .putExtra(ContactsActivity.ChipsKey, serialized)
         startActivityForResult(intent, ComposeView.SelectContactRequestCode)
+    }
+
+    override fun startSpeechRecognition() {
+        startActivityForResult(
+            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            ),
+            // include below if want a custom message that the STT can (optionally) display
+            // .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
+            ComposeView.SpeechRecognitionRequestCode
+        )
     }
 
     override fun themeChanged() {
@@ -574,6 +539,21 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
             ComposeView.AttachContactRequestCode -> {
                 data?.data?.let(contactSelectedIntent::onNext)
+            }
+
+            ComposeView.SpeechRecognitionRequestCode -> {
+                // check returned results are good
+                val match = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                if ((match !== null) && (match.size > 0) && (!match[0].isNullOrEmpty())) {
+                    // get the edit text view
+                    val messageEditBox = findViewById<QkEditText>(R.id.message)
+                    if (messageEditBox !== null) {
+                        // populate message box with data returned by STT, set cursor to end, and focus
+                        messageEditBox.append(match[0])
+                        messageEditBox.setSelection(messageEditBox.text.length)
+                        messageEditBox.requestFocus()
+                    }
+                }
             }
 
             else -> super.onActivityResult(requestCode, resultCode, data)
