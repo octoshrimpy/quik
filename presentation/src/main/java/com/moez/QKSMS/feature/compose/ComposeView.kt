@@ -34,7 +34,7 @@ interface ComposeView : QkView<ComposeState> {
     companion object {
         const val SelectContactRequestCode = 0
         const val TakePhotoRequestCode = 1
-        const val AttachAFileRequestCode = 4
+        const val AttachRequestCode = 4
         const val AttachContactRequestCode = 3
 
         const val CameraDestinationKey = "camera_destination"
@@ -63,7 +63,6 @@ interface ComposeView : QkView<ComposeState> {
     val scheduleAction: Observable<*>
     val attachContactIntent: Observable<*>
     val attachAnyFileSelectedIntent: Observable<Uri>
-    val contactSelectedIntent: Observable<Uri>
     val inputContentIntent: Observable<InputContentInfoCompat>
     val scheduleSelectedIntent: Observable<Long>
     val scheduleCancelIntent: Observable<*>
@@ -86,9 +85,8 @@ interface ComposeView : QkView<ComposeState> {
     fun themeChanged()
     fun showKeyboard()
     fun requestCamera()
-    fun requestGallery(mimeType: String, requestCode: Int)
+    fun requestSAFContent(mimeType: String, requestCode: Int)
     fun requestDatePicker()
-    fun requestContact()
     fun setDraft(draft: String)
     fun scrollToMessage(id: Long)
     fun showQksmsPlusSnackbar(@StringRes message: Int)

@@ -20,6 +20,7 @@ package dev.octoshrimpy.quik.feature.compose
 
 import android.content.Context
 import android.os.Vibrator
+import android.provider.ContactsContract
 import android.telephony.SmsMessage
 import androidx.core.content.getSystemService
 import com.moez.QKSMS.contentproviders.MmsPartProvider
@@ -71,7 +72,6 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -624,13 +624,23 @@ class ComposeViewModel @Inject constructor(
         view.attachImageFileIntent
             .doOnNext { newState { copy(attaching = false) } }
             .autoDisposable(view.scope())
-            .subscribe { view.requestGallery("image/*", ComposeView.AttachAFileRequestCode) }
+            .subscribe {
+                view.requestSAFContent(
+                    "image/*",
+                    ComposeView.AttachRequestCode
+                )
+            }
 
         // pick any file from any provider apps
         view.attachAnyFileIntent
             .doOnNext { newState { copy(attaching = false) } }
             .autoDisposable(view.scope())
-            .subscribe { view.requestGallery("*/*", ComposeView.AttachAFileRequestCode) }
+            .subscribe {
+                view.requestSAFContent(
+                    "*/*",
+                    ComposeView.AttachRequestCode
+                )
+            }
 
         // Choose a time to schedule the message
         view.scheduleIntent
@@ -671,17 +681,11 @@ class ComposeViewModel @Inject constructor(
         view.attachContactIntent
                 .doOnNext { newState { copy(attaching = false) } }
                 .autoDisposable(view.scope())
-                .subscribe { view.requestContact() }
-
-        // Contact was selected for attachment
-        view.contactSelectedIntent
-                .map { uri -> Attachment(context, uri) }
-                .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
-                .subscribeOn(Schedulers.io())
-                .autoDisposable(view.scope())
-                .subscribe(attachments::onNext) { error ->
-                    context.makeToast(R.string.compose_contact_error)
-                    Timber.w(error)
+                .subscribe {
+                    view.requestSAFContent(
+                        ContactsContract.Contacts.CONTENT_ITEM_TYPE,
+                        ComposeView.AttachRequestCode
+                    )
                 }
 
         // Detach a photo
