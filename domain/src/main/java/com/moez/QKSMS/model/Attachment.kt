@@ -18,49 +18,60 @@
  */
 package dev.octoshrimpy.quik.model
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.provider.ContactsContract
 import android.provider.OpenableColumns
 import androidx.core.view.inputmethod.InputContentInfoCompat
 
 
-class Attachment(
-    private val uri: Uri? = null,
-    private val inputContent: InputContentInfoCompat? = null
+@SuppressLint("Range")
+class Attachment (
+    context: Context,
+    var uri: Uri = Uri.EMPTY,
+    inputContent: InputContentInfoCompat? = null
 ) {
     private var resourceBytes: ByteArray? = null
 
-    fun getUri(): Uri {
-        return (
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
-                inputContent?.contentUri ?: uri ?: Uri.EMPTY
-            else uri ?: Uri.EMPTY
-        )
+    init {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+            uri = inputContent?.contentUri ?: uri
+
+        // if constructed with a uri to a contact, convert uri to associated vcard uri
+        if (context.contentResolver.getType(uri)?.lowercase() ==
+            ContactsContract.Contacts.CONTENT_ITEM_TYPE) {
+            uri = try {
+                Uri.withAppendedPath(
+                    ContactsContract.Contacts.CONTENT_VCARD_URI,
+                    context.contentResolver.query(
+                        uri, null, null, null, null
+                    )?.use {
+                        it.moveToFirst()
+                        it.getString(it.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)) ?: ""
+                    }
+                )
+            } catch (e: Exception) {
+                Uri.EMPTY
+            }
+        }
     }
 
     fun getType(context: Context): String {
-        return context.contentResolver.getType(getUri()) ?: "application/octect-stream"
+        return context.contentResolver.getType(uri) ?: "application/octect-stream"
     }
 
     fun getName(context: Context): String {
         try {
             context.contentResolver.query(
-                getUri(),
-                arrayOf(OpenableColumns.DISPLAY_NAME),
-                null,
-                null,
-                null
-            )
-            ?.use { cursor ->
-                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                if (nameIndex == -1)
-                    return "unknown"
-                cursor.moveToFirst()
-                return cursor.getString(nameIndex) ?: "unknown"
+                uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null
+            )?.use {
+                it.moveToFirst()
+                return it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME)) ?: "unknown"
             }
         }
-        catch (e: Exception) { /* nothing*/ }
+        catch (e: Exception) { /* nothing */ }
 
         return "unknown"
     }
@@ -75,30 +86,20 @@ class Attachment(
     }
 
     fun isAudio(context: Context): Boolean {
-        val mimeType = getType(context)
-        return (mimeType.startsWith("audio/"))
+        return (getType(context).startsWith("audio/"))
     }
 
     fun isImage(context: Context): Boolean {
-        val mimeType = getType(context)
-        return (mimeType.startsWith("image/"))
+        return (getType(context).startsWith("image/"))
     }
 
     fun getSize(context: Context): Long {
         try {
             context.contentResolver.query(
-                getUri(),
-                arrayOf(OpenableColumns.SIZE),
-                null,
-                null,
-                null
-            )
-            ?.use {
-                val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
-                if (sizeIndex == -1)
-                    return -1
+                uri, arrayOf(OpenableColumns.SIZE), null, null, null
+            )?.use {
                 it.moveToFirst()
-                return it.getLong(sizeIndex)
+                return it.getLong(it.getColumnIndex(OpenableColumns.SIZE))
             }
         }
         catch (e: Exception) { /* nothing */ }
@@ -110,16 +111,14 @@ class Attachment(
         if (resourceBytes != null)
             return resourceBytes!!
 
-        resourceBytes = ByteArray(0)
-
         try {
-            context.contentResolver.openInputStream(getUri())?.use {
+            context.contentResolver.openInputStream(uri)?.use {
                 resourceBytes = it.readBytes()
             }
         } catch (e: Exception) {
         }
 
-        return resourceBytes!!
+        return resourceBytes ?: ByteArray(0)
     }
 
 }
