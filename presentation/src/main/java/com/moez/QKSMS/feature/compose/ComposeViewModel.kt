@@ -19,9 +19,7 @@
 package dev.octoshrimpy.quik.feature.compose
 
 import android.content.Context
-import android.net.Uri
 import android.os.Vibrator
-import android.provider.ContactsContract
 import android.telephony.SmsMessage
 import androidx.core.content.getSystemService
 import com.moez.QKSMS.contentproviders.MmsPartProvider
@@ -652,8 +650,8 @@ class ComposeViewModel @Inject constructor(
 
         // a file, photo or otherwise, was picked by the user
         Observable.merge(
-            view.attachAnyFileSelectedIntent.map { uri -> Attachment(uri) },
-            view.inputContentIntent.map { inputContent -> Attachment(inputContent = inputContent) }
+            view.attachAnyFileSelectedIntent.map { uri -> Attachment(context, uri) },
+            view.inputContentIntent.map { inputContent -> Attachment(context, inputContent = inputContent) }
         )
             .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
             .doOnNext(attachments::onNext)
@@ -677,7 +675,7 @@ class ComposeViewModel @Inject constructor(
 
         // Contact was selected for attachment
         view.contactSelectedIntent
-                .map { uri -> Attachment(getFullVCardUri(uri)) }
+                .map { uri -> Attachment(context, uri) }
                 .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
                 .subscribeOn(Schedulers.io())
                 .autoDisposable(view.scope())
@@ -801,9 +799,7 @@ class ComposeViewModel @Inject constructor(
                         // Scheduling a message
                         state.scheduled != 0L -> {
                             newState { copy(scheduled = 0) }
-                            val uris = attachments
-                                    .map { it.getUri() }
-                                    .map { it.toString() }
+                            val uris = attachments.map { it.uri.toString() }
                             val params = AddScheduledMessage
                                     .Params(state.scheduled, subId, addresses, sendAsGroup, body, uris)
                             addScheduledMessage.execute(params)
@@ -879,19 +875,6 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { view.clearSelection() }
 
-    }
-
-    private fun getFullVCardUri(contactData: Uri): Uri {
-        val lookupKey = context.contentResolver.query(contactData, null, null, null, null)?.use {
-            it.moveToFirst()
-            val index = it.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)
-            if (index >= 0)
-                it.getString(index)
-            else
-                ""
-        }
-
-        return Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey)
     }
 
 }

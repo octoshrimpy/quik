@@ -392,8 +392,8 @@ class MessageRepositoryImpl @Inject constructor(
                 .filter { it.getResourceBytes(context).isNotEmpty() }
                 .associateWith {
                     when (it.getType(context) == "image/gif") {
-                        true -> ImageUtils.getScaledGif(context, it.getUri(), maxWidth, maxHeight)
-                        false -> ImageUtils.getScaledImage(context, it.getUri(), maxWidth, maxHeight)
+                        true -> ImageUtils.getScaledGif(context, it.uri, maxWidth, maxHeight)
+                        false -> ImageUtils.getScaledImage(context, it.uri, maxWidth, maxHeight)
                     }
                 }
                 .toMutableMap()
@@ -401,7 +401,7 @@ class MessageRepositoryImpl @Inject constructor(
             val imageByteCount = imageBytesByAttachment.values.sumOf { it.size }
             if (imageByteCount > remainingBytes) {
                 imageBytesByAttachment.forEach { (attachment, originalBytes) ->
-                    val uri = attachment.getUri() ?: return@forEach
+                    val uri = attachment.uri ?: return@forEach
                     val maxBytes = originalBytes.size / imageByteCount.toFloat() * remainingBytes
 
                     // Get the image dimensions
@@ -429,8 +429,8 @@ class MessageRepositoryImpl @Inject constructor(
 
                         attempts++
                         scaledBytes = when (attachment.getType(context) == "image/gif") {
-                            true -> ImageUtils.getScaledGif(context, attachment.getUri(), newWidth, newHeight)
-                            false -> ImageUtils.getScaledImage(context, attachment.getUri(), newWidth, newHeight)
+                            true -> ImageUtils.getScaledGif(context, attachment.uri, newWidth, newHeight)
+                            false -> ImageUtils.getScaledImage(context, attachment.uri, newWidth, newHeight)
                         }
 
                         Timber.d("Compression attempt $attempts: ${scaledBytes.size / 1024}/${maxBytes.toInt() / 1024}Kb ($width*$height -> $newWidth*$newHeight)")

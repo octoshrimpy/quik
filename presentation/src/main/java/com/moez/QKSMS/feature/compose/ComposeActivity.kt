@@ -446,7 +446,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun requestContact() {
         val intent = Intent(Intent.ACTION_PICK)
-                .setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE)
+                .setType(ContactsContract.Contacts.CONTENT_TYPE)
 
         startActivityForResult(Intent.createChooser(intent, null), ComposeView.AttachContactRequestCode)
     }

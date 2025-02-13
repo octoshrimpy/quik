@@ -93,14 +93,14 @@ class AttachmentAdapter @Inject constructor(
         holder.fileName.visibility = View.GONE
 
         // if attachment uri is missing
-        if (!attachment.getUri().resourceExists(context)) {
+        if (!attachment.uri.resourceExists(context)) {
             holder.thumbnail.setImageResource(android.R.drawable.ic_delete)
             holder.fileName.text = context.getString(R.string.attachment_missing)
             holder.fileName.visibility = View.VISIBLE
             return
         }
 
-        val uri = attachment.getUri()
+        val uri = attachment.uri
         val mimeType = attachment.getType(context)
 
         // if attachment mime type is image/* or video/*, use image/frame

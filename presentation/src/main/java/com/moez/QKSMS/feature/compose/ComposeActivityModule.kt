@@ -79,7 +79,7 @@ class ComposeActivityModule {
         activity.intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::add)
         activity.intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::addAll)
 
-        return Attachments(uris.mapNotNull { Attachment(it) })
+        return Attachments(uris.mapNotNull { Attachment(activity, it) })
     }
 
     @Provides
