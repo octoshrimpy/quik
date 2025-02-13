@@ -27,7 +27,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.format.DateFormat
@@ -150,7 +149,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val scheduleIntent by lazy { Observable.merge(schedule.clicks(), scheduleLabel.clicks()) }
     override val attachContactIntent by lazy { Observable.merge(contact.clicks(), contactLabel.clicks()) }
     override val attachAnyFileSelectedIntent: Subject<Uri> = PublishSubject.create()
-    override val contactSelectedIntent: Subject<Uri> = PublishSubject.create()
     override val inputContentIntent by lazy { message.inputContentSelected }
     override val scheduleSelectedIntent: Subject<Long> = PublishSubject.create()
     override val changeSimIntent by lazy { sim.clicks() }
@@ -444,13 +442,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         message.hideKeyboard()
     }
 
-    override fun requestContact() {
-        val intent = Intent(Intent.ACTION_PICK)
-                .setType(ContactsContract.Contacts.CONTENT_TYPE)
-
-        startActivityForResult(Intent.createChooser(intent, null), ComposeView.AttachContactRequestCode)
-    }
-
     override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
         message.hideKeyboard()
         val serialized = HashMap(chips.associate { chip -> chip.address to chip.contact?.lookupKey })
@@ -480,14 +471,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         startActivityForResult(Intent.createChooser(intent, null), ComposeView.TakePhotoRequestCode)
     }
 
-    override fun requestGallery(mimeType: String, requestCode: Int) {
-        val intent = Intent(Intent.ACTION_PICK)
-                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                .setType(mimeType)
-        startActivityForResult(Intent.createChooser(intent, null), requestCode)
+    override fun requestSAFContent(mimeType: String, requestCode: Int) {
+        startActivityForResult(
+            Intent.createChooser(
+                Intent(Intent.ACTION_GET_CONTENT)
+                    .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                    .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
+                    .setType(mimeType),
+                resources.getString(R.string.attachmnent_pick_title)
+            ),
+            requestCode
+        )
     }
 
     override fun setDraft(draft: String) {
@@ -564,16 +558,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 cameraDestination?.let(attachAnyFileSelectedIntent::onNext)
             }
 
-            ComposeView.AttachAFileRequestCode -> {
+            ComposeView.AttachRequestCode -> {
                 data?.clipData?.itemCount
                     ?.let { count -> 0 until count }
                     ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
                     ?.forEach(attachAnyFileSelectedIntent::onNext)
                     ?: data?.data?.let(attachAnyFileSelectedIntent::onNext)
-            }
-
-            ComposeView.AttachContactRequestCode -> {
-                data?.data?.let(contactSelectedIntent::onNext)
             }
 
             else -> super.onActivityResult(requestCode, resultCode, data)
