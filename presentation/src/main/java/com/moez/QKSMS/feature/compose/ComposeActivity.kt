@@ -32,14 +32,13 @@ import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.format.DateFormat
 import android.view.ContextMenu
-import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.DragEvent.ACTION_DRAG_ENDED
+import android.view.DragEvent.ACTION_DRAG_EXITED
+import android.view.DragEvent.ACTION_DROP
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -62,6 +61,7 @@ import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
+import dev.octoshrimpy.quik.common.util.extensions.makeToast
 import dev.octoshrimpy.quik.common.util.extensions.scrapViews
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -163,7 +163,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
-    override val speechRecogniserIntent by lazy { speechToTextIconBorder.clicks() }
+    override val speechRecogniserIntent by lazy { speechToTextIcon.clicks() }
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
@@ -212,12 +212,46 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .autoDisposable(scope())
             .subscribe { registerForContextMenu(it) }
 
+        // drag drop handlers for speech-to-text icon
+        speechToTextIcon.setOnLongClickListener {
+            it.startDragAndDrop(null, View.DragShadowBuilder(speechToTextFrame), null, 0)
+            speechToTextFrame.isVisible = false
+
+            contentView.setOnDragListener { _, event ->
+                when (event.action) {
+                    ACTION_DROP -> {
+                        speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
+                        speechToTextFrame.y =(event.y - (speechToTextFrame.height / 2))
+
+                        // get offset from root view as a percentage of root view for saving
+                        prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
+                        prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
+                    }
+                    ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
+                        speechToTextFrame.isVisible = true
+                    }
+                }
+                true
+            }
+            true
+        }
+
         window.callback = ComposeWindowCallback(window.callback, this)
     }
 
     override fun onStart() {
         super.onStart()
         activityVisibleIntent.onNext(true)
+
+        // if first time stt icon is shown (since setting reset), pop up an instruction toast
+        if (prefs.showStt.get() &&
+            (prefs.showSttOffsetX.get() == Float.MIN_VALUE) &&
+            (prefs.showSttOffsetX.get() == Float.MIN_VALUE)) {
+            makeToast(R.string.compose_toast_drag_stt, Toast.LENGTH_LONG)
+            // reset to new flag value that indicates 'not first time through, but not customised'
+            prefs.showSttOffsetX.set(Float.MAX_VALUE)
+            prefs.showSttOffsetY.set(Float.MAX_VALUE)
+        }
     }
 
     override fun onPause() {
@@ -327,7 +361,18 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         if (state.scheduling)
             scheduleAction.onNext(true)
 
-        speechToTextFrame.isVisible = (prefs.showStt.get())
+        if (prefs.showStt.get()) {
+            speechToTextFrame.isVisible = true
+
+            var xPercent = prefs.showSttOffsetX.get()
+            var yPercent = prefs.showSttOffsetY.get()
+
+            // if the stt icon has a custom position, move it
+            if ((xPercent != Float.MAX_VALUE) && (yPercent != Float.MAX_VALUE)) {
+                speechToTextFrame.x = (contentView.x + (xPercent * contentView.width))
+                speechToTextFrame.y = (contentView.y + (yPercent * contentView.height))
+            }
+        }
     }
 
     override fun clearSelection() = messageAdapter.clearSelection()

@@ -210,7 +210,11 @@ class SettingsPresenter @Inject constructor(
 
                         R.id.systemFont -> prefs.systemFont.set(!prefs.systemFont.get())
 
-                        R.id.showStt -> prefs.showStt.set(!prefs.showStt.get())
+                        R.id.showStt -> {
+                            prefs.showStt.set(!prefs.showStt.get())
+                            prefs.showSttOffsetX.set(Float.MIN_VALUE)
+                            prefs.showSttOffsetY.set(Float.MIN_VALUE)
+                        }
 
                         R.id.unicode -> prefs.unicode.set(!prefs.unicode.get())
 

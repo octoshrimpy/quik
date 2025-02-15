@@ -109,6 +109,8 @@ class Preferences @Inject constructor(
     val autoColor = rxPrefs.getBoolean("autoColor", true)
     val systemFont = rxPrefs.getBoolean("systemFont", false)
     val showStt = rxPrefs.getBoolean("showStt", true)
+    val showSttOffsetX = rxPrefs.getFloat("showSttOffsetX", Float.MIN_VALUE)
+    val showSttOffsetY = rxPrefs.getFloat("showSttOffsetY", Float.MIN_VALUE)
     val textSize = rxPrefs.getInteger("textSize", TEXT_SIZE_NORMAL)
     val blockingManager = rxPrefs.getInteger("blockingManager", BLOCKING_MANAGER_QKSMS)
     val drop = rxPrefs.getBoolean("drop", false)
