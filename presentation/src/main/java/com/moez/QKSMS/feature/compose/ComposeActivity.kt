@@ -32,14 +32,13 @@ import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.text.format.DateFormat
 import android.view.ContextMenu
-import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
+import android.view.DragEvent.ACTION_DRAG_ENDED
+import android.view.DragEvent.ACTION_DRAG_EXITED
+import android.view.DragEvent.ACTION_DROP
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -62,6 +61,7 @@ import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
+import dev.octoshrimpy.quik.common.util.extensions.makeToast
 import dev.octoshrimpy.quik.common.util.extensions.scrapViews
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -108,6 +108,9 @@ import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSwitch
 import kotlinx.android.synthetic.main.compose_activity.sim
 import kotlinx.android.synthetic.main.compose_activity.simIndex
+import kotlinx.android.synthetic.main.compose_activity.speechToTextFrame
+import kotlinx.android.synthetic.main.compose_activity.speechToTextIcon
+import kotlinx.android.synthetic.main.compose_activity.speechToTextIconBorder
 import kotlinx.android.synthetic.main.compose_activity.toolbarSubtitle
 import kotlinx.android.synthetic.main.compose_activity.toolbarTitle
 import kotlinx.android.synthetic.main.main_activity.toolbar
@@ -160,30 +163,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
+    override val speechRecogniserIntent by lazy { speechToTextIcon.clicks() }
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
     private var cameraDestination: Uri? = null
-
-    private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode != Activity.RESULT_OK)
-            return@registerForActivityResult
-
-        // check returned results are good
-        val match = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-        if ((match === null) || (match.size < 1) || (match[0].isNullOrEmpty()))
-            return@registerForActivityResult
-
-        // get the edit text view
-        val message = findViewById<QkEditText>(R.id.message)
-        if (message === null)
-            return@registerForActivityResult
-
-        // populate message box with data returned by STT, set cursor to end, and focus
-        message.append(match[0])
-        message.setSelection(message.text.length)
-        message.requestFocus()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -215,45 +199,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .doOnNext { loading.setTint(it.theme) }
                 .doOnNext { attach.setBackgroundTint(it.theme) }
                 .doOnNext { attach.setTint(it.textPrimary) }
+                .doOnNext { speechToTextIconBorder.setBackgroundTint(it.theme) }
+                .doOnNext { speechToTextIcon.setBackgroundTint(it.textPrimary) }
+                .doOnNext { speechToTextIcon.setTint(it.theme) }
                 .doOnNext { messageAdapter.theme = it }
                 .autoDisposable(scope())
                 .subscribe()
-
-        message.setOnTouchListener(object : OnTouchListener {
-            private val gestureDetector =
-                GestureDetector(this@ComposeActivity, object : SimpleOnGestureListener() {
-                    private var lastUpEvent: MotionEvent? = null
-
-                    override fun onDoubleTap(e: MotionEvent): Boolean {
-                        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                            .putExtra(
-                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                            )
-                            // include if want a custom message that the STT can (optionally) display   .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
-                        speechResultLauncher.launch(speechRecognizerIntent)
-                        return true
-                    }
-
-                    override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                        if (lastUpEvent !== null) {
-                            message.onTouchEvent(lastUpEvent)
-                            lastUpEvent?.recycle()
-                            lastUpEvent = null
-                        }
-                        return true
-                    }
-
-                    override fun onSingleTapUp(e: MotionEvent): Boolean {
-                        lastUpEvent = MotionEvent.obtain(e)
-                        return true     // don't show soft keyboard on this event
-                    }
-                })
-
-            override fun onTouch(v: View, e: MotionEvent): Boolean {
-                return gestureDetector.onTouchEvent(e)
-            }
-        })
 
         // context menu registration for message parts
         messagePartContextMenuRegistrar
@@ -261,12 +212,46 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .autoDisposable(scope())
             .subscribe { registerForContextMenu(it) }
 
+        // drag drop handlers for speech-to-text icon
+        speechToTextIcon.setOnLongClickListener {
+            it.startDragAndDrop(null, View.DragShadowBuilder(speechToTextFrame), null, 0)
+            speechToTextFrame.isVisible = false
+
+            contentView.setOnDragListener { _, event ->
+                when (event.action) {
+                    ACTION_DROP -> {
+                        speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
+                        speechToTextFrame.y =(event.y - (speechToTextFrame.height / 2))
+
+                        // get offset from root view as a percentage of root view for saving
+                        prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
+                        prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
+                    }
+                    ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
+                        speechToTextFrame.isVisible = true
+                    }
+                }
+                true
+            }
+            true
+        }
+
         window.callback = ComposeWindowCallback(window.callback, this)
     }
 
     override fun onStart() {
         super.onStart()
         activityVisibleIntent.onNext(true)
+
+        // if first time stt icon is shown (since setting reset), pop up an instruction toast
+        if (prefs.showStt.get() &&
+            (prefs.showSttOffsetX.get() == Float.MIN_VALUE) &&
+            (prefs.showSttOffsetX.get() == Float.MIN_VALUE)) {
+            makeToast(R.string.compose_toast_drag_stt, Toast.LENGTH_LONG)
+            // reset to new flag value that indicates 'not first time through, but not customised'
+            prefs.showSttOffsetX.set(Float.MAX_VALUE)
+            prefs.showSttOffsetY.set(Float.MAX_VALUE)
+        }
     }
 
     override fun onPause() {
@@ -375,6 +360,19 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         // if scheduling mode is set, show schedule dialog
         if (state.scheduling)
             scheduleAction.onNext(true)
+
+        if (prefs.showStt.get()) {
+            speechToTextFrame.isVisible = true
+
+            var xPercent = prefs.showSttOffsetX.get()
+            var yPercent = prefs.showSttOffsetY.get()
+
+            // if the stt icon has a custom position, move it
+            if ((xPercent != Float.MAX_VALUE) && (yPercent != Float.MAX_VALUE)) {
+                speechToTextFrame.x = (contentView.x + (xPercent * contentView.width))
+                speechToTextFrame.y = (contentView.y + (yPercent * contentView.height))
+            }
+        }
     }
 
     override fun clearSelection() = messageAdapter.clearSelection()
@@ -458,6 +456,18 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .putExtra(ContactsActivity.SharingKey, sharing)
                 .putExtra(ContactsActivity.ChipsKey, serialized)
         startActivityForResult(intent, ComposeView.SelectContactRequestCode)
+    }
+
+    override fun startSpeechRecognition() {
+        startActivityForResult(
+            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            ),
+            // include below if want a custom message that the STT can (optionally) display
+            // .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
+            ComposeView.SpeechRecognitionRequestCode
+        )
     }
 
     override fun themeChanged() {
@@ -574,6 +584,21 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
             ComposeView.AttachContactRequestCode -> {
                 data?.data?.let(contactSelectedIntent::onNext)
+            }
+
+            ComposeView.SpeechRecognitionRequestCode -> {
+                // check returned results are good
+                val match = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                if ((match !== null) && (match.size > 0) && (!match[0].isNullOrEmpty())) {
+                    // get the edit text view
+                    val messageEditBox = findViewById<QkEditText>(R.id.message)
+                    if (messageEditBox !== null) {
+                        // populate message box with data returned by STT, set cursor to end, and focus
+                        messageEditBox.append(match[0])
+                        messageEditBox.setSelection(messageEditBox.text.length)
+                        messageEditBox.requestFocus()
+                    }
+                }
             }
 
             else -> super.onActivityResult(requestCode, resultCode, data)

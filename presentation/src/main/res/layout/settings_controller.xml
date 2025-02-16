@@ -100,6 +100,14 @@
             app:title="@string/settings_system_font_title"
             app:widget="@layout/settings_switch_widget" />
 
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/showStt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_speech_to_text_black"
+            app:title="@string/settings_system_show_stt_title"
+            app:widget="@layout/settings_switch_widget" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

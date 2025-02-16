@@ -161,6 +161,8 @@
     <string name="compose_message_item">Message item</string>
     <string name="compose_message_attachment">Attachment</string>
 
+    <string name="compose_toast_drag_stt">Move the speech-to-text button anywhere you like</string>
+
     <string name="message_status_sending">Sending…</string>
     <string name="message_status_delivered">Delivered %s</string>
     <string name="message_status_failed">Failed to send. Tap to try again</string>
@@ -240,6 +242,7 @@
     <string name="settings_automatic_colors_title">Automatic contact colors</string>
     <string name="settings_text_size_title">Font size</string>
     <string name="settings_system_font_title">Use system font</string>
+    <string name="settings_system_show_stt_title">Show the speech-to-text button</string>
     <string name="settings_auto_emoji_title">Automatic emoji</string>
     <string name="settings_notifications_title">Notifications</string>
     <string name="settings_notifications_o_summary">Tap to customize</string>

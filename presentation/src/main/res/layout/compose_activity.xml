@@ -27,6 +27,41 @@
     android:orientation="vertical"
     tools:context="dev.octoshrimpy.quik.feature.compose.ComposeActivity">
 
+    <FrameLayout
+        android:id="@+id/speechToTextFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:elevation="4dp"
+        android:padding="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendAsGroupBackground"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/speechToTextIconBorder"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:background="@drawable/circle"
+            android:padding="6dp"
+            tools:backgroundTint="@color/tools_theme"
+            tools:tint="@color/textPrimaryDark" />
+
+        <ImageView
+            android:id="@+id/speechToTextIcon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/circle"
+            android:elevation="1dp"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_speech_to_text_black"
+            tools:tint="@color/tools_theme" />
+
+    </FrameLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messageList"
         android:layout_width="0dp"

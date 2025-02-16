@@ -761,6 +761,11 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe()
 
+        // speech recognition button clicked
+        view.speechRecogniserIntent
+            .autoDisposable(view.scope())
+            .subscribe { view.startSpeechRecognition() }
+
         // Send a message when the send button is clicked, and disable editing mode if it's enabled
         view.sendIntent
                 .withLatestFrom(view.textChangedIntent) { _, body -> body.toString() }
