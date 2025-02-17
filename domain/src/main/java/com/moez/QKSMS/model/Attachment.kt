@@ -19,11 +19,14 @@
 package dev.octoshrimpy.quik.model
 
 import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.ContactsContract
 import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
+import androidx.core.net.toFile
 import androidx.core.view.inputmethod.InputContentInfoCompat
 
 
@@ -41,7 +44,8 @@ class Attachment (
 
         // if constructed with a uri to a contact, convert uri to associated vcard uri
         if (context.contentResolver.getType(uri)?.lowercase() ==
-            ContactsContract.Contacts.CONTENT_ITEM_TYPE) {
+            ContactsContract.Contacts.CONTENT_ITEM_TYPE
+        ) {
             uri = try {
                 Uri.withAppendedPath(
                     ContactsContract.Contacts.CONTENT_VCARD_URI,
@@ -59,21 +63,34 @@ class Attachment (
     }
 
     fun getType(context: Context): String {
-        return context.contentResolver.getType(uri) ?: "application/octect-stream"
+        var retVal: String? = null
+        when (uri.scheme) {
+            ContentResolver.SCHEME_CONTENT -> retVal = context.contentResolver.getType(uri)
+            ContentResolver.SCHEME_FILE -> retVal =
+                MimeTypeMap.getSingleton().getMimeTypeFromExtension(uri.toFile().extension)
+        }
+        return retVal ?: "application/octect-stream"
     }
 
     fun getName(context: Context): String {
+        var retVal: String? = null
         try {
-            context.contentResolver.query(
-                uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null
-            )?.use {
-                it.moveToFirst()
-                return it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME)) ?: "unknown"
-            }
-        }
-        catch (e: Exception) { /* nothing */ }
+            when (uri.scheme) {
+                ContentResolver.SCHEME_CONTENT -> {
+                    context.contentResolver.query(
+                        uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null
+                    )?.use {
+                        it.moveToFirst()
+                        retVal = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    }
+                }
 
-        return "unknown"
+                ContentResolver.SCHEME_FILE -> retVal = uri.toFile().name
+            }
+        } catch (e: Exception) { /* nothing */
+        }
+
+        return retVal ?: "unknown"
     }
 
     fun isVCard(context: Context): Boolean {
@@ -94,17 +111,24 @@ class Attachment (
     }
 
     fun getSize(context: Context): Long {
+        var retVal: Long? = null
         try {
-            context.contentResolver.query(
-                uri, arrayOf(OpenableColumns.SIZE), null, null, null
-            )?.use {
-                it.moveToFirst()
-                return it.getLong(it.getColumnIndex(OpenableColumns.SIZE))
-            }
-        }
-        catch (e: Exception) { /* nothing */ }
+            when (uri.scheme) {
+                ContentResolver.SCHEME_CONTENT -> {
+                    context.contentResolver.query(
+                        uri, arrayOf(OpenableColumns.SIZE), null, null, null
+                    )?.use {
+                        it.moveToFirst()
+                        retVal = it.getLong(it.getColumnIndex(OpenableColumns.SIZE))
+                    }
+                }
 
-        return -1
+                ContentResolver.SCHEME_FILE -> retVal = uri.toFile().length()
+            }
+        } catch (e: Exception) { /* nothing */
+        }
+
+        return retVal ?: -1
     }
 
     fun getResourceBytes(context: Context): ByteArray {
@@ -121,6 +145,18 @@ class Attachment (
         return resourceBytes ?: ByteArray(0)
     }
 
+    fun releaseResourceBytes() {
+        resourceBytes = null
+    }
+
+    fun removeCacheFile(): Boolean {
+        // all file:// scheme files are local to the app cache dir, so can be deleted
+        if (uri.scheme == ContentResolver.SCHEME_FILE) {
+            return try { uri.toFile().delete() }
+            catch (e: Exception) { false }
+        }
+
+        return false
+    }
 }
 
-class Attachments(attachments: List<Attachment>) : List<Attachment> by attachments

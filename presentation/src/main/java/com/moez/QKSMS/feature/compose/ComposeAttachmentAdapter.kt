@@ -41,7 +41,7 @@ import kotlinx.android.synthetic.main.attachment_contact_list_item.*
 import javax.inject.Inject
 
 
-class AttachmentAdapter @Inject constructor(
+class ComposeAttachmentAdapter @Inject constructor(
     private val context: Context
 ) : QkAdapter<Attachment, QkViewHolder>() {
 
