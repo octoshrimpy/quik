@@ -255,7 +255,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         messageList.setHasFixedSize(true)
         messageList.adapter = messageAdapter
 
-        parts.adapter = attachmentAdapter
+        messageAttachments.adapter = composeAttachmentAdapter
 
         message.supportsInputContent = true
 
