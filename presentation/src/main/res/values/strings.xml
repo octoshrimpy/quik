@@ -146,14 +146,21 @@
     <string name="compose_attach_cd">Add an attachment</string>
     <string name="compose_attach_file_cd">Attach any file</string>
     <string name="compose_gallery_cd">Attach a photo</string>
+    <string name="compose_audio_message_cd">Record an audio message</string>
     <string name="compose_camera_cd">Take a photo</string>
     <string name="compose_schedule_cd">Schedule message</string>
+    <string name="compose_schedule_cancel_cd">Cancel schedule message</string>
     <string name="compose_contact_cd">Attach a contact</string>
     <string name="compose_contact_error">Error reading contact</string>
     <!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Send message</string>
+    <string name="compose_record_audio_msg_cd">Record audio message</string>
+
+    <string name="compose_record_audio_msg_abort_cd">Cancel audio message</string>
+    <string name="compose_record_audio_msg_attach_cd">Attach audio message</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Play or pause audio message</string>
 
     <string name="compose_message_cancel">Cancel</string>
     <string name="compose_message_send_now">Send now</string>

@@ -25,8 +25,10 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ContentValues
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
@@ -39,6 +41,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import android.view.View.OnTouchListener
+import android.widget.SeekBar
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -52,6 +57,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.moez.QKSMS.common.QkMediaPlayer
+import com.uber.autodispose.ObservableSubscribeProxy
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
@@ -67,6 +73,7 @@ import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
+import dev.octoshrimpy.quik.common.widget.MicInputCloudView
 import dev.octoshrimpy.quik.common.widget.QkEditText
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.feature.compose.editing.ChipsAdapter
@@ -74,13 +81,23 @@ import dev.octoshrimpy.quik.feature.contacts.ContactsActivity
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.attach
 import kotlinx.android.synthetic.main.compose_activity.attachAFileIcon
 import kotlinx.android.synthetic.main.compose_activity.attachAFileLabel
 import kotlinx.android.synthetic.main.compose_activity.attaching
-import kotlinx.android.synthetic.main.compose_activity.attachingBackground
+import kotlinx.android.synthetic.main.compose_activity.shadeBackground
+import kotlinx.android.synthetic.main.compose_activity.audioMsgAbort
+import kotlinx.android.synthetic.main.compose_activity.audioMsgAttach
+import kotlinx.android.synthetic.main.compose_activity.audioMsgBackground
+import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerBackground
+import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerPlayPause
+import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerSeekBar
+import kotlinx.android.synthetic.main.compose_activity.audioMsgRecord
 import kotlinx.android.synthetic.main.compose_activity.camera
 import kotlinx.android.synthetic.main.compose_activity.cameraLabel
 import kotlinx.android.synthetic.main.compose_activity.chips
@@ -96,7 +113,11 @@ import kotlinx.android.synthetic.main.compose_activity.message
 import kotlinx.android.synthetic.main.compose_activity.messageList
 import kotlinx.android.synthetic.main.compose_activity.messagesEmpty
 import kotlinx.android.synthetic.main.compose_activity.noValidRecipients
-import kotlinx.android.synthetic.main.compose_activity.parts
+import kotlinx.android.synthetic.main.compose_activity.messageAttachments
+import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageIcon
+import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageLabel
+import kotlinx.android.synthetic.main.compose_activity.audioMsgDuration
+import kotlinx.android.synthetic.main.compose_activity.recordAudioMsg
 import kotlinx.android.synthetic.main.compose_activity.schedule
 import kotlinx.android.synthetic.main.compose_activity.scheduleLabel
 import kotlinx.android.synthetic.main.compose_activity.scheduledCancel
@@ -118,12 +139,13 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
 class ComposeActivity : QkThemedActivity(), ComposeView {
 
-    @Inject lateinit var attachmentAdapter: AttachmentAdapter
+    @Inject lateinit var composeAttachmentAdapter: ComposeAttachmentAdapter
     @Inject lateinit var chipsAdapter: ChipsAdapter
     @Inject lateinit var dateFormatter: DateFormatter
     @Inject lateinit var messageAdapter: MessagesAdapter
@@ -144,9 +166,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSendingClicks }
     override val sendNowIntent: Subject<Long> by lazy { messageAdapter.sendNowClicks }
     override val resendIntent: Subject<Long> by lazy { messageAdapter.resendClicks }
-    override val attachmentDeletedIntent: Subject<Attachment> by lazy { attachmentAdapter.attachmentDeleted }
+    override val attachmentDeletedIntent: Subject<Attachment> by lazy { composeAttachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
-    override val attachIntent by lazy { Observable.merge(attach.clicks(), attachingBackground.clicks()) }
+    override val attachIntent by lazy { Observable.merge(attach.clicks(), shadeBackground.clicks()) }
     override val cameraIntent by lazy { Observable.merge(camera.clicks(), cameraLabel.clicks()) }
     override val attachImageFileIntent by lazy { Observable.merge(gallery.clicks(), galleryLabel.clicks()) }
     override val attachAnyFileIntent by lazy { Observable.merge(attachAFileIcon.clicks(), attachAFileLabel.clicks()) }
@@ -164,10 +186,52 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
     override val speechRecogniserIntent by lazy { speechToTextIcon.clicks() }
+    override val shadeIntent by lazy { shadeBackground.clicks() }
+    override val recordAnAudioMessage by lazy {
+        Observable.merge(recordAudioMsg.clicks(),
+            attachAnAudioMessageIcon.clicks(),
+            attachAnAudioMessageLabel.clicks())
+    }
+    override val recordAudioAbort by lazy { audioMsgAbort.clicks() }
+    override val recordAudioAttach by lazy { audioMsgAttach.clicks() }
+    override val recordAudioPlayerPlayPause: Subject<QkMediaPlayer.PlayingState> = PublishSubject.create()
+    override val recordAudioPlayerConfigUI: Subject<QkMediaPlayer.PlayingState> = PublishSubject.create()
+    override val recordAudioPlayerVisible: Subject<Boolean> = PublishSubject.create()
+    override val recordAudioChronometer: Subject<Boolean> = PublishSubject.create()
+    override val recordAudioStartStop: Subject<MicInputCloudView.ViewState> = PublishSubject.create()
+
+    private var seekBarUpdater: Disposable? = null
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
     private var cameraDestination: Uri? = null
+
+    private fun getSeekBarUpdater(): ObservableSubscribeProxy<Long> {
+        return Observable.interval(500, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.single())
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(scope())
+    }
+
+    private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK)
+            return@registerForActivityResult
+
+        // check returned results are good
+        val match = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+        if ((match === null) || (match.size < 1) || (match[0].isNullOrEmpty()))
+            return@registerForActivityResult
+
+        // get the edit text view
+        val message = findViewById<QkEditText>(R.id.message)
+        if (message === null)
+            return@registerForActivityResult
+
+        // populate message box with data returned by STT, set cursor to end, and focus
+        message.append(match[0])
+        message.setSelection(message.text.length)
+        message.requestFocus()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -191,20 +255,29 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         messageList.setHasFixedSize(true)
         messageList.adapter = messageAdapter
 
-        parts.adapter = attachmentAdapter
+        messageAttachments.adapter = composeAttachmentAdapter
 
         message.supportsInputContent = true
 
         theme
-                .doOnNext { loading.setTint(it.theme) }
-                .doOnNext { attach.setBackgroundTint(it.theme) }
-                .doOnNext { attach.setTint(it.textPrimary) }
-                .doOnNext { speechToTextIconBorder.setBackgroundTint(it.theme) }
-                .doOnNext { speechToTextIcon.setBackgroundTint(it.textPrimary) }
-                .doOnNext { speechToTextIcon.setTint(it.theme) }
-                .doOnNext { messageAdapter.theme = it }
-                .autoDisposable(scope())
-                .subscribe()
+            .doOnNext { loading.setTint(it.theme) }
+            .doOnNext { attach.setBackgroundTint(it.theme) }
+            .doOnNext { attach.setTint(it.textPrimary) }
+            .doOnNext { speechToTextIconBorder.setBackgroundTint(it.theme) }
+            .doOnNext { speechToTextIcon.setBackgroundTint(it.textPrimary) }
+            .doOnNext { speechToTextIcon.setTint(it.theme) }
+            .doOnNext { audioMsgRecord.setColor(it.theme) }
+            .doOnNext { audioMsgPlayerPlayPause.setTint(it.theme) }
+            .doOnNext {
+                audioMsgPlayerSeekBar.apply {
+                    thumbTintList = ColorStateList.valueOf(it.theme)
+                    progressBackgroundTintList = ColorStateList.valueOf(it.theme)
+                    progressTintList = ColorStateList.valueOf(it.theme)
+                }
+            }
+            .doOnNext { messageAdapter.theme = it }
+            .autoDisposable(scope())
+            .subscribe()
 
         // context menu registration for message parts
         messagePartContextMenuRegistrar
@@ -236,6 +309,86 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             true
         }
 
+        // start/stop audio message recording
+        audioMsgRecord.setOnClickListener {
+            recordAudioStartStop.onNext(audioMsgRecord.getState())
+        }
+
+        recordAudioChronometer
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .distinctUntilChanged()
+            .autoDisposable(scope())
+            .subscribe {
+                if (it) {
+                    audioMsgDuration.base = SystemClock.elapsedRealtime()
+                    audioMsgDuration.start()
+                } else {
+                    audioMsgDuration.stop()
+                }
+            }
+
+        // audio record playback play/pause button
+        audioMsgPlayerPlayPause.setOnClickListener {
+            recordAudioPlayerPlayPause.onNext(
+                audioMsgPlayerPlayPause.tag as QkMediaPlayer.PlayingState
+            )
+        }
+
+        recordAudioPlayerVisible
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .distinctUntilChanged()
+            .autoDisposable(scope())
+            .subscribe {
+                audioMsgPlayerBackground.isVisible = it
+                recordAudioPlayerConfigUI.onNext(QkMediaPlayer.PlayingState.Stopped)
+            }
+
+        recordAudioPlayerConfigUI
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .distinctUntilChanged()
+            .autoDisposable(scope())
+            .subscribe {
+                when (it) {
+                    QkMediaPlayer.PlayingState.Playing -> {
+                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Playing
+                        QkMediaPlayer.start()
+                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_pause)
+                        seekBarUpdater = getSeekBarUpdater().subscribe {
+                            audioMsgPlayerSeekBar.progress = QkMediaPlayer.currentPosition
+                            audioMsgPlayerSeekBar.max = QkMediaPlayer.duration
+                        }
+                        audioMsgPlayerSeekBar.isEnabled = true
+                    }
+                    QkMediaPlayer.PlayingState.Paused -> {
+                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Paused
+                        QkMediaPlayer.pause()
+                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
+                        seekBarUpdater?.dispose()
+                    }
+                    else -> {
+                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Stopped
+                        QkMediaPlayer.reset()
+                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
+                        seekBarUpdater?.dispose()
+                        audioMsgPlayerSeekBar.progress = 0
+                        audioMsgPlayerSeekBar.isEnabled = false
+                    }
+                }
+            }
+
+        // audio msg player seek bar handler
+        audioMsgPlayerSeekBar.setOnSeekBarChangeListener(
+            object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
+                    // if seek was initiated by the user and this part is currently playing
+                    if (fromUser)
+                        QkMediaPlayer.seekTo(progress)
+                }
+                override fun onStartTrackingTouch(p0: SeekBar?) {}
+                override fun onStopTrackingTouch(p0: SeekBar?) {}
+            }
+        )
+
         window.callback = ComposeWindowCallback(window.callback, this)
     }
 
@@ -264,6 +417,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         // stop any playing audio
         QkMediaPlayer.reset()
+
+        seekBarUpdater?.dispose()
     }
 
 
@@ -321,11 +476,18 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         scheduledGroup.isVisible = state.scheduled != 0L
         scheduledTime.text = dateFormatter.getScheduledTimestamp(state.scheduled)
 
-        parts.setVisible(state.attachments.isNotEmpty())
-        attachmentAdapter.data = state.attachments
+        messageAttachments.setVisible(state.attachments.isNotEmpty())
+        composeAttachmentAdapter.data = state.attachments
 
         attach.animate().rotation(if (state.attaching) 135f else 0f).start()
         attaching.isVisible = state.attaching
+
+        shadeBackground.visibility =
+            if (state.attaching || state.audioMsgRecording) View.VISIBLE
+            else View.GONE
+
+        // show or hide audio message recording panel and shade background
+        audioMsgBackground.isVisible = state.audioMsgRecording
 
         counter.text = state.remaining
         counter.setVisible(counter.text.isNotBlank())
@@ -334,8 +496,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
         simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()
 
-        send.isEnabled = state.canSend
-        send.imageAlpha = if (state.canSend) 255 else 128
+        // show either send or audio msg record button
+        send.visibility = if (state.canSend && !state.loading) View.VISIBLE else View.INVISIBLE
+        recordAudioMsg.visibility = if (state.canSend && !state.loading) View.INVISIBLE else View.VISIBLE
 
         // if not in editing mode, and there are no non-me participants that can be sent to,
         // hide controls that allow constructing a reply and inform user no valid recipients
@@ -416,6 +579,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun requestStoragePermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+    }
+
+    override fun requestRecordAudioPermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 0)
     }
 
     override fun requestSmsPermission() {

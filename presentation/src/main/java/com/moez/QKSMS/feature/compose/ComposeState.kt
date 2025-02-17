@@ -40,11 +40,12 @@ data class ComposeState(
     val messages: Pair<Conversation, RealmResults<Message>>? = null,
     val selectedMessages: Int = 0,
     val scheduled: Long = 0,
-    val attachments: List<Attachment> = ArrayList(),
+    val attachments: List<Attachment> = listOf(),
     val attaching: Boolean = false,
     val scheduling: Boolean = false,
     val remaining: String = "",
     val subscription: SubscriptionInfoCompat? = null,
     val canSend: Boolean = false,
     val validRecipientNumbers: Int = 1,
+    val audioMsgRecording: Boolean = false,
 )

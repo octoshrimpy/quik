@@ -18,11 +18,18 @@
  */
 package dev.octoshrimpy.quik.feature.compose
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.media.AudioAttributes
+import android.net.Uri
 import android.os.Vibrator
 import android.telephony.SmsMessage
 import androidx.core.content.getSystemService
+import androidx.core.net.toFile
+import androidx.core.net.toUri
+import com.moez.QKSMS.common.QkMediaPlayer
 import com.moez.QKSMS.contentproviders.MmsPartProvider
+import com.moez.QKSMS.manager.MediaRecorderManager
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
@@ -45,7 +52,6 @@ import dev.octoshrimpy.quik.manager.ActiveConversationManager
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.model.Attachment
-import dev.octoshrimpy.quik.model.Attachments
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.Recipient
@@ -58,6 +64,7 @@ import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import dev.octoshrimpy.quik.common.widget.MicInputCloudView
 import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
 import dev.octoshrimpy.quik.extensions.isSmil
 import dev.octoshrimpy.quik.interactor.SaveImage
@@ -72,7 +79,9 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import timber.log.Timber
+import java.io.File
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -81,7 +90,7 @@ class ComposeViewModel @Inject constructor(
     @Named("threadId") private val threadId: Long,
     @Named("addresses") private val addresses: List<String>,
     @Named("text") private val sharedText: String,
-    @Named("attachments") private val sharedAttachments: Attachments,
+    @Named("attachments") private val sharedAttachments: List<Attachment>,
     @Named("mode") private val mode: String,
     private val contactRepo: ContactRepository,
     private val context: Context,
@@ -108,7 +117,10 @@ class ComposeViewModel @Inject constructor(
         query = query)
 ) {
 
-    private val attachments: Subject<List<Attachment>> = BehaviorSubject.createDefault(sharedAttachments)
+    companion object {
+        private const val AUDIO_FILE_PREFIX = "recorded-"
+    }
+
     private val chipsReducer: Subject<(List<Recipient>) -> List<Recipient>> = PublishSubject.create()
     private val conversation: Subject<Conversation> = BehaviorSubject.create()
     private val messages: Subject<List<Message>> = BehaviorSubject.create()
@@ -119,6 +131,9 @@ class ComposeViewModel @Inject constructor(
     private var shouldShowContacts = threadId == 0L && addresses.isEmpty()
 
     init {
+        // set shared attachments into state, if any
+        newState { copy(attachments = sharedAttachments) }
+
         val initialConversation = threadId.takeIf { it != 0L }
                 ?.let(conversationRepo::getConversationAsync)
                 ?.asObservable()
@@ -199,9 +214,6 @@ class ComposeViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .subscribe { enabled -> newState { copy(sendAsGroup = enabled) } }
 
-        disposables += attachments
-                .subscribe { attachments -> newState { copy(attachments = attachments) } }
-
         disposables += conversation
                 .map { conversation -> conversation.id }
                 .distinctUntilChanged()
@@ -253,10 +265,11 @@ class ComposeViewModel @Inject constructor(
             newState { copy(scheduling = true) }
     }
 
+    @SuppressLint("StringFormatInvalid")
     override fun bindView(view: ComposeView) {
         super.bindView(view)
 
-        val sharing = sharedText.isNotEmpty() || sharedAttachments.isNotEmpty()
+        val sharing = (sharedText.isNotEmpty() || sharedAttachments.isNotEmpty())
         if (shouldShowContacts) {
             shouldShowContacts = false
             view.showContacts(sharing, selectedChips.blockingFirst())
@@ -387,8 +400,10 @@ class ComposeViewModel @Inject constructor(
             .filter { it == R.id.forward }
             .withLatestFrom(view.messagesSelectedIntent) { _, messages ->
                 messages?.firstOrNull()?.let { messageRepo.getMessage(it) }?.let { message ->
-                    val attachments = message.parts.filter { !it.isSmil() }.mapNotNull { it.getUri() }
-                    navigator.showCompose(message.getText(), attachments)
+                    navigator.showCompose(
+                        message.getText(),
+                        message.parts.filter { !it.isSmil() }.mapNotNull { it.getUri() }
+                    )
                 }
             }
             .autoDisposable(view.scope())
@@ -648,15 +663,16 @@ class ComposeViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { view.requestDatePicker() }
 
-        // a file, photo or otherwise, was picked by the user
+        // an attachment was picked by the user
         Observable.merge(
             view.attachAnyFileSelectedIntent.map { uri -> Attachment(context, uri) },
             view.inputContentIntent.map { inputContent -> Attachment(context, inputContent = inputContent) }
         )
-            .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
-            .doOnNext(attachments::onNext)
             .autoDisposable(view.scope())
-            .subscribe { newState { copy(attaching = false) } }
+            .subscribe {
+                newState { copy(attachments = attachments + it, attaching = false) }
+            }
+
         // Set the scheduled time
         view.scheduleSelectedIntent
                 .filter { scheduled ->
@@ -675,20 +691,28 @@ class ComposeViewModel @Inject constructor(
 
         // Contact was selected for attachment
         view.contactSelectedIntent
-                .map { uri -> Attachment(context, uri) }
-                .withLatestFrom(attachments) { attachment, attachments -> attachments + attachment }
                 .subscribeOn(Schedulers.io())
                 .autoDisposable(view.scope())
-                .subscribe(attachments::onNext) { error ->
+                .subscribe(
+                    {
+                        newState {
+                            copy(attachments = attachments + Attachment(context, uri = it))
+                        }
+                    }
+                ) { error ->
                     context.makeToast(R.string.compose_contact_error)
                     Timber.w(error)
                 }
 
-        // Detach a photo
+        // Detach an attachment
         view.attachmentDeletedIntent
-                .withLatestFrom(attachments) { bitmap, attachments -> attachments.filter { it !== bitmap } }
                 .autoDisposable(view.scope())
-                .subscribe { attachments.onNext(it) }
+                .subscribe {
+                    newState { copy(attachments = attachments - it) }
+
+                    // if the attachment is backed by a local file, delete the file
+                    it.removeCacheFile()
+                }
 
         conversation
                 .map { conversation -> conversation.draft }
@@ -707,14 +731,17 @@ class ComposeViewModel @Inject constructor(
                     }
                 }
 
-        // Enable the send button when there is text input into the new message body or there's
-        // an attachment, disable otherwise
-        Observables
-                .combineLatest(view.textChangedIntent, attachments) { text, attachments ->
-                    text.isNotBlank() || attachments.isNotEmpty()
-                }
-                .autoDisposable(view.scope())
-                .subscribe { canSend -> newState { copy(canSend = canSend) } }
+        // set canSend state depending on if there is text input or an attachment
+        Observables.combineLatest(
+            view.textChangedIntent,     // input message text changed
+            state
+                .distinctUntilChanged { state -> state.attachments }    // attachments changed
+                .map { it.attachments.size }   // number of attachments
+        )
+            .autoDisposable(view.scope())
+            .subscribe {
+                newState { copy(canSend = (it.first.isNotBlank() || (it.second > 0))) }
+            }
 
         // Show the remaining character counter when necessary
         view.textChangedIntent
@@ -766,11 +793,142 @@ class ComposeViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { view.startSpeechRecognition() }
 
+        // shade clicked
+        view.shadeIntent
+            .autoDisposable(view.scope())
+            .subscribe { newState { copy(attaching = false) } }
+
+        // starting or stopping (change state) of audio message recording
+        state
+            .distinctUntilChanged { state -> state.audioMsgRecording }
+            .skip(1)    // skip initial value
+            .autoDisposable(view.scope())
+            .subscribe {
+                // stop any audio playback (ie from mms attachment or audio recorder)
+                QkMediaPlayer.reset()
+
+                // if leaving audio recording mode
+                if (!it.audioMsgRecording) {
+                    // ensure recording stopped and delete any recording file
+                    safeDeleteLocalFile(MediaRecorderManager.stopRecording())
+                    view.recordAudioChronometer.onNext(false)  // stop chronometer
+                }
+            }
+
+        // start recording an audio message
+        view.recordAnAudioMessage
+            .autoDisposable(view.scope())
+            .subscribe {
+                view.recordAudioPlayerVisible.onNext(false)  // hide audio player
+
+                // check have permissions to record audio
+                if (permissionManager.hasRecordAudio().also {
+                        if (!it) view.requestRecordAudioPermission()
+                    }) {
+                    newState { copy( attaching = false, audioMsgRecording = true) }
+                    view.recordAudioChronometer.onNext(true)  // start chronometer
+                    MediaRecorderManager.startRecording(context)
+                }
+            }
+
+        // abort recording audio message button
+        view.recordAudioAbort
+            .observeOn(Schedulers.io())
+            .autoDisposable(view.scope())
+            .subscribe { newState { copy( audioMsgRecording = false) } }
+
+        // main record/stop recording audio message button
+        view.recordAudioStartStop
+            .autoDisposable(view.scope())
+            .subscribe {
+                if (it == MicInputCloudView.ViewState.PAUSED_STATE) {
+                    view.recordAudioChronometer.onNext(false)  // stop chronometer
+                    MediaRecorderManager.stopRecording()
+                    view.recordAudioPlayerVisible.onNext(true)  // show audio player
+                } else {  // state = start recording
+                    // delete old recording file
+                    safeDeleteLocalFile(MediaRecorderManager.uri)
+                    view.recordAudioPlayerVisible.onNext(false)  // hide audio player
+                    view.recordAudioChronometer.onNext(true)  // start chronometer
+                    MediaRecorderManager.startRecording(context)
+                }
+            }
+
+        // attach recorded audio message button
+        view.recordAudioAttach
+            .autoDisposable(view.scope())
+            .subscribe {
+                MediaRecorderManager.stopRecording()
+
+                try {
+                    // create new filename for recorded file
+                    val newFile = File(
+                        context.cacheDir,
+                        "${AUDIO_FILE_PREFIX}${UUID.randomUUID()}${MediaRecorderManager.AUDIO_FILE_SUFFIX}"
+                    )
+
+                    // rename recorded file to new name
+                    MediaRecorderManager.uri.toFile().renameTo(newFile)
+
+                    // attach newly named file to message
+                    newState {
+                        copy(
+                            audioMsgRecording = false,
+                            attachments = attachments + Attachment(context, newFile.toUri())
+                        )
+                    }
+                }
+                catch (e: Exception) { /* nothing */ }
+            }
+
+        // audio recording player play/pause button
+        view.recordAudioPlayerPlayPause
+            .autoDisposable(view.scope())
+            .subscribe {
+                when (it) {
+                    QkMediaPlayer.PlayingState.Paused ->
+                        view.recordAudioPlayerConfigUI.onNext(
+                            QkMediaPlayer.PlayingState.Playing
+                        )
+                    QkMediaPlayer.PlayingState.Playing ->
+                        view.recordAudioPlayerConfigUI.onNext(
+                            QkMediaPlayer.PlayingState.Paused
+                        )
+                    else -> {
+                        if (MediaRecorderManager.uri != Uri.EMPTY) {
+                            QkMediaPlayer.setOnPreparedListener {
+                                view.recordAudioPlayerConfigUI.onNext(
+                                    QkMediaPlayer.PlayingState.Playing
+                                )
+                            }
+                            QkMediaPlayer.setOnCompletionListener {
+                                view.recordAudioPlayerConfigUI.onNext(
+                                    QkMediaPlayer.PlayingState.Stopped
+                                )
+                            }
+
+                            // start the media player play sequence
+                            QkMediaPlayer.setAudioAttributes(
+                                AudioAttributes.Builder()
+                                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                                    .build()
+                            )
+
+                            QkMediaPlayer.reset()
+
+                            QkMediaPlayer.setDataSource(context, MediaRecorderManager.uri)
+
+                            QkMediaPlayer.prepareAsync()
+                        }
+                    }
+                }
+            }
+
         // Send a message when the send button is clicked, and disable editing mode if it's enabled
         view.sendIntent
                 .withLatestFrom(view.textChangedIntent) { _, body -> body.toString() }
-                .withLatestFrom(state, attachments, conversation, selectedChips) { body, state, attachments,
-                                                                                   conversation, chips ->
+                .withLatestFrom(state, conversation, selectedChips) { body, state, conversation, chips ->
                     if (!permissionManager.isDefaultSms()) {
                         view.requestDefaultSms()
                         return@withLatestFrom
@@ -804,7 +962,7 @@ class ComposeViewModel @Inject constructor(
                         // Scheduling a message
                         state.scheduled != 0L -> {
                             newState { copy(scheduled = 0) }
-                            val uris = attachments.map { it.uri.toString() }
+                            val uris = state.attachments.map { it.uri.toString() }
                             val params = AddScheduledMessage
                                     .Params(state.scheduled, subId, addresses, sendAsGroup, body, uris)
                             addScheduledMessage.execute(params)
@@ -814,19 +972,19 @@ class ComposeViewModel @Inject constructor(
                         // Sending a group message
                         sendAsGroup -> {
                             sendMessage.execute(SendMessage
-                                    .Params(subId, conversation.id, addresses, body, attachments, delay))
+                                    .Params(subId, conversation.id, addresses, body, state.attachments, delay))
                         }
 
                         // Sending a message to an existing conversation with one recipient
                         conversation.recipients.size == 1 -> {
                             val address = conversation.recipients.map { it.address }
-                            sendMessage.execute(SendMessage.Params(subId, threadId, address, body, attachments, delay))
+                            sendMessage.execute(SendMessage.Params(subId, threadId, address, body, state.attachments, delay))
                         }
 
                         // Create a new conversation with one address
                         addresses.size == 1 -> {
                             sendMessage.execute(SendMessage
-                                    .Params(subId, threadId, addresses, body, attachments, delay))
+                                    .Params(subId, threadId, addresses, body, state.attachments, delay))
                         }
 
                         // Send a message to multiple addresses
@@ -838,13 +996,14 @@ class ComposeViewModel @Inject constructor(
                                 val address = listOf(conversationRepo
                                         .getConversation(threadId)?.recipients?.firstOrNull()?.address ?: addr)
                                 sendMessage.execute(SendMessage
-                                        .Params(subId, threadId, address, body, attachments, delay))
+                                        .Params(subId, threadId, address, body, state.attachments, delay))
                             }
                         }
                     }
 
+                    // configure for new message
                     view.setDraft("")
-                    this.attachments.onNext(ArrayList())
+                    newState { copy(attachments = listOf()) }
 
                     if (state.editingMode) {
                         newState { copy(editingMode = false, hasError = !sendAsGroup) }
@@ -880,6 +1039,28 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { view.clearSelection() }
 
+        // when activity changes visibility, delete old recording cache files in background thread
+        // generally there won't be any, but under some circumstances some can be left behind
+        view.activityVisibleIntent
+            .subscribeOn(Schedulers.io())
+            .autoDisposable(view.scope())
+            .subscribe {
+                context.cacheDir.listFiles()?.forEach {
+                    if (it.isFile &&
+                        it.name.startsWith(AUDIO_FILE_PREFIX) &&
+                        it.name.endsWith(MediaRecorderManager.AUDIO_FILE_SUFFIX))
+                        safeDeleteLocalFile(it.toUri())
+                }
+            }
+    }
+
+    private fun safeDeleteLocalFile(uri: Uri): Boolean {
+        return try {
+            if (uri == Uri.EMPTY)
+                false
+            uri.toFile().delete()
+        }
+        catch (e: Exception) { false }
     }
 
 }
