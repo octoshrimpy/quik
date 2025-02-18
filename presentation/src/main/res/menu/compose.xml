@@ -51,7 +51,7 @@
     <item
         android:id="@+id/details"
         android:icon="@drawable/ic_info_black_24dp"
-        android:title="@string/compose_menu_copy"
+        android:title="@string/compose_details_title"
         android:visible="false"
         app:showAsAction="always" />
 
