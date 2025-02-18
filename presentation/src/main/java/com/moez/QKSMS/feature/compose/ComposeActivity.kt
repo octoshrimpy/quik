@@ -27,6 +27,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.ContactsContract
@@ -41,7 +42,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import android.view.View.OnTouchListener
 import android.widget.SeekBar
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -116,6 +116,7 @@ import kotlinx.android.synthetic.main.compose_activity.noValidRecipients
 import kotlinx.android.synthetic.main.compose_activity.messageAttachments
 import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageIcon
 import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageLabel
+import kotlinx.android.synthetic.main.compose_activity.audioMsgBluetooth
 import kotlinx.android.synthetic.main.compose_activity.audioMsgDuration
 import kotlinx.android.synthetic.main.compose_activity.recordAudioMsg
 import kotlinx.android.synthetic.main.compose_activity.schedule
@@ -187,6 +188,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
     override val speechRecogniserIntent by lazy { speechToTextIcon.clicks() }
     override val shadeIntent by lazy { shadeBackground.clicks() }
+    override val recordAudioStartStopRecording: Subject<Boolean> = PublishSubject.create()
     override val recordAnAudioMessage by lazy {
         Observable.merge(recordAudioMsg.clicks(),
             attachAnAudioMessageIcon.clicks(),
@@ -197,8 +199,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val recordAudioPlayerPlayPause: Subject<QkMediaPlayer.PlayingState> = PublishSubject.create()
     override val recordAudioPlayerConfigUI: Subject<QkMediaPlayer.PlayingState> = PublishSubject.create()
     override val recordAudioPlayerVisible: Subject<Boolean> = PublishSubject.create()
+    override val recordAudioMsgRecordVisible: Subject<Boolean> = PublishSubject.create()
     override val recordAudioChronometer: Subject<Boolean> = PublishSubject.create()
-    override val recordAudioStartStop: Subject<MicInputCloudView.ViewState> = PublishSubject.create()
+    override val recordAudioRecord: Subject<MicInputCloudView.ViewState> = PublishSubject.create()
 
     private var seekBarUpdater: Disposable? = null
 
@@ -286,32 +289,34 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .subscribe { registerForContextMenu(it) }
 
         // drag drop handlers for speech-to-text icon
-        speechToTextIcon.setOnLongClickListener {
-            it.startDragAndDrop(null, View.DragShadowBuilder(speechToTextFrame), null, 0)
-            speechToTextFrame.isVisible = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            speechToTextIcon.setOnLongClickListener {
+                it.startDragAndDrop(null, View.DragShadowBuilder(speechToTextFrame), null, 0)
+                speechToTextFrame.isVisible = false
 
-            contentView.setOnDragListener { _, event ->
-                when (event.action) {
-                    ACTION_DROP -> {
-                        speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
-                        speechToTextFrame.y =(event.y - (speechToTextFrame.height / 2))
+                contentView.setOnDragListener { _, event ->
+                    when (event.action) {
+                        ACTION_DROP -> {
+                            speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
+                            speechToTextFrame.y =(event.y - (speechToTextFrame.height / 2))
 
-                        // get offset from root view as a percentage of root view for saving
-                        prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
-                        prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
+                            // get offset from root view as a percentage of root view for saving
+                            prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
+                            prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
+                        }
+                        ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
+                            speechToTextFrame.isVisible = true
+                        }
                     }
-                    ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
-                        speechToTextFrame.isVisible = true
-                    }
+                    true
                 }
                 true
             }
-            true
         }
 
         // start/stop audio message recording
         audioMsgRecord.setOnClickListener {
-            recordAudioStartStop.onNext(audioMsgRecord.getState())
+            recordAudioRecord.onNext(audioMsgRecord.getState())
         }
 
         recordAudioChronometer
@@ -333,6 +338,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 audioMsgPlayerPlayPause.tag as QkMediaPlayer.PlayingState
             )
         }
+
+        recordAudioMsgRecordVisible
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .distinctUntilChanged()
+            .autoDisposable(scope())
+            .subscribe {
+                audioMsgRecord.isVisible = it
+                audioMsgDuration.isVisible = it   // chronometer follows record button visibility
+                audioMsgBluetooth.isVisible = !it
+            }
 
         recordAudioPlayerVisible
             .subscribeOn(AndroidSchedulers.mainThread())

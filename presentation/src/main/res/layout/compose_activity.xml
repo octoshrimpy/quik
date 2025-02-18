@@ -755,16 +755,28 @@
                 app:srcCompat="@drawable/ic_delete_white_24dp"
                 app:tint="?android:attr/textColorPrimary" />
 
-            <dev.octoshrimpy.quik.common.widget.MicInputCloudView
-                android:id="@+id/audioMsgRecord"
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                app:pauseIcon="@drawable/exo_icon_stop"
-                app:playIcon="@android:drawable/ic_btn_speak_now"
-                app:primaryColor="@color/textPrimaryDark" />
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/audioMsgBluetooth"
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@android:drawable/stat_sys_data_bluetooth" />
+
+                <dev.octoshrimpy.quik.common.widget.MicInputCloudView
+                    android:id="@+id/audioMsgRecord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:pauseIcon="@drawable/exo_icon_stop"
+                    app:playIcon="@android:drawable/ic_btn_speak_now"
+                    app:primaryColor="@color/textPrimaryDark" />
+            </FrameLayout>
 
             <ImageView
                 android:id="@+id/audioMsgAttach"

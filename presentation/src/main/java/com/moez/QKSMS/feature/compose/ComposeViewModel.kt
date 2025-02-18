@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.feature.compose
 import android.annotation.SuppressLint
 import android.content.Context
 import android.media.AudioAttributes
+import android.media.AudioDeviceInfo
 import android.net.Uri
 import android.os.Vibrator
 import android.telephony.SmsMessage
@@ -30,6 +31,7 @@ import androidx.core.net.toUri
 import com.moez.QKSMS.common.QkMediaPlayer
 import com.moez.QKSMS.contentproviders.MmsPartProvider
 import com.moez.QKSMS.manager.MediaRecorderManager
+import com.moez.QKSMS.manager.BluetoothMicManager
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
@@ -81,7 +83,6 @@ import io.reactivex.subjects.Subject
 import timber.log.Timber
 import java.io.File
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -129,6 +130,8 @@ class ComposeViewModel @Inject constructor(
     private val searchSelection: Subject<Long> = BehaviorSubject.createDefault(-1)
 
     private var shouldShowContacts = threadId == 0L && addresses.isEmpty()
+
+    private var bluetoothMicManager: BluetoothMicManager? = null
 
     init {
         // set shared attachments into state, if any
@@ -798,7 +801,7 @@ class ComposeViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { newState { copy(attaching = false) } }
 
-        // starting or stopping (change state) of audio message recording
+        // starting or stopping (change state) of audio message ui
         state
             .distinctUntilChanged { state -> state.audioMsgRecording }
             .skip(1)    // skip initial value
@@ -811,24 +814,68 @@ class ComposeViewModel @Inject constructor(
                 if (!it.audioMsgRecording) {
                     // ensure recording stopped and delete any recording file
                     safeDeleteLocalFile(MediaRecorderManager.stopRecording())
-                    view.recordAudioChronometer.onNext(false)  // stop chronometer
+                    view.recordAudioStartStopRecording.onNext(false)
                 }
             }
 
-        // start recording an audio message
+        // starting or stopping the recording of audio
+        view.recordAudioStartStopRecording
+            .autoDisposable(view.scope())
+            .subscribe {
+                // if start recording
+                if (it == true) {
+                    view.recordAudioPlayerVisible.onNext(false)  // hide audio player
+
+                    // check have permissions to record audio
+                    if (permissionManager.hasRecordAudio().also {
+                        if (!it) view.requestRecordAudioPermission()
+                    }) {
+                        // create bluetooth mic device manager
+                        bluetoothMicManager?.close()
+                        bluetoothMicManager = BluetoothMicManager(
+                            context,
+                            object : BluetoothMicManager.Callbacks {
+                                override fun onNoDeviceFound() {
+                                    // no bluetooth sco device found, use built-in mic
+                                    this.onConnected(null)
+                                }
+                                override fun onDeviceFound(device: AudioDeviceInfo?) {
+                                    // show bluetooth placeholder until bluetooth connected
+                                    view.recordAudioMsgRecordVisible.onNext(false)
+                                }
+                                override fun onConnecting(device: AudioDeviceInfo?) { /* nothing */ }
+                                override fun onConnected(device: AudioDeviceInfo?) {
+                                    // show record button and chronometer, hide bluetooth placeholder
+                                    view.recordAudioMsgRecordVisible.onNext(true)
+                                    view.recordAudioChronometer.onNext(true)  // start chronometer
+                                    MediaRecorderManager.startRecording(context, device)
+                                }
+                                override fun onDisconnected(device: AudioDeviceInfo?) {
+                                    // if bluetooth disconnects, stop recording
+                                    if (device != null) {
+                                        view.recordAudioRecord.onNext(
+                                            MicInputCloudView.ViewState.PAUSED_STATE
+                                        )
+                                    }
+                                }
+                            }
+                        )
+                        bluetoothMicManager?.startBluetoothDevice()
+                    }
+                } else {
+                    // stop recording
+                    bluetoothMicManager?.close()
+                    view.recordAudioChronometer.onNext(false)  // stop chronometer
+                    MediaRecorderManager.stopRecording()
+                }
+            }
+
+        // record an audio message menu item or main mic icon
         view.recordAnAudioMessage
             .autoDisposable(view.scope())
             .subscribe {
-                view.recordAudioPlayerVisible.onNext(false)  // hide audio player
-
-                // check have permissions to record audio
-                if (permissionManager.hasRecordAudio().also {
-                        if (!it) view.requestRecordAudioPermission()
-                    }) {
-                    newState { copy( attaching = false, audioMsgRecording = true) }
-                    view.recordAudioChronometer.onNext(true)  // start chronometer
-                    MediaRecorderManager.startRecording(context)
-                }
+                view.recordAudioStartStopRecording.onNext(true)  // start recording
+                newState { copy( attaching = false, audioMsgRecording = true) }
             }
 
         // abort recording audio message button
@@ -838,19 +885,15 @@ class ComposeViewModel @Inject constructor(
             .subscribe { newState { copy( audioMsgRecording = false) } }
 
         // main record/stop recording audio message button
-        view.recordAudioStartStop
+        view.recordAudioRecord
             .autoDisposable(view.scope())
             .subscribe {
                 if (it == MicInputCloudView.ViewState.PAUSED_STATE) {
-                    view.recordAudioChronometer.onNext(false)  // stop chronometer
-                    MediaRecorderManager.stopRecording()
+                    view.recordAudioStartStopRecording.onNext(false)  // stop recording
                     view.recordAudioPlayerVisible.onNext(true)  // show audio player
                 } else {  // state = start recording
-                    // delete old recording file
-                    safeDeleteLocalFile(MediaRecorderManager.uri)
-                    view.recordAudioPlayerVisible.onNext(false)  // hide audio player
-                    view.recordAudioChronometer.onNext(true)  // start chronometer
-                    MediaRecorderManager.startRecording(context)
+                    safeDeleteLocalFile(MediaRecorderManager.uri)  // delete old recording file
+                    view.recordAudioStartStopRecording.onNext(true)  // start new recording
                 }
             }
 
@@ -861,7 +904,8 @@ class ComposeViewModel @Inject constructor(
                 MediaRecorderManager.stopRecording()
 
                 try {
-                    // create new filename for recorded file
+                    // create new filename for recorded file (so cache clean doesn't accidentally
+                    // delete the attachment file)
                     val newFile = File(
                         context.cacheDir,
                         "${AUDIO_FILE_PREFIX}${UUID.randomUUID()}${MediaRecorderManager.AUDIO_FILE_SUFFIX}"

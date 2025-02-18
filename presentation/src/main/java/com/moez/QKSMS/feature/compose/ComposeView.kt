@@ -78,13 +78,15 @@ interface ComposeView : QkView<ComposeState> {
     val messageLinkAskIntent: Observable<Uri>
     val speechRecogniserIntent: Observable<*>
     val shadeIntent: Observable<Unit>
+    val recordAudioStartStopRecording: Subject<Boolean>
     val recordAnAudioMessage: Observable<Unit>
     val recordAudioAbort: Observable<Unit>
     val recordAudioAttach: Observable<Unit>
     val recordAudioPlayerPlayPause: Observable<QkMediaPlayer.PlayingState>
     val recordAudioPlayerConfigUI: Subject<QkMediaPlayer.PlayingState>
     val recordAudioPlayerVisible: Subject<Boolean>
-    val recordAudioStartStop: Subject<MicInputCloudView.ViewState>
+    val recordAudioMsgRecordVisible: Subject<Boolean>
+    val recordAudioRecord: Subject<MicInputCloudView.ViewState>
     val recordAudioChronometer: Subject<Boolean>
 
     fun clearSelection()
