@@ -35,6 +35,7 @@ import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.widget.BubbleImageView
 import dev.octoshrimpy.quik.extensions.isAudio
+import dev.octoshrimpy.quik.extensions.resourceExists
 import dev.octoshrimpy.quik.feature.compose.MessagesAdapter
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
@@ -134,48 +135,50 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
                     }
                 }
                 else -> {
-                    QkMediaPlayer.reset() // make sure reset before trying to (re-)use
+                    if (part.getUri().resourceExists(context)) {
+                        QkMediaPlayer.reset() // make sure reset before trying to (re-)use
 
-                    QkMediaPlayer.setOnPreparedListener {
-                        // start media playing
-                        QkMediaPlayer.start()
+                        QkMediaPlayer.setOnPreparedListener {
+                            // start media playing
+                            QkMediaPlayer.start()
 
-                        uiToPlaying(holder)
+                            uiToPlaying(holder)
 
-                        // set current view holder and part as active
-                        audioState.apply {
-                            audioState.state = QkMediaPlayer.PlayingState.Playing
-                            partId = part.id
-                            viewHolder = holder
+                            // set current view holder and part as active
+                            audioState.apply {
+                                audioState.state = QkMediaPlayer.PlayingState.Playing
+                                partId = part.id
+                                viewHolder = holder
+                            }
+
+                            // start progress bar update timer
+                            startSeekBarUpdateTimer()
                         }
 
-                        // start progress bar update timer
-                        startSeekBarUpdateTimer()
-                    }
+                        QkMediaPlayer.setOnCompletionListener {   // also called on error because we don't have an onerrorlistener
+                            audioState.apply {
+                                // if this part is currently active, set it to stopped and inactive
+                                if ((partId == part.id) && (viewHolder != null))
+                                    uiToStopped(viewHolder!!)
 
-                    QkMediaPlayer.setOnCompletionListener {   // also called on error because we don't have an onerrorlistener
-                        audioState.apply {
-                            // if this part is currently active, set it to stopped and inactive
-                            if ((partId == part.id) && (viewHolder != null))
-                                uiToStopped(viewHolder!!)
-
-                            state = QkMediaPlayer.PlayingState.Stopped
-                            partId = -1
-                            viewHolder = null
+                                state = QkMediaPlayer.PlayingState.Stopped
+                                partId = -1
+                                viewHolder = null
+                            }
                         }
+
+                        // start the media player play sequence
+                        QkMediaPlayer.setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)     // music, maybe?? could be voice. don't want to use CONTENT_TYPE_UNKNOWN though
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                        )
+
+                        QkMediaPlayer.setDataSource(context, part.getUri())
+
+                        QkMediaPlayer.prepareAsync()
                     }
-
-                    // start the media player play sequence
-                    QkMediaPlayer.setAudioAttributes(
-                        AudioAttributes.Builder()
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)     // music, maybe?? could be voice. don't want to use CONTENT_TYPE_UNKNOWN though
-                            .setUsage(AudioAttributes.USAGE_MEDIA)
-                            .build()
-                    )
-
-                    QkMediaPlayer.setDataSource(context, part.getUri())
-
-                    QkMediaPlayer.prepareAsync()
                 }
             }
         }
@@ -234,7 +237,8 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
         }
 
         MediaMetadataRetriever().use {
-            it.setDataSource(context, part.getUri())
+            if (part.getUri().resourceExists(context))
+                it.setDataSource(context, part.getUri())
 
             // metadata title
             holder.metadataTitle.apply {
