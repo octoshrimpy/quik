@@ -19,8 +19,10 @@
 package com.moez.QKSMS.manager
 
 import android.content.Context
+import android.media.AudioDeviceInfo
 import android.media.MediaRecorder
 import android.net.Uri
+import android.os.Build
 import androidx.core.net.toUri
 import java.io.File
 import java.util.UUID
@@ -59,7 +61,7 @@ object MediaRecorderManager : MediaRecorder() {
         }
     }
 
-    fun startRecording(context: Context): Uri {
+    fun startRecording(context: Context, preferredAudioDevice: AudioDeviceInfo? = null): Uri {
         return try {
             val file = File(
                 context.cacheDir,
@@ -73,6 +75,11 @@ object MediaRecorderManager : MediaRecorder() {
             setAudioSource(AudioSource.MIC)
             setOutputFormat(OutputFormat.THREE_GPP)
             setAudioEncoder(AudioEncoder.AMR_WB)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                preferredDevice = preferredAudioDevice
+            }
+
             recordingState = RecordingState.DataSourceConfigured
 
             setOutputFile(file.path)
