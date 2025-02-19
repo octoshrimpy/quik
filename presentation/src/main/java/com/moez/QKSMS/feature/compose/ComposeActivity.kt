@@ -320,9 +320,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                         ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
                             speechToTextFrame.isVisible = true
                         }
-                .doOnNext { loading.setTint(it.theme) }
-                .doOnNext { attach.setBackgroundTint(it.theme) }
-                .doOnNext { attach.setTint(it.textPrimary) }
                 .doOnNext { messageAdapter.theme = it }
                 .autoDisposable(scope())
                 .subscribe()
