@@ -199,13 +199,22 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     private var lastUpEvent: MotionEvent? = null
 
                     override fun onDoubleTap(e: MotionEvent): Boolean {
+                        // Create the speech recognizer intent
                         val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                            .putExtra(
-                                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                            )
-                            // include if want a custom message that the STT can (optionally) display   .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
-                        speechResultLauncher.launch(speechRecognizerIntent)
+                            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                            // Optionally include a prompt message
+                            .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
+
+                        // Check if there is a speech recognition service available
+                        val resolveInfoList = packageManager.queryIntentActivities(speechRecognizerIntent, PackageManager.MATCH_DEFAULT_ONLY)
+
+                        if (resolveInfoList.isEmpty()) {
+                            // No STT provider found, show a Toast message
+                            Toast.makeText(this@ComposeActivity, "No speech-to-text service available on this device.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            // Launch the speech recognizer
+                            speechResultLauncher.launch(speechRecognizerIntent)
+                        }
                         return true
                     }
 
