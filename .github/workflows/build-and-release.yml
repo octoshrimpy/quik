@@ -3,8 +3,6 @@ name: Build and Release
 on:
   workflow_dispatch:
   push:
-    branches:
-      - master
     tags:
       - "v*"
 
@@ -14,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup JDK
         uses: actions/setup-java@v3
@@ -55,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Set release datetime
         run: echo "DATETIME=$(date +'%d-%m-%y_%s')" >> $GITHUB_ENV

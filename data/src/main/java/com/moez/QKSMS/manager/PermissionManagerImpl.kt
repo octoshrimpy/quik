@@ -72,6 +72,10 @@ class PermissionManagerImpl @Inject constructor(private val context: Context) : 
         return hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
 
+    override fun hasRecordAudio(): Boolean {
+        return hasPermission(Manifest.permission.RECORD_AUDIO)
+    }
+
     override fun hasExactAlarms(): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             return true

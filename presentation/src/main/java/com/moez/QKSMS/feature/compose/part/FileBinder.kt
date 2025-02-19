@@ -36,7 +36,6 @@ import dev.octoshrimpy.quik.model.MmsPart
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.mms_audio_preview_list_item.share
 import kotlinx.android.synthetic.main.mms_file_list_item.*
 import javax.inject.Inject
 
@@ -76,33 +75,18 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { size -> holder.size.text = size }
 
-        // share button click handling
-        holder.share.setOnClickListener {
-            navigator.shareFile(
-                MmsPartProvider.getUriForMmsPartId(part.id, part.getBestFilename()),
-                part.type
-            )
-        }
-
         holder.filename.text = part.name
 
-        val params = holder.fileBackground.layoutParams as FrameLayout.LayoutParams
         if (!message.isMe()) {
-            holder.fileBackground.layoutParams = params.apply { gravity = Gravity.START }
             holder.fileBackground.setBackgroundTint(theme.theme)
             holder.icon.setTint(theme.textPrimary)
             holder.filename.setTextColor(theme.textPrimary)
             holder.size.setTextColor(theme.textTertiary)
-            holder.share.setTint(theme.theme)
-            holder.share.setBackgroundTint(theme.textPrimary)
         } else {
-            holder.fileBackground.layoutParams = params.apply { gravity = Gravity.END }
             holder.fileBackground.setBackgroundTint(holder.containerView.context.resolveThemeColor(R.attr.bubbleColor))
             holder.icon.setTint(holder.containerView.context.resolveThemeColor(android.R.attr.textColorSecondary))
             holder.filename.setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorPrimary))
             holder.size.setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorTertiary))
-            holder.share.setTint(holder.containerView.context.resolveThemeColor(R.attr.bubbleColor))
-            holder.share.setBackgroundTint(holder.containerView.context.resolveThemeColor(android.R.attr.textColorTertiary))
         }
     }
 

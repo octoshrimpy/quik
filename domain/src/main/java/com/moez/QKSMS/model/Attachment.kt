@@ -18,51 +18,79 @@
  */
 package dev.octoshrimpy.quik.model
 
+import android.annotation.SuppressLint
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.provider.ContactsContract
 import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
+import androidx.core.net.toFile
 import androidx.core.view.inputmethod.InputContentInfoCompat
 
 
-class Attachment(
-    private val uri: Uri? = null,
-    private val inputContent: InputContentInfoCompat? = null
+@SuppressLint("Range")
+class Attachment (
+    context: Context,
+    var uri: Uri = Uri.EMPTY,
+    inputContent: InputContentInfoCompat? = null
 ) {
     private var resourceBytes: ByteArray? = null
 
-    fun getUri(): Uri {
-        return (
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
-                inputContent?.contentUri ?: uri ?: Uri.EMPTY
-            else uri ?: Uri.EMPTY
-        )
+    init {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
+            uri = inputContent?.contentUri ?: uri
+
+        // if constructed with a uri to a contact, convert uri to associated vcard uri
+        if (context.contentResolver.getType(uri)?.lowercase() ==
+            ContactsContract.Contacts.CONTENT_ITEM_TYPE
+        ) {
+            uri = try {
+                Uri.withAppendedPath(
+                    ContactsContract.Contacts.CONTENT_VCARD_URI,
+                    context.contentResolver.query(
+                        uri, null, null, null, null
+                    )?.use {
+                        it.moveToFirst()
+                        it.getString(it.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)) ?: ""
+                    }
+                )
+            } catch (e: Exception) {
+                Uri.EMPTY
+            }
+        }
     }
 
     fun getType(context: Context): String {
-        return context.contentResolver.getType(getUri()) ?: "application/octect-stream"
+        var retVal: String? = null
+        when (uri.scheme) {
+            ContentResolver.SCHEME_CONTENT -> retVal = context.contentResolver.getType(uri)
+            ContentResolver.SCHEME_FILE -> retVal =
+                MimeTypeMap.getSingleton().getMimeTypeFromExtension(uri.toFile().extension)
+        }
+        return retVal ?: "application/octect-stream"
     }
 
     fun getName(context: Context): String {
+        var retVal: String? = null
         try {
-            context.contentResolver.query(
-                getUri(),
-                arrayOf(OpenableColumns.DISPLAY_NAME),
-                null,
-                null,
-                null
-            )
-            ?.use { cursor ->
-                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                if (nameIndex == -1)
-                    return "unknown"
-                cursor.moveToFirst()
-                return cursor.getString(nameIndex) ?: "unknown"
-            }
-        }
-        catch (e: Exception) { /* nothing*/ }
+            when (uri.scheme) {
+                ContentResolver.SCHEME_CONTENT -> {
+                    context.contentResolver.query(
+                        uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null
+                    )?.use {
+                        it.moveToFirst()
+                        retVal = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                    }
+                }
 
-        return "unknown"
+                ContentResolver.SCHEME_FILE -> retVal = uri.toFile().name
+            }
+        } catch (e: Exception) { /* nothing */
+        }
+
+        return retVal ?: "unknown"
     }
 
     fun isVCard(context: Context): Boolean {
@@ -75,53 +103,60 @@ class Attachment(
     }
 
     fun isAudio(context: Context): Boolean {
-        val mimeType = getType(context)
-        return (mimeType.startsWith("audio/"))
+        return (getType(context).startsWith("audio/"))
     }
 
     fun isImage(context: Context): Boolean {
-        val mimeType = getType(context)
-        return (mimeType.startsWith("image/"))
+        return (getType(context).startsWith("image/"))
     }
 
     fun getSize(context: Context): Long {
+        var retVal: Long? = null
         try {
-            context.contentResolver.query(
-                getUri(),
-                arrayOf(OpenableColumns.SIZE),
-                null,
-                null,
-                null
-            )
-            ?.use {
-                val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
-                if (sizeIndex == -1)
-                    return -1
-                it.moveToFirst()
-                return it.getLong(sizeIndex)
-            }
-        }
-        catch (e: Exception) { /* nothing */ }
+            when (uri.scheme) {
+                ContentResolver.SCHEME_CONTENT -> {
+                    context.contentResolver.query(
+                        uri, arrayOf(OpenableColumns.SIZE), null, null, null
+                    )?.use {
+                        it.moveToFirst()
+                        retVal = it.getLong(it.getColumnIndex(OpenableColumns.SIZE))
+                    }
+                }
 
-        return -1
+                ContentResolver.SCHEME_FILE -> retVal = uri.toFile().length()
+            }
+        } catch (e: Exception) { /* nothing */
+        }
+
+        return retVal ?: -1
     }
 
     fun getResourceBytes(context: Context): ByteArray {
         if (resourceBytes != null)
             return resourceBytes!!
 
-        resourceBytes = ByteArray(0)
-
         try {
-            context.contentResolver.openInputStream(getUri())?.use {
+            context.contentResolver.openInputStream(uri)?.use {
                 resourceBytes = it.readBytes()
             }
         } catch (e: Exception) {
         }
 
-        return resourceBytes!!
+        return resourceBytes ?: ByteArray(0)
     }
 
+    fun releaseResourceBytes() {
+        resourceBytes = null
+    }
+
+    fun removeCacheFile(): Boolean {
+        // all file:// scheme files are local to the app cache dir, so can be deleted
+        if (uri.scheme == ContentResolver.SCHEME_FILE) {
+            return try { uri.toFile().delete() }
+            catch (e: Exception) { false }
+        }
+
+        return false
+    }
 }
 
-class Attachments(attachments: List<Attachment>) : List<Attachment> by attachments

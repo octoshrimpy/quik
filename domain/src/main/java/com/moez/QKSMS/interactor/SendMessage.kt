@@ -53,6 +53,9 @@ class SendMessage @Inject constructor(
                 }
                 messageRepo.sendMessage(params.subId, threadId, params.addresses, params.body, params.attachments,
                         params.delay)
+
+                // delete attachment local files, if any, because they're saved to mms db by now
+                params.attachments.forEach { it.removeCacheFile() }
             }
             .mapNotNull {
                 // If the threadId wasn't provided, then it's probably because it doesn't exist in Realm.

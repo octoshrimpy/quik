@@ -38,8 +38,11 @@
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">Call</string>
     <string name="menu_info">Details</string>
-    <string name="menu_save">Save to gallery</string>
-    <string name="menu_share">Share</string>
+
+    <string name="menu_mms_part_save">Save to gallery</string>
+    <string name="menu_mms_part_share">Share</string>
+    <string name="menu_mms_part_forward">Forward</string>
+    <string name="menu_mms_part_open">Open externally</string>
 
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d selected</string>
@@ -54,6 +57,7 @@
     <string name="main_menu_read">Mark read</string>
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">Block</string>
+    <string name="main_menu_send_now">Send now</string>
     <string name="main_menu_rename_conversation">Rename conversation</string>
     <string name="main_syncing">Syncing messages…</string>
     <string name="main_sender_you">You: %s</string>
@@ -86,7 +90,7 @@
     <string name="drawer_plus_banner_summary">Unlock amazing new features, and support development</string>
 
     <string name="rate_title">Enjoying QUIK?</string>
-    <string name="rate_summary">Share some love and rate us on Google Play!</string>
+    <string name="rate_summary">Share some love and leave us a Star on GitHub!</string>
     <string name="rate_okay">OKAY!</string>
     <string name="rate_dismiss">DISMISS</string>
 
@@ -99,6 +103,13 @@
         <item quantity="one">Are you sure you would like to delete this message?</item>
         <item quantity="other">Are you sure you would like to delete %d messages?</item>
     </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Are you sure you would like to send this message now?</item>
+        <item quantity="other">Are you sure you would like to send %d messages now?</item>
+    </plurals>
+
+    <string name="dialog_clear_compose_title">Clear message</string>
+    <string name="dialog_clear_compose">Clear the message? This action can\'t be undone.</string>
 
     <string-array name="message_options">
         <item>Copy text</item>
@@ -143,20 +154,29 @@
     <string name="compose_attach_cd">Add an attachment</string>
     <string name="compose_attach_file_cd">Attach any file</string>
     <string name="compose_gallery_cd">Attach a photo</string>
+    <string name="compose_audio_message_cd">Record an audio message</string>
     <string name="compose_camera_cd">Take a photo</string>
     <string name="compose_schedule_cd">Schedule message</string>
+    <string name="compose_schedule_cancel_cd">Cancel schedule message</string>
     <string name="compose_contact_cd">Attach a contact</string>
     <string name="compose_contact_error">Error reading contact</string>
     <!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">Send message</string>
+    <string name="compose_record_audio_msg_cd">Record audio message</string>
+
+    <string name="compose_record_audio_msg_abort_cd">Cancel audio message</string>
+    <string name="compose_record_audio_msg_attach_cd">Attach audio message</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Play or pause audio message</string>
 
     <string name="compose_message_cancel">Cancel</string>
     <string name="compose_message_send_now">Send now</string>
     <string name="compose_message_sim">SIM number</string>
     <string name="compose_message_item">Message item</string>
     <string name="compose_message_attachment">Attachment</string>
+
+    <string name="compose_toast_drag_stt">Move the speech-to-text button anywhere you like</string>
 
     <string name="message_status_sending">Sending…</string>
     <string name="message_status_delivered">Delivered %s</string>
@@ -219,11 +239,6 @@
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
     <string name="attachment_missing">Missing</string>
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
 
     <string name="settings_category_appearance">Appearance</string>
     <string name="settings_category_general">General</string>
@@ -237,6 +252,7 @@
     <string name="settings_automatic_colors_title">Automatic contact colors</string>
     <string name="settings_text_size_title">Font size</string>
     <string name="settings_system_font_title">Use system font</string>
+    <string name="settings_system_show_stt_title">Show the speech-to-text button</string>
     <string name="settings_auto_emoji_title">Automatic emoji</string>
     <string name="settings_notifications_title">Notifications</string>
     <string name="settings_notifications_o_summary">Tap to customize</string>
@@ -440,6 +456,7 @@
     <string name="button_more">More</string>
     <string name="button_set">Set</string>
     <string name="button_undo">Undo</string>
+    <string name="button_clear">Clear</string>
 
     <string name="toast_copied">Copied</string>
     <plurals name="toast_archived">

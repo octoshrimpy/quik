@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Setup JDK
         uses: actions/setup-java@v3
@@ -41,35 +41,27 @@ jobs:
         run: mv presentation/build/outputs/apk/noAnalytics/release/QUIK-v*-noAnalytics-release.apk presentation/build/outputs/apk/noAnalytics/release/QUIK-noAnalytics-release.apk
       
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: apk
           path: presentation/build/outputs/apk/noAnalytics/release/QUIK-noAnalytics-release.apk
 
   release:
-    name: Release APK
+    name: validate fdroid APK
     needs: apk
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     steps:
       - name: Download APK from build
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: apk
           
       - name: List files in the APK directory
         run: ls -Rla ./
-
-      - name: Create and upload pre-release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: presentation/build/outputs/apk/noAnalytics/release/QUIK-noAnalytics-release.apk
-          prerelease: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Validate Fastlane Supply Metadata
         uses: ashutoshgngwr/validate-fastlane-supply-metadata@v2.0.0

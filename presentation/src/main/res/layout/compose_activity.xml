@@ -27,6 +27,41 @@
     android:orientation="vertical"
     tools:context="dev.octoshrimpy.quik.feature.compose.ComposeActivity">
 
+    <FrameLayout
+        android:id="@+id/speechToTextFrame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:elevation="4dp"
+        android:padding="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendAsGroupBackground"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/speechToTextIconBorder"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:background="@drawable/circle"
+            android:padding="6dp"
+            tools:backgroundTint="@color/tools_theme"
+            tools:tint="@color/textPrimaryDark" />
+
+        <ImageView
+            android:id="@+id/speechToTextIcon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/circle"
+            android:elevation="1dp"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_speech_to_text_black"
+            tools:tint="@color/tools_theme" />
+
+    </FrameLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messageList"
         android:layout_width="0dp"
@@ -133,7 +168,7 @@
         android:id="@+id/composeBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="messageBackground,attachments,attach,message,counter,send" />
+        app:constraint_referenced_ids="messageBackground,messageAttachments,attach,message,counter" />
 
     <View
         android:id="@+id/composeDivider"
@@ -194,29 +229,30 @@
         app:layout_constraintStart_toStartOf="@id/messageBackground"
         app:layout_constraintTop_toBottomOf="@id/scheduledTitle"
         app:textSize="secondary"
-        tools:text="Decemeber 23rd at 12:00AM" />
+        tools:text="December 23rd at 12:00AM" />
 
     <ImageView
         android:id="@+id/scheduledCancel"
         android:layout_width="44dp"
         android:layout_height="56dp"
+        android:contentDescription="@string/compose_schedule_cancel_cd"
         android:padding="10dp"
         android:src="@drawable/ic_cancel_black_24dp"
-        app:tint="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toTopOf="@id/scheduledSeparator"
-        app:layout_constraintEnd_toEndOf="@id/messageBackground" />
+        app:layout_constraintEnd_toEndOf="@id/messageBackground"
+        app:tint="?android:attr/textColorSecondary" />
 
     <View
         android:id="@+id/scheduledSeparator"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="?android:attr/divider"
-        app:layout_constraintBottom_toTopOf="@id/attachments"
+        app:layout_constraintBottom_toTopOf="@id/messageAttachments"
         app:layout_constraintEnd_toEndOf="@id/messageBackground"
         app:layout_constraintStart_toStartOf="@id/messageBackground" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/attachments"
+        android:id="@+id/messageAttachments"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:clipChildren="false"
@@ -260,10 +296,10 @@
         android:contentDescription="@string/compose_sim_cd"
         android:padding="8dp"
         android:src="@drawable/ic_sim_card_black_24dp"
-        app:tint="?android:attr/textColorSecondary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
-        app:layout_constraintEnd_toEndOf="@id/messageBackground" />
+        app:layout_constraintEnd_toEndOf="@id/messageBackground"
+        app:tint="?android:attr/textColorSecondary" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/simIndex"
@@ -302,9 +338,11 @@
         android:contentDescription="@string/compose_send_cd"
         android:padding="10dp"
         android:src="@drawable/ic_send_black_24dp"
-        app:tint="?android:textColorSecondary"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="?android:textColorSecondary"
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -326,8 +364,8 @@
                 android:id="@+id/toolbarTitle"
                 style="@style/ToolbarText"
                 android:layout_height="wrap_content"
-                tools:text="Moez Bhatti"
-                android:textDirection="ltr" />
+                android:textDirection="ltr"
+                tools:text="Moez Bhatti" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 android:id="@+id/toolbarSubtitle"
@@ -357,30 +395,25 @@
         android:background="@drawable/ab_shadow"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/divider"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
     <androidx.constraintlayout.widget.Group
         android:id="@+id/attaching"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="contact,contactLabel,schedule,scheduleLabel,gallery,galleryLabel,attachAFileIcon,attachAFileLabel,camera,cameraLabel,attachingBackground" />
+        app:constraint_referenced_ids="contact,contactLabel,schedule,scheduleLabel,attachAFileIcon,attachAFileLabel,attachAnAudioMessageIcon,attachAnAudioMessageLabel,gallery,galleryLabel,camera,cameraLabel" />
 
     <View
-        android:id="@+id/attachingBackground"
+        android:id="@+id/shadeBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#44000000"
         android:elevation="4dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 
     <ImageView
         android:id="@+id/contact"
@@ -393,11 +426,11 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_person_black_24dp"
-        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/schedule"
         app:layout_constraintEnd_toEndOf="@id/attach"
-        app:layout_constraintStart_toStartOf="@id/attach" />
+        app:layout_constraintStart_toStartOf="@id/attach"
+        app:tint="?android:attr/textColorSecondary" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/contactLabel"
@@ -427,11 +460,11 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_event_black_24dp"
-        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/attachAFileIcon"
         app:layout_constraintEnd_toEndOf="@id/attach"
-        app:layout_constraintStart_toStartOf="@id/attach" />
+        app:layout_constraintStart_toStartOf="@id/attach"
+        app:tint="?android:attr/textColorSecondary" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/scheduleLabel"
@@ -450,7 +483,6 @@
         app:layout_constraintStart_toEndOf="@id/schedule"
         app:layout_constraintTop_toTopOf="@id/schedule" />
 
-
     <ImageView
         android:id="@+id/attachAFileIcon"
         android:layout_width="40dp"
@@ -464,7 +496,7 @@
         android:rotation="-45"
         android:src="@drawable/ic_attachment_black_24dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/gallery"
+        app:layout_constraintBottom_toTopOf="@id/attachAnAudioMessageIcon"
         app:layout_constraintEnd_toEndOf="@id/attach"
         app:layout_constraintStart_toStartOf="@id/attach"
         app:tint="?android:attr/textColorSecondary" />
@@ -486,6 +518,39 @@
         app:layout_constraintStart_toEndOf="@id/attachAFileIcon"
         app:layout_constraintTop_toTopOf="@id/attachAFileIcon" />
 
+    <ImageView
+        android:id="@+id/attachAnAudioMessageIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?attr/bubbleColor"
+        android:contentDescription="@string/compose_audio_message_cd"
+        android:elevation="4dp"
+        android:padding="10dp"
+        android:src="@android:drawable/ic_btn_speak_now"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/gallery"
+        app:layout_constraintEnd_toEndOf="@id/attach"
+        app:layout_constraintStart_toStartOf="@id/attach"
+        app:tint="?android:attr/textColorSecondary" />
+
+    <dev.octoshrimpy.quik.common.widget.QkTextView
+        android:id="@+id/attachAnAudioMessageLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_rectangle_4dp"
+        android:backgroundTint="?attr/bubbleColor"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="@string/compose_audio_message_cd"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/attachAnAudioMessageIcon"
+        app:layout_constraintStart_toEndOf="@id/attachAnAudioMessageIcon"
+        app:layout_constraintTop_toTopOf="@id/attachAnAudioMessageIcon" />
 
     <ImageView
         android:id="@+id/gallery"
@@ -498,11 +563,11 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_insert_photo_black_24dp"
-        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/camera"
         app:layout_constraintEnd_toEndOf="@id/attach"
-        app:layout_constraintStart_toStartOf="@id/attach" />
+        app:layout_constraintStart_toStartOf="@id/attach"
+        app:tint="?android:attr/textColorSecondary" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/galleryLabel"
@@ -532,11 +597,11 @@
         android:elevation="4dp"
         android:padding="10dp"
         android:src="@drawable/ic_camera_alt_black_24dp"
-        app:tint="?android:attr/textColorSecondary"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/attach"
         app:layout_constraintEnd_toEndOf="@id/attach"
-        app:layout_constraintStart_toStartOf="@id/attach" />
+        app:layout_constraintStart_toStartOf="@id/attach"
+        app:tint="?android:attr/textColorSecondary" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/cameraLabel"
@@ -583,5 +648,150 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/recordAudioMsg"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/compose_record_audio_msg_cd"
+        android:padding="8dp"
+        android:src="@android:drawable/ic_btn_speak_now"
+        app:layout_constraintBottom_toBottomOf="@id/messageBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="?android:textColorSecondary" />
+
+    <LinearLayout
+        android:id="@+id/audioMsgBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/windowBackground"
+        android:elevation="16dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
+
+        <View
+            android:id="@+id/audioMsgBackgroundShadow"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:background="@drawable/ab_shadow"
+            app:layout_constraintTop_toBottomOf="@id/sendAsGroupBackground" />
+
+        <LinearLayout
+            android:id="@+id/audioMsgPlayerBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/rounded_rectangle_22dp"
+            android:backgroundTint="#1f000000"
+            android:orientation="horizontal"
+            android:padding="2dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/audioMsgPlayerPlayPause"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_weight="0"
+                android:contentDescription="@string/compose_record_audio_msg_play_pause_cd"
+                app:srcCompat="@drawable/exo_controls_play"
+                app:tint="@color/tools_theme" />
+
+            <SeekBar
+                android:id="@+id/audioMsgPlayerSeekBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:progressBackgroundTint="@color/tools_theme"
+                android:thumbTint="@color/tools_theme" />
+        </LinearLayout>
+
+        <Chronometer
+            android:id="@+id/audioMsgDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/audioMsgControls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:backgroundTint="#1f000000"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/audioMsgAbort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:contentDescription="@string/compose_record_audio_msg_abort_cd"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/ic_delete_white_24dp"
+                app:tint="?android:attr/textColorPrimary" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/audioMsgBluetooth"
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@android:drawable/stat_sys_data_bluetooth" />
+
+                <dev.octoshrimpy.quik.common.widget.MicInputCloudView
+                    android:id="@+id/audioMsgRecord"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    app:pauseIcon="@drawable/exo_icon_stop"
+                    app:playIcon="@android:drawable/ic_btn_speak_now"
+                    app:primaryColor="@color/textPrimaryDark" />
+            </FrameLayout>
+
+            <ImageView
+                android:id="@+id/audioMsgAttach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:contentDescription="@string/compose_record_audio_msg_attach_cd"
+                android:rotation="135"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_attachment_black_24dp"
+                app:tint="?android:attr/textColorPrimary" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

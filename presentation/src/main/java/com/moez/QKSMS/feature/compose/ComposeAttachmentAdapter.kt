@@ -41,9 +41,9 @@ import kotlinx.android.synthetic.main.attachment_contact_list_item.*
 import javax.inject.Inject
 
 
-class AttachmentAdapter @Inject constructor(
+class ComposeAttachmentAdapter @Inject constructor(
     private val context: Context
-) : QkAdapter<Attachment>() {
+) : QkAdapter<Attachment, QkViewHolder>() {
 
     companion object {
         private const val VIEW_TYPE_FILE = 0
@@ -93,14 +93,14 @@ class AttachmentAdapter @Inject constructor(
         holder.fileName.visibility = View.GONE
 
         // if attachment uri is missing
-        if (!attachment.getUri().resourceExists(context)) {
+        if (!attachment.uri.resourceExists(context)) {
             holder.thumbnail.setImageResource(android.R.drawable.ic_delete)
             holder.fileName.text = context.getString(R.string.attachment_missing)
             holder.fileName.visibility = View.VISIBLE
             return
         }
 
-        val uri = attachment.getUri()
+        val uri = attachment.uri
         val mimeType = attachment.getType(context)
 
         // if attachment mime type is image/* or video/*, use image/frame

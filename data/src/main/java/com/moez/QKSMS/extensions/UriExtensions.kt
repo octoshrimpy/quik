@@ -18,19 +18,24 @@
  */
 package dev.octoshrimpy.quik.extensions
 
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toFile
 
 fun Uri.resourceExists(context: Context): Boolean {
-    // check if resource at uri still exists
+    var retVal: Boolean? = null
     try {
-        return context.contentResolver.query(
-            this, null, null, null, null
-        )?.use {
-            it.moveToFirst()
-        } ?: false
+        when (this.scheme) {
+            ContentResolver.SCHEME_CONTENT -> {
+                retVal = context.contentResolver.query(
+                    this, null, null, null, null
+                )?.use { it.moveToFirst() }
+            }
+            ContentResolver.SCHEME_FILE -> retVal = this.toFile().exists()
+        }
+    } catch (e: Exception) { /* nothing */
     }
-    catch (e: Exception) { /* nothing */ }
 
-    return false
+    return retVal ?: false
 }

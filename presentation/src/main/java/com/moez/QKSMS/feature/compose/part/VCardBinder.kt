@@ -71,15 +71,12 @@ class VCardBinder @Inject constructor(colors: Colors, private val context: Conte
                     holder.name.isVisible = displayName.isNotEmpty()
                 }
 
-        val params = holder.vCardBackground.layoutParams as FrameLayout.LayoutParams
         if (!message.isMe()) {
-            holder.vCardBackground.layoutParams = params.apply { gravity = Gravity.START }
             holder.vCardBackground.setBackgroundTint(theme.theme)
             holder.vCardAvatar.setTint(theme.textPrimary)
             holder.name.setTextColor(theme.textPrimary)
             holder.label.setTextColor(theme.textTertiary)
         } else {
-            holder.vCardBackground.layoutParams = params.apply { gravity = Gravity.END }
             holder.vCardBackground.setBackgroundTint(holder.containerView.context.resolveThemeColor(R.attr.bubbleColor))
             holder.vCardAvatar.setTint(holder.containerView.context.resolveThemeColor(android.R.attr.textColorSecondary))
             holder.name.setTextColor(holder.containerView.context.resolveThemeColor(android.R.attr.textColorPrimary))

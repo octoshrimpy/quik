@@ -45,7 +45,6 @@ import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.TextViewStyler
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
-import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setPadding
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -66,7 +65,7 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.message_list_item_in.*
-import kotlinx.android.synthetic.main.message_list_item_in.attachments
+import kotlinx.android.synthetic.main.message_list_item_in.parts
 import kotlinx.android.synthetic.main.message_list_item_in.body
 import kotlinx.android.synthetic.main.message_list_item_in.sim
 import kotlinx.android.synthetic.main.message_list_item_in.simIndex
@@ -109,11 +108,13 @@ class MessagesAdapter @Inject constructor(
 
     }
 
-    val clicks: Subject<Long> = PublishSubject.create()
+    // click events passed back to compose view model
     val partClicks: Subject<Long> = PublishSubject.create()
     val messageLinkClicks: Subject<Uri> = PublishSubject.create()
-    val cancelSending: Subject<Long> = PublishSubject.create()
-    val sendNow: Subject<Long> = PublishSubject.create()
+    val cancelSendingClicks: Subject<Long> = PublishSubject.create()
+    val sendNowClicks: Subject<Long> = PublishSubject.create()
+    val resendClicks: Subject<Long> = PublishSubject.create()
+    val partContextMenuRegistrar: Subject<View> = PublishSubject.create()
 
     var data: Pair<Conversation, RealmResults<Message>>? = null
         set(value) {
@@ -131,17 +132,6 @@ class MessagesAdapter @Inject constructor(
     private val conversation: Conversation?
         get() = data?.first?.takeIf { it.isValid }
 
-    /**
-     * Mark this message as highlighted
-     */
-    var highlight: Long = -1L
-        set(value) {
-            if (field == value) return
-
-            field = value
-            notifyDataSetChanged()
-        }
-
     private val contactCache = ContactCache()
     private val expanded = HashMap<Long, Boolean>()
     private val subs = subscriptionManager.activeSubscriptionInfoList
@@ -150,11 +140,6 @@ class MessagesAdapter @Inject constructor(
 
     private val audioState = AudioState()
 
-    /**
-     * If the viewType is negative, then the viewHolder has an attachment. We'll consider
-     * this a unique viewType even though it uses the same view, so that regular messages
-     * don't need clipToOutline set to true, and they don't need to worry about images
-     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
 
         // Use the parent's context to inflate the layout, otherwise link clicks will crash the app
@@ -166,15 +151,15 @@ class MessagesAdapter @Inject constructor(
             view.findViewById<ImageView>(R.id.cancelIcon).setTint(theme.theme)
             view.findViewById<ProgressBar>(R.id.cancel).setTint(theme.theme)
             view.findViewById<ImageView>(R.id.sendNowIcon).setTint(theme.theme)
+            view.findViewById<ImageView>(R.id.resendIcon).setTint(theme.theme)
         } else {
             view = layoutInflater.inflate(R.layout.message_list_item_in, parent, false)
         }
 
         view.body.hyphenationFrequency = Layout.HYPHENATION_FREQUENCY_NONE
 
-        val partsAdapter = partsAdapterProvider.get()
-        partsAdapter.clicks.subscribe(partClicks)
-        view.attachments.adapter = partsAdapter
+        // register recycler view with compose activity for context menus
+        partContextMenuRegistrar.onNext(view.parts)
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
@@ -182,7 +167,6 @@ class MessagesAdapter @Inject constructor(
                 when (toggleSelection(message.id, false)) {
                     true -> view.isActivated = isSelected(message.id)
                     false -> {
-                        clicks.onNext(message.id)
                         expanded[message.id] = view.status.visibility != View.VISIBLE
                         notifyItemChanged(adapterPosition)
                     }
@@ -207,6 +191,11 @@ class MessagesAdapter @Inject constructor(
             false -> colors.theme(contactCache[message.address])
         }
 
+        holder.parts.adapter = partsAdapterProvider.get().apply {
+            contextMenuValue = message.id
+            clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model
+        }
+
         // Update the selected state
         holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
 
@@ -215,7 +204,7 @@ class MessagesAdapter @Inject constructor(
             holder.cancelFrame.let { cancelFrame ->
                 val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
                 cancelFrame.visibility = if (isCancellable) View.VISIBLE else View.GONE
-                cancelFrame.clicks().subscribe { cancelSending.onNext(message.id) }
+                cancelFrame.clicks().subscribe { cancelSendingClicks.onNext(message.id) }
                 cancelFrame.cancel.progress = 2
 
                 if (isCancellable) {
@@ -235,16 +224,30 @@ class MessagesAdapter @Inject constructor(
             }
         }
 
-        // Bind the send now icon view
+        // bind the send now icon view
         if (holder.sendNowIcon != null) {
             holder.sendNowIcon.let { sendNowIcon ->
-                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
-                sendNowIcon.visibility = if (isCancellable) View.VISIBLE else View.GONE
-                sendNowIcon.clicks().subscribe { sendNow.onNext(message.id) }
+                if (message.isSending() && message.date > System.currentTimeMillis()) {
+                    sendNowIcon.visibility = View.VISIBLE
+                    sendNowIcon.clicks().subscribe { sendNowClicks.onNext(message.id) }
+                } else
+                    sendNowIcon.visibility = View.GONE
             }
         }
 
-        val cancelableSimpleOnGestureListener = holder.body.forwardTouches(holder.containerView)
+        // bind the resend icon view
+        if (holder.resendIcon != null) {
+            holder.resendIcon.let { resendIcon ->
+                if (message.isFailedMessage()) {
+                    resendIcon.visibility = View.VISIBLE
+                    resendIcon.clicks().subscribe {
+                        resendClicks.onNext(message.id)
+                        resendIcon.visibility = View.GONE
+                    }
+                } else
+                    resendIcon.visibility = View.GONE
+            }
+        }
 
         // Bind the message status
         bindStatus(holder, message, next)
@@ -325,9 +328,6 @@ class MessagesAdapter @Inject constructor(
                         object : ClickableSpan() {
                             override fun onClick(widget: View) {
                                 messageLinkClicks.onNext(Uri.parse(span.url))
-
-                                // interrupt the upcoming click event on the body view
-                                cancelableSimpleOnGestureListener.cancelCurrentClick()
                             }
                         },
                         spanString.getSpanStart(span),
@@ -351,8 +351,8 @@ class MessagesAdapter @Inject constructor(
                 canGroupWithNext = canGroup(message, next),
                 isMe = message.isMe()))
 
-        // Bind the attachments
-        val partsAdapter = holder.attachments.adapter as PartsAdapter
+        // Bind the parts
+        val partsAdapter = (holder.parts.adapter as PartsAdapter)
         partsAdapter.theme = theme
         partsAdapter.setData(message, previous, next, holder, audioState)
     }
@@ -365,12 +365,9 @@ class MessagesAdapter @Inject constructor(
             message.isDelivered() -> context.getString(R.string.message_status_delivered,
                     dateFormatter.getTimestamp(message.dateSent))
             message.isFailedMessage() -> context.getString(R.string.message_status_failed)
-
-            // Incoming group message
-            !message.isMe() && conversation?.recipients?.size ?: 0 > 1 -> {
+            !message.isMe() && (conversation?.recipients?.size ?: 0) > 1 -> {  // incoming group message
                 "${contactCache[message.address]?.getDisplayName()} • ${dateFormatter.getTimestamp(message.date)}"
             }
-
             else -> dateFormatter.getTimestamp(message.date)
         }
 
@@ -379,7 +376,7 @@ class MessagesAdapter @Inject constructor(
             message.isSending() -> true
             message.isFailedMessage() -> true
             expanded[message.id] == false -> false
-            conversation?.recipients?.size ?: 0 > 1 && !message.isMe() && next?.compareSender(message) != true -> true
+            (conversation?.recipients?.size ?: 0) > 1 && !message.isMe() && next?.compareSender(message) != true -> true
             message.isDelivered() && next?.isDelivered() != true && age <= BubbleUtils.TIMESTAMP_THRESHOLD -> true
             else -> false
         })
@@ -395,30 +392,6 @@ class MessagesAdapter @Inject constructor(
             true -> VIEW_TYPE_MESSAGE_OUT
             false -> VIEW_TYPE_MESSAGE_IN
         }
-    }
-
-    fun toggleSelectAll() {
-        var needToSelectAll = false
-
-        // if a non-selected item is found, then we need to select all, otherwise deselect all
-        for (position in 0 until itemCount)
-            if (!isSelected(getItemId(position))) {
-                needToSelectAll = true
-                break
-            }
-
-        // select or deselect item based on if toggling all selected of deselected
-        for (position in 0 until itemCount) {
-            val messageId = getItemId(position)
-            // if deselecting all then toggle selection (we know all items are selected)
-            if (!needToSelectAll)
-                toggleSelection(messageId)
-            // else, selecting all, toggle if not already selected
-            else if (!isSelected(messageId))
-                toggleSelection(messageId)
-        }
-
-        notifyDataSetChanged()
     }
 
     fun expandMessages(messageIds: List<Long>, expand: Boolean) {

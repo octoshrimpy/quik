@@ -45,7 +45,7 @@ import javax.inject.Inject
 class ComposeItemAdapter @Inject constructor(
     private val colors: Colors,
     private val conversationRepo: ConversationRepository
-) : QkAdapter<ComposeItem>() {
+) : QkAdapter<ComposeItem, QkViewHolder>() {
 
     val clicks: Subject<ComposeItem> = PublishSubject.create()
     val longClicks: Subject<ComposeItem> = PublishSubject.create()

@@ -116,7 +116,10 @@ class SettingsPresenter @Inject constructor(
                 .subscribe { autoColor -> newState { copy(autoColor = autoColor) } }
 
         disposables += prefs.systemFont.asObservable()
-                .subscribe { enabled -> newState { copy(systemFontEnabled = enabled) } }
+            .subscribe { enabled -> newState { copy(systemFontEnabled = enabled) } }
+
+        disposables += prefs.showStt.asObservable()
+            .subscribe { enabled -> newState { copy(showStt = enabled) } }
 
         disposables += prefs.unicode.asObservable()
                 .subscribe { enabled -> newState { copy(stripUnicodeEnabled = enabled) } }
@@ -206,6 +209,12 @@ class SettingsPresenter @Inject constructor(
                         }
 
                         R.id.systemFont -> prefs.systemFont.set(!prefs.systemFont.get())
+
+                        R.id.showStt -> {
+                            prefs.showStt.set(!prefs.showStt.get())
+                            prefs.showSttOffsetX.set(Float.MIN_VALUE)
+                            prefs.showSttOffsetY.set(Float.MIN_VALUE)
+                        }
 
                         R.id.unicode -> prefs.unicode.set(!prefs.unicode.get())
 

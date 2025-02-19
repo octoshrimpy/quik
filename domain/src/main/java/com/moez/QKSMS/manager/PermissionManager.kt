@@ -36,6 +36,8 @@ interface PermissionManager {
 
     fun hasStorage(): Boolean
 
+    fun hasRecordAudio(): Boolean
+
     fun hasExactAlarms(): Boolean
 
 }

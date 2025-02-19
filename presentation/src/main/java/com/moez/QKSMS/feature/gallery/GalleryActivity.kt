@@ -107,7 +107,7 @@ class GalleryActivity : QkActivity(), GalleryView {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.gallery, menu)
+        menuInflater.inflate(R.menu.mms_part_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

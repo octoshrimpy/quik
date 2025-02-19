@@ -61,7 +61,13 @@ class ScheduledMessageAdapter @Inject constructor(
         return QkViewHolder(view).apply {
             view.setOnClickListener {
                 val message = getItem(adapterPosition) ?: return@setOnClickListener
-                clicks.onNext(message.id)
+                if (toggleSelection(message.id, false))
+                    view.isActivated = isSelected(message.id)
+            }
+            view.setOnClickListener {
+                val message = getItem(adapterPosition) ?: return@setOnClickListener
+                toggleSelection(message.id)
+                view.isActivated = isSelected(message.id)
             }
         }
     }
@@ -79,9 +85,16 @@ class ScheduledMessageAdapter @Inject constructor(
         holder.date.text = dateFormatter.getScheduledTimestamp(message.date)
         holder.body.text = message.body
 
+        // update the selected/highlighted state
+        holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
+
         val adapter = holder.attachments.adapter as ScheduledMessageAttachmentAdapter
         adapter.data = message.attachments.map(Uri::parse)
         holder.attachments.isVisible = message.attachments.isNotEmpty()
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position)?.id ?: -1
     }
 
     /**

@@ -47,6 +47,7 @@ import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.anyOf
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.extensions.isVideo
+import dev.octoshrimpy.quik.extensions.resourceExists
 import dev.octoshrimpy.quik.manager.ActiveConversationManager
 import dev.octoshrimpy.quik.manager.KeyManager
 import dev.octoshrimpy.quik.model.Attachment
@@ -368,32 +369,35 @@ class MessageRepositoryImpl @Inject constructor(
                 parts += MMSPart("text", ContentType.TEXT_PLAIN, bytes)
             }
 
-            // Attach those that can't be compressed (ie. everything but not images)
+            // Attach those that can't be compressed (ie. everything but images)
             parts += attachments
-                // filter out images
+                // filter in non-images only
                 .filter { !it.isImage(context) }
-                // filter out items that have no data available (ie user may have deleted
-                // the file from storage)
-                .filter { it.getResourceBytes(context).isNotEmpty() }
+                // filter in only items that exist (user may have deleted the file)
+                .filter { it.uri.resourceExists(context) }
                 .map {
                     remainingBytes -= it.getResourceBytes(context).size
-                    MMSPart(
+                    val mmsPart = MMSPart(
                         it.getName(context),
                         it.getType(context),
                         it.getResourceBytes(context)
                     )
+
+                    // release the attachment hold on the image bytes so the GC can reclaim
+                    it.releaseResourceBytes()
+
+                    mmsPart
                 }
 
             val imageBytesByAttachment = attachments
-                // filter out non-images
+                // filter in images only
                 .filter { it.isImage(context) }
-                // filter out items that have no data available (ie user may have deleted
-                // the file from storage)
-                .filter { it.getResourceBytes(context).isNotEmpty() }
+                // filter in only items that exist (user may have deleted the file)
+                .filter { it.uri.resourceExists(context) }
                 .associateWith {
                     when (it.getType(context) == "image/gif") {
-                        true -> ImageUtils.getScaledGif(context, it.getUri(), maxWidth, maxHeight)
-                        false -> ImageUtils.getScaledImage(context, it.getUri(), maxWidth, maxHeight)
+                        true -> ImageUtils.getScaledGif(context, it.uri, maxWidth, maxHeight)
+                        false -> ImageUtils.getScaledImage(context, it.uri, maxWidth, maxHeight)
                     }
                 }
                 .toMutableMap()
@@ -401,7 +405,7 @@ class MessageRepositoryImpl @Inject constructor(
             val imageByteCount = imageBytesByAttachment.values.sumOf { it.size }
             if (imageByteCount > remainingBytes) {
                 imageBytesByAttachment.forEach { (attachment, originalBytes) ->
-                    val uri = attachment.getUri() ?: return@forEach
+                    val uri = attachment.uri ?: return@forEach
                     val maxBytes = originalBytes.size / imageByteCount.toFloat() * remainingBytes
 
                     // Get the image dimensions
@@ -429,11 +433,14 @@ class MessageRepositoryImpl @Inject constructor(
 
                         attempts++
                         scaledBytes = when (attachment.getType(context) == "image/gif") {
-                            true -> ImageUtils.getScaledGif(context, attachment.getUri(), newWidth, newHeight)
-                            false -> ImageUtils.getScaledImage(context, attachment.getUri(), newWidth, newHeight)
+                            true -> ImageUtils.getScaledGif(context, attachment.uri, newWidth, newHeight)
+                            false -> ImageUtils.getScaledImage(context, attachment.uri, newWidth, newHeight)
                         }
 
                         Timber.d("Compression attempt $attempts: ${scaledBytes.size / 1024}/${maxBytes.toInt() / 1024}Kb ($width*$height -> $newWidth*$newHeight)")
+
+                        // release the attachment hold on the image bytes so the GC can reclaim
+                        attachment.releaseResourceBytes()
                     }
 
                     Timber.v("Compressed ${originalBytes.size / 1024}Kb to ${scaledBytes.size / 1024}Kb with a target size of ${maxBytes.toInt() / 1024}Kb in $attempts attempts")
