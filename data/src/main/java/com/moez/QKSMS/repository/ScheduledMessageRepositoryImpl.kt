@@ -69,6 +69,10 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
         disposables.add(subscription)
     }
 
+    override fun deleteScheduledMessages(ids: List<Long>) {
+        ids.forEach { deleteScheduledMessage(it) }
+    }
+
     // Ensure to clear disposables when the repository is no longer needed
     fun clearDisposables() {
         disposables.clear()

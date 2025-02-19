@@ -57,6 +57,7 @@
     <string name="main_menu_read">Mark read</string>
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">Block</string>
+    <string name="main_menu_send_now">Send now</string>
     <string name="main_menu_rename_conversation">Rename conversation</string>
     <string name="main_syncing">Syncing messages…</string>
     <string name="main_sender_you">You: %s</string>
@@ -101,6 +102,10 @@
     <plurals name="dialog_delete_chat">
         <item quantity="one">Are you sure you would like to delete this message?</item>
         <item quantity="other">Are you sure you would like to delete %d messages?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Are you sure you would like to send this message now?</item>
+        <item quantity="other">Are you sure you would like to send %d messages now?</item>
     </plurals>
 
     <string name="dialog_clear_compose_title">Clear message</string>
@@ -234,11 +239,6 @@
     <string name="scheduled_compose_cd">Schedule a message</string>
     <string name="scheduled_options_title">Scheduled message</string>
     <string name="attachment_missing">Missing</string>
-    <string-array name="scheduled_options">
-        <item>Send now</item>
-        <item>Copy text</item>
-        <item>Delete</item>
-    </string-array>
 
     <string name="settings_category_appearance">Appearance</string>
     <string name="settings_category_general">General</string>

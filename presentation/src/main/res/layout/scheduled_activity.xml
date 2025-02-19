@@ -17,145 +17,177 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_max="140dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/empty"
-                android:layout_width="match_parent"
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/toolbarTitle"
+                style="@style/ToolbarText"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp">
-
-                <dev.octoshrimpy.quik.common.widget.QkTextView
-                    style="@style/TextPrimary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/scheduled_empty_description"
-                    android:textColor="?android:attr/textColorSecondary" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp" />
-
-                <dev.octoshrimpy.quik.common.widget.TightTextView
-                    style="@style/ScheduledSampleTextStyle"
-                    android:layout_gravity="end"
-                    android:text="@string/scheduled_empty_message_1" />
-
-                <dev.octoshrimpy.quik.common.widget.TightTextView
-                    android:id="@+id/sampleMessage"
-                    style="@style/ScheduledSampleTextStyle"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/rounded_rectangle_22dp"
-                    android:text="@string/scheduled_empty_message_2"
-                    tools:backgroundTint="@color/tools_theme"
-                    tools:textColor="@color/textPrimaryDark" />
-
-                <dev.octoshrimpy.quik.common.widget.TightTextView
-                    style="@style/ScheduledSampleTextStyle"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/scheduled_empty_message_3" />
-
-                <dev.octoshrimpy.quik.common.widget.QkTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:gravity="end"
-                    android:text="@string/scheduled_empty_message_3_timestamp"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textStyle="italic"
-                    app:textSize="secondary" />
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/messages"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/scheduled_message_list_item" />
+                android:textDirection="ltr"
+                tools:text="Moez Bhatti" />
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </androidx.appcompat.widget.Toolbar>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/compose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="@string/scheduled_compose_cd"
-        android:src="@drawable/ic_schedule_send_black_24dp"
-        android:tint="@color/white"
-        android:visibility="visible"
-        tools:backgroundTint="@color/tools_theme" />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/upgrade"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:background="@drawable/rounded_rectangle_24dp"
-        android:elevation="4dp"
-        android:gravity="center"
-        android:visibility="gone"
-        tools:backgroundTint="@color/tools_theme">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ImageView
-            android:id="@+id/upgradeIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_star_black_24dp"
-            tools:tint="@color/textPrimaryDark" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:orientation="vertical">
 
-        <dev.octoshrimpy.quik.common.widget.QkTextView
-            android:id="@+id/upgradeLabel"
+                <LinearLayout
+                    android:id="@+id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp">
+
+                    <dev.octoshrimpy.quik.common.widget.QkTextView
+                        style="@style/TextPrimary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/scheduled_empty_description"
+                        android:textColor="?android:attr/textColorSecondary" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp" />
+
+                    <dev.octoshrimpy.quik.common.widget.TightTextView
+                        style="@style/ScheduledSampleTextStyle"
+                        android:layout_gravity="end"
+                        android:text="@string/scheduled_empty_message_1" />
+
+                    <dev.octoshrimpy.quik.common.widget.TightTextView
+                        android:id="@+id/sampleMessage"
+                        style="@style/ScheduledSampleTextStyle"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/rounded_rectangle_22dp"
+                        android:text="@string/scheduled_empty_message_2"
+                        tools:backgroundTint="@color/tools_theme"
+                        tools:textColor="@color/textPrimaryDark" />
+
+                    <dev.octoshrimpy.quik.common.widget.TightTextView
+                        style="@style/ScheduledSampleTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/scheduled_empty_message_3" />
+
+                    <dev.octoshrimpy.quik.common.widget.QkTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:gravity="end"
+                        android:text="@string/scheduled_empty_message_3_timestamp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textStyle="italic"
+                        app:textSize="secondary" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/messages"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/scheduled_message_list_item" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/compose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/title_qksms_plus"
-            android:textColor="@color/textPrimaryDark"
-            android:textStyle="bold"
-            app:textSize="primary" />
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/scheduled_compose_cd"
+            android:src="@drawable/ic_schedule_send_black_24dp"
+            android:tint="@color/white"
+            android:visibility="visible"
+            tools:backgroundTint="@color/tools_theme" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/upgrade"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:background="@drawable/rounded_rectangle_24dp"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:backgroundTint="@color/tools_theme">
 
-    <include layout="@layout/collapsing_toolbar" />
+            <ImageView
+                android:id="@+id/upgradeIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_star_black_24dp"
+                tools:tint="@color/textPrimaryDark" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/divider" />
+            <dev.octoshrimpy.quik.common.widget.QkTextView
+                android:id="@+id/upgradeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/title_qksms_plus"
+                android:textColor="@color/textPrimaryDark"
+                android:textStyle="bold"
+                app:textSize="primary" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:background="?android:attr/divider" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

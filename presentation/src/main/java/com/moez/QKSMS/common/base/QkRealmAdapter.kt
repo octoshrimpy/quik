@@ -53,12 +53,27 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
     private var selection = listOf<Long>()
 
     /**
+     * Mark this message as highlighted
+     */
+    var highlight: Long = -1L
+        set(value) {
+            if (field == value) return
+
+            field = value
+            notifyDataSetChanged()
+        }
+
+    /**
      * Toggles the selected state for a particular view
      *
      * If we are currently in selection mode (we have an active selection), then the state will
      * toggle. If we are not in selection mode, then we will only toggle if [force]
      */
-    protected fun toggleSelection(id: Long, force: Boolean = true): Boolean {
+    protected fun toggleSelection(
+        id: Long,
+        force: Boolean = true,
+        useChangeEvent: Boolean = true
+    ): Boolean {
         if (!force && selection.isEmpty()) return false
 
         selection = when (selection.contains(id)) {
@@ -66,7 +81,8 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
             false -> selection + id
         }
 
-        selectionChanges.onNext(selection)
+        if (useChangeEvent)
+            selectionChanges.onNext(selection)
         return true
     }
 
@@ -77,6 +93,33 @@ abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkVi
     fun clearSelection() {
         selection = listOf()
         selectionChanges.onNext(selection)
+        notifyDataSetChanged()
+    }
+
+    fun toggleSelectAll() {
+        var needToSelectAll = false
+
+        // if a non-selected item is found, then we need to select all, otherwise deselect all
+        for (position in 0 until itemCount)
+            if (!isSelected(getItemId(position))) {
+                needToSelectAll = true
+                break
+            }
+
+        // select or deselect item based on if toggling all selected of deselected
+        for (position in 0 until itemCount) {
+            val messageId = getItemId(position)
+            // if deselecting all then toggle selection (we know all items are selected)
+            if (!needToSelectAll)
+                toggleSelection(messageId, useChangeEvent = false)
+            // else, selecting all, toggle if not already selected
+            else if (!isSelected(messageId))
+                toggleSelection(messageId, useChangeEvent = false)
+        }
+
+        // fire a single change event now
+        selectionChanges.onNext(selection)
+
         notifyDataSetChanged()
     }
 
