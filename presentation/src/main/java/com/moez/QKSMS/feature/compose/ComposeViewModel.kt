@@ -1102,23 +1102,14 @@ class ComposeViewModel @Inject constructor(
                 view.setDraft("")
                 // if choosing contacts, don't remove attachments. they may have come from an
                 // external share
-                if (it.editingMode)
-                    newState {
-                        copy(
-                            editingMode = false,
-                            hasError = !sendAsGroup,
-                            scheduled = 0,
-                        )
-                    }
-                else
-                    newState {
-                        copy(
-                            editingMode = false,
-                            hasError = !sendAsGroup,
-                            attachments = listOf(),
-                            scheduled = 0,
-                        )
-                    }
+                newState {
+                    copy(
+                        editingMode = false,
+                        hasError = !sendAsGroup,
+                        attachments = listOf(),
+                        scheduled = 0,
+                    )
+                }
             }
 
         // when activity changes visibility, delete old recording cache files in background thread
