@@ -388,15 +388,21 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { view.showDetails(it) }
 
-        // Show the delete message dialog
+        // Show the delete message dialog if one or more messages selected
         view.optionsItemIntent
-                .filter { it == R.id.delete }
-                .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
-                .withLatestFrom(view.messagesSelectedIntent, conversation) { _, messages, conversation ->
-                    view.showDeleteDialog(messages)
-                }
-                .autoDisposable(view.scope())
-                .subscribe()
+            .filter { it == R.id.delete }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages -> selectedMessages }
+            .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
+            .autoDisposable(view.scope())
+            .subscribe { view.showDeleteDialog(it) }
+
+        // show the clear current message dialog if no messages selected
+        view.optionsItemIntent
+            .filter { it == R.id.delete }
+            .withLatestFrom(state) { _, state -> state }
+            .filter { it.selectedMessages == 0 }
+            .autoDisposable(view.scope())
+            .subscribe { view.showClearCurrentMessageDialog() }
 
         // Forward the message
         view.optionsItemIntent
@@ -734,16 +740,22 @@ class ComposeViewModel @Inject constructor(
                     }
                 }
 
-        // set canSend state depending on if there is text input or an attachment
+        // set canSend state depending on if there is text input, an attachment or a schedule set
         Observables.combineLatest(
             view.textChangedIntent,     // input message text changed
             state
                 .distinctUntilChanged { state -> state.attachments }    // attachments changed
-                .map { it.attachments.size }   // number of attachments
+                .map { it.attachments.size },   // number of attachments
+            state.distinctUntilChanged { state -> state.scheduled }    // schedule set or not
+                .map { it.scheduled }
         )
             .autoDisposable(view.scope())
             .subscribe {
-                newState { copy(canSend = (it.first.isNotBlank() || (it.second > 0))) }
+                newState {
+                    copy(
+                        canSend = (it.first.isNotBlank() || (it.second > 0)) || (it.third > 0)
+                    )
+                }
             }
 
         // Show the remaining character counter when necessary
@@ -1045,13 +1057,8 @@ class ComposeViewModel @Inject constructor(
                         }
                     }
 
-                    // configure for new message
-                    view.setDraft("")
-                    newState { copy(attachments = listOf()) }
-
-                    if (state.editingMode) {
-                        newState { copy(editingMode = false, hasError = !sendAsGroup) }
-                    }
+                    // clear the current message ready for new message composition
+                    view.clearCurrentMessageIntent.onNext(Unit)
                 }
                 .autoDisposable(view.scope())
                 .subscribe()
@@ -1082,6 +1089,37 @@ class ComposeViewModel @Inject constructor(
                 }
                 .autoDisposable(view.scope())
                 .subscribe { view.clearSelection() }
+
+        view.confirmClearCurrentMessageIntent
+            .autoDisposable(view.scope())
+            .subscribe { view.clearCurrentMessageIntent.onNext(Unit) }
+
+        // clear the current message schedule, text and attachments
+        view.clearCurrentMessageIntent
+            .withLatestFrom(state) { _, state -> state }
+            .autoDisposable(view.scope())
+            .subscribe {
+                view.setDraft("")
+                // if choosing contacts, don't remove attachments. they may have come from an
+                // external share
+                if (it.editingMode)
+                    newState {
+                        copy(
+                            editingMode = false,
+                            hasError = !sendAsGroup,
+                            scheduled = 0,
+                        )
+                    }
+                else
+                    newState {
+                        copy(
+                            editingMode = false,
+                            hasError = !sendAsGroup,
+                            attachments = listOf(),
+                            scheduled = 0,
+                        )
+                    }
+            }
 
         // when activity changes visibility, delete old recording cache files in background thread
         // generally there won't be any, but under some circumstances some can be left behind

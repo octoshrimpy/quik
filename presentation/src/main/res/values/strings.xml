@@ -103,6 +103,9 @@
         <item quantity="other">Are you sure you would like to delete %d messages?</item>
     </plurals>
 
+    <string name="dialog_clear_compose_title">Clear message</string>
+    <string name="dialog_clear_compose">Clear the message? This action can\'t be undone.</string>
+
     <string-array name="message_options">
         <item>Copy text</item>
         <item>Forward</item>
@@ -453,6 +456,7 @@
     <string name="button_more">More</string>
     <string name="button_set">Set</string>
     <string name="button_undo">Undo</string>
+    <string name="button_clear">Clear</string>
 
     <string name="toast_copied">Copied</string>
     <plurals name="toast_archived">
