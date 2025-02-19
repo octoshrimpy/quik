@@ -20,33 +20,36 @@ package dev.octoshrimpy.quik.feature.scheduled
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
-import dev.octoshrimpy.quik.common.QkDialog
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
-import dev.octoshrimpy.quik.common.util.FontProvider
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.collapsing_toolbar.*
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.main_activity.toolbar
 import kotlinx.android.synthetic.main.scheduled_activity.*
 import javax.inject.Inject
 
 
 class ScheduledActivity : QkThemedActivity(), ScheduledView {
 
-    @Inject lateinit var dialog: QkDialog
-    @Inject lateinit var fontProvider: FontProvider
-    @Inject lateinit var messageAdapter: ScheduledMessageAdapter
+    @Inject lateinit var scheduledMessageAdapter: ScheduledMessageAdapter
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override val messageClickIntent by lazy { messageAdapter.clicks }
-    override val messageMenuIntent by lazy { dialog.adapter.menuItemClicks }
     override val composeIntent by lazy { compose.clicks() }
     override val upgradeIntent by lazy { upgrade.clicks() }
+    override val messagesSelectedIntent by lazy { scheduledMessageAdapter.selectionChanges }
+    override val optionsItemIntent: Subject<Int> = PublishSubject.create()
+    override val deleteScheduledMessages: Subject<List<Long>> = PublishSubject.create()
+    override val sendScheduledMessages: Subject<List<Long>> = PublishSubject.create()
+    override val backPressedIntent: Subject<Unit> = PublishSubject.create()
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ScheduledViewModel::class.java] }
 
@@ -58,19 +61,8 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
         showBackButton(true)
         viewModel.bindView(this)
 
-        if (!prefs.systemFont.get()) {
-            fontProvider.getLato { lato ->
-                val typeface = Typeface.create(lato, Typeface.BOLD)
-                collapsingToolbar.setCollapsedTitleTypeface(typeface)
-                collapsingToolbar.setExpandedTitleTypeface(typeface)
-            }
-        }
-
-        dialog.title = getString(R.string.scheduled_options_title)
-        dialog.adapter.setData(R.array.scheduled_options)
-
-        messageAdapter.emptyView = empty
-        messages.adapter = messageAdapter
+        scheduledMessageAdapter.emptyView = empty
+        messages.adapter = scheduledMessageAdapter
 
         colors.theme().let { theme ->
             sampleMessage.setBackgroundTint(theme.theme)
@@ -84,14 +76,65 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
     }
 
     override fun render(state: ScheduledState) {
-        messageAdapter.updateData(state.scheduledMessages)
+        scheduledMessageAdapter.updateData(state.scheduledMessages)
 
+        setTitle(when {
+            (state.selectedMessages > 0) ->
+                getString(R.string.compose_title_selected, state.selectedMessages)
+            else -> getString(R.string.scheduled_title)
+        })
+
+        // show/hide menu items
+        toolbar.menu.findItem(R.id.delete)?.isVisible =
+            ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages != 0))
+        toolbar.menu.findItem(R.id.select_all)?.isVisible =
+            ((scheduledMessageAdapter.itemCount > 1) && (state.selectedMessages != 0))
+        toolbar.menu.findItem(R.id.copy)?.isVisible = (state.selectedMessages != 0)
+        toolbar.menu.findItem(R.id.send_now)?.isVisible = (state.selectedMessages != 0)
+
+        // show compose button
         compose.isVisible = state.upgraded
         upgrade.isVisible = !state.upgraded
     }
 
-    override fun showMessageOptions() {
-        dialog.show(this)
+    override fun onBackPressed() = backPressedIntent.onNext(Unit)
+
+    override fun clearSelection() = scheduledMessageAdapter.clearSelection()
+
+    override fun toggleSelectAll() = scheduledMessageAdapter.toggleSelectAll()
+
+    override fun showDeleteDialog(messages: List<Long>) {
+        val count = messages.size
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
+            .setPositiveButton(R.string.button_delete) { _, _ -> deleteScheduledMessages.onNext(messages) }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
+    }
+
+    override fun showSendNowDialog(messages: List<Long>) {
+        val count = messages.size
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(resources.getQuantityString(R.plurals.dialog_send_now, count, count))
+            .setPositiveButton(R.string.main_menu_send_now) { _, _ -> sendScheduledMessages.onNext(messages) }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.scheduled_messages, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        optionsItemIntent.onNext(item.itemId)
+        return true
+    }
+
+    override fun finishActivity() {
+        finish()
     }
 
 }

@@ -50,4 +50,7 @@ interface ScheduledMessageRepository {
      */
     fun deleteScheduledMessage(id: Long)
 
+    // delete multiple scheduled messages by id list
+    fun deleteScheduledMessages(ids: List<Long>)
+
 }
