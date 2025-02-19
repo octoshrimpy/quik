@@ -155,6 +155,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         showBackButton(true)
         viewModel.bindView(this)
 
+        // Check if there is a speech recognition service available
+        val packageManager = packageManager
+        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        val resolveInfoList = packageManager.queryIntentActivities(speechRecognizerIntent, PackageManager.MATCH_DEFAULT_ONLY)
+
+        if (resolveInfoList.isEmpty()) {
+        // No STT provider found, show a Toast message
+            Toast.makeText(this, "No speech-to-text service available on this device.", Toast.LENGTH_SHORT).show()
+        }
+
+
         contentView.layoutTransition = LayoutTransition().apply {
             disableTransitionType(LayoutTransition.CHANGING)
         }
