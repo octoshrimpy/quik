@@ -44,7 +44,14 @@
     <item
         android:id="@+id/send_now"
         android:icon="@drawable/ic_send_black_24dp"
-        android:title="@string/main_menu_send_now"
+        android:title="@string/scheduled_menu_send_now"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/edit_message"
+        android:icon="@drawable/ic_schedule_send_black_24dp"
+        android:title="@string/scheduled_menu_edit_message"
         android:visible="false"
         app:showAsAction="never" />
 

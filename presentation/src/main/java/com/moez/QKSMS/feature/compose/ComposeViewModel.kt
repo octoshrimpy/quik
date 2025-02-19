@@ -91,8 +91,11 @@ class ComposeViewModel @Inject constructor(
     @Named("threadId") private val threadId: Long,
     @Named("addresses") private val addresses: List<String>,
     @Named("text") private val sharedText: String,
-    @Named("attachments") private val sharedAttachments: List<Attachment>,
+    @Named("attachments") val sharedAttachments: List<Attachment>,
     @Named("mode") private val mode: String,
+    @Named("subscriptionId") val sharedSubscriptionId: Int,
+    @Named("sendAsGroup") val sharedSendAsGroup: Boolean?,
+    @Named("scheduleDateTime") val sharedScheduledDateTime: Long,
     private val contactRepo: ContactRepository,
     private val context: Context,
     private val activeConversationManager: ActiveConversationManager,
@@ -134,7 +137,20 @@ class ComposeViewModel @Inject constructor(
     private var bluetoothMicManager: BluetoothMicManager? = null
 
     init {
-        // set shared attachments into state, if any
+        // set shared subscription into state if set
+        subscriptionManager.activeSubscriptionInfoList.firstOrNull {
+            it.subscriptionId == sharedSubscriptionId
+        }?.let { newState { copy(subscription = it)} }
+
+        // set shared scheduled datetime into state if set
+        if (sharedScheduledDateTime != 0L)
+            newState { copy (scheduled = sharedScheduledDateTime) }
+
+        // set shared sendAsGroup into state if set
+        if (sharedSendAsGroup != null)
+            newState { copy(sendAsGroup = sharedSendAsGroup) }
+
+        // set shared attachments into state
         newState { copy(attachments = sharedAttachments) }
 
         val initialConversation = threadId.takeIf { it != 0L }

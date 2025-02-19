@@ -81,9 +81,24 @@ class ComposeActivityModule {
 
     @Provides
     @Named("mode")
-    fun provideSharedAction(activity: ComposeActivity): String {
-        return activity.intent.getStringExtra("mode") ?: "";
-    }
+    fun provideSharedAction(activity: ComposeActivity): String =
+        activity.intent.getStringExtra("mode") ?: ""
+
+    @Provides
+    @Named("subscriptionId")
+    fun provideSubscriptionId(activity: ComposeActivity): Int =
+        activity.intent.getIntExtra("subscriptionId", -1)
+
+    @Provides
+    @Named("sendAsGroup")
+    fun provideSendAsGroup(activity: ComposeActivity): Boolean? =
+        if (!activity.intent.hasExtra("sendAsGroup")) null
+        else activity.intent.getBooleanExtra("sendAsGroup", false)
+
+    @Provides
+    @Named("scheduleDateTime")
+    fun provideSharedScheduleDateTime(activity: ComposeActivity): Long =
+        activity.intent.getLongExtra("scheduleDateTime", 0L)
 
     @Provides
     @IntoMap

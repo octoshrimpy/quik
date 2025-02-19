@@ -81,6 +81,13 @@ class ScheduledViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { view.showSendNowDialog(it) }
 
+        // edit message menu item selected
+        view.optionsItemIntent
+            .filter { it == R.id.edit_message }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessage -> selectedMessage.first() }
+            .autoDisposable(view.scope())
+            .subscribe { view.showEditMessageDialog(it) }
+
         // delete message(s) (fired after the confirmation dialog has been shown)
         view.deleteScheduledMessages
             .observeOn(AndroidSchedulers.mainThread())
@@ -98,6 +105,20 @@ class ScheduledViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe {
                 it.forEach { sendScheduledMessageInteractor.execute(it) }
+                view.clearSelection()
+            }
+
+
+        // edit message (fired after the confirmation dialog has been shown)
+        view.editScheduledMessage
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .autoDisposable(view.scope())
+            .subscribe {
+                scheduledMessageRepo.getScheduledMessage(it)?.let {
+                    navigator.showCompose(it)
+                    scheduledMessageRepo.deleteScheduledMessage(it.id)
+                }
                 view.clearSelection()
             }
 
