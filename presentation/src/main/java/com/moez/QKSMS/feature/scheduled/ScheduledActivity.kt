@@ -116,7 +116,7 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
     override fun showSendNowDialog(messages: List<Long>) {
         val count = messages.size
         android.app.AlertDialog.Builder(this)
-            .setTitle(R.string.dialog_delete_title)
+            .setTitle(R.string.main_menu_send_now)
             .setMessage(resources.getQuantityString(R.plurals.dialog_send_now, count, count))
             .setPositiveButton(R.string.main_menu_send_now) { _, _ -> sendScheduledMessages.onNext(messages) }
             .setNegativeButton(R.string.button_cancel, null)
