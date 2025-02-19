@@ -17,6 +17,11 @@ To do this, navigate to the release tab in this repository and click on releases
 Once you have done this, simply use the app as normal, and report any bugs you come across.
 ## Translating 
 To translate this app navigate to `presentation/src/main/res` and find or make a values file with the language you wish to edit. Then copy over the `strings.xml` file from `presentation/src/main/res/values` and translate it. Please do not translate any string with the `translatable=false` attribute. Also, remember to make sure to insert a backslash `\` before any apostrophe `'` or quotes `"`.
+<!--
+## Translations
+
+If you'd like to add translations to QUIK, please join the project on [Crowdin](https://crowdin.com/project/qksms). Translations that are committed directly to source files will not be accepted.
+-->
 ## Updating the Wiki 
 To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshrimpy/quik/wiki) in this repository, find the file that you need to edit, and then click `Edit Page`. Then you can edit and commit your change. For more sizeable changes, and for feedback and questions please comment in [this discussion](https://github.com/octoshrimpy/quik/discussions/174).
 ## Fix Bugs 
