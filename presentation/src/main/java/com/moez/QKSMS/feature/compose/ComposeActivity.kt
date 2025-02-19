@@ -185,6 +185,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
+    override val confirmClearCurrentMessageIntent: Subject<Unit> = PublishSubject.create()
+    override val clearCurrentMessageIntent: Subject<Unit> = PublishSubject.create()
     override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
     override val speechRecogniserIntent by lazy { speechToTextIcon.clicks() }
     override val shadeIntent by lazy { shadeBackground.clicks() }
@@ -470,7 +472,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 && state.query.isEmpty()
         toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
-        toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && state.selectedMessages > 0
+        toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && ((state.selectedMessages > 0) || state.canSend)
         toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.show_status)?.isVisible = !state.editingMode && state.selectedMessages > 0
         toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
@@ -710,6 +712,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(messages) }
                 .setNegativeButton(R.string.button_cancel, null)
                 .show()
+    }
+
+    override fun showClearCurrentMessageDialog() {
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_clear_compose_title)
+            .setMessage(R.string.dialog_clear_compose)
+            .setPositiveButton(R.string.button_clear) { _, _ ->
+                clearCurrentMessageIntent.onNext(Unit)
+            }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
