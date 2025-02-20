@@ -521,6 +521,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         // hide controls that allow constructing a reply and inform user no valid recipients
         if (!state.editingMode && (state.validRecipientNumbers == 0)) {
             composeBar.visibility = View.GONE
+            sim.visibility = View.GONE
+            recordAudioMsg.visibility = View.GONE
             noValidRecipients.visibility = View.VISIBLE
 
             // change constraint of messageList to constrain bottom to top of noValidRecipients
