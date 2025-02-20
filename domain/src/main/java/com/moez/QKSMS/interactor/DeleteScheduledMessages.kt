@@ -39,7 +39,7 @@ class DeleteScheduledMessages @Inject constructor(
                     it.forEach {
                         // recursively delete scheduled message top level dir
                         val topDir = File(context.filesDir, "scheduled-${it}")
-//                        topDir.exists() && topDir.deleteRecursively()
+                        topDir.exists() && topDir.deleteRecursively()
                     }
                 } catch (e: Exception) { /* nothing */ }
 
