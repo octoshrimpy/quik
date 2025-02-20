@@ -23,11 +23,17 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import android.provider.ContactsContract
-import android.provider.OpenableColumns
-import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.core.view.inputmethod.InputContentInfoCompat
+import dev.octoshrimpy.quik.extensions.contactToVCard
+import dev.octoshrimpy.quik.extensions.getName
+import dev.octoshrimpy.quik.extensions.getResourceBytes
+import dev.octoshrimpy.quik.extensions.getSize
+import dev.octoshrimpy.quik.extensions.getType
+import dev.octoshrimpy.quik.extensions.isAudio
+import dev.octoshrimpy.quik.extensions.isContact
+import dev.octoshrimpy.quik.extensions.isImage
+import dev.octoshrimpy.quik.extensions.isVCard
 
 
 @SuppressLint("Range")
@@ -43,106 +49,35 @@ class Attachment (
             uri = inputContent?.contentUri ?: uri
 
         // if constructed with a uri to a contact, convert uri to associated vcard uri
-        if (context.contentResolver.getType(uri)?.lowercase() ==
-            ContactsContract.Contacts.CONTENT_ITEM_TYPE
-        ) {
-            uri = try {
-                Uri.withAppendedPath(
-                    ContactsContract.Contacts.CONTENT_VCARD_URI,
-                    context.contentResolver.query(
-                        uri, null, null, null, null
-                    )?.use {
-                        it.moveToFirst()
-                        it.getString(it.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)) ?: ""
-                    }
-                )
-            } catch (e: Exception) {
-                Uri.EMPTY
-            }
-        }
+        if (uri.isContact(context))
+            uri = uri.contactToVCard(context)
     }
 
-    fun getType(context: Context): String {
-        var retVal: String? = null
-        when (uri.scheme) {
-            ContentResolver.SCHEME_CONTENT -> retVal = context.contentResolver.getType(uri)
-            ContentResolver.SCHEME_FILE -> retVal =
-                MimeTypeMap.getSingleton().getMimeTypeFromExtension(uri.toFile().extension)
-        }
-        return retVal ?: "application/octect-stream"
-    }
+    fun isVCard(context: Context): Boolean = uri.isVCard(context)
 
-    fun getName(context: Context): String {
-        var retVal: String? = null
-        try {
-            when (uri.scheme) {
-                ContentResolver.SCHEME_CONTENT -> {
-                    context.contentResolver.query(
-                        uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null
-                    )?.use {
-                        it.moveToFirst()
-                        retVal = it.getString(it.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                    }
-                }
+    fun isAudio(context: Context): Boolean = uri.isAudio(context)
 
-                ContentResolver.SCHEME_FILE -> retVal = uri.toFile().name
-            }
-        } catch (e: Exception) { /* nothing */
-        }
+    fun isImage(context: Context): Boolean = uri.isImage(context)
 
-        return retVal ?: "unknown"
-    }
+    fun getType(context: Context): String = uri.getType(context)
 
-    fun isVCard(context: Context): Boolean {
-        return (getType(context) == "text/x-vcard")
-    }
+    fun getName(context: Context): String = uri.getName(context) ?: "unknown"
+
+    fun getSize(context: Context): Long = uri.getSize(context)
 
     fun hasDisplayableImage(context: Context): Boolean {
         val mimeType = getType(context)
         return (mimeType.startsWith("image/") || mimeType.startsWith("video/"))
     }
 
-    fun isAudio(context: Context): Boolean {
-        return (getType(context).startsWith("audio/"))
-    }
-
-    fun isImage(context: Context): Boolean {
-        return (getType(context).startsWith("image/"))
-    }
-
-    fun getSize(context: Context): Long {
-        var retVal: Long? = null
-        try {
-            when (uri.scheme) {
-                ContentResolver.SCHEME_CONTENT -> {
-                    context.contentResolver.query(
-                        uri, arrayOf(OpenableColumns.SIZE), null, null, null
-                    )?.use {
-                        it.moveToFirst()
-                        retVal = it.getLong(it.getColumnIndex(OpenableColumns.SIZE))
-                    }
-                }
-
-                ContentResolver.SCHEME_FILE -> retVal = uri.toFile().length()
-            }
-        } catch (e: Exception) { /* nothing */
-        }
-
-        return retVal ?: -1
-    }
-
     fun getResourceBytes(context: Context): ByteArray {
+        // cache resource bytes by loading first time only
         if (resourceBytes != null)
             return resourceBytes!!
 
-        try {
-            context.contentResolver.openInputStream(uri)?.use {
-                resourceBytes = it.readBytes()
-            }
-        } catch (e: Exception) {
-        }
+        resourceBytes = uri.getResourceBytes(context)
 
-        return resourceBytes ?: ByteArray(0)
+        return resourceBytes!!
     }
 
     fun releaseResourceBytes() {

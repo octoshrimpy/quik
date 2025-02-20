@@ -19,25 +19,24 @@
 package dev.octoshrimpy.quik.feature.compose
 
 import android.content.Context
-import android.content.Intent
-import android.media.MediaMetadataRetriever
-import android.provider.MediaStore.MATCH_DEFAULT
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
+import com.moez.QKSMS.feature.extensions.LoadBestIconIntoImageView
+import com.moez.QKSMS.feature.extensions.loadBestIconIntoImageView
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.extensions.getDisplayName
-import dev.octoshrimpy.quik.extensions.resourceExists
+import dev.octoshrimpy.quik.extensions.getName
 import dev.octoshrimpy.quik.model.Attachment
 import ezvcard.Ezvcard
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.attachment_file_list_item.*
 import kotlinx.android.synthetic.main.attachment_contact_list_item.*
+import kotlinx.android.synthetic.main.scheduled_message_image_list_item.fileName
+import kotlinx.android.synthetic.main.scheduled_message_image_list_item.thumbnail
 import javax.inject.Inject
 
 
@@ -90,69 +89,21 @@ class ComposeAttachmentAdapter @Inject constructor(
             return
         }
 
-        holder.fileName.visibility = View.GONE
-
-        // if attachment uri is missing
-        if (!attachment.uri.resourceExists(context)) {
-            holder.thumbnail.setImageResource(android.R.drawable.ic_delete)
-            holder.fileName.text = context.getString(R.string.attachment_missing)
-            holder.fileName.visibility = View.VISIBLE
-            return
-        }
-
-        val uri = attachment.uri
-        val mimeType = attachment.getType(context)
-
-        // if attachment mime type is image/* or video/*, use image/frame
-        if (attachment.hasDisplayableImage(context)) {
-            Glide
-                .with(context)
-                .load(uri)
-                .into(holder.thumbnail)
-            return
-        }
-
-        // if audio mime type, try and use embedded image if one exists
-        if (attachment.isAudio(context)) {
-            val metaDataRetriever = MediaMetadataRetriever()
-            metaDataRetriever.setDataSource(context, uri)
-            val embeddedPicture = metaDataRetriever.embeddedPicture
-            if (embeddedPicture != null) {
-                Glide
-                    .with(context)
-                    .load(embeddedPicture)
-                    .into(holder.thumbnail)
-                return
+        // set best image and text to use for icon
+        when (attachment.uri.loadBestIconIntoImageView(context, holder.thumbnail)) {
+            LoadBestIconIntoImageView.Missing -> {
+                holder.fileName.text = context.getString(R.string.attachment_missing)
+                holder.fileName.visibility = View.VISIBLE
             }
+            LoadBestIconIntoImageView.ActivityIcon,
+            LoadBestIconIntoImageView.DefaultAudioIcon,
+            LoadBestIconIntoImageView.GenericIcon -> {
+                // generic style icon used, also show name
+                holder.fileName.text = attachment.uri.getName(context)
+                holder.fileName.visibility = View.VISIBLE
+            }
+            else -> holder.fileName.visibility = View.GONE
         }
-
-        // try and use icon from default app for type
-        val intent = Intent(Intent.ACTION_VIEW).setDataAndType(uri, mimeType)
-        val appIcon = context
-            .packageManager
-            .resolveActivity(intent, MATCH_DEFAULT)
-            ?.loadIcon(context.packageManager)
-        if (appIcon != null)
-            Glide
-                .with(context)
-                .load(appIcon)
-                .into(holder.thumbnail)
-        else if (mimeType?.startsWith("audio/") == true)
-            // else, if audio, use default local audio icon
-            Glide
-                .with(context)
-                .load(R.drawable.ic_round_volume_up_24)
-                .into(holder.thumbnail)
-        else
-            // else, use default attachment icon
-            Glide
-                .with(context)
-                .load(R.drawable.ic_attachment_black_24dp)
-                .into(holder.thumbnail)
-
-        // else, show file name
-        holder.fileName.text = attachment.getName(context)
-        holder.fileName.visibility = View.VISIBLE
     }
 
     override fun getItemViewType(position: Int) = when (getItem(position).isVCard(context)) {
