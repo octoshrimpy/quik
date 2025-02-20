@@ -49,6 +49,7 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val deleteScheduledMessages: Subject<List<Long>> = PublishSubject.create()
     override val sendScheduledMessages: Subject<List<Long>> = PublishSubject.create()
+    override val editScheduledMessage: Subject<Long> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ScheduledViewModel::class.java] }
@@ -85,12 +86,16 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
         })
 
         // show/hide menu items
-        toolbar.menu.findItem(R.id.delete)?.isVisible =
-            ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages != 0))
         toolbar.menu.findItem(R.id.select_all)?.isVisible =
             ((scheduledMessageAdapter.itemCount > 1) && (state.selectedMessages != 0))
-        toolbar.menu.findItem(R.id.copy)?.isVisible = (state.selectedMessages != 0)
-        toolbar.menu.findItem(R.id.send_now)?.isVisible = (state.selectedMessages != 0)
+        toolbar.menu.findItem(R.id.delete)?.isVisible =
+            ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages != 0))
+        toolbar.menu.findItem(R.id.copy)?.isVisible =
+            ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages != 0))
+        toolbar.menu.findItem(R.id.send_now)?.isVisible =
+            ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages != 0))
+        toolbar.menu.findItem(R.id.edit_message)?.isVisible =
+            ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages == 1))
 
         // show compose button
         compose.isVisible = state.upgraded
@@ -119,6 +124,17 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
             .setTitle(R.string.main_menu_send_now)
             .setMessage(resources.getQuantityString(R.plurals.dialog_send_now, count, count))
             .setPositiveButton(R.string.main_menu_send_now) { _, _ -> sendScheduledMessages.onNext(messages) }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
+    }
+
+    override fun showEditMessageDialog(message: Long) {
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.dialog_edit_scheduled_message_title)
+            .setMessage(R.string.dialog_edit_scheduled_message)
+            .setPositiveButton(R.string.dialog_edit_scheduled_message_positive_button) { _, _ ->
+                editScheduledMessage.onNext(message)
+            }
             .setNegativeButton(R.string.button_cancel, null)
             .show()
     }

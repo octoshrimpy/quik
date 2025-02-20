@@ -58,6 +58,7 @@
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">Block</string>
     <string name="main_menu_send_now">Send now</string>
+    <string name="main_menu_edit_message">Edit message</string>
     <string name="main_menu_rename_conversation">Rename conversation</string>
     <string name="main_syncing">Syncing messages…</string>
     <string name="main_sender_you">You: %s</string>
@@ -76,6 +77,9 @@
     <string name="main_permission_contacts">QUIK needs permission to view your contacts</string>
     <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">Allow</string>
+
+    <string name="scheduled_menu_send_now">Send now</string>
+    <string name="scheduled_menu_edit_message">Edit message</string>
 
     <string name="drawer_inbox">Inbox</string>
     <string name="drawer_archived">Archived</string>
@@ -107,6 +111,10 @@
         <item quantity="one">Are you sure you would like to send this message now?</item>
         <item quantity="other">Are you sure you would like to send %d messages now?</item>
     </plurals>
+
+    <string name="dialog_edit_scheduled_message_title">Edit message</string>
+    <string name="dialog_edit_scheduled_message">Editing this message will remove it from the schedule.\n\nMake sure to re-submit it on the next screen, or it will be lost.\n\nDo you want to continue?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Yes, edit the message</string>
 
     <string name="dialog_clear_compose_title">Clear message</string>
     <string name="dialog_clear_compose">Clear the message? This action can\'t be undone.</string>
