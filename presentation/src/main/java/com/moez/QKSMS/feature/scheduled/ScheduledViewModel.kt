@@ -10,6 +10,7 @@ import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.common.util.ClipboardUtils
+import dev.octoshrimpy.quik.interactor.DeleteScheduledMessages
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
@@ -22,6 +23,7 @@ class ScheduledViewModel @Inject constructor(
     private val navigator: Navigator,
     private val scheduledMessageRepo: ScheduledMessageRepository,
     private val sendScheduledMessageInteractor: SendScheduledMessage,
+    private val deleteScheduledMessagesInteractor: DeleteScheduledMessages,
 ) : QkViewModel<ScheduledView, ScheduledState>(ScheduledState(
     scheduledMessages = scheduledMessageRepo.getScheduledMessages()
 )) {
@@ -94,7 +96,7 @@ class ScheduledViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .autoDisposable(view.scope())
             .subscribe {
-                scheduledMessageRepo.deleteScheduledMessages(it)
+                deleteScheduledMessagesInteractor.execute(it)
                 view.clearSelection()
             }
 

@@ -1127,20 +1127,6 @@ class ComposeViewModel @Inject constructor(
                     )
                 }
             }
-
-        // when activity changes visibility, delete old recording cache files in background thread
-        // generally there won't be any, but under some circumstances some can be left behind
-        view.activityVisibleIntent
-            .subscribeOn(Schedulers.io())
-            .autoDisposable(view.scope())
-            .subscribe {
-                context.cacheDir.listFiles()?.forEach {
-                    if (it.isFile &&
-                        it.name.startsWith(AUDIO_FILE_PREFIX) &&
-                        it.name.endsWith(MediaRecorderManager.AUDIO_FILE_SUFFIX))
-                        safeDeleteLocalFile(it.toUri())
-                }
-            }
     }
 
     private fun safeDeleteLocalFile(uri: Uri): Boolean {

@@ -21,9 +21,14 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
         sendAsGroup: Boolean,
         body: String,
         attachments: List<String>
-    ) {
+    ): ScheduledMessage {
         Realm.getDefaultInstance().use { realm ->
-            val id = (realm.where(ScheduledMessage::class.java).max("id")?.toLong() ?: -1) + 1
+            val id = (realm
+                .where(ScheduledMessage::class.java)
+                .max("id")
+                ?.toLong() ?: -1
+                    ) + 1
+
             val recipientsRealmList = RealmList(*recipients.toTypedArray())
             val attachmentsRealmList = RealmList(*attachments.toTypedArray())
 
@@ -31,6 +36,14 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
                 attachmentsRealmList)
 
             realm.executeTransaction { realm.insertOrUpdate(message) }
+
+            return message
+        }
+    }
+
+    override fun updateScheduledMessage(scheduledMessage: ScheduledMessage) {
+        Realm.getDefaultInstance().use { realm ->
+            realm.executeTransaction { realm.insertOrUpdate(scheduledMessage) }
         }
     }
 
@@ -71,6 +84,17 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
 
     override fun deleteScheduledMessages(ids: List<Long>) {
         ids.forEach { deleteScheduledMessage(it) }
+    }
+
+    override fun getAllScheduledMessageIdsSnapshot(): List<Long> {
+        Realm.getDefaultInstance().use { realm ->
+            return realm
+                .where(ScheduledMessage::class.java)
+                .sort("date")
+                .findAll()
+                .createSnapshot()
+                .map { it.id }
+        }
     }
 
     // Ensure to clear disposables when the repository is no longer needed

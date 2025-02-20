@@ -94,6 +94,10 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
     implementation 'io.michaelrocks:libphonenumber-android:8.13.47'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    // work manager
+    implementation("androidx.work:work-runtime-ktx:$androidx_work_version")
+
     implementation project(":android-smsmms")
     implementation project(':common')
     implementation project(':domain')

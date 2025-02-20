@@ -25,6 +25,7 @@ import android.content.BroadcastReceiver
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
+import com.moez.QKSMS.manager.HousekeepingWorkManager
 import com.moez.QKSMS.manager.SpeakManager
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.CrashlyticsTree
@@ -114,6 +115,9 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         RxDogTag.builder()
                 .configureWith(AutoDisposeConfigurer::configure)
                 .install()
+
+        // register, or re-register, once-a-day-housekeeping work manager
+        HousekeepingWorkManager.register(applicationContext)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

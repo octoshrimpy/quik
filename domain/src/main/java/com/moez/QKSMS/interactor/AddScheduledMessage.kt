@@ -18,13 +18,23 @@
  */
 package dev.octoshrimpy.quik.interactor
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.net.Uri
+import androidx.core.net.toUri
+import dev.octoshrimpy.quik.extensions.getName
+import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import io.reactivex.Flowable
+import io.realm.RealmList
+import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
 class AddScheduledMessage @Inject constructor(
     private val scheduledMessageRepo: ScheduledMessageRepository,
-    private val updateScheduledMessageAlarms: UpdateScheduledMessageAlarms
+    private val updateScheduledMessageAlarms: UpdateScheduledMessageAlarms,
+    private val context: Context,
 ) : Interactor<AddScheduledMessage.Params>() {
 
     data class Params(
@@ -36,13 +46,53 @@ class AddScheduledMessage @Inject constructor(
         val attachments: List<String>
     )
 
+    @SuppressLint("Range")
     override fun buildObservable(params: Params): Flowable<*> {
+        // have to 3-step save scheduled message
         return Flowable.just(params)
-                .map {
-                    scheduledMessageRepo.saveScheduledMessage(it.date, it.subId, it.recipients, it.sendAsGroup, it.body,
-                            it.attachments)
-                }
-                .flatMap { updateScheduledMessageAlarms.buildObservable(Unit) }
+            .map {  // step 1 - save, as-is, to db to get primary key id
+                scheduledMessageRepo.saveScheduledMessage(
+                    it.date, it.subId, it.recipients, it.sendAsGroup, it.body, it.attachments
+                )
+            }
+            .map { scheduledMessageDb ->
+                // step 2 - copy attachments to app local storage
+                scheduledMessageDb.attachments = RealmList(
+                    *scheduledMessageDb.attachments.mapNotNull {
+                        val inUri = Uri.parse(it)
+                        try {
+                            // get filename of input uri or use random uuid on fail to get
+                            val filename = inUri.getName(context) ?: UUID.randomUUID()
+
+                            // copy attachment data to app local dir - first, create dir
+                            val localFile = File(
+                                context.filesDir,
+                                "scheduled-${scheduledMessageDb.id}/${UUID.randomUUID()}/${filename}"
+                            )
+
+                            // create directory tree in app local storage
+                            localFile.parentFile?.mkdirs()
+
+                            val localUri = localFile.toUri()
+
+                            // copy attachment resource data to local file
+                            context.contentResolver.openOutputStream(localUri, "w")
+                                ?.use { outputStream ->
+                                    context.contentResolver.openInputStream(inUri)
+                                        ?.use { it.copyTo(outputStream, 4096) }
+                                }
+
+                            localUri.toString()
+                        } catch (e: Exception) {
+                            it  // on any error, use original uri string
+                        }
+                    }.toTypedArray()
+                )
+
+                // step 3 - update scheduled message with new attachment uris
+                scheduledMessageRepo.updateScheduledMessage(scheduledMessageDb)
+            }
+            .flatMap { updateScheduledMessageAlarms.buildObservable(Unit) }
     }
 
 }
