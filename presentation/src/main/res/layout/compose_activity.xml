@@ -299,7 +299,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toEndOf="@id/messageBackground"
-        app:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorPrimary" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/simIndex"
@@ -673,7 +673,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible">
+        tools:visibility="invisible">
 
         <View
             android:id="@+id/audioMsgBackgroundShadow"
