@@ -266,10 +266,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         viewModel.bindView(this)
         val isSpeechRecognitionAvailable = isSpeechRecognitionAvailable()
         if (isSpeechRecognitionAvailable) {
-            // Speech recognition is available, enable related features
-            // For example, you might want to show a button to start speech recognition
-            // startSpeechRecognitionButton.visibility = View.VISIBLE
-
             contentView.layoutTransition = LayoutTransition().apply {
                 disableTransitionType(LayoutTransition.CHANGING)
             }
@@ -677,7 +673,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
             ),
             // include below if want a custom message that the STT can (optionally) display
-            // .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
+            // .putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.stt_toast_extra_prompt))
             ComposeView.SpeechRecognitionRequestCode
         )
     }
