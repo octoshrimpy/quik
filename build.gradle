@@ -16,7 +16,7 @@ buildscript {
     ext.dagger_version = "2.18"
     ext.espresso_version = '3.1.0-alpha3'
     ext.exoplayer_version = "r2.9.0"
-    ext.glide_version = "4.8.0"
+    ext.glide_version = "4.16.0"
     ext.junit_version = '4.12'
     ext.kotlin_version = '1.7.20'
     ext.lifecycle_version = '2.1.0'
