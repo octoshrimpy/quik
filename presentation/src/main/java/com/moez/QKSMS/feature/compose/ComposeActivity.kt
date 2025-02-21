@@ -220,7 +220,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .autoDisposable(scope())
     }
     private fun isSpeechRecognitionAvailable(): Boolean {
-        // Check if there is a speech recognition service available
+        // Check if there is a speech recognition service available, in Android 13 and up
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         val packageManager = this.packageManager
         val activities: List<ResolveInfo>
@@ -231,7 +231,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
             )
         } else {
-// else, pre-tiramisu versions
+// else, pre-tiramisu/Android 13 and earlier
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             activities = packageManager.queryIntentActivities(intent, 0)
         }
@@ -676,7 +676,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 ComposeView.SpeechRecognitionRequestCode
             )
         } else {
-            // Display a message or handle the lack of STT provider in a way that suits your app
             Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
         }
     }
