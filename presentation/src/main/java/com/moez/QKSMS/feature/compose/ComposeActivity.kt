@@ -237,7 +237,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         }
         return activities.isNotEmpty()
     }
-
     private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode != Activity.RESULT_OK)
             return@registerForActivityResult
@@ -257,19 +256,20 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         message.setSelection(message.text.length)
         message.requestFocus()
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
+        if (!isSpeechRecognitionAvailable()) {
+            // Show a message when there is no STT provider
+            Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
+        }
         setContentView(R.layout.compose_activity)
         showBackButton(true)
         viewModel.bindView(this)
-        val isSpeechRecognitionAvailable = isSpeechRecognitionAvailable()
-        if (isSpeechRecognitionAvailable) {
-            contentView.layoutTransition = LayoutTransition().apply {
-                disableTransitionType(LayoutTransition.CHANGING)
-            }
 
+        contentView.layoutTransition = LayoutTransition().apply {
+            disableTransitionType(LayoutTransition.CHANGING)
+        }
             chipsAdapter.view = chips
 
             chips.itemAnimator = null
@@ -321,12 +321,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                         when (event.action) {
                             ACTION_DROP -> {
                                 speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
-                                speechToTextFrame.y =(event.y - (speechToTextFrame.height / 2))
+                                speechToTextFrame.y = (event.y - (speechToTextFrame.height / 2))
 
                                 // get offset from root view as a percentage of root view for saving
                                 prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
                                 prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
                             }
+
                             ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
                                 speechToTextFrame.isVisible = true
                             }
@@ -368,7 +369,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 .autoDisposable(scope())
                 .subscribe {
                     audioMsgRecord.isVisible = it
-                    audioMsgDuration.isVisible = it   // chronometer follows record button visibility
+                    audioMsgDuration.isVisible =
+                        it   // chronometer follows record button visibility
                     audioMsgBluetooth.isVisible = !it
                 }
 
@@ -397,12 +399,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                             }
                             audioMsgPlayerSeekBar.isEnabled = true
                         }
+
                         QkMediaPlayer.PlayingState.Paused -> {
                             audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Paused
                             QkMediaPlayer.pause()
                             audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
                             seekBarUpdater?.dispose()
                         }
+
                         else -> {
                             audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Stopped
                             QkMediaPlayer.reset()
@@ -413,7 +417,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                         }
                     }
                 }
-
             // audio msg player seek bar handler
             audioMsgPlayerSeekBar.setOnSeekBarChangeListener(
                 object : SeekBar.OnSeekBarChangeListener {
@@ -428,9 +431,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             )
 
             window.callback = ComposeWindowCallback(window.callback, this)
-        } else {
-            Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onStart() {
@@ -667,15 +667,18 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun startSpeechRecognition() {
-        startActivityForResult(
-            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            ),
-            // include below if want a custom message that the STT can (optionally) display
-            // .putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.stt_toast_extra_prompt))
-            ComposeView.SpeechRecognitionRequestCode
-        )
+        if (isSpeechRecognitionAvailable()) {
+            startActivityForResult(
+                Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
+                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                ),
+                ComposeView.SpeechRecognitionRequestCode
+            )
+        } else {
+            // Display a message or handle the lack of STT provider in a way that suits your app
+            Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun themeChanged() {
