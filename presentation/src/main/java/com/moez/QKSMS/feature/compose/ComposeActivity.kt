@@ -26,6 +26,7 @@ import android.app.TimePickerDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -251,7 +252,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         val resolveInfoList = packageManager.queryIntentActivities(speechRecognizerIntent, PackageManager.MATCH_DEFAULT_ONLY)
 
         if (resolveInfoList.isEmpty()) {
-        // No STT provider found, show a Toast message
+            // No STT provider found, show a Toast message
             Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
         }
 
@@ -268,12 +269,32 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         messageAdapter.autoScrollToStart(messageList)
         messageAdapter.emptyView = messagesEmpty
 
-        messageList.setHasFixedSize(true)
-        messageList.adapter = messageAdapter
+        // drag drop handlers for speech-to-text icon
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            speechToTextIcon.setOnLongClickListener {
+                it.startDragAndDrop(null, View.DragShadowBuilder(speechToTextFrame), null, 0)
+                speechToTextFrame.isVisible = false
 
-        messageAttachments.adapter = composeAttachmentAdapter
+                contentView.setOnDragListener { _, event ->
+                    when (event.action) {
+                        ACTION_DROP -> {
+                            speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
+                            speechToTextFrame.y = (event.y - (speechToTextFrame.height / 2))
 
-        message.supportsInputContent = true
+                            // get offset from root view as a percentage of root view for saving
+                            prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
+                            prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
+                        }
+                        ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
+                            speechToTextFrame.isVisible = true
+                        }
+                        // Add other cases if needed
+                    }
+                    true // Return true to indicate the event was handled
+                }
+                true // Return true to indicate the long click was handled
+            }
+        }
 
         theme
             .doOnNext { loading.setTint(it.theme) }
@@ -295,66 +316,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .autoDisposable(scope())
             .subscribe()
 
-        // context menu registration for message parts
+// context menu registration for message parts
         messagePartContextMenuRegistrar
             .mapNotNull { it }
             .autoDisposable(scope())
             .subscribe { registerForContextMenu(it) }
 
-        // drag drop handlers for speech-to-text icon
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            speechToTextIcon.setOnLongClickListener {
-                it.startDragAndDrop(null, View.DragShadowBuilder(speechToTextFrame), null, 0)
-                speechToTextFrame.isVisible = false
-
-                contentView.setOnDragListener { _, event ->
-                    when (event.action) {
-                        ACTION_DROP -> {
-                            speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
-                            speechToTextFrame.y =(event.y - (speechToTextFrame.height / 2))
-
-                            // get offset from root view as a percentage of root view for saving
-                            prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
-                            prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
-                        }
-                        ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
-                            speechToTextFrame.isVisible = true
-                        }
-                .doOnNext { messageAdapter.theme = it }
-                .autoDisposable(scope())
-                .subscribe()
-
-        message.setOnTouchListener(object : OnTouchListener {
-            private val gestureDetector =
-                GestureDetector(this@ComposeActivity, object : SimpleOnGestureListener() {
-                    private var lastUpEvent: MotionEvent? = null
-
-                    override fun onDoubleTap(e: MotionEvent): Boolean {
-                        // Create the speech recognizer intent
-                        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                            // Optionally include a prompt message
-                            .putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.stt_toast_extra_prompt))
-
-                        // Check if there is a speech recognition service available
-                        val resolveInfoList = packageManager.queryIntentActivities(speechRecognizerIntent, PackageManager.MATCH_DEFAULT_ONLY)
-
-                        if (resolveInfoList.isEmpty()) {
-                            // No STT provider found, show a Toast message
-                            Toast.makeText(this@ComposeActivity, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
-                        } else {
-                            // Launch the speech recognizer
-                            speechResultLauncher.launch(speechRecognizerIntent)
-                        }
-                        return true
-                    }
-                    true
-                }
-                true
-            }
-        }
-
-        // start/stop audio message recording
+// start/stop audio message recording
         audioMsgRecord.setOnClickListener {
             recordAudioRecord.onNext(audioMsgRecord.getState())
         }
@@ -373,481 +341,481 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             }
 
         // audio record playback play/pause button
-        audioMsgPlayerPlayPause.setOnClickListener {
-            recordAudioPlayerPlayPause.onNext(
-                audioMsgPlayerPlayPause.tag as QkMediaPlayer.PlayingState
-            )
-        }
+                    audioMsgPlayerPlayPause.setOnClickListener {
+                        recordAudioPlayerPlayPause.onNext(
+                            audioMsgPlayerPlayPause.tag as QkMediaPlayer.PlayingState
+                        )
+                    }
 
-        recordAudioMsgRecordVisible
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .distinctUntilChanged()
-            .autoDisposable(scope())
-            .subscribe {
-                audioMsgRecord.isVisible = it
-                audioMsgDuration.isVisible = it   // chronometer follows record button visibility
-                audioMsgBluetooth.isVisible = !it
-            }
-
-        recordAudioPlayerVisible
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .distinctUntilChanged()
-            .autoDisposable(scope())
-            .subscribe {
-                audioMsgPlayerBackground.isVisible = it
-                recordAudioPlayerConfigUI.onNext(QkMediaPlayer.PlayingState.Stopped)
-            }
-
-        recordAudioPlayerConfigUI
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .distinctUntilChanged()
-            .autoDisposable(scope())
-            .subscribe {
-                when (it) {
-                    QkMediaPlayer.PlayingState.Playing -> {
-                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Playing
-                        QkMediaPlayer.start()
-                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_pause)
-                        seekBarUpdater = getSeekBarUpdater().subscribe {
-                            audioMsgPlayerSeekBar.progress = QkMediaPlayer.currentPosition
-                            audioMsgPlayerSeekBar.max = QkMediaPlayer.duration
+                    recordAudioMsgRecordVisible
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .distinctUntilChanged()
+                        .autoDisposable(scope())
+                        .subscribe {
+                            audioMsgRecord.isVisible = it
+                            audioMsgDuration.isVisible = it   // chronometer follows record button visibility
+                            audioMsgBluetooth.isVisible = !it
                         }
-                        audioMsgPlayerSeekBar.isEnabled = true
-                    }
-                    QkMediaPlayer.PlayingState.Paused -> {
-                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Paused
-                        QkMediaPlayer.pause()
-                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
-                        seekBarUpdater?.dispose()
-                    }
-                    else -> {
-                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Stopped
-                        QkMediaPlayer.reset()
-                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
-                        seekBarUpdater?.dispose()
-                        audioMsgPlayerSeekBar.progress = 0
-                        audioMsgPlayerSeekBar.isEnabled = false
+
+                    recordAudioPlayerVisible
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .distinctUntilChanged()
+                        .autoDisposable(scope())
+                        .subscribe {
+                            audioMsgPlayerBackground.isVisible = it
+                            recordAudioPlayerConfigUI.onNext(QkMediaPlayer.PlayingState.Stopped)
+                        }
+
+                    recordAudioPlayerConfigUI
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .distinctUntilChanged()
+                        .autoDisposable(scope())
+                        .subscribe {
+                            when (it) {
+                                QkMediaPlayer.PlayingState.Playing -> {
+                                    audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Playing
+                                    QkMediaPlayer.start()
+                                    audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_pause)
+                                    seekBarUpdater = getSeekBarUpdater().subscribe {
+                                        audioMsgPlayerSeekBar.progress = QkMediaPlayer.currentPosition
+                                        audioMsgPlayerSeekBar.max = QkMediaPlayer.duration
+                                    }
+                                    audioMsgPlayerSeekBar.isEnabled = true
+                                }
+                                QkMediaPlayer.PlayingState.Paused -> {
+                                    audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Paused
+                                    QkMediaPlayer.pause()
+                                    audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
+                                    seekBarUpdater?.dispose()
+                                }
+                                else -> {
+                                    audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Stopped
+                                    QkMediaPlayer.reset()
+                                    audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
+                                    seekBarUpdater?.dispose()
+                                    audioMsgPlayerSeekBar.progress = 0
+                                    audioMsgPlayerSeekBar.isEnabled = false
+                                }
+                            }
+                        }
+
+                    // audio msg player seek bar handler
+                    audioMsgPlayerSeekBar.setOnSeekBarChangeListener(
+                        object : SeekBar.OnSeekBarChangeListener {
+                            override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
+                                // if seek was initiated by the user and this part is currently playing
+                                if (fromUser)
+                                    QkMediaPlayer.seekTo(progress)
+                            }
+                            override fun onStartTrackingTouch(p0: SeekBar?) {}
+                            override fun onStopTrackingTouch(p0: SeekBar?) {}
+                        }
+                    )
+
+                    window.callback = ComposeWindowCallback(window.callback, this)
+                }
+
+                override fun onStart() {
+                    super.onStart()
+                    activityVisibleIntent.onNext(true)
+
+                    // if first time stt icon is shown (since setting reset), pop up an instruction toast
+                    if (prefs.showStt.get() &&
+                        (prefs.showSttOffsetX.get() == Float.MIN_VALUE) &&
+                        (prefs.showSttOffsetX.get() == Float.MIN_VALUE)) {
+                        makeToast(R.string.compose_toast_drag_stt, Toast.LENGTH_LONG)
+                        // reset to new flag value that indicates 'not first time through, but not customised'
+                        prefs.showSttOffsetX.set(Float.MAX_VALUE)
+                        prefs.showSttOffsetY.set(Float.MAX_VALUE)
                     }
                 }
-            }
 
-        // audio msg player seek bar handler
-        audioMsgPlayerSeekBar.setOnSeekBarChangeListener(
-            object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
-                    // if seek was initiated by the user and this part is currently playing
-                    if (fromUser)
-                        QkMediaPlayer.seekTo(progress)
+                override fun onPause() {
+                    super.onPause()
+                    activityVisibleIntent.onNext(false)
                 }
-                override fun onStartTrackingTouch(p0: SeekBar?) {}
-                override fun onStopTrackingTouch(p0: SeekBar?) {}
-            }
-        )
-
-        window.callback = ComposeWindowCallback(window.callback, this)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        activityVisibleIntent.onNext(true)
-
-        // if first time stt icon is shown (since setting reset), pop up an instruction toast
-        if (prefs.showStt.get() &&
-            (prefs.showSttOffsetX.get() == Float.MIN_VALUE) &&
-            (prefs.showSttOffsetX.get() == Float.MIN_VALUE)) {
-            makeToast(R.string.compose_toast_drag_stt, Toast.LENGTH_LONG)
-            // reset to new flag value that indicates 'not first time through, but not customised'
-            prefs.showSttOffsetX.set(Float.MAX_VALUE)
-            prefs.showSttOffsetY.set(Float.MAX_VALUE)
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        activityVisibleIntent.onNext(false)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // stop any playing audio
-        QkMediaPlayer.reset()
-
-        seekBarUpdater?.dispose()
-    }
-
-
-    override fun render(state: ComposeState) {
-        if (state.hasError) {
-            finish()
-            return
-        }
-
-        threadId.onNext(state.threadId)
-
-        title = when {
-            state.selectedMessages > 0 -> getString(R.string.compose_title_selected, state.selectedMessages)
-            state.query.isNotEmpty() -> state.query
-            else -> state.conversationtitle
-        }
-
-        toolbarSubtitle.setVisible(state.query.isNotEmpty())
-        toolbarSubtitle.text = getString(R.string.compose_subtitle_results, state.searchSelectionPosition,
-                state.searchResults)
-
-        toolbarTitle.setVisible(!state.editingMode)
-        chips.setVisible(state.editingMode)
-        composeBar.setVisible(!state.loading)
-
-        // Don't set the adapters unless needed
-        if (state.editingMode && chips.adapter == null) chips.adapter = chipsAdapter
-
-        toolbar.menu.findItem(R.id.select_all)?.isVisible = !state.editingMode && (messageAdapter.itemCount > 1) && state.selectedMessages != 0
-        toolbar.menu.findItem(R.id.add)?.isVisible = state.editingMode
-        toolbar.menu.findItem(R.id.call)?.isVisible = !state.editingMode && state.selectedMessages == 0
-                && state.query.isEmpty()
-        toolbar.menu.findItem(R.id.info)?.isVisible = !state.editingMode && state.selectedMessages == 0
-                && state.query.isEmpty()
-        toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages > 0
-        toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
-        toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && ((state.selectedMessages > 0) || state.canSend)
-        toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
-        toolbar.menu.findItem(R.id.show_status)?.isVisible = !state.editingMode && state.selectedMessages > 0
-        toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
-        toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
-        toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
-
-        chipsAdapter.data = state.selectedChips
-
-        loading.setVisible(state.loading)
-
-        sendAsGroup.setVisible(state.editingMode && state.selectedChips.size >= 2)
-        sendAsGroupSwitch.isChecked = state.sendAsGroup
-
-        messageList.setVisible(!state.editingMode || state.sendAsGroup || state.selectedChips.size == 1)
-        messageAdapter.data = state.messages
-        messageAdapter.highlight = state.searchSelectionId
-
-        scheduledGroup.isVisible = state.scheduled != 0L
-        scheduledTime.text = dateFormatter.getScheduledTimestamp(state.scheduled)
-
-        messageAttachments.setVisible(state.attachments.isNotEmpty())
-        composeAttachmentAdapter.data = state.attachments
-
-        attach.animate().rotation(if (state.attaching) 135f else 0f).start()
-        attaching.isVisible = state.attaching
-
-        shadeBackground.visibility =
-            if (state.attaching || state.audioMsgRecording) View.VISIBLE
-            else View.GONE
-
-        // show or hide audio message recording panel and shade background
-        audioMsgBackground.isVisible = state.audioMsgRecording
-
-        counter.text = state.remaining
-        counter.setVisible(counter.text.isNotBlank())
-
-        sim.setVisible(state.subscription != null)
-        sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
-        simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()
-
-        // show either send or audio msg record button
-        send.visibility = if (state.canSend && !state.loading) View.VISIBLE else View.INVISIBLE
-        recordAudioMsg.visibility = if (state.canSend && !state.loading) View.INVISIBLE else View.VISIBLE
-
-        // if not in editing mode, and there are no non-me participants that can be sent to,
-        // hide controls that allow constructing a reply and inform user no valid recipients
-        if (!state.editingMode && (state.validRecipientNumbers == 0)) {
-            composeBar.visibility = View.GONE
-            noValidRecipients.visibility = View.VISIBLE
-
-            // change constraint of messageList to constrain bottom to top of noValidRecipients
-            val constraintLayout = findViewById<ConstraintLayout>(R.id.contentView)
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(constraintLayout)
-            constraintSet.connect(
-                R.id.messageList,
-                ConstraintSet.BOTTOM,
-                R.id.noValidRecipients,
-                ConstraintSet.TOP,
-                0
-            )
-            constraintSet.applyTo(constraintLayout)
-        }
-
-        // if scheduling mode is set, show schedule dialog
-        if (state.scheduling)
-            scheduleAction.onNext(true)
-
-        if (prefs.showStt.get()) {
-            speechToTextFrame.isVisible = true
-
-            var xPercent = prefs.showSttOffsetX.get()
-            var yPercent = prefs.showSttOffsetY.get()
-
-            // if the stt icon has a custom position, move it
-            if ((xPercent != Float.MAX_VALUE) && (yPercent != Float.MAX_VALUE)) {
-                speechToTextFrame.x = (contentView.x + (xPercent * contentView.width))
-                speechToTextFrame.y = (contentView.y + (yPercent * contentView.height))
-            }
-        }
-    }
-
-    override fun clearSelection() = messageAdapter.clearSelection()
-
-    override fun toggleSelectAll() {
-        messageAdapter.toggleSelectAll()
-    }
-
-    override fun expandMessages(messageIds: List<Long>, expand: Boolean) {
-        messageAdapter.expandMessages(messageIds, expand)
-    }
-
-    override fun showDetails(details: String) {
-        AlertDialog.Builder(this)
-                .setTitle(R.string.compose_details_title)
-                .setMessage(details)
-                .setCancelable(true)
-                .show()
-    }
-
-    override fun showMessageLinkAskDialog(uri: Uri) {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.messageLinkHandling_dialog_title)
-            .setMessage(getString(R.string.messageLinkHandling_dialog_body, uri.toString()))
-            .setPositiveButton(
-                R.string.messageLinkHandling_dialog_positive
-            ) { _, _ ->
-                ContextCompat.startActivity(
-                    this,
-                    Intent(Intent.ACTION_VIEW).setData(uri),
-                    null
-                )
-            }
-            .setNegativeButton(R.string.messageLinkHandling_dialog_negative) { _, _ -> { } }
-            .show()
-    }
-
-    override fun requestDefaultSms() {
-        navigator.showDefaultSmsDialog(this)
-    }
-
-    override fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
-    }
-
-    override fun requestRecordAudioPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 0)
-    }
-
-    override fun requestSmsPermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(
-                Manifest.permission.READ_SMS,
-                Manifest.permission.SEND_SMS), 0)
-    }
-
-    override fun requestDatePicker() {
-        val calendar = Calendar.getInstance()
-        DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
-            TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-                calendar.set(Calendar.YEAR, year)
-                calendar.set(Calendar.MONTH, month)
-                calendar.set(Calendar.DAY_OF_MONTH, day)
-                calendar.set(Calendar.HOUR_OF_DAY, hour)
-                calendar.set(Calendar.MINUTE, minute)
-                scheduleSelectedIntent.onNext(calendar.timeInMillis)
-            }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(this))
-                    .show()
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
-
-        // On some devices, the keyboard can cover the date picker
-        message.hideKeyboard()
-    }
-
-    override fun requestContact() {
-        val intent = Intent(Intent.ACTION_PICK)
-                .setType(ContactsContract.Contacts.CONTENT_TYPE)
-
-        startActivityForResult(Intent.createChooser(intent, null), ComposeView.AttachContactRequestCode)
-    }
-
-    override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
-        message.hideKeyboard()
-        val serialized = HashMap(chips.associate { chip -> chip.address to chip.contact?.lookupKey })
-        val intent = Intent(this, ContactsActivity::class.java)
-                .putExtra(ContactsActivity.SharingKey, sharing)
-                .putExtra(ContactsActivity.ChipsKey, serialized)
-        startActivityForResult(intent, ComposeView.SelectContactRequestCode)
-    }
-
-    override fun startSpeechRecognition() {
-        startActivityForResult(
-            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            ),
-            // include below if want a custom message that the STT can (optionally) display
-            // .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
-            ComposeView.SpeechRecognitionRequestCode
-        )
-    }
-
-    override fun themeChanged() {
-        messageList.scrapViews()
-    }
-
-    override fun showKeyboard() {
-        message.postDelayed({
-            message.showKeyboard()
-        }, 200)
-    }
-
-    override fun requestCamera() {
-        cameraDestination = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-                .let { timestamp -> ContentValues().apply { put(MediaStore.Images.Media.TITLE, timestamp) } }
-                .let { cv -> contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv) }
-
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
-        startActivityForResult(Intent.createChooser(intent, null), ComposeView.TakePhotoRequestCode)
-    }
-
-    override fun requestGallery(mimeType: String, requestCode: Int) {
-        val intent = Intent(Intent.ACTION_PICK)
-                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                .setType(mimeType)
-        startActivityForResult(Intent.createChooser(intent, null), requestCode)
-    }
-
-    override fun setDraft(draft: String) {
-        message.setText(draft)
-        message.setSelection(draft.length)
-    }
-
-    override fun scrollToMessage(id: Long) {
-        messageAdapter.data?.second
-                ?.indexOfLast { message -> message.id == id }
-                ?.takeIf { position -> position != -1 }
-                ?.let(messageList::scrollToPosition)
-    }
-
-    override fun showQksmsPlusSnackbar(message: Int) {
-        Snackbar.make(contentView, message, Snackbar.LENGTH_LONG).run {
-            setAction(R.string.button_more) { viewQksmsPlusIntent.onNext(Unit) }
-            setActionTextColor(colors.theme().theme)
-            show()
-        }
-    }
-
-    override fun showDeleteDialog(messages: List<Long>) {
-        val count = messages.size
-        android.app.AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_delete_title)
-                .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
-                .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(messages) }
-                .setNegativeButton(R.string.button_cancel, null)
-                .show()
-    }
-
-    override fun showClearCurrentMessageDialog() {
-        android.app.AlertDialog.Builder(this)
-            .setTitle(R.string.dialog_clear_compose_title)
-            .setMessage(R.string.dialog_clear_compose)
-            .setPositiveButton(R.string.button_clear) { _, _ ->
-                clearCurrentMessageIntent.onNext(Unit)
-            }
-            .setNegativeButton(R.string.button_cancel, null)
-            .show()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.compose, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        optionsItemIntent.onNext(item.itemId)
-        return true
-    }
-
-    override fun getColoredMenuItems(): List<Int> {
-        return super.getColoredMenuItems() + R.id.call
-    }
-
-    override fun onCreateContextMenu(
-        menu: ContextMenu?,
-        v: View?,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        menuInflater.inflate(R.menu.mms_part_menu, menu)
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        super.onContextItemSelected(item)
-        contextItemIntent.onNext(item)
-        return true
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode != Activity.RESULT_OK)
-            return
-
-        when (requestCode) {
-            ComposeView.SelectContactRequestCode -> {
-                chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.ChipsKey)
-                        ?.let { serializable -> serializable as? HashMap<String, String?> }
-                        ?: hashMapOf())
-            }
-
-            ComposeView.TakePhotoRequestCode -> {
-                cameraDestination?.let(attachAnyFileSelectedIntent::onNext)
-            }
-
-            ComposeView.AttachAFileRequestCode -> {
-                data?.clipData?.itemCount
-                    ?.let { count -> 0 until count }
-                    ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
-                    ?.forEach(attachAnyFileSelectedIntent::onNext)
-                    ?: data?.data?.let(attachAnyFileSelectedIntent::onNext)
-            }
-
-            ComposeView.AttachContactRequestCode -> {
-                data?.data?.let(contactSelectedIntent::onNext)
-            }
-
-            ComposeView.SpeechRecognitionRequestCode -> {
-                // check returned results are good
-                val match = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                if ((match !== null) && (match.size > 0) && (!match[0].isNullOrEmpty())) {
-                    // get the edit text view
-                    val messageEditBox = findViewById<QkEditText>(R.id.message)
-                    if (messageEditBox !== null) {
-                        // populate message box with data returned by STT, set cursor to end, and focus
-                        messageEditBox.append(match[0])
-                        messageEditBox.setSelection(messageEditBox.text.length)
-                        messageEditBox.requestFocus()
+
+                override fun onDestroy() {
+                    super.onDestroy()
+
+                    // stop any playing audio
+                    QkMediaPlayer.reset()
+
+                    seekBarUpdater?.dispose()
+                }
+
+
+                override fun render(state: ComposeState) {
+                    if (state.hasError) {
+                        finish()
+                        return
+                    }
+
+                    threadId.onNext(state.threadId)
+
+                    title = when {
+                        state.selectedMessages > 0 -> getString(R.string.compose_title_selected, state.selectedMessages)
+                        state.query.isNotEmpty() -> state.query
+                        else -> state.conversationtitle
+                    }
+
+                    toolbarSubtitle.setVisible(state.query.isNotEmpty())
+                    toolbarSubtitle.text = getString(R.string.compose_subtitle_results, state.searchSelectionPosition,
+                        state.searchResults)
+
+                    toolbarTitle.setVisible(!state.editingMode)
+                    chips.setVisible(state.editingMode)
+                    composeBar.setVisible(!state.loading)
+
+                    // Don't set the adapters unless needed
+                    if (state.editingMode && chips.adapter == null) chips.adapter = chipsAdapter
+
+                    toolbar.menu.findItem(R.id.select_all)?.isVisible = !state.editingMode && (messageAdapter.itemCount > 1) && state.selectedMessages != 0
+                    toolbar.menu.findItem(R.id.add)?.isVisible = state.editingMode
+                    toolbar.menu.findItem(R.id.call)?.isVisible = !state.editingMode && state.selectedMessages == 0
+                            && state.query.isEmpty()
+                    toolbar.menu.findItem(R.id.info)?.isVisible = !state.editingMode && state.selectedMessages == 0
+                            && state.query.isEmpty()
+                    toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages > 0
+                    toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
+                    toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && ((state.selectedMessages > 0) || state.canSend)
+                    toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
+                    toolbar.menu.findItem(R.id.show_status)?.isVisible = !state.editingMode && state.selectedMessages > 0
+                    toolbar.menu.findItem(R.id.previous)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
+                    toolbar.menu.findItem(R.id.next)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
+                    toolbar.menu.findItem(R.id.clear)?.isVisible = state.selectedMessages == 0 && state.query.isNotEmpty()
+
+                    chipsAdapter.data = state.selectedChips
+
+                    loading.setVisible(state.loading)
+
+                    sendAsGroup.setVisible(state.editingMode && state.selectedChips.size >= 2)
+                    sendAsGroupSwitch.isChecked = state.sendAsGroup
+
+                    messageList.setVisible(!state.editingMode || state.sendAsGroup || state.selectedChips.size == 1)
+                    messageAdapter.data = state.messages
+                    messageAdapter.highlight = state.searchSelectionId
+
+                    scheduledGroup.isVisible = state.scheduled != 0L
+                    scheduledTime.text = dateFormatter.getScheduledTimestamp(state.scheduled)
+
+                    messageAttachments.setVisible(state.attachments.isNotEmpty())
+                    composeAttachmentAdapter.data = state.attachments
+
+                    attach.animate().rotation(if (state.attaching) 135f else 0f).start()
+                    attaching.isVisible = state.attaching
+
+                    shadeBackground.visibility =
+                        if (state.attaching || state.audioMsgRecording) View.VISIBLE
+                        else View.GONE
+
+                    // show or hide audio message recording panel and shade background
+                    audioMsgBackground.isVisible = state.audioMsgRecording
+
+                    counter.text = state.remaining
+                    counter.setVisible(counter.text.isNotBlank())
+
+                    sim.setVisible(state.subscription != null)
+                    sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
+                    simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()
+
+                    // show either send or audio msg record button
+                    send.visibility = if (state.canSend && !state.loading) View.VISIBLE else View.INVISIBLE
+                    recordAudioMsg.visibility = if (state.canSend && !state.loading) View.INVISIBLE else View.VISIBLE
+
+                    // if not in editing mode, and there are no non-me participants that can be sent to,
+                    // hide controls that allow constructing a reply and inform user no valid recipients
+                    if (!state.editingMode && (state.validRecipientNumbers == 0)) {
+                        composeBar.visibility = View.GONE
+                        noValidRecipients.visibility = View.VISIBLE
+
+                        // change constraint of messageList to constrain bottom to top of noValidRecipients
+                        val constraintLayout = findViewById<ConstraintLayout>(R.id.contentView)
+                        val constraintSet = ConstraintSet()
+                        constraintSet.clone(constraintLayout)
+                        constraintSet.connect(
+                            R.id.messageList,
+                            ConstraintSet.BOTTOM,
+                            R.id.noValidRecipients,
+                            ConstraintSet.TOP,
+                            0
+                        )
+                        constraintSet.applyTo(constraintLayout)
+                    }
+
+                    // if scheduling mode is set, show schedule dialog
+                    if (state.scheduling)
+                        scheduleAction.onNext(true)
+
+                    if (prefs.showStt.get()) {
+                        speechToTextFrame.isVisible = true
+
+                        var xPercent = prefs.showSttOffsetX.get()
+                        var yPercent = prefs.showSttOffsetY.get()
+
+                        // if the stt icon has a custom position, move it
+                        if ((xPercent != Float.MAX_VALUE) && (yPercent != Float.MAX_VALUE)) {
+                            speechToTextFrame.x = (contentView.x + (xPercent * contentView.width))
+                            speechToTextFrame.y = (contentView.y + (yPercent * contentView.height))
+                        }
                     }
                 }
+
+                override fun clearSelection() = messageAdapter.clearSelection()
+
+                override fun toggleSelectAll() {
+                    messageAdapter.toggleSelectAll()
+                }
+
+                override fun expandMessages(messageIds: List<Long>, expand: Boolean) {
+                    messageAdapter.expandMessages(messageIds, expand)
+                }
+
+                override fun showDetails(details: String) {
+                    AlertDialog.Builder(this)
+                        .setTitle(R.string.compose_details_title)
+                        .setMessage(details)
+                        .setCancelable(true)
+                        .show()
+                }
+
+                override fun showMessageLinkAskDialog(uri: Uri) {
+                    AlertDialog.Builder(this)
+                        .setTitle(R.string.messageLinkHandling_dialog_title)
+                        .setMessage(getString(R.string.messageLinkHandling_dialog_body, uri.toString()))
+                        .setPositiveButton(
+                            R.string.messageLinkHandling_dialog_positive
+                        ) { _, _ ->
+                            ContextCompat.startActivity(
+                                this,
+                                Intent(Intent.ACTION_VIEW).setData(uri),
+                                null
+                            )
+                        }
+                        .setNegativeButton(R.string.messageLinkHandling_dialog_negative) { _, _ -> { } }
+                        .show()
+                }
+
+                override fun requestDefaultSms() {
+                    navigator.showDefaultSmsDialog(this)
+                }
+
+                override fun requestStoragePermission() {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 0)
+                }
+
+                override fun requestRecordAudioPermission() {
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), 0)
+                }
+
+                override fun requestSmsPermission() {
+                    ActivityCompat.requestPermissions(this, arrayOf(
+                        Manifest.permission.READ_SMS,
+                        Manifest.permission.SEND_SMS), 0)
+                }
+
+                override fun requestDatePicker() {
+                    val calendar = Calendar.getInstance()
+                    DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
+                        TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+                            calendar.set(Calendar.YEAR, year)
+                            calendar.set(Calendar.MONTH, month)
+                            calendar.set(Calendar.DAY_OF_MONTH, day)
+                            calendar.set(Calendar.HOUR_OF_DAY, hour)
+                            calendar.set(Calendar.MINUTE, minute)
+                            scheduleSelectedIntent.onNext(calendar.timeInMillis)
+                        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(this))
+                            .show()
+                    }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+
+                    // On some devices, the keyboard can cover the date picker
+                    message.hideKeyboard()
+                }
+
+                override fun requestContact() {
+                    val intent = Intent(Intent.ACTION_PICK)
+                        .setType(ContactsContract.Contacts.CONTENT_TYPE)
+
+                    startActivityForResult(Intent.createChooser(intent, null), ComposeView.AttachContactRequestCode)
+                }
+
+                override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
+                    message.hideKeyboard()
+                    val serialized = HashMap(chips.associate { chip -> chip.address to chip.contact?.lookupKey })
+                    val intent = Intent(this, ContactsActivity::class.java)
+                        .putExtra(ContactsActivity.SharingKey, sharing)
+                        .putExtra(ContactsActivity.ChipsKey, serialized)
+                    startActivityForResult(intent, ComposeView.SelectContactRequestCode)
+                }
+
+                override fun startSpeechRecognition() {
+                    startActivityForResult(
+                        Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
+                            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                        ),
+                        // include below if want a custom message that the STT can (optionally) display
+                        // .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
+                        ComposeView.SpeechRecognitionRequestCode
+                    )
+                }
+
+                override fun themeChanged() {
+                    messageList.scrapViews()
+                }
+
+                override fun showKeyboard() {
+                    message.postDelayed({
+                        message.showKeyboard()
+                    }, 200)
+                }
+
+                override fun requestCamera() {
+                    cameraDestination = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+                        .let { timestamp -> ContentValues().apply { put(MediaStore.Images.Media.TITLE, timestamp) } }
+                        .let { cv -> contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv) }
+
+                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
+                    startActivityForResult(Intent.createChooser(intent, null), ComposeView.TakePhotoRequestCode)
+                }
+
+                override fun requestGallery(mimeType: String, requestCode: Int) {
+                    val intent = Intent(Intent.ACTION_PICK)
+                        .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                        .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+                        .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
+                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        .setType(mimeType)
+                    startActivityForResult(Intent.createChooser(intent, null), requestCode)
+                }
+
+                override fun setDraft(draft: String) {
+                    message.setText(draft)
+                    message.setSelection(draft.length)
+                }
+
+                override fun scrollToMessage(id: Long) {
+                    messageAdapter.data?.second
+                        ?.indexOfLast { message -> message.id == id }
+                        ?.takeIf { position -> position != -1 }
+                        ?.let(messageList::scrollToPosition)
+                }
+
+                override fun showQksmsPlusSnackbar(message: Int) {
+                    Snackbar.make(contentView, message, Snackbar.LENGTH_LONG).run {
+                        setAction(R.string.button_more) { viewQksmsPlusIntent.onNext(Unit) }
+                        setActionTextColor(colors.theme().theme)
+                        show()
+                    }
+                }
+
+                override fun showDeleteDialog(messages: List<Long>) {
+                    val count = messages.size
+                    android.app.AlertDialog.Builder(this)
+                        .setTitle(R.string.dialog_delete_title)
+                        .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
+                        .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(messages) }
+                        .setNegativeButton(R.string.button_cancel, null)
+                        .show()
+                }
+
+                override fun showClearCurrentMessageDialog() {
+                    android.app.AlertDialog.Builder(this)
+                        .setTitle(R.string.dialog_clear_compose_title)
+                        .setMessage(R.string.dialog_clear_compose)
+                        .setPositiveButton(R.string.button_clear) { _, _ ->
+                            clearCurrentMessageIntent.onNext(Unit)
+                        }
+                        .setNegativeButton(R.string.button_cancel, null)
+                        .show()
+                }
+
+                override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+                    menuInflater.inflate(R.menu.compose, menu)
+                    return super.onCreateOptionsMenu(menu)
+                }
+
+                override fun onOptionsItemSelected(item: MenuItem): Boolean {
+                    optionsItemIntent.onNext(item.itemId)
+                    return true
+                }
+
+                override fun getColoredMenuItems(): List<Int> {
+                    return super.getColoredMenuItems() + R.id.call
+                }
+
+                override fun onCreateContextMenu(
+                    menu: ContextMenu?,
+                    v: View?,
+                    menuInfo: ContextMenu.ContextMenuInfo?
+                ) {
+                    super.onCreateContextMenu(menu, v, menuInfo)
+                    menuInflater.inflate(R.menu.mms_part_menu, menu)
+                }
+
+                override fun onContextItemSelected(item: MenuItem): Boolean {
+                    super.onContextItemSelected(item)
+                    contextItemIntent.onNext(item)
+                    return true
+                }
+
+                override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+                    if (resultCode != Activity.RESULT_OK)
+                        return
+
+                    when (requestCode) {
+                        ComposeView.SelectContactRequestCode -> {
+                            chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.ChipsKey)
+                                ?.let { serializable -> serializable as? HashMap<String, String?> }
+                                ?: hashMapOf())
+                        }
+
+                        ComposeView.TakePhotoRequestCode -> {
+                            cameraDestination?.let(attachAnyFileSelectedIntent::onNext)
+                        }
+
+                        ComposeView.AttachAFileRequestCode -> {
+                            data?.clipData?.itemCount
+                                ?.let { count -> 0 until count }
+                                ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
+                                ?.forEach(attachAnyFileSelectedIntent::onNext)
+                                ?: data?.data?.let(attachAnyFileSelectedIntent::onNext)
+                        }
+
+                        ComposeView.AttachContactRequestCode -> {
+                            data?.data?.let(contactSelectedIntent::onNext)
+                        }
+
+                        ComposeView.SpeechRecognitionRequestCode -> {
+                            // check returned results are good
+                            val match = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                            if ((match !== null) && (match.size > 0) && (!match[0].isNullOrEmpty())) {
+                                // get the edit text view
+                                val messageEditBox = findViewById<QkEditText>(R.id.message)
+                                if (messageEditBox !== null) {
+                                    // populate message box with data returned by STT, set cursor to end, and focus
+                                    messageEditBox.append(match[0])
+                                    messageEditBox.setSelection(messageEditBox.text.length)
+                                    messageEditBox.requestFocus()
+                                }
+                            }
+                        }
+
+                        else -> super.onActivityResult(requestCode, resultCode, data)
+                    }
+                }
+
+                override fun onSaveInstanceState(outState: Bundle) {
+                    outState.putParcelable(ComposeView.CameraDestinationKey, cameraDestination)
+                    super.onSaveInstanceState(outState)
+                }
+
+                override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+                    cameraDestination = savedInstanceState.getParcelable(ComposeView.CameraDestinationKey)
+                    super.onRestoreInstanceState(savedInstanceState)
+                }
+
+                override fun onBackPressed() = backPressedIntent.onNext(Unit)
+
             }
-
-            else -> super.onActivityResult(requestCode, resultCode, data)
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(ComposeView.CameraDestinationKey, cameraDestination)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        cameraDestination = savedInstanceState.getParcelable(ComposeView.CameraDestinationKey)
-        super.onRestoreInstanceState(savedInstanceState)
-    }
-
-    override fun onBackPressed() = backPressedIntent.onNext(Unit)
-
-}
