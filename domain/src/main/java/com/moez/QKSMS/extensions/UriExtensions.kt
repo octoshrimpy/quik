@@ -136,21 +136,25 @@ fun Uri.contactToVCard(context: Context): Uri =
     }
 
 fun Uri.getDefaultActivityIconForMimeType(context: Context): Drawable? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            context.packageManager
-                .queryIntentActivities(
-                    Intent(Intent.ACTION_VIEW).setDataAndType(this, getType(context)),
-                    PackageManager.ResolveInfoFlags.of(
-                        PackageManager.MATCH_DEFAULT_ONLY.toLong()
-                    )
-                ).let {
-                    if (it.size > 0) it[0].loadIcon(context.packageManager)
-                    else null
-                }
-        } else {
-            context.packageManager
-                .resolveActivity(
-                    Intent(Intent.ACTION_VIEW).setDataAndType(this, getType(context)),
-                    PackageManager.MATCH_DEFAULT_ONLY)
-                ?.loadIcon(context.packageManager)
-        }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        context.packageManager
+            .queryIntentActivities(
+                Intent(Intent.ACTION_VIEW).setDataAndType(this, getType(context)),
+                PackageManager.ResolveInfoFlags.of(
+                    PackageManager.MATCH_DEFAULT_ONLY.toLong()
+                )
+            ).let {
+                if (it.size > 0) it[0].loadIcon(context.packageManager)
+                else null
+            }
+    } else {
+        // else, pre-tiramisu versions
+        context.packageManager
+            .queryIntentActivities(
+                Intent(Intent.ACTION_VIEW).setDataAndType(this, getType(context)),
+                PackageManager.MATCH_DEFAULT_ONLY
+            ).let {
+                if (it.size > 0) it[0].loadIcon(context.packageManager)
+                else null
+            }
+    }
