@@ -246,15 +246,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        if (!isSpeechRecognitionAvailable()) {
-            try {
-                // Show a message when there is no STT provider
-                Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
-            } catch (_: Exception) {
-
-            }
-
-        }
         setContentView(R.layout.compose_activity)
         showBackButton(true)
         viewModel.bindView(this)
