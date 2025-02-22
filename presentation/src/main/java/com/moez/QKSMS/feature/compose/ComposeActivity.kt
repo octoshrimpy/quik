@@ -23,10 +23,9 @@ import android.animation.LayoutTransition
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
@@ -35,6 +34,7 @@ import android.os.SystemClock
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.text.format.DateFormat
 import android.view.ContextMenu
 import android.view.DragEvent.ACTION_DRAG_ENDED
@@ -219,24 +219,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(scope())
     }
+
     private fun isSpeechRecognitionAvailable(): Boolean {
-        // Check if there is a speech recognition service available, in Android 13 and up
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        val packageManager = this.packageManager
-        val activities: List<ResolveInfo>
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            this.packageManager
-            activities = packageManager.queryIntentActivities(
-                intent,
-                PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
-            )
-        } else {
-// else, pre-tiramisu/Android 13 and earlier
-            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            activities = packageManager.queryIntentActivities(intent, 0)
-        }
-        return activities.isNotEmpty()
+        return SpeechRecognizer.isRecognitionAvailable(this)
     }
+
     private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode != Activity.RESULT_OK)
             return@registerForActivityResult
@@ -260,8 +247,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         if (!isSpeechRecognitionAvailable()) {
-            // Show a message when there is no STT provider
-            Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
+            try {
+                // Show a message when there is no STT provider
+                Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
+            } catch (_: Exception) {
+
+            }
+
         }
         setContentView(R.layout.compose_activity)
         showBackButton(true)
@@ -667,16 +659,15 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun startSpeechRecognition() {
-        if (isSpeechRecognitionAvailable()) {
-            startActivityForResult(
-                Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
-                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                ),
-                ComposeView.SpeechRecognitionRequestCode
-            )
-        } else {
-            Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
+        if (!isSpeechRecognitionAvailable()) {
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            }
+            try {
+                startActivityForResult(intent, ComposeView.SpeechRecognitionRequestCode)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
