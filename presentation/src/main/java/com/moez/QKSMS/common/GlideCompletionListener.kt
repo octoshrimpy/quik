@@ -24,13 +24,23 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
 class GlideCompletionListener<T>(private val listener: () -> Unit) : RequestListener<T> {
-
-    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<T>?, isFirstResource: Boolean): Boolean {
+    override fun onLoadFailed(
+        e: GlideException?,
+        model: Any?,
+        target: Target<T>,
+        isFirstResource: Boolean
+    ): Boolean {
         listener()
         return false
     }
 
-    override fun onResourceReady(resource: T, model: Any?, target: Target<T>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+    override fun onResourceReady(
+        resource: T,
+        model: Any,
+        target: Target<T>?,
+        dataSource: DataSource,
+        isFirstResource: Boolean
+    ): Boolean {
         listener()
         return false
     }
