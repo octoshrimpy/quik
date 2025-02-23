@@ -21,6 +21,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:background="?attr/bubbleColor">
 
     <FrameLayout
@@ -41,11 +42,11 @@
 
         <TextView
             android:id="@+id/fileName"
-            style="@style/TextPrimary"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ddffffff"
+            android:background="#a7ffffff"
             android:gravity="center"
+            android:textColor="@color/black"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -61,6 +62,6 @@
         android:background="@drawable/circle"
         android:backgroundTint="?attr/bubbleColor"
         android:src="@drawable/ic_cancel_black_24dp"
-        android:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorSecondary" />
 
 </FrameLayout>
