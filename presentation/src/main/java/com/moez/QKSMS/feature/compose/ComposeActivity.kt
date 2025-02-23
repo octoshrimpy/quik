@@ -23,6 +23,7 @@ import android.animation.LayoutTransition
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -33,6 +34,7 @@ import android.os.SystemClock
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.text.format.DateFormat
 import android.view.ContextMenu
 import android.view.DragEvent.ACTION_DRAG_ENDED
@@ -218,6 +220,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .autoDisposable(scope())
     }
 
+    private fun isSpeechRecognitionAvailable(): Boolean {
+        return SpeechRecognizer.isRecognitionAvailable(this)
+    }
+
     private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode != Activity.RESULT_OK)
             return@registerForActivityResult
@@ -237,7 +243,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         message.setSelection(message.text.length)
         message.requestFocus()
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -248,165 +253,167 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         contentView.layoutTransition = LayoutTransition().apply {
             disableTransitionType(LayoutTransition.CHANGING)
         }
+            chipsAdapter.view = chips
 
-        chipsAdapter.view = chips
+            chips.itemAnimator = null
+            chips.layoutManager = FlexboxLayoutManager(this)
 
-        chips.itemAnimator = null
-        chips.layoutManager = FlexboxLayoutManager(this)
+            messageAdapter.autoScrollToStart(messageList)
+            messageAdapter.emptyView = messagesEmpty
 
-        messageAdapter.autoScrollToStart(messageList)
-        messageAdapter.emptyView = messagesEmpty
+            messageList.setHasFixedSize(true)
+            messageList.adapter = messageAdapter
 
-        messageList.setHasFixedSize(true)
-        messageList.adapter = messageAdapter
+            messageAttachments.adapter = composeAttachmentAdapter
 
-        messageAttachments.adapter = composeAttachmentAdapter
+            message.supportsInputContent = true
 
-        message.supportsInputContent = true
-
-        theme
-            .doOnNext { loading.setTint(it.theme) }
-            .doOnNext { attach.setBackgroundTint(it.theme) }
-            .doOnNext { attach.setTint(it.textPrimary) }
-            .doOnNext { speechToTextIconBorder.setBackgroundTint(it.theme) }
-            .doOnNext { speechToTextIcon.setBackgroundTint(it.textPrimary) }
-            .doOnNext { speechToTextIcon.setTint(it.theme) }
-            .doOnNext { audioMsgRecord.setColor(it.theme) }
-            .doOnNext { audioMsgPlayerPlayPause.setTint(it.theme) }
-            .doOnNext {
-                audioMsgPlayerSeekBar.apply {
-                    thumbTintList = ColorStateList.valueOf(it.theme)
-                    progressBackgroundTintList = ColorStateList.valueOf(it.theme)
-                    progressTintList = ColorStateList.valueOf(it.theme)
+            theme
+                .doOnNext { loading.setTint(it.theme) }
+                .doOnNext { attach.setBackgroundTint(it.theme) }
+                .doOnNext { attach.setTint(it.textPrimary) }
+                .doOnNext { speechToTextIconBorder.setBackgroundTint(it.theme) }
+                .doOnNext { speechToTextIcon.setBackgroundTint(it.textPrimary) }
+                .doOnNext { speechToTextIcon.setTint(it.theme) }
+                .doOnNext { audioMsgRecord.setColor(it.theme) }
+                .doOnNext { audioMsgPlayerPlayPause.setTint(it.theme) }
+                .doOnNext {
+                    audioMsgPlayerSeekBar.apply {
+                        thumbTintList = ColorStateList.valueOf(it.theme)
+                        progressBackgroundTintList = ColorStateList.valueOf(it.theme)
+                        progressTintList = ColorStateList.valueOf(it.theme)
+                    }
                 }
-            }
-            .doOnNext { messageAdapter.theme = it }
-            .autoDisposable(scope())
-            .subscribe()
+                .doOnNext { messageAdapter.theme = it }
+                .autoDisposable(scope())
+                .subscribe()
 
-        // context menu registration for message parts
-        messagePartContextMenuRegistrar
-            .mapNotNull { it }
-            .autoDisposable(scope())
-            .subscribe { registerForContextMenu(it) }
+            // context menu registration for message parts
+            messagePartContextMenuRegistrar
+                .mapNotNull { it }
+                .autoDisposable(scope())
+                .subscribe { registerForContextMenu(it) }
 
-        // drag drop handlers for speech-to-text icon
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            speechToTextIcon.setOnLongClickListener {
-                it.startDragAndDrop(null, View.DragShadowBuilder(speechToTextFrame), null, 0)
-                speechToTextFrame.isVisible = false
+            // drag drop handlers for speech-to-text icon
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                speechToTextIcon.setOnLongClickListener {
+                    it.startDragAndDrop(null, View.DragShadowBuilder(speechToTextFrame), null, 0)
+                    speechToTextFrame.isVisible = false
 
-                contentView.setOnDragListener { _, event ->
-                    when (event.action) {
-                        ACTION_DROP -> {
-                            speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
-                            speechToTextFrame.y =(event.y - (speechToTextFrame.height / 2))
+                    contentView.setOnDragListener { _, event ->
+                        when (event.action) {
+                            ACTION_DROP -> {
+                                speechToTextFrame.x = (event.x - (speechToTextFrame.width / 2))
+                                speechToTextFrame.y = (event.y - (speechToTextFrame.height / 2))
 
-                            // get offset from root view as a percentage of root view for saving
-                            prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
-                            prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
+                                // get offset from root view as a percentage of root view for saving
+                                prefs.showSttOffsetX.set((speechToTextFrame.x - contentView.x) / contentView.width)
+                                prefs.showSttOffsetY.set((speechToTextFrame.y - contentView.y) / contentView.height)
+                            }
+
+                            ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
+                                speechToTextFrame.isVisible = true
+                            }
                         }
-                        ACTION_DRAG_ENDED, ACTION_DRAG_EXITED -> {
-                            speechToTextFrame.isVisible = true
-                        }
+                        true
                     }
                     true
                 }
-                true
             }
-        }
 
-        // start/stop audio message recording
-        audioMsgRecord.setOnClickListener {
-            recordAudioRecord.onNext(audioMsgRecord.getState())
-        }
+            // start/stop audio message recording
+            audioMsgRecord.setOnClickListener {
+                recordAudioRecord.onNext(audioMsgRecord.getState())
+            }
 
-        recordAudioChronometer
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .distinctUntilChanged()
-            .autoDisposable(scope())
-            .subscribe {
-                if (it) {
-                    audioMsgDuration.base = SystemClock.elapsedRealtime()
-                    audioMsgDuration.start()
-                } else {
-                    audioMsgDuration.stop()
+            recordAudioChronometer
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .distinctUntilChanged()
+                .autoDisposable(scope())
+                .subscribe {
+                    if (it) {
+                        audioMsgDuration.base = SystemClock.elapsedRealtime()
+                        audioMsgDuration.start()
+                    } else {
+                        audioMsgDuration.stop()
+                    }
                 }
+
+            // audio record playback play/pause button
+            audioMsgPlayerPlayPause.setOnClickListener {
+                recordAudioPlayerPlayPause.onNext(
+                    audioMsgPlayerPlayPause.tag as QkMediaPlayer.PlayingState
+                )
             }
 
-        // audio record playback play/pause button
-        audioMsgPlayerPlayPause.setOnClickListener {
-            recordAudioPlayerPlayPause.onNext(
-                audioMsgPlayerPlayPause.tag as QkMediaPlayer.PlayingState
-            )
-        }
+            recordAudioMsgRecordVisible
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .distinctUntilChanged()
+                .autoDisposable(scope())
+                .subscribe {
+                    audioMsgRecord.isVisible = it
+                    audioMsgDuration.isVisible =
+                        it   // chronometer follows record button visibility
+                    audioMsgBluetooth.isVisible = !it
+                }
 
-        recordAudioMsgRecordVisible
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .distinctUntilChanged()
-            .autoDisposable(scope())
-            .subscribe {
-                audioMsgRecord.isVisible = it
-                audioMsgDuration.isVisible = it   // chronometer follows record button visibility
-                audioMsgBluetooth.isVisible = !it
-            }
+            recordAudioPlayerVisible
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .distinctUntilChanged()
+                .autoDisposable(scope())
+                .subscribe {
+                    audioMsgPlayerBackground.isVisible = it
+                    recordAudioPlayerConfigUI.onNext(QkMediaPlayer.PlayingState.Stopped)
+                }
 
-        recordAudioPlayerVisible
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .distinctUntilChanged()
-            .autoDisposable(scope())
-            .subscribe {
-                audioMsgPlayerBackground.isVisible = it
-                recordAudioPlayerConfigUI.onNext(QkMediaPlayer.PlayingState.Stopped)
-            }
-
-        recordAudioPlayerConfigUI
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .distinctUntilChanged()
-            .autoDisposable(scope())
-            .subscribe {
-                when (it) {
-                    QkMediaPlayer.PlayingState.Playing -> {
-                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Playing
-                        QkMediaPlayer.start()
-                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_pause)
-                        seekBarUpdater = getSeekBarUpdater().subscribe {
-                            audioMsgPlayerSeekBar.progress = QkMediaPlayer.currentPosition
-                            audioMsgPlayerSeekBar.max = QkMediaPlayer.duration
+            recordAudioPlayerConfigUI
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .distinctUntilChanged()
+                .autoDisposable(scope())
+                .subscribe {
+                    when (it) {
+                        QkMediaPlayer.PlayingState.Playing -> {
+                            audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Playing
+                            QkMediaPlayer.start()
+                            audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_pause)
+                            seekBarUpdater = getSeekBarUpdater().subscribe {
+                                audioMsgPlayerSeekBar.progress = QkMediaPlayer.currentPosition
+                                audioMsgPlayerSeekBar.max = QkMediaPlayer.duration
+                            }
+                            audioMsgPlayerSeekBar.isEnabled = true
                         }
-                        audioMsgPlayerSeekBar.isEnabled = true
-                    }
-                    QkMediaPlayer.PlayingState.Paused -> {
-                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Paused
-                        QkMediaPlayer.pause()
-                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
-                        seekBarUpdater?.dispose()
-                    }
-                    else -> {
-                        audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Stopped
-                        QkMediaPlayer.reset()
-                        audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
-                        seekBarUpdater?.dispose()
-                        audioMsgPlayerSeekBar.progress = 0
-                        audioMsgPlayerSeekBar.isEnabled = false
+
+                        QkMediaPlayer.PlayingState.Paused -> {
+                            audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Paused
+                            QkMediaPlayer.pause()
+                            audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
+                            seekBarUpdater?.dispose()
+                        }
+
+                        else -> {
+                            audioMsgPlayerPlayPause.tag = QkMediaPlayer.PlayingState.Stopped
+                            QkMediaPlayer.reset()
+                            audioMsgPlayerPlayPause.setImageResource(R.drawable.exo_icon_play)
+                            seekBarUpdater?.dispose()
+                            audioMsgPlayerSeekBar.progress = 0
+                            audioMsgPlayerSeekBar.isEnabled = false
+                        }
                     }
                 }
-            }
-
-        // audio msg player seek bar handler
-        audioMsgPlayerSeekBar.setOnSeekBarChangeListener(
-            object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
-                    // if seek was initiated by the user and this part is currently playing
-                    if (fromUser)
-                        QkMediaPlayer.seekTo(progress)
+            // audio msg player seek bar handler
+            audioMsgPlayerSeekBar.setOnSeekBarChangeListener(
+                object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
+                        // if seek was initiated by the user and this part is currently playing
+                        if (fromUser)
+                            QkMediaPlayer.seekTo(progress)
+                    }
+                    override fun onStartTrackingTouch(p0: SeekBar?) {}
+                    override fun onStopTrackingTouch(p0: SeekBar?) {}
                 }
-                override fun onStartTrackingTouch(p0: SeekBar?) {}
-                override fun onStopTrackingTouch(p0: SeekBar?) {}
-            }
-        )
+            )
 
-        window.callback = ComposeWindowCallback(window.callback, this)
+            window.callback = ComposeWindowCallback(window.callback, this)
     }
 
     override fun onStart() {
@@ -455,7 +462,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         toolbarSubtitle.setVisible(state.query.isNotEmpty())
         toolbarSubtitle.text = getString(R.string.compose_subtitle_results, state.searchSelectionPosition,
-                state.searchResults)
+            state.searchResults)
 
         toolbarTitle.setVisible(!state.editingMode)
         chips.setVisible(state.editingMode)
@@ -567,10 +574,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun showDetails(details: String) {
         AlertDialog.Builder(this)
-                .setTitle(R.string.compose_details_title)
-                .setMessage(details)
-                .setCancelable(true)
-                .show()
+            .setTitle(R.string.compose_details_title)
+            .setMessage(details)
+            .setCancelable(true)
+            .show()
     }
 
     override fun showMessageLinkAskDialog(uri: Uri) {
@@ -604,8 +611,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun requestSmsPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(
-                Manifest.permission.READ_SMS,
-                Manifest.permission.SEND_SMS), 0)
+            Manifest.permission.READ_SMS,
+            Manifest.permission.SEND_SMS), 0)
     }
 
     override fun requestDatePicker() {
@@ -619,7 +626,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 calendar.set(Calendar.MINUTE, minute)
                 scheduleSelectedIntent.onNext(calendar.timeInMillis)
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(this))
-                    .show()
+                .show()
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
 
         // On some devices, the keyboard can cover the date picker
@@ -628,7 +635,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun requestContact() {
         val intent = Intent(Intent.ACTION_PICK)
-                .setType(ContactsContract.Contacts.CONTENT_TYPE)
+            .setType(ContactsContract.Contacts.CONTENT_TYPE)
 
         startActivityForResult(Intent.createChooser(intent, null), ComposeView.AttachContactRequestCode)
     }
@@ -637,21 +644,22 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         message.hideKeyboard()
         val serialized = HashMap(chips.associate { chip -> chip.address to chip.contact?.lookupKey })
         val intent = Intent(this, ContactsActivity::class.java)
-                .putExtra(ContactsActivity.SharingKey, sharing)
-                .putExtra(ContactsActivity.ChipsKey, serialized)
+            .putExtra(ContactsActivity.SharingKey, sharing)
+            .putExtra(ContactsActivity.ChipsKey, serialized)
         startActivityForResult(intent, ComposeView.SelectContactRequestCode)
     }
 
     override fun startSpeechRecognition() {
-        startActivityForResult(
-            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            ),
-            // include below if want a custom message that the STT can (optionally) display
-            // .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
-            ComposeView.SpeechRecognitionRequestCode
-        )
+        if (!isSpeechRecognitionAvailable()) {
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            }
+            try {
+                startActivityForResult(intent, ComposeView.SpeechRecognitionRequestCode)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun themeChanged() {
@@ -666,21 +674,21 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun requestCamera() {
         cameraDestination = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-                .let { timestamp -> ContentValues().apply { put(MediaStore.Images.Media.TITLE, timestamp) } }
-                .let { cv -> contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv) }
+            .let { timestamp -> ContentValues().apply { put(MediaStore.Images.Media.TITLE, timestamp) } }
+            .let { cv -> contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv) }
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
+            .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
         startActivityForResult(Intent.createChooser(intent, null), ComposeView.TakePhotoRequestCode)
     }
 
     override fun requestGallery(mimeType: String, requestCode: Int) {
         val intent = Intent(Intent.ACTION_PICK)
-                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
-                .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                .setType(mimeType)
+            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+            .putExtra(Intent.EXTRA_LOCAL_ONLY, false)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            .setType(mimeType)
         startActivityForResult(Intent.createChooser(intent, null), requestCode)
     }
 
@@ -691,9 +699,9 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun scrollToMessage(id: Long) {
         messageAdapter.data?.second
-                ?.indexOfLast { message -> message.id == id }
-                ?.takeIf { position -> position != -1 }
-                ?.let(messageList::scrollToPosition)
+            ?.indexOfLast { message -> message.id == id }
+            ?.takeIf { position -> position != -1 }
+            ?.let(messageList::scrollToPosition)
     }
 
     override fun showQksmsPlusSnackbar(message: Int) {
@@ -707,11 +715,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun showDeleteDialog(messages: List<Long>) {
         val count = messages.size
         android.app.AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_delete_title)
-                .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
-                .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(messages) }
-                .setNegativeButton(R.string.button_cancel, null)
-                .show()
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
+            .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(messages) }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
     }
 
     override fun showClearCurrentMessageDialog() {
@@ -761,8 +769,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         when (requestCode) {
             ComposeView.SelectContactRequestCode -> {
                 chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.ChipsKey)
-                        ?.let { serializable -> serializable as? HashMap<String, String?> }
-                        ?: hashMapOf())
+                    ?.let { serializable -> serializable as? HashMap<String, String?> }
+                    ?: hashMapOf())
             }
 
             ComposeView.TakePhotoRequestCode -> {
