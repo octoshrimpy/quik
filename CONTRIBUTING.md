@@ -1,12 +1,12 @@
 # Contributing
 Contributions are greatly appreciated! There are many ways to contribute to this repository:
-* [Submitt Issues](#submitt-issues)
+* [Submit Issues](#submit-issues)
 * [Test Latest Versions](#test-latest-versions)
 * [Translate](#translate)
 * [Update the Wiki](#update-the-wiki)
 * [Fix Bugs](#fix-bugs)
 * [Add Features](#add-features)
-## Submitt Issues
+## Submit Issues
 A great bug report contains a description of the problem and steps to reproduce the problem. We need to know what we're looking for and where to look for it.
 When reporting a bug, please make sure to provide the following information:
 * Steps to reproduce the issue
