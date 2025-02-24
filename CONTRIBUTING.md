@@ -1,6 +1,6 @@
 # Contributing
 Contributions are greatly appreciated! There are many ways to contribute to this repository:
-* [Submitting Issues](#submitting-Issues)
+* [Submitting Issues](#submitting-issues)
 * [Testing Latest Versions](#testing-latest-versions)
 * [Translating](#translating)
 * [Updating the Wiki](#updating-the-wiki)
@@ -29,7 +29,7 @@ To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshr
 2. Fork the repository.
 3. Create a new branch.
 4. Make your change.
-5. Test your change, either by building an apk or running on an emulator.
+5. Test your change, either by building an apk or running on an emulator. 
 6. Submit a pull request with your change.
 **We have a build action on each pull request, if this build fails, please edit the pull request in order to make the build succeed.**
 ## Add Features 
@@ -37,6 +37,44 @@ To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshr
 2. Fork the repository.
 3. Create a new branch.
 4. Make your change. **Note: Please make sure to provide detailed comments within your code to make reviewers and future contributors lives easier.**
-5. Test your change, either by building an apk or running on an emulator.
+5. Test your change, either by building an apk or running on an emulator. 
 6. Submit a pull request with your change.
 **We have a build action on each pull request, if this build fails, please edit the pull request in order to make the build succeed.**
+## Helpful Tips
+### [build.gradle](https://github.com/octoshrimpy/quik/blob/master/presentation/build.gradle) configuration for building locally
+```
+
+/*
+    signingConfigs {
+        release {
+            def keystoreProps = new Properties()
+            def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
+            storeFile file('./my-release-key.keystore')
+            keyAlias 'quik_release'
+            if (keystorePropsFile.exists()) {
+                keystoreProps.load(new FileInputStream(keystorePropsFile))
+            } else if (System.getenv("CI") == "true") {
+//                do nothing
+            } else {
+                throw new GradleException("Keystore properties file not found.")
+            }
+            storePassword keystoreProps['storePassword']
+            keyPassword keystoreProps['keyPassword']
+        }
+    }
+*/
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+       //     signingConfig signingConfigs.release
+        }
+    }
+
+    productFlavors {
+        withAnalytics { dimension "analytics" }
+        noAnalytics {
+        //    signingConfig signingConfigs.release
+        }
+    }
