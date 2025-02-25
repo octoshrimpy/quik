@@ -33,6 +33,17 @@
 # moshi
 # JSR 305 annotations are for embedding nullability information.
 -dontwarn javax.annotation.**
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
+-dontwarn org.conscrypt.Conscrypt$Version
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE
+-dontwarn org.slf4j.Logger
+-dontwarn org.slf4j.LoggerFactory
 
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
@@ -95,3 +106,17 @@
     <init>(...);
     <fields>;
 }
+# Dagger
+# This is to allow the restore functionality to work
+-keep class dagger.** { *; }
+-keep class * extends dagger.Module { *; }
+-keep class * extends dagger.Component { *; }
+-keep class * extends dagger.Subcomponent { *; }
+-keep class * {
+    @dagger.Provides <methods>;
+}
+-keep class io.reactivex.** { *; }
+-keep class io.reactivex.subjects.** { *; }
+-keep class androidx.activity.result.** { *; }
+-keep class dev.octoshrimpy.quik.** { *; }
+
