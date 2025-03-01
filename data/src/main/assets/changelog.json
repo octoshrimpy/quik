@@ -1,54 +1,85 @@
-
-[  
-    {
-        "versionCode": 2227,
-        "versionName": "4.0.10-beta",
-        "added": [
-            "Send delayed sms immediately",
-            "Fully select message backgrounds in compose screen",
-            "Disable auto hyperlink (warn link on press)"
-        ],
-        "fixed": [
-            "Scheduled messages click doesnt schedule",
-            "Fix update Attachment.kt",
-            "Fix 'take a photo' not working",
-            "Fix mms image compression bug not compressing",
-            "Fix bug that disabled download/view of mms attachments",
-            "Fix only images attached to forwarded messages",
-            "Fix strings in French Translation"
-        ]
-    },
-    {
+[
+  {
+    "versionCode": 2228,
+    "versionName": "4.1.0",
+    "added": [
+      "Icon to F-Droid",
+      "Context menu to save, share, forward, open externally",
+      "Speech-to-text option and new button",
+      "Quick voice message option",
+      "Allow editing of scheduled messages",
+      "Enable a delete/clear menu icon on compose screen",
+      "Scheduled message save attachments locally",
+      "Check to see if STT provider is available and if not abort process"
+    ],
+    "fixed": [
+      "Gracefully handle a failure to get contact attachment data",
+      "Mms attachment view/share is suboptimal and other small fixups",
+      "Size of the icon.png",
+      "Npe in messagesadapter with out messages",
+      "Change from leave a review on Google Play to leave a star on github",
+      "Ingest attachments in standard manner",
+      "Race condition crash when deleting a message",
+      "Use bluetooth sco source device, if available, to record audio",
+      "Wrong string when long-pressing detail button",
+      "Bring scheduled messages activity into ui alignment with the rest of the app",
+      "Update attachment icon retrieve and manifest query to enable",
+      "upgrade glide library version",
+      "Remove extraneous controls on compose (sim and mic) when no reply possible",
+      "Copyright Date",
+      "Backup and Restore being unable to read file",
+      "Replace QUIK hero image in README.md repo"
+    ]
+  },
+  {
+    "versionCode": 2227,
+    "versionName": "4.0.10-beta",
+    "added": [
+      "Send delayed sms immediately",
+      "Fully select message backgrounds in compose screen",
+      "Disable auto hyperlink (warn link on press)"
+    ],
+    "fixed": [
+      "Scheduled messages click doesnt schedule",
+      "Fix update Attachment.kt",
+      "Fix 'take a photo' not working",
+      "Fix mms image compression bug not compressing",
+      "Fix bug that disabled download/view of mms attachments",
+      "Fix only images attached to forwarded messages",
+      "Fix strings in French Translation"
+    ]
+  },
+  {
     "versionCode": 2226,
     "versionName": "4.0.9",
-      "added": [
-    "Basic speech to text for compose (and qkreply)",
-    "Text to speech",
-    "Add 'super' font size setting",
-    "Basic speech to text for compose (and qkreply) take 2",
-    "Make unread conversations float at the top of conversation lists",
-    "Select and copy a text part",
-    "Add 'super' font size setting - take 2",
-    "Main widget launch appropriate app activities",
-    "Change convo name from main convo activity",
-    "Play audio attachments",
-    "Select all on conversations and compose screens. New compose 'show status' option",
-    "Build on pull request",
-    "Update French translation",
-    "Changes to allow attaching *any* type of file",
-    "Update French translation"
-  ],
-  "fixed": [
-    "Bug fix for motion events being used after recycled",
-    "Disable reply ability to non-replyable messages/conversations",
-    "Sort blocked messages by lastmessage.date desc",
-    "Fix fr strings from pr 226. Fixes build",
-    "Fix pr 225 render issue",
-    "Fix unblock number bug",
-    "Silent notifications if no recipients are a contact"
-  ]
+    "added": [
+      "Basic speech to text for compose (and qkreply)",
+      "Text to speech",
+      "Add 'super' font size setting",
+      "Basic speech to text for compose (and qkreply) take 2",
+      "Make unread conversations float at the top of conversation lists",
+      "Select and copy a text part",
+      "Add 'super' font size setting - take 2",
+      "Main widget launch appropriate app activities",
+      "Change convo name from main convo activity",
+      "Play audio attachments",
+      "Select all on conversations and compose screens. New compose 'show status' option",
+      "Build on pull request",
+      "Update French translation",
+      "Changes to allow attaching *any* type of file",
+      "Update French translation"
+    ],
+    "fixed": [
+      "Bug fix for motion events being used after recycled",
+      "Disable reply ability to non-replyable messages/conversations",
+      "Sort blocked messages by lastmessage.date desc",
+      "Fix fr strings from pr 226. Fixes build",
+      "Fix pr 225 render issue",
+      "Fix unblock number bug",
+      "Silent notifications if no recipients are a contact"
+    ]
   },
-    {
+  {
     "versionCode": 2225,
     "versionName": "4.0.8",
     "fixed": [
@@ -78,10 +109,8 @@
   {
     "versionCode": 2222,
     "versionName": "4.0.5",
-    "fixed": [
-    ],
-    "removed": [
-    ]
+    "fixed": [],
+    "removed": []
   },
   {
     "versionCode": 2221,
