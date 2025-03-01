@@ -31,7 +31,7 @@ When reporting a bug, please make sure to provide the following information:
 - Device / OS information
 
 ## Contributing
-Contributions welcome! Please see the [contributing guidelines](https://github.com/octoshrimpy/quik/blob/contributing/CONTRIBUTING.md) for details.
+Contributions welcome! Please see the [contributing guidelines](https://github.com/octoshrimpy/quik/blob/master/CONTRIBUTING.md) for details.
 
 ## Thank you
 
