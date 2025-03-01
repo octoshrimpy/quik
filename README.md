@@ -30,11 +30,8 @@ When reporting a bug, please make sure to provide the following information:
 - QUIK version
 - Device / OS information
 
-<!--
-## Translations
-
-If you'd like to add translations to QUIK, please join the project on [Crowdin](https://crowdin.com/project/qksms). Translations that are committed directly to source files will not be accepted.
--->
+## Contributing
+Contributions welcome! Please see the [contributing guidelines](https://github.com/octoshrimpy/quik/blob/contributing/CONTRIBUTING.md) for details.
 
 ## Thank you
 
