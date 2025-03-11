@@ -104,10 +104,11 @@ class QkReplyViewModel @Inject constructor(
         super.bindView(view)
 
         conversation
-                .map { conversation -> conversation.draft }
-                .distinctUntilChanged()
-                .autoDisposable(view.scope())
-                .subscribe { draft -> view.setDraft(draft) }
+            .take(1)  // only update saved draft to ui once
+            .map { conversation -> conversation.draft }
+            .distinctUntilChanged()
+            .autoDisposable(view.scope())
+            .subscribe { draft -> view.setDraft(draft) }
 
         // Mark read
         view.menuItemIntent
