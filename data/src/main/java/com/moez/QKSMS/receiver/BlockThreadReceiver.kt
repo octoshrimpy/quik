@@ -26,6 +26,7 @@ import dev.octoshrimpy.quik.interactor.MarkBlocked
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.util.Preferences
 import dagger.android.AndroidInjection
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class BlockThreadReceiver : BroadcastReceiver() {
@@ -38,15 +39,23 @@ class BlockThreadReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        val pendingResult = goAsync()
         val threadId = intent.getLongExtra("threadId", 0)
-        val conversation = conversationRepo.getConversation(threadId)!!
-        val blockingManager = prefs.blockingManager.get()
 
         blockingClient
-                .block(conversation.recipients.map { it.address })
-                .andThen(markBlocked.buildObservable(MarkBlocked.Params(listOf(threadId), blockingManager, null)))
-                .subscribe { pendingResult.finish() }
+            .block(
+                conversationRepo.getConversation(threadId)
+                    ?.recipients
+                    ?.map { it.address }
+                    ?: listOf()
+            )
+            .subscribeOn(Schedulers.io())
+            .andThen(
+                markBlocked.buildObservable(
+                    MarkBlocked.Params(listOf(threadId), prefs.blockingManager.get(), null)
+                )
+            )
+            .subscribe { goAsync().finish() }
+            .dispose()
     }
 
 }
