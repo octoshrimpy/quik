@@ -63,6 +63,7 @@ import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.realm.Case
 import io.realm.Realm
+import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import timber.log.Timber
@@ -73,7 +74,7 @@ import kotlin.collections.ArrayList
 import kotlin.math.sqrt
 
 @Singleton
-class MessageRepositoryImpl @Inject constructor(
+open class MessageRepositoryImpl @Inject constructor(
     private val activeConversationManager: ActiveConversationManager,
     private val context: Context,
     private val messageIds: KeyManager,
@@ -82,23 +83,30 @@ class MessageRepositoryImpl @Inject constructor(
     private val syncRepository: SyncRepository
 ) : MessageRepository {
 
-    override fun getMessages(threadId: Long, query: String): RealmResults<Message> {
+    private fun getMessagesBase(threadId: Long, query: String): RealmQuery<Message> {
         return Realm.getDefaultInstance()
-                .where(Message::class.java)
-                .equalTo("threadId", threadId)
-                .let {
-                    when (query.isEmpty()) {
-                        true -> it
-                        false -> it
-                                .beginGroup()
-                                .contains("body", query, Case.INSENSITIVE)
-                                .or()
-                                .contains("parts.text", query, Case.INSENSITIVE)
-                                .endGroup()
-                    }
+            .where(Message::class.java)
+            .equalTo("threadId", threadId)
+            .let {
+                when (query.isEmpty()) {
+                    true -> it
+                    false -> it
+                        .beginGroup()
+                        .contains("body", query, Case.INSENSITIVE)
+                        .or()
+                        .contains("parts.text", query, Case.INSENSITIVE)
+                        .endGroup()
                 }
-                .sort("date")
-                .findAllAsync()
+            }
+            .sort("date")
+    }
+
+    override fun getMessages(threadId: Long, query: String): RealmResults<Message> {
+        return getMessagesBase(threadId, query).findAllAsync()
+    }
+
+    override fun getMessagesSync(threadId: Long, query: String): RealmResults<Message> {
+        return getMessagesBase(threadId, query).findAll()
     }
 
     override fun getMessage(id: Long): Message? {
