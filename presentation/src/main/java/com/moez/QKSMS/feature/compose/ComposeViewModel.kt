@@ -1024,14 +1024,14 @@ class ComposeViewModel @Inject constructor(
                     return@withLatestFrom
                 }
 
-                    val subId = state.subscription?.subscriptionId ?: -1
-                    val addresses = when (conversation.recipients.isNotEmpty()) {
-                        true -> conversation.recipients.map { it.address }
-                        false -> chips.map { chip -> chip.address }
-                    }
-                    val sendAsGroup = ((addresses.size > 1) &&  // if more than one address to send to
-                            (!state.editingMode ||    // and is not a new convo
-                            state.sendAsGroup))  // or (is a new convo and) send as group is selected
+                val subId = state.subscription?.subscriptionId ?: -1
+                val addresses = when (conversation.recipients.isNotEmpty()) {
+                    true -> conversation.recipients.map { it.address }
+                    false -> chips.map { chip -> chip.address }
+                }
+                val sendAsGroup = ((addresses.size > 1) &&  // if more than one address to send to
+                        (!state.editingMode ||    // and is not a new convo
+                        state.sendAsGroup))  // or (is a new convo and) send as group is selected
 
                 when {
                     // Scheduling a message
