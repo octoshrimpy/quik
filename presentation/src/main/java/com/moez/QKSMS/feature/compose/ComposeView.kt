@@ -75,8 +75,7 @@ interface ComposeView : QkView<ComposeState> {
     val viewQksmsPlusIntent: Subject<Unit>
     val backPressedIntent: Observable<Unit>
     val confirmDeleteIntent: Observable<List<Long>>
-    val confirmClearCurrentMessageIntent: Observable<Unit>
-    val clearCurrentMessageIntent: Subject<Unit>
+    val clearCurrentMessageIntent: Subject<Boolean>
     val messageLinkAskIntent: Observable<Uri>
     val speechRecogniserIntent: Observable<*>
     val shadeIntent: Observable<Unit>
