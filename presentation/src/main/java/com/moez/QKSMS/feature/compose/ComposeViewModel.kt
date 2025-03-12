@@ -999,29 +999,30 @@ class ComposeViewModel @Inject constructor(
 
         // Send a message when the send button is clicked, and disable editing mode if it's enabled
         view.sendIntent
-                .withLatestFrom(view.textChangedIntent) { _, body -> body.toString() }
-                .withLatestFrom(state, conversation, selectedChips) { body, state, conversation, chips ->
-                    if (!permissionManager.isDefaultSms()) {
-                        view.requestDefaultSms()
-                        return@withLatestFrom
-                    }
+            .observeOn(Schedulers.io())
+            .withLatestFrom(view.textChangedIntent) { _, body -> body.toString() }
+            .withLatestFrom(state, conversation, selectedChips) { body, state, conversation, chips ->
+                if (!permissionManager.isDefaultSms()) {
+                    view.requestDefaultSms()
+                    return@withLatestFrom
+                }
 
-                    if (!permissionManager.hasSendSms()) {
-                        view.requestSmsPermission()
-                        return@withLatestFrom
-                    }
+                if (!permissionManager.hasSendSms()) {
+                    view.requestSmsPermission()
+                    return@withLatestFrom
+                }
 
-                    val delay = when (prefs.sendDelay.get()) {
-                        Preferences.SEND_DELAY_SHORT -> 3000
-                        Preferences.SEND_DELAY_MEDIUM -> 5000
-                        Preferences.SEND_DELAY_LONG -> 10000
-                        else -> 0
-                    }
+                val delay = when (prefs.sendDelay.get()) {
+                    Preferences.SEND_DELAY_SHORT -> 3000
+                    Preferences.SEND_DELAY_MEDIUM -> 5000
+                    Preferences.SEND_DELAY_LONG -> 10000
+                    else -> 0
+                }
 
-                    if ((delay != 0 || state.scheduled != 0L) && !permissionManager.hasExactAlarms()) {
-                        navigator.showExactAlarmsSettings()
-                        return@withLatestFrom
-                    }
+                if ((delay != 0 || state.scheduled != 0L) && !permissionManager.hasExactAlarms()) {
+                    navigator.showExactAlarmsSettings()
+                    return@withLatestFrom
+                }
 
                     val subId = state.subscription?.subscriptionId ?: -1
                     val addresses = when (conversation.recipients.isNotEmpty()) {
@@ -1032,55 +1033,66 @@ class ComposeViewModel @Inject constructor(
                             (!state.editingMode ||    // and is not a new convo
                             state.sendAsGroup))  // or (is a new convo and) send as group is selected
 
-                    when {
-                        // Scheduling a message
-                        state.scheduled != 0L -> {
-                            newState { copy(scheduled = 0) }
-                            val uris = state.attachments.map { it.uri.toString() }
-                            val params = AddScheduledMessage
-                                    .Params(state.scheduled, subId, addresses, sendAsGroup, body, uris)
-                            addScheduledMessage.execute(params)
-                            context.makeToast(R.string.compose_scheduled_toast)
-                        }
-
-                        // Sending a group message
-                        sendAsGroup -> {
-                            sendMessage.execute(SendMessage
-                                    .Params(subId, conversation.id, addresses, body, state.attachments, delay))
-                        }
-
-                        // Sending a message to an existing conversation with one recipient
-                        conversation.recipients.size == 1 -> {
-                            val address = conversation.recipients.map { it.address }
-                            sendMessage.execute(SendMessage.Params(subId, threadId, address, body, state.attachments, delay))
-                        }
-
-                        // Create a new conversation with one address
-                        addresses.size == 1 -> {
-                            sendMessage.execute(SendMessage
-                                    .Params(subId, threadId, addresses, body, state.attachments, delay))
-                        }
-
-                        // Send a message to multiple addresses
-                        else -> {
-                            addresses.forEach { addr ->
-                                val threadId = tryOrNull(false) {
-                                    TelephonyCompat.getOrCreateThreadId(context, addr)
-                                } ?: 0
-                                val address = listOf(conversationRepo
-                                        .getConversation(threadId)?.recipients?.firstOrNull()?.address ?: addr)
-                                sendMessage.execute(SendMessage
-                                        .Params(subId, threadId, address, body, state.attachments, delay))
-                            }
-                        }
+                when {
+                    // Scheduling a message
+                    state.scheduled != 0L -> {
+                        newState { copy(scheduled = 0) }
+                        val uris = state.attachments.map { it.uri.toString() }
+                        val params = AddScheduledMessage
+                                .Params(state.scheduled, subId, addresses, sendAsGroup, body, uris)
+                        addScheduledMessage.execute(params)
+                        context.makeToast(R.string.compose_scheduled_toast)
                     }
 
-                    // clear the current message ready for new message composition (or finish()
-                    // compose activity)
-                    view.clearCurrentMessageIntent.onNext(
-                        ((addresses.size > 1) &&  // if more than one address to send to
-                            state.editingMode &&    // and is a new convo
-                            !state.sendAsGroup)     // and is *not* sent as a group
+                    // Sending a group message
+                    sendAsGroup -> {
+                        sendMessage.execute(SendMessage
+                                .Params(subId, conversation.id, addresses, body, state.attachments, delay))
+                    }
+
+                    // Sending a message to an existing conversation with one recipient
+                    conversation.recipients.size == 1 -> {
+                        val address = conversation.recipients.map { it.address }
+                        sendMessage.execute(SendMessage.Params(subId, threadId, address, body, state.attachments, delay))
+                    }
+
+                    // Create a new conversation with one address
+                    addresses.size == 1 -> {
+                        sendMessage.execute(SendMessage
+                                .Params(subId, threadId, addresses, body, state.attachments, delay))
+                    }
+
+                    // Send a message to multiple addresses
+                    else -> {
+                        addresses.forEach {
+                            val threadId = tryOrNull(false) {
+                                TelephonyCompat.getOrCreateThreadId(context, it)
+                            } ?: 0
+                            val address = conversationRepo.getOrCreateConversation(it)
+                                ?.recipients
+                                ?.firstOrNull()
+                                ?.address
+                                ?: it
+                            sendMessage.execute(
+                                SendMessage.Params(
+                                    subId,
+                                    threadId,
+                                    listOf(address),
+                                    body,
+                                    state.attachments,
+                                    delay
+                                )
+                            )
+                        }
+                    }
+                }
+
+                // clear the current message ready for new message composition (or finish()
+                // compose activity)
+                view.clearCurrentMessageIntent.onNext(
+                    ((addresses.size > 1) &&  // if more than one address to send to
+                        state.editingMode &&    // and is a new convo
+                        !state.sendAsGroup)     // and is *not* sent as a group
                     )
                 }
                 .autoDisposable(view.scope())
@@ -1115,6 +1127,7 @@ class ComposeViewModel @Inject constructor(
 
         // clear the current message schedule, text and attachments
         view.clearCurrentMessageIntent
+            .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(view.scope())
             .subscribe {
                 view.setDraft("")
