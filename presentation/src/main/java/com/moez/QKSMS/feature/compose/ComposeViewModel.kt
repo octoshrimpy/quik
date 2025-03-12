@@ -1028,7 +1028,9 @@ class ComposeViewModel @Inject constructor(
                         true -> conversation.recipients.map { it.address }
                         false -> chips.map { chip -> chip.address }
                     }
-                    val sendAsGroup = !state.editingMode || state.sendAsGroup
+                    val sendAsGroup = ((addresses.size > 1) &&  // if more than one address to send to
+                            (!state.editingMode ||    // and is not a new convo
+                            state.sendAsGroup))  // or (is a new convo and) send as group is selected
 
                     when {
                         // Scheduling a message
@@ -1073,8 +1075,13 @@ class ComposeViewModel @Inject constructor(
                         }
                     }
 
-                    // clear the current message ready for new message composition
-                    view.clearCurrentMessageIntent.onNext(Unit)
+                    // clear the current message ready for new message composition (or finish()
+                    // compose activity)
+                    view.clearCurrentMessageIntent.onNext(
+                        ((addresses.size > 1) &&  // if more than one address to send to
+                            state.editingMode &&    // and is a new convo
+                            !state.sendAsGroup)     // and is *not* sent as a group
+                    )
                 }
                 .autoDisposable(view.scope())
                 .subscribe()
@@ -1106,22 +1113,15 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe { view.clearSelection() }
 
-        view.confirmClearCurrentMessageIntent
-            .autoDisposable(view.scope())
-            .subscribe { view.clearCurrentMessageIntent.onNext(Unit) }
-
         // clear the current message schedule, text and attachments
         view.clearCurrentMessageIntent
-            .withLatestFrom(state) { _, state -> state }
             .autoDisposable(view.scope())
             .subscribe {
                 view.setDraft("")
-                // if choosing contacts, don't remove attachments. they may have come from an
-                // external share
                 newState {
                     copy(
                         editingMode = false,
-                        hasError = !sendAsGroup,
+                        hasError = it,  // hasError being kinda misused to finish() compose activity
                         attachments = listOf(),
                         scheduled = 0,
                     )

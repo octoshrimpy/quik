@@ -187,8 +187,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
-    override val confirmClearCurrentMessageIntent: Subject<Unit> = PublishSubject.create()
-    override val clearCurrentMessageIntent: Subject<Unit> = PublishSubject.create()
+    override val clearCurrentMessageIntent: Subject<Boolean> = PublishSubject.create()
     override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
     override val speechRecogniserIntent by lazy { speechToTextIcon.clicks() }
     override val shadeIntent by lazy { shadeBackground.clicks() }
@@ -729,7 +728,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .setTitle(R.string.dialog_clear_compose_title)
             .setMessage(R.string.dialog_clear_compose)
             .setPositiveButton(R.string.button_clear) { _, _ ->
-                clearCurrentMessageIntent.onNext(Unit)
+                clearCurrentMessageIntent.onNext(false)
             }
             .setNegativeButton(R.string.button_cancel, null)
             .show()
