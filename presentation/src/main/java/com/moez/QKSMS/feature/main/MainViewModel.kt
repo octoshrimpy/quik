@@ -46,6 +46,7 @@ import dev.octoshrimpy.quik.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.interactor.SpeakThreads
+import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.withLatestFrom
@@ -66,6 +67,7 @@ class MainViewModel @Inject constructor(
     syncRepository: SyncRepository,
     private val changelogManager: ChangelogManager,
     private val conversationRepo: ConversationRepository,
+    private val messageRepo: MessageRepository,
     private val deleteConversations: DeleteConversations,
     private val markArchived: MarkArchived,
     private val markPinned: MarkPinned,
@@ -510,17 +512,28 @@ class MainViewModel @Inject constructor(
         view.swipeConversationIntent
                 .autoDisposable(view.scope())
                 .subscribe { (threadId, direction) ->
-                    val action = if (direction == ItemTouchHelper.RIGHT) prefs.swipeRight.get() else prefs.swipeLeft.get()
+                    val action =
+                        if (direction == ItemTouchHelper.RIGHT) prefs.swipeRight.get()
+                        else prefs.swipeLeft.get()
                     when (action) {
-                        Preferences.SWIPE_ACTION_ARCHIVE -> markArchived.execute(listOf(threadId))
-                        {
-                            lastArchivedThreadIds.clear()
-                            lastArchivedThreadIds.add(threadId)
-                            view.showArchivedSnackbar(1)
+                        Preferences.SWIPE_ACTION_ARCHIVE ->
+                            markArchived.execute(listOf(threadId)) {
+                                lastArchivedThreadIds.clear()
+                                lastArchivedThreadIds.add(threadId)
+                                view.showArchivedSnackbar(1)
+                            }
+                        Preferences.SWIPE_ACTION_DELETE ->
+                            view.showDeleteDialog(listOf(threadId))
+                        Preferences.SWIPE_ACTION_BLOCK ->
+                            view.showBlockingDialog(listOf(threadId), true)
+                        Preferences.SWIPE_ACTION_CALL -> {
+                            (
+                                messageRepo.getMessagesSync(threadId).lastOrNull { !it.isMe() }
+                                    ?.address // most recent non-me msg address
+                                ?: conversationRepo.getConversation(threadId)
+                                    ?.recipients?.firstOrNull()?.address  // first recipient in convo
+                            )?.let(navigator::makePhoneCall)
                         }
-                        Preferences.SWIPE_ACTION_DELETE -> view.showDeleteDialog(listOf(threadId))
-                        Preferences.SWIPE_ACTION_BLOCK -> view.showBlockingDialog(listOf(threadId), true)
-                        Preferences.SWIPE_ACTION_CALL -> conversationRepo.getConversation(threadId)?.recipients?.firstOrNull()?.address?.let(navigator::makePhoneCall)
                         Preferences.SWIPE_ACTION_READ -> markRead.execute(listOf(threadId))
                         Preferences.SWIPE_ACTION_UNREAD -> markUnread.execute(listOf(threadId))
                         Preferences.SWIPE_ACTION_SPEAK -> speakThreads.execute(listOf(threadId))
