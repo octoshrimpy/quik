@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
-        android:elevation="4dp"
+        android:elevation="3dp"
         android:padding="8dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -406,7 +406,7 @@
         android:id="@+id/shadeBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#44000000"
+        android:background="#aa000000"
         android:elevation="4dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -421,7 +421,7 @@
         android:layout_height="40dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/circle"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:contentDescription="@string/compose_contact_cd"
         android:elevation="4dp"
         android:padding="10dp"
@@ -430,7 +430,7 @@
         app:layout_constraintBottom_toTopOf="@id/schedule"
         app:layout_constraintEnd_toEndOf="@id/attach"
         app:layout_constraintStart_toStartOf="@id/attach"
-        app:tint="?android:attr/textColorSecondary" />
+        app:tint="@color/textPrimaryDark" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/contactLabel"
@@ -438,13 +438,13 @@
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/rounded_rectangle_4dp"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="@string/compose_contact_cd"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/contact"
         app:layout_constraintStart_toEndOf="@id/contact"
         app:layout_constraintTop_toTopOf="@id/contact" />
@@ -455,7 +455,7 @@
         android:layout_height="40dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/circle"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:contentDescription="@string/compose_schedule_cd"
         android:elevation="4dp"
         android:padding="10dp"
@@ -464,7 +464,7 @@
         app:layout_constraintBottom_toTopOf="@id/attachAFileIcon"
         app:layout_constraintEnd_toEndOf="@id/attach"
         app:layout_constraintStart_toStartOf="@id/attach"
-        app:tint="?android:attr/textColorSecondary" />
+        app:tint="@color/textPrimaryDark" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/scheduleLabel"
@@ -472,13 +472,13 @@
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/rounded_rectangle_4dp"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="@string/compose_schedule_cd"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/schedule"
         app:layout_constraintStart_toEndOf="@id/schedule"
         app:layout_constraintTop_toTopOf="@id/schedule" />
@@ -489,7 +489,7 @@
         android:layout_height="40dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/circle"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:contentDescription="@string/compose_attach_file_cd"
         android:elevation="4dp"
         android:padding="10dp"
@@ -499,7 +499,7 @@
         app:layout_constraintBottom_toTopOf="@id/attachAnAudioMessageIcon"
         app:layout_constraintEnd_toEndOf="@id/attach"
         app:layout_constraintStart_toStartOf="@id/attach"
-        app:tint="?android:attr/textColorSecondary" />
+        app:tint="@color/textPrimaryDark" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/attachAFileLabel"
@@ -507,13 +507,13 @@
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/rounded_rectangle_4dp"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="@string/compose_attach_file_cd"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/attachAFileIcon"
         app:layout_constraintStart_toEndOf="@id/attachAFileIcon"
         app:layout_constraintTop_toTopOf="@id/attachAFileIcon" />
@@ -524,7 +524,7 @@
         android:layout_height="40dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/circle"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:contentDescription="@string/compose_audio_message_cd"
         android:elevation="4dp"
         android:padding="10dp"
@@ -533,7 +533,7 @@
         app:layout_constraintBottom_toTopOf="@id/gallery"
         app:layout_constraintEnd_toEndOf="@id/attach"
         app:layout_constraintStart_toStartOf="@id/attach"
-        app:tint="?android:attr/textColorSecondary" />
+        app:tint="@color/textPrimaryDark" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/attachAnAudioMessageLabel"
@@ -541,13 +541,13 @@
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/rounded_rectangle_4dp"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="@string/compose_audio_message_cd"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/attachAnAudioMessageIcon"
         app:layout_constraintStart_toEndOf="@id/attachAnAudioMessageIcon"
         app:layout_constraintTop_toTopOf="@id/attachAnAudioMessageIcon" />
@@ -558,7 +558,7 @@
         android:layout_height="40dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/circle"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:contentDescription="@string/compose_gallery_cd"
         android:elevation="4dp"
         android:padding="10dp"
@@ -567,7 +567,7 @@
         app:layout_constraintBottom_toTopOf="@id/camera"
         app:layout_constraintEnd_toEndOf="@id/attach"
         app:layout_constraintStart_toStartOf="@id/attach"
-        app:tint="?android:attr/textColorSecondary" />
+        app:tint="@color/textPrimaryDark" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/galleryLabel"
@@ -575,13 +575,13 @@
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/rounded_rectangle_4dp"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="@string/compose_gallery_cd"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/gallery"
         app:layout_constraintStart_toEndOf="@id/gallery"
         app:layout_constraintTop_toTopOf="@id/gallery" />
@@ -592,7 +592,7 @@
         android:layout_height="40dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/circle"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:contentDescription="@string/compose_camera_cd"
         android:elevation="4dp"
         android:padding="10dp"
@@ -601,7 +601,7 @@
         app:layout_constraintBottom_toTopOf="@id/attach"
         app:layout_constraintEnd_toEndOf="@id/attach"
         app:layout_constraintStart_toStartOf="@id/attach"
-        app:tint="?android:attr/textColorSecondary" />
+        app:tint="@color/textPrimaryDark" />
 
     <dev.octoshrimpy.quik.common.widget.QkTextView
         android:id="@+id/cameraLabel"
@@ -609,13 +609,13 @@
         android:layout_height="32dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/rounded_rectangle_4dp"
-        android:backgroundTint="?attr/bubbleColor"
+        android:backgroundTint="@color/tools_theme"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="@string/compose_camera_cd"
-        android:textColor="?android:attr/textColorPrimary"
+        android:textColor="@color/textPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/camera"
         app:layout_constraintStart_toEndOf="@id/gallery"
         app:layout_constraintTop_toTopOf="@id/camera" />

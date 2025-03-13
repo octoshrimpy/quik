@@ -59,6 +59,12 @@ fun ImageView.setTint(color: Int?) {
         else ColorStateList.valueOf(color)
 }
 
+fun TextView.setTint(color: Int?) {
+    foregroundTintList =
+        if (color == null) null
+        else ColorStateList.valueOf(color)
+}
+
 fun ProgressBar.setTint(color: Int?) {
     indeterminateTintList =
         if (color == null) null
@@ -66,7 +72,6 @@ fun ProgressBar.setTint(color: Int?) {
     progressTintList =
         if (color == null) null
         else ColorStateList.valueOf(color)
-
 }
 
 fun View.setBackgroundTint(color: Int?) {
