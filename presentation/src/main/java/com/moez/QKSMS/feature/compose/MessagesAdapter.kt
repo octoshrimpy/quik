@@ -22,6 +22,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
 import android.net.Uri
+import android.os.Build
 import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
@@ -49,6 +50,7 @@ import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setPadding
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.common.util.extensions.withAlpha
 import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
 import dev.octoshrimpy.quik.extensions.isSmil
 import dev.octoshrimpy.quik.extensions.isText
@@ -276,6 +278,19 @@ class MessagesAdapter @Inject constructor(
 
             holder.body.setTextColor(theme.textPrimary)
             holder.body.setBackgroundTint(theme.theme)
+            holder.body.highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                holder.body.textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                holder.body.textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                holder.body.textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+            }
+        } else {
+            holder.body.highlightColor = theme.theme.withAlpha(0x5d)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                holder.body.textSelectHandle?.setTint(theme.theme.withAlpha(0xad))
+                holder.body.textSelectHandleLeft?.setTint(theme.theme.withAlpha(0xad))
+                holder.body.textSelectHandleRight?.setTint(theme.theme.withAlpha(0xad))
+            }
         }
 
         // Bind the body text
