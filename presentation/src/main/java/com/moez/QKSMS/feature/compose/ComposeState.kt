@@ -48,4 +48,5 @@ data class ComposeState(
     val canSend: Boolean = false,
     val validRecipientNumbers: Int = 1,
     val audioMsgRecording: Boolean = false,
+    val saveDraft: Boolean = true,
 )
