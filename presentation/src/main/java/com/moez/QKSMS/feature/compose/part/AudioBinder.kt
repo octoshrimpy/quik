@@ -33,6 +33,7 @@ import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.common.util.extensions.withAlpha
 import dev.octoshrimpy.quik.common.widget.BubbleImageView
 import dev.octoshrimpy.quik.extensions.isAudio
 import dev.octoshrimpy.quik.extensions.resourceExists
@@ -236,20 +237,20 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
             setBackgroundTint(primaryColor)
         }
 
-        MediaMetadataRetriever().use {
+        MediaMetadataRetriever().apply {
             if (part.getUri().resourceExists(context))
-                it.setDataSource(context, part.getUri())
+                setDataSource(context, part.getUri())
 
             // metadata title
             holder.metadataTitle.apply {
-                text = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+                text = extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
 
                 if (text.isEmpty())
                     visibility = View.GONE
                 else {
                     visibility = View.VISIBLE
                     setTextColor(primaryColor)
-                    setBackgroundTint(0xccffffff.toInt() and secondaryColor)    // hex value is alpha
+                    setBackgroundTint(secondaryColor.withAlpha(0xcc))    // hex value is alpha
                 }
             }
 
@@ -265,7 +266,7 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
                     else -> BubbleImageView.Style.ONLY
                 }
 
-                val embeddedPicture = it.embeddedPicture
+                val embeddedPicture = embeddedPicture
                 if (embeddedPicture == null) {
                     holder.frame.layoutParams.height = (holder.frame.layoutParams.width / 2)
                     setTint(secondaryColor)
@@ -283,6 +284,8 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
                         .into(this)
                 }
             }
+
+            release()
         }
     }
 }
