@@ -23,7 +23,7 @@ A clear and concise description of what you expected to happen.
 **Smartphone (please complete the following information):**
  - Device: [e.g. Pixel 3A]
  - OS: [e.g. Android 11, Custom Rom]
- - App Version [e.g. 4.1.0]
+ - App Version [e.g. 4.1.1]
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.

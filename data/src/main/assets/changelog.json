@@ -1,4 +1,20 @@
-[
+[{
+  "versionCode": 2229,
+  "versionName": "4.1.1",
+  "fixed": [
+    "Dead Link",
+    "Handling sms:1234566?body=xyz style uris starting compose activity",
+    "Blockthreadreceiver db interaction on io thread",
+    "Circular update of message text and db conversation in qkreply",
+    "Bug causing compose activity to finish() when it wasn't supposed to",
+    "Remove `DependencyInfoBlock` in APK",
+    "Dial last non-me party in a group convo",
+    "New conversation not created for non-send-as-group multi-recipient message",
+    "UI changes to make attach menu properly visible in dark (and light) theme",
+    "Do not save draft text when adding new recipients to group convo",
+    "UI - change compose activity bubble text selection colors"
+  ]
+},
   {
     "versionCode": 2228,
     "versionName": "4.1.0",
