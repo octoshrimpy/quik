@@ -328,6 +328,7 @@ class ComposeViewModel @Inject constructor(
         view.optionsItemIntent
                 .filter { it == R.id.add }
                 .withLatestFrom(selectedChips) { _, chips ->
+                    newState { copy(saveDraft = false) }  // do not save draft on next activity invisibility
                     view.showContacts(sharing, chips)
                 }
                 .autoDisposable(view.scope())
@@ -643,8 +644,10 @@ class ComposeViewModel @Inject constructor(
                 .withLatestFrom(conversation) { _, conversation -> conversation }
                 .mapNotNull { conversation -> conversation.takeIf { it.isValid }?.id }
                 .observeOn(Schedulers.io())
-                .withLatestFrom(view.textChangedIntent) { threadId, draft ->
-                    conversationRepo.saveDraft(threadId, draft.toString())
+                .withLatestFrom(view.textChangedIntent, state) { threadId, draftText, state ->
+                    if (state.saveDraft)
+                        conversationRepo.saveDraft(threadId, draftText.toString())
+                    newState { copy(saveDraft = true) }
                 }
                 .autoDisposable(view.scope())
                 .subscribe()
