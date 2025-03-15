@@ -68,6 +68,7 @@ import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.autoScrollToStart
+import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
 import dev.octoshrimpy.quik.common.util.extensions.makeToast
 import dev.octoshrimpy.quik.common.util.extensions.scrapViews
@@ -268,22 +269,40 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             message.supportsInputContent = true
 
             theme
-                .doOnNext { loading.setTint(it.theme) }
-                .doOnNext { attach.setBackgroundTint(it.theme) }
-                .doOnNext { attach.setTint(it.textPrimary) }
-                .doOnNext { speechToTextIconBorder.setBackgroundTint(it.theme) }
-                .doOnNext { speechToTextIcon.setBackgroundTint(it.textPrimary) }
-                .doOnNext { speechToTextIcon.setTint(it.theme) }
-                .doOnNext { audioMsgRecord.setColor(it.theme) }
-                .doOnNext { audioMsgPlayerPlayPause.setTint(it.theme) }
                 .doOnNext {
+                    loading.setTint(it.theme)
+
+                    // entire attach menu
+                    attach.setBackgroundTint(it.theme); attach.setTint(it.textPrimary)
+                    contact.setBackgroundTint(it.theme); contact.setTint(it.textPrimary)
+                    contactLabel.setBackgroundTint(it.theme); contactLabel.setTint(it.textPrimary)
+                    schedule.setBackgroundTint(it.theme); schedule.setTint(it.textPrimary)
+                    scheduleLabel.setBackgroundTint(it.theme); scheduleLabel.setTint(it.textPrimary)
+                    attachAFileIcon.setBackgroundTint(it.theme); attachAFileIcon.setTint(it.textPrimary)
+                    attachAFileLabel.setBackgroundTint(it.theme); attachAFileLabel.setTint(it.textPrimary)
+                    attachAnAudioMessageIcon.setBackgroundTint(it.theme); attachAnAudioMessageIcon.setTint(it.textPrimary)
+                    attachAnAudioMessageLabel.setBackgroundTint(it.theme); attachAnAudioMessageLabel.setTint(it.textPrimary)
+                    gallery.setBackgroundTint(it.theme); gallery.setTint(it.textPrimary)
+                    galleryLabel.setBackgroundTint(it.theme); galleryLabel.setTint(it.textPrimary)
+                    camera.setBackgroundTint(it.theme); camera.setTint(it.textPrimary)
+                    cameraLabel.setBackgroundTint(it.theme); cameraLabel.setTint(it.textPrimary)
+
+                    // speech to text floating button
+                    speechToTextIconBorder.setBackgroundTint(it.theme)
+                    speechToTextIcon.setBackgroundTint(it.textPrimary)
+                    speechToTextIcon.setTint(it.theme)
+
+                    // audio message recording
+                    audioMsgRecord.setColor(it.theme)
+                    audioMsgPlayerPlayPause.setTint(it.theme)
                     audioMsgPlayerSeekBar.apply {
                         thumbTintList = ColorStateList.valueOf(it.theme)
                         progressBackgroundTintList = ColorStateList.valueOf(it.theme)
                         progressTintList = ColorStateList.valueOf(it.theme)
                     }
+
+                    messageAdapter.theme = it
                 }
-                .doOnNext { messageAdapter.theme = it }
                 .autoDisposable(scope())
                 .subscribe()
 
@@ -505,9 +524,21 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         attach.animate().rotation(if (state.attaching) 135f else 0f).start()
         attaching.isVisible = state.attaching
 
-        shadeBackground.visibility =
-            if (state.attaching || state.audioMsgRecording) View.VISIBLE
-            else View.GONE
+        shadeBackground.apply {
+            when {
+                state.attaching -> {
+                    visibility = View.VISIBLE
+                    elevation = 4.dpToPx(context).toFloat() // below attach menu
+                }
+
+                state.audioMsgRecording -> {
+                    visibility = View.VISIBLE
+                    elevation = 5.dpToPx(context).toFloat() // above attach menu
+                }
+
+                else-> visibility = View.GONE
+            }
+        }
 
         // show or hide audio message recording panel and shade background
         audioMsgBackground.isVisible = state.audioMsgRecording
