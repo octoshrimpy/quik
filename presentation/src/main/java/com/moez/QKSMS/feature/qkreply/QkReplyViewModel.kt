@@ -120,12 +120,15 @@ class QkReplyViewModel @Inject constructor(
 
         // Call
         view.menuItemIntent
-                .filter { id -> id == R.id.call }
-                .withLatestFrom(conversation) { _, conversation -> conversation }
-                .mapNotNull { conversation -> conversation.recipients.first()?.address }
-                .doOnNext { address -> navigator.makePhoneCall(address) }
-                .autoDisposable(view.scope())
-                .subscribe { newState { copy(hasError = true) } }
+            .filter { id -> id == R.id.call }
+            .withLatestFrom(state, conversation)
+            .mapNotNull { (_, state, conversation) ->
+                state.data?.second?.lastOrNull { !it.isMe() }?.address // most recent non-me msg address
+                    ?: conversation.recipients.firstOrNull()?.address  // first recipient in convo
+            }
+            .doOnNext { navigator.makePhoneCall(it) }
+            .autoDisposable(view.scope())
+            .subscribe { newState { copy(hasError = true) } }
 
         // Show all messages
         view.menuItemIntent
