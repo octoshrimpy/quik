@@ -30,6 +30,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewStub
+import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
@@ -89,8 +90,11 @@ class MainActivity : QkThemedActivity(), MainView {
     override val composeIntent by lazy { compose.clicks() }
     override val drawerOpenIntent: Observable<Boolean> by lazy {
         drawerLayout
-                .drawerOpen(Gravity.START)
-                .doOnNext { dismissKeyboard() }
+            .drawerOpen(Gravity.START)
+            .doOnNext {
+                dismissKeyboard()
+                inbox.requestFocus();
+            }
     }
     override val homeIntent: Subject<Unit> = PublishSubject.create()
     override val navigationIntent: Observable<NavItem> by lazy {
