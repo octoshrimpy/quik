@@ -6,6 +6,19 @@
 
 QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation of [QKSMS](https://github.com/moezbhatti/qksms). 
 
+## Features
+
+- Scheduled Messages
+- Message Backup
+- Speech to Text and Text to Speech integrated within the app
+- Message Blocking and Archiving
+- Voice Messages
+- Attachments of any type of file
+- Message Sorting
+- Delayed Sending
+
+## Avaliable On
+
 QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases), but you can also keep track of updates with [Obtainium](https://github.com/ImranR98/Obtainium#-obtainium).
 
 
@@ -31,7 +44,7 @@ When reporting a bug, please make sure to provide the following information:
 - Device / OS information
 
 ## Contributing
-Contributions welcome! Please see the [contributing guidelines](https://github.com/octoshrimpy/quik/blob/master/CONTRIBUTING.md) for details.
+Contributions welcome! Please see the [contributing guidelines](/CONTRIBUTING.md) for details.
 
 ## Thank you
 
