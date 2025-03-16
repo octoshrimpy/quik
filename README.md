@@ -17,7 +17,7 @@ QUIK is an open source replacement to the [stock messaging app](https://github.c
 - Message Sorting
 - Delayed Sending
 
-## Avaliable On
+## Download
 
 QUIK is available to download from the official [github releases page](https://github.com/octoshrimpy/quik/releases), but you can also keep track of updates with [Obtainium](https://github.com/ImranR98/Obtainium#-obtainium).
 
