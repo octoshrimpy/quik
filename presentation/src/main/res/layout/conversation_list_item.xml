@@ -28,7 +28,8 @@
     android:paddingStart="12dp"
     android:paddingTop="8dp"
     android:paddingEnd="16dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    android:nextFocusRight="@+id/compose">
 
     <dev.octoshrimpy.quik.common.widget.GroupAvatarView
         android:id="@+id/avatars"

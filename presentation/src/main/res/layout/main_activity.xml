@@ -33,8 +33,6 @@
             android:id="@+id/toolbar"
             style="@style/Toolbar"
             android:animateLayoutChanges="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             app:contentInsetStartWithNavigation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +60,10 @@
                 android:paddingEnd="16dp"
                 android:textColorHint="?android:attr/textColorTertiary"
                 app:textSize="primary"
-                tools:textSize="16sp" />
+                tools:textSize="16sp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:nextFocusRight="@+id/compose" />
 
         </androidx.appcompat.widget.Toolbar>
 
