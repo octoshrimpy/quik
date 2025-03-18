@@ -31,8 +31,14 @@ jobs:
     - name: Run Tests
       run: ./gradlew test
 
-    - name: Deploy Artifacts
+    - name: List APK Output Directory 
+      run: ls -R presentation/build/outputs/apk/noAnalytics/debug
+
+    - name: Rename APK
+      run: mv presentation/build/outputs/apk/noAnalytics/debug/QUIK-v*-noAnalytics-debug.apk presentation/build/outputs/apk/noAnalytics/debug/QUIK-noAnalytics-debug.apk
+      
+    - name: Upload App
       uses: actions/upload-artifact@v4
       with:
-        name: build-artifacts
-        path: build/libs/
+        name: apk
+        path: presentation/build/outputs/apk/noAnalytics/debug/QUIK-noAnalytics-debug.apk
