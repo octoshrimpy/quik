@@ -18,92 +18,117 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="shortcut_compose_long_label">Conversatie noua</string>
+    <string name="shortcut_compose_long_label">Conversație nouă</string>
     <string name="shortcut_compose_short_label">Compune</string>
     <string name="shortcut_compose_disabled_message">Comanda rapidă dezactivată</string>
     <string name="title_archived">Arhivate</string>
     <string name="title_settings">Setări</string>
     <string name="title_notification_prefs">Notificări</string>
-    <string name="title_theme">Teme</string>
-    <string name="title_conversations">Caută în inbox...</string>
-    <string name="title_compose">Compune</string>
-    <string name="setup_skip">Sari</string>
+    <string name="title_theme">Tematică</string>
+    <string name="title_conversations">Caută în inbox…</string>
+    <string name="title_compose">Scrie un nume sau un număr</string>
+    <string name="setup_skip">Omite</string>
     <string name="setup_next">Continuă</string>
     <string name="menu_add_person">Adaugă persoană</string>
-    <string name="menu_call">Apel</string>
-    <string name="menu_info">Details</string>
-    <string name="menu_save">Save to gallery</string>
-    <string name="menu_share">Distribuire</string>
-    <string name="main_drawer_open_cd">Open navigation drawer</string>
-    <string name="main_title_selected">%d selected</string>
-    <string name="main_menu_clear">Clear</string>
-    <string name="main_menu_archive">Archive</string>
-    <string name="main_menu_unarchive">Dezarhivare</string>
-    <string name="main_menu_delete">Ştergeţi</string>
+    <string name="menu_call">Apelează</string>
+    <string name="menu_info">Detalii</string>
+    <string name="menu_mms_part_save">Salvează în galerie</string>
+    <string name="menu_mms_part_share">Partajează</string>
+    <string name="menu_mms_part_forward">Redirecționează</string>
+    <string name="menu_mms_part_open">Deschide extern</string>
+    <string name="main_drawer_open_cd">Deschide panoul de navigare</string>
+    <string name="main_title_selected">%d selectate</string>
+    <string name="main_menu_clear">Șterge</string>
+    <string name="main_menu_select_all">Selectează tot</string>
+    <string name="main_menu_archive">Arhivează</string>
+    <string name="main_menu_unarchive">Dezarhivează</string>
+    <string name="main_menu_delete">Șterge</string>
     <string name="main_menu_add_contact">Adaugă la contacte</string>
     <string name="main_menu_pin">Fixează în sus</string>
-    <string name="main_menu_unpin">Unpin</string>
+    <string name="main_menu_unpin">Anulează fixarea</string>
     <string name="main_menu_read">Marchează ca citit</string>
     <string name="main_menu_unread">Marchează ca necitit</string>
     <string name="main_menu_block">Blochează</string>
-    <string name="main_syncing">Se sincronizează mesajele&#8230;</string>
-    <string name="main_sender_you">Dumneavoastră: %s</string>
-    <string name="main_draft">Ciornă</string>
+    <string name="main_menu_send_now">Trimite acum</string>
+    <string name="main_menu_edit_message">Modifică mesajul</string>
+    <string name="main_menu_rename_conversation">Redenumește conversația</string>
+    <string name="main_syncing">Se sincronizează mesajele…</string>
+    <string name="main_sender_you">Tu: %s</string>
+    <string name="main_draft">Schițe</string>
     <string name="main_message_results_title">Rezultate în mesaje</string>
     <string name="main_message_results">%d mesaje</string>
     <string name="inbox_empty_text">Conversațiile tale vor apărea aici</string>
     <string name="inbox_search_empty_text">Niciun rezultat</string>
     <string name="archived_empty_text">Conversațiile tale arhivate vor apărea aici</string>
     <string name="main_fab_cd">Începe o conversație nouă</string>
-    <string name="main_default_sms_title">Îndrăgosteștete iar de SMS-uri</string>
-    <string name="main_default_sms_message">Faceți QUIK aplicația dvs. prestabilită pentru SMS</string>
+    <string name="main_default_sms_title">Iubește din nou schimbul de mesaje text</string>
+    <string name="main_default_sms_message">Fă QUIK aplicația prestabilită pentru SMS</string>
     <string name="main_default_sms_change">Schimbă</string>
     <string name="main_permission_required">Permisiune necesară</string>
     <string name="main_permission_sms">QUIK are nevoie de permisiunea de a trimite și vizualiza mesaje SMS</string>
     <string name="main_permission_contacts">QUIK are nevoie de permisiunea de a vizualiza contactele</string>
     <string name="main_permission_notifications">QUIK are nevoie de permisiuni pentru a afișa notificări</string>
     <string name="main_permission_allow">Permite</string>
+    <string name="scheduled_menu_send_now">Trimite acum</string>
+    <string name="scheduled_menu_edit_message">Modifică mesajul</string>
     <string name="drawer_inbox">Mesaje primite</string>
-    <string name="drawer_archived">Arhivat</string>
-    <string name="drawer_scheduled">Programat</string>
-    <string name="drawer_blocking">Blocat</string>
-    <string name="drawer_more">Mai mult</string>
+    <string name="drawer_archived">Arhivate</string>
+    <string name="drawer_scheduled">Programate</string>
+    <string name="drawer_blocking">Blocate</string>
+    <string name="drawer_more">Mai multe</string>
     <string name="drawer_settings">Setări</string>
-    <string name="drawer_help">Ajutor &amp; feedback</string>
+    <string name="drawer_help">Ajutor și feedback</string>
     <string name="drawer_invite">Invită prieteni</string>
     <string name="drawer_plus_banner_summary">Deblochează funcții noi uimitoare și sprijină dezvoltarea</string>
     <string name="rate_title">Îți place QUIK?</string>
     <string name="rate_summary">Împărtășește-ne niște dragoste și dă-ne o notă pe Google Play!</string>
-    <string name="rate_okay">OKAY!</string>
-    <string name="rate_dismiss">RESPINGEȚI</string>
-    <string name="dialog_delete_title">Ştergeţi</string>
+    <string name="rate_okay">BINE!</string>
+    <string name="rate_dismiss">RESPINGE</string>
+    <string name="dialog_delete_title">Șterge</string>
     <plurals name="dialog_delete_message">
         <item quantity="one">Ești sigur că vrei să ștergi această conversație?</item>
-        <item quantity="few">Ești sigur că vrei să ștergi aceaste conversații?</item>
-        <item quantity="other">Ești sigur că vrei să ștergi aceaste conversații?</item>
+        <item quantity="few">Ești sigur că vrei să ștergi %d conversații?</item>
+        <item quantity="other">Ești sigur că vrei să ștergi %d conversații?</item>
     </plurals>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Ești sigur că vrei să ștergi acest mesaj?</item>
+        <item quantity="few">Ești sigur că vrei să ștergi %d mesaje?</item>
+        <item quantity="other">Ești sigur că vrei să ștergi %d mesaje?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Ești sigur că vrei să trimiți acest mesaj acum?</item>
+        <item quantity="few">Ești sigur că vrei să trimiți %d mesaje acum?</item>
+        <item quantity="other">Ești sigur că vrei să trimiți %d mesaje acum?</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Modifică mesajul</string>
+    <string name="dialog_edit_scheduled_message">Editarea acestui mesaj îl va elimina din program.\n\nAsigură-te că îl retrimiți pe ecranul următor, sau va fi pierdut.\n\nDorești să continui?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Da, editează mesajul</string>
+    <string name="dialog_clear_compose_title">Șterge mesajul</string>
+    <string name="dialog_clear_compose">Ștergi mesajul? Această acțiune nu poate fi anulată.</string>
     <string-array name="message_options">
         <item>Copiază textul</item>
-        <item>Redirecționare</item>
-        <item>Ştergeţi</item>
+        <item>Redirecționează</item>
+        <item>Șterge</item>
     </string-array>
     <string name="compose_number_picker_title">Alege un număr de telefon</string>
-    <string name="compose_number_picker_default">%s ·Implicit</string>
+    <string name="compose_number_picker_default">%s · Implicit</string>
     <string name="compose_number_picker_once">Doar o dată</string>
     <string name="compose_number_picker_always">Întotdeauna</string>
     <string name="compose_title_selected">%d selectate</string>
     <string name="compose_subtitle_results">%1$d din %2$d rezultate</string>
     <string name="compose_send_group_title">Trimite ca mesaj de grup</string>
-    <string name="compose_send_group_summary">Destinatarii si raspunsurile vor fi vizibile tuturor</string>
+    <string name="compose_send_group_summary">Destinatarii si răspunsurile vor fi vizibile tuturor</string>
     <string name="compose_messages_empty">Acesta este începutul conversației tale. Spune ceva drăguț!</string>
     <string name="compose_vcard_label">Carte de contact</string>
     <string name="compose_scheduled_for">Programat pentru</string>
     <string name="compose_scheduled_future">Timpul selectat trebuie să fie în viitor!</string>
-    <string name="compose_scheduled_plus">Trebuie să deblocați QUIK+ pentru a utiliza mesajele programate</string>
+    <string name="compose_scheduled_plus">Trebuie să deblochezi QUIK+ pentru a utiliza mesajele programate</string>
     <string name="compose_scheduled_toast">Adăugat la mesajele programate</string>
-    <string name="compose_hint">Scrie un mesaj&#8230;</string>
+    <string name="compose_hint">Scrie un mesaj…</string>
+    <string name="compose_no_valid_recipients">Nu se poate trimite altor participanți</string>
     <string name="compose_menu_copy">Copiază textul</string>
-    <string name="compose_menu_forward">Redirecționare</string>
+    <string name="compose_menu_forward">Redirecționează</string>
+    <string name="compose_menu_show_status">Arată starea</string>
     <string name="compose_menu_delete">Șterge</string>
     <string name="compose_menu_previous">Anterior</string>
     <string name="compose_menu_next">Următorul</string>
@@ -114,92 +139,102 @@
     <string name="compose_details_to">Către: %s</string>
     <string name="compose_details_subject">Subiect: %s</string>
     <string name="compose_details_priority">Prioritate: %s</string>
-    <string name="compose_details_size">Mărime: %s</string>
+    <string name="compose_details_size">Dimensiune: %s</string>
     <string name="compose_details_sent">Trimis: %s</string>
     <string name="compose_details_received">Primit: %s</string>
     <string name="compose_details_delivered">Livrat: %s</string>
     <string name="compose_details_error_code">Cod de eroare: %d</string>
     <string name="compose_attach_cd">Adaugă un atașament</string>
+    <string name="compose_attach_file_cd">Atașează orice fișier</string>
     <string name="compose_gallery_cd">Atașează o fotografie</string>
-    <string name="compose_camera_cd">Fă o fotografie</string>
+    <string name="compose_audio_message_cd">Înregistrează un mesaj audio</string>
+    <string name="compose_camera_cd">Realizează o fotografie</string>
     <string name="compose_schedule_cd">Programează mesajul</string>
+    <string name="compose_schedule_cancel_cd">Anulează programarea mesajului</string>
     <string name="compose_contact_cd">Atașează un contact</string>
     <string name="compose_contact_error">Eroare la citirea contactului</string>
     <!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selectat</string>
     <string name="compose_sim_cd">%s selectat, schimbă cartela SIM</string>
-    <string name="compose_send_cd">Mesaj nou</string>
-    <string name="message_status_sending">Se trimite...</string>
+    <string name="compose_send_cd">Trimite mesajul</string>
+    <string name="compose_record_audio_msg_cd">Înregistrează un mesaj audio</string>
+    <string name="compose_record_audio_msg_abort_cd">Anulează mesajul audio</string>
+    <string name="compose_record_audio_msg_attach_cd">Atașează mesaj audio</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Redă sau întrerupe mesajul audio</string>
+    <string name="compose_message_cancel">Anulează</string>
+    <string name="compose_message_send_now">Trimite acum</string>
+    <string name="compose_message_sim">Număr SIM</string>
+    <string name="compose_message_item">Elementul mesajului</string>
+    <string name="compose_message_attachment">Atașament</string>
+    <string name="compose_toast_drag_stt">Mută butonul vorbire-în-text oriunde îți place</string>
+    <string name="message_status_sending">Se trimite…</string>
     <string name="message_status_delivered">Livrat %s</string>
-    <string name="message_status_failed">Trimitere eșuată. Atingeți pentru a încerca din nou</string>
+    <string name="message_status_failed">Trimitere eșuată. Atinge pentru a încerca din nou</string>
     <string name="info_title">Detalii</string>
-    <string name="info_copied_address">Adresa copiata</string>
+    <string name="info_copied_address">Adresă copiată</string>
     <string name="info_name">Titlul conversației</string>
     <string name="info_notifications">Notificări</string>
-    <string name="info_theme">Teme</string>
+    <string name="info_theme">Temă</string>
     <string name="info_archive">Arhivează</string>
-    <string name="info_unarchive">Dezarhivare</string>
+    <string name="info_unarchive">Dezarhivează</string>
     <string name="info_block">Blochează</string>
     <string name="info_unblock">Deblochează</string>
     <string name="info_delete">Șterge conversația</string>
     <string name="gallery_error">Nu s-a putut încărca fișierul media</string>
     <string name="gallery_toast_saved">Salvat în galerie</string>
-    <string name="backup_title">Backup și restaurare</string>
-    <string name="backup_backing_up">Se salvează mesajele</string>
-    <string name="backup_restoring">Restaurare din backup</string>
-    <string name="backup_loading">Se încarcă&#8230;</string>
+    <string name="backup_title">Copie de rezervă și restaurare</string>
+    <string name="backup_backing_up">Se creează copie de rezervă pentru mesaje</string>
+    <string name="backup_restoring">Restaurare din copia de rezervă</string>
+    <string name="backup_loading">Se încarcă…</string>
     <string name="backup_never">Niciodată</string>
-    <string name="backup_location_title">Locație de backup</string>
-    <string name="backup_location_summary">Locație dosar</string>
-    <string name="backup_restore_title">Restabilire</string>
-    <string name="backup_restore_summary">Selectaţi un backup</string>
-    <string name="backup_restore_error_plus">Vă rugăm să deblocați QUIK+ pentru a utiliza copia de rezervă și a restabili</string>
-    <string name="backup_restore_error_backup">Backup în desfășurare&#8230;</string>
-    <string name="backup_restore_error_restore">Restabilire în desfășurare&#8230;</string>
-    <string name="backup_restore_confirm_title">Restaurează din backup</string>
+    <string name="backup_location_title">Locație copie de rezervă</string>
+    <string name="backup_location_summary">Setează dosarul</string>
+    <string name="backup_restore_title">Restaurează</string>
+    <string name="backup_restore_summary">Selectează o copie de rezervă</string>
+    <string name="backup_restore_error_plus">Deblochează QUIK+ pentru a utiliza copii de rezervă și restabilire</string>
+    <string name="backup_restore_error_backup">Copie de rezervă în curs de desfășurare…</string>
+    <string name="backup_restore_error_restore">Restabilire în desfășurare…</string>
+    <string name="backup_restore_confirm_title">Restaurează dintr-o copie de rezervă</string>
     <string name="backup_restore_stop_title">Oprește restaurarea</string>
     <string name="backup_restore_stop_message">Mesajele care au fost deja restaurate vor rămâne pe dispozitiv</string>
-    <string name="backup_select_location_rationale_title">Selectaţi locaţia de backup</string>
-    <string name="backup_select_location_rationale_message">Vă rugăm să selectați un dosar pentru a salva copiile de rezervă</string>
+    <string name="backup_select_location_rationale_title">Alege locația pentru copiile de rezervă</string>
+    <string name="backup_select_location_rationale_message">Selectează un dosar pentru a salva copiile de rezervă</string>
     <string name="backup_details">%1$s\n%2$d mesaje</string>
     <string name="backup_selected_backup_error_title">Eroare</string>
-    <string name="backup_selected_backup_error_message">Nu s-a putut citi fișierul de backup</string>
-    <string name="backup_selected_backup_details_title">Detalii backup</string>
-    <string name="backup_restore_dialog_title">Backup-uri</string>
-    <string name="backup_restore_dialog_empty">Nu s-au găsit copii de rezervă</string>
+    <string name="backup_selected_backup_error_message">Nu s-a putut citi fișierul copiei de rezervă</string>
+    <string name="backup_selected_backup_details_title">Detalii copie de rezervă</string>
+    <string name="backup_restore_dialog_title">Copii de rezervă</string>
+    <string name="backup_restore_dialog_empty">Nu a fost găsită nici o copie de rezervă</string>
     <string name="backup_disclaimer">Momentan, doar SMS este acceptat prin Backup și Restaurare. Suportul MMS și backup-urile programate vor fi disponibile în curând!</string>
-    <string name="backup_now">Backup acum</string>
-    <string name="backup_progress_parsing">Se analizează copia de rezervă&#8230;</string>
+    <string name="backup_now">Fă o copie acum</string>
+    <string name="backup_progress_parsing">Se analizează copia de rezervă…</string>
     <string name="backup_progress_running">%d/%d mesaje</string>
-    <string name="backup_progress_saving">Salvare copie de rezervă&#8230;</string>
-    <string name="backup_progress_syncing">Se sincronizează mesajele&#8230;</string>
-    <string name="backup_progress_finished">Terminat!</string>
-    <string name="backup_notification_channel_name">Backup și restaurare</string>
+    <string name="backup_progress_saving">Salvare copie de rezervă…</string>
+    <string name="backup_progress_syncing">Se sincronizează mesajele…</string>
+    <string name="backup_progress_finished">Finalizat!</string>
+    <string name="backup_notification_channel_name">Copie de rezervă și restaurare</string>
     <string name="scheduled_title">Planificare</string>
     <string name="scheduled_empty_description">Trimite automat un mesaj, exact în momentul în care dorești</string>
     <string name="scheduled_empty_message_1">Hei! Când a fost ziua ta de naștere?</string>
     <string name="scheduled_empty_message_2">Este pe 23 decembrie</string>
     <string name="scheduled_empty_message_3">La mulți ani! Uită-te la ce prieten grozav sunt, amintindu-ți ziua ta de naștere</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Trimite pe 23 decembrie</string>
+    <string name="scheduled_empty_message_3_timestamp">Trimite pe 23 decembrie&#x200A;</string>
     <string name="scheduled_compose_cd">Programează un mesaj</string>
     <string name="scheduled_options_title">Mesaj programat</string>
-    <string-array name="scheduled_options">
-        <item>Trimite acum</item>
-        <item>Copiază textul</item>
-        <item>Șterge</item>
-    </string-array>
+    <string name="attachment_missing">Lipsește</string>
     <string name="settings_category_appearance">Aspect</string>
     <string name="settings_category_general">General</string>
-    <string name="settings_category_qkreply">QK Răspuns</string>
+    <string name="settings_category_qkreply">Răspuns rapid</string>
     <string name="settings_theme_title">Tematică</string>
-    <string name="settings_night_title">Modul de noapte</string>
+    <string name="settings_night_title">Modul nocturn</string>
     <string name="settings_black_title">Mod pur negru de noapte</string>
     <string name="settings_night_start_title">Ora de începere</string>
     <string name="settings_night_end_title">Ora de încheiere</string>
     <string name="settings_automatic_colors_title">Culori de contact automate</string>
     <string name="settings_text_size_title">Dimensiunea fontului</string>
     <string name="settings_system_font_title">Folosește fontul sistemului</string>
+    <string name="settings_system_show_stt_title">Arată butonul vorbire-în-text</string>
     <string name="settings_auto_emoji_title">Emoji automat</string>
     <string name="settings_notifications_title">Notificări</string>
     <string name="settings_notifications_o_summary">Atinge pentru a personaliza</string>
@@ -208,17 +243,20 @@
     <string name="settings_notification_action_2">Buton 2</string>
     <string name="settings_notification_action_3">Buton 3</string>
     <string name="settings_notification_previews_title">Previzualizări notificări</string>
+    <string name="settings_notification_previews_summary">Arată numele și mesajul</string>
     <string name="settings_notification_wake_title">Trezește ecranul</string>
-    <string name="settings_vibration_title">Vibraţii</string>
+    <string name="settings_notification_silent_title">Silențios dacă nu este contact</string>
+    <string name="settings_notification_silent_summary">Notificări silențioase pentru mesajele fără destinatari în contactele tale</string>
+    <string name="settings_vibration_title">Vibrații</string>
     <string name="settings_ringtone_title">Sunet</string>
     <string name="settings_ringtone_none">Fără</string>
-    <string name="settings_qkreply_title">QK Răspuns</string>
+    <string name="settings_qkreply_title">Răspuns rapid</string>
     <string name="settings_qkreply_summary">Popup pentru mesaje noi</string>
-    <string name="settings_qkreply_tap_dismiss_title">Atingeți pentru a respinge</string>
+    <string name="settings_qkreply_tap_dismiss_title">Atinge pentru a respinge</string>
     <string name="settings_qkreply_tap_dismiss_summary">Atinge în afara ferestrei pop-up pentru a o închide</string>
     <string name="settings_delayed_title">Trimitere întârziată</string>
-    <string name="settings_swipe_actions">Acțiuni glisare</string>
-    <string name="settings_swipe_actions_summary">Configurați acțiunile de glisare pentru conversații</string>
+    <string name="settings_swipe_actions">Acțiuni la glisare</string>
+    <string name="settings_swipe_actions_summary">Configurează acțiunile de glisare pentru conversații</string>
     <string name="settings_swipe_actions_right">Glisare la dreapta</string>
     <string name="settings_swipe_actions_left">Glisare la stânga</string>
     <string name="settings_swipe_actions_change">SCHIMBĂ</string>
@@ -227,24 +265,27 @@
         <item>Arhivează</item>
         <item>Șterge</item>
         <item>Blochează</item>
-        <item>Apelați</item>
+        <item>Apelează</item>
         <item>Marchează ca citit</item>
         <item>Marchează ca necitit</item>
+        <item>Vorbește</item>
     </string-array>
     <string name="settings_delivery_title">Confirmare de livrare</string>
-    <string name="settings_delivery_summary">Confirmaţi că mesajele au fost trimise cu succes</string>
+    <string name="settings_delivery_summary">Confirmare că mesajele au fost trimise cu succes</string>
+    <string name="settings_unread_at_top_title">Necitit în partea de sus</string>
+    <string name="settings_unread_at_top_summary">Arată conversațiile necitite în partea de sus</string>
     <string name="settings_signature_title">Semnătură</string>
     <string name="settings_signature_summary">Adaugă o semnătură la sfârșitul mesajelor tale</string>
     <string name="settings_unicode_title">Renunță la accente</string>
     <string name="settings_unicode_summary">Elimină accentele de la caracterele din SMS-urile trimise</string>
     <string name="settings_mobile_title">Numai numere mobile</string>
-    <string name="settings_mobile_summary">Când compuneți un mesaj, afișați numai numerele de telefon mobil</string>
+    <string name="settings_mobile_summary">Când compui un mesaj, se afișează numai numerele de telefon mobil</string>
     <string name="settings_auto_delete">Șterge automat mesajele vechi</string>
     <string name="settings_auto_delete_dialog_message">Mesajele vor fi șterse după numărul de zile specificat</string>
     <string name="settings_auto_delete_dialog_hint">Număr de zile</string>
     <string name="settings_auto_delete_never">Niciodată</string>
-    <string name="settings_auto_delete_warning">Ștergeți automat mesajele vechi?</string>
-    <string name="settings_auto_delete_warning_message">Dacă continuați, %1$d mesaje vor fi șterse acum</string>
+    <string name="settings_auto_delete_warning">Ștergi automat mesajele vechi?</string>
+    <string name="settings_auto_delete_warning_message">Dacă continui, %1$d mesaje vor fi șterse acum</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">După 1 zi</item>
         <item quantity="few">După %d zile</item>
@@ -253,25 +294,25 @@
     <string name="settings_long_as_mms_title">Trimite mesaje lungi ca MMS</string>
     <string name="settings_long_as_mms_summary">În cazul în care mesajele text mai lungi nu reușesc să fie trimise sau se trimit în ordine greșită, le poți trimite ca mesaje MMS. Pot fi aplicate taxe suplimentare</string>
     <string name="settings_mms_size_title">Auto-comprimare atașamente MMS</string>
+    <string name="settings_mms_weblink_title">Manipularea link-urilor în mesaje</string>
     <string name="settings_sync_title">Sincronizare mesaje</string>
-    <string name="settings_sync_summary">Re-sincronizați mesajele cu baza de date Android SMS</string>
+    <string name="settings_sync_summary">Re-sincronizează mesajele cu baza de date Android SMS</string>
     <string name="settings_about_title">Despre QUIK</string>
     <string name="settings_version">Versiunea %s</string>
     <string name="settings_logging_enabled">Jurnalizare pentru depanare activată</string>
     <string name="settings_logging_disabled">Jurnalizare pentru depanare dezactivată</string>
-    <string name="settings_delay_duration_hint">Introduceți durata (secunde)</string>
-    <string name="blocking_title">Blocarea</string>
-    <string name="blocking_drop_title">Uită de mesajele</string>
+    <string name="settings_delay_duration_hint">Introdu durata (secunde)</string>
+    <string name="blocking_title">Blocare</string>
+    <string name="blocking_drop_title">Șterge mesajele</string>
     <string name="blocking_drop_summary">Șterge mesajele primite de la expeditorii blocați în loc să le ascunzi</string>
     <string name="blocking_conversations">Conversații blocate</string>
     <string name="blocking_manager_title">Manager de blocări</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Funcționalitate de blocare încorporată în QUIK</string>
-    <string name="blocking_manager_call_blocker_summary">Blocare mesaje spam, numere &amp; apeluri necunoscute din lista neagră &amp; Planificare</string>
+    <string name="blocking_manager_call_blocker_summary">Blocare mesaje spam, numere și apeluri necunoscute din lista neagră și Planificare</string>
     <string name="blocking_manager_call_control_summary">Filtrează automat apelurile și mesajele într-un loc convenabil! Community IQ™ îți permite să previi mesajele nedorite de la spamerii cunoscuți de comunitate</string>
     <string name="blocking_manager_sia_summary">Filtrează automat mesajele de la numere nesolicitate folosind aplicația \"Trebuie să răspund\"</string>
     <string name="blocking_manager_copy_title">Copiază numerele blocate</string>
-    <string name="blocking_manager_copy_summary">Continuă la %s și copiază peste numerele existente blocate</string>
+    <string name="blocking_manager_copy_summary">Continuă să %s și copiază peste numerele existente blocate</string>
     <string name="blocked_numbers_title">Numere blocate</string>
     <string name="blocked_numbers_empty">Numerele tale blocate vor apărea aici</string>
     <string name="blocked_numbers_add_cd">Blochează un număr nou</string>
@@ -283,14 +324,14 @@
     <string name="blocking_block_title">Blochează</string>
     <string name="blocking_unblock_title">Deblochează</string>
     <plurals name="blocking_block_external">
-        <item quantity="one">Continuă la %s și blochează acest număr</item>
-        <item quantity="few">Continuă la %s și blochează aceste numere</item>
-        <item quantity="other">Continuă la %s și blochează aceste numere</item>
+        <item quantity="one">Continuă să %s și blochează acest număr</item>
+        <item quantity="few">Continuă să %s și blochează aceste numere</item>
+        <item quantity="other">Continuă să %s și blochează aceste numere</item>
     </plurals>
     <plurals name="blocking_unblock_external">
-        <item quantity="one">Continuați la %s și permiteți acest număr</item>
-        <item quantity="few">Continuați la %s și permiteți aceste numere</item>
-        <item quantity="other">Continuați la %s și permiteți aceste numere</item>
+        <item quantity="one">Continuă să %s și permite acest număr</item>
+        <item quantity="few">Continuați să %s și permite aceste numere</item>
+        <item quantity="other">Continuă să %s și permite aceste numere</item>
     </plurals>
     <string name="about_title">Despre</string>
     <string name="about_version_title">Versiune</string>
@@ -306,18 +347,18 @@
     <string name="qksms_plus_upgrade">Upgrade pe viață pentru %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Deblochează + donează pentru %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Vă mulțumim pentru sprijinul acordat QUIK!</string>
+    <string name="qksms_plus_thanks_title">Îți mulțumim pentru sprijinul acordat QUIK!</string>
     <string name="qksms_plus_thanks_summary">Acum ai acces la toate caracteristicile QUIK+</string>
-    <string name="qksms_plus_error">A apărut o eroare, încercați din nou</string>
-    <string name="qksms_plus_free_title">QUIK+ este gratuit pentru utilizatorii F-Droid! Dacă doriți să sprijiniți dezvoltarea, o donație ar fi foarte apreciată.</string>
+    <string name="qksms_plus_error">A apărut o eroare, încearcă din nou</string>
+    <string name="qksms_plus_free_title">QUIK+ este gratuit pentru utilizatorii F-Droid! Dacă dorești să sprijiniți dezvoltarea, o donație ar fi foarte apreciată.</string>
     <string name="qksms_plus_donate">Donează prin PayPal</string>
     <string name="qksms_plus_coming_soon">În curând</string>
     <string name="qksms_plus_themes_title">Teme premium</string>
     <string name="qksms_plus_themes_summary">Deblochează culori de temă frumoase care nu sunt disponibile în paleta Material Design</string>
-    <string name="qksms_plus_emoji_title">auto-emoji-uri personalizate</string>
-    <string name="qksms_plus_emoji_summary">Creați comenzi rapide personalizate pentru auto-emoji</string>
-    <string name="qksms_plus_backup_title">Backup mesaj</string>
-    <string name="qksms_plus_backup_summary">Backup automat al mesajelor. Niciodată nu vă mai faceți griji pentru pierderea istoricului în cazul în care schimbați telefonul sau va pierdeți telefonul</string>
+    <string name="qksms_plus_emoji_title">Auto-emoji-uri personalizate</string>
+    <string name="qksms_plus_emoji_summary">Creează comenzi rapide personalizate pentru auto-emoji</string>
+    <string name="qksms_plus_backup_title">Copii de rezervă</string>
+    <string name="qksms_plus_backup_summary">Copie de rezervă automată a mesajelor. Niciodată nu-ți mai face griji pentru pierderea istoricului în cazul în care schimbi sau pierzi telefonul</string>
     <string name="qksms_plus_scheduled_title">Mesaje programate</string>
     <string name="qksms_plus_scheduled_summary">Programează mesajele să fie trimise automat la o anumită dată și oră</string>
     <string name="qksms_plus_delayed_title">Trimitere întârziată</string>
@@ -336,41 +377,46 @@
     <string name="widget_more">Vezi mai multe conversații</string>
     <string name="qkreply_menu_read">Marchează ca citit</string>
     <string name="qkreply_menu_call">Apel</string>
-    <string name="qkreply_menu_delete">Ştergeţi</string>
+    <string name="qkreply_menu_delete">Șterge</string>
     <string name="qkreply_menu_expand">Arată mai mult</string>
     <string name="qkreply_menu_collapse">Arată mai puțin</string>
     <string name="qkreply_menu_view">Deschide conversația</string>
     <string name="theme_material">Material</string>
-    <string name="theme_hex">HEX</string>
     <string name="theme_apply">Aplică</string>
     <string-array name="notification_actions">
         <item>Niciunul</item>
         <item>Arhivează</item>
-        <item>Ştergeţi</item>
+        <item>Șterge</item>
         <item>Blochează</item>
-        <item>Apel</item>
+        <item>Apelează</item>
         <item>Marchează ca citit</item>
-        <item>Răspundeți</item>
+        <item>Răspunde</item>
+        <item>Vorbește</item>
     </string-array>
     <string name="button_yes">Da</string>
-    <string name="button_continue">Continuare</string>
-    <string name="button_cancel">Anulare</string>
-    <string name="button_delete">Ştergeţi</string>
-    <string name="button_save">Salvați</string>
+    <string name="button_continue">Continuă</string>
+    <string name="button_cancel">Renunță</string>
+    <string name="button_delete">Șterge</string>
+    <string name="button_save">Salvează</string>
     <string name="button_stop">Oprește</string>
     <string name="button_more">Mai mult</string>
-    <string name="button_set">Setați</string>
+    <string name="button_set">Setează</string>
     <string name="button_undo">Anulează</string>
+    <string name="button_clear">Șterge</string>
     <string name="toast_copied">Copiat</string>
-    <string name="toast_archived">Conversație arhivată</string>
-    <string name="toast_qksms_plus">Trebuie să deblocați QUIK+ pentru a utiliza acest lucru</string>
+    <plurals name="toast_archived">
+        <item quantity="one">Conversație arhivată</item>
+        <item quantity="few">%d convesații arhivate</item>
+        <item quantity="other">%d convesații arhivate</item>
+    </plurals>
+    <string name="toast_qksms_plus">Trebuie să deblochezi QUIK+ pentru a utiliza aceasta</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Mesaj nou</item>
         <item quantity="few">%s mesaje noi</item>
         <item quantity="other">%s de mesaje noi</item>
     </plurals>
     <string name="notification_message_failed_title">Mesajul nu a fost trimis</string>
-    <string name="notification_message_failed_text">Mesajul către %s nu aputut fi trimis</string>
+    <string name="notification_message_failed_text">Mesajul către %s nu a putut fi trimis</string>
     <string-array name="night_modes">
         <item>Sistem</item>
         <item>Dezactivat</item>
@@ -380,13 +426,14 @@
     <string-array name="notification_preview_options">
         <item>Arată numele și mesajul</item>
         <item>Arată numele</item>
-        <item>Ascundeți conținutul</item>
+        <item>Ascunde conținutul</item>
     </string-array>
     <string-array name="text_sizes">
         <item>Mic</item>
         <item>Normal</item>
         <item>Mare</item>
         <item>Mai mare</item>
+        <item>Super</item>
     </string-array>
     <string-array name="delayed_sending_labels">
         <item>Fără întârziere</item>
@@ -396,26 +443,39 @@
     </string-array>
     <string-array name="mms_sizes">
         <item>Automat</item>
-        <item>100KB</item>
-        <item>200KB</item>
-        <item>300KB</item>
-        <item>600KB</item>
-        <item>1000KB</item>
-        <item>2000KB</item>
+        <item>100KO</item>
+        <item>200KO</item>
+        <item>300KO</item>
+        <item>600KO</item>
+        <item>1000KO</item>
+        <item>2000KO</item>
         <item>Fără comprimare</item>
     </string-array>
+    <string-array name="messageLinkHandlings">
+        <item>Blochează</item>
+        <item>Permite</item>
+        <item>Întreabă înainte de deschidere</item>
+    </string-array>
     <string-array name="qk_responses">
-        <item>OK</item>
+        <item>Bine</item>
         <item>Acordă-mi un moment</item>
         <item>Sunt în drum spre tine</item>
         <item>Mulțumesc</item>
-        <item>Sună bine!</item>
-        <item>Ce s-a întâmplat ?</item>
-        <item>Bine</item>
+        <item>Sună bine</item>
+        <item>Ce s-a întâmplat?</item>
+        <item>De acord</item>
         <item>Nu</item>
         <item>Te iubesc</item>
         <item>Scuze</item>
         <item>LOL</item>
         <item>E în regulă</item>
     </string-array>
+    <string name="speak_no_messages">Niciun mesaj</string>
+    <string name="speak_unseen_messages">Vorbește mesaje nevăzute</string>
+    <string name="messageLinkHandling_dialog_title">Avertisment pentru link-ul extern</string>
+    <string name="messageLinkHandling_dialog_body">Unele link-uri pot fi nesigure sau te pot redirecționa în mod neașteptat. Examinează link-ul de mai jos înainte de a continua:\n\n%1$s\n\nDorești să continui?</string>
+    <string name="messageLinkHandling_dialog_positive">Da, deschide link-ul</string>
+    <string name="messageLinkHandling_dialog_negative">Nu</string>
+    <string name="stt_toast_no_provider">Nici un serviciu vorbire-în-text disponibil</string>
+    <string name="stt_toast_extra_prompt">Vorbește mesajul</string>
 </resources>
