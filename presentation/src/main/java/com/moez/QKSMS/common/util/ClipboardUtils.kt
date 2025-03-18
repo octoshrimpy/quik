@@ -21,13 +21,25 @@ package dev.octoshrimpy.quik.common.util
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.widget.Toast
+import dev.octoshrimpy.quik.R
 
 object ClipboardUtils {
 
     fun copy(context: Context, string: String) {
-        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("SMS", string)
-        clipboard.setPrimaryClip(clip)
+        try {
+            (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager)
+                .setPrimaryClip(ClipData.newPlainText("SMS", string))
+        } catch (e: Exception) {
+            Toast.makeText(
+                context,
+                if ((e is RuntimeException) &&
+                    e.message?.startsWith("android.os.TransactionTooLargeException") == true
+                ) R.string.clipboard_too_large_to_copy
+                else R.string.clipboard_unable_to_copy_to,
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
 }

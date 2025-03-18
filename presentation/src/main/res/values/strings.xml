@@ -237,6 +237,9 @@
     <string name="backup_progress_finished">Finished!</string>
     <string name="backup_notification_channel_name">Backup and restore</string>
 
+    <string name="clipboard_too_large_to_copy">Data size exceeds clipboard limit</string>
+    <string name="clipboard_unable_to_copy_to">Unable to copy to the clipboard</string>
+
     <string name="scheduled_title">Scheduled</string>
     <string name="scheduled_empty_description">Automatically send a message, at the exact moment you\'d like</string>
     <string name="scheduled_empty_message_1">Hey! When was your birthday again?</string>

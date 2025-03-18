@@ -381,18 +381,18 @@ class ComposeViewModel @Inject constructor(
                 .filter { it == R.id.copy }
                 .withLatestFrom(view.messagesSelectedIntent) { _, messageIds ->
                     val messages = messageIds.mapNotNull(messageRepo::getMessage).sortedBy { it.date }
-                    val text = when (messages.size) {
-                        1 -> messages.first().getText()
-                        else -> messages.foldIndexed("") { index, acc, message ->
+                    ClipboardUtils.copy(
+                        context,
+                        messages.foldIndexed(StringBuilder()) { index, acc, message ->
                             when {
-                                index == 0 -> message.getText()
-                                messages[index - 1].compareSender(message) -> "$acc\n${message.getText()}"
-                                else -> "$acc\n\n${message.getText()}"
+                                index == 0 ->
+                                    acc.append(message.getText())
+                                messages[index - 1].compareSender(message) ->
+                                    acc.appendLine().append(message.getText())
+                                else ->
+                                    acc.appendLine().appendLine().append(message.getText())
                             }
-                        }
-                    }
-
-                    ClipboardUtils.copy(context, text)
+                        }.toString())
                 }
                 .autoDisposable(view.scope())
                 .subscribe { view.clearSelection() }
