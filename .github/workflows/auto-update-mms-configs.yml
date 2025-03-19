@@ -1,0 +1,75 @@
+name: Auto-Update MMS configs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'
+
+jobs:
+  vvm:
+    runs-on: ubuntu-latest
+    env:
+      DEFAULT_BRANCH: auto-update-mms-configs
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+      
+      - name: Set Branch Name
+        run: echo "BRANCH_NAME=update-mms-configs-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+      
+      - name: Install apkeep
+        run: cargo install apkeep
+        
+      - name: Install aapt and unzip
+        run: |
+          sudo apt update
+          sudo apt -y install aapt unzip
+          
+      - name: Install Apktool
+        run: |
+          wget https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.11.1.jar
+          
+      - name: Download Messaging APK 
+        run: apkeep -a com.google.android.apps.messaging -o device=walleye /home/runner/work/quik/quik
+
+      - name: Unzip the Messaging APK from XAPK
+        run: |
+          unzip /home/runner/work/quik/quik/com.google.android.apps.messaging.xapk -d /home/runner/work/quik/quik
+                
+      - name: Decompile Messaging using apktool
+        run: java -jar apktool_2.11.1.jar decode com.google.android.apps.messaging.apk -o dump
+        
+      - name: Copy MMS configs
+        run: |
+          rm -rv android-smsmms/src/main/res/xml-mcc*
+          cp -rv dump/res/xml-mcc* android-smsmms/src/main/res/
+          rm -rv android-smsmms/src/main/res/xml-mcc*/*_config_override.xml
+
+      - name: Set up Git User
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+         
+      - name: Commit changes
+        run: |
+          git checkout -b ${{ env.BRANCH_NAME }}
+          git add android-smsmms/src/main/res/
+          git commit -m "CI: update MMS configs from $(aapt dump badging com.google.android.apps.messaging.apk | grep "VersionName" | sed -e "s/.*versionName='//" -e "s/' .*//")"
+          git push -u origin ${{ env.BRANCH_NAME }}
+        
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+          title: "Update MMS configs"
+          body: |
+            This pull request updates the MMS configs.
+              - Updated by [Auto-Update MMS configs][1] on ${{ github.event.pull_request.created_at }}
+              - Please refer to https://github.com/octoshrimpy/quik/issues/369, https://github.com/octoshrimpy/quik/issues/36 and https://github.com/octoshrimpy/quik/pull/377 for more details.
+          add-paths: android-smsmms/src/main/res/xml-mcc*
+          base: ${{ env.BRANCH_NAME }}
+          branch: ${{ env.DEFAULT_BRANCH }}
