@@ -18,13 +18,19 @@
  */
 package dev.octoshrimpy.quik.common.util
 
+import android.content.Context
+import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
+import androidx.core.content.contentValuesOf
 import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.File
-import java.io.FileOutputStream
+import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -34,40 +40,86 @@ import javax.inject.Singleton
  * Based off Vipin Kumar's FileLoggingTree: https://medium.com/@vicky7230/file-logging-with-timber-4e63a1b86a66
  */
 @Singleton
-class FileLoggingTree @Inject constructor(private val prefs: Preferences) : Timber.DebugTree() {
+class FileLoggingTree @Inject constructor(
+    private val prefs: Preferences,
+    private val context: Context
+) : Timber.DebugTree() {
+    companion object {
+        val TAG: String? = FileLoggingTree::class.simpleName
+    }
 
-    private val fileLock: Boolean = false
+    private var logFileUri: Uri? = null
 
     override fun log(priority: Int, tag: String, message: String, t: Throwable?) {
         if (!prefs.logging.get()) return
 
         Schedulers.io().scheduleDirect {
-            val timestamp = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.getDefault()).format(System.currentTimeMillis())
-            val priorityString = when (priority) {
-                Log.VERBOSE -> "V"
-                Log.DEBUG -> "D"
-                Log.INFO -> "I"
-                Log.WARN -> "W"
-                Log.ERROR -> "E"
-                else -> "WTF"
-            }
+            synchronized(this) {    // one thread can access file at a time
+                val logItem =
+                    "${    // date/time
+                        SimpleDateFormat(
+                            "yyyy-MM-dd HH:mm:ss:SSS",
+                            Locale.getDefault()
+                        ).format(System.currentTimeMillis())
+                    } ${    // priority
+                        when (priority) {
+                            Log.VERBOSE -> "V"
+                            Log.DEBUG -> "D"
+                            Log.INFO -> "I"
+                            Log.WARN -> "W"
+                            Log.ERROR -> "E"
+                            else -> "?"
+                        }
+                    }/${    // tag
+                        tag
+                    }: ${    // message
+                        message
+                    }${    // stack trace
+                        Log.getStackTraceString(t)
+                    }\n"
 
-            // Format the log to be written to the file
-            val log = "$timestamp $priorityString/$tag: $message ${Log.getStackTraceString(t)}\n".toByteArray()
-
-            // Ensure that only one thread is writing to the file at a time
-            synchronized(fileLock) {
                 try {
-                    // Create the directory
-                    val dir = File(Environment.getExternalStorageDirectory(), "QKSMS/Logs").apply { mkdirs() }
+                    // if uri of log file not yet determined, get one now
+                    if (logFileUri == null) {
+                        val filename = "Quik-log-${
+                            SimpleDateFormat(
+                                "yyyy-MM-dd",
+                                Locale.getDefault()
+                            ).format(System.currentTimeMillis())
+                        }.log"
 
-                    // Create the file
-                    val file = File(dir, "${SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(System.currentTimeMillis())}.log")
+                        logFileUri =
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                                // use media store
+                                context.contentResolver.insert(
+                                    MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                                    contentValuesOf(
+                                        MediaStore.MediaColumns.MIME_TYPE to "text/plain",
+                                        MediaStore.MediaColumns.RELATIVE_PATH to
+                                                Environment.DIRECTORY_DOWNLOADS,
+                                        MediaStore.MediaColumns.DISPLAY_NAME to filename,
+                                    )
+                                )
+                            else
+                                // use direct access to 'external' dir
+                                File(Environment.getExternalStorageDirectory(), filename).let {
+                                    tryOrNull { it.createNewFile() }
+                                    Uri.fromFile(it)
+                                }
+                    }
 
-                    // Write the log to the file
-                    FileOutputStream(file, true).use { fileOutputStream -> fileOutputStream.write(log) }
+                    logFileUri?.let {
+                        context.contentResolver.openOutputStream(it, "wa")?.use {
+                            // write the log entry
+                            it.write(logItem.toByteArray())
+                        }
+                    }
+                } catch (e: FileNotFoundException) {
+                    Log.e(TAG, "Log file went away. Lost log file item: $logItem")
+                    // log file seems to have gone away. start a new file next time through
+                    logFileUri = null
                 } catch (e: Exception) {
-                    Log.e("FileLoggingTree", "Error while logging into file", e)
+                    Log.e(TAG, "Error while logging into file", e)
                 }
             }
         }
