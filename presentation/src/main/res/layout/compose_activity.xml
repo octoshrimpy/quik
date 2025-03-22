@@ -286,7 +286,10 @@
         android:textColorHint="?android:attr/textColorTertiary"
         app:layout_constraintBottom_toBottomOf="@id/messageBackground"
         app:layout_constraintEnd_toStartOf="@id/sim"
-        app:layout_constraintStart_toStartOf="@id/messageBackground" />
+        app:layout_constraintStart_toStartOf="@id/messageBackground">
+
+        <requestFocus />
+    </dev.octoshrimpy.quik.common.widget.QkEditText>
 
     <ImageView
         android:id="@+id/sim"
