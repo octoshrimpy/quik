@@ -3,4 +3,7 @@
     <bool name="allowEnablingWapPushSI">true</bool>
     <bool name="enableWapPushSI">true</bool>
     <bool name="smsUsesSimpleCharactersOnly">false</bool>
+    <bool name="enabledMMS">false</bool>
+    <bool name="groupChatDefaultsToMMS">false</bool>
+    <bool name="enableGroupMms">false</bool>
 </mms_config>

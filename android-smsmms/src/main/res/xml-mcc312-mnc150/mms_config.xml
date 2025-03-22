@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mms_config version="1">
+    <string name="httpParams">X-MDN: ##LINE1##</string>
+</mms_config>
