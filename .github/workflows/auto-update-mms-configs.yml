@@ -3,7 +3,7 @@ name: Auto-Update MMS configs
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 1 * *'
+    - cron: '0 0 1 1,4,7,10 *'
 
 jobs:
   vvm:
@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0 
       
       - name: Set Branch Name
-        run: echo "BRANCH_NAME=update-mms-configs-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+        run: echo "NEW_BRANCH=update-mms-configs-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
       
       - name: Install apkeep
         run: cargo install apkeep
@@ -48,28 +48,34 @@ jobs:
           cp -rv dump/res/xml-mcc* android-smsmms/src/main/res/
           rm -rv android-smsmms/src/main/res/xml-mcc*/*_config_override.xml
 
-      - name: Set up Git User
+      - name: Remove Duplicate MMS Config Files
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-         
-      - name: Commit changes
-        run: |
-          git checkout -b ${{ env.BRANCH_NAME }}
-          git add android-smsmms/src/main/res/
-          git commit -m "CI: update MMS configs from $(aapt dump badging com.google.android.apps.messaging.apk | grep "VersionName" | sed -e "s/.*versionName='//" -e "s/' .*//")"
-          git push -u origin ${{ env.BRANCH_NAME }}
-        
+          #!/bin/bash
+          declare -A seen
+          for file in android-smsmms/src/main/res/xml-mcc*/mms_config.xml; do
+            dir_name=$(dirname "$file")
+            if [[ "$dir_name" == *-mnc00 ]]; then
+              # Check for corresponding directory without -mnc suffix
+              base_dir=$(echo "$dir_name" | sed 's/-mnc00//')
+              if [[ -d "$base_dir" ]]; then
+                echo "Duplicate found for $base_dir and $dir_name"
+                rm -rf "$base_dir"
+              fi
+            fi
+          done
+          
+          
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          author: ${{ github.actor }} <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+          commit-message: Update MMS configs from com.google.android.apps.messaging.apk. 
+          committer: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           title: "Update MMS configs"
           body: |
-            This pull request updates the MMS configs.
-              - Updated by [Auto-Update MMS configs][1] on ${{ github.event.pull_request.created_at }}
-              - Please refer to https://github.com/octoshrimpy/quik/issues/369, https://github.com/octoshrimpy/quik/issues/36 and https://github.com/octoshrimpy/quik/pull/377 for more details.
+            This pull request updates the MMS configurations to the latest version. 
+              - Updated by [Auto-Update MMS configs] [Auto-Update MMS configs](./.github%2Fworkflows%2Fauto-update-mms-configs.yml)
           add-paths: android-smsmms/src/main/res/xml-mcc*
-          base: ${{ env.BRANCH_NAME }}
-          branch: ${{ env.DEFAULT_BRANCH }}
+          branch: ${{ env.NEW_BRANCH }}
+          base: ${{ env.DEFAULT_BRANCH }}
