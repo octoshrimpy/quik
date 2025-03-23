@@ -229,6 +229,15 @@
             app:title="@string/settings_mms_weblink_title"
             tools:summary="100KB" />
 
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/disableScreenshots"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_screenshot"
+            app:summary="@string/settings_diable_screenshots_summary"
+            app:title="@string/settings_disable_screenshots_title"
+            app:widget="@layout/settings_switch_widget" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

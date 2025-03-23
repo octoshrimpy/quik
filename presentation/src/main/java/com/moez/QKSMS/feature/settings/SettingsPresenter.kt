@@ -153,6 +153,8 @@ class SettingsPresenter @Inject constructor(
                     )
                 }
             }
+        disposables += prefs.disableScreenshots.asObservable()
+            .subscribe { enabled -> newState { copy(disableScreenshotsEnabled = enabled) } }
 
         disposables += syncRepo.syncProgress
                 .sample(16, TimeUnit.MILLISECONDS)
@@ -227,6 +229,8 @@ class SettingsPresenter @Inject constructor(
                         R.id.mmsSize -> view.showMmsSizePicker()
 
                         R.id.messsageLinkHandling -> view.showMessageLinkHandlingDialogPicker()
+
+                        R.id.disableScreenshots -> prefs.disableScreenshots.set(!prefs.disableScreenshots.get())
 
                         R.id.sync -> syncMessages.execute(Unit)
 

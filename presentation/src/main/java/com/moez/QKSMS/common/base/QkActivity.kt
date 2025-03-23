@@ -22,12 +22,16 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 abstract class QkActivity : AppCompatActivity() {
+    @Inject lateinit var prefs: Preferences
 
     protected val menu: Subject<Menu> = BehaviorSubject.create()
 
@@ -35,6 +39,12 @@ abstract class QkActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onNewIntent(intent)
+        disableScreenshots(prefs.disableScreenshots.get())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        disableScreenshots(prefs.disableScreenshots.get())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -72,6 +82,14 @@ abstract class QkActivity : AppCompatActivity() {
 
     protected open fun showBackButton(show: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
+    }
+
+    private fun disableScreenshots(disableScreenshots: Boolean) {
+        if (disableScreenshots) {
+            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
     }
 
 }

@@ -36,7 +36,6 @@ import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
-import dev.octoshrimpy.quik.util.Preferences
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
@@ -60,7 +59,6 @@ abstract class QkThemedActivity : QkActivity() {
     @Inject lateinit var conversationRepo: ConversationRepository
     @Inject lateinit var messageRepo: MessageRepository
     @Inject lateinit var phoneNumberUtils: PhoneNumberUtils
-    @Inject lateinit var prefs: Preferences
 
     /**
      * In case the activity should be themed for a specific conversation, the selected conversation
