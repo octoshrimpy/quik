@@ -39,6 +39,7 @@ data class ComposeState(
     val searchResults: Int = 0,
     val messages: Pair<Conversation, RealmResults<Message>>? = null,
     val selectedMessages: Int = 0,
+    val selectedMessagesHaveText: Boolean = false,
     val scheduled: Long = 0,
     val attachments: List<Attachment> = listOf(),
     val attaching: Boolean = false,

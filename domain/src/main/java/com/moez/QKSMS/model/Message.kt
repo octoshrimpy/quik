@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.model
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.Telephony.*
+import dev.octoshrimpy.quik.extensions.joinTo
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
@@ -100,14 +101,30 @@ open class Message : RealmObject() {
     /**
      * Returns the text that should be copied to the clipboard
      */
-    fun getText(): String {
-        return when {
+    fun getText(withSubject: Boolean = true): String {
+        val messageText = when {
             isSms() -> body
-
             else -> parts
-                    .filter { it.type == "text/plain" }
-                    .mapNotNull { it.text }
-                    .joinToString("\n") { text -> text }
+                .filter { it.type.lowercase() == "text/plain" }
+                .mapNotNull { it.text }
+                .filter { it.isNotBlank() }
+                .joinToString("\n") { text -> text }
+        }
+
+        if (!withSubject)
+            return messageText
+
+        return getCleansedSubject().joinTo(messageText, "\n")
+    }
+
+    // returns a boolean indicating if message has any text parts that are not whitespace only
+    fun hasNonWhitespaceText(): Boolean {
+        return when {
+            isSms() -> body.isNotBlank()
+            else -> parts
+                .filter { it.type.lowercase() == "text/plain" }
+                .mapNotNull { it.text }
+                .any { it.isNotBlank() }
         }
     }
 
@@ -162,3 +179,18 @@ open class Message : RealmObject() {
         else -> false
     }
 }
+
+// extension function to get all text from a list of messages
+fun List<Message>.getText(withSubject: Boolean = true): String =
+    foldIndexed(StringBuilder()) { index, acc, message ->
+        when {
+            index == 0 ->
+                acc.append(message.getText(withSubject))
+
+            this[index - 1].compareSender(message) ->
+                acc.appendLine().append(message.getText(withSubject))
+
+            else ->
+                acc.appendLine().appendLine().append(message.getText(withSubject))
+        }
+    }.toString()

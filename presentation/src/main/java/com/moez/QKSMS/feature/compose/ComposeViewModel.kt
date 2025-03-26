@@ -25,23 +25,33 @@ import android.media.AudioDeviceInfo
 import android.net.Uri
 import android.os.Vibrator
 import android.telephony.SmsMessage
+import android.widget.Toast
 import androidx.core.content.getSystemService
+import androidx.core.content.FileProvider
 import androidx.core.net.toFile
-import androidx.core.net.toUri
+import com.google.android.exoplayer2.util.MimeTypes
 import com.moez.QKSMS.common.QkMediaPlayer
 import com.moez.QKSMS.contentproviders.MmsPartProvider
-import com.moez.QKSMS.manager.MediaRecorderManager
 import com.moez.QKSMS.manager.BluetoothMicManager
+import com.moez.QKSMS.manager.MediaRecorderManager
+import com.moez.QKSMS.manager.MediaRecorderManager.AUDIO_FILE_PREFIX
+import com.moez.QKSMS.manager.MediaRecorderManager.AUDIO_FILE_SUFFIX
+import com.moez.QKSMS.util.Constants.Companion.SAVED_MESSAGE_TEXT_FILE_PREFIX
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
 import dev.octoshrimpy.quik.common.util.ClipboardUtils
 import dev.octoshrimpy.quik.common.util.MessageDetailsFormatter
 import dev.octoshrimpy.quik.common.util.extensions.makeToast
+import dev.octoshrimpy.quik.common.widget.MicInputCloudView
+import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
 import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
 import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.asObservable
 import dev.octoshrimpy.quik.extensions.isImage
+import dev.octoshrimpy.quik.extensions.isSmil
 import dev.octoshrimpy.quik.extensions.isVideo
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.interactor.AddScheduledMessage
@@ -49,6 +59,7 @@ import dev.octoshrimpy.quik.interactor.CancelDelayedMessage
 import dev.octoshrimpy.quik.interactor.DeleteMessages
 import dev.octoshrimpy.quik.interactor.MarkRead
 import dev.octoshrimpy.quik.interactor.RetrySending
+import dev.octoshrimpy.quik.interactor.SaveImage
 import dev.octoshrimpy.quik.interactor.SendMessage
 import dev.octoshrimpy.quik.manager.ActiveConversationManager
 import dev.octoshrimpy.quik.manager.BillingManager
@@ -56,21 +67,17 @@ import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.model.Recipient
+import dev.octoshrimpy.quik.model.getText
 import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.util.ActiveSubscriptionObservable
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.FileUtils
 import dev.octoshrimpy.quik.util.tryOrNull
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import dev.octoshrimpy.quik.common.widget.MicInputCloudView
-import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
-import dev.octoshrimpy.quik.extensions.isSmil
-import dev.octoshrimpy.quik.interactor.SaveImage
-import dev.octoshrimpy.quik.model.MmsPart
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -81,7 +88,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import timber.log.Timber
-import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -120,11 +127,6 @@ class ComposeViewModel @Inject constructor(
         threadId = threadId,
         query = query)
 ) {
-
-    companion object {
-        private const val AUDIO_FILE_PREFIX = "recorded-"
-    }
-
     private val chipsReducer: Subject<(List<Recipient>) -> List<Recipient>> = PublishSubject.create()
     private val conversation: Subject<Conversation> = BehaviorSubject.create()
     private val messages: Subject<List<Message>> = BehaviorSubject.create()
@@ -380,22 +382,75 @@ class ComposeViewModel @Inject constructor(
         view.optionsItemIntent
                 .filter { it == R.id.copy }
                 .withLatestFrom(view.messagesSelectedIntent) { _, messageIds ->
-                    val messages = messageIds.mapNotNull(messageRepo::getMessage).sortedBy { it.date }
                     ClipboardUtils.copy(
                         context,
-                        messages.foldIndexed(StringBuilder()) { index, acc, message ->
-                            when {
-                                index == 0 ->
-                                    acc.append(message.getText())
-                                messages[index - 1].compareSender(message) ->
-                                    acc.appendLine().append(message.getText())
-                                else ->
-                                    acc.appendLine().appendLine().append(message.getText())
-                            }
-                        }.toString())
+                        messageIds
+                            .mapNotNull(messageRepo::getMessage)
+                            .sortedBy { it.date }
+                            .getText()
+                    )
                 }
                 .autoDisposable(view.scope())
                 .subscribe { view.clearSelection() }
+
+        // share the message text contents
+        view.optionsItemIntent
+            .filter { it == R.id.share }
+            .observeOn(Schedulers.io())
+            .withLatestFrom(view.messagesSelectedIntent) { _, messageIds -> messageIds }
+            .mapNotNull { messageIds ->
+                val filename = "$SAVED_MESSAGE_TEXT_FILE_PREFIX${
+                    SimpleDateFormat(
+                        "yyyy-MM-dd-HH-mm-ss",
+                        Locale.getDefault()
+                    ).format(System.currentTimeMillis())}.txt"
+
+                val mimeType = "${MimeTypes.BASE_TYPE_TEXT}/plain"
+
+                // save all messages text to a file in cache
+                val (uri, e) = FileUtils.createAndWrite(
+                        context,
+                        FileUtils.Companion.Location.Cache,
+                        filename,
+                        mimeType,
+                        messageIds
+                            .mapNotNull(messageRepo::getMessage)
+                            .sortedBy { it.date }
+                            .getText()
+                            .toByteArray()
+                    )
+
+                if (e is Exception)
+                    Pair(filename, e)
+                else {
+                    // share file from cache
+                    navigator.viewFile(
+                        FileProvider.getUriForFile(
+                            context,
+                            "dev.octoshrimpy.quik.messagesText",
+                            uri.toFile()
+                        ),
+                        mimeType
+                    )
+
+                    Pair(filename, null)
+                }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { (filename, e) ->
+                if (e is Exception)
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.messages_text_share_file_error),
+                        Toast.LENGTH_LONG
+                    ).show().also {
+                        Timber.e("Error writing to messages text cache file", e)
+                    }
+                else
+                    Timber.d("Created and shared messages text file: $filename", e)
+            }
+            .autoDisposable(view.scope())
+            .subscribe { view.clearSelection() }
 
         // Show the message details
         view.optionsItemIntent
@@ -572,14 +627,27 @@ class ComposeViewModel @Inject constructor(
 
         // Update the State when the message selected count changes
         view.messagesSelectedIntent
-                .map { selection -> selection.size }
+                .map {
+                    Pair(
+                        it.size,
+                        it.any { messageRepo.getMessage(it)?.hasNonWhitespaceText() ?: false }
+                    )
+                }
                 .autoDisposable(view.scope())
-                .subscribe { messages -> newState { copy(selectedMessages = messages, editingMode = false) } }
+                .subscribe {
+                    newState {
+                        copy(
+                            selectedMessages = it.first,
+                            selectedMessagesHaveText = it.second,
+                            editingMode = false
+                        )
+                    }
+                }
 
         // Cancel sending a message
         view.cancelSendingIntent
                 .mapNotNull(messageRepo::getMessage)
-                .doOnNext { message -> view.setDraft(message.getText()) }
+                .doOnNext { message -> view.setDraft(message.getText(false)) }
                 .autoDisposable(view.scope())
                 .subscribe { message ->
                     cancelMessage.execute(CancelDelayedMessage.Params(message.id, message.threadId))
@@ -646,7 +714,15 @@ class ComposeViewModel @Inject constructor(
                 .observeOn(Schedulers.io())
                 .withLatestFrom(view.textChangedIntent, state) { threadId, draftText, state ->
                     if (state.saveDraft)
-                        conversationRepo.saveDraft(threadId, draftText.toString())
+                        conversationRepo.saveDraft(
+                            threadId,
+                            if (draftText.isNotBlank()) draftText.toString()
+                            else ""
+                        )
+
+                    // remove attachments
+                    state.attachments.forEach { it.removeCacheFile() }
+
                     newState { copy(saveDraft = true) }
                 }
                 .autoDisposable(view.scope())
@@ -846,7 +922,7 @@ class ComposeViewModel @Inject constructor(
                 // if leaving audio recording mode
                 if (!it.audioMsgRecording) {
                     // ensure recording stopped and delete any recording file
-                    safeDeleteLocalFile(MediaRecorderManager.stopRecording())
+                    FileUtils.deleteFile(MediaRecorderManager.stopRecording())
                     view.recordAudioStartStopRecording.onNext(false)
                 }
             }
@@ -925,7 +1001,7 @@ class ComposeViewModel @Inject constructor(
                     view.recordAudioStartStopRecording.onNext(false)  // stop recording
                     view.recordAudioPlayerVisible.onNext(true)  // show audio player
                 } else {  // state = start recording
-                    safeDeleteLocalFile(MediaRecorderManager.uri)  // delete old recording file
+                    FileUtils.deleteFile(MediaRecorderManager.uri)  // delete old recording file
                     view.recordAudioStartStopRecording.onNext(true)  // start new recording
                 }
             }
@@ -937,21 +1013,25 @@ class ComposeViewModel @Inject constructor(
                 MediaRecorderManager.stopRecording()
 
                 try {
-                    // create new filename for recorded file (so cache clean doesn't accidentally
-                    // delete the attachment file)
-                    val newFile = File(
-                        context.cacheDir,
-                        "${AUDIO_FILE_PREFIX}${UUID.randomUUID()}${MediaRecorderManager.AUDIO_FILE_SUFFIX}"
+                    // create new filename for recorded file because leaving the recording ui
+                    // will delete the original filename as a catch-all to not leave orphaned files
+                    val (newUri, e) = FileUtils.create(
+                        FileUtils.Companion.Location.Cache,
+                        context,
+                        "$AUDIO_FILE_PREFIX-${UUID.randomUUID()}$AUDIO_FILE_SUFFIX",
+                        ""
                     )
+                    if (e is Exception)
+                        throw e
 
                     // rename recorded file to new name
-                    MediaRecorderManager.uri.toFile().renameTo(newFile)
+                    FileUtils.renameTo(MediaRecorderManager.uri, newUri)
 
                     // attach newly named file to message
                     newState {
                         copy(
                             audioMsgRecording = false,
-                            attachments = attachments + Attachment(context, newFile.toUri())
+                            attachments = attachments + Attachment(context, newUri)
                         )
                     }
                 }
@@ -1133,6 +1213,11 @@ class ComposeViewModel @Inject constructor(
         // clear the current message schedule, text and attachments
         view.clearCurrentMessageIntent
             .observeOn(AndroidSchedulers.mainThread())
+            .withLatestFrom(state) { hasError, state ->
+                // remove attachments
+                state.attachments.forEach { it.removeCacheFile() }
+                hasError
+            }
             .autoDisposable(view.scope())
             .subscribe {
                 view.setDraft("")
@@ -1145,15 +1230,6 @@ class ComposeViewModel @Inject constructor(
                     )
                 }
             }
-    }
-
-    private fun safeDeleteLocalFile(uri: Uri): Boolean {
-        return try {
-            if (uri == Uri.EMPTY)
-                false
-            uri.toFile().delete()
-        }
-        catch (e: Exception) { false }
     }
 
 }

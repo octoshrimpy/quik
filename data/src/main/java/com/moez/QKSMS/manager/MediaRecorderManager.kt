@@ -23,8 +23,8 @@ import android.media.AudioDeviceInfo
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
-import androidx.core.net.toUri
-import java.io.File
+import androidx.core.net.toFile
+import dev.octoshrimpy.quik.util.FileUtils
 import java.util.UUID
 
 object MediaRecorderManager : MediaRecorder() {
@@ -63,10 +63,16 @@ object MediaRecorderManager : MediaRecorder() {
 
     fun startRecording(context: Context, preferredAudioDevice: AudioDeviceInfo? = null): Uri {
         return try {
-            val file = File(
-                context.cacheDir,
-                AUDIO_FILE_PREFIX + UUID.randomUUID() + AUDIO_FILE_SUFFIX
+            val (newUri, e) = FileUtils.create(
+                FileUtils.Companion.Location.Cache,
+                context,
+                "$AUDIO_FILE_PREFIX${UUID.randomUUID()}$AUDIO_FILE_SUFFIX",
+                ""
             )
+            if (e is Exception)
+                throw e
+
+            uri = newUri
 
             // ensure stopped before using again
             stopRecording()
@@ -76,21 +82,18 @@ object MediaRecorderManager : MediaRecorder() {
             setOutputFormat(OutputFormat.THREE_GPP)
             setAudioEncoder(AudioEncoder.AMR_WB)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 preferredDevice = preferredAudioDevice
-            }
 
             recordingState = RecordingState.DataSourceConfigured
 
-            setOutputFile(file.path)
+            setOutputFile(uri.toFile().path)
 
             prepare()
             recordingState = RecordingState.Prepared
 
             start()
             recordingState = RecordingState.Recording
-
-            uri = file.toUri()
 
             uri
         }
