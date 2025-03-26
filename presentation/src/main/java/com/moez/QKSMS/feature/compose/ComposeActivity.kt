@@ -852,4 +852,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)
 
+    override fun focusMessage() {
+        runOnUiThread {
+            val message = findViewById<QkEditText>(R.id.message)
+            if (message !== null) message.requestFocus()
+        }
+    }
+
 }
