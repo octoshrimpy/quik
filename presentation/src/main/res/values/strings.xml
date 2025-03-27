@@ -324,6 +324,8 @@
     <string name="settings_long_as_mms_summary">If your longer text messages are failing to send, or sending in the wrong order, you can send them as MMS messages instead. Additional charges may apply</string>
     <string name="settings_mms_size_title">Auto-compress MMS image attachments</string>
     <string name="settings_mms_weblink_title">Link handling in messages</string>
+    <string name="settings_disable_screenshots_title">Disable Screenshots</string>
+    <string name="settings_diable_screenshots_summary">Prevent your OS and other apps from taking screenshots of the app.</string>
     <string name="settings_sync_title">Sync messages</string>
     <string name="settings_sync_summary">Re-sync your messages with the native Android SMS database</string>
     <string name="settings_about_title">About QUIK</string>

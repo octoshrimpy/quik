@@ -51,5 +51,6 @@ data class SettingsState(
     val maxMmsSizeId: Int = 100,
     val messageLinkHandlingSummary: String = "Ask before opening",
     val messageLinkHandlingId: Int = 2,
+    val disableScreenshotsEnabled: Boolean = false,
     val syncProgress: SyncRepository.SyncProgress = SyncRepository.SyncProgress.Idle
 )
