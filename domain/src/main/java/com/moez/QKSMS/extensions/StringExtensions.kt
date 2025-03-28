@@ -24,3 +24,16 @@ import java.text.Normalizer
  * Strip the accents from a string
  */
 fun CharSequence.removeAccents(): String = Normalizer.normalize(this, Normalizer.Form.NFKD).replace(Regex("\\p{M}"), "")
+
+fun String.joinTo(rhs:String, separator: String) =
+    when {
+        this.isEmpty() -> rhs
+        rhs.isEmpty() -> this
+        else -> "$this$separator$rhs"
+}
+
+fun String.truncateWithEllipses(maxLengthIncEllipses: Int) =
+    when (this.length) {
+        in 0..maxLengthIncEllipses -> this
+        else -> this.take(maxLengthIncEllipses - 1) + "…"
+    }

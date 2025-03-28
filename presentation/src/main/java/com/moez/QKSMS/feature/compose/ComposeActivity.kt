@@ -78,6 +78,7 @@ import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.MicInputCloudView
 import dev.octoshrimpy.quik.common.widget.QkEditText
+import dev.octoshrimpy.quik.common.widget.TextInputDialog
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.feature.compose.editing.ChipsAdapter
 import dev.octoshrimpy.quik.feature.contacts.ContactsActivity
@@ -206,6 +207,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val recordAudioMsgRecordVisible: Subject<Boolean> = PublishSubject.create()
     override val recordAudioChronometer: Subject<Boolean> = PublishSubject.create()
     override val recordAudioRecord: Subject<MicInputCloudView.ViewState> = PublishSubject.create()
+//    override val saveMessagesTextIntent: Subject<String> = PublishSubject.create()
 
     private var seekBarUpdater: Disposable? = null
 
@@ -224,25 +226,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         return SpeechRecognizer.isRecognitionAvailable(this)
     }
 
-    private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode != Activity.RESULT_OK)
-            return@registerForActivityResult
-
-        // check returned results are good
-        val match = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-        if ((match === null) || (match.size < 1) || (match[0].isNullOrEmpty()))
-            return@registerForActivityResult
-
-        // get the edit text view
-        val message = findViewById<QkEditText>(R.id.message)
-        if (message === null)
-            return@registerForActivityResult
-
-        // populate message box with data returned by STT, set cursor to end, and focus
-        message.append(match[0])
-        message.setSelection(message.text.length)
-        message.requestFocus()
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -495,7 +478,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 && state.query.isEmpty()
         toolbar.menu.findItem(R.id.info)?.isVisible = !state.editingMode && state.selectedMessages == 0
                 && state.query.isEmpty()
-        toolbar.menu.findItem(R.id.copy)?.isVisible = !state.editingMode && state.selectedMessages > 0
+        toolbar.menu.findItem(R.id.copy)?.isVisible =
+            !state.editingMode && state.selectedMessages > 0 && state.selectedMessagesHaveText
+        toolbar.menu.findItem(R.id.share)?.isVisible =
+            !state.editingMode && state.selectedMessages > 0 && state.selectedMessagesHaveText
         toolbar.menu.findItem(R.id.details)?.isVisible = !state.editingMode && state.selectedMessages == 1
         toolbar.menu.findItem(R.id.delete)?.isVisible = !state.editingMode && ((state.selectedMessages > 0) || state.canSend)
         toolbar.menu.findItem(R.id.forward)?.isVisible = !state.editingMode && state.selectedMessages == 1
@@ -628,6 +614,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .setNegativeButton(R.string.messageLinkHandling_dialog_negative) { _, _ -> { } }
             .show()
     }
+//
+//    override fun showSaveMessagesFilenameDialog(filename: String) {
+//        TextInputDialog(
+//            this,
+//            getString(R.string.messages_save_file_dialog_title),
+//            saveMessagesTextIntent::onNext
+//        ).setText(filename).show()
+//    }
 
     override fun requestDefaultSms() {
         navigator.showDefaultSmsDialog(this)

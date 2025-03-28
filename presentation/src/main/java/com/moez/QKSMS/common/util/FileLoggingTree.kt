@@ -20,16 +20,11 @@ package dev.octoshrimpy.quik.common.util
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
-import androidx.core.content.contentValuesOf
 import dev.octoshrimpy.quik.util.Preferences
-import dev.octoshrimpy.quik.util.tryOrNull
+import dev.octoshrimpy.quik.util.FileUtils
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import java.io.File
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -78,48 +73,33 @@ class FileLoggingTree @Inject constructor(
                         Log.getStackTraceString(t)
                     }\n"
 
-                try {
-                    // if uri of log file not yet determined, get one now
-                    if (logFileUri == null) {
-                        val filename = "Quik-log-${
-                            SimpleDateFormat(
-                                "yyyy-MM-dd",
-                                Locale.getDefault()
-                            ).format(System.currentTimeMillis())
-                        }.log"
+                // if uri of log file not yet determined, get one now
+                if (logFileUri == null) {
+                    val filename = "Quik-log-${
+                        SimpleDateFormat(
+                            "yyyy-MM-dd",
+                            Locale.getDefault()
+                        ).format(System.currentTimeMillis())
+                    }.log"
 
-                        logFileUri =
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                                // use media store
-                                context.contentResolver.insert(
-                                    MediaStore.Downloads.EXTERNAL_CONTENT_URI,
-                                    contentValuesOf(
-                                        MediaStore.MediaColumns.MIME_TYPE to "text/plain",
-                                        MediaStore.MediaColumns.RELATIVE_PATH to
-                                                Environment.DIRECTORY_DOWNLOADS,
-                                        MediaStore.MediaColumns.DISPLAY_NAME to filename,
-                                    )
-                                )
-                            else
-                                // use direct access to 'external' dir
-                                File(Environment.getExternalStorageDirectory(), filename).let {
-                                    tryOrNull { it.createNewFile() }
-                                    Uri.fromFile(it)
-                                }
-                    }
+                    val (uri, e) = FileUtils.create(
+                        FileUtils.Companion.Location.Downloads,
+                        context,
+                        filename,
+                        "text/plain"
+                    )
+                    if (e is Exception)
+                        Log.e(TAG, "Error opening log file", e)
+                    else
+                        logFileUri = uri
+                }
 
-                    logFileUri?.let {
-                        context.contentResolver.openOutputStream(it, "wa")?.use {
-                            // write the log entry
-                            it.write(logItem.toByteArray())
-                        }
-                    }
-                } catch (e: FileNotFoundException) {
-                    Log.e(TAG, "Log file went away. Lost log file item: $logItem")
-                    // log file seems to have gone away. start a new file next time through
-                    logFileUri = null
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error while logging into file", e)
+                logFileUri?.let {
+                    val e = FileUtils.append(context, it, logItem.toByteArray())
+                    if (e is FileNotFoundException)
+                        Log.e(TAG, "Log file went away. Lost log file item: $logItem", e)
+                    else if (e is Exception)
+                        Log.e(TAG, "Error while logging into file", e)
                 }
             }
         }

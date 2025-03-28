@@ -142,6 +142,7 @@
     <string name="compose_hint">Write a message…</string>
     <string name="compose_no_valid_recipients">Can\'t send to other participants</string>
     <string name="compose_menu_copy">Copy text</string>
+    <string name="compose_menu_share">Share text</string>
     <string name="compose_menu_forward">Forward</string>
     <string name="compose_menu_show_status">Show status</string>
     <string name="compose_menu_delete">Delete</string>
@@ -189,6 +190,7 @@
     <string name="message_status_sending">Sending…</string>
     <string name="message_status_delivered">Delivered %s</string>
     <string name="message_status_failed">Failed to send. Tap to try again</string>
+    <string name="message_body_too_long_to_display">⚠ Message is long. Copy or Save for the full text</string>
 
     <string name="info_title">Details</string>
     <string name="info_copied_address">Address copied</string>
@@ -570,4 +572,6 @@
     <string name="messageLinkHandling_dialog_negative">No</string>
     <string name="stt_toast_no_provider">No speech-to-text service available</string>
     <string name="stt_toast_extra_prompt">Speak your message</string>
+
+    <string name="messages_text_share_file_error">Oops! Something went wrong while sharing</string>
 </resources>
