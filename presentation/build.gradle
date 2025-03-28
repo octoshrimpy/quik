@@ -123,6 +123,7 @@ dependencies {
     implementation "androidx.emoji:emoji-appcompat:$androidx_emoji_version"
     implementation "androidx.viewpager2:viewpager2:$androidx_viewpager_version"
     implementation "com.google.android.material:material:$material_version"
+    implementation("androidx.work:work-runtime-ktx:$androidx_work_version")
 
     // conductor
     implementation "com.bluelinelabs:conductor:$conductor_version"

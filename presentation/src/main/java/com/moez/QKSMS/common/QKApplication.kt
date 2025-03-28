@@ -25,7 +25,9 @@ import android.content.BroadcastReceiver
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
-import com.moez.QKSMS.manager.HousekeepingWorkManager
+import androidx.work.Configuration
+import androidx.work.WorkManager
+import androidx.work.WorkerFactory
 import com.moez.QKSMS.manager.SpeakManager
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.CrashlyticsTree
@@ -46,6 +48,7 @@ import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.HasServiceInjector
 import dev.octoshrimpy.quik.interactor.SpeakThreads
+import dev.octoshrimpy.quik.worker.HousekeepingWorker
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +75,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     @Inject lateinit var nightModeManager: NightModeManager
     @Inject lateinit var realmMigration: QkRealmMigration
     @Inject lateinit var referralManager: ReferralManager
+    @Inject lateinit var workerFactory: WorkerFactory
 
     override fun onCreate() {
         super.onCreate()
@@ -116,8 +120,14 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
                 .configureWith(AutoDisposeConfigurer::configure)
                 .install()
 
-        // register, or re-register, once-a-day-housekeeping work manager
-        HousekeepingWorkManager.register(applicationContext)
+        // init work manager with custom factory supporting dagger/injection capability
+        WorkManager.initialize(
+            this,
+            Configuration.Builder().setWorkerFactory(workerFactory).build()
+        )
+
+        // register, or re-register, housekeeping work manager
+        HousekeepingWorker.register(applicationContext)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

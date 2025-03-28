@@ -246,6 +246,18 @@
             </intent-filter>
         </service>
 
+        <!-- remove default workmanager init so custom injection capable instance can be used -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="dev.octoshrimpy.quik.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
         <meta-data
             android:name="com.callcontrol.datashare.messaging"
             android:value="true" />

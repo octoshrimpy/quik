@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.WorkerFactory
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.blocking.BlockingManager
@@ -88,6 +89,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
+import dev.octoshrimpy.quik.worker.InjectionWorkerFactory
 import javax.inject.Singleton
 
 @Module(subcomponents = [
@@ -217,4 +219,7 @@ class AppModule(private var application: Application) {
     @Provides
     fun provideSyncRepository(repository: SyncRepositoryImpl): SyncRepository = repository
 
+    // worker factory
+    @Provides
+    fun provideWorkerFactory(workerFactory: InjectionWorkerFactory): WorkerFactory = workerFactory
 }
