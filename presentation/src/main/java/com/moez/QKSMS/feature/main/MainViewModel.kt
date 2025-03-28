@@ -423,7 +423,7 @@ class MainViewModel @Inject constructor(
         view.optionsItemIntent
                 .filter { itemId -> itemId == R.id.block }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
-                    view.showBlockingDialog(conversations, true)
+                    view.showBlockingDialog(conversations.toList(), true)
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
