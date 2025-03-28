@@ -46,7 +46,7 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
             // don't check return value because, well, we can't do much about a failure
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WORKER_TAG,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 PeriodicWorkRequest.Builder(
                     HousekeepingWorker::class.java,
                     24,
