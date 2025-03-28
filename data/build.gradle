@@ -97,6 +97,7 @@ dependencies {
 
     // work manager
     implementation("androidx.work:work-runtime-ktx:$androidx_work_version")
+    implementation "androidx.work:work-rxjava2:$androidx_work_version"
 
     implementation project(":android-smsmms")
     implementation project(':common')

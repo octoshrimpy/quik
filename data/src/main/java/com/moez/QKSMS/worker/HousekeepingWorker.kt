@@ -16,33 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with QUIK.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.moez.QKSMS.manager
+package dev.octoshrimpy.quik.worker
 
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
+import com.moez.QKSMS.manager.MediaRecorderManager
 import com.moez.QKSMS.manager.MediaRecorderManager.AUDIO_FILE_PREFIX
+import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepositoryImpl
+import dev.octoshrimpy.quik.worker.ReceiveSmsWorker.Companion.INPUT_DATA_KEY_MESSAGE_ID
 import java.io.File
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class HousekeepingWorkManager(appContext: Context, workerParams: WorkerParameters)
-    : Worker(appContext, workerParams) {
-
+class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
+: Worker(appContext, workerParams) {
     companion object {
-        private val WORKER_TAG: String = HousekeepingWorkManager::class.java.simpleName
+        private val WORKER_TAG: String = HousekeepingWorker::class.java.simpleName
 
         fun register(context: Context) {
             // don't check return value because, well, we can't do much about a failure
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WORKER_TAG,
-                ExistingPeriodicWorkPolicy.KEEP,
+                ExistingPeriodicWorkPolicy.UPDATE,
                 PeriodicWorkRequest.Builder(
-                    HousekeepingWorkManager::class.java,
+                    HousekeepingWorker::class.java,
                     24,
                     TimeUnit.HOURS
                 )
@@ -57,13 +63,15 @@ class HousekeepingWorkManager(appContext: Context, workerParams: WorkerParameter
                     )
                     .addTag(WORKER_TAG)
                     .build()
-                )
-            }
-
-            fun cancel(context: Context) {
-                WorkManager.getInstance(context).cancelUniqueWork(WORKER_TAG)
-            }
+            )
         }
+
+        fun cancel(context: Context) {
+            WorkManager.getInstance(context).cancelUniqueWork(WORKER_TAG)
+        }
+    }
+
+    @Inject lateinit var scheduledMessageRepository: ScheduledMessageRepository
 
     override fun doWork(): Result {
         removeOrphanedScheduledMessageAttachmentFiles()
@@ -75,7 +83,7 @@ class HousekeepingWorkManager(appContext: Context, workerParams: WorkerParameter
 
     private fun removeOrphanedScheduledMessageAttachmentFiles() {
         // get list of all scheduled message ids
-        val scheduledMessageIds = ScheduledMessageRepositoryImpl().getAllScheduledMessageIdsSnapshot()
+        val scheduledMessageIds = scheduledMessageRepository.getAllScheduledMessageIdsSnapshot()
 
         // remove orphaned scheduled message dirs in files dir
         File(applicationContext.filesDir,"")

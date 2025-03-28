@@ -22,24 +22,48 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony.Sms
-import dev.octoshrimpy.quik.interactor.ReceiveSms
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.worker.ReceiveSmsWorker
+import dev.octoshrimpy.quik.worker.ReceiveSmsWorker.Companion.INPUT_DATA_KEY_MESSAGE_ID
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
 class SmsReceiver : BroadcastReceiver() {
-
-    @Inject lateinit var receiveMessage: ReceiveSms
+    @Inject lateinit var messageRepo: MessageRepository
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
-        Timber.v("onReceive")
 
         Sms.Intents.getMessagesFromIntent(intent)?.let { messages ->
-            val subId = intent.extras?.getInt("subscription", -1) ?: -1
+            // reduce list of messages to single message and save in db
+            val messageId = Single.just(messages)
+                .observeOn(Schedulers.io())
+                .map {
+                    Timber.v("onReceive() new sms")  // here so runs on io thread
 
-            val pendingResult = goAsync()
-            receiveMessage.execute(ReceiveSms.Params(subId, messages)) { pendingResult.finish() }
+                    messageRepo.insertReceivedSms(
+                        intent.extras?.getInt("subscription", -1) ?: -1,
+                        messages[0].displayOriginatingAddress,
+                        messages.mapNotNull { it.displayMessageBody }.reduce { body, new -> body + new },
+                        messages[0].timestampMillis
+                    ).id
+                }
+                .blockingGet()
+
+            // start worker with message id as param
+            WorkManager.getInstance(context).enqueue(
+                OneTimeWorkRequestBuilder<ReceiveSmsWorker>()
+                    .setInputData(workDataOf(INPUT_DATA_KEY_MESSAGE_ID to messageId))
+                    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                    .build()
+            )
         }
     }
 
