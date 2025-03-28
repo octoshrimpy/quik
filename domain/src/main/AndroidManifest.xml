@@ -20,7 +20,7 @@
     <application>
         <provider
             android:name="com.moez.QKSMS.contentproviders.MmsPartProvider"
-            android:authorities="dev.octoshrimpy.quik.mmspart"
+            android:authorities="${applicationId}.mmspart"
             android:enabled="true"
             android:exported="false"
             android:grantUriPermissions="true">

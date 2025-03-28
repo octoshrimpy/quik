@@ -155,10 +155,10 @@
         <receiver android:name=".receiver.SmsDeliveredReceiver" />
         <receiver
             android:name=".receiver.MmsSentReceiver"
-            android:taskAffinity="dev.octoshrimpy.quik.MMS_SENT" />
+            android:taskAffinity="${applicationId}.MMS_SENT" />
         <receiver
             android:name=".receiver.MmsUpdatedReceiver"
-            android:taskAffinity="dev.octoshrimpy.quik.MMS_UPDATED" />
+            android:taskAffinity="${applicationId}.MMS_UPDATED" />
         <receiver
             android:name=".receiver.MmsReceivedReceiver"
             android:taskAffinity="com.klinker.android.messaging.MMS_RECEIVED" />
@@ -170,7 +170,7 @@
             android:name=".receiver.SpeakThreadsReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="dev.octoshrimpy.quik.intent.action.ACTION_SPEAK_MESSAGES" />
+                <action android:name="${applicationId}.intent.action.ACTION_SPEAK_MESSAGES" />
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.RemoteMessagingReceiver" />
@@ -190,7 +190,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="dev.octoshrimpy.quik.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
+                <action android:name="${applicationId}.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
             </intent-filter>
 
             <meta-data
@@ -249,10 +249,9 @@
         <!-- remove default workmanager init so custom injection capable instance can be used -->
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="dev.octoshrimpy.quik.androidx-startup"
+            android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            tools:node="merge"
-            tools:replace="android:authorities">
+            tools:node="merge">
             <meta-data
                 android:name="androidx.work.WorkManagerInitializer"
                 android:value="androidx.startup"
