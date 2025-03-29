@@ -21,19 +21,13 @@ package dev.octoshrimpy.quik.worker
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.moez.QKSMS.util.Constants
-import androidx.work.workDataOf
 import com.moez.QKSMS.manager.MediaRecorderManager
-import com.moez.QKSMS.manager.MediaRecorderManager.AUDIO_FILE_PREFIX
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
-import dev.octoshrimpy.quik.repository.ScheduledMessageRepositoryImpl
-import dev.octoshrimpy.quik.worker.ReceiveSmsWorker.Companion.INPUT_DATA_KEY_MESSAGE_ID
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -42,8 +36,6 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
 : Worker(appContext, workerParams) {
     companion object {
         private val WORKER_TAG: String = HousekeepingWorker::class.java.simpleName
-
-        private val someHoursAgo = (System.currentTimeMillis() - (2 * 60 * 60 * 1000))
 
         fun register(context: Context) {
             // don't check return value because, well, we can't do much about a failure
@@ -77,11 +69,13 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
     @Inject lateinit var scheduledMessageRepository: ScheduledMessageRepository
 
     override fun doWork(): Result {
+        val twoHoursAgo = (System.currentTimeMillis() - (2 * 60 * 60 * 1000))
+
         removeOrphanedScheduledMessageAttachmentFiles()
 
-        removeOrphanedComposeAudioRecordings()
+        removeOrphanedComposeAudioRecordings(twoHoursAgo)
 
-        removeSavedMessagesTexts()
+        removeSavedMessagesTexts(twoHoursAgo)
 
         return Result.success()
     }
@@ -102,21 +96,21 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
             ?.forEach { it.deleteRecursively() }
     }
 
-    private fun removeOrphanedComposeAudioRecordings() =
+    private fun removeOrphanedComposeAudioRecordings(removeOlderThan: Long) =
         // find recording files in cache dir
         applicationContext.cacheDir.listFiles { entry ->
             entry.isFile &&
                     entry.name.startsWith(MediaRecorderManager.AUDIO_FILE_PREFIX) &&
                     entry.name.endsWith(MediaRecorderManager.AUDIO_FILE_SUFFIX) &&
-                    (entry.lastModified() < someHoursAgo)
+                    (entry.lastModified() < removeOlderThan)
         }?.forEach { it.delete() }  // delete recording file
 
-    private fun removeSavedMessagesTexts() =
+    private fun removeSavedMessagesTexts(removeOlderThan: Long) =
         // find saved message text files in cache dir
         applicationContext.cacheDir.listFiles { entry ->
             entry.isFile &&
                     entry.name.startsWith(Constants.SAVED_MESSAGE_TEXT_FILE_PREFIX) &&
-                    (entry.lastModified() < someHoursAgo)
+                    (entry.lastModified() < removeOlderThan)
         }?.forEach { it.delete() }  // delete message text file
 
 }
