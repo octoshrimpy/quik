@@ -55,19 +55,19 @@ class MmsPartProvider : ContentProvider() {
                 .encodedPath("part/$partId")
                 .build()
         }
-
-        fun getUriForMmsPartId(partId: Long, partName: String): Uri {
-            return Uri
-                .Builder()
-                .scheme(ContentResolver.SCHEME_CONTENT)
-                .authority("dev.octoshrimpy.quik.mmspart")
-                .encodedPath("part/$partId/$partName")
-                .build()
-        }
     }
 
     override fun onCreate(): Boolean {
         return true
+    }
+
+    fun getUriForMmsPartId(partId: Long, partName: String): Uri {
+        return Uri
+            .Builder()
+            .scheme(ContentResolver.SCHEME_CONTENT)
+            .authority("${context?.packageName}.mmspart")
+            .encodedPath("part/$partId/$partName")
+            .build()
     }
 
     override fun query(

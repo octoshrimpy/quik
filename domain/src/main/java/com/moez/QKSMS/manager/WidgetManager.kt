@@ -21,7 +21,7 @@ package dev.octoshrimpy.quik.manager
 interface WidgetManager {
 
     companion object {
-        const val ACTION_NOTIFY_DATASET_CHANGED = "dev.octoshrimpy.quik.intent.action.ACTION_NOTIFY_DATASET_CHANGED"
+        const val ACTION_NOTIFY_DATASET_CHANGED = "action.ACTION_NOTIFY_DATASET_CHANGED"
     }
 
     fun sendDatasetChanged()

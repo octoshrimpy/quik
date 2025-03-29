@@ -135,7 +135,6 @@
                 <action android:name="android.provider.action.DEFAULT_SMS_PACKAGE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.DeleteMessagesReceiver" />
         <receiver
             android:name=".receiver.SmsReceivedReceiver"
             android:exported="true"
@@ -167,7 +166,7 @@
             android:name=".receiver.SpeakThreadsReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="dev.octoshrimpy.quik.intent.action.ACTION_SPEAK_MESSAGES" />
+                <action android:name=".action.ACTION_SPEAK_MESSAGES" />
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.RemoteMessagingReceiver" />
@@ -185,7 +184,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="dev.octoshrimpy.quik.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
+                <action android:name="${applicationId}.action.ACTION_NOTIFY_DATASET_CHANGED" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -196,7 +195,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="dev.octoshrimpy.quik.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
+                <action android:name="${applicationId}.action.ACTION_NOTIFY_DATASET_CHANGED" />
             </intent-filter>
 
             <meta-data
@@ -242,7 +241,7 @@
         <!-- remove default workmanager init so custom injection capable instance can be used -->
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="dev.octoshrimpy.quik.androidx-startup"
+            android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
             <meta-data

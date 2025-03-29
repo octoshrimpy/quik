@@ -426,7 +426,7 @@ class ComposeViewModel @Inject constructor(
                     navigator.viewFile(
                         FileProvider.getUriForFile(
                             context,
-                            "dev.octoshrimpy.quik.messagesText",
+                            "${context.packageName}.messagesText",
                             uri.toFile()
                         ),
                         mimeType
@@ -552,7 +552,7 @@ class ComposeViewModel @Inject constructor(
                 val menuInfo = it.menuInfo as QkContextMenuRecyclerView.ContextMenuInfo<Long, MmsPart>
                 if (menuInfo.viewHolderValue != null)
                     navigator.shareFile(
-                        MmsPartProvider.getUriForMmsPartId(
+                        MmsPartProvider().getUriForMmsPartId(
                             menuInfo.viewHolderValue.id,
                             menuInfo.viewHolderValue.getBestFilename()
                         ),
@@ -578,7 +578,7 @@ class ComposeViewModel @Inject constructor(
                 val menuInfo = it.menuInfo as QkContextMenuRecyclerView.ContextMenuInfo<Long, MmsPart>
                 if (menuInfo.viewHolderValue != null)
                     navigator.viewFile(
-                        MmsPartProvider.getUriForMmsPartId(
+                        MmsPartProvider().getUriForMmsPartId(
                             menuInfo.viewHolderValue.id,
                             menuInfo.viewHolderValue.getBestFilename()
                         ),
@@ -623,7 +623,7 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe {
                     navigator.viewFile(
-                        MmsPartProvider.getUriForMmsPartId(it.id, it.getBestFilename()),
+                        MmsPartProvider().getUriForMmsPartId(it.id, it.getBestFilename()),
                         it.type
                     )
                 }
