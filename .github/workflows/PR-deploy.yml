@@ -1,4 +1,4 @@
-name: PR deploy
+name: PR build & validate fdroid
 
 on:
   pull_request:
