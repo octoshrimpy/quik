@@ -104,7 +104,7 @@ class BackupController : QkController<BackupView, BackupState, BackupPresenter>(
                 .create()
     }
 
-    private lateinit var openDirectory: ActivityResultLauncher<Uri>
+    private lateinit var openDirectory: ActivityResultLauncher<Uri?>
     private lateinit var openDocument: ActivityResultLauncher<QkActivityResultContracts.OpenDocumentParams>
 
     init {
