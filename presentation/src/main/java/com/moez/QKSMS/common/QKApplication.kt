@@ -23,8 +23,6 @@ import android.app.Application
 import android.app.Service
 import android.content.BroadcastReceiver
 import androidx.core.provider.FontRequest
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.FontRequestEmojiCompatConfig
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
@@ -105,14 +103,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         }
 
         nightModeManager.updateCurrentTheme()
-
-        val fontRequest = FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs)
-
-        EmojiCompat.init(FontRequestEmojiCompatConfig(this, fontRequest))
 
         Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
 
