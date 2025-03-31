@@ -23,13 +23,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.moez.QKSMS.feature.extensions.LoadBestIconIntoImageView
-import com.moez.QKSMS.feature.extensions.loadBestIconIntoImageView
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.extensions.getDisplayName
 import dev.octoshrimpy.quik.extensions.getName
+import dev.octoshrimpy.quik.feature.extensions.LoadBestIconIntoImageView
+import dev.octoshrimpy.quik.feature.extensions.loadBestIconIntoImageView
 import dev.octoshrimpy.quik.model.Attachment
 import ezvcard.Ezvcard
 import io.reactivex.subjects.PublishSubject
