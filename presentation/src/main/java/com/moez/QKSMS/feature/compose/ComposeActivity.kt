@@ -566,11 +566,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         if (state.scheduling)
             scheduleAction.onNext(true)
 
-        if (prefs.showStt.get()) {
+        // if stt is available and preference is set to show stt button
+        if (isSpeechRecognitionAvailable() && prefs.showStt.get()) {
             speechToTextFrame.isVisible = true
 
-            var xPercent = prefs.showSttOffsetX.get()
-            var yPercent = prefs.showSttOffsetY.get()
+            val xPercent = prefs.showSttOffsetX.get()
+            val yPercent = prefs.showSttOffsetY.get()
 
             // if the stt icon has a custom position, move it
             if ((xPercent != Float.MAX_VALUE) && (yPercent != Float.MAX_VALUE)) {
