@@ -22,7 +22,8 @@ import android.app.Activity
 import android.app.Application
 import android.app.Service
 import android.content.BroadcastReceiver
-import androidx.core.provider.FontRequest
+import androidx.emoji2.bundled.BundledEmojiCompatConfig
+import androidx.emoji2.text.EmojiCompat
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
@@ -104,8 +105,26 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
 
         nightModeManager.updateCurrentTheme()
 
+        // configure timber logging
         Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
 
+        // configure emoji compatibility with bundled package
+        // (bundled library works with no play-services/gsm os versions)
+        EmojiCompat.init(BundledEmojiCompatConfig(this)
+            .registerInitCallback(object: EmojiCompat.InitCallback() {
+                override fun onInitialized() {
+                    super.onInitialized()
+                    Timber.v("bundled emojicompat initialized")
+                }
+
+                override fun onFailed(throwable: Throwable?) {
+                    super.onFailed(throwable)
+                    Timber.e("bundled emojicompat initialization failed")
+                }
+            })
+        )
+
+        // rxdogtag provides 'look-back' for exceptions in rxjava2 'chains'
         RxDogTag.builder()
                 .configureWith(AutoDisposeConfigurer::configure)
                 .install()

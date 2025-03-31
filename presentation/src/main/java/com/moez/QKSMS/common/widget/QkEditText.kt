@@ -25,7 +25,7 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputConnectionWrapper
-import android.widget.EditText
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
@@ -44,7 +44,8 @@ import javax.inject.Inject
  * Beware of updating to extend AppCompatTextView, as this inexplicably breaks the view in
  * the contacts chip view
  */
-class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : EditText(context, attrs) {
+class QkEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
+    : AppCompatEditText(context, attrs) {
 
     @Inject lateinit var textViewStyler: TextViewStyler
 

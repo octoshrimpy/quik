@@ -1,9 +1,9 @@
 package dev.octoshrimpy.quik.feature.extensions
 
 import android.text.Spannable
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.EmojiCompat.REPLACE_STRATEGY_ALL
-import androidx.emoji.text.EmojiSpan
+import androidx.emoji2.text.EmojiCompat
+import androidx.emoji2.text.EmojiCompat.REPLACE_STRATEGY_ALL
+import androidx.emoji2.text.EmojiSpan
 
 
 fun CharSequence.isEmojiOnly(considerWhitespace: Boolean = false): Boolean {
