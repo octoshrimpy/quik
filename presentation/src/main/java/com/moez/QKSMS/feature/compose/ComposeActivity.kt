@@ -676,7 +676,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun startSpeechRecognition() {
-        if (!isSpeechRecognitionAvailable()) {
+        if (isSpeechRecognitionAvailable()) {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             }
