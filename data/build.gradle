@@ -21,7 +21,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdk 33
+    compileSdk 34
     publishNonDefault true
     flavorDimensions "analytics"
 

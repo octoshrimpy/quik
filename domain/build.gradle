@@ -23,7 +23,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility 1.8

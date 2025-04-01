@@ -28,12 +28,11 @@ class QkActivityResultContracts {
             return intent
         }
 
-        override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
-            if (intent == null || resultCode != Activity.RESULT_OK) {
-                return null
-            }
+        override fun parseResult(resultCode: Int, intent: Intent?): Uri {
+            if (resultCode != Activity.RESULT_OK)
+                return Uri.EMPTY
 
-            return intent.data
+            return intent?.data ?: Uri.EMPTY
         }
     }
 

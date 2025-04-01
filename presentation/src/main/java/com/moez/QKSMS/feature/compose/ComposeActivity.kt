@@ -824,7 +824,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     if (messageEditBox !== null) {
                         // populate message box with data returned by STT, set cursor to end, and focus
                         messageEditBox.append(match[0])
-                        messageEditBox.setSelection(messageEditBox.text.length)
+                        messageEditBox.setSelection(messageEditBox.text?.length ?: 0)
                         messageEditBox.requestFocus()
                     }
                 }
