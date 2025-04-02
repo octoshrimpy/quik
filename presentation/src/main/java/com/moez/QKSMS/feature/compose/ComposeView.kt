@@ -113,5 +113,4 @@ interface ComposeView : QkView<ComposeState> {
     fun showClearCurrentMessageDialog()
     fun startSpeechRecognition()
     fun focusMessage()
-
 }
