@@ -548,6 +548,6 @@
     <string name="messageLinkHandling_dialog_body">Niektóre linki mogą być niebezpieczne lub nieoczekiwanie przekierowywać użytkownika. Sprawdź poniższy link przed kontynuowaniem:\n\n%1$s\n\nCzy chcesz kontynuować?</string>
     <string name="messageLinkHandling_dialog_positive">Tak, otwórz link</string>
     <string name="messageLinkHandling_dialog_negative">Nie</string>
-    <string name="stt_toast_no_provider">Brak dostępnej usługi zamiany mowy na tekst</string>
+    <string name="error_stt_toast">Brak dostępnej usługi zamiany mowy na tekst</string>
     <string name="stt_toast_extra_prompt">Wypowiedz swoją wiadomość</string>
 </resources>

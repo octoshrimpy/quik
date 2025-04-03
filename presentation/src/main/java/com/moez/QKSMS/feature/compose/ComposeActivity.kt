@@ -675,7 +675,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             try {
                 startActivityForResult(intent, ComposeView.SpeechRecognitionRequestCode)
             } catch (e: ActivityNotFoundException) {
-                Toast.makeText(this, getString(R.string.stt_toast_no_provider), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.error_stt_toast), Toast.LENGTH_SHORT).show()
             }
         }
     }
