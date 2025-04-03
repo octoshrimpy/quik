@@ -80,7 +80,7 @@ class QkReplyActivity : QkThemedActivity(), QkReplyView {
 
         // populate message box with data returned by STT, set cursor to end, and focus
         message.setText(match[0])
-        message.setSelection(message.text.length)
+        message.setSelection(message.text?.length ?: 0)
         message.requestFocus()
     }
 

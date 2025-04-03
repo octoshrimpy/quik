@@ -1,4 +1,4 @@
-package com.moez.QKSMS.feature.extensions
+package dev.octoshrimpy.quik.feature.extensions
 
 import android.content.Context
 import android.graphics.drawable.Drawable

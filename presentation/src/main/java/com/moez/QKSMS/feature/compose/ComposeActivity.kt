@@ -566,11 +566,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         if (state.scheduling)
             scheduleAction.onNext(true)
 
-        if (prefs.showStt.get()) {
+        // if stt is available and preference is set to show stt button
+        if (isSpeechRecognitionAvailable() && prefs.showStt.get()) {
             speechToTextFrame.isVisible = true
 
-            var xPercent = prefs.showSttOffsetX.get()
-            var yPercent = prefs.showSttOffsetY.get()
+            val xPercent = prefs.showSttOffsetX.get()
+            val yPercent = prefs.showSttOffsetY.get()
 
             // if the stt icon has a custom position, move it
             if ((xPercent != Float.MAX_VALUE) && (yPercent != Float.MAX_VALUE)) {
@@ -676,7 +677,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun startSpeechRecognition() {
-        if (!isSpeechRecognitionAvailable()) {
+        if (isSpeechRecognitionAvailable()) {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             }
@@ -824,7 +825,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     if (messageEditBox !== null) {
                         // populate message box with data returned by STT, set cursor to end, and focus
                         messageEditBox.append(match[0])
-                        messageEditBox.setSelection(messageEditBox.text.length)
+                        messageEditBox.setSelection(messageEditBox.text?.length ?: 0)
                         messageEditBox.requestFocus()
                     }
                 }
