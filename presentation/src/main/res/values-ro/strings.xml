@@ -476,6 +476,6 @@
     <string name="messageLinkHandling_dialog_body">Unele link-uri pot fi nesigure sau te pot redirecționa în mod neașteptat. Examinează link-ul de mai jos înainte de a continua:\n\n%1$s\n\nDorești să continui?</string>
     <string name="messageLinkHandling_dialog_positive">Da, deschide link-ul</string>
     <string name="messageLinkHandling_dialog_negative">Nu</string>
-    <string name="stt_toast_no_provider">Nici un serviciu vorbire-în-text disponibil</string>
+    <string name="error_stt_toast">Nici un serviciu vorbire-în-text disponibil</string>
     <string name="stt_toast_extra_prompt">Vorbește mesajul</string>
 </resources>

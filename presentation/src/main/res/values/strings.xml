@@ -570,7 +570,7 @@
     <string name="messageLinkHandling_dialog_body">Some links may be unsafe or redirect you unexpectedly. Review the link below before proceeding:\n\n%1$s\n\nDo you want to continue?</string>
     <string name="messageLinkHandling_dialog_positive">Yes, open the link</string>
     <string name="messageLinkHandling_dialog_negative">No</string>
-    <string name="stt_toast_no_provider">No speech-to-text service available</string>
+    <string name="error_stt_toast">Sorry, there was an error loading the Speech-To-Text provider.</string>
     <string name="stt_toast_extra_prompt">Speak your message</string>
 
     <string name="messages_text_share_file_error">Oops! Something went wrong while sharing</string>
