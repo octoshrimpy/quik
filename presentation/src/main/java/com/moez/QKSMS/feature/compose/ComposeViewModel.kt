@@ -1179,9 +1179,11 @@ class ComposeViewModel @Inject constructor(
                         state.editingMode &&    // and is a new convo
                         !state.sendAsGroup)     // and is *not* sent as a group
                     )
-                }
-                .autoDisposable(view.scope())
-                .subscribe{view.focusMessage()}
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext { view.focusMessage() }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         // View QKSMS+
         view.viewQksmsPlusIntent

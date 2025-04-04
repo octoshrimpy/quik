@@ -30,7 +30,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewStub
-import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
@@ -88,13 +87,8 @@ class MainActivity : QkThemedActivity(), MainView {
     override val activityResumedIntent: Subject<Boolean> = PublishSubject.create()
     override val queryChangedIntent by lazy { toolbarSearch.textChanges() }
     override val composeIntent by lazy { compose.clicks() }
-    override val drawerOpenIntent: Observable<Boolean> by lazy {
-        drawerLayout
-            .drawerOpen(Gravity.START)
-            .doOnNext {
-                dismissKeyboard()
-                inbox.requestFocus();
-            }
+    override val drawerToggledIntent: Observable<Boolean> by lazy {
+        drawerLayout.drawerOpen(Gravity.START)
     }
     override val homeIntent: Subject<Unit> = PublishSubject.create()
     override val navigationIntent: Observable<NavItem> by lazy {
@@ -122,10 +116,22 @@ class MainActivity : QkThemedActivity(), MainView {
     override val undoArchiveIntent: Subject<Unit> = PublishSubject.create()
     override val snackbarButtonIntent: Subject<Unit> = PublishSubject.create()
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java] }
-    private val toggle by lazy { ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.main_drawer_open_cd, 0) }
+    private val viewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
+    }
+    private val toggle by lazy {
+        ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.main_drawer_open_cd,
+            0
+        )
+    }
     private val itemTouchHelper by lazy { ItemTouchHelper(itemTouchCallback) }
-    private val progressAnimator by lazy { ObjectAnimator.ofInt(syncingProgress, "progress", 0, 0) }
+    private val progressAnimator by lazy {
+        ObjectAnimator.ofInt(syncingProgress, "progress", 0, 0)
+    }
     private val changelogDialog by lazy { ChangelogDialog(this) }
     private val snackbar by lazy { findViewById<View>(R.id.snackbar) }
     private val syncing by lazy { findViewById<View>(R.id.syncing) }
@@ -145,8 +151,10 @@ class MainActivity : QkThemedActivity(), MainView {
         }
 
         (syncing as? ViewStub)?.setOnInflateListener { _, _ ->
-            syncingProgress?.progressTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
-            syncingProgress?.indeterminateTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
+            syncingProgress?.let {
+                it.progressTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
+                it.indeterminateTintList = ColorStateList.valueOf(theme.blockingFirst().theme)
+            }
         }
 
         toggle.syncState()
@@ -170,12 +178,13 @@ class MainActivity : QkThemedActivity(), MainView {
                             intArrayOf(android.R.attr.state_activated),
                             intArrayOf(-android.R.attr.state_activated))
 
-                    resolveThemeColor(android.R.attr.textColorSecondary)
-                            .let { textSecondary -> ColorStateList(states, intArrayOf(theme.theme, textSecondary)) }
-                            .let { tintList ->
-                                inboxIcon.imageTintList = tintList
-                                archivedIcon.imageTintList = tintList
-                            }
+                    ColorStateList(states, intArrayOf(theme.theme,
+                        resolveThemeColor(android.R.attr.textColorSecondary)
+                    ))
+                        .let { tintList ->
+                            inboxIcon.imageTintList = tintList
+                            archivedIcon.imageTintList = tintList
+                        }
 
                     // Miscellaneous views
                     listOf(plusBadge1, plusBadge2).forEach { badge ->
@@ -193,10 +202,11 @@ class MainActivity : QkThemedActivity(), MainView {
                 }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        intent?.run(onNewIntentIntent::onNext)
-    }
+    override fun onNewIntent(intent: Intent?) =
+        intent?.let {
+            super.onNewIntent(intent)
+            it.run(onNewIntentIntent::onNext)
+        } ?: Unit
 
     override fun render(state: MainState) {
         if (state.hasError) {
@@ -228,20 +238,28 @@ class MainActivity : QkThemedActivity(), MainView {
             else -> 0
         }
 
-        toolbarSearch.setVisible(state.page is Inbox && state.page.selected == 0 || state.page is Searching)
+        toolbarSearch.setVisible(state.page is Inbox &&
+                state.page.selected == 0 ||
+                state.page is Searching
+        )
         toolbarTitle.setVisible(toolbarSearch.visibility != View.VISIBLE)
 
-        toolbar.menu.findItem(R.id.select_all)?.isVisible = (conversationsAdapter.itemCount > 1) && selectedConversations != 0
-        toolbar.menu.findItem(R.id.archive)?.isVisible = state.page is Inbox && selectedConversations != 0
-        toolbar.menu.findItem(R.id.unarchive)?.isVisible = state.page is Archived && selectedConversations != 0
-        toolbar.menu.findItem(R.id.delete)?.isVisible = selectedConversations != 0
-        toolbar.menu.findItem(R.id.add)?.isVisible = addContact && selectedConversations != 0
-        toolbar.menu.findItem(R.id.pin)?.isVisible = markPinned && selectedConversations != 0
-        toolbar.menu.findItem(R.id.unpin)?.isVisible = !markPinned && selectedConversations != 0
-        toolbar.menu.findItem(R.id.read)?.isVisible = markRead && selectedConversations != 0
-        toolbar.menu.findItem(R.id.unread)?.isVisible = !markRead && selectedConversations != 0
-        toolbar.menu.findItem(R.id.block)?.isVisible = selectedConversations != 0
-        toolbar.menu.findItem(R.id.rename)?.isVisible = selectedConversations == 1
+        toolbar.menu.apply {
+            findItem(R.id.select_all)?.isVisible =
+                (conversationsAdapter.itemCount > 1) && selectedConversations != 0
+            findItem(R.id.archive)?.isVisible =
+                state.page is Inbox && selectedConversations != 0
+            findItem(R.id.unarchive)?.isVisible =
+                state.page is Archived && selectedConversations != 0
+            findItem(R.id.delete)?.isVisible = selectedConversations != 0
+            findItem(R.id.add)?.isVisible = addContact && selectedConversations != 0
+            findItem(R.id.pin)?.isVisible = markPinned && selectedConversations != 0
+            findItem(R.id.unpin)?.isVisible = !markPinned && selectedConversations != 0
+            findItem(R.id.read)?.isVisible = markRead && selectedConversations != 0
+            findItem(R.id.unread)?.isVisible = !markRead && selectedConversations != 0
+            findItem(R.id.block)?.isVisible = selectedConversations != 0
+            findItem(R.id.rename)?.isVisible = selectedConversations == 1
+        }
 
         listOf(plusBadge1, plusBadge2).forEach { badge ->
             badge.isVisible = drawerBadgesExperiment.variant && !state.upgraded
@@ -251,14 +269,17 @@ class MainActivity : QkThemedActivity(), MainView {
         rateLayout.setVisible(state.showRating)
 
         compose.setVisible(state.page is Inbox || state.page is Archived)
-        conversationsAdapter.emptyView = empty.takeIf { state.page is Inbox || state.page is Archived }
+        conversationsAdapter.emptyView = empty.takeIf {
+            state.page is Inbox || state.page is Archived
+        }
         searchAdapter.emptyView = empty.takeIf { state.page is Searching }
 
         when (state.page) {
             is Inbox -> {
                 showBackButton(state.page.selected > 0)
                 title = getString(R.string.main_title_selected, state.page.selected)
-                if (recyclerView.adapter !== conversationsAdapter) recyclerView.adapter = conversationsAdapter
+                if (recyclerView.adapter !== conversationsAdapter)
+                    recyclerView.adapter = conversationsAdapter
                 conversationsAdapter.updateData(state.page.data)
                 itemTouchHelper.attachToRecyclerView(recyclerView)
                 empty.setText(R.string.inbox_empty_text)
@@ -278,7 +299,8 @@ class MainActivity : QkThemedActivity(), MainView {
                     true -> getString(R.string.main_title_selected, state.page.selected)
                     false -> getString(R.string.title_archived)
                 }
-                if (recyclerView.adapter !== conversationsAdapter) recyclerView.adapter = conversationsAdapter
+                if (recyclerView.adapter !== conversationsAdapter)
+                    recyclerView.adapter = conversationsAdapter
                 conversationsAdapter.updateData(state.page.data)
                 itemTouchHelper.attachToRecyclerView(null)
                 empty.setText(R.string.archived_empty_text)
@@ -290,22 +312,26 @@ class MainActivity : QkThemedActivity(), MainView {
         inbox.isActivated = state.page is Inbox
         archived.isActivated = state.page is Archived
 
-        if (drawerLayout.isDrawerOpen(GravityCompat.START) && !state.drawerOpen) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START) && !state.drawerOpen)
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else if (!drawerLayout.isDrawerVisible(GravityCompat.START) && state.drawerOpen) {
+        else if (!drawerLayout.isDrawerVisible(GravityCompat.START) && state.drawerOpen)
             drawerLayout.openDrawer(GravityCompat.START)
-        }
 
         when (state.syncing) {
             is SyncRepository.SyncProgress.Idle -> {
                 syncing.isVisible = false
-                snackbar.isVisible = !state.defaultSms || !state.smsPermission || !state.contactPermission || !state.notificationPermission
+                snackbar.isVisible = (!state.defaultSms ||
+                        !state.smsPermission ||
+                        !state.contactPermission ||
+                        !state.notificationPermission)
             }
 
             is SyncRepository.SyncProgress.Running -> {
                 syncing.isVisible = true
                 syncingProgress.max = state.syncing.max
-                progressAnimator.apply { setIntValues(syncingProgress.progress, state.syncing.progress) }.start()
+                progressAnimator.apply {
+                    setIntValues(syncingProgress.progress, state.syncing.progress)
+                }.start()
                 syncingProgress.isIndeterminate = state.syncing.indeterminate
                 snackbar.isVisible = false
             }
@@ -338,32 +364,26 @@ class MainActivity : QkThemedActivity(), MainView {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        activityResumedIntent.onNext(true)
-    }
+    override fun onResume() =
+        super.onResume().also { activityResumedIntent.onNext(true) }
 
-    override fun onPause() {
-        super.onPause()
-        activityResumedIntent.onNext(false)
-    }
+    override fun onPause() =
+        super.onPause().also { activityResumedIntent.onNext(false) }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.dispose()
-    }
+    override fun onDestroy() =
+        super.onDestroy().also { disposables.dispose() }
 
-    override fun showBackButton(show: Boolean) {
-        toggle.onDrawerSlide(drawer, if (show) 1f else 0f)
-        toggle.drawerArrowDrawable.color = when (show) {
-            true -> resolveThemeColor(android.R.attr.textColorSecondary)
-            false -> resolveThemeColor(android.R.attr.textColorPrimary)
+    override fun showBackButton(show: Boolean) =
+        toggle.let {
+            it.onDrawerSlide(drawer, if (show) 1f else 0f)
+            it.drawerArrowDrawable.color = when (show) {
+                true -> resolveThemeColor(android.R.attr.textColorSecondary)
+                false -> resolveThemeColor(android.R.attr.textColorPrimary)
+            }
         }
-    }
 
-    override fun requestDefaultSms() {
+    override fun requestDefaultSms() =
         navigator.showDefaultSmsDialog(this)
-    }
 
     override fun requestPermissions() {
         val permissions = mutableListOf(
@@ -372,9 +392,8 @@ class MainActivity : QkThemedActivity(), MainView {
             Manifest.permission.READ_CONTACTS
         )
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             permissions += Manifest.permission.POST_NOTIFICATIONS
-        }
 
         ActivityCompat.requestPermissions(this, permissions.toTypedArray(), 0)
     }
@@ -384,68 +403,72 @@ class MainActivity : QkThemedActivity(), MainView {
         toolbarSearch.text = null
     }
 
-    override fun clearSelection() {
-        conversationsAdapter.clearSelection()
-    }
+    override fun clearSelection() = conversationsAdapter.clearSelection()
 
-    override fun toggleSelectAll() {
-        conversationsAdapter.toggleSelectAll()
-    }
+    override fun toggleSelectAll() = conversationsAdapter.toggleSelectAll()
 
-    override fun themeChanged() {
-        recyclerView.scrapViews()
-    }
+    override fun themeChanged() = recyclerView.scrapViews()
 
     override fun showBlockingDialog(conversations: List<Long>, block: Boolean) {
         blockingDialog.show(this, conversations, block)
     }
 
     override fun showDeleteDialog(conversations: List<Long>) {
-        val count = conversations.size
         AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_delete_title)
-                .setMessage(resources.getQuantityString(R.plurals.dialog_delete_message, count, count))
-                .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }
-                .setNegativeButton(R.string.button_cancel, null)
-                .show()
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(
+                resources.getQuantityString(
+                    R.plurals.dialog_delete_message,
+                    conversations.size,
+                    conversations.size
+                )
+            )
+            .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(conversations) }
+            .setNegativeButton(R.string.button_cancel, null)
+            .show()
     }
 
-    override fun showRenameDialog(conversationName: String) {
+    override fun showRenameDialog(conversationName: String) =
         TextInputDialog(
             this,
             getString(R.string.info_name),
             renameConversationIntent::onNext
-        ).setText(conversationName).show()
-    }
+        )
+            .setText(conversationName)
+            .show()
 
-    override fun showChangelog(changelog: ChangelogManager.CumulativeChangelog) {
+    override fun showChangelog(changelog: ChangelogManager.CumulativeChangelog) =
         changelogDialog.show(changelog)
-    }
 
-    override fun showArchivedSnackbar(countConversationsArchived: Int) {
+    override fun showArchivedSnackbar(countConversationsArchived: Int) =
         Snackbar.make(
             drawerLayout,
             resources.getQuantityString(R.plurals.toast_archived, countConversationsArchived, countConversationsArchived),
-            if (countConversationsArchived < 10) Snackbar.LENGTH_LONG else Snackbar.LENGTH_INDEFINITE
-        ).apply {
-            setAction(R.string.button_undo) { undoArchiveIntent.onNext(Unit) }
-            setActionTextColor(colors.theme().theme)
-            show()
+            if (countConversationsArchived < 10) Snackbar.LENGTH_LONG
+            else Snackbar.LENGTH_INDEFINITE
+        ).let {
+            it.setAction(R.string.button_undo) { undoArchiveIntent.onNext(Unit) }
+            it.setActionTextColor(colors.theme().theme)
+            it.show()
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
+    override fun onCreateOptionsMenu(menu: Menu?) =
+        menu?.let {
+            menuInflater.inflate(R.menu.main, it)
+            super.onCreateOptionsMenu(it)
+        } ?: false
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        optionsItemIntent.onNext(item.itemId)
-        return true
-    }
+    override fun onOptionsItemSelected(item: MenuItem) =
+        optionsItemIntent.onNext(item.itemId).let { true }
 
-    override fun onBackPressed() {
-        backPressedSubject.onNext(NavItem.BACK)
-    }
+    override fun onBackPressed() = backPressedSubject.onNext(NavItem.BACK)
 
+    override fun drawerToggled(opened: Boolean) {
+        if (opened) {
+            dismissKeyboard()
+            if (!inbox.isInTouchMode)
+                inbox.requestFocus()
+        } else
+            toolbarSearch.requestFocus()
+    }
 }
