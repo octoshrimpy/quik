@@ -63,7 +63,6 @@
                 tools:textSize="16sp"
                 android:focusable="true"
                 android:nextFocusRight="@+id/compose" />
-            <requestFocus />
         </androidx.appcompat.widget.Toolbar>
 
         <dev.octoshrimpy.quik.common.widget.QkTextView
