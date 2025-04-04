@@ -838,4 +838,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)
 
+    override fun focusMessage() {
+        message.requestFocus()
+    }
 }

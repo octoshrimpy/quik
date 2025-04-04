@@ -1180,6 +1180,8 @@ class ComposeViewModel @Inject constructor(
                         !state.sendAsGroup)     // and is *not* sent as a group
                     )
             }
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext { view.focusMessage() }
             .autoDisposable(view.scope())
             .subscribe()
 
