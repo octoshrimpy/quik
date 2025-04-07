@@ -1205,7 +1205,7 @@ class ComposeViewModel @Inject constructor(
         // Delete the message
         view.confirmDeleteIntent
                 .withLatestFrom(view.messagesSelectedIntent, conversation) { _, messages, conversation ->
-                    deleteMessages.execute(DeleteMessages.Params(messages, conversation.id))
+                    deleteMessages.execute(DeleteMessages.Params(messages.toList(), conversation.id))
                 }
                 .autoDisposable(view.scope())
                 .subscribe { view.clearSelection() }

@@ -353,7 +353,7 @@ class MainViewModel @Inject constructor(
         view.optionsItemIntent
                 .filter { itemId -> itemId == R.id.unarchive }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
-                    markUnarchived.execute(conversations)
+                    markUnarchived.execute(conversations.toList())
                     view.showArchivedSnackbar(conversations.count())
                     view.clearSelection()
                 }
@@ -385,7 +385,7 @@ class MainViewModel @Inject constructor(
         view.optionsItemIntent
                 .filter { itemId -> itemId == R.id.pin }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
-                    markPinned.execute(conversations)
+                    markPinned.execute(conversations.toList())
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -394,7 +394,7 @@ class MainViewModel @Inject constructor(
         view.optionsItemIntent
                 .filter { itemId -> itemId == R.id.unpin }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
-                    markUnpinned.execute(conversations)
+                    markUnpinned.execute(conversations.toList())
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -404,7 +404,7 @@ class MainViewModel @Inject constructor(
                 .filter { itemId -> itemId == R.id.read }
                 .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
-                    markRead.execute(conversations)
+                    markRead.execute(conversations.toList())
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -414,7 +414,7 @@ class MainViewModel @Inject constructor(
                 .filter { itemId -> itemId == R.id.unread }
                 .filter { permissionManager.isDefaultSms().also { if (!it) view.requestDefaultSms() } }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
-                    markUnread.execute(conversations)
+                    markUnread.execute(conversations.toList())
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -488,7 +488,7 @@ class MainViewModel @Inject constructor(
         view.confirmDeleteIntent
                 .autoDisposable(view.scope())
                 .subscribe { conversations ->
-                    deleteConversations.execute(conversations)
+                    deleteConversations.execute(conversations.toList())
                     view.clearSelection()
                 }
 
