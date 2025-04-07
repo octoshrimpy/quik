@@ -156,56 +156,39 @@ class ComposeViewModel @Inject constructor(
         newState { copy(attachments = sharedAttachments) }
 
         val initialConversation = threadId.takeIf { it != 0L }
-                ?.let(conversationRepo::getConversationAsync)
-                ?.asObservable()
-                ?: Observable.empty()
+            ?.let(conversationRepo::getConversationAsync)
+            ?.asObservable()
+            ?: Observable.empty()
 
         val selectedConversation = selectedChips
-                .skipWhile { it.isEmpty() }
-                .map { chips -> chips.map { it.address } }
-                .distinctUntilChanged()
-                .doOnNext { newState { copy(loading = true) } }
-                .observeOn(Schedulers.io())
-                .map { addresses -> Pair(conversationRepo.getOrCreateConversation(addresses)?.id ?: 0, addresses) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { newState { copy(loading = false) } }
-                .switchMap { (threadId, addresses) ->
-                    // If we already have this thread in realm, or we're able to obtain it from the
-                    // system, just return that.
-                    threadId.takeIf { it > 0 }?.let {
-                        return@switchMap conversationRepo.getConversationAsync(threadId).asObservable()
-                    }
-
-                    // Otherwise, we'll monitor the conversations until our expected conversation is created
-                    conversationRepo.getConversations(prefs.unreadAtTop.get()).asObservable()
-                            .filter { it.isLoaded }
-                            .observeOn(Schedulers.io())
-                            .map { conversationRepo.getOrCreateConversation(addresses)?.id ?: 0 }
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .switchMap { actualThreadId ->
-                                when (actualThreadId) {
-                                    0L -> Observable.just(Conversation(0))
-                                    else -> conversationRepo.getConversationAsync(actualThreadId).asObservable()
-                                }
-                            }
+            .skipWhile { recipients -> recipients.isEmpty() }
+            .map { recipients -> recipients.map { it.address } }
+            .distinctUntilChanged()
+            .doOnNext { newState { copy(loading = true) } }
+            .observeOn(Schedulers.io())  // background thread for possible long telephony running
+            .doOnNext { addresses -> conversationRepo.getOrCreateConversation(addresses) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .switchMap { addresses ->
+                // monitors convos and triggers when wanted convo is present
+                conversationRepo.getConversations(false)
+                    .asObservable()
+                    .filter { conversations -> conversations.isLoaded }
+                    .mapNotNull { conversationRepo.getConversation(addresses) }
+                    .doOnNext { newState { copy(loading = false) } }
+                    .switchMap { conversation -> conversation.asObservable() }
                 }
 
-        // Merges two potential conversation sources (threadId from constructor and contact selection) into a single
-        // stream of conversations. If the conversation was deleted, notify the activity to shut down
+        // Merges two potential conversation sources (constructor threadId and contact selection)
+        // into a single stream of conversations. If the conversation was deleted, notify the
+        // activity to shut down
         disposables += selectedConversation
-                .mergeWith(initialConversation)
-                .filter { conversation -> conversation.isLoaded }
-                .doOnNext { conversation ->
-                    if (!conversation.isValid) {
-                        newState { copy(hasError = true) }
-                    }
-                }
-                .filter { conversation -> conversation.isValid }
-                .subscribe(conversation::onNext)
+            .mergeWith(initialConversation)
+            .filter { it.isLoaded }
+            .filter { it.isValid.also { if (!it) newState { copy(hasError = true) } } }
+            .subscribe(conversation::onNext)
 
-        if (addresses.isNotEmpty()) {
+        if (addresses.isNotEmpty())
             selectedChips.onNext(addresses.map { address -> Recipient(address = address) })
-        }
 
         disposables += chipsReducer
                 .scan(listOf<Recipient>()) { previousState, reducer -> reducer(previousState) }
@@ -1085,8 +1068,12 @@ class ComposeViewModel @Inject constructor(
         // Send a message when the send button is clicked, and disable editing mode if it's enabled
         view.sendIntent
             .observeOn(Schedulers.io())
-            .withLatestFrom(view.textChangedIntent) { _, body -> body.toString() }
-            .withLatestFrom(state, conversation, selectedChips) { body, state, conversation, chips ->
+            .withLatestFrom(
+                view.textChangedIntent,
+                state,
+                conversation,
+                selectedChips
+            ) { _, body, state, conversation, chips ->
                 if (!permissionManager.isDefaultSms()) {
                     view.requestDefaultSms()
                     return@withLatestFrom
@@ -1115,60 +1102,49 @@ class ComposeViewModel @Inject constructor(
                     false -> chips.map { chip -> chip.address }
                 }
                 val sendAsGroup = ((addresses.size > 1) &&  // if more than one address to send to
-                        (!state.editingMode ||    // and is not a new convo
-                        state.sendAsGroup))  // or (is a new convo and) send as group is selected
+                        (!state.editingMode ||    // and is not a new convo (group msg or not is already set)
+                            state.sendAsGroup))  // or (is a new convo and) send as group is selected
 
                 when {
                     // Scheduling a message
-                    state.scheduled != 0L -> {
+                    state.scheduled != 0L -> addScheduledMessage.execute(
+                        AddScheduledMessage.Params(
+                            state.scheduled,
+                            subId,
+                            addresses,
+                            sendAsGroup,
+                            body.toString(),
+                            state.attachments.map { it.uri.toString() }
+                        )
+                    ).also {
                         newState { copy(scheduled = 0) }
-                        val uris = state.attachments.map { it.uri.toString() }
-                        val params = AddScheduledMessage
-                                .Params(state.scheduled, subId, addresses, sendAsGroup, body, uris)
-                        addScheduledMessage.execute(params)
                         context.makeToast(R.string.compose_scheduled_toast)
                     }
 
-                    // Sending a group message
-                    sendAsGroup -> {
-                        sendMessage.execute(SendMessage
-                                .Params(subId, conversation.id, addresses, body, state.attachments, delay))
-                    }
+                    // sending a group message
+                    sendAsGroup -> sendMessage.execute(
+                        SendMessage.Params(
+                            subId,
+                            0,
+                            addresses,
+                            body.toString(),
+                            state.attachments,
+                            delay
+                        )
+                    )
 
-                    // Sending a message to an existing conversation with one recipient
-                    conversation.recipients.size == 1 -> {
-                        val address = conversation.recipients.map { it.address }
-                        sendMessage.execute(SendMessage.Params(subId, threadId, address, body, state.attachments, delay))
-                    }
-
-                    // Create a new conversation with one address
-                    addresses.size == 1 -> {
-                        sendMessage.execute(SendMessage
-                                .Params(subId, threadId, addresses, body, state.attachments, delay))
-                    }
-
-                    // Send a message to multiple addresses
-                    else -> {
-                        addresses.forEach {
-                            val threadId = tryOrNull(false) {
-                                TelephonyCompat.getOrCreateThreadId(context, it)
-                            } ?: 0
-                            val address = conversationRepo.getOrCreateConversation(it)
-                                ?.recipients
-                                ?.firstOrNull()
-                                ?.address
-                                ?: it
-                            sendMessage.execute(
-                                SendMessage.Params(
-                                    subId,
-                                    threadId,
-                                    listOf(address),
-                                    body,
-                                    state.attachments,
-                                    delay
-                                )
+                    // sending message to individual address(es)
+                    else -> addresses.forEach {
+                        sendMessage.execute(
+                            SendMessage.Params(
+                                subId,
+                                0,
+                                listOf(it),
+                                body.toString(),
+                                state.attachments,
+                                delay
                             )
-                        }
+                        )
                     }
                 }
 
@@ -1176,12 +1152,14 @@ class ComposeViewModel @Inject constructor(
                 // compose activity)
                 view.clearCurrentMessageIntent.onNext(
                     ((addresses.size > 1) &&  // if more than one address to send to
-                        state.editingMode &&    // and is a new convo
-                        !state.sendAsGroup)     // and is *not* sent as a group
-                    )
-                }
-                .autoDisposable(view.scope())
-                .subscribe{view.focusMessage()}
+                            state.editingMode &&    // and is a new convo
+                            !state.sendAsGroup)     // and is *not* sent as a group
+                )
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext { view.focusMessage() }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         // View QKSMS+
         view.viewQksmsPlusIntent
