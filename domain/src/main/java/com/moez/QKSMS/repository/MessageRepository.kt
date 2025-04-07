@@ -57,20 +57,20 @@ interface MessageRepository {
      */
     fun getUnreadMessages(threadId: Long): RealmResults<Message>
 
-    fun markAllSeen()
+    fun markAllSeen(): Int
 
-    fun markSeen(threadId: Long)
+    fun markSeen(threadId: Long): Int
 
-    fun markRead(vararg threadIds: Long)
+    fun markRead(threadIds: Collection<Long>): Int
 
-    fun markUnread(vararg threadIds: Long)
+    fun markUnread(threadIds: Collection<Long>): Int
 
     fun sendMessage(
         subId: Int,
         threadId: Long,
-        addresses: List<String>,
+        addresses: Collection<String>,
         body: String,
-        attachments: List<Attachment>,
+        attachments: Collection<Attachment>,
         delay: Int = 0
     )
 
@@ -103,7 +103,7 @@ interface MessageRepository {
 
     fun markDeliveryFailed(id: Long, resultCode: Int)
 
-    fun deleteMessages(vararg messageIds: Long)
+    fun deleteMessages(messageIds: Collection<Long>)
 
     /**
      * Returns the number of messages older than [maxAgeDays] per conversation
