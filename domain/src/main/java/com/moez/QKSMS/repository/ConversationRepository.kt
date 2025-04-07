@@ -67,15 +67,15 @@ interface ConversationRepository {
 
     fun getRecipient(recipientId: Long): Recipient?
 
-    fun getThreadId(recipient: String): Long?
+    fun getConversation(recipient: String): Conversation?
 
-    fun getThreadId(recipients: Collection<String>): Long?
+    fun getConversation(recipients: Collection<String>): Conversation?
 
     fun getOrCreateConversation(threadId: Long): Conversation?
 
     fun getOrCreateConversation(address: String): Conversation?
 
-    fun getOrCreateConversation(addresses: List<String>): Conversation?
+    fun getOrCreateConversation(addresses: Collection<String>): Conversation?
 
     fun saveDraft(threadId: Long, draft: String)
 
@@ -92,7 +92,7 @@ interface ConversationRepository {
 
     fun markUnpinned(vararg threadIds: Long)
 
-    fun markBlocked(threadIds: List<Long>, blockingClient: Int, blockReason: String?)
+    fun markBlocked(threadIds: Collection<Long>, blockingClient: Int, blockReason: String?)
 
     fun markUnblocked(vararg threadIds: Long)
 
