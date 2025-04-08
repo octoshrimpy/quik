@@ -49,7 +49,7 @@ class ReceiveMms @Inject constructor(
                     // TODO: Ideally this is done when we're saving the MMS to ContentResolver
                     // This change can be made once we move the MMS storing code to the Data module
                     if (activeConversationManager.getActiveConversation() == message.threadId) {
-                        messageRepo.markRead(message.threadId)
+                        messageRepo.markRead(listOf(message.threadId))
                     }
                 }
                 .mapNotNull { message ->
@@ -62,13 +62,13 @@ class ReceiveMms @Inject constructor(
                     Timber.v("block=$action, drop=$shouldDrop")
 
                     if (action is BlockingClient.Action.Block && shouldDrop) {
-                        messageRepo.deleteMessages(message.id)
+                        messageRepo.deleteMessages(listOf(message.id))
                         return@mapNotNull null
                     }
 
                     when (action) {
                         is BlockingClient.Action.Block -> {
-                            messageRepo.markRead(message.threadId)
+                            messageRepo.markRead(listOf(message.threadId))
                             conversationRepo.markBlocked(listOf(message.threadId), prefs.blockingManager.get(), action.reason)
                         }
                         is BlockingClient.Action.Unblock -> conversationRepo.markUnblocked(message.threadId)

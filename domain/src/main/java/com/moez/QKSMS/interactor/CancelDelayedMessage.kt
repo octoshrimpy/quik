@@ -32,9 +32,9 @@ class CancelDelayedMessage @Inject constructor(
 
     override fun buildObservable(params: Params): Flowable<*> {
         return Flowable.just(Unit)
-                .doOnNext { messageRepo.cancelDelayedSms(params.messageId) }
-                .doOnNext { messageRepo.deleteMessages(params.messageId) }
-                .doOnNext { conversationRepo.updateConversations(params.threadId) } // Update the conversation
+            .doOnNext { messageRepo.cancelDelayedSms(params.messageId) }
+            .doOnNext { messageRepo.deleteMessages(listOf(params.messageId)) }
+            .doOnNext { conversationRepo.updateConversations(params.threadId) } // Update the conversation
     }
 
 }
