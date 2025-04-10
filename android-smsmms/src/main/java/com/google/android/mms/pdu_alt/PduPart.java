@@ -118,6 +118,8 @@ public class PduPart {
       */
      private byte[] mPartData = null;
 
+     private static final String TAG = "PduPart";
+
      /**
       * Empty Constructor.
       */

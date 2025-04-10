@@ -18,6 +18,8 @@ package com.android.mms.service_alt;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.android.mms.service_alt.exception.MmsHttpException;
 import com.squareup.okhttp.ConnectionPool;
 import com.squareup.okhttp.ConnectionSpec;
@@ -28,11 +30,7 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.internal.Internal;
 import com.squareup.okhttp.internal.huc.HttpURLConnectionImpl;
 import com.squareup.okhttp.internal.huc.HttpsURLConnectionImpl;
-import timber.log.Timber;
 
-import javax.net.SocketFactory;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -55,11 +53,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.net.SocketFactory;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * MMS HTTP client for sending and downloading MMS messages
  */
 public class MmsHttpClient {
+    private static final String TAG = "MmsHttpClient";
 
     public static final String METHOD_POST = "POST";
     public static final String METHOD_GET = "GET";
@@ -116,7 +118,7 @@ public class MmsHttpClient {
     public byte[] execute(String urlString, byte[] pdu, String method, boolean isProxySet,
             String proxyHost, int proxyPort, MmsConfig.Overridden mmsConfig)
             throws MmsHttpException {
-        Timber.d("HTTP: " + method + " " + urlString
+        Log.d(TAG, "HTTP: " + method + " " + redactUrlForNonVerbose(urlString)
                 + (isProxySet ? (", proxy=" + proxyHost + ":" + proxyPort) : "")
                 + ", PDU size=" + (pdu != null ? pdu.length : 0));
         checkMethod(method);
@@ -139,13 +141,13 @@ public class MmsHttpClient {
                     HEADER_ACCEPT_LANGUAGE, getCurrentAcceptLanguage(Locale.getDefault()));
             // Header: User-Agent
             final String userAgent = mmsConfig.getUserAgent();
-            Timber.i("HTTP: User-Agent=" + userAgent);
+            Log.i(TAG, "HTTP: User-Agent=" + userAgent);
             connection.setRequestProperty(HEADER_USER_AGENT, userAgent);
             // Header: x-wap-profile
             final String uaProfUrlTagName = mmsConfig.getUaProfTagName();
             final String uaProfUrl = mmsConfig.getUaProfUrl();
             if (uaProfUrl != null) {
-                Timber.i("HTTP: UaProfUrl=" + uaProfUrl);
+                Log.i(TAG, "HTTP: UaProfUrl=" + uaProfUrl);
                 connection.setRequestProperty(uaProfUrlTagName, uaProfUrl);
             }
             // Add extra headers specified by mms_config.xml's httpparams
@@ -153,7 +155,7 @@ public class MmsHttpClient {
             // Different stuff for GET and POST
             if (METHOD_POST.equals(method)) {
                 if (pdu == null || pdu.length < 1) {
-                    Timber.e("HTTP: empty pdu");
+                    Log.e(TAG, "HTTP: empty pdu");
                     throw new MmsHttpException(0/*statusCode*/, "Sending empty PDU");
                 }
                 connection.setDoOutput(true);
@@ -165,22 +167,29 @@ public class MmsHttpClient {
                     connection.setRequestProperty(HEADER_CONTENT_TYPE,
                             HEADER_VALUE_CONTENT_TYPE_WITHOUT_CHARSET);
                 }
-                logHttpHeaders(connection.getRequestProperties());
+                if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                    logHttpHeaders(connection.getRequestProperties());
+                }
                 connection.setFixedLengthStreamingMode(pdu.length);
                 // Sending request body
-                final OutputStream out = new BufferedOutputStream(connection.getOutputStream());
+                final OutputStream out =
+                        new BufferedOutputStream(connection.getOutputStream());
                 out.write(pdu);
                 out.flush();
                 out.close();
             } else if (METHOD_GET.equals(method)) {
-                logHttpHeaders(connection.getRequestProperties());
+                if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                    logHttpHeaders(connection.getRequestProperties());
+                }
                 connection.setRequestMethod(METHOD_GET);
             }
             // Get response
             final int responseCode = connection.getResponseCode();
             final String responseMessage = connection.getResponseMessage();
-            Timber.d("HTTP: " + responseCode + " " + responseMessage);
-            logHttpHeaders(connection.getHeaderFields());
+            Log.d(TAG, "HTTP: " + responseCode + " " + responseMessage);
+            if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                logHttpHeaders(connection.getHeaderFields());
+            }
             if (responseCode / 100 != 2) {
                 throw new MmsHttpException(responseCode, responseMessage);
             }
@@ -193,17 +202,19 @@ public class MmsHttpClient {
             }
             in.close();
             final byte[] responseBody = byteOut.toByteArray();
-            Timber.d("HTTP: response size="
+            Log.d(TAG, "HTTP: response size="
                     + (responseBody != null ? responseBody.length : 0));
             return responseBody;
         } catch (MalformedURLException e) {
-            Timber.e(e, "HTTP: invalid URL " + urlString);
-            throw new MmsHttpException(0/*statusCode*/, "Invalid URL " + urlString, e);
+            final String redactedUrl = redactUrlForNonVerbose(urlString);
+            Log.e(TAG, "HTTP: invalid URL " + redactedUrl, e);
+            throw new MmsHttpException(0/*statusCode*/, "Invalid URL " + redactedUrl, e);
         } catch (ProtocolException e) {
-            Timber.e(e, "HTTP: invalid URL protocol " + urlString);
-            throw new MmsHttpException(0/*statusCode*/, "Invalid URL protocol " + urlString, e);
+            final String redactedUrl = redactUrlForNonVerbose(urlString);
+            Log.e(TAG, "HTTP: invalid URL protocol " + redactedUrl, e);
+            throw new MmsHttpException(0/*statusCode*/, "Invalid URL protocol " + redactedUrl, e);
         } catch (IOException e) {
-            Timber.e(e, "HTTP: IO failure");
+            Log.e(TAG, "HTTP: IO failure", e);
             throw new MmsHttpException(0/*statusCode*/, e);
         } finally {
             if (connection != null) {
@@ -318,7 +329,7 @@ public class MmsHttpClient {
                     }
                 }
             }
-            Timber.v("HTTP: headers\n" + sb.toString());
+            Log.v(TAG, "HTTP: headers\n" + sb.toString());
         }
     }
 
@@ -413,7 +424,7 @@ public class MmsHttpClient {
             if (macroValue != null) {
                 replaced.append(macroValue);
             } else {
-                Timber.w("HTTP: invalid macro " + macro);
+                Log.w(TAG, "HTTP: invalid macro " + macro);
             }
             nextStart = matcher.end();
         }
@@ -448,5 +459,36 @@ public class MmsHttpClient {
                 }
             }
         }
+    }
+
+    /**
+     * Redact the URL for non-VERBOSE logging. Replace url with only the host part and the length
+     * of the input URL string.
+     *
+     * @param urlString
+     * @return
+     */
+    public static String redactUrlForNonVerbose(String urlString) {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            // Don't redact for VERBOSE level logging
+            return urlString;
+        }
+        if (TextUtils.isEmpty(urlString)) {
+            return urlString;
+        }
+        String protocol = "http";
+        String host = "";
+        try {
+            final URL url = new URL(urlString);
+            protocol = url.getProtocol();
+            host = url.getHost();
+        } catch (MalformedURLException e) {
+            // Ignore
+        }
+        // Print "http://host[length]"
+        final StringBuilder sb = new StringBuilder();
+        sb.append(protocol).append("://").append(host)
+                .append("[").append(urlString.length()).append("]");
+        return sb.toString();
     }
 }
