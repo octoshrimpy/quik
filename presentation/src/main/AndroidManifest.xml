@@ -57,7 +57,8 @@
         <activity
             android:name=".feature.main.MainActivity"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -70,7 +71,8 @@
         <activity
             android:name=".feature.compose.ComposeActivity"
             android:exported="true"
-            android:parentActivityName=".feature.main.MainActivity">
+            android:parentActivityName=".feature.main.MainActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
