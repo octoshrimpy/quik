@@ -23,15 +23,17 @@ import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import io.realm.RealmResults
-import java.io.File
 
 interface MessageRepository {
-
     fun getMessages(threadId: Long, query: String = ""): RealmResults<Message>
 
     fun getMessagesSync(threadId: Long, query: String = ""): RealmResults<Message>
 
-    fun getMessage(id: Long): Message?
+    fun getMessage(messageId: Long): Message?
+
+    fun getUnmanagedMessage(messageId: Long): Message?
+
+    fun getMessages(messageIds: Collection<Long>): RealmResults<Message>
 
     fun getMessageForPart(id: Long): Message?
 
@@ -45,74 +47,45 @@ interface MessageRepository {
 
     fun savePart(id: Long): Uri?
 
-    /**
-     * Retrieves the list of messages which should be shown in the notification
-     * for a given conversation
-     */
     fun getUnreadUnseenMessages(threadId: Long): RealmResults<Message>
 
-    /**
-     * Retrieves the list of messages which should be shown in the quickreply popup
-     * for a given conversation
-     */
     fun getUnreadMessages(threadId: Long): RealmResults<Message>
 
     fun markAllSeen(): Int
 
-    fun markSeen(threadId: Long): Int
+    fun markSeen(threadIds: Collection<Long>): Int
 
     fun markRead(threadIds: Collection<Long>): Int
 
     fun markUnread(threadIds: Collection<Long>): Int
 
-    fun sendMessage(
-        subId: Int,
-        threadId: Long,
-        addresses: Collection<String>,
-        body: String,
-        attachments: Collection<Attachment>,
-        delay: Int = 0
-    )
+    fun markSending(messageId: Long)
 
-    /**
-     * Attempts to send the SMS message. This can be called if the message has already been persisted
-     */
-    fun sendSms(message: Message)
+    fun markSent(messageId: Long)
 
-    fun resendMms(message: Message)
+    fun markFailed(messageId: Long, resultCode: Int): Boolean
 
-    /**
-     * Attempts to cancel sending the message with the given id
-     */
-    fun cancelDelayedSms(id: Long)
+    fun markDelivered(messageId: Long)
 
-    fun insertSentSms(subId: Int, threadId: Long, address: String, body: String, date: Long): Message
+    fun markDeliveryFailed(messageId: Long, resultCode: Int)
+
+    fun sendNewMessages(
+        subId: Int, toAddresses: Collection<String>, body: String,
+        attachments: Collection<Attachment>, sendAsGroup: Boolean, delayMs: Int = 0
+    ): Collection<Message>
+
+    fun sendMessage(message: Message): Collection<Message>
+
+    fun sendMessage(messageId: Long): Collection<Message>
+
+    fun cancelDelayedSmsAlarm(messageId: Long)
 
     fun insertReceivedSms(subId: Int, address: String, body: String, sentTime: Long): Message
 
-    /**
-     * Marks the message as sending, in case we need to retry sending it
-     */
-    fun markSending(id: Long)
-
-    fun markSent(id: Long)
-
-    fun markFailed(id: Long, resultCode: Int)
-
-    fun markDelivered(id: Long)
-
-    fun markDeliveryFailed(id: Long, resultCode: Int)
-
     fun deleteMessages(messageIds: Collection<Long>)
 
-    /**
-     * Returns the number of messages older than [maxAgeDays] per conversation
-     */
     fun getOldMessageCounts(maxAgeDays: Int): Map<Long, Int>
 
-    /**
-     * Deletes all messages older than [maxAgeDays]
-     */
     fun deleteOldMessages(maxAgeDays: Int)
 
 }

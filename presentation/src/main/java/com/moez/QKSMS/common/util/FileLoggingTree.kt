@@ -21,8 +21,8 @@ package dev.octoshrimpy.quik.common.util
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.FileUtils
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.FileNotFoundException
@@ -83,7 +83,7 @@ class FileLoggingTree @Inject constructor(
                     }.log"
 
                     val (uri, e) = FileUtils.create(
-                        FileUtils.Companion.Location.Downloads,
+                        FileUtils.Location.Downloads,
                         context,
                         filename,
                         "text/plain"

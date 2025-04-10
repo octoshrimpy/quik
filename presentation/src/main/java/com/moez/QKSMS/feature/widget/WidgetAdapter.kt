@@ -95,7 +95,7 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
      * we'll return the max count + 1, where the last row just shows "View more conversations"
      */
     override fun getCount(): Int {
-        val count = Math.min(conversations.size, MAX_CONVERSATIONS_COUNT)
+        val count = conversations.size.coerceAtMost(MAX_CONVERSATIONS_COUNT)
         val shouldShowViewMore = count < conversations.size
         return count + if (shouldShowViewMore) 1 else 0
     }

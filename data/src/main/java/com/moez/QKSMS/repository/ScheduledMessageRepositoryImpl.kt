@@ -97,8 +97,4 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
         }
     }
 
-    // Ensure to clear disposables when the repository is no longer needed
-    fun clearDisposables() {
-        disposables.clear()
-    }
 }

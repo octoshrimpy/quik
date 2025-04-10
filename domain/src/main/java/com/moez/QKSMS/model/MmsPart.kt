@@ -19,10 +19,8 @@
 package dev.octoshrimpy.quik.model
 
 import android.content.ContentResolver
-import android.content.ContentResolver.MimeTypeInfo
 import android.net.Uri
 import android.webkit.MimeTypeMap
-import androidx.core.net.toUri
 import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.Index
@@ -50,9 +48,12 @@ open class MmsPart : RealmObject() {
         .build()
 
     fun getBestFilename(): String =
-        if (File(name).extension.isNotEmpty()) name ?: "unknown"
-        else "$name." + (MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
-            ?: type.substringAfter("/"))
+        if (name.isNullOrBlank()) "unknown"
+        else if (File(name!!).extension.isNotEmpty()) name!!
+        else "$name" +
+                if (type.isBlank()) ""
+                else ".${MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+                    ?: type.substringAfter("/")}"
 
     fun getSummary(): String? = when {
         type == "application/smil" -> null

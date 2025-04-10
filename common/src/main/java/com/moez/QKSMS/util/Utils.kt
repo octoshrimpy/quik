@@ -31,3 +31,8 @@ fun <T> tryOrNull(logOnError: Boolean = true, body: () -> T?): T? {
         null
     }
 }
+
+fun nonDebugPackageName(packageName: String): String {
+    return if (packageName.endsWith(".debug")) packageName.removeSuffix(".debug")
+    else packageName
+}

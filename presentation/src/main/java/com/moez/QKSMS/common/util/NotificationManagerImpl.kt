@@ -48,9 +48,7 @@ import dev.octoshrimpy.quik.manager.ShortcutManager
 import dev.octoshrimpy.quik.mapper.CursorToPartImpl
 import dev.octoshrimpy.quik.receiver.BlockThreadReceiver
 import dev.octoshrimpy.quik.receiver.DeleteMessagesReceiver
-import dev.octoshrimpy.quik.receiver.MarkArchivedReceiver
-import dev.octoshrimpy.quik.receiver.MarkReadReceiver
-import dev.octoshrimpy.quik.receiver.MarkSeenReceiver
+import dev.octoshrimpy.quik.receiver.MessageMarkReceiver
 import dev.octoshrimpy.quik.receiver.RemoteMessagingReceiver
 import dev.octoshrimpy.quik.receiver.SpeakThreadsReceiver
 import dev.octoshrimpy.quik.repository.ContactRepository
@@ -63,6 +61,7 @@ import dev.octoshrimpy.quik.util.tryOrNull
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import androidx.core.net.toUri
 
 @Singleton
 class NotificationManagerImpl @Inject constructor(
@@ -127,7 +126,9 @@ class NotificationManagerImpl @Inject constructor(
                 .addNextIntent(contentIntent)
         val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        val seenIntent = Intent(context, MarkSeenReceiver::class.java).putExtra("threadId", threadId)
+        val seenIntent = Intent(context, MessageMarkReceiver::class.java)
+            .putExtra("threadId", threadId)
+            .putExtra("type", MessageMarkReceiver.MarkType.Seen.ordinal)
         val seenPI = PendingIntent.getBroadcast(context, threadId.toInt(), seenIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
@@ -254,7 +255,9 @@ class NotificationManagerImpl @Inject constructor(
                 .mapNotNull { action ->
                     when (action) {
                         Preferences.NOTIFICATION_ACTION_ARCHIVE -> {
-                            val intent = Intent(context, MarkArchivedReceiver::class.java).putExtra("threadId", threadId)
+                            val intent = Intent(context, MessageMarkReceiver::class.java)
+                                .putExtra("threadId", threadId)
+                                .putExtra("type", MessageMarkReceiver.MarkType.Archived.ordinal)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_archive_white_24dp, actionLabels[action], pi)
@@ -281,7 +284,9 @@ class NotificationManagerImpl @Inject constructor(
                         }
 
                         Preferences.NOTIFICATION_ACTION_READ -> {
-                            val intent = Intent(context, MarkReadReceiver::class.java).putExtra("threadId", threadId)
+                            val intent = Intent(context, MessageMarkReceiver::class.java)
+                                .putExtra("threadId", threadId)
+                                .putExtra("type", MessageMarkReceiver.MarkType.Read.ordinal)
                             val pi = PendingIntent.getBroadcast(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_check_white_24dp, actionLabels[action], pi)
@@ -304,7 +309,7 @@ class NotificationManagerImpl @Inject constructor(
                         Preferences.NOTIFICATION_ACTION_CALL -> {
                             val address = conversation.recipients[0]?.address
                             val intentAction = if (permissions.hasCalling()) Intent.ACTION_CALL else Intent.ACTION_DIAL
-                            val intent = Intent(intentAction, Uri.parse("tel:$address"))
+                            val intent = Intent(intentAction, "tel:$address".toUri())
                             val pi = PendingIntent.getActivity(context, threadId.toInt(), intent,
                                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                             NotificationCompat.Action.Builder(R.drawable.ic_call_white_24dp, actionLabels[action], pi)

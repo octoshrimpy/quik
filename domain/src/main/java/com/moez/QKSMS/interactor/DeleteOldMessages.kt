@@ -34,11 +34,10 @@ class DeleteOldMessages @Inject constructor(
     override fun buildObservable(params: Unit): Flowable<*> = Flowable.fromCallable {
         val maxAge = prefs.autoDelete.get().takeIf { it > 0 } ?: return@fromCallable
         val counts = messageRepo.getOldMessageCounts(maxAge)
-        val threadIds = counts.keys.toLongArray()
 
-        Timber.d("Deleting ${counts.values.sum()} old messages from ${threadIds.size} conversations")
+        Timber.d("Deleting ${counts.values.sum()} old messages from ${counts.keys.size} conversations")
         messageRepo.deleteOldMessages(maxAge)
-        conversationRepo.updateConversations(*threadIds)
+        conversationRepo.updateConversations(counts.keys)
     }
 
 }

@@ -18,7 +18,6 @@
  */
 package dev.octoshrimpy.quik.interactor
 
-import android.annotation.SuppressLint
 import android.content.Context
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import io.reactivex.Flowable
@@ -30,21 +29,20 @@ class DeleteScheduledMessages @Inject constructor(
     private val context: Context,
 ) : Interactor<List<Long>>() {
 
-    @SuppressLint("Range")
-    override fun buildObservable(scheduledMessageIds: List<Long>): Flowable<*> {
-        return Flowable.just(scheduledMessageIds)
-            .map {
+    override fun buildObservable(params: List<Long>): Flowable<*> {
+        return Flowable.just(Unit)
+            .doOnNext {
                 try {
                     // for each message id to delete
-                    it.forEach {
+                    params.forEach { scheduledMessageId ->
                         // recursively delete scheduled message top level dir
-                        val topDir = File(context.filesDir, "scheduled-${it}")
+                        val topDir = File(context.filesDir, "scheduled-${scheduledMessageId}")
                         topDir.exists() && topDir.deleteRecursively()
                     }
                 } catch (e: Exception) { /* nothing */ }
 
                 // delete the db entries
-                scheduledMessageRepo.deleteScheduledMessages(it)
+                scheduledMessageRepo.deleteScheduledMessages(params)
             }
     }
 

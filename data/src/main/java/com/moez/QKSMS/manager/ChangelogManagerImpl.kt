@@ -26,15 +26,8 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Response
-import java.io.IOException
 import javax.inject.Inject
 
 class ChangelogManagerImpl @Inject constructor(
@@ -43,7 +36,7 @@ class ChangelogManagerImpl @Inject constructor(
     private val prefs: Preferences
 ) : ChangelogManager {
 
-    override fun didUpdate(): Boolean = (prefs.changelogVersion.get() ?: 0) != context.versionCode
+    override fun didUpdate(): Boolean = prefs.changelogVersion.get() != context.versionCode
 
     override suspend fun getChangelog(): ChangelogManager.CumulativeChangelog {
         val listType = Types.newParameterizedType(List::class.java, Changeset::class.java)
@@ -56,7 +49,7 @@ class ChangelogManagerImpl @Inject constructor(
                         .orEmpty()
                         .sortedBy { changelog -> changelog.versionCode }
                         .filter { changelog ->
-                            changelog.versionCode in (prefs.changelogVersion.get() ?: 0).inc()..context.versionCode
+                            changelog.versionCode in prefs.changelogVersion.get().inc()..context.versionCode
                         }
 
                 ChangelogManager.CumulativeChangelog(

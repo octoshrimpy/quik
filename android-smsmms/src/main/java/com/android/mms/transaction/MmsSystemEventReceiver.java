@@ -22,9 +22,12 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Telephony.Mms;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
+
+import com.android.mms.logs.LogTag;
 import com.klinker.android.send_message.Utils;
-import timber.log.Timber;
 
 /**
  * MmsSystemEventReceiver receives the
@@ -36,14 +39,24 @@ import timber.log.Timber;
  * </ul>
  */
 public class MmsSystemEventReceiver extends BroadcastReceiver {
+    private static final String TAG = LogTag.TAG;
     private static ConnectivityManager mConnMgr = null;
 
     public static void wakeUpService(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                Timber.v("wakeUpService: start transaction service ...");
+            }
+
+            context.startService(new Intent(context, TransactionService.class));
+        }
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Timber.v("Intent received: " + intent);
+        if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+            Timber.v("Intent received: " + intent);
+        }
 
         if (!Utils.isDefaultSmsApp(context)) {
             Timber.v("not default sms app, cancelling");
@@ -72,14 +85,18 @@ public class MmsSystemEventReceiver extends BroadcastReceiver {
                     //Utils.setMobileDataEnabled(context, true);
                     return;
                 }
-                NetworkInfo mmsNetworkInfo = mConnMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE_MMS);
+                NetworkInfo mmsNetworkInfo = mConnMgr
+                        .getNetworkInfo(ConnectivityManager.TYPE_MOBILE_MMS);
                 if (mmsNetworkInfo == null) {
                     return;
                 }
                 boolean available = mmsNetworkInfo.isAvailable();
                 boolean isConnected = mmsNetworkInfo.isConnected();
 
-                Timber.v("TYPE_MOBILE_MMS available = " + available + ", isConnected = " + isConnected);
+                if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                    Timber.v("TYPE_MOBILE_MMS available = " + available +
+                            ", isConnected = " + isConnected);
+                }
 
                 // Wake up transact service when MMS data is available and isn't connected.
                 if (available && !isConnected) {

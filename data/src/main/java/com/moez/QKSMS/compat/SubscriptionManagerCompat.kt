@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.compat
 
 import android.content.Context
-import android.os.Build
 import android.telephony.SubscriptionManager
 import dev.octoshrimpy.quik.manager.PermissionManager
 import javax.inject.Inject
@@ -59,7 +58,7 @@ class SubscriptionManagerCompat @Inject constructor(context: Context, private va
 
     abstract class OnSubscriptionsChangedListener {
 
-        val listener: SubscriptionManager.OnSubscriptionsChangedListener? =
+        val listener: SubscriptionManager.OnSubscriptionsChangedListener =
             object : SubscriptionManager.OnSubscriptionsChangedListener() {
                 override fun onSubscriptionsChanged() {
                     this@OnSubscriptionsChangedListener.onSubscriptionsChanged()

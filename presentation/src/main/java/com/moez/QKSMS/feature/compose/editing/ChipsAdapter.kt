@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.feature.compose.editing
 
 import android.content.Context
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
@@ -28,8 +27,6 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
-import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
-import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.contact_chip.*
@@ -38,7 +35,7 @@ import javax.inject.Inject
 class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkViewHolder>() {
 
     var view: RecyclerView? = null
-    val chipDeleted: PublishSubject<Recipient> = PublishSubject.create<Recipient>()
+    val chipDeleted: PublishSubject<Recipient> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val inflater = LayoutInflater.from(parent.context)

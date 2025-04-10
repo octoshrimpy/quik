@@ -28,6 +28,7 @@ import io.realm.FieldAttribute
 import io.realm.RealmList
 import io.realm.RealmMigration
 import io.realm.Sort
+import timber.log.Timber
 import javax.inject.Inject
 
 class QkRealmMigration @Inject constructor(
@@ -36,7 +37,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SchemaVersion: Long = 11
+        const val SCHEMA_VERSION: Long = 12
     }
 
     @SuppressLint("ApplySharedPref")
@@ -45,82 +46,82 @@ class QkRealmMigration @Inject constructor(
 
         if (version == 0L) {
             realm.schema.get("MmsPart")
-                    ?.removeField("image")
+                ?.removeField("image")
 
             version++
         }
 
         if (version == 1L) {
             realm.schema.get("Message")
-                    ?.addField("subId", Int::class.java)
+                ?.addField("subId", Int::class.java)
 
             version++
         }
 
         if (version == 2L) {
             realm.schema.get("Conversation")
-                    ?.addField("name", String::class.java, FieldAttribute.REQUIRED)
+                ?.addField("name", String::class.java, FieldAttribute.REQUIRED)
 
             version++
         }
 
         if (version == 3L) {
             realm.schema.create("ScheduledMessage")
-                    .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
-                    .addField("date", Long::class.java, FieldAttribute.REQUIRED)
-                    .addField("subId", Long::class.java, FieldAttribute.REQUIRED)
-                    .addRealmListField("recipients", String::class.java)
-                    .addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
-                    .addField("body", String::class.java, FieldAttribute.REQUIRED)
-                    .addRealmListField("attachments", String::class.java)
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("date", Long::class.java, FieldAttribute.REQUIRED)
+                .addField("subId", Long::class.java, FieldAttribute.REQUIRED)
+                .addRealmListField("recipients", String::class.java)
+                .addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+                .addField("body", String::class.java, FieldAttribute.REQUIRED)
+                .addRealmListField("attachments", String::class.java)
 
             version++
         }
 
         if (version == 4L) {
             realm.schema.get("Conversation")
-                    ?.addField("pinned", Boolean::class.java, FieldAttribute.REQUIRED, FieldAttribute.INDEXED)
+                ?.addField("pinned", Boolean::class.java, FieldAttribute.REQUIRED, FieldAttribute.INDEXED)
 
             version++
         }
 
         if (version == 5L) {
             realm.schema.create("BlockedNumber")
-                    .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
-                    .addField("address", String::class.java, FieldAttribute.REQUIRED)
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("address", String::class.java, FieldAttribute.REQUIRED)
 
             version++
         }
 
         if (version == 6L) {
             realm.schema.get("Conversation")
-                    ?.addField("blockingClient", Integer::class.java)
-                    ?.addField("blockReason", String::class.java)
+                ?.addField("blockingClient", Integer::class.java)
+                ?.addField("blockReason", String::class.java)
 
             realm.schema.get("MmsPart")
-                    ?.addField("seq", Integer::class.java, FieldAttribute.REQUIRED)
-                    ?.addField("name", String::class.java)
+                ?.addField("seq", Integer::class.java, FieldAttribute.REQUIRED)
+                ?.addField("name", String::class.java)
 
             version++
         }
 
         if (version == 7L) {
             realm.schema.get("Conversation")
-                    ?.addRealmObjectField("lastMessage", realm.schema.get("Message"))
-                    ?.removeField("count")
-                    ?.removeField("date")
-                    ?.removeField("snippet")
-                    ?.removeField("read")
-                    ?.removeField("me")
+                ?.addRealmObjectField("lastMessage", realm.schema.get("Message"))
+                ?.removeField("count")
+                ?.removeField("date")
+                ?.removeField("snippet")
+                ?.removeField("read")
+                ?.removeField("me")
 
             val conversations = realm.where("Conversation")
-                    .findAll()
+                .findAll()
 
             val messages = realm.where("Message")
-                    .sort("date", Sort.DESCENDING)
-                    .distinct("threadId")
-                    .findAll()
-                    .associateBy { message -> message.getLong("threadId") }
+                .sort("date", Sort.DESCENDING)
+                .distinct("threadId")
+                .findAll()
+                .associateBy { message -> message.getLong("threadId") }
 
             conversations.forEach { conversation ->
                 conversation.setObject("lastMessage", messages[conversation.getLong("id")])
@@ -134,44 +135,44 @@ class QkRealmMigration @Inject constructor(
             realm.delete("PhoneNumber")
 
             realm.schema.create("ContactGroup")
-                    .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
-                    .addField("title", String::class.java, FieldAttribute.REQUIRED)
-                    .addRealmListField("contacts", realm.schema.get("Contact"))
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("title", String::class.java, FieldAttribute.REQUIRED)
+                .addRealmListField("contacts", realm.schema.get("Contact"))
 
             realm.schema.get("PhoneNumber")
-                    ?.addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
-                    ?.addField("accountType", String::class.java)
-                    ?.addField("isDefault", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                ?.addField("accountType", String::class.java)
+                ?.addField("isDefault", Boolean::class.java, FieldAttribute.REQUIRED)
 
             val phoneNumbers = cursorToContact.getContactsCursor()
-                    ?.map(cursorToContact::map)
-                    ?.distinctBy { contact -> contact.numbers.firstOrNull()?.id } // Each row has only one number
-                    ?.groupBy { contact -> contact.lookupKey }
-                    ?: mapOf()
+                ?.map(cursorToContact::map)
+                ?.distinctBy { contact -> contact.numbers.firstOrNull()?.id } // Each row has only one number
+                ?.groupBy { contact -> contact.lookupKey }
+                ?: mapOf()
 
             realm.schema.get("Contact")
-                    ?.addField("starred", Boolean::class.java, FieldAttribute.REQUIRED)
-                    ?.addField("photoUri", String::class.java)
-                    ?.transform { realmContact ->
-                        val numbers = RealmList<DynamicRealmObject>()
-                        phoneNumbers[realmContact.get("lookupKey")]
-                                ?.flatMap { contact -> contact.numbers }
-                                ?.map { number ->
-                                    realm.createObject("PhoneNumber", number.id).apply {
-                                        setString("accountType", number.accountType)
-                                        setString("address", number.address)
-                                        setString("type", number.type)
-                                    }
-                                }
-                                ?.let(numbers::addAll)
+                ?.addField("starred", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.addField("photoUri", String::class.java)
+                ?.transform { realmContact ->
+                    val numbers = RealmList<DynamicRealmObject>()
+                    phoneNumbers[realmContact.get("lookupKey")]
+                        ?.flatMap { contact -> contact.numbers }
+                        ?.map { number ->
+                            realm.createObject("PhoneNumber", number.id).apply {
+                                setString("accountType", number.accountType)
+                                setString("address", number.address)
+                                setString("type", number.type)
+                            }
+                        }
+                        ?.let(numbers::addAll)
 
-                        val photoUri = phoneNumbers[realmContact.get("lookupKey")]
-                                ?.firstOrNull { number -> number.photoUri != null }
-                                ?.photoUri
+                    val photoUri = phoneNumbers[realmContact.get("lookupKey")]
+                        ?.firstOrNull { number -> number.photoUri != null }
+                        ?.photoUri
 
-                        realmContact.setList("numbers", numbers)
-                        realmContact.setString("photoUri", photoUri)
-                    }
+                    realmContact.setList("numbers", numbers)
+                    realmContact.setString("photoUri", photoUri)
+                }
 
             // Migrate conversation themes
             val recipients = mutableMapOf<Long, Int>() // Map of recipientId:theme
@@ -225,16 +226,42 @@ class QkRealmMigration @Inject constructor(
 
         if (version == 10L) {
             realm.schema.get("MmsPart")
-                    ?.addField("messageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
-                    ?.transform { part ->
-                        val messageId = part.linkingObjects("Message", "parts").firstOrNull()?.getLong("contentId") ?: 0
-                        part.setLong("messageId", messageId)
-                    }
+                ?.addField("messageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+                ?.transform { part ->
+                    val messageId = part.linkingObjects("Message", "parts").firstOrNull()?.getLong("contentId") ?: 0
+                    part.setLong("messageId", messageId)
+                }
 
             version++
         }
 
-        check(version >= newVersion) { "Migration missing from v$oldVersion to v$newVersion" }
+        if (version == 11L) {
+            realm.schema.get("Conversation")
+                ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.transform { conversation ->
+                    conversation.setBoolean(
+                        "sendAsGroup",
+                        (conversation.getList("recipients").size > 1)
+                    )
+                }
+
+            realm.schema.get("Message")
+                ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+
+            version++
+        }
+
+        check(version >= SCHEMA_VERSION) {
+            "Migration from v$oldVersion to v$newVersion failed at v$version"
+        }
+
+        // throw an exception if migration failed
+        check(version >= newVersion) {
+            "Realm migration from v$oldVersion to v$newVersion after v$version"
+        }
+
+        // else
+        Timber.d("Realm migration from v$oldVersion to v$newVersion succeeded")
     }
 
 }

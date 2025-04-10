@@ -1,15 +1,12 @@
 package com.google.android.mms.smil;
 
+import android.util.Log;
+
 import com.android.mms.dom.smil.SmilDocumentImpl;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.pdu_alt.PduBody;
 import com.google.android.mms.pdu_alt.PduPart;
-import org.w3c.dom.smil.SMILDocument;
-import org.w3c.dom.smil.SMILElement;
-import org.w3c.dom.smil.SMILLayoutElement;
-import org.w3c.dom.smil.SMILMediaElement;
-import org.w3c.dom.smil.SMILParElement;
-import timber.log.Timber;
+import org.w3c.dom.smil.*;
 
 
 public class SmilHelper {
@@ -88,7 +85,7 @@ public class SmilHelper {
                 par.appendChild(textElement);
                 hasMedia = true;
             } else {
-                Timber.e("creating_smil_document", "unknown mimetype");
+                Log.e("creating_smil_document", "unknown mimetype");
             }
         }
 

@@ -49,7 +49,7 @@ class WidgetProvider : AppWidgetProvider() {
         AndroidInjection.inject(this, context)
 
         when (intent.action) {
-            WidgetManager.ACTION_NOTIFY_DATASET_CHANGED -> updateData(context)
+            "${context.packageName}.${WidgetManager.ACTION_NOTIFY_DATASET_CHANGED}" -> updateData(context)
             else -> super.onReceive(context, intent)
         }
     }

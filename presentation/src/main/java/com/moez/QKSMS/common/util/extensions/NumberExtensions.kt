@@ -37,5 +37,5 @@ fun Int.forEach(action: (Int) -> Unit) {
 }
 
 fun Float.within(min: Float, max: Float): Float {
-    return Math.min(max, Math.max(min, this))
+    return max.coerceAtMost(min.coerceAtLeast(this))
 }

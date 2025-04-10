@@ -20,10 +20,10 @@ package dev.octoshrimpy.quik.mapper
 
 import android.content.Context
 import android.database.Cursor
-import android.net.Uri
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.model.Recipient
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 class CursorToRecipientImpl @Inject constructor(
     private val context: Context,
@@ -31,7 +31,7 @@ class CursorToRecipientImpl @Inject constructor(
 ) : CursorToRecipient {
 
     companion object {
-        val URI = Uri.parse("content://mms-sms/canonical-addresses")
+        val URI = "content://mms-sms/canonical-addresses".toUri()
 
         const val COLUMN_ID = 0
         const val COLUMN_ADDRESS = 1

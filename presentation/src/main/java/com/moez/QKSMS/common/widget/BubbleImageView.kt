@@ -23,11 +23,10 @@ import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.widget.ImageView
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 
-class BubbleImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : ImageView(context, attrs) {
-
+class BubbleImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null)
+    : androidx.appcompat.widget.AppCompatImageView(context, attrs) {
     enum class Style(val topLeft: Boolean, val topRight: Boolean, val bottomRight: Boolean, val bottomLeft: Boolean) {
 
         ONLY(true, true, true, true),

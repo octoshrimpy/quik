@@ -27,7 +27,7 @@ import dev.octoshrimpy.quik.extensions.asObservable
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.interactor.DeleteMessages
 import dev.octoshrimpy.quik.interactor.MarkRead
-import dev.octoshrimpy.quik.interactor.SendMessage
+import dev.octoshrimpy.quik.interactor.SendNewMessage
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
@@ -52,7 +52,7 @@ class QkReplyViewModel @Inject constructor(
     private val markRead: MarkRead,
     private val messageRepo: MessageRepository,
     private val navigator: Navigator,
-    private val sendMessage: SendMessage,
+    private val sendNewMessage: SendNewMessage,
     private val subscriptionManager: SubscriptionManagerCompat
 ) : QkViewModel<QkReplyView, QkReplyState>(QkReplyState(threadId = threadId)) {
 
@@ -69,7 +69,7 @@ class QkReplyViewModel @Inject constructor(
 
     init {
         disposables += markRead
-        disposables += sendMessage
+        disposables += sendNewMessage
 
         // When the set of messages changes, update the state
         // If we're ever showing an empty set of messages, then it's time to shut down to activity
@@ -215,9 +215,10 @@ class QkReplyViewModel @Inject constructor(
                 .withLatestFrom(view.textChangedIntent) { _, body -> body }
                 .map { body -> body.toString() }
                 .withLatestFrom(state, conversation) { body, state, conversation ->
-                    val subId = state.subscription?.subscriptionId ?: -1
-                    val addresses = conversation.recipients.map { it.address }
-                    sendMessage.execute(SendMessage.Params(subId, threadId, addresses, body))
+                    sendNewMessage.execute(SendNewMessage.Params(
+                        state.subscription?.subscriptionId ?: -1, 0,
+                        conversation.recipients.map { it.address }, body, conversation.sendAsGroup
+                    ))
                     view.setDraft("")
                 }
                 .doOnNext {

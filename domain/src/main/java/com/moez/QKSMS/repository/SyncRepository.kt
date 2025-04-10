@@ -33,7 +33,7 @@ interface SyncRepository {
 
     fun syncMessages()
 
-    fun syncMessage(uri: Uri): Message?
+    fun syncMessage(uri: Uri, messageId: Long = 0): Message?
 
     fun syncContacts()
 

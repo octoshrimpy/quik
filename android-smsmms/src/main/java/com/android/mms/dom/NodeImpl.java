@@ -17,7 +17,9 @@
 
 package com.android.mms.dom;
 
-import com.android.mms.dom.events.EventTargetImpl;
+import java.util.NoSuchElementException;
+import java.util.Vector;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -29,8 +31,7 @@ import org.w3c.dom.events.EventException;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 
-import java.util.NoSuchElementException;
-import java.util.Vector;
+import com.android.mms.dom.events.EventTargetImpl;
 
 public abstract class NodeImpl implements Node, EventTarget {
     private Node mParentNode;

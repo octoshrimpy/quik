@@ -27,6 +27,7 @@ import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.util.Preferences
 import dagger.android.AndroidInjection
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 class BlockThreadReceiver : BroadcastReceiver() {
@@ -38,6 +39,8 @@ class BlockThreadReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
+
+        Timber.v("received")
 
         val threadId = intent.getLongExtra("threadId", 0)
 

@@ -41,7 +41,6 @@ import androidx.core.net.toUri
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.common.QkMediaPlayer
 import dev.octoshrimpy.quik.R
-import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
@@ -96,7 +95,6 @@ class MessagesAdapter @Inject constructor(
     private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences,
     private val textViewStyler: TextViewStyler,
-    private val navigator: Navigator,
 ) : QkRealmAdapter<Message>() {
     class AudioState(
         var partId: Long = -1,
@@ -198,38 +196,41 @@ class MessagesAdapter @Inject constructor(
         // Update the selected state
         holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
 
-        // Bind the cancelFrame (cancel button) view
-        holder.cancelFrame?.let {
-            val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
-            it.visibility = if (isCancellable) View.VISIBLE else View.GONE
-            it.let {
-                it.clicks().subscribe { cancelSendingClicks.onNext(message.id) }
-            }
-            it.cancel.progress = 2
+        // bind the cancelFrame (cancel button) and send now button
+        holder.cancelFrame?.let { cancelFrame ->
+            holder.sendNowIcon?.let { sendNowIcon ->
+                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
 
-            if (isCancellable) {
-                val delay = when (prefs.sendDelay.get()) {
-                    Preferences.SEND_DELAY_SHORT -> 3000
-                    Preferences.SEND_DELAY_MEDIUM -> 5000
-                    Preferences.SEND_DELAY_LONG -> 10000
-                    else -> 0
+                if (isCancellable) {
+                    cancelFrame.visibility = View.VISIBLE
+                    sendNowIcon.visibility = View.VISIBLE
+
+                    cancelFrame.setOnClickListener { cancelSendingClicks.onNext(message.id) }
+                    sendNowIcon.setOnClickListener {  sendNowClicks.onNext(message.id) }
+
+                    cancelFrame.cancel.progress = 2
+
+                    val delay = when (prefs.sendDelay.get()) {
+                        Preferences.SEND_DELAY_SHORT -> 3000
+                        Preferences.SEND_DELAY_MEDIUM -> 5000
+                        Preferences.SEND_DELAY_LONG -> 10000
+                        else -> 0
+                    }
+                    val progress =
+                        (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+
+                    ObjectAnimator.ofInt(cancelFrame.cancel, "progress", progress.toInt(), 100)
+                        .setDuration(message.date - System.currentTimeMillis())
+                        .start()
                 }
-                val progress =
-                    (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+                else {
+                    cancelFrame.visibility = View.GONE
+                    sendNowIcon.visibility = View.GONE
 
-                ObjectAnimator.ofInt(it.cancel, "progress", progress.toInt(), 100)
-                    .setDuration(message.date - System.currentTimeMillis())
-                    .start()
+                    cancelFrame.setOnClickListener(null)
+                    sendNowIcon.setOnClickListener(null)
+                }
             }
-        }
-
-        // bind the send now icon view
-        holder.sendNowIcon?.let {
-            if (message.isSending() && message.date > System.currentTimeMillis()) {
-                it.visibility = View.VISIBLE
-                it.clicks().subscribe { sendNowClicks.onNext(message.id) }
-            } else
-                it.visibility = View.GONE
         }
 
         // bind the resend icon view
