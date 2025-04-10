@@ -38,6 +38,8 @@ import com.google.android.mms.ContentType
 import com.google.android.mms.MMSPart
 import com.google.android.mms.pdu_alt.MultimediaMessagePdu
 import com.google.android.mms.pdu_alt.PduPersister
+import com.klinker.android.send_message.Message.Part
+import com.klinker.android.send_message.Settings
 import com.klinker.android.send_message.SmsManagerFactory
 import com.klinker.android.send_message.StripAccents
 import com.klinker.android.send_message.Transaction
@@ -451,7 +453,11 @@ open class MessageRepositoryImpl @Inject constructor(
 
             signedBody.takeIf { it.isNotEmpty() }?.toByteArray()?.let { bytes ->
                 remainingBytes -= bytes.size
-                parts += MMSPart("text", ContentType.TEXT_PLAIN, bytes)
+                parts += MMSPart().apply {
+                    Name = "text"
+                    MimeType = ContentType.TEXT_PLAIN
+                    Data = bytes
+                }
             }
 
             // Attach those that can't be compressed (ie. everything but images)
@@ -462,11 +468,11 @@ open class MessageRepositoryImpl @Inject constructor(
                 .filter { it.uri.resourceExists(context) }
                 .map {
                     remainingBytes -= it.getResourceBytes(context).size
-                    val mmsPart = MMSPart(
-                        it.getName(context),
-                        it.getType(context),
-                        it.getResourceBytes(context)
-                    )
+                    val mmsPart = MMSPart().apply {
+                        Name = it.getName(context)
+                        MimeType = it.getType(context)
+                        Data = it.getResourceBytes(context)
+                    }
 
                     // release the attachment hold on the image bytes so the GC can reclaim
                     it.releaseResourceBytes()
@@ -553,24 +559,30 @@ open class MessageRepositoryImpl @Inject constructor(
             }
 
             imageBytesByAttachment.forEach { (attachment, bytes) ->
-                parts += when (attachment.getType(context) == "image/gif") {
-                    true -> MMSPart(attachment.getName(context), ContentType.IMAGE_GIF, bytes)
-                    false -> MMSPart(attachment.getName(context), ContentType.IMAGE_JPEG, bytes)
+                parts += MMSPart().apply {
+                    Name = attachment.getName(context)
+                    MimeType =
+                        if (attachment.getType(context) == "image/gif") ContentType.IMAGE_GIF
+                        else ContentType.IMAGE_JPEG
+                    Data = bytes
                 }
             }
 
-            // We need to strip the separators from outgoing MMS, or else they'll appear to have
-            // sent and not go through
-            val transaction = Transaction(context)
-            val recipients = addresses.map(phoneNumberUtils::normalizeNumber)
-            transaction.sendNewMessage(
-                subId,
-                threadId,
-                recipients,
-                parts,
-                null,
-                null
-            )
+            Transaction(context, Settings().apply {
+                useSystemSending = true
+                subscriptionId = subId
+                group = true
+            }).sendMmsMessage(
+                    null,
+                    null,
+                    addresses.map(phoneNumberUtils::normalizeNumber).toTypedArray(),
+                    arrayOf(),
+                    arrayOf(),
+                    parts.map { Part(it.Data, it.MimeType, it.Name) },
+                    null,
+                    true,
+                    Uri.EMPTY
+                )
         }
     }
 
@@ -625,20 +637,27 @@ open class MessageRepositoryImpl @Inject constructor(
             PduPersister.getPduPersister(context).load(message.getUri()) as MultimediaMessagePdu
         }
             ?.let { pdu ->
-                Transaction(context).sendNewMessage(
-                    message.subId,
-                    message.threadId,
-                    pdu.to.map { it.string }.filter { it.isNotBlank() },
+                Transaction(context, Settings().apply {
+                    useSystemSending = true
+                    subscriptionId = message.subId
+                    group = true
+                }).sendMmsMessage(
+                    null,
+                    null,
+                    pdu.to.map { it.string }.filter { it.isNotBlank() }.toTypedArray(),
+                    arrayOf(),
+                    arrayOf(),
                     message.parts.mapNotNull { part ->
                         val bytes = tryOrNull(false) {
                             context.contentResolver.openInputStream(part.getUri())?.use {
-                                    inputStream -> inputStream.readBytes()
+                                inputStream -> inputStream.readBytes()
                             }
                         } ?: return@mapNotNull null
 
-                        MMSPart(part.name.orEmpty(), part.type, bytes)
+                        Part(bytes, part.type, part.name.orEmpty())
                     },
                     message.subject,
+                    false,
                     message.getUri()
                 )
             }

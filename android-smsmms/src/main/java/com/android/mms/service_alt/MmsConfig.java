@@ -24,7 +24,7 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 import com.klinker.android.send_message.R;
 
@@ -600,7 +600,7 @@ public class MmsConfig {
                 }
             }
 
-            if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            if (Timber_isLoggable(TAG, Log.VERBOSE)) {
                 Log.v(TAG, "MmsConfig.getNai: nai=" + nai);
             }
 

@@ -19,27 +19,24 @@
 package dev.octoshrimpy.quik.receiver
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import com.klinker.android.send_message.MmsReceivedReceiver
 import dev.octoshrimpy.quik.interactor.ReceiveMms
-import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class MmsReceivedReceiver : MmsReceivedReceiver() {
 
     @Inject lateinit var receiveMms: ReceiveMms
 
-    override fun onReceive(context: Context?, intent: Intent?) {
-        AndroidInjection.inject(this, context)
-        super.onReceive(context, intent)
-    }
-
-    override fun onMessageReceived(messageUri: Uri?) {
+    override fun onMessageReceived(context: Context?, messageUri: Uri?) {
         messageUri?.let { uri ->
             val pendingResult = goAsync()
             receiveMms.execute(uri) { pendingResult.finish() }
         }
+    }
+
+    override fun onError(context: Context?, error: String?) {
+        TODO("Not yet implemented")
     }
 
 }

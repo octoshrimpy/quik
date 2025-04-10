@@ -28,12 +28,14 @@ import android.net.Uri
 import android.provider.Telephony
 import com.google.android.mms.MmsException
 import com.google.android.mms.util_alt.SqliteWrapper
+import com.klinker.android.send_message.MmsSentReceiver
 import com.klinker.android.send_message.Transaction
-import dev.octoshrimpy.quik.interactor.SyncMessage
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.interactor.SyncMessage
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 class MmsSentReceiver : BroadcastReceiver() {
 
@@ -43,7 +45,10 @@ class MmsSentReceiver : BroadcastReceiver() {
         AndroidInjection.inject(this, context)
 
         Timber.v("MMS sending result: $resultCode")
-        val uri = Uri.parse(intent.getStringExtra(Transaction.EXTRA_CONTENT_URI))
+        val uri = intent.getStringExtra(MmsSentReceiver.EXTRA_CONTENT_URI)?.toUri() ?: Uri.EMPTY
+        if (uri == Uri.EMPTY) {
+            Timber.e("MMS sent receiver got a null uri! can't handle it")
+        }
         Timber.v(uri.toString())
 
         when (resultCode) {
@@ -80,13 +85,13 @@ class MmsSentReceiver : BroadcastReceiver() {
             }
         }
 
-        val filePath = intent.getStringExtra(Transaction.EXTRA_FILE_PATH)
+        val filePath = intent.getStringExtra(MmsSentReceiver.EXTRA_FILE_PATH)
         Timber.v(filePath)
         File(filePath).delete()
 
-        Uri.parse(intent.getStringExtra("content_uri"))?.let { uri ->
+        intent.getStringExtra("content_uri")?.toUri()?.let { contentUri ->
             val pendingResult = goAsync()
-            syncMessage.execute(uri) { pendingResult.finish() }
+            syncMessage.execute(contentUri) { pendingResult.finish() }
         }
     }
 

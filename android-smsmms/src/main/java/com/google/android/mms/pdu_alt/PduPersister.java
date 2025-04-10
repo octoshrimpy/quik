@@ -49,7 +49,7 @@ import com.google.android.mms.util_alt.DrmConvertSession;
 import com.google.android.mms.util_alt.PduCache;
 import com.google.android.mms.util_alt.PduCacheEntry;
 import com.google.android.mms.util_alt.SqliteWrapper;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 import com.klinker.android.send_message.Settings;
 
 import java.io.ByteArrayOutputStream;
@@ -1637,7 +1637,7 @@ public class PduPersister {
      * Check if read permissions for SMS have been granted
      */
     private boolean checkReadSmsPermissions() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
+        return // Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
                 mContext.checkSelfPermission(Manifest.permission.READ_SMS) ==
                         PackageManager.PERMISSION_GRANTED;
     }

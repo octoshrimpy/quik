@@ -40,7 +40,7 @@ import android.net.http.AndroidHttpClient;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Config;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 import com.android.mms.logs.LogTag;
 import com.android.mms.MmsConfig;
@@ -97,7 +97,7 @@ public class HttpUtils {
             throw new IllegalArgumentException("URL must not be null.");
         }
 
-        if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+        if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
             Log.v(TAG, "httpConnection: params list");
             Log.v(TAG, "\ttoken\t\t= " + token);
             Log.v(TAG, "\turl\t\t= " + url);
@@ -157,7 +157,7 @@ public class HttpUtils {
                 String xWapProfileTagName = MmsConfig.getUaProfTagName();
                 String xWapProfileUrl = MmsConfig.getUaProfUrl();
                 if (xWapProfileUrl != null) {
-                    if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                    if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
                         Log.d(LogTag.TRANSACTION,
                                 "[HttpUtils] httpConn: xWapProfUrl=" + xWapProfileUrl);
                     }
@@ -305,7 +305,7 @@ public class HttpUtils {
         // set the socket timeout
         int soTimeout = MmsConfig.getHttpSocketTimeout();
 
-        if (Log.isLoggable(LogTag.TRANSACTION, Log.DEBUG)) {
+        if (Timber_isLoggable(LogTag.TRANSACTION, Log.DEBUG)) {
             Log.d(TAG, "[HttpUtils] createHttpClient w/ socket timeout " + soTimeout + " ms, "
                     + ", UA=" + userAgent);
         }

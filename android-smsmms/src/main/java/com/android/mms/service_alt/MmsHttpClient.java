@@ -18,7 +18,7 @@ package com.android.mms.service_alt;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
+import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable;  // inserted with sed
 
 import com.android.mms.service_alt.exception.MmsHttpException;
 import com.squareup.okhttp.ConnectionPool;
@@ -167,7 +167,7 @@ public class MmsHttpClient {
                     connection.setRequestProperty(HEADER_CONTENT_TYPE,
                             HEADER_VALUE_CONTENT_TYPE_WITHOUT_CHARSET);
                 }
-                if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                if (Timber_isLoggable(TAG, Log.VERBOSE)) {
                     logHttpHeaders(connection.getRequestProperties());
                 }
                 connection.setFixedLengthStreamingMode(pdu.length);
@@ -178,7 +178,7 @@ public class MmsHttpClient {
                 out.flush();
                 out.close();
             } else if (METHOD_GET.equals(method)) {
-                if (Log.isLoggable(TAG, Log.VERBOSE)) {
+                if (Timber_isLoggable(TAG, Log.VERBOSE)) {
                     logHttpHeaders(connection.getRequestProperties());
                 }
                 connection.setRequestMethod(METHOD_GET);
@@ -187,7 +187,7 @@ public class MmsHttpClient {
             final int responseCode = connection.getResponseCode();
             final String responseMessage = connection.getResponseMessage();
             Log.d(TAG, "HTTP: " + responseCode + " " + responseMessage);
-            if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            if (Timber_isLoggable(TAG, Log.VERBOSE)) {
                 logHttpHeaders(connection.getHeaderFields());
             }
             if (responseCode / 100 != 2) {
@@ -469,7 +469,7 @@ public class MmsHttpClient {
      * @return
      */
     public static String redactUrlForNonVerbose(String urlString) {
-        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+        if (Timber_isLoggable(TAG, Log.VERBOSE)) {
             // Don't redact for VERBOSE level logging
             return urlString;
         }

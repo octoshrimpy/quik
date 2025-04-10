@@ -27,7 +27,7 @@ import android.net.Uri;
 import android.provider.Telephony.Sms;
 import android.provider.Telephony.Sms.Inbox;
 import android.telephony.SmsMessage;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 import com.android.mms.logs.LogTag;
 
@@ -89,7 +89,7 @@ public class MessageStatusService extends IntentService {
                 boolean isStatusReport = message.isStatusReportMessage();
                 ContentValues contentValues = new ContentValues(2);
 
-                if (Log.isLoggable(LogTag.TAG, Log.DEBUG)) {
+                if (Timber_isLoggable(LogTag.TAG, Log.DEBUG)) {
                     log("updateMessageStatus: msgUrl=" + messageUri + ", status=" + status +
                             ", isStatusReport=" + isStatusReport);
                 }

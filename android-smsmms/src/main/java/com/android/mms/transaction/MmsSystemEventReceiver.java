@@ -24,7 +24,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Telephony.Mms;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 import com.android.mms.logs.LogTag;
 import com.klinker.android.send_message.Utils;
@@ -44,7 +44,7 @@ public class MmsSystemEventReceiver extends BroadcastReceiver {
 
     public static void wakeUpService(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+            if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
                 Log.v(TAG, "wakeUpService: start transaction service ...");
             }
 
@@ -54,7 +54,7 @@ public class MmsSystemEventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+        if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
             Log.v(TAG, "Intent received: " + intent);
         }
 
@@ -93,7 +93,7 @@ public class MmsSystemEventReceiver extends BroadcastReceiver {
                 boolean available = mmsNetworkInfo.isAvailable();
                 boolean isConnected = mmsNetworkInfo.isConnected();
 
-                if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
                     Log.v(TAG, "TYPE_MOBILE_MMS available = " + available +
                             ", isConnected = " + isConnected);
                 }

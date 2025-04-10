@@ -20,7 +20,7 @@ import com.android.mms.logs.LogTag;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 /**
  * MmsPushOutboxMessages listens for MMS_SEND_OUTBOX_MSG intent .
@@ -35,7 +35,7 @@ public class MmsPushOutboxMessages extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+        if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
             Log.v(TAG, "Received the MMS_SEND_OUTBOX_MSG intent: " + intent);
         }
         String action = intent.getAction();

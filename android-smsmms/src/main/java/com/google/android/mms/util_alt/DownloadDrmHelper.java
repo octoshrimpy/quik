@@ -18,7 +18,7 @@ package com.google.android.mms.util_alt;
 
 import android.content.Context;
 import android.drm.DrmManagerClient;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 public class DownloadDrmHelper {
     private static final String TAG = "DownloadDrmHelper";

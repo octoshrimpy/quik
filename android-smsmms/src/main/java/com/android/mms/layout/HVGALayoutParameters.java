@@ -19,7 +19,7 @@ package com.android.mms.layout;
 import com.android.mms.logs.LogTag;
 
 import android.content.Context;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 public class HVGALayoutParameters implements LayoutParameters {
     private static final String TAG = LogTag.TAG;

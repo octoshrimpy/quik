@@ -20,7 +20,7 @@ import com.android.mms.logs.LogTag;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import com.klinker.android.logger.Log;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 /**
  * MMS presentation layout management.
