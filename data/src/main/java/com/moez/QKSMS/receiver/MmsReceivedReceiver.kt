@@ -25,7 +25,6 @@ import dev.octoshrimpy.quik.interactor.ReceiveMms
 import javax.inject.Inject
 
 class MmsReceivedReceiver : MmsReceivedReceiver() {
-
     @Inject lateinit var receiveMms: ReceiveMms
 
     override fun onMessageReceived(context: Context?, messageUri: Uri?) {
@@ -36,7 +35,7 @@ class MmsReceivedReceiver : MmsReceivedReceiver() {
     }
 
     override fun onError(context: Context?, error: String?) {
-        TODO("Not yet implemented")
+        // todo: do something with error string ?
     }
 
 }

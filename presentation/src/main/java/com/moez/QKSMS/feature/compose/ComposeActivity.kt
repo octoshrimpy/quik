@@ -131,6 +131,7 @@ import kotlinx.android.synthetic.main.compose_activity.scheduledTime
 import kotlinx.android.synthetic.main.compose_activity.send
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroup
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
+import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSummary
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSwitch
 import kotlinx.android.synthetic.main.compose_activity.sim
 import kotlinx.android.synthetic.main.compose_activity.simIndex
@@ -168,8 +169,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
     override val messagePartContextMenuRegistrar: Subject<View> by lazy { messageAdapter.partContextMenuRegistrar }
     override val messagesSelectedIntent by lazy { messageAdapter.selectionChanges }
-    override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSendingClicks }
-    override val sendNowIntent: Subject<Long> by lazy { messageAdapter.sendNowClicks }
+    override val cancelDelayedIntent: Subject<Long> by lazy { messageAdapter.cancelSendingClicks }
+    override val sendDelayedNowIntent: Subject<Long> by lazy { messageAdapter.sendNowClicks }
     override val resendIntent: Subject<Long> by lazy { messageAdapter.resendClicks }
     override val attachmentDeletedIntent: Subject<Attachment> by lazy { composeAttachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
@@ -493,8 +494,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         loading.setVisible(state.loading)
 
-        sendAsGroup.setVisible(state.editingMode && state.selectedChips.size >= 2)
+        sendAsGroup.setVisible(state.recipientCount > 1)
         sendAsGroupSwitch.isChecked = state.sendAsGroup
+        sendAsGroupSummary.setText(
+            if (sendAsGroupSwitch.isChecked) R.string.compose_send_group_summary_on
+            else R.string.compose_send_group_summary_off
+        )
 
         messageList.setVisible(!state.editingMode || state.sendAsGroup || state.selectedChips.size == 1)
         messageAdapter.data = state.messages
@@ -745,7 +750,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .setTitle(R.string.dialog_clear_compose_title)
             .setMessage(R.string.dialog_clear_compose)
             .setPositiveButton(R.string.button_clear) { _, _ ->
-                clearCurrentMessageIntent.onNext(false)
+                clearCurrentMessageIntent.onNext(true)
             }
             .setNegativeButton(R.string.button_cancel, null)
             .show()

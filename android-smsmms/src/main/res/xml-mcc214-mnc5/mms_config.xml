@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mms_config version="2">
+    <bool name="smsUsesSimpleCharactersOnly">true</bool>
+    <bool name="useCustomUserAgent">true</bool>
+</mms_config>

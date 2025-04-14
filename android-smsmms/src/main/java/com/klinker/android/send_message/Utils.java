@@ -1,6 +1,7 @@
 package com.klinker.android.send_message;
 
 import android.annotation.TargetApi;
+import android.app.role.RoleManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -427,6 +428,8 @@ public class Utils {
      * @return true if app is default
      */
     public static boolean isDefaultSmsApp(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            return (context.getSystemService(RoleManager.class).isRoleHeld(RoleManager.ROLE_SMS));
         if (hasKitKat()) {
             return context.getPackageName().equals(Telephony.Sms.getDefaultSmsPackage(context));
         }

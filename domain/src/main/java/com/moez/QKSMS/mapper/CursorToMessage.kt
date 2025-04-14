@@ -55,7 +55,7 @@ interface CursorToMessage : Mapper<Pair<Cursor, CursorToMessage.MessageColumns>,
         val mmsMessageBox by lazy { getColumnIndex(Mms.MESSAGE_BOX) }
         val mmsDeliveryReport by lazy { getColumnIndex(Mms.DELIVERY_REPORT) }
         val mmsReadReport by lazy { getColumnIndex(Mms.READ_REPORT) }
-        val mmsErrorType by lazy { getColumnIndex(MmsSms.PendingMessages.ERROR_TYPE) }
+//        val mmsErrorType by lazy { getColumnIndex(MmsSms.PendingMessages.ERROR_TYPE) }
         val mmsStatus by lazy { getColumnIndex(Mms.STATUS) }
 
         private fun getColumnIndex(columnsName: String) = try {

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mms_config version="1">
+    <bool name="enabledMMS">false</bool>
+    <bool name="enableGroupMms">false</bool>
+    <bool name="groupChatDefaultsToMMS">false</bool>
+    <bool name="enableMultipartSMS">true</bool>
+    <bool name="allowEnablingWapPushSI">true</bool>
+    <bool name="enableWapPushSI">true</bool>
+    <bool name="smsUsesSimpleCharactersOnly">false</bool>
+</mms_config>

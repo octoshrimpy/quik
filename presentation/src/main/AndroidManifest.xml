@@ -137,7 +137,7 @@
         </receiver>
         <receiver android:name=".receiver.DeleteMessagesReceiver" />
         <receiver
-            android:name=".receiver.SmsReceiver"
+            android:name=".receiver.SmsReceivedReceiver"
             android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
@@ -145,7 +145,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".receiver.MmsReceiver"
+            android:name=".receiver.MmsWapPushReceiver"
             android:exported="true"
             android:permission="android.permission.BROADCAST_WAP_PUSH">
             <intent-filter>
@@ -153,26 +153,21 @@
                 <data android:mimeType="application/vnd.wap.mms-message" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.SmsSentReceiver" />
-        <receiver android:name=".receiver.SmsDeliveredReceiver" />
-        <receiver
-            android:name=".receiver.MmsSentReceiver"
-            android:taskAffinity="${applicationId}.MMS_SENT" />
-        <receiver
-            android:name=".receiver.MmsUpdatedReceiver"
-            android:taskAffinity="${applicationId}.MMS_UPDATED" />
         <receiver
             android:name=".receiver.MmsReceivedReceiver"
             android:taskAffinity="com.klinker.android.messaging.MMS_RECEIVED" />
-        <receiver android:name=".receiver.MarkArchivedReceiver" />
+        <receiver android:name=".receiver.MessageSentReceiver" />
+        <receiver android:name=".receiver.MessageDeliveredReceiver" />
+        <receiver android:name=".receiver.SendScheduledMessageReceiver" />
+        <receiver android:name=".receiver.SendDelayedMessageReceiver" />
+        <receiver android:name=".receiver.DeleteMessagesReceiver" />
         <receiver android:name=".receiver.BlockThreadReceiver" />
-        <receiver android:name=".receiver.MarkSeenReceiver" />
-        <receiver android:name=".receiver.MarkReadReceiver" />
+        <receiver android:name=".receiver.MessageMarkReceiver" />
         <receiver
             android:name=".receiver.SpeakThreadsReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="${applicationId}.intent.action.ACTION_SPEAK_MESSAGES" />
+                <action android:name="dev.octoshrimpy.quik.intent.action.ACTION_SPEAK_MESSAGES" />
             </intent-filter>
         </receiver>
         <receiver android:name=".receiver.RemoteMessagingReceiver" />
@@ -184,17 +179,14 @@
                 <action android:name="android.provider.action.EXTERNAL_PROVIDER_CHANGE" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".receiver.SendScheduledMessageReceiver" />
         <receiver
             android:name=".feature.widget.WidgetSpeakUnseenProvider"
             android:label="@string/speak_unseen_messages"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="${applicationId}.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
+                <action android:name="dev.octoshrimpy.quik.intent.action.ACTION_NOTIFY_DATASET_CHANGED" />
             </intent-filter>
-
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_speak_unseen_info" />
@@ -211,7 +203,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
-        <receiver android:name=".receiver.SendSmsReceiver" />
         <receiver android:name=".receiver.StartActivityFromWidgetReceiver" />
 
         <service android:name="com.android.mms.transaction.TransactionService" />
@@ -251,7 +242,7 @@
         <!-- remove default workmanager init so custom injection capable instance can be used -->
         <provider
             android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
+            android:authorities="dev.octoshrimpy.quik.androidx-startup"
             android:exported="false"
             tools:node="merge">
             <meta-data

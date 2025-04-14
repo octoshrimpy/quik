@@ -64,7 +64,7 @@ object MediaRecorderManager : MediaRecorder() {
     fun startRecording(context: Context, preferredAudioDevice: AudioDeviceInfo? = null): Uri {
         return try {
             val (newUri, e) = FileUtils.create(
-                FileUtils.Companion.Location.Cache,
+                FileUtils.Location.Cache,
                 context,
                 "$AUDIO_FILE_PREFIX${UUID.randomUUID()}$AUDIO_FILE_SUFFIX",
                 ""

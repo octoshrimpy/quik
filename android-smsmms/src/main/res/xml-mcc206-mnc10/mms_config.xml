@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mms_config version="2">
+    <bool name="allowEnablingWapPushSI">true</bool>
+    <bool name="enableWapPushSI">true</bool>
+    <bool name="mmsRoamingAutoRetrieveByDefault">true</bool>
+    <int name="httpSocketTimeout">120000</int>
+    <bool name="enableGroupMms">true</bool>
+    <bool name="groupChatDefaultsToMMS">true</bool>
+</mms_config>

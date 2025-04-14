@@ -70,7 +70,7 @@ class ReceiveSms @Inject constructor(
                 }
 
                 // update and fetch conversation
-                conversationRepo.updateConversations(it.threadId)
+                conversationRepo.updateConversations(listOf(it.threadId))
                 conversationRepo.getOrCreateConversation(it.threadId)
             }
             .mapNotNull {
@@ -83,7 +83,7 @@ class ReceiveSms @Inject constructor(
                 // unarchive conversation if necessary
                 if (it.archived) {
                     Timber.v("conversation unarchived")
-                    conversationRepo.markUnarchived(it.id)
+                    conversationRepo.markUnarchived(listOf(it.id))
                 }
 
                 // update/create notification
