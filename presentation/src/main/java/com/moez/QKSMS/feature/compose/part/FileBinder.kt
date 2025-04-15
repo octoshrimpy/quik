@@ -33,6 +33,7 @@ import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.feature.compose.BubbleUtils
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
+import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -60,7 +61,8 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
         BubbleUtils.getBubble(false, canGroupWithPrevious, canGroupWithNext, message.isMe())
                 .let(holder.fileBackground::setBackgroundResource)
 
-        Observable.just(part.getUri())
+        tryOrNull(true) {
+            Observable.just(part.getUri())
                 .map(context.contentResolver::openInputStream)
                 .map { inputStream -> inputStream.use { it.available() } }
                 .map { bytes ->
@@ -75,7 +77,8 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { size -> holder.size.text = size }
 
-        holder.filename.text = part.name
+            holder.filename.text = part.getBestFilename()
+        }
 
         if (!message.isMe()) {
             holder.fileBackground.setBackgroundTint(theme.theme)
