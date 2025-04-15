@@ -42,7 +42,7 @@ class MessageMarkReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        Timber.e("received")
+        Timber.v("received")
 
         intent.getLongExtra("threadId", 0).takeIf { it > 0 }?.let { threadId ->
             intent.getIntExtra("type", -1).takeIf { it >= 0 }?.let { type ->

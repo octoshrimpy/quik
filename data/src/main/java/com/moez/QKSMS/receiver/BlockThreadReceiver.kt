@@ -40,7 +40,7 @@ class BlockThreadReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        Timber.e("received")
+        Timber.v("received")
 
         val threadId = intent.getLongExtra("threadId", 0)
 

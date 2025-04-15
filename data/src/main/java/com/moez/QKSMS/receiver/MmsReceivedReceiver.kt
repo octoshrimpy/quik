@@ -32,9 +32,11 @@ class MmsReceivedReceiver : MmsReceivedReceiver() {
     override fun onMessageReceived(context: Context?, messageUri: Uri?) {
         AndroidInjection.inject(this, context)
 
-        Timber.e("received")
+        Timber.v("received")
 
         messageUri?.let { uri ->
+            Timber.v("received uri is $uri")
+
             val pendingResult = goAsync()
             receiveMms.execute(uri) { pendingResult.finish() }
         }

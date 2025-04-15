@@ -39,13 +39,13 @@ class MessageDeliveredReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        Timber.e("received")
+        Timber.v("received")
 
         intent.extras?.getLong(MESSAGE_ID_EXTRA)?.takeIf { it > 0 }
             ?.let { messageId ->
                 val pendingResult = goAsync()
 
-                Timber.e("resultcode: ${pendingResult.resultCode}")
+                Timber.v("resultcode: ${pendingResult.resultCode}")
 
                 when (pendingResult.resultCode) {
                     // TODO notify about delivery

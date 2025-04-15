@@ -35,7 +35,7 @@ class SendScheduledMessageReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        Timber.e("received")
+        Timber.v("received")
 
         intent.getLongExtra("id", -1L).takeIf { it >= 0 }?.let { id ->
             val result = goAsync()

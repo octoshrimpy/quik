@@ -32,7 +32,7 @@ class DeleteMessagesReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        Timber.e("received")
+        Timber.v("received")
 
         intent.getLongExtra("threadId", 0).takeIf { it > 0 }?.let { threadId ->
             intent.getLongArrayExtra("messageIds")?.let { messageIds ->
