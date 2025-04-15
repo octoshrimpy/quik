@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.Intent
 import com.klinker.android.send_message.BroadcastUtils
 import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.nonDebugPackageName
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
@@ -61,7 +62,12 @@ class WidgetManagerImpl @Inject constructor(
 
     override fun updateTheme() {
         val ids = AppWidgetManager.getInstance(context)
-            .getAppWidgetIds(ComponentName(context.packageName, "${context.packageName}.feature.widget.WidgetProvider"))
+            .getAppWidgetIds(
+                ComponentName(
+                    context.packageName,
+                    "${nonDebugPackageName(context.packageName)}.feature.widget.WidgetProvider"
+                )
+            )
 
         val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
 
