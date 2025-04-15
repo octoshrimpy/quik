@@ -42,7 +42,7 @@ import com.klinker.android.send_message.R;
 public class DownloadManager {
     private static final String TAG = LogTag.TAG;
     private static final boolean DEBUG = false;
-    private static final boolean LOCAL_LOGV = false;
+    private static final boolean LOCAL_LOGV = true;
 
     public static final int DEFERRED_MASK           = 0x04;
 

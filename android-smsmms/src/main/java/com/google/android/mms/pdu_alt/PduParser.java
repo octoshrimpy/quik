@@ -83,7 +83,7 @@ public class PduParser {
      */
     private static final String LOG_TAG = "PduParser";
     private static final boolean DEBUG = false;
-    private static final boolean LOCAL_LOGV = false;
+    private static final boolean LOCAL_LOGV = true;
 
     /**
      * Whether to parse content-disposition part header

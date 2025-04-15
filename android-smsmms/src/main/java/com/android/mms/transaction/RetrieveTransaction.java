@@ -59,7 +59,7 @@ import com.klinker.android.send_message.Utils;
 public class RetrieveTransaction extends Transaction implements Runnable {
     private static final String TAG = LogTag.TAG;
     private static final boolean DEBUG = false;
-    private static final boolean LOCAL_LOGV = false;
+    private static final boolean LOCAL_LOGV = true;
 
     private final Uri mUri;
     private final String mContentLocation;
