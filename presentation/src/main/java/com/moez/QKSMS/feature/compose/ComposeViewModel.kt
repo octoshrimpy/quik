@@ -553,9 +553,8 @@ class ComposeViewModel @Inject constructor(
                 if (menuInfo.viewHolderValue != null)
                     navigator.shareFile(
                         MmsPartProvider().getUriForMmsPartId(
-                            menuInfo.viewHolderValue.id,
-                            menuInfo.viewHolderValue.getBestFilename()
-                        ),
+                            context, menuInfo.viewHolderValue.id,
+                            menuInfo.viewHolderValue.getBestFilename()),
                         menuInfo.viewHolderValue.type
                     )
             }
@@ -579,9 +578,8 @@ class ComposeViewModel @Inject constructor(
                 if (menuInfo.viewHolderValue != null)
                     navigator.viewFile(
                         MmsPartProvider().getUriForMmsPartId(
-                            menuInfo.viewHolderValue.id,
-                            menuInfo.viewHolderValue.getBestFilename()
-                        ),
+                            context, menuInfo.viewHolderValue.id,
+                            menuInfo.viewHolderValue.getBestFilename()),
                         menuInfo.viewHolderValue.type
                     )
             }
@@ -623,7 +621,7 @@ class ComposeViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe {
                     navigator.viewFile(
-                        MmsPartProvider().getUriForMmsPartId(it.id, it.getBestFilename()),
+                        MmsPartProvider().getUriForMmsPartId(context, it.id, it.getBestFilename()),
                         it.type
                     )
                 }
