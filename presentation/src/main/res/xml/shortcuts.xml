@@ -30,7 +30,7 @@
         <intent
             android:action="dev.octoshrimpy.quik.START"
             android:targetClass="dev.octoshrimpy.quik.feature.compose.ComposeActivity"
-            android:targetPackage="@string/application_id" />
+            android:targetPackage="dev.octoshrimpy.quik" />
 
         <categories android:name="android.shortcut.conversation" />
 

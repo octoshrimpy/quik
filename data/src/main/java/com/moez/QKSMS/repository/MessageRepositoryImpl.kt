@@ -651,7 +651,7 @@ open class MessageRepositoryImpl @Inject constructor(
                         getIntentForDelayedSms(message.id)
                     )
 
-                Timber.v("set ${delayMs}ms delay for message id $message.id")
+                Timber.v("set ${delayMs}ms delay for message id ${message.id}")
             }
         }
 

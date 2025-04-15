@@ -366,32 +366,6 @@ public class QkTransaction {
                     }
                     query.close();
                 }
-//            }
-//                else {
-//                    // using existing message uri, get original values from os provider
-//                    messageUri = existingMessageUri;
-//                    Cursor query = context.getContentResolver().query(
-//                            messageUri,
-//                            new String[]{"_id", "address", "body"}, null, null, null
-//                    );
-//                    if (query != null) {
-//                        if (query.moveToFirst()) {
-//                            messageId = query.getInt(0);
-//                            addresses[i] = query.getString(1);
-//                            text = query.getString(2);
-//                        }
-//                        query.close();
-//                    }
-//
-//                    if (messageId != 0) {
-//                        // update sent datetime
-//                        ContentValues values = new ContentValues();
-//                        values.put("date", Calendar.getInstance().getTimeInMillis() + "");
-//                        context.getContentResolver().update(messageUri, values, null, null);
-//                    }
-//                    else
-//                        messageUri = Uri.EMPTY;
-//                }
 
                 retVal.add(messageUri);
 

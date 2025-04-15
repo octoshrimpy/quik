@@ -21,13 +21,19 @@ package dev.octoshrimpy.quik.receiver
 import android.content.Context
 import android.net.Uri
 import com.klinker.android.send_message.MmsReceivedReceiver
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.interactor.ReceiveMms
+import timber.log.Timber
 import javax.inject.Inject
 
 class MmsReceivedReceiver : MmsReceivedReceiver() {
     @Inject lateinit var receiveMms: ReceiveMms
 
     override fun onMessageReceived(context: Context?, messageUri: Uri?) {
+        AndroidInjection.inject(this, context)
+
+        Timber.e("received")
+
         messageUri?.let { uri ->
             val pendingResult = goAsync()
             receiveMms.execute(uri) { pendingResult.finish() }

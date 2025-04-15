@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.interactor.ActionDelayedMessage
+import timber.log.Timber
 import javax.inject.Inject
 
 class SendDelayedMessageReceiver : BroadcastReceiver() {
@@ -34,6 +35,8 @@ class SendDelayedMessageReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
+
+        Timber.e("received")
 
         intent.extras?.getLong(MESSAGE_ID_EXTRA)?.takeIf { it > 0 }
             ?.let { messageId ->

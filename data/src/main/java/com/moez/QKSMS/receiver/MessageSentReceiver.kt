@@ -43,6 +43,8 @@ class MessageSentReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         AndroidInjection.inject(this, context)
 
+        Timber.e("received")
+
         // if have EXTRA_FILE_PATH then need to delete mms cache file
         intent.extras?.getString(EXTRA_FILE_PATH)?.let { filePath ->
             Timber.v("delete mms temp file $filePath")
@@ -52,6 +54,8 @@ class MessageSentReceiver : BroadcastReceiver() {
         intent.extras?.getLong(MESSAGE_ID_EXTRA)?.takeIf { it > 0 }
             ?.let { messageId ->
                 val pendingResult = goAsync()
+
+                Timber.e("resultcode: $resultCode")
 
                 when (resultCode) {
                     Activity.RESULT_OK ->

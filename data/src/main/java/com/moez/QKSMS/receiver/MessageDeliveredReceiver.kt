@@ -25,7 +25,6 @@ import android.content.Intent
 import dev.octoshrimpy.quik.interactor.MarkDelivered
 import dev.octoshrimpy.quik.interactor.MarkDeliveryFailed
 import dagger.android.AndroidInjection
-import dev.octoshrimpy.quik.model.Message
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,9 +39,13 @@ class MessageDeliveredReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
+        Timber.e("received")
+
         intent.extras?.getLong(MESSAGE_ID_EXTRA)?.takeIf { it > 0 }
             ?.let { messageId ->
                 val pendingResult = goAsync()
+
+                Timber.e("resultcode: $resultCode")
 
                 when (resultCode) {
                     // TODO notify about delivery

@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import dev.octoshrimpy.quik.interactor.DeleteMessages
 import dagger.android.AndroidInjection
+import timber.log.Timber
 import javax.inject.Inject
 
 class DeleteMessagesReceiver : BroadcastReceiver() {
@@ -30,6 +31,8 @@ class DeleteMessagesReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
+
+        Timber.e("received")
 
         intent.getLongExtra("threadId", 0).takeIf { it > 0 }?.let { threadId ->
             intent.getLongArrayExtra("messageIds")?.let { messageIds ->
