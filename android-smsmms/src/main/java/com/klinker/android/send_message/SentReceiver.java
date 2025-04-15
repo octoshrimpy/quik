@@ -30,7 +30,7 @@ public abstract class SentReceiver extends StatusUpdatedReceiver {
 
     @Override
     public void updateInInternalDatabase(Context context, Intent intent, int resultCode) {
-        Log.v("sent_receiver", "marking message as sent");
+        Timber.v("sent_receiver", "marking message as sent");
         final Uri uri = getUri(intent);
 
         try {
@@ -38,7 +38,7 @@ public abstract class SentReceiver extends StatusUpdatedReceiver {
                 case Activity.RESULT_OK:
                     if (uri != null) {
                         try {
-                            Log.v("sent_receiver", "using supplied uri");
+                            Timber.v("sent_receiver", "using supplied uri");
                             ContentValues values = new ContentValues();
                             values.put("type", 2);
                             values.put("read", 1);
@@ -56,14 +56,14 @@ public abstract class SentReceiver extends StatusUpdatedReceiver {
                 case SmsManager.RESULT_ERROR_NULL_PDU:
                 case SmsManager.RESULT_ERROR_RADIO_OFF:
                     if (uri != null) {
-                        Log.v("sent_receiver", "using supplied uri");
+                        Timber.v("sent_receiver", "using supplied uri");
                         ContentValues values = new ContentValues();
                         values.put("type", 5);
                         values.put("read", true);
                         values.put("error_code", resultCode);
                         context.getContentResolver().update(uri, values, null, null);
                     } else {
-                        Log.v("sent_receiver", "using first message");
+                        Timber.v("sent_receiver", "using first message");
                         Cursor query = context.getContentResolver().query(Uri.parse("content://sms/outbox"), null, null, null, null);
 
                         // mark message failed
@@ -107,7 +107,7 @@ public abstract class SentReceiver extends StatusUpdatedReceiver {
     }
 
     private void markFirstAsSent(Context context) {
-        Log.v("sent_receiver", "using first message");
+        Timber.v("sent_receiver", "using first message");
         Cursor query = context.getContentResolver().query(Uri.parse("content://sms/outbox"), null, null, null, null);
 
         // mark message as sent successfully

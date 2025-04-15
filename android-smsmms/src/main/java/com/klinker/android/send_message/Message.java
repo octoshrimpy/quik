@@ -540,7 +540,7 @@ public class Message {
     public static byte[] bitmapToByteArray(Bitmap image) {
 		byte[] output = new byte[0];
         if (image == null) {
-            Log.v("Message", "image is null, returning byte array of size 0");
+            Timber.v("Message", "image is null, returning byte array of size 0");
             return output;
         }
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();

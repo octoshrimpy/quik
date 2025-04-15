@@ -31,7 +31,7 @@ public abstract class DeliveredReceiver extends StatusUpdatedReceiver {
 
     @Override
     public void updateInInternalDatabase(Context context, Intent intent, int resultCode) {
-        Log.v("delivery_receiver", "marking message as delivered");
+        Timber.v("delivery_receiver", "marking message as delivered");
 
         final Uri uri = getUri(intent);
 

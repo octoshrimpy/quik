@@ -29,7 +29,7 @@ public class ApnUtils {
         final ArrayList<APN> apns = loadApns(context);
 
         if (apns == null || apns.size() == 0) {
-            Log.v(TAG, "Found no APNs :( Damn CDMA network probably.");
+            Timber.v("Found no APNs :( Damn CDMA network probably.");
             Toast.makeText(context, context.getString(R.string.auto_select_failed), Toast.LENGTH_SHORT).show();
             if (listener != null) {
                 listener.onFinished();
@@ -125,7 +125,7 @@ public class ApnUtils {
                     text = parser.getText();
                 }
 
-                Log.v(TAG, "tag: " + tag + " value: " + value + " - " +
+                Timber.v("tag: " + tag + " value: " + value + " - " +
                         text);
                 if ("name".equalsIgnoreCase(name)) {
                     if ("int".equals(tag)) {
@@ -148,11 +148,11 @@ public class ApnUtils {
                 }
             }
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "loadMmsSettings caught ", e);
+            Timber.e("loadMmsSettings caught ", e);
         } catch (NumberFormatException e) {
-            Log.e(TAG, "loadMmsSettings caught ", e);
+            Timber.e("loadMmsSettings caught ", e);
         } catch (IOException e) {
-            Log.e(TAG, "loadMmsSettings caught ", e);
+            Timber.e("loadMmsSettings caught ", e);
         } finally {
             parser.close();
         }
@@ -163,7 +163,7 @@ public class ApnUtils {
             String err =
                     String.format("MmsConfig.loadMmsSettings mms_config.xml missing %s setting",
                             errorStr);
-            Log.e(TAG, err);
+            Timber.e(err);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -221,11 +221,11 @@ public class ApnUtils {
         }
 
         if (mcc == -1 || mnc == -1) {
-            Log.v(TAG, "couldn't find both mcc and mnc. mcc = " + mcc + ", mnc = " + mnc);
+            Timber.v("couldn't find both mcc and mnc. mcc = " + mcc + ", mnc = " + mnc);
             return null;
         }
 
-        Log.v(TAG, "mcc: " + mcc + " mnc: " + mnc);
+        Timber.v("mcc: " + mcc + " mnc: " + mnc);
 
         try {
             beginDocument(parser, "apns");
@@ -301,16 +301,16 @@ public class ApnUtils {
                 }
             }
         } catch (XmlPullParserException e) {
-            Log.e(TAG, "loadApns caught ", e);
+            Timber.e("loadApns caught ", e);
         } catch (NumberFormatException e) {
-            Log.e(TAG, "loadApns caught ", e);
+            Timber.e("loadApns caught ", e);
         } catch (IOException e) {
-            Log.e(TAG, "loadApns caught ", e);
+            Timber.e("loadApns caught ", e);
         } finally {
             parser.close();
         }
 
-        Log.v(TAG, "MMSC: " + mmsc + ", MMS Proxy: " + proxy + ", MMS Port: " + port);
+        Timber.v("MMSC: " + mmsc + ", MMS Proxy: " + proxy + ", MMS Port: " + port);
 
         String errorStr = null;
 
@@ -318,7 +318,7 @@ public class ApnUtils {
             String err =
                     String.format("MmsConfig.loadMmsSettings mms_config.xml missing %s setting",
                             errorStr);
-            Log.e(TAG, err);
+            Timber.e(err);
         }
 
         return apns;

@@ -37,10 +37,10 @@ public class MmsSentReceiver extends StatusUpdatedReceiver {
 
     @Override
     public void updateInInternalDatabase(Context context, Intent intent, int resultCode) {
-        Log.v(TAG, "MMS has finished sending, marking it as so, in the database");
+        Timber.v("MMS has finished sending, marking it as so, in the database");
 
         Uri uri = Uri.parse(intent.getStringExtra(EXTRA_CONTENT_URI));
-        Log.v(TAG, uri.toString());
+        Timber.v(uri.toString());
 
         ContentValues values = new ContentValues(1);
         values.put(Telephony.Mms.MESSAGE_BOX, Telephony.Mms.MESSAGE_BOX_SENT);
@@ -48,7 +48,7 @@ public class MmsSentReceiver extends StatusUpdatedReceiver {
                 null, null);
 
         String filePath = intent.getStringExtra(EXTRA_FILE_PATH);
-        Log.v(TAG, filePath);
+        Timber.v(filePath);
         new File(filePath).delete();
     }
 

@@ -258,7 +258,7 @@ public class Settings {
             this.useSystemSending = useSystemSending;
         } else {
             this.useSystemSending = false;
-            Log.e("Settings", "System sending only available on Lollipop+ devices");
+            Timber.e("Settings", "System sending only available on Lollipop+ devices");
         }
     }
 
