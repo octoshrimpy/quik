@@ -30,6 +30,7 @@ import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.feature.compose.BubbleUtils
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
@@ -63,8 +64,11 @@ class FileBinder @Inject constructor(colors: Colors, private val context: Contex
 
         tryOrNull(true) {
             Observable.just(part.getUri())
-                .map(context.contentResolver::openInputStream)
-                .map { inputStream -> inputStream.use { it.available() } }
+                .mapNotNull { uri ->
+                    tryOrNull(true) {
+                        context.contentResolver.openInputStream(uri)?.use { it.available() }
+                    }
+                }
                 .map { bytes ->
                     when (bytes) {
                         in 0..999 -> "$bytes B"
