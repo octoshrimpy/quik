@@ -45,9 +45,9 @@ class MessageDeliveredReceiver : BroadcastReceiver() {
             ?.let { messageId ->
                 val pendingResult = goAsync()
 
-                Timber.e("resultcode: $resultCode")
+                Timber.e("resultcode: ${pendingResult.resultCode}")
 
-                when (resultCode) {
+                when (pendingResult.resultCode) {
                     // TODO notify about delivery
                     Activity.RESULT_OK -> markDelivered.execute(messageId) { pendingResult.finish() }
 

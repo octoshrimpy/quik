@@ -42,8 +42,11 @@ import com.klinker.android.send_message.SmsManagerFactory
 import dev.octoshrimpy.quik.common.util.extensions.now
 import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.anyOf
+import dev.octoshrimpy.quik.extensions.getResourceBytes
 import dev.octoshrimpy.quik.extensions.insertOrUpdate
 import dev.octoshrimpy.quik.extensions.isImage
+import dev.octoshrimpy.quik.extensions.isSmil
+import dev.octoshrimpy.quik.extensions.isText
 import dev.octoshrimpy.quik.extensions.isVideo
 import dev.octoshrimpy.quik.extensions.map
 import dev.octoshrimpy.quik.extensions.resourceExists
@@ -603,6 +606,7 @@ open class MessageRepositoryImpl @Inject constructor(
                     },
                     QkTransaction.NO_THREAD_ID,
                     false,
+//true,
                     if (delayMs > 0)  // if delaying, only get template message
                         QkTransaction.SendNewMessageType.TemplateMessageOnly
                     else if (messageTypes == SendNewMessagesType.NoTemplateMessage)
@@ -698,7 +702,15 @@ open class MessageRepositoryImpl @Inject constructor(
                         messageUri = message.getUri()
                         text = message.body
                         addresses = toAddresses.toTypedArray()
-                        parts.forEach { addMedia(it.media, it.contentType, it.name) }
+                        message.parts.forEach {
+                            if (!it.isSmil())
+                                addMedia(
+                                    if (it.isText()) it.text?.toByteArray()
+                                    else it.getUri().getResourceBytes(context),
+                                    it.type,
+                                    it.name
+                                )
+                        }
                     },
                     QkTransaction.NO_THREAD_ID,
                     true,

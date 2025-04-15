@@ -55,9 +55,9 @@ class MessageSentReceiver : BroadcastReceiver() {
             ?.let { messageId ->
                 val pendingResult = goAsync()
 
-                Timber.e("resultcode: $resultCode")
+                Timber.e("resultcode: ${pendingResult.resultCode}")
 
-                when (resultCode) {
+                when (pendingResult.resultCode) {
                     Activity.RESULT_OK ->
                         markSent.execute(messageId) { pendingResult.finish() }
 
