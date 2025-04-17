@@ -678,7 +678,7 @@ open class MessageRepositoryImpl @Inject constructor(
             markSending(message.id)
 
             val sentMessageIntent = Intent(context, MessageSentReceiver::class.java)
-                .putExtra(MessageSentReceiver.MESSAGE_ID_EXTRA, message.id)
+                .putExtra(MessageSentReceiver.EXTRA_QUIK_MESSAGE_ID, message.id)
 
             val deliveredMessageIntent = Intent(context, MessageDeliveredReceiver::class.java)
                 .putExtra(MessageDeliveredReceiver.MESSAGE_ID_EXTRA, message.id)

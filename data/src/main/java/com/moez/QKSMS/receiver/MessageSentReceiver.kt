@@ -33,7 +33,8 @@ import javax.inject.Inject
 
 class MessageSentReceiver : BroadcastReceiver() {
     companion object {
-        const val MESSAGE_ID_EXTRA = "messageId"
+        const val EXTRA_QUIK_MESSAGE_ID = "messageId"
+        const val EXTRA_IS_NOTIFY = "isNotify"
     }
 
     @Inject lateinit var markSent: MarkSent
@@ -51,7 +52,12 @@ class MessageSentReceiver : BroadcastReceiver() {
             File(filePath).delete()
         }
 
-        intent.extras?.getLong(MESSAGE_ID_EXTRA)?.takeIf { it > 0 }
+        if (intent.extras?.getInt(EXTRA_IS_NOTIFY, -1) != -1) {
+            Timber.v("notify message sent resultcode $resultCode")
+            return
+        }
+
+        intent.extras?.getLong(EXTRA_QUIK_MESSAGE_ID)?.takeIf { it > 0 }
             ?.let { messageId ->
                 val pendingResult = goAsync()
 

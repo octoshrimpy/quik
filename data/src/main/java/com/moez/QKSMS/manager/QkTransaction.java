@@ -579,73 +579,26 @@ public class QkTransaction {
             data.add(part);
         }
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            MessageInfo info = null;
+        Log.v(TAG, "using lollipop method for sending sms");
 
-            try {
-                info = getBytes(context, saveMessage, fromAddress, address.split(" "),
-                        data.toArray(new MMSPart[data.size()]), subject);
-                MmsMessageSender sender = new MmsMessageSender(context, info.location, info.bytes.length);
-                sender.sendMessage(info.token);
-
-                IntentFilter filter = new IntentFilter();
-                filter.addAction(ProgressCallbackEntity.PROGRESS_STATUS_ACTION);
-                BroadcastReceiver receiver = new BroadcastReceiver() {
-
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        int progress = intent.getIntExtra("progress", -3);
-                        Log.v("sending_mms_library", "progress: " + progress);
-
-                        // send progress broadcast to update ui if desired...
-                        Intent progressIntent = new Intent(MMS_PROGRESS);
-                        progressIntent.putExtra("progress", progress);
-                        BroadcastUtils.sendExplicitBroadcast(context, progressIntent, MMS_PROGRESS);
-
-                        if (progress == ProgressCallbackEntity.PROGRESS_COMPLETE) {
-                            BroadcastUtils.sendExplicitBroadcast(context, new Intent(), REFRESH);
-
-                            try {
-                                context.unregisterReceiver(this);
-                            } catch (Exception e) {
-                                // TODO fix me
-                                // receiver is not registered force close error... hmm.
-                            }
-                        } else if (progress == ProgressCallbackEntity.PROGRESS_ABORT) {
-                            // This seems to get called only after the progress has reached 100 and
-                            // then something else goes wrong, so here we will try and send again
-                            // and see if it works
-                            Log.v("sending_mms_library", "sending aborted for some reason...");
-                        }
-                    }
-
-                };
-
-                context.registerReceiver(receiver, filter);
-            } catch (Throwable e) {
-                Log.e(TAG, "exception thrown", e);
-            }
-        } else {
-            Log.v(TAG, "using lollipop method for sending sms");
-
-            if (settings.getUseSystemSending()) {
-                Log.v(TAG, "using system method for sending");
-                retVal = sendMmsThroughSystem(context, subject, data, fromAddress,
-                        addresses, explicitSentMmsReceiver, save, messageUri, send);
-            } else {
-                try {
-                    MessageInfo info = getBytes(context, saveMessage, fromAddress, address.split(" "),
-                            data.toArray(new MMSPart[data.size()]), subject);
-                    MmsRequestManager requestManager = new MmsRequestManager(context, info.bytes);
-                    SendRequest request = new SendRequest(requestManager, Utils.getDefaultSubscriptionId(),
-                            info.location, null, null, null, null);
-                    MmsNetworkManager manager = new MmsNetworkManager(context, Utils.getDefaultSubscriptionId());
-                    request.execute(context, manager);
-                } catch (Exception e) {
-                    Log.e(TAG, "error sending mms", e);
-                }
-            }
-        }
+//        if (settings.getUseSystemSending()) {
+            Log.v(TAG, "using system method for sending");
+            retVal = sendMmsThroughSystem(context, subject, data, fromAddress,
+                    addresses, explicitSentMmsReceiver, save, messageUri, send);
+//        }
+//        } else {
+//            try {
+//                MessageInfo info = getBytes(context, saveMessage, fromAddress, address.split(" "),
+//                        data.toArray(new MMSPart[data.size()]), subject);
+//                MmsRequestManager requestManager = new MmsRequestManager(context, info.bytes);
+//                SendRequest request = new SendRequest(requestManager, Utils.getDefaultSubscriptionId(),
+//                        info.location, null, null, null, null);
+//                MmsNetworkManager manager = new MmsNetworkManager(context, Utils.getDefaultSubscriptionId());
+//                request.execute(context, manager);
+//            } catch (Exception e) {
+//                Log.e(TAG, "error sending mms", e);
+//            }
+//        }
 
         return retVal;
     }
@@ -836,7 +789,6 @@ public class QkTransaction {
                     try {
                         writer.close();
                     } catch (IOException e) {
-                        Log.v("xxx", "test");
                     }
                 }
             }
