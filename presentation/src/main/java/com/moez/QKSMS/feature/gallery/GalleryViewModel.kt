@@ -90,7 +90,7 @@ class GalleryViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe {
                     navigator.shareFile(
-                        MmsPartProvider.getUriForMmsPartId(it.id, it.getBestFilename()),
+                        MmsPartProvider().getUriForMmsPartId(context, it.id, it.getBestFilename()),
                         it.type
                     )
                 }
@@ -109,7 +109,7 @@ class GalleryViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe {
                 navigator.viewFile(
-                    MmsPartProvider.getUriForMmsPartId(it.id, it.getBestFilename()),
+                    MmsPartProvider().getUriForMmsPartId(context, it.id, it.getBestFilename()),
                     it.type
                 )
             }

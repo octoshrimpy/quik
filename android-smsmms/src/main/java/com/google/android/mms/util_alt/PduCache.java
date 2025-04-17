@@ -20,13 +20,14 @@ import android.content.ContentUris;
 import android.content.UriMatcher;
 import android.net.Uri;
 import android.provider.Telephony.Mms;
-import timber.log.Timber;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 import java.util.HashMap;
 import java.util.HashSet;
 
 public final class PduCache extends AbstractCache<Uri, PduCacheEntry> {
-
+    private static final String TAG = "PduCache";
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private static final int MMS_ALL             = 0;
@@ -82,7 +83,7 @@ public final class PduCache extends AbstractCache<Uri, PduCacheEntry> {
     synchronized public static final PduCache getInstance() {
         if (sInstance == null) {
             if (LOCAL_LOGV) {
-                Timber.v("Constructing new PduCache instance.");
+                Log.v(TAG, "Constructing new PduCache instance.");
             }
             sInstance = new PduCache();
         }
@@ -202,14 +203,14 @@ public final class PduCache extends AbstractCache<Uri, PduCacheEntry> {
         }
 
         if (LOCAL_LOGV) {
-            Timber.v(uri + " -> " + normalizedKey);
+            Log.v(TAG, uri + " -> " + normalizedKey);
         }
         return normalizedKey;
     }
 
     private void purgeByMessageBox(Integer msgBoxId) {
         if (LOCAL_LOGV) {
-            Timber.v("Purge cache in message box: " + msgBoxId);
+            Log.v(TAG, "Purge cache in message box: " + msgBoxId);
         }
 
         if (msgBoxId != null) {
@@ -235,7 +236,7 @@ public final class PduCache extends AbstractCache<Uri, PduCacheEntry> {
 
     private void purgeByThreadId(long threadId) {
         if (LOCAL_LOGV) {
-            Timber.v("Purge cache in thread: " + threadId);
+            Log.v(TAG, "Purge cache in thread: " + threadId);
         }
 
         HashSet<Uri> thread = mThreads.remove(threadId);

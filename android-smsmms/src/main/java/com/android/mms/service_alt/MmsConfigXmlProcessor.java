@@ -16,10 +16,11 @@
 
 package com.android.mms.service_alt;
 
-import android.content.ContentValues;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import timber.log.Timber;
+
+import android.content.ContentValues;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 import java.io.IOException;
 
@@ -27,6 +28,7 @@ import java.io.IOException;
  * XML processor for mms_config.xml
  */
 public class MmsConfigXmlProcessor {
+    private static final String TAG = "MmsConfigXmlProcessor";
 
     public interface MmsConfigHandler {
         public void process(String key, String value, String type);
@@ -91,9 +93,9 @@ public class MmsConfigXmlProcessor {
                 processMmsConfig();
             }
         } catch (IOException e) {
-            Timber.e(e, "MmsConfigXmlProcessor: I/O failure " + e);
+            Log.e(TAG, "MmsConfigXmlProcessor: I/O failure " + e, e);
         } catch (XmlPullParserException e) {
-            Timber.e(e, "MmsConfigXmlProcessor: parsing failure " + e);
+            Log.e(TAG, "MmsConfigXmlProcessor: parsing failure " + e, e);
         }
     }
 
@@ -131,7 +133,7 @@ public class MmsConfigXmlProcessor {
                 }
                 return mLogStringBuilder.toString();
             } catch (XmlPullParserException e) {
-                Timber.e(e, "xmlParserDebugContext: " + e);
+                Log.e(TAG, "xmlParserDebugContext: " + e, e);
             }
         }
         return "Unknown";
@@ -189,7 +191,7 @@ public class MmsConfigXmlProcessor {
                 mMmsConfigHandler.process(key, value, type);
             }
         } else {
-            Timber.w("MmsConfig: invalid key=" + key + " or type=" + type);
+            Log.w(TAG, "MmsConfig: invalid key=" + key + " or type=" + type);
         }
     }
 }

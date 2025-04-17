@@ -49,12 +49,12 @@ interface ComposeView : QkView<ComposeState> {
     val menuReadyIntent: Observable<Unit>
     val optionsItemIntent: Observable<Int>
     val contextItemIntent: Observable<MenuItem>
-    val sendAsGroupIntent: Observable<*>
+    val sendAsGroupIntent: Observable<Unit>
     val messagePartClickIntent: Subject<Long>
     val messagePartContextMenuRegistrar: Subject<View>
     val messagesSelectedIntent: Observable<List<Long>>
-    val cancelSendingIntent: Subject<Long>
-    val sendNowIntent: Subject<Long>
+    val cancelDelayedIntent: Subject<Long>
+    val sendDelayedNowIntent: Subject<Long>
     val resendIntent: Subject<Long>
     val attachmentDeletedIntent: Subject<Attachment>
     val textChangedIntent: Observable<CharSequence>

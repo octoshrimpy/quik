@@ -16,15 +16,19 @@
 
 package com.android.mms.dom.events;
 
+import com.android.mms.logs.LogTag;
+
+import java.util.ArrayList;
+
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventException;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
-import timber.log.Timber;
 
-import java.util.ArrayList;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 public class EventTargetImpl implements EventTarget {
+    private static final String TAG = LogTag.TAG;
     private ArrayList<EventListenerEntry> mListenerEntries;
     private EventTarget mNodeTarget;
 
@@ -96,7 +100,7 @@ public class EventTargetImpl implements EventTarget {
                     catch (Exception e) {
                         // Any exceptions thrown inside an EventListener will
                         // not stop propagation of the event
-                        Timber.w(e, "Catched EventListener exception");
+                        Log.w(TAG, "Catched EventListener exception", e);
                     }
                 }
             }

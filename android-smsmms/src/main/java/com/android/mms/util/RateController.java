@@ -24,9 +24,13 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
 import android.provider.Telephony.Mms.Rate;
-import timber.log.Timber;
+
+import com.android.mms.logs.LogTag;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 public class RateController {
+    private static final String TAG = LogTag.TAG;
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private static final int RATE_LIMIT = 100;
@@ -52,7 +56,7 @@ public class RateController {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (LOCAL_LOGV) {
-                Timber.v("Intent received: " + intent);
+                Log.v(TAG, "Intent received: " + intent);
             }
 
             if (RATE_LIMIT_CONFIRMED_ACTION.equals(intent.getAction())) {
@@ -71,11 +75,11 @@ public class RateController {
 
     public static void init(Context context) {
         if (LOCAL_LOGV) {
-            Timber.v("RateController.init()");
+            Log.v(TAG, "RateController.init()");
         }
 
         if (sInstance != null) {
-            Timber.w("Already initialized.");
+            Log.w(TAG, "Already initialized.");
             return;
         }
         sInstance = new RateController(context);
@@ -146,7 +150,7 @@ public class RateController {
         for (int t = 0; (mAnswer == NO_ANSWER) && (t < ANSWER_TIMEOUT); t += 1000) {
             try {
                 if (LOCAL_LOGV) {
-                    Timber.v("Waiting for answer..." + t / 1000);
+                    Log.v(TAG, "Waiting for answer..." + t / 1000);
                 }
                 wait(1000L);
             } catch (InterruptedException e) {

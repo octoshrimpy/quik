@@ -16,14 +16,17 @@
 
 package com.android.mms.layout;
 
+import com.android.mms.logs.LogTag;
+
 import android.content.Context;
 import android.content.res.Configuration;
-import timber.log.Timber;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 /**
  * MMS presentation layout management.
  */
 public class LayoutManager {
+    private static final String TAG = LogTag.TAG;
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
@@ -44,7 +47,7 @@ public class LayoutManager {
                 : LayoutParameters.HVGA_LANDSCAPE);
 
         if (LOCAL_LOGV) {
-            Timber.v("LayoutParameters: " + mLayoutParams.getTypeDescription()
+            Log.v(TAG, "LayoutParameters: " + mLayoutParams.getTypeDescription()
                     + ": " + mLayoutParams.getWidth() + "x" + mLayoutParams.getHeight());
         }
     }
@@ -63,11 +66,11 @@ public class LayoutManager {
 
     public static void init(Context context) {
         if (LOCAL_LOGV) {
-            Timber.v("DefaultLayoutManager.init()");
+            Log.v(TAG, "DefaultLayoutManager.init()");
         }
 
         if (sInstance != null) {
-            Timber.w("Already initialized.");
+            Log.w(TAG, "Already initialized.");
         }
         sInstance = new LayoutManager(context);
     }
@@ -81,7 +84,7 @@ public class LayoutManager {
 
     public void onConfigurationChanged(Configuration newConfig) {
         if (LOCAL_LOGV) {
-            Timber.v("-> LayoutManager.onConfigurationChanged().");
+            Log.v(TAG, "-> LayoutManager.onConfigurationChanged().");
         }
         initLayoutParameters(newConfig);
     }

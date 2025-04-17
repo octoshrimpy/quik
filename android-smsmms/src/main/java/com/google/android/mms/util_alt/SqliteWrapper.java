@@ -23,10 +23,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 import android.widget.Toast;
-import timber.log.Timber;
 
 public final class SqliteWrapper {
+    private static final String TAG = "SqliteWrapper";
     private static final String SQLITE_EXCEPTION_DETAIL_MESSAGE
                 = "unable to open database file";
 
@@ -68,7 +69,7 @@ public final class SqliteWrapper {
         try {
             return resolver.query(uri, projection, selection, selectionArgs, sortOrder);
         } catch (SQLiteException e) {
-            Timber.e(e, "Catch a SQLiteException when query: ");
+            Log.e(TAG, "Catch a SQLiteException when query: ", e);
             checkSQLiteException(context, e);
             return null;
         }
@@ -78,7 +79,7 @@ public final class SqliteWrapper {
         try {
             return cursor.requery();
         } catch (SQLiteException e) {
-            Timber.e(e, "Catch a SQLiteException when requery: ");
+            Log.e(TAG, "Catch a SQLiteException when requery: ", e);
             checkSQLiteException(context, e);
             return false;
         }
@@ -88,7 +89,7 @@ public final class SqliteWrapper {
         try {
             return resolver.update(uri, values, where, selectionArgs);
         } catch (SQLiteException e) {
-            Timber.e(e, "Catch a SQLiteException when update: ");
+            Log.e(TAG, "Catch a SQLiteException when update: ", e);
             checkSQLiteException(context, e);
             return -1;
         }
@@ -99,7 +100,7 @@ public final class SqliteWrapper {
         try {
             return resolver.delete(uri, where, selectionArgs);
         } catch (SQLiteException e) {
-            Timber.e(e, "Catch a SQLiteException when delete: ");
+            Log.e(TAG, "Catch a SQLiteException when delete: ", e);
             checkSQLiteException(context, e);
             return -1;
         }
@@ -110,7 +111,7 @@ public final class SqliteWrapper {
         try {
             return resolver.insert(uri, values);
         } catch (SQLiteException e) {
-            Timber.e(e, "Catch a SQLiteException when insert: ");
+            Log.e(TAG, "Catch a SQLiteException when insert: ", e);
             checkSQLiteException(context, e);
             return null;
         }

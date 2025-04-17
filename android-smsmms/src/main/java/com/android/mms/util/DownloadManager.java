@@ -26,7 +26,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Telephony.Mms;
+
+import com.android.mms.logs.LogTag;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 import android.widget.Toast;
+
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.mms.service_alt.SystemPropertiesProxy;
 import com.google.android.mms.MmsException;
@@ -34,10 +38,11 @@ import com.google.android.mms.pdu_alt.EncodedStringValue;
 import com.google.android.mms.pdu_alt.NotificationInd;
 import com.google.android.mms.pdu_alt.PduPersister;
 import com.klinker.android.send_message.R;
-import timber.log.Timber;
 
 public class DownloadManager {
-    private static final boolean LOCAL_LOGV = false;
+    private static final String TAG = LogTag.TAG;
+    private static final boolean DEBUG = false;
+    private static final boolean LOCAL_LOGV = true;
 
     public static final int DEFERRED_MASK           = 0x04;
 
@@ -64,7 +69,7 @@ public class DownloadManager {
 
         mAutoDownload = getAutoDownloadState(context, mPreferences);
         if (LOCAL_LOGV) {
-            Timber.v("mAutoDownload ------> " + mAutoDownload);
+            Log.v(TAG, "mAutoDownload ------> " + mAutoDownload);
         }
     }
 
@@ -74,11 +79,11 @@ public class DownloadManager {
 
     public static void init(Context context) {
         if (LOCAL_LOGV) {
-            Timber.v("DownloadManager.init()");
+            Log.v(TAG, "DownloadManager.init()");
         }
 
         if (sInstance != null) {
-            Timber.w("Already initialized.");
+            Log.w(TAG, "Already initialized.");
         }
         sInstance = new DownloadManager(context);
     }
@@ -98,14 +103,14 @@ public class DownloadManager {
         boolean autoDownload = prefs.getBoolean("auto_download_mms", true);
 
         if (LOCAL_LOGV) {
-            Timber.v("auto download without roaming -> " + autoDownload);
+            Log.v(TAG, "auto download without roaming -> " + autoDownload);
         }
 
         if (autoDownload) {
             boolean alwaysAuto = true;
 
             if (LOCAL_LOGV) {
-                Timber.v("auto download during roaming -> " + alwaysAuto);
+                Log.v(TAG, "auto download during roaming -> " + alwaysAuto);
             }
 
             if (!roaming || alwaysAuto) {
@@ -120,7 +125,7 @@ public class DownloadManager {
         String roaming = SystemPropertiesProxy.get(context,
                 TelephonyProperties.PROPERTY_OPERATOR_ISROAMING, null);
         if (LOCAL_LOGV) {
-            Timber.v("roaming ------> " + roaming);
+            Log.v(TAG, "roaming ------> " + roaming);
         }
         return "true".equals(roaming);
     }
@@ -142,7 +147,7 @@ public class DownloadManager {
                 return;
             }
         } catch(MmsException e) {
-            Timber.e(e, e.getMessage());
+            Log.e(TAG, e.getMessage(), e);
             return;
         }
 
@@ -154,7 +159,7 @@ public class DownloadManager {
                         Toast.makeText(mContext, getMessage(uri),
                                 Toast.LENGTH_LONG).show();
                     } catch (MmsException e) {
-                        Timber.e(e, e.getMessage());
+                        Log.e(TAG, e.getMessage(), e);
                     }
                 }
             });
@@ -177,7 +182,7 @@ public class DownloadManager {
                 try {
                     Toast.makeText(mContext, errStr, Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
-                    Timber.e("Caught an exception in showErrorCodeToast");
+                    Log.e(TAG,"Caught an exception in showErrorCodeToast");
                 }
             }
         });

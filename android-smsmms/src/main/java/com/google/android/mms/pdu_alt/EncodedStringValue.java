@@ -16,7 +16,7 @@
 
 package com.google.android.mms.pdu_alt;
 
-import timber.log.Timber;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,6 +27,8 @@ import java.util.ArrayList;
  * Encoded-string-value = Text-string | Value-length Char-set Text-string
  */
 public class EncodedStringValue implements Cloneable {
+    private static final String TAG = "EncodedStringValue";
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     /**
@@ -72,7 +74,7 @@ public class EncodedStringValue implements Cloneable {
             mData = data.getBytes(CharacterSets.DEFAULT_CHARSET_NAME);
             mCharacterSet = CharacterSets.DEFAULT_CHARSET;
         } catch (UnsupportedEncodingException e) {
-            Timber.e(e, "Default encoding must be supported.");
+            Log.e(TAG, "Default encoding must be supported.", e);
         }
     }
 
@@ -138,7 +140,7 @@ public class EncodedStringValue implements Cloneable {
                 return new String(mData, name);
             } catch (UnsupportedEncodingException e) {
             	if (LOCAL_LOGV) {
-            		Timber.v(e, e.getMessage());
+            		Log.v(TAG, e.getMessage(), e);
             	}
             	try {
                     return new String(mData, CharacterSets.MIMENAME_ISO_8859_1);
@@ -170,7 +172,7 @@ public class EncodedStringValue implements Cloneable {
                 newTextString.write(mData);
                 newTextString.write(textString);
             } catch (IOException e) {
-                Timber.e(e, "logging error");
+                Log.e(TAG, "logging error", e);
                 e.printStackTrace();
                 throw new NullPointerException(
                         "appendTextString: failed when write a new Text-string");
@@ -194,7 +196,7 @@ public class EncodedStringValue implements Cloneable {
         try {
             return new EncodedStringValue(mCharacterSet, dstBytes);
         } catch (Exception e) {
-            Timber.e(e, "logging error");
+            Log.e(TAG, "logging error", e);
             e.printStackTrace();
             throw new CloneNotSupportedException(e.getMessage());
         }
