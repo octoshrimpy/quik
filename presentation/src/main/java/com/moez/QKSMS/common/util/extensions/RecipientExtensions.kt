@@ -5,19 +5,15 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Path
 import android.provider.ContactsContract
-import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View.*
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.app.Person
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.drawToBitmap
 import androidx.core.widget.TextViewCompat
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.Colors
@@ -43,14 +39,12 @@ fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, h
         else
             icon = IconCompat.createWithBitmap(bitmap)
     }
-    if(icon == null) { // If there is no contact or no photo, create the default icon
-        Timber.v("Photo not found, creating default icon")
+    if(icon == null) {
+        // If there is no contact or no photo, create the default icon using the avatar_view layout
         val inflater = LayoutInflater.from(context)
-        val layout = FrameLayout(context)
-        layout.layout(0, 0, width, height)
-        layout.layoutParams = FrameLayout.LayoutParams(width, height)
-        val view = inflater.inflate(R.layout.avatar_view, layout)
-        view.layoutParams = FrameLayout.LayoutParams(width, height)
+        val container = FrameLayout(context)
+        container.layoutParams = FrameLayout.LayoutParams(width, height)
+        val view = inflater.inflate(R.layout.avatar_view, container)
         val textView = view.findViewById<QkTextView>(R.id.initial)
         val iconView = view.findViewById<ImageView>(R.id.icon)
         val photoView = view.findViewById<ImageView>(R.id.photo)
@@ -87,7 +81,7 @@ fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, h
             iconView.setTint(theme.textPrimary)
         }
 
-        view.apply {
+        container.apply {
             measure(
                 MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
@@ -95,8 +89,8 @@ fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, h
             layout(0, 0, measuredWidth, measuredHeight)
         }
 
-        Timber.v("w: ${view.measuredWidth}; h: ${view.measuredHeight}")
-        val bitmap = createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
+        Timber.v("w: ${container.measuredWidth}; h: ${container.measuredHeight}")
+        val bitmap = createBitmap(container.measuredWidth, container.measuredHeight, Bitmap.Config.ARGB_8888)
         val canvas = android.graphics.Canvas(bitmap)
         canvas.clipPath(Path().apply {
             addCircle(
@@ -106,7 +100,7 @@ fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, h
                 Path.Direction.CW
             )
         })
-        view.draw(canvas)
+        container.draw(canvas)
 
         icon = IconCompat.createWithBitmap(bitmap)
     }
