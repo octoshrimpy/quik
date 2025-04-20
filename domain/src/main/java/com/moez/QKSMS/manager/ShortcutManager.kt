@@ -18,10 +18,17 @@
  */
 package dev.octoshrimpy.quik.manager
 
+import android.content.pm.ShortcutInfo
+import androidx.core.content.pm.ShortcutInfoCompat
+
 interface ShortcutManager {
 
     fun updateBadge()
 
     fun updateShortcuts()
+
+    fun getShortcut(threadId: Long): ShortcutInfoCompat?
+
+    fun reportShortcutUsed(threadId: Long)
 
 }
