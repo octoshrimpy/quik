@@ -19,6 +19,7 @@
 package dev.octoshrimpy.quik.interactor
 
 import android.content.Context
+import dev.octoshrimpy.quik.manager.ShortcutManager
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
@@ -29,7 +30,8 @@ class SendMessage @Inject constructor(
     private val context: Context,
     private val conversationRepo: ConversationRepository,
     private val messageRepo: MessageRepository,
-    private val updateBadge: UpdateBadge
+    private val updateBadge: UpdateBadge,
+    private val shortcutManager: ShortcutManager
 ) : Interactor<SendMessage.Params>() {
 
     data class Params(
@@ -61,6 +63,8 @@ class SendMessage @Inject constructor(
             conversationRepo.updateConversations(threadId)
 
             conversationRepo.markUnarchived(threadId)
+
+            shortcutManager.reportShortcutUsed(threadId)
 
             // delete attachment local files, if any, because they're saved to mms db by now
             params.attachments.forEach { it.removeCacheFile() }
