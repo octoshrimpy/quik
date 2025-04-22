@@ -57,9 +57,14 @@ abstract class QkActivity : AppCompatActivity() {
                     if (detector.scaleFactor > 1.2) currentTextSize++
 
                     // bounds check
-                    val maxSize = this@QkActivity.resources.getStringArray(R.array.text_sizes).size
-                    if (currentTextSize < 0) currentTextSize = 0
-                    if (currentTextSize > maxSize) currentTextSize = maxSize
+                    if (currentTextSize < 0)
+                        currentTextSize = 0
+                    else {
+                        val maxSize =
+                            (this@QkActivity.resources.getStringArray(R.array.text_sizes).size - 1)
+                        if (currentTextSize > maxSize)
+                            currentTextSize = maxSize
+                    }
 
                     prefs.textSize.set(currentTextSize)
                 }
