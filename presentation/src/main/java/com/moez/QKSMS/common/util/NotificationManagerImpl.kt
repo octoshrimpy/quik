@@ -30,20 +30,21 @@ import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
-import android.provider.ContactsContract
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
-import androidx.core.graphics.drawable.IconCompat
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.common.util.extensions.fromRecipient
+import dev.octoshrimpy.quik.common.util.extensions.toPerson
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.feature.compose.ComposeActivity
 import dev.octoshrimpy.quik.feature.qkreply.QkReplyActivity
 import dev.octoshrimpy.quik.manager.PermissionManager
+import dev.octoshrimpy.quik.manager.ShortcutManager
 import dev.octoshrimpy.quik.mapper.CursorToPartImpl
 import dev.octoshrimpy.quik.receiver.BlockThreadReceiver
 import dev.octoshrimpy.quik.receiver.DeleteMessagesReceiver
@@ -73,6 +74,7 @@ class NotificationManagerImpl @Inject constructor(
     private val permissions: PermissionManager,
     private val phoneNumberUtils: PhoneNumberUtils,
     private val contactRepo: ContactRepository,
+    private val shortcutManager: ShortcutManager
 ) : dev.octoshrimpy.quik.manager.NotificationManager {
 
     companion object {
@@ -184,18 +186,8 @@ class NotificationManagerImpl @Inject constructor(
                     phoneNumberUtils.compare(recipient.address, message.address)
                 }
 
-                person.setName(recipient?.getDisplayName() ?: message.address)
-                person.setIcon(GlideApp.with(context)
-                        .asBitmap()
-                        .circleCrop()
-                        .load(recipient?.contact?.photoUri)
-                        .submit(64.dpToPx(context), 64.dpToPx(context))
-                        .let { futureGet -> tryOrNull(false) { futureGet.get() } }
-                        ?.let(IconCompat::createWithBitmap))
-
-                recipient?.contact
-                        ?.let { contact -> "${ContactsContract.Contacts.CONTENT_LOOKUP_URI}/${contact.lookupKey}" }
-                        ?.let(person::setUri)
+                if(recipient != null)
+                    person.fromRecipient(recipient, context, colors)
             }
 
             NotificationCompat.MessagingStyle.Message(message.getSummary(), message.date, person.build()).apply {
@@ -251,7 +243,7 @@ class NotificationManagerImpl @Inject constructor(
         // Add all of the people from this conversation to the notification, so that the system can
         // appropriately bypass DND mode
         conversation.recipients.forEach { recipient ->
-            notification.addPerson("tel:${recipient.address}")
+            notification.addPerson(recipient.toPerson(context, colors))
         }
 
         // Add the action buttons
@@ -341,7 +333,8 @@ class NotificationManagerImpl @Inject constructor(
 
             context.startActivity(intent)
         }
-
+        val sc = shortcutManager.getShortcut(threadId)
+        notification.setShortcutInfo(sc)
         notificationManager.notify(threadId.toInt(), notification.build())
 
         // Wake screen

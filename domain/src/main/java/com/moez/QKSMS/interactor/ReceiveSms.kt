@@ -93,6 +93,7 @@ class ReceiveSms @Inject constructor(
                 // update shortcuts
                 Timber.v("update shortcuts")
                 shortcutManager.updateShortcuts()
+                shortcutManager.reportShortcutUsed(it.id)
 
                 // update the badge and widget
                 Timber.v("update badge and widget")
