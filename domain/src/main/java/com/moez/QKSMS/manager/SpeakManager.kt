@@ -174,9 +174,9 @@ class SpeakManager() {
 
         val timeWithSplitAmPmForSpeech = getFormatter("h:mm a").format(date).let {
             if (it.length < 2) it
-            else when (it.substring((it.length - 2))) {
-                "AM" -> "${it.substring(0, (it.length - 2))}A M"
-                "PM" -> "${it.substring(0, (it.length - 2))}P M"
+            else when (it.substring((it.length - 2)).lowercase()) {
+                "am" -> "${it.substring(0, (it.length - 2))}A M"
+                "pm" -> "${it.substring(0, (it.length - 2))}P M"
                 else -> it  // locales that don't use am/pm
             }
         }
