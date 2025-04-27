@@ -172,13 +172,22 @@ class SpeakManager() {
         lastWeekCheck.timeInMillis = date
         lastWeekCheck.add(Calendar.DATE, 7)
 
+        val timeWithSplitAmPmForSpeech = getFormatter("h:mm a").format(date).let {
+            if (it.length < 2) it
+            else when (it.substring((it.length - 2)).lowercase()) {
+                "am" -> "${it.substring(0, (it.length - 2))}A M"
+                "pm" -> "${it.substring(0, (it.length - 2))}P M"
+                else -> it  // locales that don't use am/pm
+            }
+        }
+
         return when {
             (then.get(Calendar.DATE) == now.get(Calendar.DATE)) -> StringBuilder()      // today
             (yesterdayCheck.get(Calendar.DATE) == now.get(Calendar.DATE)) -> StringBuilder("yesterday")     // yesterday
             (lastWeekCheck.get(Calendar.DATE) > now.get(Calendar.DATE)) -> StringBuilder("on ").append(getFormatter("EEEE").format(date))   // during last week
             (then.get(Calendar.YEAR) == now.get(Calendar.YEAR)) -> StringBuilder("on ").append(getFormatter("MMMM d").format(date))     // this year
             else -> StringBuilder("on").append(getFormatter("MMMM d yyyy").format(date))    // otherwise
-        }.append(" at ").append(getFormatter("h:mm a").format(date)).toString()
+        }.append(" at ").append(timeWithSplitAmPmForSpeech).toString()
     }
 
     // toggle is used to stop and not repeat if a sessionId of the same name is currently being read aloud
@@ -260,7 +269,7 @@ class SpeakManager() {
 
         // more than 1 recipient
         if (conversation.recipients.count() > 1)
-            utterance.append("Group SMS ")
+            utterance.append("Group message ")
 
         // message sender
         if (conversationLastSms.isMe())
