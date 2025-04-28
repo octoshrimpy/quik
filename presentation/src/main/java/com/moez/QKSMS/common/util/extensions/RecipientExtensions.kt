@@ -41,68 +41,73 @@ fun Recipient.getThemedIcon(context: Context, theme: Colors.Theme, width: Int, h
     }
     if(icon == null) {
         // If there is no contact or no photo, create the default icon using the avatar_view layout
-        val inflater = LayoutInflater.from(context)
-        val container = FrameLayout(context)
-        container.layoutParams = FrameLayout.LayoutParams(width, height)
-        val view = inflater.inflate(R.layout.avatar_view, container)
-        val textView = view.findViewById<QkTextView>(R.id.initial)
-        val iconView = view.findViewById<ImageView>(R.id.icon)
-        val photoView = view.findViewById<ImageView>(R.id.photo)
+        try {
+            val inflater = LayoutInflater.from(context)
+            val container = FrameLayout(context)
+            container.layoutParams = FrameLayout.LayoutParams(width, height)
+            val view = inflater.inflate(R.layout.avatar_view, container)
+            val textView = view.findViewById<QkTextView>(R.id.initial)
+            val iconView = view.findViewById<ImageView>(R.id.icon)
+            val photoView = view.findViewById<ImageView>(R.id.photo)
 
-        photoView.visibility = GONE
-        view.setBackgroundColor(theme.theme)
-        view.setBackgroundTint(theme.theme)
-        textView.setTextColor(theme.textPrimary)
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(textView, TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, height * 0.5f)
-        iconView.layoutParams = FrameLayout.LayoutParams((width * 0.5).toInt(), (height * 0.5).toInt(),
-            Gravity.CENTER)
+            photoView.visibility = GONE
+            view.setBackgroundColor(theme.theme)
+            view.setBackgroundTint(theme.theme)
+            textView.setTextColor(theme.textPrimary)
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(textView, TextViewCompat.AUTO_SIZE_TEXT_TYPE_NONE)
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, height * 0.5f)
+            iconView.layoutParams = FrameLayout.LayoutParams((width * 0.5).toInt(), (height * 0.5).toInt(),
+                Gravity.CENTER)
 
-        if(contact != null) {
-            val initials = contact!!.name
-                .substringBefore(',')
-                .split(" ")
-                .filter { name -> name.isNotEmpty() }
-                .map { name -> name[0] }
-                .filter { initial -> initial.isLetterOrDigit() }
-                .map { initial -> initial.toString() }
-            if (initials.isNotEmpty()) {
-                textView.text =
-                    if (initials.size > 1) initials.first() + initials.last() else initials.first()
-                iconView.visibility = GONE
-            } else {
-                textView.text = null
-                iconView.visibility = VISIBLE
+            if(contact != null) {
+                val initials = contact!!.name
+                    .substringBefore(',')
+                    .split(" ")
+                    .filter { name -> name.isNotEmpty() }
+                    .map { name -> name[0] }
+                    .filter { initial -> initial.isLetterOrDigit() }
+                    .map { initial -> initial.toString() }
+                if (initials.isNotEmpty()) {
+                    textView.text =
+                        if (initials.size > 1) initials.first() + initials.last() else initials.first()
+                    iconView.visibility = GONE
+                } else {
+                    textView.text = null
+                    iconView.visibility = VISIBLE
+                }
             }
-        }
-        else {
-            textView.visibility = GONE
-            iconView.visibility = VISIBLE
-            iconView.setTint(theme.textPrimary)
-        }
+            else {
+                textView.visibility = GONE
+                iconView.visibility = VISIBLE
+                iconView.setTint(theme.textPrimary)
+            }
 
-        container.apply {
-            measure(
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
-            )
-            layout(0, 0, measuredWidth, measuredHeight)
+            container.apply {
+                measure(
+                    MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
+                )
+                layout(0, 0, measuredWidth, measuredHeight)
+            }
+
+            val bitmap = createBitmap(container.measuredWidth, container.measuredHeight, Bitmap.Config.ARGB_8888)
+            val canvas = android.graphics.Canvas(bitmap)
+            canvas.clipPath(Path().apply {
+                addCircle(
+                    (width / 2).toFloat(),
+                    (height / 2).toFloat(),
+                    (width / 2).toFloat(),
+                    Path.Direction.CW
+                )
+            })
+            container.draw(canvas)
+
+            icon = IconCompat.createWithBitmap(bitmap)
         }
-
-        Timber.v("w: ${container.measuredWidth}; h: ${container.measuredHeight}")
-        val bitmap = createBitmap(container.measuredWidth, container.measuredHeight, Bitmap.Config.ARGB_8888)
-        val canvas = android.graphics.Canvas(bitmap)
-        canvas.clipPath(Path().apply {
-            addCircle(
-                (width / 2).toFloat(),
-                (height / 2).toFloat(),
-                (width / 2).toFloat(),
-                Path.Direction.CW
-            )
-        })
-        container.draw(canvas)
-
-        icon = IconCompat.createWithBitmap(bitmap)
+        catch (e: Exception) {
+            Timber.e(e)
+            return IconCompat.createWithResource(context, R.mipmap.ic_shortcut_person)
+        }
     }
     return icon
 }
