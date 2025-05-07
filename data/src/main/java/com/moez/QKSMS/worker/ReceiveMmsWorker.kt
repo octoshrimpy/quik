@@ -19,9 +19,11 @@
 package dev.octoshrimpy.quik.worker
 
 import android.content.Context
+import androidx.work.ForegroundInfo
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import dev.octoshrimpy.quik.interactor.ReceiveMms
+import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.receiver.MmsReceivedReceiver
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,10 +39,10 @@ class ReceiveMmsWorker(appContext: Context, workerParams: WorkerParameters)
     }
 
     @Inject lateinit var receiveMms: ReceiveMms
+    @Inject lateinit var notificationManager: NotificationManager
 
     override fun doWork(): Result {
         Timber.v("started")
-
 
         MmsReceivedReceiver.onReceiveWorker(
             applicationContext,
@@ -56,5 +58,10 @@ class ReceiveMmsWorker(appContext: Context, workerParams: WorkerParameters)
 
         return Result.success()
     }
+
+    override fun getForegroundInfo() = ForegroundInfo(
+        0,
+        notificationManager.getForegroundNotificationForWorkersOnOlderAndroids()
+    )
 
 }

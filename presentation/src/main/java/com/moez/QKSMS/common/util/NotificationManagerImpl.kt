@@ -90,6 +90,18 @@ class NotificationManagerImpl @Inject constructor(
         createNotificationChannel()
     }
 
+    override fun getForegroundNotificationForWorkersOnOlderAndroids() =
+        NotificationCompat.Builder(context, DEFAULT_CHANNEL_ID)
+            .setContentTitle(context.getString(R.string.notification_foreground_worker_text))
+            .setShowWhen(false)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.ic_notification)
+            .setColor(colors.theme().theme)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setOngoing(true)
+            .build()
+
     /**
      * Updates the notification for a particular conversation
      */
