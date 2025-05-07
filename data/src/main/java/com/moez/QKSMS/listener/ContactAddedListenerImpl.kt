@@ -44,7 +44,7 @@ class ContactAddedListenerImpl @Inject constructor(
 
     private class ContactContentObserver(context: Context) : ContentObserver(Handler()) {
 
-        private val subject = BehaviorSubject.createDefault<Unit>(Unit)
+        private val subject = BehaviorSubject.createDefault(Unit)
 
         val observable: Observable<Unit> = subject
                 .doOnSubscribe { context.contentResolver.registerContentObserver(URI, true, this) }

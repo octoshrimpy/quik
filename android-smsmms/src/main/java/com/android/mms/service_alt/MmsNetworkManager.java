@@ -20,20 +20,22 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
 import android.net.NetworkRequest;
+import android.net.NetworkInfo;
 import android.net.SSLCertificateSocketFactory;
 import android.os.Build;
 import android.os.SystemClock;
+
+import timber.log.Timber;
+
 import com.android.mms.service_alt.exception.MmsNetworkException;
 import com.squareup.okhttp.ConnectionPool;
-import timber.log.Timber;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
-
+    private static final String TAG = "MmsNetworkManager";
     // Timeout used to call ConnectivityManager.requestNetwork
     private static final int NETWORK_REQUEST_TIMEOUT_MILLIS = 60 * 1000;
     // Wait timeout for this class, a little bit longer than the above timeout
@@ -87,11 +89,18 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
         mSubId = subId;
 
         if (!MmsRequest.useWifi(context)) {
-            mNetworkRequest = new NetworkRequest.Builder()
-                    .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-                    .addCapability(NetworkCapabilities.NET_CAPABILITY_MMS)
-                    .setNetworkSpecifier(Integer.toString(mSubId))
-                    .build();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                mNetworkRequest = new NetworkRequest.Builder()
+                        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                        .addCapability(NetworkCapabilities.NET_CAPABILITY_MMS)
+                        .setNetworkSpecifier(Integer.toString(mSubId))
+                        .build();
+            } else {
+                mNetworkRequest = new NetworkRequest.Builder()
+                        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                        .addCapability(NetworkCapabilities.NET_CAPABILITY_MMS)
+                        .build();
+            }
         } else {
             mNetworkRequest = new NetworkRequest.Builder()
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
@@ -196,7 +205,7 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
             connectivityManager.requestNetwork(
                     mNetworkRequest, mNetworkCallback);
         } catch (SecurityException e) {
-            Timber.e(e, "permission exception... skipping it for testing purposes");
+            Timber.e("permission exception... skipping it for testing purposes", e);
             permissionError = true;
         }
     }
@@ -213,7 +222,7 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
             try {
                 connectivityManager.unregisterNetworkCallback(callback);
             } catch (Exception e) {
-                Timber.e(e, "couldn't unregister");
+                Timber.e("couldn't unregister", e);
             }
         }
         resetLocked();

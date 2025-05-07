@@ -109,11 +109,6 @@ class CancelableSimpleOnGestureListener(view: View, parentView: View) : SimpleOn
             textInitiallySelectable = thisView.isTextSelectable
     }
 
-    fun cancelCurrentClick() {
-        lastUpEvent?.recycle()
-        lastUpEvent = null
-    }
-
     override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
         if (lastUpEvent !== null) {
             parent.onTouchEvent(e)

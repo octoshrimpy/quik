@@ -54,7 +54,7 @@ abstract class QkAdapter<T, VHT : RecyclerView.ViewHolder> : RecyclerView.Adapte
             field?.isVisible = data.isEmpty()
         }
 
-    val selectionChanges: Subject<List<Long>> = BehaviorSubject.create()
+    private val selectionChanges: Subject<List<Long>> = BehaviorSubject.create()
 
     private val selection = mutableListOf<Long>()
 

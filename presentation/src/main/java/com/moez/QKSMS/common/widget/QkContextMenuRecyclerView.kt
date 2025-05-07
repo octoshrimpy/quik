@@ -1,7 +1,6 @@
 package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
-import android.net.Uri
 import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.View
@@ -54,7 +53,7 @@ open class QkContextMenuRecyclerView<ADAPTER_VALUE_TYPE, VIEW_HOLDER_VALUE_TYPE>
 
     private fun saveContextMenuInfo(originalView: View) {
         contextMenuInfo = ContextMenuInfo(
-            (adapter as Adapter<ADAPTER_VALUE_TYPE, *, *>)?.contextMenuValue,
+            (adapter as Adapter<ADAPTER_VALUE_TYPE, *, *>).contextMenuValue,
             getChildViewHolder(originalView)?.contextMenuValue,
             this,
             originalView,

@@ -18,7 +18,8 @@ package com.google.android.mms.util_alt;
 import android.content.Context;
 import android.drm.DrmConvertedStatus;
 import android.drm.DrmManagerClient;
-import timber.log.Timber;
+import timber.log.Timber; import android.util.Log;
+import android.provider.Downloads;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,11 +29,7 @@ import java.io.RandomAccessFile;
 public class DrmConvertSession {
     private DrmManagerClient mDrmClient;
     private int mConvertSessionId;
-
-    private static final int STATUS_UNKNOWN_ERROR = 491;
-    private static final int STATUS_NOT_ACCEPTABLE = 406;
-    private static final int STATUS_SUCCESS = 200;
-    private static final int STATUS_FILE_ERROR = 492;
+    private static final String TAG = "DrmConvertSession";
 
     private DrmConvertSession(DrmManagerClient drmClient, int convertSessionId) {
         mDrmClient = drmClient;
@@ -58,10 +55,11 @@ public class DrmConvertSession {
                     Timber.w("Conversion of Mimetype: " + mimeType
                             + " is not supported.", e);
                 } catch (IllegalStateException e) {
-                    Timber.w(e, "Could not access Open DrmFramework.");
+                    Timber.w("Could not access Open DrmFramework.", e);
                 }
             } catch (IllegalArgumentException e) {
-                Timber.w("DrmManagerClient instance could not be created, context is Illegal.");
+                Log.w(TAG,
+                        "DrmManagerClient instance could not be created, context is Illegal.");
             } catch (IllegalStateException e) {
                 Timber.w("DrmManagerClient didn't initialize properly.");
             }
@@ -116,38 +114,38 @@ public class DrmConvertSession {
      * Ends a conversion session of a file.
      *
      * @param filename The filename of the converted file.
-     * @return STATUS_SUCCESS if execution is ok.
-     *         STATUS_FILE_ERROR in case converted file can not
-     *         be accessed. STATUS_NOT_ACCEPTABLE if a problem
+     * @return Downloads.Impl.STATUS_SUCCESS if execution is ok.
+     *         Downloads.Impl.STATUS_FILE_ERROR in case converted file can not
+     *         be accessed. Downloads.Impl.STATUS_NOT_ACCEPTABLE if a problem
      *         occurs when accessing drm framework.
-     *         STATUS_UNKNOWN_ERROR if a general error occurred.
+     *         Downloads.Impl.STATUS_UNKNOWN_ERROR if a general error occurred.
      */
     public int close(String filename) {
         DrmConvertedStatus convertedStatus = null;
-        int result = STATUS_UNKNOWN_ERROR;
+        int result = Downloads.Impl.STATUS_UNKNOWN_ERROR;
         if (mDrmClient != null && mConvertSessionId >= 0) {
             try {
                 convertedStatus = mDrmClient.closeConvertSession(mConvertSessionId);
                 if (convertedStatus == null ||
                         convertedStatus.statusCode != DrmConvertedStatus.STATUS_OK ||
                         convertedStatus.convertedData == null) {
-                    result = STATUS_NOT_ACCEPTABLE;
+                    result = Downloads.Impl.STATUS_NOT_ACCEPTABLE;
                 } else {
                     RandomAccessFile rndAccessFile = null;
                     try {
                         rndAccessFile = new RandomAccessFile(filename, "rw");
                         rndAccessFile.seek(convertedStatus.offset);
                         rndAccessFile.write(convertedStatus.convertedData);
-                        result = STATUS_SUCCESS;
+                        result = Downloads.Impl.STATUS_SUCCESS;
                     } catch (FileNotFoundException e) {
-                        result = STATUS_FILE_ERROR;
-                        Timber.w(e, "File: " + filename + " could not be found.");
+                        result = Downloads.Impl.STATUS_FILE_ERROR;
+                        Timber.w("File: " + filename + " could not be found.", e);
                     } catch (IOException e) {
-                        result = STATUS_FILE_ERROR;
-                        Timber.w(e, "Could not access File: " + filename + " .");
+                        result = Downloads.Impl.STATUS_FILE_ERROR;
+                        Timber.w("Could not access File: " + filename + " .", e);
                     } catch (IllegalArgumentException e) {
-                        result = STATUS_FILE_ERROR;
-                        Timber.w(e, "Could not open file in mode: rw");
+                        result = Downloads.Impl.STATUS_FILE_ERROR;
+                        Timber.w("Could not open file in mode: rw", e);
                     } catch (SecurityException e) {
                         Timber.w("Access to File: " + filename +
                                 " was denied denied by SecurityManager.", e);
@@ -156,7 +154,7 @@ public class DrmConvertSession {
                             try {
                                 rndAccessFile.close();
                             } catch (IOException e) {
-                                result = STATUS_FILE_ERROR;
+                                result = Downloads.Impl.STATUS_FILE_ERROR;
                                 Timber.w("Failed to close File:" + filename
                                         + ".", e);
                             }

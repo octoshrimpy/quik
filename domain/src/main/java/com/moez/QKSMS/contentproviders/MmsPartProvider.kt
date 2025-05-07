@@ -21,6 +21,7 @@ package com.moez.QKSMS.contentproviders
 import android.content.ContentProvider
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
@@ -55,19 +56,19 @@ class MmsPartProvider : ContentProvider() {
                 .encodedPath("part/$partId")
                 .build()
         }
-
-        fun getUriForMmsPartId(partId: Long, partName: String): Uri {
-            return Uri
-                .Builder()
-                .scheme(ContentResolver.SCHEME_CONTENT)
-                .authority("dev.octoshrimpy.quik.mmspart")
-                .encodedPath("part/$partId/$partName")
-                .build()
-        }
     }
 
     override fun onCreate(): Boolean {
         return true
+    }
+
+    fun getUriForMmsPartId(context: Context, partId: Long, partName: String): Uri {
+        return Uri
+            .Builder()
+            .scheme(ContentResolver.SCHEME_CONTENT)
+            .authority("${context.packageName}.mmspart")
+            .encodedPath("part/$partId/$partName")
+            .build()
     }
 
     override fun query(

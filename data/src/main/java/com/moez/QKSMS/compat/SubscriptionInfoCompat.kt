@@ -18,8 +18,6 @@
  */
 package dev.octoshrimpy.quik.compat
 
-import android.annotation.TargetApi
-import android.os.Build
 import android.telephony.SubscriptionInfo
 
 data class SubscriptionInfoCompat(private val subscriptionInfo: SubscriptionInfo) {
@@ -28,6 +26,6 @@ data class SubscriptionInfoCompat(private val subscriptionInfo: SubscriptionInfo
 
     val simSlotIndex get() = subscriptionInfo.simSlotIndex
 
-    val displayName get() = subscriptionInfo.displayName
+    val displayName: CharSequence get() = subscriptionInfo.displayName
 
 }

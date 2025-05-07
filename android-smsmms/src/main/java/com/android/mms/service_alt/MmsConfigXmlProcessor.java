@@ -16,9 +16,10 @@
 
 package com.android.mms.service_alt;
 
-import android.content.ContentValues;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+
+import android.content.ContentValues;
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ import java.io.IOException;
  * XML processor for mms_config.xml
  */
 public class MmsConfigXmlProcessor {
+    private static final String TAG = "MmsConfigXmlProcessor";
 
     public interface MmsConfigHandler {
         public void process(String key, String value, String type);
@@ -91,9 +93,9 @@ public class MmsConfigXmlProcessor {
                 processMmsConfig();
             }
         } catch (IOException e) {
-            Timber.e(e, "MmsConfigXmlProcessor: I/O failure " + e);
+            Timber.e("MmsConfigXmlProcessor: I/O failure " + e, e);
         } catch (XmlPullParserException e) {
-            Timber.e(e, "MmsConfigXmlProcessor: parsing failure " + e);
+            Timber.e("MmsConfigXmlProcessor: parsing failure " + e, e);
         }
     }
 
@@ -131,7 +133,7 @@ public class MmsConfigXmlProcessor {
                 }
                 return mLogStringBuilder.toString();
             } catch (XmlPullParserException e) {
-                Timber.e(e, "xmlParserDebugContext: " + e);
+                Timber.e("xmlParserDebugContext: " + e, e);
             }
         }
         return "Unknown";

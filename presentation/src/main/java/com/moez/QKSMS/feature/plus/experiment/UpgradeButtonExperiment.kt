@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.feature.plus.experiment
 
 import android.content.Context
-import androidx.annotation.StringRes
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.experiment.Experiment
 import dev.octoshrimpy.quik.experiment.Variant

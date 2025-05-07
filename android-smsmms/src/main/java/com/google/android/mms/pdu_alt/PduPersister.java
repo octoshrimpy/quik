@@ -27,8 +27,8 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteException;
 import android.drm.DrmManagerClient;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
+import android.provider.Telephony;
 import android.provider.Telephony.Mms;
 import android.provider.Telephony.Mms.Addr;
 import android.provider.Telephony.Mms.Part;
@@ -38,6 +38,8 @@ import android.provider.Telephony.Threads;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
+import com.android.mms.service_alt.SubscriptionIdChecker;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.InvalidHeaderValueException;
 import com.google.android.mms.MmsException;
@@ -47,6 +49,8 @@ import com.google.android.mms.util_alt.PduCache;
 import com.google.android.mms.util_alt.PduCacheEntry;
 import com.google.android.mms.util_alt.SqliteWrapper;
 import timber.log.Timber;
+
+import com.klinker.android.send_message.Settings;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,9 +69,11 @@ import java.util.Set;
  * This class is the high-level manager of PDU storage.
  */
 public class PduPersister {
+    private static final String TAG = "PduPersister";
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
-    public static final long DUMMY_THREAD_ID = Long.MAX_VALUE;
+    private static final long DUMMY_THREAD_ID = Long.MAX_VALUE;
     private static final int DEFAULT_SUBSCRIPTION = 0;
     private static final int MAX_TEXT_BODY_SIZE = 300 * 1024;
 
@@ -75,11 +81,11 @@ public class PduPersister {
      * The uri of temporary drm objects.
      */
     public static final String TEMPORARY_DRM_OBJECT_URI =
-            "content://mms/" + Long.MAX_VALUE + "/part";
+        "content://mms/" + Long.MAX_VALUE + "/part";
     /**
      * Indicate that we transiently failed to process a MM.
      */
-    public static final int PROC_STATUS_TRANSIENT_FAILURE = 1;
+    public static final int PROC_STATUS_TRANSIENT_FAILURE   = 1;
     /**
      * Indicate that we permanently failed to process a MM.
      */
@@ -87,97 +93,97 @@ public class PduPersister {
     /**
      * Indicate that we have successfully processed a MM.
      */
-    public static final int PROC_STATUS_COMPLETED = 3;
+    public static final int PROC_STATUS_COMPLETED           = 3;
 
     private static PduPersister sPersister;
     private static final PduCache PDU_CACHE_INSTANCE;
 
-    private static final int[] ADDRESS_FIELDS = new int[]{
+    private static final int[] ADDRESS_FIELDS = new int[] {
             PduHeaders.BCC,
             PduHeaders.CC,
             PduHeaders.FROM,
             PduHeaders.TO
     };
 
-    private static final String[] PDU_PROJECTION = new String[]{
-            Mms._ID,
-            Mms.MESSAGE_BOX,
-            Mms.THREAD_ID,
-            Mms.RETRIEVE_TEXT,
-            Mms.SUBJECT,
-            Mms.CONTENT_LOCATION,
-            Mms.CONTENT_TYPE,
-            Mms.MESSAGE_CLASS,
-            Mms.MESSAGE_ID,
-            Mms.RESPONSE_TEXT,
-            Mms.TRANSACTION_ID,
-            Mms.CONTENT_CLASS,
-            Mms.DELIVERY_REPORT,
-            Mms.MESSAGE_TYPE,
-            Mms.MMS_VERSION,
-            Mms.PRIORITY,
-            Mms.READ_REPORT,
-            Mms.READ_STATUS,
-            Mms.REPORT_ALLOWED,
-            Mms.RETRIEVE_STATUS,
-            Mms.STATUS,
-            Mms.DATE,
-            Mms.DELIVERY_TIME,
-            Mms.EXPIRY,
-            Mms.MESSAGE_SIZE,
-            Mms.SUBJECT_CHARSET,
-            Mms.RETRIEVE_TEXT_CHARSET,
+    private static final String[] PDU_PROJECTION = new String[] {
+        Mms._ID,
+        Mms.MESSAGE_BOX,
+        Mms.THREAD_ID,
+        Mms.RETRIEVE_TEXT,
+        Mms.SUBJECT,
+        Mms.CONTENT_LOCATION,
+        Mms.CONTENT_TYPE,
+        Mms.MESSAGE_CLASS,
+        Mms.MESSAGE_ID,
+        Mms.RESPONSE_TEXT,
+        Mms.TRANSACTION_ID,
+        Mms.CONTENT_CLASS,
+        Mms.DELIVERY_REPORT,
+        Mms.MESSAGE_TYPE,
+        Mms.MMS_VERSION,
+        Mms.PRIORITY,
+        Mms.READ_REPORT,
+        Mms.READ_STATUS,
+        Mms.REPORT_ALLOWED,
+        Mms.RETRIEVE_STATUS,
+        Mms.STATUS,
+        Mms.DATE,
+        Mms.DELIVERY_TIME,
+        Mms.EXPIRY,
+        Mms.MESSAGE_SIZE,
+        Mms.SUBJECT_CHARSET,
+        Mms.RETRIEVE_TEXT_CHARSET,
     };
 
-    private static final int PDU_COLUMN_ID = 0;
-    private static final int PDU_COLUMN_MESSAGE_BOX = 1;
-    private static final int PDU_COLUMN_THREAD_ID = 2;
-    private static final int PDU_COLUMN_RETRIEVE_TEXT = 3;
-    private static final int PDU_COLUMN_SUBJECT = 4;
-    private static final int PDU_COLUMN_CONTENT_LOCATION = 5;
-    private static final int PDU_COLUMN_CONTENT_TYPE = 6;
-    private static final int PDU_COLUMN_MESSAGE_CLASS = 7;
-    private static final int PDU_COLUMN_MESSAGE_ID = 8;
-    private static final int PDU_COLUMN_RESPONSE_TEXT = 9;
-    private static final int PDU_COLUMN_TRANSACTION_ID = 10;
-    private static final int PDU_COLUMN_CONTENT_CLASS = 11;
-    private static final int PDU_COLUMN_DELIVERY_REPORT = 12;
-    private static final int PDU_COLUMN_MESSAGE_TYPE = 13;
-    private static final int PDU_COLUMN_MMS_VERSION = 14;
-    private static final int PDU_COLUMN_PRIORITY = 15;
-    private static final int PDU_COLUMN_READ_REPORT = 16;
-    private static final int PDU_COLUMN_READ_STATUS = 17;
-    private static final int PDU_COLUMN_REPORT_ALLOWED = 18;
-    private static final int PDU_COLUMN_RETRIEVE_STATUS = 19;
-    private static final int PDU_COLUMN_STATUS = 20;
-    private static final int PDU_COLUMN_DATE = 21;
-    private static final int PDU_COLUMN_DELIVERY_TIME = 22;
-    private static final int PDU_COLUMN_EXPIRY = 23;
-    private static final int PDU_COLUMN_MESSAGE_SIZE = 24;
-    private static final int PDU_COLUMN_SUBJECT_CHARSET = 25;
+    private static final int PDU_COLUMN_ID                    = 0;
+    private static final int PDU_COLUMN_MESSAGE_BOX           = 1;
+    private static final int PDU_COLUMN_THREAD_ID             = 2;
+    private static final int PDU_COLUMN_RETRIEVE_TEXT         = 3;
+    private static final int PDU_COLUMN_SUBJECT               = 4;
+    private static final int PDU_COLUMN_CONTENT_LOCATION      = 5;
+    private static final int PDU_COLUMN_CONTENT_TYPE          = 6;
+    private static final int PDU_COLUMN_MESSAGE_CLASS         = 7;
+    private static final int PDU_COLUMN_MESSAGE_ID            = 8;
+    private static final int PDU_COLUMN_RESPONSE_TEXT         = 9;
+    private static final int PDU_COLUMN_TRANSACTION_ID        = 10;
+    private static final int PDU_COLUMN_CONTENT_CLASS         = 11;
+    private static final int PDU_COLUMN_DELIVERY_REPORT       = 12;
+    private static final int PDU_COLUMN_MESSAGE_TYPE          = 13;
+    private static final int PDU_COLUMN_MMS_VERSION           = 14;
+    private static final int PDU_COLUMN_PRIORITY              = 15;
+    private static final int PDU_COLUMN_READ_REPORT           = 16;
+    private static final int PDU_COLUMN_READ_STATUS           = 17;
+    private static final int PDU_COLUMN_REPORT_ALLOWED        = 18;
+    private static final int PDU_COLUMN_RETRIEVE_STATUS       = 19;
+    private static final int PDU_COLUMN_STATUS                = 20;
+    private static final int PDU_COLUMN_DATE                  = 21;
+    private static final int PDU_COLUMN_DELIVERY_TIME         = 22;
+    private static final int PDU_COLUMN_EXPIRY                = 23;
+    private static final int PDU_COLUMN_MESSAGE_SIZE          = 24;
+    private static final int PDU_COLUMN_SUBJECT_CHARSET       = 25;
     private static final int PDU_COLUMN_RETRIEVE_TEXT_CHARSET = 26;
 
-    private static final String[] PART_PROJECTION = new String[]{
-            Part._ID,
-            Part.CHARSET,
-            Part.CONTENT_DISPOSITION,
-            Part.CONTENT_ID,
-            Part.CONTENT_LOCATION,
-            Part.CONTENT_TYPE,
-            Part.FILENAME,
-            Part.NAME,
-            Part.TEXT
+    private static final String[] PART_PROJECTION = new String[] {
+        Part._ID,
+        Part.CHARSET,
+        Part.CONTENT_DISPOSITION,
+        Part.CONTENT_ID,
+        Part.CONTENT_LOCATION,
+        Part.CONTENT_TYPE,
+        Part.FILENAME,
+        Part.NAME,
+        Part.TEXT
     };
 
-    private static final int PART_COLUMN_ID = 0;
-    private static final int PART_COLUMN_CHARSET = 1;
+    private static final int PART_COLUMN_ID                  = 0;
+    private static final int PART_COLUMN_CHARSET             = 1;
     private static final int PART_COLUMN_CONTENT_DISPOSITION = 2;
-    private static final int PART_COLUMN_CONTENT_ID = 3;
-    private static final int PART_COLUMN_CONTENT_LOCATION = 4;
-    private static final int PART_COLUMN_CONTENT_TYPE = 5;
-    private static final int PART_COLUMN_FILENAME = 6;
-    private static final int PART_COLUMN_NAME = 7;
-    private static final int PART_COLUMN_TEXT = 8;
+    private static final int PART_COLUMN_CONTENT_ID          = 3;
+    private static final int PART_COLUMN_CONTENT_LOCATION    = 4;
+    private static final int PART_COLUMN_CONTENT_TYPE        = 5;
+    private static final int PART_COLUMN_FILENAME            = 6;
+    private static final int PART_COLUMN_NAME                = 7;
+    private static final int PART_COLUMN_TEXT                = 8;
 
     private static final HashMap<Uri, Integer> MESSAGE_BOX_MAP;
     // These map are used for convenience in persist() and load().
@@ -194,9 +200,9 @@ public class PduPersister {
 
     static {
         MESSAGE_BOX_MAP = new HashMap<Uri, Integer>();
-        MESSAGE_BOX_MAP.put(Mms.Inbox.CONTENT_URI, Mms.MESSAGE_BOX_INBOX);
-        MESSAGE_BOX_MAP.put(Mms.Sent.CONTENT_URI, Mms.MESSAGE_BOX_SENT);
-        MESSAGE_BOX_MAP.put(Mms.Draft.CONTENT_URI, Mms.MESSAGE_BOX_DRAFTS);
+        MESSAGE_BOX_MAP.put(Mms.Inbox.CONTENT_URI,  Mms.MESSAGE_BOX_INBOX);
+        MESSAGE_BOX_MAP.put(Mms.Sent.CONTENT_URI,   Mms.MESSAGE_BOX_SENT);
+        MESSAGE_BOX_MAP.put(Mms.Draft.CONTENT_URI,  Mms.MESSAGE_BOX_DRAFTS);
         MESSAGE_BOX_MAP.put(Mms.Outbox.CONTENT_URI, Mms.MESSAGE_BOX_OUTBOX);
 
         CHARSET_COLUMN_INDEX_MAP = new HashMap<Integer, Integer>();
@@ -272,7 +278,7 @@ public class PduPersister {
         LONG_COLUMN_NAME_MAP.put(PduHeaders.MESSAGE_SIZE, Mms.MESSAGE_SIZE);
 
         PDU_CACHE_INSTANCE = PduCache.getInstance();
-    }
+     }
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -283,13 +289,11 @@ public class PduPersister {
         mContext = context;
         mContentResolver = context.getContentResolver();
         mDrmManagerClient = new DrmManagerClient(context);
-        mTelephonyManager = (TelephonyManager) context
+        mTelephonyManager = (TelephonyManager)context
                 .getSystemService(Context.TELEPHONY_SERVICE);
-    }
+     }
 
-    /**
-     * Get(or create if not exist) an instance of PduPersister
-     */
+    /** Get(or create if not exist) an instance of PduPersister */
     public static PduPersister getPduPersister(Context context) {
         if ((sPersister == null)) {
             sPersister = new PduPersister(context);
@@ -439,8 +443,8 @@ public class PduPersister {
                     if (ContentType.TEXT_PLAIN.equals(type) || ContentType.APP_SMIL.equals(type)
                             || ContentType.TEXT_HTML.equals(type)) {
                         String text = c.getString(PART_COLUMN_TEXT);
-                        byte[] blob = new EncodedStringValue(text != null ? text : "")
-                                .getTextString();
+                        byte [] blob = new EncodedStringValue(text != null ? text : "")
+                            .getTextString();
                         baos.write(blob, 0, blob.length);
                     } else {
 
@@ -454,7 +458,7 @@ public class PduPersister {
                                 len = is.read(buffer);
                             }
                         } catch (IOException e) {
-                            Timber.e(e, "Failed to load part data");
+                            Timber.e("Failed to load part data", e);
                             c.close();
                             throw new MmsException(e);
                         } finally {
@@ -462,7 +466,7 @@ public class PduPersister {
                                 try {
                                     is.close();
                                 } catch (IOException e) {
-                                    Timber.e(e, "Failed to close stream");
+                                    Timber.e("Failed to close stream", e);
                                 } // Ignore
                             }
                         }
@@ -483,7 +487,7 @@ public class PduPersister {
     private void loadAddress(long msgId, PduHeaders headers) {
         Cursor c = SqliteWrapper.query(mContext, mContentResolver,
                 Uri.parse("content://mms/" + msgId + "/addr"),
-                new String[]{Addr.ADDRESS, Addr.CHARSET, Addr.TYPE},
+                new String[] { Addr.ADDRESS, Addr.CHARSET, Addr.TYPE },
                 null, null, null);
 
         if (c != null) {
@@ -530,7 +534,7 @@ public class PduPersister {
         int msgBox = 0;
         long threadId = DUMMY_THREAD_ID;
         try {
-            synchronized (PDU_CACHE_INSTANCE) {
+            synchronized(PDU_CACHE_INSTANCE) {
                 if (PDU_CACHE_INSTANCE.isUpdating(uri)) {
                     if (LOCAL_LOGV) {
                         Timber.v("load: " + uri + " blocked by isUpdating()");
@@ -538,13 +542,15 @@ public class PduPersister {
                     try {
                         PDU_CACHE_INSTANCE.wait();
                     } catch (InterruptedException e) {
-                        Timber.e(e, "load: ");
-                    }
-                    cacheEntry = PDU_CACHE_INSTANCE.get(uri);
-                    if (cacheEntry != null) {
-                        return cacheEntry.getPdu();
+                        Timber.e("load: ", e);
                     }
                 }
+
+                cacheEntry = PDU_CACHE_INSTANCE.get(uri);
+                if (cacheEntry != null) {
+                    return cacheEntry.getPdu();
+                }
+
                 // Tell the cache to indicate to other callers that this item
                 // is currently being updated.
                 PDU_CACHE_INSTANCE.setUpdating(uri, true);
@@ -618,57 +624,57 @@ public class PduPersister {
             }
 
             switch (msgType) {
-                case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
-                    pdu = new NotificationInd(headers);
-                    break;
-                case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
-                    pdu = new DeliveryInd(headers);
-                    break;
-                case PduHeaders.MESSAGE_TYPE_READ_ORIG_IND:
-                    pdu = new ReadOrigInd(headers);
-                    break;
-                case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
-                    pdu = new RetrieveConf(headers, body);
-                    break;
-                case PduHeaders.MESSAGE_TYPE_SEND_REQ:
-                    pdu = new SendReq(headers, body);
-                    break;
-                case PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND:
-                    pdu = new AcknowledgeInd(headers);
-                    break;
-                case PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND:
-                    pdu = new NotifyRespInd(headers);
-                    break;
-                case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
-                    pdu = new ReadRecInd(headers);
-                    break;
-                case PduHeaders.MESSAGE_TYPE_SEND_CONF:
-                case PduHeaders.MESSAGE_TYPE_FORWARD_REQ:
-                case PduHeaders.MESSAGE_TYPE_FORWARD_CONF:
-                case PduHeaders.MESSAGE_TYPE_MBOX_STORE_REQ:
-                case PduHeaders.MESSAGE_TYPE_MBOX_STORE_CONF:
-                case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_REQ:
-                case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_CONF:
-                case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_REQ:
-                case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_CONF:
-                case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_REQ:
-                case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_CONF:
-                case PduHeaders.MESSAGE_TYPE_MBOX_DESCR:
-                case PduHeaders.MESSAGE_TYPE_DELETE_REQ:
-                case PduHeaders.MESSAGE_TYPE_DELETE_CONF:
-                case PduHeaders.MESSAGE_TYPE_CANCEL_REQ:
-                case PduHeaders.MESSAGE_TYPE_CANCEL_CONF:
-                    throw new MmsException(
-                            "Unsupported PDU type: " + Integer.toHexString(msgType));
+            case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
+                pdu = new NotificationInd(headers);
+                break;
+            case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
+                pdu = new DeliveryInd(headers);
+                break;
+            case PduHeaders.MESSAGE_TYPE_READ_ORIG_IND:
+                pdu = new ReadOrigInd(headers);
+                break;
+            case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
+                pdu = new RetrieveConf(headers, body);
+                break;
+            case PduHeaders.MESSAGE_TYPE_SEND_REQ:
+                pdu = new SendReq(headers, body);
+                break;
+            case PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND:
+                pdu = new AcknowledgeInd(headers);
+                break;
+            case PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND:
+                pdu = new NotifyRespInd(headers);
+                break;
+            case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
+                pdu = new ReadRecInd(headers);
+                break;
+            case PduHeaders.MESSAGE_TYPE_SEND_CONF:
+            case PduHeaders.MESSAGE_TYPE_FORWARD_REQ:
+            case PduHeaders.MESSAGE_TYPE_FORWARD_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_STORE_REQ:
+            case PduHeaders.MESSAGE_TYPE_MBOX_STORE_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_REQ:
+            case PduHeaders.MESSAGE_TYPE_MBOX_VIEW_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_REQ:
+            case PduHeaders.MESSAGE_TYPE_MBOX_UPLOAD_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_REQ:
+            case PduHeaders.MESSAGE_TYPE_MBOX_DELETE_CONF:
+            case PduHeaders.MESSAGE_TYPE_MBOX_DESCR:
+            case PduHeaders.MESSAGE_TYPE_DELETE_REQ:
+            case PduHeaders.MESSAGE_TYPE_DELETE_CONF:
+            case PduHeaders.MESSAGE_TYPE_CANCEL_REQ:
+            case PduHeaders.MESSAGE_TYPE_CANCEL_CONF:
+                throw new MmsException(
+                        "Unsupported PDU type: " + Integer.toHexString(msgType));
 
-                default:
-                    throw new MmsException(
-                            "Unrecognized PDU type: " + Integer.toHexString(msgType));
+            default:
+                throw new MmsException(
+                        "Unrecognized PDU type: " + Integer.toHexString(msgType));
             }
         } finally {
-            synchronized (PDU_CACHE_INSTANCE) {
+            synchronized(PDU_CACHE_INSTANCE) {
                 if (pdu != null) {
-                    assert (PDU_CACHE_INSTANCE.get(uri) == null);
+                    assert(PDU_CACHE_INSTANCE.get(uri) == null);
                     // Update the cache entry with the real info
                     cacheEntry = new PduCacheEntry(pdu, msgBox, threadId);
                     PDU_CACHE_INSTANCE.put(uri, cacheEntry);
@@ -680,7 +686,8 @@ public class PduPersister {
         return pdu;
     }
 
-    private void persistAddress(long msgId, int type, EncodedStringValue[] array) {
+    private void persistAddress(
+            long msgId, int type, EncodedStringValue[] array) {
         ContentValues values = new ContentValues(3);
 
         for (EncodedStringValue addr : array) {
@@ -704,7 +711,7 @@ public class PduPersister {
         ContentValues values = new ContentValues(8);
 
         int charset = part.getCharset();
-        if (charset != 0) {
+        if (charset != 0 ) {
             values.put(Part.CHARSET, charset);
         }
 
@@ -798,15 +805,15 @@ public class PduPersister {
      * save it. If the data is an image, we may scale down it according
      * to user preference.
      *
-     * @param part           The PDU part which contains data to be saved.
-     * @param uri            The URI of the part.
-     * @param contentType    The MIME type of the part.
+     * @param part The PDU part which contains data to be saved.
+     * @param uri The URI of the part.
+     * @param contentType The MIME type of the part.
      * @param preOpenedFiles if not null, a map of preopened InputStreams for the parts.
      * @throws MmsException Cannot find source data or error occurred
-     *                      while saving the data.
+     *         while saving the data.
      */
     private void persistData(PduPart part, Uri uri,
-                             String contentType, HashMap<Uri, InputStream> preOpenedFiles)
+            String contentType, HashMap<Uri, InputStream> preOpenedFiles)
             throws MmsException {
         OutputStream os = null;
         InputStream is = null;
@@ -856,7 +863,7 @@ public class PduPersister {
                                 return;
                             }
                         } catch (Exception e) {
-                            Timber.e(e, "Can't get file info for: " + part.getDataUri());
+                            Timber.e("Can't get file info for: " + part.getDataUri(), e);
                         }
                     }
                     // We haven't converted the file yet, start the conversion
@@ -919,24 +926,24 @@ public class PduPersister {
                 }
             }
         } catch (FileNotFoundException e) {
-            Timber.e(e, "Failed to open Input/Output stream.");
+            Timber.e("Failed to open Input/Output stream.", e);
             throw new MmsException(e);
         } catch (IOException e) {
-            Timber.e(e, "Failed to read/write data.");
+            Timber.e("Failed to read/write data.", e);
             throw new MmsException(e);
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (IOException e) {
-                    Timber.e(e, "IOException while closing: " + os);
+                    Timber.e("IOException while closing: " + os, e);
                 } // Ignore
             }
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    Timber.e(e, "IOException while closing: " + is);
+                    Timber.e("IOException while closing: " + is, e);
                 } // Ignore
             }
             if (drmConvertSession != null) {
@@ -947,18 +954,18 @@ public class PduPersister {
                 File f = new File(path);
                 ContentValues values = new ContentValues(0);
                 SqliteWrapper.update(mContext, mContentResolver,
-                        Uri.parse("content://mms/resetFilePerm/" + f.getName()),
-                        values, null, null);
+                                     Uri.parse("content://mms/resetFilePerm/" + f.getName()),
+                                     values, null, null);
             }
         }
     }
 
     /**
      * This method expects uri in the following format
-     * content://media/<table_name>/<row_index> (or)
-     * file://sdcard/test.mp4
-     * http://test.com/test.mp4
-     * <p>
+     *     content://media/<table_name>/<row_index> (or)
+     *     file://sdcard/test.mp4
+     *     http://test.com/test.mp4
+     *
      * Here <table_name> shall be "video" or "audio" or "images"
      * <row_index> the index of the content in given table
      */
@@ -974,7 +981,7 @@ public class PduPersister {
                 path = uri.toString();
 
             } else if (scheme.equals(ContentResolver.SCHEME_CONTENT)) {
-                String[] projection = new String[]{MediaStore.MediaColumns.DATA};
+                String[] projection = new String[] {MediaStore.MediaColumns.DATA};
                 Cursor cursor = null;
                 try {
                     cursor = context.getContentResolver().query(uri, projection, null,
@@ -1013,12 +1020,12 @@ public class PduPersister {
     /**
      * Update headers of a SendReq.
      *
-     * @param uri     The PDU which need to be updated.
+     * @param uri The PDU which need to be updated.
      * @param sendReq New headers.
      * @throws MmsException Bad URI or updating failed.
      */
     public void updateHeaders(Uri uri, SendReq sendReq) {
-        synchronized (PDU_CACHE_INSTANCE) {
+        synchronized(PDU_CACHE_INSTANCE) {
             // If the cache item is getting updated, wait until it's done updating before
             // purging it.
             if (PDU_CACHE_INSTANCE.isUpdating(uri)) {
@@ -1028,7 +1035,7 @@ public class PduPersister {
                 try {
                     PDU_CACHE_INSTANCE.wait();
                 } catch (InterruptedException e) {
-                    Timber.e(e, "updateHeaders: ");
+                    Timber.e("updateHeaders: ", e);
                 }
             }
         }
@@ -1127,7 +1134,7 @@ public class PduPersister {
         ContentValues values = new ContentValues(7);
 
         int charset = part.getCharset();
-        if (charset != 0) {
+        if (charset != 0 ) {
             values.put(Part.CHARSET, charset);
         }
 
@@ -1179,8 +1186,8 @@ public class PduPersister {
     /**
      * Update all parts of a PDU.
      *
-     * @param uri            The PDU which need to be updated.
-     * @param body           New message body of the PDU.
+     * @param uri The PDU which need to be updated.
+     * @param body New message body of the PDU.
      * @param preOpenedFiles if not null, a map of preopened InputStreams for the parts.
      * @throws MmsException Bad URI or updating failed.
      */
@@ -1188,7 +1195,7 @@ public class PduPersister {
             throws MmsException {
         try {
             PduCacheEntry cacheEntry;
-            synchronized (PDU_CACHE_INSTANCE) {
+            synchronized(PDU_CACHE_INSTANCE) {
                 if (PDU_CACHE_INSTANCE.isUpdating(uri)) {
                     if (LOCAL_LOGV) {
                         Timber.v("updateParts: " + uri + " blocked by isUpdating()");
@@ -1196,7 +1203,7 @@ public class PduPersister {
                     try {
                         PDU_CACHE_INSTANCE.wait();
                     } catch (InterruptedException e) {
-                        Timber.e(e, "updateParts: ");
+                        Timber.e("updateParts: ", e);
                     }
                     cacheEntry = PDU_CACHE_INSTANCE.get(uri);
                     if (cacheEntry != null) {
@@ -1251,51 +1258,52 @@ public class PduPersister {
                 updatePart(e.getKey(), e.getValue(), preOpenedFiles);
             }
         } finally {
-            synchronized (PDU_CACHE_INSTANCE) {
+            synchronized(PDU_CACHE_INSTANCE) {
                 PDU_CACHE_INSTANCE.setUpdating(uri, false);
                 PDU_CACHE_INSTANCE.notifyAll();
             }
         }
     }
 
+    public String getContentLocationFromPduHeader(GenericPdu pdu) {
+        return toIsoString(pdu.getPduHeaders().getTextString(PduHeaders.CONTENT_LOCATION));
+    }
+
     /**
      * Persist a PDU object to specific location in the storage.
      *
-     * @param pdu             The PDU object to be stored.
-     * @param uri             Where to store the given PDU object.
-     * @param threadId
-     * @param createThreadId  if true, this function may create a thread id for the recipients
+     * @param pdu The PDU object to be stored.
+     * @param uri Where to store the given PDU object.
+     * @param createThreadId if true, this function may create a thread id for the recipients
      * @param groupMmsEnabled if true, all of the recipients addressed in the PDU will be used
-     *                        to create the associated thread. When false, only the sender will be used in finding or
-     *                        creating the appropriate thread or conversation.
-     * @param preOpenedFiles  if not null, a map of preopened InputStreams for the parts.
+     *  to create the associated thread. When false, only the sender will be used in finding or
+     *  creating the appropriate thread or conversation.
+     * @param preOpenedFiles if not null, a map of preopened InputStreams for the parts.
      * @return A Uri which can be used to access the stored PDU.
      */
 
-    public Uri persist(GenericPdu pdu, Uri uri, long threadId, boolean createThreadId, boolean groupMmsEnabled,
-                       HashMap<Uri, InputStream> preOpenedFiles) throws MmsException {
-
+    public Uri persist(GenericPdu pdu, Uri uri, boolean createThreadId, boolean groupMmsEnabled,
+            HashMap<Uri, InputStream> preOpenedFiles, int subscriptionId)
+            throws MmsException {
         if (uri == null) {
             throw new MmsException("Uri may not be null.");
         }
-
         long msgId = -1;
         try {
             msgId = ContentUris.parseId(uri);
         } catch (NumberFormatException e) {
             // the uri ends with "inbox" or something else like that
         }
-
         boolean existingUri = msgId != -1;
 
         if (!existingUri && MESSAGE_BOX_MAP.get(uri) == null) {
             throw new MmsException(
                     "Bad destination, must be one of "
-                            + "content://mms/inbox, content://mms/sent, "
-                            + "content://mms/drafts, content://mms/outbox, "
-                            + "content://mms/temp.");
+                    + "content://mms/inbox, content://mms/sent, "
+                    + "content://mms/drafts, content://mms/outbox, "
+                    + "content://mms/temp.");
         }
-        synchronized (PDU_CACHE_INSTANCE) {
+        synchronized(PDU_CACHE_INSTANCE) {
             // If the cache item is getting updated, wait until it's done updating before
             // purging it.
             if (PDU_CACHE_INSTANCE.isUpdating(uri)) {
@@ -1305,7 +1313,7 @@ public class PduPersister {
                 try {
                     PDU_CACHE_INSTANCE.wait();
                 } catch (InterruptedException e) {
-                    Timber.e(e, "persist1: ");
+                    Timber.e("persist1: ", e);
                 }
             }
         }
@@ -1328,7 +1336,7 @@ public class PduPersister {
         }
 
         set = TEXT_STRING_COLUMN_NAME_MAP.entrySet();
-        for (Entry<Integer, String> e : set) {
+        for (Entry<Integer, String> e : set){
             byte[] text = header.getTextString(e.getKey());
             if (text != null) {
                 values.put(e.getValue(), toIsoString(text));
@@ -1336,7 +1344,7 @@ public class PduPersister {
         }
 
         set = OCTET_COLUMN_NAME_MAP.entrySet();
-        for (Entry<Integer, String> e : set) {
+        for (Entry<Integer, String> e : set){
             int b = header.getOctet(e.getKey());
             if (b != 0) {
                 values.put(e.getValue(), b);
@@ -1344,7 +1352,7 @@ public class PduPersister {
         }
 
         set = LONG_COLUMN_NAME_MAP.entrySet();
-        for (Entry<Integer, String> e : set) {
+        for (Entry<Integer, String> e : set){
             long l = header.getLongInteger(e.getKey());
             if (l != -1L) {
                 values.put(e.getValue(), l);
@@ -1401,7 +1409,8 @@ public class PduPersister {
                     loadRecipients(PduHeaders.TO, recipients, addressMap, false);
                     break;
             }
-            if (threadId == DUMMY_THREAD_ID && createThreadId && !recipients.isEmpty()) {
+            long threadId = DUMMY_THREAD_ID;
+            if (createThreadId && !recipients.isEmpty()) {
                 // Given all the recipients associated with this message, find (or create) the
                 // correct thread.
                 threadId = Threads.getOrCreateThreadId(mContext, recipients);
@@ -1413,6 +1422,9 @@ public class PduPersister {
         // while saving the parts.
         long dummyId = System.currentTimeMillis(); // Dummy ID of the msg.
 
+        // Figure out if this PDU is a text-only message
+        boolean textOnly = true;
+
         // Sum up the total message size
         int messageSize = 0;
 
@@ -1421,18 +1433,41 @@ public class PduPersister {
             body = ((MultimediaMessagePdu) pdu).getBody();
             // Start saving parts if necessary.
             if (body != null) {
-                for (int i = 0; i < body.getPartsNum(); i++) {
+                int partsNum = body.getPartsNum();
+                if (partsNum > 2) {
+                    // For a text-only message there will be two parts: 1-the SMIL, 2-the text.
+                    // Down a few lines below we're checking to make sure we've only got SMIL or
+                    // text. We also have to check then we don't have more than two parts.
+                    // Otherwise, a slideshow with two text slides would be marked as textOnly.
+                    textOnly = false;
+                }
+                for (int i = 0; i < partsNum; i++) {
                     PduPart part = body.getPart(i);
                     messageSize += part.getDataLength();
                     persistPart(part, dummyId, preOpenedFiles);
+
+                    // If we've got anything besides text/plain or SMIL part, then we've got
+                    // an mms message with some other type of attachment.
+                    String contentType = getPartContentType(part);
+                    if (contentType != null && !ContentType.APP_SMIL.equals(contentType)
+                            && !ContentType.TEXT_PLAIN.equals(contentType)) {
+                        textOnly = false;
+                    }
                 }
             }
         }
-
+        // Record whether this mms message is a simple plain text or not. This is a hint for the
+        // UI.
+        // values.put(Mms.TEXT_ONLY, textOnly ? 1 : 0);
         // The message-size might already have been inserted when parsing the
         // PDU header. If not, then we insert the message size as well.
         if (values.getAsInteger(Mms.MESSAGE_SIZE) == null) {
             values.put(Mms.MESSAGE_SIZE, messageSize);
+        }
+
+        // insert only if it is a valid subscription id.
+        if (Settings.DEFAULT_SUBSCRIPTION_ID != subscriptionId && SubscriptionIdChecker.getInstance(mContext).canUseSubscriptionId()) {
+            values.put(Telephony.Mms.SUBSCRIPTION_ID, subscriptionId);
         }
 
         Uri res = null;
@@ -1452,8 +1487,8 @@ public class PduPersister {
         values = new ContentValues(1);
         values.put(Part.MSG_ID, msgId);
         SqliteWrapper.update(mContext, mContentResolver,
-                Uri.parse("content://mms/" + dummyId + "/part"),
-                values, null, null);
+                             Uri.parse("content://mms/" + dummyId + "/part"),
+                             values, null, null);
         // We should return the longest URI of the persisted PDU, for
         // example, if input URI is "content://mms/inbox" and the _ID of
         // persisted PDU is '8', we should return "content://mms/inbox/8"
@@ -1477,13 +1512,13 @@ public class PduPersister {
     /**
      * For a given address type, extract the recipients from the headers.
      *
-     * @param addressType     can be PduHeaders.FROM, PduHeaders.TO or PduHeaders.CC
-     * @param recipients      a HashSet that is loaded with the recipients from the FROM, TO or CC headers
-     * @param addressMap      a HashMap of the addresses from the ADDRESS_FIELDS header
+     * @param addressType can be PduHeaders.FROM, PduHeaders.TO or PduHeaders.CC
+     * @param recipients a HashSet that is loaded with the recipients from the FROM, TO or CC headers
+     * @param addressMap a HashMap of the addresses from the ADDRESS_FIELDS header
      * @param excludeMyNumber if true, the number of this phone will be excluded from recipients
      */
     private void loadRecipients(int addressType, HashSet<String> recipients,
-                                HashMap<Integer, EncodedStringValue[]> addressMap, boolean excludeMyNumber) {
+            HashMap<Integer, EncodedStringValue[]> addressMap, boolean excludeMyNumber) {
         EncodedStringValue[] array = addressMap.get(addressType);
         if (array == null) {
             return;
@@ -1512,10 +1547,10 @@ public class PduPersister {
      * Move a PDU object from one location to another.
      *
      * @param from Specify the PDU object to be moved.
-     * @param to   The destination location, should be one of the following:
-     *             "content://mms/inbox", "content://mms/sent",
-     *             "content://mms/drafts", "content://mms/outbox",
-     *             "content://mms/trash".
+     * @param to The destination location, should be one of the following:
+     *        "content://mms/inbox", "content://mms/sent",
+     *        "content://mms/drafts", "content://mms/outbox",
+     *        "content://mms/trash".
      * @return New Uri of the moved PDU.
      * @throws MmsException Error occurred while moving the message.
      */
@@ -1531,9 +1566,9 @@ public class PduPersister {
         if (msgBox == null) {
             throw new MmsException(
                     "Bad destination, must be one of "
-                            + "content://mms/inbox, content://mms/sent, "
-                            + "content://mms/drafts, content://mms/outbox, "
-                            + "content://mms/temp.");
+                    + "content://mms/inbox, content://mms/sent, "
+                    + "content://mms/drafts, content://mms/outbox, "
+                    + "content://mms/temp.");
         }
 
         ContentValues values = new ContentValues(1);
@@ -1550,7 +1585,7 @@ public class PduPersister {
             return new String(bytes, CharacterSets.MIMENAME_ISO_8859_1);
         } catch (UnsupportedEncodingException e) {
             // Impossible to reach here!
-            Timber.e(e, "ISO_8859_1 must be supported!");
+            Timber.e("ISO_8859_1 must be supported!", e);
             return "";
         }
     }
@@ -1563,7 +1598,7 @@ public class PduPersister {
             return data.getBytes(CharacterSets.MIMENAME_ISO_8859_1);
         } catch (UnsupportedEncodingException e) {
             // Impossible to reach here!
-            Timber.e(e, "ISO_8859_1 must be supported!");
+            Timber.e("ISO_8859_1 must be supported!", e);
             return new byte[0];
         }
     }
@@ -1581,8 +1616,8 @@ public class PduPersister {
      */
     public Cursor getPendingMessages(long dueTime) {
         if (!checkReadSmsPermissions()) {
-            Timber.w("No read sms permissions have been granted");
-            return null;
+          Timber.w("No read sms permissions have been granted");
+          return null;
         }
         Uri.Builder uriBuilder = PendingMessages.CONTENT_URI.buildUpon();
         uriBuilder.appendQueryParameter("protocol", "mms");
@@ -1590,7 +1625,7 @@ public class PduPersister {
         String selection = PendingMessages.ERROR_TYPE + " < ?"
                 + " AND " + PendingMessages.DUE_TIME + " <= ?";
 
-        String[] selectionArgs = new String[]{
+        String[] selectionArgs = new String[] {
                 String.valueOf(MmsSms.ERR_TYPE_GENERIC_PERMANENT),
                 String.valueOf(dueTime)
         };
@@ -1604,6 +1639,8 @@ public class PduPersister {
      * Check if read permissions for SMS have been granted
      */
     private boolean checkReadSmsPermissions() {
-        return mContext.checkSelfPermission(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED;
+        return // Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
+                mContext.checkSelfPermission(Manifest.permission.READ_SMS) ==
+                        PackageManager.PERMISSION_GRANTED;
     }
 }

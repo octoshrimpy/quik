@@ -16,20 +16,26 @@
 
 package com.android.mms.dom.smil;
 
-import com.android.mms.dom.events.EventImpl;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.events.DocumentEvent;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.smil.ElementTime;
 import org.w3c.dom.smil.SMILMediaElement;
 import org.w3c.dom.smil.TimeList;
+
 import timber.log.Timber;
 
-public class SmilMediaElementImpl extends SmilElementImpl implements SMILMediaElement {
+import com.android.mms.logs.LogTag;
+import com.android.mms.dom.events.EventImpl;
+
+public class SmilMediaElementImpl extends SmilElementImpl implements
+        SMILMediaElement {
     public final static String SMIL_MEDIA_START_EVENT = "SmilMediaStart";
     public final static String SMIL_MEDIA_END_EVENT = "SmilMediaEnd";
     public final static String SMIL_MEDIA_PAUSE_EVENT = "SmilMediaPause";
     public final static String SMIL_MEDIA_SEEK_EVENT = "SmilMediaSeek";
+    private final static String TAG = LogTag.TAG;
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     ElementTime mElementTime = new ElementTimeImpl(this) {

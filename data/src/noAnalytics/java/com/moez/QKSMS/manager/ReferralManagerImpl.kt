@@ -19,11 +19,7 @@
 
 package dev.octoshrimpy.quik.manager
 
-import android.content.Context
-import dev.octoshrimpy.quik.util.Preferences
-import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
-import kotlin.coroutines.resume
 
 class ReferralManagerImpl @Inject constructor() : ReferralManager {
 
