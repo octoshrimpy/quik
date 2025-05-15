@@ -16,6 +16,8 @@
 
 package com.android.mms.layout;
 
+import com.android.mms.logs.LogTag;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import timber.log.Timber;
@@ -24,6 +26,7 @@ import timber.log.Timber;
  * MMS presentation layout management.
  */
 public class LayoutManager {
+    private static final String TAG = LogTag.TAG;
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 

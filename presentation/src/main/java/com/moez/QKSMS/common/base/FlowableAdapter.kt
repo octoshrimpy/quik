@@ -29,7 +29,7 @@ import io.reactivex.disposables.Disposable
  */
 abstract class FlowableAdapter<T> : QkAdapter<T, QkViewHolder>() {
 
-    var flowable: Flowable<List<T>>? = null
+    private var flowable: Flowable<List<T>>? = null
         set(value) {
             if (field === value) return
 

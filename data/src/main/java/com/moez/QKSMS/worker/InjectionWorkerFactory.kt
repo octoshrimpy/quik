@@ -23,15 +23,18 @@ import androidx.work.ListenableWorker
 import androidx.work.Worker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import dev.octoshrimpy.quik.interactor.ReceiveMms
 import dev.octoshrimpy.quik.interactor.ReceiveSms
+import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import javax.inject.Inject
 
 class InjectionWorkerFactory @Inject constructor(
     private val receiveSms: ReceiveSms,
-    private val scheduledMessageRepository: ScheduledMessageRepository
-)
-: WorkerFactory() {
+    private val receiveMms: ReceiveMms,
+    private val scheduledMessageRepository: ScheduledMessageRepository,
+    private val notificationManager: NotificationManager,
+) : WorkerFactory() {
     override fun createWorker(
         appContext: Context,
         workerClassName: String,
@@ -44,11 +47,15 @@ class InjectionWorkerFactory @Inject constructor(
             .newInstance(appContext, workerParameters)
 
         when (instance) {
-            is HousekeepingWorker -> {
+            is HousekeepingWorker ->
                 instance.scheduledMessageRepository = scheduledMessageRepository
-            }
             is ReceiveSmsWorker -> {
                 instance.receiveSms = receiveSms
+                instance.notificationManager = notificationManager
+            }
+            is ReceiveMmsWorker -> {
+                instance.receiveMms = receiveMms
+                instance.notificationManager = notificationManager
             }
         }
 

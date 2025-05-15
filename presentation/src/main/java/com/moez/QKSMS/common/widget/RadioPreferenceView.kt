@@ -87,7 +87,7 @@ class RadioPreferenceView @JvmOverloads constructor(
         radioButton.buttonTintList = ColorStateList(states, intArrayOf(themeColor, textSecondary))
         radioButton.forwardTouches(this)
 
-        context.obtainStyledAttributes(attrs, R.styleable.RadioPreferenceView)?.run {
+        context.obtainStyledAttributes(attrs, R.styleable.RadioPreferenceView).run {
             title = getString(R.styleable.RadioPreferenceView_title)
             summary = getString(R.styleable.RadioPreferenceView_summary)
 

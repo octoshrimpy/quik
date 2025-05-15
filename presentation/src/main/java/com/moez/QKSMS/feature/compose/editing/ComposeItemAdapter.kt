@@ -84,9 +84,7 @@ class ComposeItemAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
         val prevItem = if (position > 0) getItem(position - 1) else null
-        val item = getItem(position)
-
-        when (item) {
+        when (val item = getItem(position)) {
             is ComposeItem.New -> bindNew(holder, item.value)
             is ComposeItem.Recent -> bindRecent(holder, item.value, prevItem)
             is ComposeItem.Starred -> bindStarred(holder, item.value, prevItem)

@@ -251,7 +251,7 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun showAutoDeleteDialog(days: Int) = autoDeleteDialog.setExpiry(days).show()
 
     override suspend fun showAutoDeleteWarningDialog(messages: Int): Boolean = withContext(Dispatchers.Main) {
-        suspendCancellableCoroutine<Boolean> { cont ->
+        suspendCancellableCoroutine { cont ->
             AlertDialog.Builder(activity!!)
                     .setTitle(R.string.settings_auto_delete_warning)
                     .setMessage(context.resources.getString(R.string.settings_auto_delete_warning_message, messages))

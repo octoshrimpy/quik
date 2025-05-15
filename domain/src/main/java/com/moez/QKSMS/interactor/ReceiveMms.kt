@@ -44,53 +44,57 @@ class ReceiveMms @Inject constructor(
 
     override fun buildObservable(params: Uri): Flowable<*> {
         return Flowable.just(params)
-                .mapNotNull(syncManager::syncMessage) // Sync the message
-                .doOnNext { message ->
-                    // TODO: Ideally this is done when we're saving the MMS to ContentResolver
-                    // This change can be made once we move the MMS storing code to the Data module
-                    if (activeConversationManager.getActiveConversation() == message.threadId) {
+            .mapNotNull(syncManager::syncMessage) // Sync the message
+            .doOnNext { message ->
+                // TODO: Ideally this is done when we're saving the MMS to ContentResolver
+                // This change can be made once we move the MMS storing code to the Data module
+                if (activeConversationManager.getActiveConversation() == message.threadId) {
+                    messageRepo.markRead(listOf(message.threadId))
+                }
+            }
+            .mapNotNull { message ->
+                // Because we use the smsmms library for receiving and storing MMS, we'll need
+                // to check if it should be blocked after we've pulled it into realm. If it
+                // turns out that it should be dropped, then delete it
+                // TODO Don't store blocked messages in the first place
+                val action = blockingClient.shouldBlock(message.address).blockingGet()
+                val shouldDrop = prefs.drop.get()
+                Timber.v("block=$action, drop=$shouldDrop")
+
+                if (action is BlockingClient.Action.Block && shouldDrop) {
+                    messageRepo.deleteMessages(listOf(message.id))
+                    return@mapNotNull null
+                }
+
+                when (action) {
+                    is BlockingClient.Action.Block -> {
                         messageRepo.markRead(listOf(message.threadId))
+                        conversationRepo.markBlocked(
+                            listOf(message.threadId), prefs.blockingManager.get(), action.reason
+                        )
                     }
+                    is BlockingClient.Action.Unblock ->
+                        conversationRepo.markUnblocked(message.threadId)
+                    else -> Unit
                 }
-                .mapNotNull { message ->
-                    // Because we use the smsmms library for receiving and storing MMS, we'll need
-                    // to check if it should be blocked after we've pulled it into realm. If it
-                    // turns out that it should be dropped, then delete it
-                    // TODO Don't store blocked messages in the first place
-                    val action = blockingClient.shouldBlock(message.address).blockingGet()
-                    val shouldDrop = prefs.drop.get()
-                    Timber.v("block=$action, drop=$shouldDrop")
 
-                    if (action is BlockingClient.Action.Block && shouldDrop) {
-                        messageRepo.deleteMessages(listOf(message.id))
-                        return@mapNotNull null
-                    }
-
-                    when (action) {
-                        is BlockingClient.Action.Block -> {
-                            messageRepo.markRead(listOf(message.threadId))
-                            conversationRepo.markBlocked(listOf(message.threadId), prefs.blockingManager.get(), action.reason)
-                        }
-                        is BlockingClient.Action.Unblock -> conversationRepo.markUnblocked(message.threadId)
-                        else -> Unit
-                    }
-
-                    message
-                }
-                .doOnNext { message ->
-                    conversationRepo.updateConversations(message.threadId) // Update the conversation
-                }
-                .mapNotNull { message ->
-                    conversationRepo.getOrCreateConversation(message.threadId) // Map message to conversation
-                }
-                .filter { conversation -> !conversation.blocked } // Don't notify for blocked conversations
-                .doOnNext { conversation ->
-                    // Unarchive conversation if necessary
-                    if (conversation.archived) conversationRepo.markUnarchived(conversation.id)
-                }
-                .map { conversation -> conversation.id } // Map to the id because [delay] will put us on the wrong thread
-                .doOnNext(notificationManager::update) // Update the notification
-                .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
+                message
+            }
+            .doOnNext { message ->
+                conversationRepo.updateConversations(listOf(message.threadId)) // Update the conversation
+            }
+            .mapNotNull { message ->
+                conversationRepo.getOrCreateConversation(message.threadId) // Map message to conversation
+            }
+            .filter { conversation -> !conversation.blocked } // Don't notify for blocked conversations
+            .doOnNext { conversation ->
+                // Unarchive conversation if necessary
+                if (conversation.archived)
+                    conversationRepo.markUnarchived(listOf(conversation.id))
+            }
+            .map { conversation -> conversation.id } // Map to the id because [delay] will put us on the wrong thread
+            .doOnNext(notificationManager::update) // Update the notification
+            .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
     }
 
 }

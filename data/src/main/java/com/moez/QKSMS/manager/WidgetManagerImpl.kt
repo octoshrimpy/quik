@@ -24,22 +24,20 @@ import android.content.Context
 import android.content.Intent
 import com.klinker.android.send_message.BroadcastUtils
 import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.nonDebugPackageName
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 
-class WidgetManagerImpl @Inject constructor(
-    private val context: Context,
-    private val prefs: Preferences
-    ) : WidgetManager {
-
+class WidgetManagerImpl @Inject constructor(private val context: Context, prefs: Preferences)
+    : WidgetManager {
     companion object {
         private var staticUnreadAtTopPrefsDisposable = AtomicReference<Disposable>(null)
 
         fun sendDatasetChanged(context: Context) {
-            BroadcastUtils.sendExplicitBroadcast(context, Intent(), WidgetManager.ACTION_NOTIFY_DATASET_CHANGED)
+            BroadcastUtils.sendExplicitBroadcast(context, Intent(), "${context.packageName}.${WidgetManager.ACTION_NOTIFY_DATASET_CHANGED}")
         }
     }
 
@@ -61,7 +59,12 @@ class WidgetManagerImpl @Inject constructor(
 
     override fun updateTheme() {
         val ids = AppWidgetManager.getInstance(context)
-            .getAppWidgetIds(ComponentName(context.packageName, "dev.octoshrimpy.quik.feature.widget.WidgetProvider"))
+            .getAppWidgetIds(
+                ComponentName(
+                    context.packageName,
+                    "${nonDebugPackageName(context.packageName)}.feature.widget.WidgetProvider"
+                )
+            )
 
         val intent = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
 

@@ -31,9 +31,6 @@ interface ConversationRepository {
 
     fun getConversationsSnapshot(unreadAtTop: Boolean): List<Conversation>
 
-    /**
-     * Returns the top conversations that were active in the last week
-     */
     fun getTopConversations(): List<Conversation>
 
     fun setConversationName(id: Long, name: String): Completable
@@ -48,15 +45,14 @@ interface ConversationRepository {
 
     fun getConversation(threadId: Long): Conversation?
 
+    fun updateSendAsGroup(threadId: Long, sendAsGroup: Boolean): Unit?
+
     fun getUnseenIds(archived: Boolean = false): List<Long>
 
     fun getUnreadIds(archived: Boolean = false): List<Long>
 
     fun getConversationAndLastSenderContactName(threadId: Long): Pair<Conversation?, String?>?
 
-    /**
-     * Returns all conversations with an id in [threadIds]
-     */
     fun getConversations(vararg threadIds: Long): RealmResults<Conversation>
 
     fun getUnmanagedConversations(): Observable<List<Conversation>>
@@ -67,26 +63,27 @@ interface ConversationRepository {
 
     fun getRecipient(recipientId: Long): Recipient?
 
-    fun getConversation(recipient: String): Conversation?
+    fun getOrCreateConversation(threadId: Long, sendAsGroup: Boolean = false): Conversation?
 
-    fun getConversation(recipients: Collection<String>): Conversation?
+    fun createConversation(threadId: Long, sendAsGroup: Boolean = false): Conversation?
 
-    fun getOrCreateConversation(threadId: Long): Conversation?
+    fun getConversation(addresses: Collection<String>): Conversation?
 
-    fun getOrCreateConversation(address: String): Conversation?
+    fun getOrCreateConversation(
+        addresses: Collection<String>, sendAsGroup: Boolean = false
+    ): Conversation?
 
-    fun getOrCreateConversation(addresses: Collection<String>): Conversation?
+    fun createConversation(
+        addresses: Collection<String>, sendAsGroup: Boolean = false
+    ): Conversation?
 
     fun saveDraft(threadId: Long, draft: String)
 
-    /**
-     * Updates message-related fields in the conversation, like the date and snippet
-     */
-    fun updateConversations(vararg threadIds: Long)
+    fun updateConversations(threadIds: Collection<Long>)
 
     fun markArchived(vararg threadIds: Long)
 
-    fun markUnarchived(vararg threadIds: Long)
+    fun markUnarchived(threadIds: Collection<Long>)
 
     fun markPinned(vararg threadIds: Long)
 

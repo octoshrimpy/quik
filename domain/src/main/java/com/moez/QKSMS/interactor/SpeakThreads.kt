@@ -18,9 +18,7 @@
  */
 package dev.octoshrimpy.quik.interactor
 
-import android.content.res.Resources
 import com.moez.QKSMS.manager.SpeakManager
-import dev.octoshrimpy.quik.domain.R
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
@@ -31,6 +29,7 @@ import javax.inject.Inject
 class SpeakThreads @Inject constructor(
     private val conversationRepo: ConversationRepository,
     private val messageRepo: MessageRepository,
+    private val speakManager: SpeakManager
 ) : Interactor<List<Long>>() {
 
     companion object {
@@ -42,8 +41,6 @@ class SpeakThreads @Inject constructor(
     }
 
     override fun buildObservable(threadIds: List<Long>): Flowable<*> {
-        val speakManager = SpeakManager()
-
         if (threadIds.isEmpty())
               return Single.just(0)
                   .doOnSubscribe { speakManager.startSpeakSession(noMessagesStr) }
@@ -54,9 +51,10 @@ class SpeakThreads @Inject constructor(
         return Flowable.fromIterable(threadIds)
             .doOnSubscribe { speakManager.startSpeakSession("threads:" + threadIds.sorted().joinToString()) }
             .mapNotNull { threadId -> conversationRepo.getConversationAndLastSenderContactName(threadId) }
-            .map { conversationAndSender ->
-                    if (speakManager.speakConversationLastSms(conversationAndSender))
-                        messageRepo.markSeen(conversationAndSender.first!!.id)
+            .map { (conversation, sender) ->
+                if (speakManager.speakConversationLastSms(Pair(conversation, sender)) &&
+                    conversation != null)
+                    messageRepo.markSeen(listOf(conversation.id))
             }
             .doOnTerminate { speakManager.endSpeakSession() }
     }

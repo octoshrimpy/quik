@@ -52,8 +52,8 @@ class MenuItemAdapter @Inject constructor(private val context: Context, private 
 
             field = value
 
-            old.let { notifyItemChanged(it) }
-            new.let { notifyItemChanged(it) }
+            notifyItemChanged(old)
+            notifyItemChanged(new)
         }
 
     fun setData(@ArrayRes titles: Int, @ArrayRes values: Int = -1) {

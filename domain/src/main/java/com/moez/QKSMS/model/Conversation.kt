@@ -35,7 +35,9 @@ open class Conversation(
     var blockingClient: Int? = null,
     var blockReason: String? = null,
 
-    var name: String = "" // For group chats, the user is allowed to set a custom title for the conversation
+    var name: String = "", // custom title
+
+    var sendAsGroup: Boolean = false,
 ) : RealmObject() {
 
     val date: Long get() = lastMessage?.date ?: 0

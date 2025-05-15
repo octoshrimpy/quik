@@ -27,7 +27,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import dev.octoshrimpy.quik.R
-import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeAttribute
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import kotlinx.android.synthetic.main.blocking_manager_preference_view.view.*
