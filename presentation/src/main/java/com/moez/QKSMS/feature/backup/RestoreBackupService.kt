@@ -101,7 +101,7 @@ class RestoreBackupService : Service() {
 
         // Start the restore
         Observable.just(intent)
-            .map { Uri.parse(it.getStringExtra("${baseContext.packageName}.$EXTRA_FILE_URI}")) }
+            .map { Uri.parse(it.getStringExtra("${baseContext.packageName}.$EXTRA_FILE_URI")) }
             .map(backupRepo::performRestore)
             .subscribeOn(Schedulers.io())
             .subscribe({}, Timber::w)
