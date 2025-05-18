@@ -28,6 +28,7 @@ import android.widget.RemoteViewsService
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import androidx.core.text.italic
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
@@ -142,9 +143,6 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
         remoteViews.setTextColor(R.id.name, textPrimary)
         remoteViews.setTextViewText(R.id.name, boldText(buildSpannedString {
             append(conversation.getTitle())
-            if (conversation.draft.isNotEmpty()) {
-                color(theme.theme) { append(" " + context.getString(R.string.main_draft)) }
-            }
         }, conversation.unread))
 
         // Date
@@ -154,12 +152,17 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 
         // Snippet
         val snippet = when {
-            conversation.draft.isNotEmpty() -> conversation.draft
+            conversation.draft.isNotEmpty() -> context.getString(
+                R.string.main_sender_draft,
+                conversation.draft
+            )
+
             conversation.me -> context.getString(R.string.main_sender_you, conversation.snippet)
             else -> conversation.snippet
         }
         remoteViews.setTextColor(R.id.snippet, if (conversation.unread) textPrimary else textTertiary)
         remoteViews.setTextViewText(R.id.snippet, boldText(snippet, conversation.unread))
+        remoteViews.setTextViewText(R.id.snippet, italicText(snippet, conversation.draft.isNotEmpty()))
 
         // set fill-in intent to be used for current item
         remoteViews.setOnClickFillInIntent(
@@ -187,6 +190,12 @@ class WidgetAdapter(intent: Intent) : RemoteViewsService.RemoteViewsFactory {
     private fun boldText(text: CharSequence?, shouldBold: Boolean): CharSequence? = when {
         shouldBold -> SpannableStringBuilder()
                 .bold { append(text) }
+        else -> text
+    }
+
+    private fun italicText(text: CharSequence?, shouldBold: Boolean): CharSequence? = when {
+        shouldBold -> SpannableStringBuilder()
+        .italic { append(text) }
         else -> text
     }
 
