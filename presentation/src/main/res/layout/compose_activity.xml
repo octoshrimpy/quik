@@ -139,7 +139,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
-        android:text="@string/compose_send_group_summary"
+        android:text="@string/compose_send_group_summary_on"
         android:textColor="?android:attr/textColorTertiary"
         app:layout_constraintEnd_toEndOf="@id/sendAsGroupTitle"
         app:layout_constraintStart_toStartOf="@id/sendAsGroupTitle"

@@ -14,18 +14,17 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
-class SpeakManager() {
+class SpeakManager @Inject constructor (private val context: Context) {
     companion object {
         // system TextToSpeech engine
         private var staticTextToSpeech = AtomicReference<TextToSpeech>(null)
 
         val lock = Any()
-
-        private var context: Context? = null
 
         // currently speaking sessionId
         private var currentSessionId: String? = null
@@ -33,14 +32,6 @@ class SpeakManager() {
         // audio manager items for audio focus
         private var audioManager: AudioManager? = null
         private var audioFocusRequest: AudioFocusRequest? = null
-
-        fun setContext(inContext: Context) {
-            synchronized(lock) {
-                if (context !== null)
-                    return
-                context = inContext
-            }
-        }
     }
 
     private var sessionId: String? = null
@@ -53,12 +44,9 @@ class SpeakManager() {
         if (tts !== null)
             return tts
 
-        // if context not set then the global engine can not be instantiated
-        if (context === null)
-            return null
-
         val audioAttributes = AudioAttributes.Builder(). run {
-            setUsage(AudioAttributes.USAGE_ASSISTANT)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                setUsage(AudioAttributes.USAGE_ASSISTANT)
             setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
             build()
         }
@@ -70,7 +58,7 @@ class SpeakManager() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 // init audio manager and audio focus request first time through only
                 localAudioManager =
-                    context?.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                 if (localAudioManager === null)
                     return null
 
@@ -199,10 +187,9 @@ class SpeakManager() {
 
         this.sessionId = sessionId
 
-        sessionStopped = if ((this.sessionId !== null) && (toggle) && (currentSessionId == sessionId)) {
-            true   // do not output any speech in this session
-        } else
-            false
+        // do not output any speech in this session
+        sessionStopped =
+            (this.sessionId !== null) && (toggle) && (currentSessionId == sessionId)
 
         // stop any current speech immediately
         stopSpeaking()
@@ -212,7 +199,7 @@ class SpeakManager() {
         sessionStopped = true
     }
 
-    fun stopSpeaking() {
+    private fun stopSpeaking() {
         // get or init system TextToSpeech engine
         val tts = getSystemTtsEngine()
         if (tts === null)

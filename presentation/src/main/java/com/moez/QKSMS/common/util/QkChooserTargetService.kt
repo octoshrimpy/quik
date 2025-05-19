@@ -21,10 +21,8 @@ package dev.octoshrimpy.quik.common.util
 import android.content.ComponentName
 import android.content.IntentFilter
 import android.graphics.drawable.Icon
-import android.os.Build
 import android.service.chooser.ChooserTarget
 import android.service.chooser.ChooserTargetService
-import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.feature.compose.ComposeActivity

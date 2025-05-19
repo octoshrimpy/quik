@@ -19,8 +19,6 @@
 package dev.octoshrimpy.quik.compat
 
 import android.content.Context
-import android.net.Uri
-import android.provider.BaseColumns
 import android.provider.Telephony
 import android.text.TextUtils
 import android.util.Patterns
@@ -28,13 +26,9 @@ import java.util.regex.Pattern
 
 class TelephonyCompat {
     companion object {
-        val THREADS_CONTENT_URI = Telephony.Threads.CONTENT_URI
+        val THREADS_CONTENT_URI = Telephony.Threads.CONTENT_URI!!
 
-        private val ID_PROJECTION = arrayOf(BaseColumns._ID)
-
-        private val THREAD_ID_CONTENT_URI = Uri.parse("content://mms-sms/threadID")
-
-        val NAME_ADDR_EMAIL_PATTERN = Pattern.compile("\\s*(\"[^\"]*\"|[^<>\"]+)\\s*<([^<>]+)>\\s*")
+        private val NAME_ADDRESS_EMAIL_PATTERN = Pattern.compile("\\s*(\"[^\"]*\"|[^<>\"]+)\\s*<([^<>]+)>\\s*")
 
         fun getOrCreateThreadId(context: Context, recipient: String): Long {
             return getOrCreateThreadId(context, listOf(recipient))
@@ -44,8 +38,8 @@ class TelephonyCompat {
             return Telephony.Threads.getOrCreateThreadId(context, recipients.toSet())
         }
 
-        fun extractAddrSpec(address: String): String {
-            val match = NAME_ADDR_EMAIL_PATTERN.matcher(address)
+        private fun extractAddrSpec(address: String): String {
+            val match = NAME_ADDRESS_EMAIL_PATTERN.matcher(address)
             return if (match.matches()) {
                 match.group(2)
             } else address

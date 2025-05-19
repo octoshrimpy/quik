@@ -20,10 +20,13 @@ import android.content.Context;
 import android.net.NetworkUtilsHelper;
 import android.provider.Telephony;
 import android.text.TextUtils;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
+
 import com.android.mms.MmsConfig;
 import com.klinker.android.send_message.Transaction;
 import com.klinker.android.send_message.Utils;
-import timber.log.Timber;
+
+import com.android.mms.logs.LogTag;
 
 /**
  * Container of transaction settings. Instances of this class are contained
@@ -31,9 +34,24 @@ import timber.log.Timber;
  * settings or of the MMS Client.
  */
 public class TransactionSettings {
+    private static final String TAG = LogTag.TAG;
+    private static final boolean DEBUG = true;
+    private static final boolean LOCAL_LOGV = false;
+
     private String mServiceCenter;
     private String mProxyAddress;
     private int mProxyPort = -1;
+
+    private static final String[] APN_PROJECTION = {
+            Telephony.Carriers.TYPE,            // 0
+            Telephony.Carriers.MMSC,            // 1
+            Telephony.Carriers.MMSPROXY,        // 2
+            Telephony.Carriers.MMSPORT          // 3
+    };
+    private static final int COLUMN_TYPE         = 0;
+    private static final int COLUMN_MMSC         = 1;
+    private static final int COLUMN_MMSPROXY     = 2;
+    private static final int COLUMN_MMSPORT      = 3;
 
     /**
      * Constructor that uses the default settings of the MMS Client.
@@ -42,27 +60,50 @@ public class TransactionSettings {
      */
     public TransactionSettings(Context context, String apnName) {
         Timber.v("TransactionSettings: apnName: " + apnName);
-        if (Transaction.Companion.getSettings() == null) {
-            Transaction.Companion.setSettings(Utils.getDefaultSendSettings(context));
+//        String selection = "current" + " IS NOT NULL";
+//        String[] selectionArgs = null;
+//        if (!TextUtils.isEmpty(apnName)) {
+//            selection += " AND " + "apn" + "=?";
+//            selectionArgs = new String[]{ apnName.trim() };
+//        }
+//
+//        Cursor cursor;
+//
+//        try {
+//            cursor = SqliteWrapper.query(context, context.getContentResolver(),
+//                                Telephony.Carriers.CONTENT_URI,
+//                                APN_PROJECTION, selection, selectionArgs, null);
+//
+//                Timber.v("TransactionSettings looking for apn: " + selection + " returned: " +
+//                        (cursor == null ? "null cursor" : (cursor.getCount() + " hits")));
+//        } catch (SecurityException e) {
+//            Timber.e("exception thrown", e);
+//            cursor = null;
+//        }
+//
+//        if (cursor == null) {
+//            Timber.e("Apn is not found in Database!");
+        if (Transaction.settings == null) {
+            Transaction.settings = Utils.getDefaultSendSettings(context);
         }
 
-        mServiceCenter = NetworkUtilsHelper.trimV4AddrZeros(Transaction.Companion.getSettings().getMmsc());
-        mProxyAddress = NetworkUtilsHelper.trimV4AddrZeros(Transaction.Companion.getSettings().getProxy());
+        mServiceCenter = NetworkUtilsHelper.trimV4AddrZeros(Transaction.settings.getMmsc());
+        mProxyAddress = NetworkUtilsHelper.trimV4AddrZeros(Transaction.settings.getProxy());
 
         // Set up the agent, profile url and tag name to be used in the mms request if they are attached in settings
-        String agent = Transaction.Companion.getSettings().getAgent();
+        String agent = Transaction.settings.getAgent();
         if (agent != null && !agent.trim().equals("")) {
             MmsConfig.setUserAgent(agent);
             Timber.v("set user agent");
         }
 
-        String uaProfUrl = Transaction.Companion.getSettings().getUserProfileUrl();
+        String uaProfUrl = Transaction.settings.getUserProfileUrl();
         if (uaProfUrl != null && !uaProfUrl.trim().equals("")) {
             MmsConfig.setUaProfUrl(uaProfUrl);
             Timber.v("set user agent profile url");
         }
 
-        String uaProfTagName = Transaction.Companion.getSettings().getUaProfTagName();
+        String uaProfTagName = Transaction.settings.getUaProfTagName();
         if (uaProfTagName != null && !uaProfTagName.trim().equals("")) {
             MmsConfig.setUaProfTagName(uaProfTagName);
             Timber.v("set user agent profile tag name");
@@ -70,11 +111,51 @@ public class TransactionSettings {
 
         if (isProxySet()) {
             try {
-                mProxyPort = Integer.parseInt(Transaction.Companion.getSettings().getPort());
+                mProxyPort = Integer.parseInt(Transaction.settings.getPort());
             } catch (NumberFormatException e) {
-                Timber.e(e, "could not get proxy: " + Transaction.Companion.getSettings().getPort());
+                Timber.e("could not get proxy: " + Transaction.settings.getPort(), e);
             }
         }
+//        }
+
+//        boolean sawValidApn = false;
+//        try {
+//            while (cursor.moveToNext() && TextUtils.isEmpty(mServiceCenter)) {
+//                // Read values from APN settings
+//                if (isValidApnType(cursor.getString(COLUMN_TYPE), "mms")) {
+//                    sawValidApn = true;
+//
+//                    String mmsc = cursor.getString(COLUMN_MMSC);
+//                    if (mmsc == null) {
+//                        continue;
+//                    }
+//
+//                    mServiceCenter = NetworkUtils.trimV4AddrZeros(mmsc.trim());
+//                    mProxyAddress = NetworkUtils.trimV4AddrZeros(
+//                            cursor.getString(COLUMN_MMSPROXY));
+//                    if (isProxySet()) {
+//                        String portString = cursor.getString(COLUMN_MMSPORT);
+//                        try {
+//                            mProxyPort = Integer.parseInt(portString);
+//                        } catch (NumberFormatException e) {
+//                            if (TextUtils.isEmpty(portString)) {
+//                                Timber.w("mms port not set!");
+//                            } else {
+//                                Timber.e("Bad port number format: " + portString, e);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        } finally {
+//            cursor.close();
+//        }
+//
+//        Timber.v("APN setting: MMSC: " + mServiceCenter + " looked for: " + selection);
+//
+//        if (sawValidApn && TextUtils.isEmpty(mServiceCenter)) {
+//            Timber.e("Invalid APN setting: MMSC is empty");
+//        }
     }
 
     /**
@@ -91,9 +172,11 @@ public class TransactionSettings {
         mProxyAddress = proxyAddr;
         mProxyPort = proxyPort;
 
-            Timber.v("TransactionSettings: " + mServiceCenter
-                    + " proxyAddress: " + mProxyAddress
-                    + " proxyPort: " + mProxyPort);
+        if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+            Timber.v("TransactionSettings: " + mServiceCenter +
+                    " proxyAddress: " + mProxyAddress +
+                    " proxyPort: " + mProxyPort);
+        }
    }
 
     public String getMmscUrl() {
@@ -112,4 +195,17 @@ public class TransactionSettings {
         return (mProxyAddress != null) && (mProxyAddress.trim().length() != 0);
     }
 
+    static private boolean isValidApnType(String types, String requestType) {
+        // If APN type is unspecified, assume APN_TYPE_ALL.
+        if (TextUtils.isEmpty(types)) {
+            return true;
+        }
+
+        for (String t : types.split(",")) {
+            if (t.equals(requestType) || t.equals("*")) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

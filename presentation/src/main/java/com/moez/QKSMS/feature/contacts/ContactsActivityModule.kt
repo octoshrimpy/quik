@@ -29,12 +29,12 @@ class ContactsActivityModule {
 
     @Provides
     fun provideIsSharing(activity: ContactsActivity): Boolean {
-        return activity.intent.extras?.getBoolean(ContactsActivity.SharingKey, false) ?: false
+        return activity.intent.extras?.getBoolean(ContactsActivity.SHARING_KEY, false) ?: false
     }
 
     @Provides
     fun provideChips(activity: ContactsActivity): HashMap<String, String?> {
-        return activity.intent.extras?.getSerializable(ContactsActivity.ChipsKey)
+        return activity.intent.extras?.getSerializable(ContactsActivity.CHIPS_KEY)
                 ?.let { serializable -> serializable as? HashMap<String, String?> }
                 ?: hashMapOf()
     }

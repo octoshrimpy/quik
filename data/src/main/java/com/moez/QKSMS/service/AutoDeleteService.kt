@@ -6,13 +6,11 @@ import android.app.job.JobParameters
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
-import androidx.core.content.getSystemService
 import dev.octoshrimpy.quik.common.util.extensions.jobScheduler
 import dev.octoshrimpy.quik.interactor.DeleteOldMessages
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.coroutines.Job
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -20,13 +18,13 @@ import javax.inject.Inject
 class AutoDeleteService : JobService() {
 
     companion object {
-        private const val JobId = 8120235
+        private const val JOB_ID = 8120235
 
         @SuppressLint("MissingPermission") // Added in [presentation]'s AndroidManifest.xml
         fun scheduleJob(context: Context) {
             Timber.i("Scheduling job")
             val serviceComponent = ComponentName(context, AutoDeleteService::class.java)
-            val periodicJob = JobInfo.Builder(JobId, serviceComponent)
+            val periodicJob = JobInfo.Builder(JOB_ID, serviceComponent)
                     .setPeriodic(TimeUnit.DAYS.toMillis(1))
                     .setPersisted(true)
                     .build()
@@ -36,7 +34,7 @@ class AutoDeleteService : JobService() {
 
         fun cancelJob(context: Context) {
             Timber.i("Canceling job")
-            context.jobScheduler.cancel(JobId)
+            context.jobScheduler.cancel(JOB_ID)
         }
     }
 

@@ -34,13 +34,13 @@ import io.reactivex.subjects.Subject
 interface ComposeView : QkView<ComposeState> {
 
     companion object {
-        const val SelectContactRequestCode = 0
-        const val TakePhotoRequestCode = 1
-        const val AttachContactRequestCode = 3
-        const val AttachAFileRequestCode = 4
-        const val SpeechRecognitionRequestCode = 5
+        const val SELECT_CONTACT_REQUEST_CODE = 0
+        const val TAKE_PHOTOS_REQUEST_CODE = 1
+        const val ATTACH_CONTACT_REQUEST_CODE = 3
+        const val ATTACH_FILE_REQUEST_CODE = 4
+        const val SPEECH_RECOGNITION_REQUEST_CODE = 5
 
-        const val CameraDestinationKey = "camera_destination"
+        const val CAMERA_DESTINATION_KEY = "camera_destination"
     }
 
     val activityVisibleIntent: Observable<Boolean>
@@ -49,12 +49,12 @@ interface ComposeView : QkView<ComposeState> {
     val menuReadyIntent: Observable<Unit>
     val optionsItemIntent: Observable<Int>
     val contextItemIntent: Observable<MenuItem>
-    val sendAsGroupIntent: Observable<*>
+    val sendAsGroupIntent: Observable<Unit>
     val messagePartClickIntent: Subject<Long>
     val messagePartContextMenuRegistrar: Subject<View>
     val messagesSelectedIntent: Observable<List<Long>>
-    val cancelSendingIntent: Subject<Long>
-    val sendNowIntent: Subject<Long>
+    val cancelDelayedIntent: Subject<Long>
+    val sendDelayedNowIntent: Subject<Long>
     val resendIntent: Subject<Long>
     val attachmentDeletedIntent: Subject<Attachment>
     val textChangedIntent: Observable<CharSequence>
