@@ -79,3 +79,5 @@ To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshr
         }
     }
 ```
+### Set Java Version
+When building QUIK, make sure to download JDK 17 and specify an installation path for it. In Android Studio, you can do that in Settings > Build, Execution, Deployment > Build Tools > Gradle.
