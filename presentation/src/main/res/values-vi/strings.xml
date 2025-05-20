@@ -32,8 +32,8 @@
     <string name="menu_add_person">Thêm người</string>
     <string name="menu_call">Cuộc gọi</string>
     <string name="menu_info">Chi tiết</string>
-    <string name="menu_save">Lưu vào bộ sưu tập</string>
-    <string name="menu_share">Chia sẻ</string>
+    <string name="menu_mms_part_save">Lưu vào bộ sưu tập</string>
+    <string name="compose_menu_share">Chia sẻ</string>
     <string name="main_drawer_open_cd">Mở ngăn điều hướng</string>
     <string name="main_title_selected">Đã chọn %d</string>
     <string name="main_menu_clear">Dọn sạch</string>
@@ -261,7 +261,6 @@
     <string name="blocking_drop_summary">Loại bỏ các tin nhắn được gửi tới từ người gửi đã chặn thay vì ẩn chúng</string>
     <string name="blocking_conversations">Các cuộc trò chuyện đã chặn</string>
     <string name="blocking_manager_title">Quản lý danh sách chặn</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Chức năng chặn tích hợp sẵn trong QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Chặn tin nhằn rác, số &amp; cuộc gọi không xác định bằng danh sách đen &amp; Lịch trình</string>
     <string name="blocking_manager_call_control_summary">Tự động lọc các cuộc gọi và tin nhắn của bạn ở một nơi thuận tiện! Cộng đồng IQ™ cho phép bạn ngăn chặn các tin nhắn từ những kẻ gửi tin rác được đóng góp bởi cộng đồng</string>

@@ -32,8 +32,8 @@
     <string name="menu_add_person">增加傳送人</string>
     <string name="menu_call">致電</string>
     <string name="menu_info">詳細資訊</string>
-    <string name="menu_save">保存到圖庫</string>
-    <string name="menu_share">分享</string>
+    <string name="menu_mms_part_save">保存到圖庫</string>
+    <string name="compose_menu_share">分享</string>
     <string name="main_drawer_open_cd">打開導航抽屜</string>
     <string name="main_title_selected">已選擇%d項</string>
     <string name="main_menu_clear">清除</string>
@@ -261,7 +261,6 @@
     <string name="blocking_drop_summary">直接刪除封鎖的簡訊，而非只有隱藏簡訊</string>
     <string name="blocking_conversations">封鎖的對話</string>
     <string name="blocking_manager_title">封鎖管理器</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">QUIK內建封鎖功能</string>
     <string name="blocking_manager_call_blocker_summary">使用黑名單與排程封鎖垃圾訊息、號碼和未知來電</string>
     <string name="blocking_manager_call_control_summary">自動過濾來電與簡訊！群眾智慧Community IQ™能讓你遠離不想要的垃圾簡訊</string>

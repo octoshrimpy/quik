@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_blocking_manager_qksms"
             app:summary="@string/blocking_manager_qksms_summary"
-            app:title="@string/blocking_manager_qksms_title"
+            app:title="@string/app_name"
             app:widget="@layout/blocking_manager_list_option" />
 
         <dev.octoshrimpy.quik.feature.blocking.manager.BlockingManagerPreferenceView

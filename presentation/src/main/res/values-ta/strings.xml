@@ -32,8 +32,8 @@
     <string name="menu_add_person">நபரைச் சேர்</string>
     <string name="menu_call">அழை</string>
     <string name="menu_info">விவரங்கள்</string>
-    <string name="menu_save">காட்சியகத்தில் சேமி</string>
-    <string name="menu_share">பகிர்</string>
+    <string name="menu_mms_part_save">காட்சியகத்தில் சேமி</string>
+    <string name="compose_menu_share">பகிர்</string>
     <string name="main_drawer_open_cd">வழிசெலுத்தல் அலமாரியை திற</string>
     <string name="main_title_selected">%d தேர்ந்தெடுக்கப்பட்டது</string>
     <string name="main_menu_clear">அழி</string>
@@ -263,7 +263,6 @@
     <string name="blocking_drop_summary">தடுத்த அனுப்புநர்களிடமிருந்து வரும் தகவல்களை மறைப்பதற்கு பதிலாக கைவிடு</string>
     <string name="blocking_conversations">தடுக்கப்பட்ட உரையாடல்கள்</string>
     <string name="blocking_manager_title">தடுத்தல் மேலாளர்</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>

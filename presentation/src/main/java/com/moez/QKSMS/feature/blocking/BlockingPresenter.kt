@@ -41,7 +41,7 @@ class BlockingPresenter @Inject constructor(
                         Preferences.BLOCKING_MANAGER_CB -> R.string.blocking_manager_call_blocker_title
                         Preferences.BLOCKING_MANAGER_CC -> R.string.blocking_manager_call_control_title
                         Preferences.BLOCKING_MANAGER_SIA -> R.string.blocking_manager_sia_title
-                        else -> R.string.blocking_manager_qksms_title
+                        else -> R.string.app_name
                     }
                 }
                 .map(context::getString)

@@ -32,8 +32,8 @@
     <string name="menu_add_person">Añadir persona</string>
     <string name="menu_call">Llamar</string>
     <string name="menu_info">Detalles</string>
-    <string name="menu_save">Guardar en la galería</string>
-    <string name="menu_share">Compartir</string>
+    <string name="menu_mms_part_save">Guardar en la galería</string>
+    <string name="compose_menu_share">Compartir</string>
     <string name="main_drawer_open_cd">Abrir cajón de navegación</string>
     <string name="main_title_selected">%d Seleccionados</string>
     <string name="main_menu_clear">Limpiar</string>
@@ -263,7 +263,6 @@
     <string name="blocking_drop_summary">Eliminar mensajes entrantes de los remitentes bloqueados en lugar de ocultarlos</string>
     <string name="blocking_conversations">Conversaciones bloqueadas</string>
     <string name="blocking_manager_title">Gestor de bloqueo</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Función de bloqueo integrado en QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Bloquee mensajes de spam, números y llamadas desconocidas con lista negra y programación</string>
     <string name="blocking_manager_call_control_summary">¡Filtrre automáticamente sus llamadas y mensajes en un lugar conveniente! La comunidad IQ™ te permite prevenir mensajes no deseados de spammers conocidos por la comunidad</string>

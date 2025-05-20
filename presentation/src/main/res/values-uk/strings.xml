@@ -32,8 +32,8 @@
     <string name="menu_add_person">Додати контакт</string>
     <string name="menu_call">Зателефонувати</string>
     <string name="menu_info">Деталі</string>
-    <string name="menu_save">Зберегти в галереї</string>
-    <string name="menu_share">Поділитися</string>
+    <string name="menu_mms_part_save">Зберегти в галереї</string>
+    <string name="compose_menu_share">Поділитися</string>
     <string name="main_drawer_open_cd">Відкрити панель навігації</string>
     <string name="main_title_selected">Обрано: %d</string>
     <string name="main_menu_clear">Очистити</string>
@@ -267,7 +267,6 @@
     <string name="blocking_drop_summary">Видаляти вхідні повідомлення від заблокованих відправників, а не приховувати їх</string>
     <string name="blocking_conversations">Заблоковані бесіди</string>
     <string name="blocking_manager_title">Керування блокуванням</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Вбудована функція блокування QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Блокуйте спам-повідомлення, невідомі номери та дзвінки за допомогою чорного списку та за розкладом</string>
     <string name="blocking_manager_call_control_summary">Автоматична фільтрація дзвінків та повідомлень в одному зручному місці! Community IQ™ дозволить запобігти отримуванню небажаних повідомлень від відомих спільноті спамерів</string>

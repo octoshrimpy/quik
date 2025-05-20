@@ -32,8 +32,8 @@
     <string name="menu_add_person">Személy hozzáadása</string>
     <string name="menu_call">Hívás</string>
     <string name="menu_info">Részletek</string>
-    <string name="menu_save">Mentés a galériába</string>
-    <string name="menu_share">Megosztás</string>
+    <string name="menu_mms_part_save">Mentés a galériába</string>
+    <string name="compose_menu_share">Megosztás</string>
     <string name="main_drawer_open_cd">Navigációs kiválasztása</string>
     <string name="main_title_selected">%d kijelölve</string>
     <string name="main_menu_clear">Törlés</string>
@@ -263,7 +263,6 @@
     <string name="blocking_drop_summary">Üzenetek eldobása a blokkolt küldőktől az elrejtésük helyett</string>
     <string name="blocking_conversations">Tiltott társalgások</string>
     <string name="blocking_manager_title">Tiltáskezelő</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">A QUIK beépített tiltási funkciója</string>
     <string name="blocking_manager_call_blocker_summary">Spam üzenetek blokkolása, számok &amp; ismeretlek hívások feketelistával &amp; Ütemezés</string>
     <string name="blocking_manager_call_control_summary">Egy kényelmesen kezelhető helyen a hívások és üzenetek szűrése! A Community IQ™ megakadályozza a közösség által ismert spammerek üzeneteit</string>

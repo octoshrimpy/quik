@@ -32,8 +32,8 @@
     <string name="menu_add_person">Přidat osobu</string>
     <string name="menu_call">Volat</string>
     <string name="menu_info">Podrobnosti</string>
-    <string name="menu_save">Uložit do galerie</string>
-    <string name="menu_share">Sdílet</string>
+    <string name="menu_mms_part_save">Uložit do galerie</string>
+    <string name="compose_menu_share">Sdílet</string>
     <string name="main_drawer_open_cd">Otevřít menu</string>
     <string name="main_title_selected">Vybráno: %d</string>
     <string name="main_menu_clear">Vymazat</string>
@@ -267,7 +267,6 @@
     <string name="blocking_drop_summary">Zahodit příchozí zprávy od blokovaných odesílatelů namísto jejich skrytí</string>
     <string name="blocking_conversations">Blokované konverzace</string>
     <string name="blocking_manager_title">Správce blokování</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Vestavěné blokování v QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatické filtrování hovorů a zpráv na jednom místě. Community IQ™ poskytuje ochranu před nevyžádanými zprávami od komunitou označených spammerů.</string>

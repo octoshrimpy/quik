@@ -32,8 +32,8 @@
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">Call</string>
     <string name="menu_info">Details</string>
-    <string name="menu_save">Save to gallery</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_mms_part_save">Save to gallery</string>
+    <string name="compose_menu_share">Share</string>
     <string name="main_drawer_open_cd">Open navigation drawer</string>
     <string name="main_title_selected">%d selected</string>
     <string name="main_menu_clear">Clear</string>
@@ -267,7 +267,6 @@
     <string name="blocking_drop_summary">Drop incoming messages from blocked senders instead of hiding them</string>
     <string name="blocking_conversations">Blocked conversations</string>
     <string name="blocking_manager_title">Blocking Manager</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Built-in blocking functionality in QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Automatically filter your calls and messages in one convenient place! Community IQ™ allows you to prevent unwanted messages from community known spammers</string>
