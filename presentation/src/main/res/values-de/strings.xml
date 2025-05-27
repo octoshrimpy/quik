@@ -32,8 +32,8 @@
     <string name="menu_add_person">Person hinzufügen</string>
     <string name="menu_call">Anrufen</string>
     <string name="menu_info">Details</string>
-    <string name="menu_save">In Galerie speichern</string>
-    <string name="menu_share">Teilen</string>
+    <string name="menu_mms_part_save">In Galerie speichern</string>
+    <string name="compose_menu_share">Teilen</string>
     <string name="main_drawer_open_cd">Öffne den Navigation Drawer</string>
     <string name="main_title_selected">%d ausgewählt</string>
     <string name="main_menu_clear">Zurücksetzen</string>
@@ -263,7 +263,6 @@
     <string name="blocking_drop_summary">Eingehende Nachrichten von blockierten Absendern verwefen anstatt sie auszublenden</string>
     <string name="blocking_conversations">Blockierte Unterhaltungen</string>
     <string name="blocking_manager_title">Blockiermanager</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">In QUIK integrierte Blockierfunktion</string>
     <string name="blocking_manager_call_blocker_summary">Spam-Nachrichten und Nummern &amp; unbekannte Anrufe mit Sperrliste &amp; Zeitplan blockieren</string>
     <string name="blocking_manager_call_control_summary">Filtern Sie automatisch Ihre Anrufe und Nachrichten in einer geeigneten Umgeben! Community IQ™ erlaubt es Ihnen unerwünschte Nachrichten von bekannten Spamnern zu unterbinden</string>

@@ -32,8 +32,8 @@
     <string name="menu_add_person">কাউকে যুক্ত করো</string>
     <string name="menu_call">কল করো</string>
     <string name="menu_info">বিস্তারিত</string>
-    <string name="menu_save">গ্যালারিতে সংরক্ষণ করো</string>
-    <string name="menu_share">শেয়ার</string>
+    <string name="menu_mms_part_save">গ্যালারিতে সংরক্ষণ করো</string>
+    <string name="compose_menu_share">শেয়ার</string>
     <string name="main_drawer_open_cd">ন্যাভিগেশন ড্রয়ার খুলো</string>
     <string name="main_title_selected">%d নির্বাচিত</string>
     <string name="main_menu_clear">পরিষ্কার</string>
@@ -263,7 +263,6 @@
     <string name="blocking_drop_summary">অবরোধকৃত প্রেরকদের বার্তা লুকানোর জায়গায় ফেলে দাও</string>
     <string name="blocking_conversations">অবরুদ্ধ কথাবার্তা</string>
     <string name="blocking_manager_title">অবরুদ্ধকরণ ব্যবস্থাপক</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">QUIK-এর অন্তর্ভুক্ত অবরোধী সক্ষমতা(blocking)</string>
     <string name="blocking_manager_call_blocker_summary">স্প্যাম বার্তা, নম্বর &amp; অজানা কল অবরোধ তালিকা দিয়ে থামাও &amp; সময়সূচী</string>
     <string name="blocking_manager_call_control_summary">তোমার কল আর বার্তা একটাই সুবিধাজনক জায়গা থেকে ফিল্টার করো বা ছাঁকো! Community IQ™ দিয়ে অবাঞ্ছিত বার্তা আটকানো যায় সমাজে পরিচিত স্প্যামারদের থেকে</string>

@@ -32,8 +32,8 @@
     <string name="menu_add_person">הוסף איש קשר</string>
     <string name="menu_call">התקשרות</string>
     <string name="menu_info">פרטים</string>
-    <string name="menu_save">שמור לגלריה</string>
-    <string name="menu_share">שיתוף</string>
+    <string name="menu_mms_part_save">שמור לגלריה</string>
+    <string name="compose_menu_share">שיתוף</string>
     <string name="main_drawer_open_cd">פתח מגירת ניווט</string>
     <string name="main_title_selected">%d נבחרו</string>
     <string name="main_menu_clear">נקה</string>
@@ -267,7 +267,6 @@
     <string name="blocking_drop_summary">להשמיט הודעות נכנסות משולחים חסומים במקום להסתיר אותן</string>
     <string name="blocking_conversations">התכתבויות חסומות</string>
     <string name="blocking_manager_title">מנהל חסימות</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">תכונת חסימה מובנית בתוך QUIK</string>
     <string name="blocking_manager_call_blocker_summary">חסימת הודעות ספאם, מספרים ושיחות לא מזוהות עם רשימת חסימה ותזמון</string>
     <string name="blocking_manager_call_control_summary">לסנן אוטומטית את השיחות וההודעות שלך במקום אחיד ונוח! Community IQ™‎ מאפשר לך להימנע מהודעות בלתי רצויות בזכות דיווחים על מפיצי ספאם מצד הקהילה</string>

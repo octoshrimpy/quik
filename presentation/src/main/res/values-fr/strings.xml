@@ -38,8 +38,8 @@
     <string name="menu_add_person">Ajouter quelqu’un</string>
     <string name="menu_call">Appeler</string>
     <string name="menu_info">Détails</string>
-    <string name="menu_save">Enregistrer dans la galerie</string>
-    <string name="menu_share">Partager</string>
+    <string name="menu_mms_part_save">Enregistrer dans la galerie</string>
+    <string name="compose_menu_share">Partager</string>
   
     <string name="main_drawer_open_cd">Ouvrir le tiroir de navigation</string>
     <string name="main_title_selected">%d sélectionnée</string>
@@ -300,7 +300,6 @@
     <string name="blocking_conversations">Conversations bloquées</string>
   
     <string name="blocking_manager_title">Gestionnaire de blocage</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Fonction de blocage intégrée dans QUIK</string>
     <string name="blocking_manager_call_blocker_title" translatable="false">Call Blocker - Incoming/Outgoing</string>
     <string name="blocking_manager_call_blocker_summary">Bloquer les spams, les numéros &amp; les appels inconnus avec une liste noire &amp; Planifier</string>

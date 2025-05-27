@@ -32,8 +32,8 @@
     <string name="menu_add_person">Add person</string>
     <string name="menu_call">Ring</string>
     <string name="menu_info">Detaljer</string>
-    <string name="menu_save">Lagre til galleri</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_mms_part_save">Lagre til galleri</string>
+    <string name="compose_menu_share">Share</string>
     <string name="main_drawer_open_cd">Åpne navigasjonsskuff</string>
     <string name="main_title_selected">%d valgt</string>
     <string name="main_menu_clear">Tøm</string>
@@ -263,7 +263,6 @@
     <string name="blocking_drop_summary">Forkast meldinger fra blokkerte sendere istedenfor å skjule dem</string>
     <string name="blocking_conversations">Blokkerte samtaler</string>
     <string name="blocking_manager_title">Blokkeringer</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Innebygd blokkeringsfunksjon i QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
     <string name="blocking_manager_call_control_summary">Filtrer anrop og meldinger automatisk. Fellesskapets intelligens™ hjelper med å forhindre uønskede henvendelser fra plageånder</string>

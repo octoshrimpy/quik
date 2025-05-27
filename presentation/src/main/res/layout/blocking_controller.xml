@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/blocking_manager_title"
-            tools:summary="@string/blocking_manager_qksms_title" />
+            tools:summary="@string/app_name" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/blockedNumbers"

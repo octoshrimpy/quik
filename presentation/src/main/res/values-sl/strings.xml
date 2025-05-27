@@ -32,8 +32,8 @@
     <string name="menu_add_person">Dodaj osebo</string>
     <string name="menu_call">Klic</string>
     <string name="menu_info">Podrobnosti</string>
-    <string name="menu_save">Shrani v galerijo</string>
-    <string name="menu_share">Deli</string>
+    <string name="menu_mms_part_save">Shrani v galerijo</string>
+    <string name="compose_menu_share">Deli</string>
     <string name="main_drawer_open_cd">Odpri nacigacijski meni</string>
     <string name="main_title_selected">%d izbranih</string>
     <string name="main_menu_clear">Počisti</string>
@@ -267,7 +267,6 @@
     <string name="blocking_drop_summary">Opusti prihajajoča sporočila blokiranih pošiljateljev, namesto da jih skriješ</string>
     <string name="blocking_conversations">Blokirani pogovori</string>
     <string name="blocking_manager_title">Upravljalnik Blokiranja</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Vgrajena sposobnost blokiranja v QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Blokiraj neželena sporočila, številke &amp; neznane klice s črnim seznamom &amp; Urnik</string>
     <string name="blocking_manager_call_control_summary">Samodejno razvrstite vaše klice in sporočila v eno priročno mesto! Skupnostni IQ™ omogoča, da preprečite prejemanje sporočil pošiljateljev neželenih sporočil, kateri so skupnosti poznani</string>

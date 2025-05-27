@@ -32,8 +32,8 @@
     <string name="menu_add_person">添加人物</string>
     <string name="menu_call">致电</string>
     <string name="menu_info">详情</string>
-    <string name="menu_save">保存到图库</string>
-    <string name="menu_share">分享</string>
+    <string name="menu_mms_part_save">保存到图库</string>
+    <string name="compose_menu_share">分享</string>
     <string name="main_drawer_open_cd">打开导航栏</string>
     <string name="main_title_selected">已选择 %d 项</string>
     <string name="main_menu_clear">清除</string>
@@ -261,7 +261,6 @@
     <string name="blocking_drop_summary">丢弃屏蔽的发件人所发送的信息</string>
     <string name="blocking_conversations">已屏蔽的会话</string>
     <string name="blocking_manager_title">屏蔽管理器</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">QUIK 中内建的屏蔽功能</string>
     <string name="blocking_manager_call_blocker_summary">屏蔽垃圾信息、号码和未知来电以及黑名单和日程</string>
     <string name="blocking_manager_call_control_summary">自动在适当的位置过滤您的来电和信息！Community IQ™ 允许您阻止社区中已知的垃圾发件人所发送的垃圾信息</string>

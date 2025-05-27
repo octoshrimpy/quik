@@ -32,8 +32,8 @@
     <string name="menu_add_person">افزودن شخص</string>
     <string name="menu_call">تماس</string>
     <string name="menu_info">جزئیات</string>
-    <string name="menu_save">ذخیره در گالری</string>
-    <string name="menu_share">هم‌رسانی</string>
+    <string name="menu_mms_part_save">ذخیره در گالری</string>
+    <string name="compose_menu_share">هم‌رسانی</string>
     <string name="main_drawer_open_cd">بازکردن کشو ناوبری</string>
     <string name="main_title_selected">%d انتخاب شده</string>
     <string name="main_menu_clear">پاکسازی</string>
@@ -263,7 +263,6 @@
     <string name="blocking_drop_summary">پیام های ورودی را از فرستنده های مسدود شده به جای مخفی کردن آنها دور بیندازید</string>
     <string name="blocking_conversations">گفتگوهای مسدود شده</string>
     <string name="blocking_manager_title">مدیریت انسداد</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">عملکرد مسدود کننده داخلی در QUIK</string>
     <string name="blocking_manager_call_blocker_summary">مسدود کردن پیام های هرزنامه، شماره ها و تماس های ناشناخته توسط لیست سیاه و  جدول زمان بندی</string>
     <string name="blocking_manager_call_control_summary">تماس ها و پیام های خود را بطور خودکار فیلتر کنید! IQ Community به شما اجازه می دهد تا از پیام های ناخواسته توسط اسپمرهای شناخته شده در جامعه جلوگیری کنید</string>

@@ -32,8 +32,8 @@
     <string name="menu_add_person">Dodaj osobu</string>
     <string name="menu_call">Nazovi</string>
     <string name="menu_info">Detalji</string>
-    <string name="menu_save">Spremi u galeriju</string>
-    <string name="menu_share">Podijeli</string>
+    <string name="menu_mms_part_save">Spremi u galeriju</string>
+    <string name="compose_menu_share">Podijeli</string>
     <string name="main_drawer_open_cd">Otvori navigacijsku ladicu</string>
     <string name="main_title_selected">%d odabrano</string>
     <string name="main_menu_clear">Očisti</string>
@@ -265,7 +265,6 @@
     <string name="blocking_drop_summary">Odbacite dolazne poruke od blokiranih pošiljatelja umjesto da ih samo sakrivate</string>
     <string name="blocking_conversations">Blokirani razgovori</string>
     <string name="blocking_manager_title">Upravitelj za blokiranje</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">Ugrađena funkcionalnost blokiranja u QUIK-u</string>
     <string name="blocking_manager_call_blocker_summary">Blokirajte neželjene poruke, brojeve i nepoznate pozive pomoću crne liste i zakazivanja</string>
     <string name="blocking_manager_call_control_summary">Automatski filtrirajte svoje pozive i poruke na jednom mjestu! Community IQ™ omogućuje vam filtriranje neželjenih poruka od spammera poznatih zajednici</string>

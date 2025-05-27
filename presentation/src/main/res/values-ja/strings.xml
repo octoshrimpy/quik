@@ -32,8 +32,8 @@
     <string name="menu_add_person">人物を追加</string>
     <string name="menu_call">通話</string>
     <string name="menu_info">詳細</string>
-    <string name="menu_save">ギャラリーに保存</string>
-    <string name="menu_share">共有</string>
+    <string name="menu_mms_part_save">ギャラリーに保存</string>
+    <string name="compose_menu_share">共有</string>
     <string name="main_drawer_open_cd">ナビゲーションドロワーを開く</string>
     <string name="main_title_selected">%d 件を選択中</string>
     <string name="main_menu_clear">消去</string>
@@ -261,7 +261,6 @@
     <string name="blocking_drop_summary">ブロックした送信者からの受信メッセージを非表示にする代わりにドロップします</string>
     <string name="blocking_conversations">ブロックした会話</string>
     <string name="blocking_manager_title">ブロッキングマネージャー</string>
-    <string name="blocking_manager_qksms_title">QUIK</string>
     <string name="blocking_manager_qksms_summary">QUIK の内蔵ブロック機能</string>
     <string name="blocking_manager_call_blocker_summary">ブラックリストにより迷惑メッセージ、番号、不明な通話をブロック</string>
     <string name="blocking_manager_call_control_summary">1 か所で便利に通話とメッセージを自動的にフィルタリングします! Community IQ™を使用すると、コミュニティで知られているスパマーからの不要なメッセージを防ぐことができます</string>
