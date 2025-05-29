@@ -73,7 +73,7 @@
     <string name="main_default_sms_message">Faire de QUIK votre application SMS par défaut</string>
     <string name="main_default_sms_change">Changer</string>
     <string name="main_permission_required">Autorisation requise</string>
-    <string name="main_permission_sms">QUIK a besoin de l’autorisation d\’envoyer et de consulter les messages SMS</string>
+    <string name="main_permission_sms">QUIK a besoin de l’autorisation d’envoyer et de consulter les messages SMS</string>
     <string name="main_permission_contacts">QUIK a besoin de l’autorisation d’accéder aux contacts</string>
     <string name="main_permission_notifications">QUIK a besoin de l’autorisation d’afficher des notifications</string>
     <string name="main_permission_allow">Autoriser</string>
@@ -94,7 +94,7 @@
     <string name="drawer_plus_banner_summary">Débloquer les nouvelles fonctions sensationnelles et soutenir le développement</string>
   
     <string name="rate_title">Vous aimez QUIK&#160;?</string>
-    <string name="rate_summary">Partagez un peu d\’amour et évaluez-nous sur le Play Store&#160;!</string>
+    <string name="rate_summary">Partagez un peu d’amour et évaluez-nous sur le Play Store&#160;!</string>
     <string name="rate_okay">OK&#160;!</string>
     <string name="rate_dismiss">ANNULER</string>
   
@@ -326,8 +326,8 @@
     <string name="settings_long_as_mms_summary">Si vos messages texte plus longs ne parviennent pas à être envoyés, ou s’ils sont envoyés dans le désordre, vous pouvez les envoyer sous forme de messages MMS à la place. Des frais supplémentaires peuvent s’appliquer</string>
     <string name="settings_mms_size_title">Compresser automatiquement les pièces jointes des MMS</string>
     <string name="settings_mms_weblink_title">Gestion des liens dans les messages</string>
-    <string name="settings_disable_screenshots_title">Désactiver les captures d'écran</string>
-    <string name="settings_diable_screenshots_summary">Empêche l'OS et les autres applications de prendre des captures d'écran de l'application.</string>
+    <string name="settings_disable_screenshots_title">Désactiver les captures d’écran</string>
+    <string name="settings_diable_screenshots_summary">Empêche l’OS et les autres applications de prendre des captures d’écran de l’application.</string>
     <string name="settings_sync_title">Synchroniser les messages</string>
     <string name="settings_sync_summary">Resynchroniser les messages avec la base de données Android native</string>
     <string name="settings_about_title">À propos de QUIK</string>
@@ -381,7 +381,7 @@
     <string name="about_changelog_title">Liste des modifications</string>
     <string name="about_contact_title">Contact</string>
     <string name="about_license_title">Licence</string>
-    <string name="about_copyright_title">Droits d\’auteur</string>
+    <string name="about_copyright_title">Droits d’auteur</string>
   
     <string name="qksms_plus_description_title">Soutenir le développement, tout déverrouiller</string>
     <string name="qksms_plus_description_summary">Vous pouvez sauver un développeur affamé pour seulement %s</string>
@@ -540,7 +540,7 @@
     <string-array name="messageLinkHandlings">
         <item>Bloquer</item>
         <item>Autoriser</item>
-        <item>Demander avant d'ouvrir</item>
+        <item>Demander avant d’ouvrir</item>
     </string-array>
 
     <integer-array name="messageLinkHandling_ids">
@@ -552,16 +552,16 @@
     <string-array name="qk_responses">
         <item>OK</item>
         <item>Donnez-moi un moment</item>
-        <item>J\'arrive</item>
+        <item>J’arrive</item>
         <item>Merci</item>
-        <item>Ça a l\'air bien</item>
+        <item>Ça a l’air bien</item>
         <item>Quoi de neuf&#160;?</item>
-        <item>D\'accord</item>
+        <item>D’accord</item>
         <item>Non</item>
-        <item>Je t\'aime</item>
+        <item>Je t’aime</item>
         <item>Désolé</item>
         <item>LOL</item>
-        <item>C\'est d\'accord</item>
+        <item>C’est d’accord</item>
     </string-array>
     <string name="speak_no_messages">Aucun message</string>
     <string name="speak_unseen_messages">Exprimer les messages non vus</string>
@@ -572,5 +572,5 @@
     <string name="error_stt_toast">Désolé, il y a eu une erreur au chargement du fournisseur de saisie vocale.</string>
     <string name="stt_toast_extra_prompt">Exprimez votre message</string>
 
-    <string name="messages_text_share_file_error">Oups&#160;! Quelque chose s'est mal déroulé pendant le partage</string>
+    <string name="messages_text_share_file_error">Oups&#160;! Quelque chose s’est mal déroulé pendant le partage</string>
 </resources>
