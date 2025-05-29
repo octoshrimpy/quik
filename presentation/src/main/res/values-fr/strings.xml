@@ -181,11 +181,11 @@
 
     <string name="compose_message_cancel">Annuler</string>
     <string name="compose_message_send_now">Envoyer maintenant</string>
-    <string name="compose_message_sim">SIM number</string>
-    <string name="compose_message_item">Message item</string>
+    <string name="compose_message_sim">Numéro SIM</string>
+    <string name="compose_message_item">Objet du message</string>
     <string name="compose_message_attachment">Pièce jointe</string>
 
-    <string name="compose_toast_drag_stt">Bougez le bouton de saisie vocale où vous le souhaitez</string>
+    <string name="compose_toast_drag_stt">Déplacez le bouton de saisie vocale où vous le souhaitez</string>
   
     <string name="message_status_sending">Envoi&#8230;</string>
     <string name="message_status_delivered">Délivré %s</string>
