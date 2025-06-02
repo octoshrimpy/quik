@@ -20,6 +20,8 @@ package dev.octoshrimpy.quik.util
 
 import android.content.Context
 import android.net.Uri
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import java.io.ByteArrayOutputStream
 
 object ImageUtils {
@@ -41,13 +43,18 @@ object ImageUtils {
 
     fun getScaledImage(context: Context, uri: Uri, maxWidth: Int, maxHeight: Int, quality: Int = 90): ByteArray {
         return GlideApp
-                .with(context)
-                .`as`(ByteArray::class.java)
-                .load(uri)
-                .centerInside()
-                .encodeQuality(quality)
-                .submit(maxWidth, maxHeight)
-                .get()
+            .with(context)
+            .`as`(ByteArray::class.java)
+            .load(uri)
+            .apply(
+                RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+            )
+            .centerInside()
+            .encodeQuality(quality)
+            .submit(maxWidth, maxHeight)
+            .get()
     }
 
 }
