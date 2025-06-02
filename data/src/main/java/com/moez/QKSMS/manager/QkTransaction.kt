@@ -45,6 +45,7 @@ import android.provider.Telephony
 import android.telephony.SmsManager
 import android.telephony.SmsMessage
 import androidx.core.content.contentValuesOf
+import androidx.core.net.toUri
 import com.android.mms.MmsConfig
 import com.android.mms.dom.smil.parser.SmilXmlSerializer
 import com.android.mms.util.DownloadManager
@@ -75,7 +76,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Calendar
 import java.util.UUID
-import androidx.core.net.toUri
 
 object QkTransaction {
     private const val DEFAULT_EXPIRY_TIME: Long = (7 * 24 * 60 * 60).toLong()
@@ -511,19 +511,10 @@ object QkTransaction {
                 return false
             }
 
-            // overrides of default mmsc config values
-            val configOverrides = Bundle()
-            configOverrides.putBoolean(SmsManager.MMS_CONFIG_GROUP_MMS_ENABLED, true)
-            val httpParams = MmsConfig.getHttpParams()
-            if (!httpParams.isNullOrEmpty())
-                configOverrides.putString(SmsManager.MMS_CONFIG_HTTP_PARAMS, httpParams)
-            configOverrides.putInt(
-                SmsManager.MMS_CONFIG_MAX_MESSAGE_SIZE, MmsConfig.getMaxMessageSize()
-            )
-
             // build intent to send when message sent
             val pendingIntent = PendingIntent.getBroadcast(
-                context, id,
+                context,
+                id,
                 sentIntent
                     .setData(messageUri)
                     .putExtra(MmsSentReceiver.EXTRA_FILE_PATH, mSendFile.path),
@@ -531,7 +522,11 @@ object QkTransaction {
             )
 
             SmsManagerFactory.createSmsManager(subscriptionId).sendMultimediaMessage(
-                context, contentUri, null, configOverrides, pendingIntent
+                context,
+                contentUri,
+                null,
+                Bundle().apply { putBoolean(SmsManager.MMS_CONFIG_GROUP_MMS_ENABLED, true) },
+                pendingIntent
             )
         } catch (e: Exception) {
             Timber.e("failed sending mms", e)
