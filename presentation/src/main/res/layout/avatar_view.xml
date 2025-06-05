@@ -41,7 +41,7 @@
         android:layout_height="24dp"
         android:layout_gravity="center"
         android:src="@drawable/ic_person_black_24dp"
-        android:tint="@color/white" />
+        app:tint="@color/white" />
 
     <ImageView
         android:id="@+id/photo"

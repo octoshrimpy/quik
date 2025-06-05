@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.common.util
 
 import timber.log.Timber
-import javax.inject.Inject
 
 class CrashlyticsTree : Timber.Tree() {
 

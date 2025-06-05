@@ -20,7 +20,6 @@ package dev.octoshrimpy.quik.feature.contacts
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
@@ -31,8 +30,6 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.ViewModelFactory
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
-import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
-import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.QkDialog
 import dev.octoshrimpy.quik.extensions.Optional
@@ -50,8 +47,8 @@ import javax.inject.Inject
 class ContactsActivity : QkThemedActivity(), ContactsContract {
 
     companion object {
-        const val SharingKey = "sharing"
-        const val ChipsKey = "chips"
+        const val SHARING_KEY = "sharing"
+        const val CHIPS_KEY = "chips"
     }
 
     @Inject lateinit var contactsAdapter: ComposeItemAdapter
@@ -116,7 +113,7 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
 
     override fun finish(result: HashMap<String, String?>) {
         search.hideKeyboard()
-        val intent = Intent().putExtra(ChipsKey, result)
+        val intent = Intent().putExtra(CHIPS_KEY, result)
         setResult(Activity.RESULT_OK, intent)
         finish()
     }

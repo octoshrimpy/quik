@@ -52,10 +52,13 @@ class WidgetSpeakUnseenProvider : AppWidgetProvider() {
         remoteViews.setImageViewResource(R.id.speakUnseenImage, R.drawable.ic_speak_unseen_widget)
 
         // speak unseen intent
-        val speakUnseenIntent = Intent(context, SpeakThreadsReceiver::class.java)
-            .putExtra("threadId", -1L)
-        val speakUnseenPendingIntent = PendingIntent.getBroadcast(context,0,
-            speakUnseenIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val speakUnseenPendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            Intent(context, SpeakThreadsReceiver::class.java)
+                .putExtra("threadId", -1L),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         remoteViews.setOnClickPendingIntent(R.id.speakUnseenImage, speakUnseenPendingIntent)
 
         AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews)

@@ -116,7 +116,7 @@
                 android:backgroundTint="?android:attr/divider"
                 android:padding="8dp"
                 android:src="@drawable/ic_person_black_24dp"
-                android:tint="?android:attr/textColorTertiary"
+                app:tint="?android:attr/textColorTertiary"
                 app:layout_constraintBottom_toBottomOf="@id/rightBackground"
                 app:layout_constraintStart_toEndOf="@id/rightIcon"
                 app:layout_constraintTop_toTopOf="@id/rightBackground" />
@@ -237,7 +237,7 @@
                 android:backgroundTint="?android:attr/divider"
                 android:padding="8dp"
                 android:src="@drawable/ic_person_black_24dp"
-                android:tint="?android:attr/textColorTertiary"
+                app:tint="?android:attr/textColorTertiary"
                 app:layout_constraintBottom_toBottomOf="@id/leftBackground"
                 app:layout_constraintStart_toStartOf="@id/leftBackground"
                 app:layout_constraintTop_toTopOf="@id/leftBackground" />

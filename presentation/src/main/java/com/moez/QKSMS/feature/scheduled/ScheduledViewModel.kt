@@ -51,83 +51,91 @@ class ScheduledViewModel @Inject constructor(
         // show the delete message dialog if one or more messages selected
         view.optionsItemIntent
             .filter { it == R.id.delete }
-            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages -> selectedMessages }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages ->
+                view.showDeleteDialog(selectedMessages)
+            }
             .autoDisposable(view.scope())
-            .subscribe { view.showDeleteDialog(it) }
+            .subscribe()
 
         // copy the selected message text to the clipboard
         view.optionsItemIntent
             .filter { it == R.id.copy }
-            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages -> selectedMessages }
-            .autoDisposable(view.scope())
-            .subscribe {
-                val messages = it
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessageIds ->
+                selectedMessageIds  // same order as messages on screen
                     .mapNotNull(scheduledMessageRepo::getScheduledMessage)
-                    .sortedBy { it.date }   // same order as messages on screen
-                val text = when (messages.size) {
-                    1 -> messages.first().body
-                    else -> messages.fold(StringBuilder()) { acc, message ->
-                        if (acc.isNotEmpty() && message.body.isNotEmpty())
-                            acc.append("\n\n")
-                        acc.append(message.body)
+                    .sortedBy { it.date }
+                    .let { scheduledMessages ->
+                        ClipboardUtils.copy(
+                            context,
+                            when (scheduledMessages.size) {
+                                1 -> scheduledMessages.first().body
+                                else -> scheduledMessages.fold(StringBuilder()) { acc, message ->
+                                    if (acc.isNotEmpty() && message.body.isNotEmpty())
+                                        acc.append("\n\n")
+                                    acc.append(message.body)
+                                }
+                            }.toString()
+                        )
                     }
-                }
-
-                ClipboardUtils.copy(context, text.toString())
             }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         // send the messages now menu item selected
         view.optionsItemIntent
             .filter { it == R.id.send_now }
-            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages -> selectedMessages }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages ->
+                view.showSendNowDialog(selectedMessages)
+            }
             .autoDisposable(view.scope())
-            .subscribe { view.showSendNowDialog(it) }
+            .subscribe()
 
         // edit message menu item selected
         view.optionsItemIntent
             .filter { it == R.id.edit_message }
-            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessage -> selectedMessage.first() }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessage ->
+                view.showEditMessageDialog(selectedMessage.first())
+            }
             .autoDisposable(view.scope())
-            .subscribe { view.showEditMessageDialog(it) }
+            .subscribe()
 
         // delete message(s) (fired after the confirmation dialog has been shown)
         view.deleteScheduledMessages
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
             .autoDisposable(view.scope())
-            .subscribe {
-                deleteScheduledMessagesInteractor.execute(it)
+            .subscribe { selectedMessagesIds ->
+                deleteScheduledMessagesInteractor.execute(selectedMessagesIds.toList())
                 view.clearSelection()
             }
 
         // send message(s) now (fired after the confirmation dialog has been shown)
         view.sendScheduledMessages
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
             .autoDisposable(view.scope())
-            .subscribe {
-                it.forEach { sendScheduledMessageInteractor.execute(it) }
+            .subscribe { selectedMessagesIds ->
+                selectedMessagesIds.forEach { selectedMessagesId ->
+                    sendScheduledMessageInteractor.execute(selectedMessagesId)
+                }
                 view.clearSelection()
             }
 
 
         // edit message (fired after the confirmation dialog has been shown)
         view.editScheduledMessage
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .autoDisposable(view.scope())
-            .subscribe {
-                scheduledMessageRepo.getScheduledMessage(it)?.let {
-                    navigator.showCompose(it)
-                    scheduledMessageRepo.deleteScheduledMessage(it.id)
-                }
-                view.clearSelection()
+            .observeOn(Schedulers.io())
+            .doOnNext { selectedMessageId ->
+                scheduledMessageRepo.getScheduledMessage(selectedMessageId)
+                    ?.let { scheduledMessage ->
+                        navigator.showCompose(scheduledMessage)
+                        scheduledMessageRepo.deleteScheduledMessage(scheduledMessage.id)
+                    }
             }
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(view.scope())
+            .subscribe { view.clearSelection() }
 
         // navigate back or unselect
         view.optionsItemIntent
             .filter { it == android.R.id.home }
-            .map { Unit }
+            .map { }
             .mergeWith(view.backPressedIntent)
             .withLatestFrom(state) { _, state -> state }
             .autoDisposable(view.scope())

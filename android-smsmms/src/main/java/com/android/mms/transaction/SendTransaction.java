@@ -25,6 +25,8 @@ import android.net.Uri;
 import android.provider.Telephony.Mms;
 import android.provider.Telephony.Mms.Sent;
 import android.text.TextUtils;
+
+import com.android.mms.logs.LogTag;
 import com.android.mms.util.RateController;
 import com.android.mms.util.SendingProgressTokenManager;
 import com.google.android.mms.pdu_alt.EncodedStringValue;
@@ -34,9 +36,9 @@ import com.google.android.mms.pdu_alt.PduParser;
 import com.google.android.mms.pdu_alt.PduPersister;
 import com.google.android.mms.pdu_alt.SendConf;
 import com.google.android.mms.pdu_alt.SendReq;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 import com.klinker.android.send_message.BroadcastUtils;
 import com.klinker.android.send_message.Utils;
-import timber.log.Timber;
 
 import java.util.Arrays;
 
@@ -54,6 +56,8 @@ import java.util.Arrays;
  * </ul>
  */
 public class SendTransaction extends Transaction implements Runnable {
+    private static final String TAG = LogTag.TAG;
+
     private Thread mThread;
     public final Uri mSendReqURI;
 
@@ -113,9 +117,11 @@ public class SendTransaction extends Transaction implements Runnable {
                                       new PduComposer(mContext, sendReq).make());
             SendingProgressTokenManager.remove(tokenKey);
 
-            String respStr = new String(response);
-            builder.append("[SendTransaction] run: send mms msg (" + mId + "), resp=" + respStr);
-            Timber.d("[SendTransaction] run: send mms msg (" + mId + "), resp=" + respStr);
+            if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                String respStr = new String(response);
+                builder.append("[SendTransaction] run: send mms msg (" + mId + "), resp=" + respStr);
+                Timber.d("[SendTransaction] run: send mms msg (" + mId + "), resp=" + respStr);
+            }
 
             SendConf conf = (SendConf) new PduParser(response).parse();
             if (conf == null) {
@@ -161,7 +167,7 @@ public class SendTransaction extends Transaction implements Runnable {
             mTransactionState.setState(TransactionState.SUCCESS);
             mTransactionState.setContentUri(uri);
         } catch (Throwable t) {
-            Timber.e(t, "error");
+            Timber.e("error", t);
         } finally {
             if (mTransactionState.getState() != TransactionState.SUCCESS) {
                 mTransactionState.setState(TransactionState.FAILED);

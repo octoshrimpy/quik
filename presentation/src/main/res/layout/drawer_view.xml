@@ -77,7 +77,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_import_export_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -104,7 +104,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_event_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -131,7 +131,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_block_white_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -153,7 +153,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_settings_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -198,7 +198,7 @@
             <ImageView
                 style="@style/DrawerIcon"
                 android:src="@drawable/ic_people_black_24dp"
-                android:tint="?android:attr/textColorSecondary" />
+                app:tint="?android:attr/textColorSecondary" />
 
             <dev.octoshrimpy.quik.common.widget.QkTextView
                 style="@style/DrawerText"
@@ -259,7 +259,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_chevron_right_black_24dp"
-                android:tint="?android:attr/textColorTertiary"
+                app:tint="?android:attr/textColorTertiary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -24,18 +24,17 @@ import android.content.Intent
 import androidx.core.app.RemoteInput
 import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
 import dev.octoshrimpy.quik.interactor.MarkRead
-import dev.octoshrimpy.quik.interactor.SendMessage
+import dev.octoshrimpy.quik.interactor.SendNewMessage
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class RemoteMessagingReceiver : BroadcastReceiver() {
-
     @Inject lateinit var conversationRepo: ConversationRepository
     @Inject lateinit var markRead: MarkRead
     @Inject lateinit var messageRepo: MessageRepository
-    @Inject lateinit var sendMessage: SendMessage
+    @Inject lateinit var sendNewMessage: SendNewMessage
     @Inject lateinit var subscriptionManager: SubscriptionManagerCompat
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -45,16 +44,23 @@ class RemoteMessagingReceiver : BroadcastReceiver() {
         val bundle = intent.extras ?: return
 
         val threadId = bundle.getLong("threadId")
-        val body = remoteInput.getCharSequence("body").toString()
+
         markRead.execute(listOf(threadId))
 
         val lastMessage = messageRepo.getMessages(threadId).lastOrNull()
-        val subId = subscriptionManager.activeSubscriptionInfoList
-                .firstOrNull { it.subscriptionId == lastMessage?.subId }
-                ?.subscriptionId ?: -1
-        val addresses = conversationRepo.getConversation(threadId)?.recipients?.map { it.address } ?: return
+        val conversation = conversationRepo.getConversation(threadId)
 
         val pendingRepository = goAsync()
-        sendMessage.execute(SendMessage.Params(subId, threadId, addresses, body)) { pendingRepository.finish() }
+        sendNewMessage.execute(
+            SendNewMessage.Params(
+                subscriptionManager.activeSubscriptionInfoList
+                    .firstOrNull { it.subscriptionId == lastMessage?.subId }
+                    ?.subscriptionId ?: -1,
+                0,
+                conversation?.recipients?.map { it.address } ?: return,
+                remoteInput.getCharSequence("body").toString(),
+                conversation.sendAsGroup
+            )
+        ) { pendingRepository.finish() }
     }
 }

@@ -26,7 +26,6 @@ import dev.octoshrimpy.quik.model.Attachment
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import java.net.URLDecoder
 import javax.inject.Named
 
 @Module
@@ -56,7 +55,7 @@ class ComposeActivityModule {
     @Provides
     @Named("text")
     fun provideSharedText(activity: ComposeActivity): String {
-        var retVal = StringBuilder()
+        val retVal = StringBuilder()
 
         // from subject, if passed in intent
         retVal.append(activity.intent?.getStringExtra(Intent.EXTRA_SUBJECT) ?: "")
@@ -90,7 +89,7 @@ class ComposeActivityModule {
         activity.intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::add)
         activity.intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.run(uris::addAll)
 
-        return uris.mapNotNull { Attachment(activity, it) }
+        return uris.map { Attachment(activity, it) }
     }
 
     @Provides

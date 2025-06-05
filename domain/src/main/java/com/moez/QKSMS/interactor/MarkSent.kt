@@ -22,11 +22,9 @@ import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.Flowable
 import javax.inject.Inject
 
-class MarkSent @Inject constructor(private val messageRepo: MessageRepository) : Interactor<Long>() {
-
-    override fun buildObservable(params: Long): Flowable<Unit> {
-        return Flowable.just(Unit)
-                .doOnNext { messageRepo.markSent(params) }
-    }
+class MarkSent @Inject constructor(private val messageRepo: MessageRepository)
+    : Interactor<Long>() {
+    override fun buildObservable(params: Long): Flowable<Unit> =
+        Flowable.just(Unit).doOnNext { messageRepo.markSent(params) }
 
 }

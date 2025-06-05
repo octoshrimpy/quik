@@ -22,25 +22,27 @@ import android.app.IntentService
 import android.content.Intent
 import android.net.Uri
 import android.telephony.TelephonyManager
-import dev.octoshrimpy.quik.interactor.SendMessage
+import dev.octoshrimpy.quik.interactor.SendNewMessage
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class HeadlessSmsSendService : IntentService("HeadlessSmsSendService") {
-
     @Inject lateinit var conversationRepo: ConversationRepository
-    @Inject lateinit var sendMessage: SendMessage
+    @Inject lateinit var sendNewMessage: SendNewMessage
 
     override fun onHandleIntent(intent: Intent?) {
         if (intent?.action != TelephonyManager.ACTION_RESPOND_VIA_MESSAGE) return
 
         AndroidInjection.inject(this)
         intent.extras?.getString(Intent.EXTRA_TEXT)?.takeIf { it.isNotBlank() }?.let { body ->
-            val intentUri = intent.data
-            val recipients = intentUri?.let(::getRecipients)?.split(";") ?: return@let
-            val threadId = conversationRepo.getOrCreateConversation(recipients)?.id ?: 0L
-            sendMessage.execute(SendMessage.Params(-1, threadId, recipients, body))
+            val recipients = intent.data?.let(::getRecipients)?.split(";") ?: return@let
+
+            val conversation = conversationRepo.getOrCreateConversation(recipients)
+
+            sendNewMessage.execute(SendNewMessage.Params(
+                -1, 0, recipients, body, conversation?.sendAsGroup ?: false
+            ))
         }
     }
 

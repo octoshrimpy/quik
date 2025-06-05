@@ -25,7 +25,7 @@ import java.io.File
 
 class QkFileObserver(path: String) : FileObserver(path, CREATE or DELETE or MODIFY) {
 
-    private val subject = BehaviorSubject.createDefault<String>(path).toSerialized()
+    private val subject = BehaviorSubject.createDefault(path).toSerialized()
 
     val observable: Observable<String> = subject
             .doOnSubscribe { startWatching() }
