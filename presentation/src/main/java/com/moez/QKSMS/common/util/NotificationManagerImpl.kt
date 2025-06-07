@@ -53,6 +53,7 @@ import dev.octoshrimpy.quik.receiver.MarkReadReceiver
 import dev.octoshrimpy.quik.receiver.MarkSeenReceiver
 import dev.octoshrimpy.quik.receiver.RemoteMessagingReceiver
 import dev.octoshrimpy.quik.receiver.SpeakThreadsReceiver
+import dev.octoshrimpy.quik.receiver.SendSmsReceiver
 import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
@@ -371,9 +372,29 @@ class NotificationManagerImpl @Inject constructor(
             .addNextIntent(contentIntent)
         val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
+        //Action for resending a failed message
+        val resendIntent = Intent(context, SendSmsReceiver::class.java).apply {
+            putExtra("id", message.id)
+        }
+        val resendPendingIntent = PendingIntent.getBroadcast(
+            context,
+            message.id.toInt(),
+            resendIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val resendAction = NotificationCompat.Action.Builder(
+            R.drawable.ic_send_black_24dp,
+            context.getString(R.string.notification_message_failed_action),
+            resendPendingIntent
+        )
+            .setSemanticAction(NotificationCompat.Action.SEMANTIC_ACTION_NONE)
+            .build()
+
         val notification = NotificationCompat.Builder(context, getChannelIdForNotification(threadId))
                 .setContentTitle(context.getString(R.string.notification_message_failed_title))
                 .setContentText(context.getString(R.string.notification_message_failed_text, conversation.getTitle()))
+                .addAction(resendAction)
                 .setColor(colors.theme(lastRecipient).theme)
                 .setPriority(NotificationManagerCompat.IMPORTANCE_MAX)
                 .setSmallIcon(R.drawable.ic_notification_failed)
