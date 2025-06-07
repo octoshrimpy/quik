@@ -19,10 +19,10 @@
 package dev.octoshrimpy.quik.feature.qkreply
 
 import androidx.lifecycle.ViewModel
-import dev.octoshrimpy.quik.injection.ViewModelKey
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import dev.octoshrimpy.quik.injection.ViewModelKey
 import javax.inject.Named
 
 @Module

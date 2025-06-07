@@ -18,10 +18,10 @@
  */
 package dev.octoshrimpy.quik.feature.conversationinfo.injection
 
-import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoController
-import dev.octoshrimpy.quik.injection.scope.ControllerScope
 import dagger.Module
 import dagger.Provides
+import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoController
+import dev.octoshrimpy.quik.injection.scope.ControllerScope
 import javax.inject.Named
 
 @Module

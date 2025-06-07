@@ -6,13 +6,11 @@ import android.app.job.JobParameters
 import android.app.job.JobService
 import android.content.ComponentName
 import android.content.Context
-import androidx.core.content.getSystemService
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.common.util.extensions.jobScheduler
 import dev.octoshrimpy.quik.interactor.DeleteOldMessages
-import dagger.android.AndroidInjection
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import kotlinx.coroutines.Job
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

@@ -25,6 +25,8 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
+import com.uber.autodispose.android.ViewScopeProvider
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.forEach
@@ -32,8 +34,6 @@ import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.extensions.Optional
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.repository.ConversationRepository
-import com.uber.autodispose.android.ViewScopeProvider
-import com.uber.autodispose.autoDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.tab_view.view.*

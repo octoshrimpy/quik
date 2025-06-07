@@ -24,9 +24,9 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Telephony
 import androidx.annotation.RequiresApi
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.interactor.SyncMessages
 import dev.octoshrimpy.quik.util.Preferences
-import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class DefaultSmsChangedReceiver : BroadcastReceiver() {

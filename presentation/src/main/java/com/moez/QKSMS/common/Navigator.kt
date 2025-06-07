@@ -45,7 +45,6 @@ import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.model.ScheduledMessage
-import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 

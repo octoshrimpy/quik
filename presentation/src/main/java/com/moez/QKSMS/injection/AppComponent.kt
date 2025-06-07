@@ -18,6 +18,8 @@
  */
 package dev.octoshrimpy.quik.injection
 
+import dagger.Component
+import dagger.android.support.AndroidSupportInjectionModule
 import dev.octoshrimpy.quik.common.QKApplication
 import dev.octoshrimpy.quik.common.QkDialog
 import dev.octoshrimpy.quik.common.util.QkChooserTargetService
@@ -43,8 +45,6 @@ import dev.octoshrimpy.quik.feature.widget.WidgetAdapter
 import dev.octoshrimpy.quik.injection.android.ActivityBuilderModule
 import dev.octoshrimpy.quik.injection.android.BroadcastReceiverBuilderModule
 import dev.octoshrimpy.quik.injection.android.ServiceBuilderModule
-import dagger.Component
-import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton

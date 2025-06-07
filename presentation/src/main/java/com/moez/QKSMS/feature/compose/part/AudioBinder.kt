@@ -25,7 +25,6 @@ import android.media.MediaMetadataRetriever
 import android.view.View
 import android.widget.SeekBar
 import com.moez.QKSMS.common.QkMediaPlayer
-import com.moez.QKSMS.contentproviders.MmsPartProvider
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewHolder

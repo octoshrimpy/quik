@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.compat
 
 import android.content.Context
-import android.os.Build
 import android.telephony.SubscriptionManager
 import dev.octoshrimpy.quik.manager.PermissionManager
 import javax.inject.Inject

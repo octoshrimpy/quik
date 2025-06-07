@@ -73,8 +73,8 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.message_list_item_in.*
-import kotlinx.android.synthetic.main.message_list_item_in.parts
 import kotlinx.android.synthetic.main.message_list_item_in.body
+import kotlinx.android.synthetic.main.message_list_item_in.parts
 import kotlinx.android.synthetic.main.message_list_item_in.sim
 import kotlinx.android.synthetic.main.message_list_item_in.simIndex
 import kotlinx.android.synthetic.main.message_list_item_in.status

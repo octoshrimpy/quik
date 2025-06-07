@@ -18,9 +18,9 @@
  */
 package dev.octoshrimpy.quik.feature.themepicker.injection
 
+import dagger.Subcomponent
 import dev.octoshrimpy.quik.feature.themepicker.ThemePickerController
 import dev.octoshrimpy.quik.injection.scope.ControllerScope
-import dagger.Subcomponent
 
 @ControllerScope
 @Subcomponent(modules = [ThemePickerModule::class])

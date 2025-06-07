@@ -20,9 +20,6 @@ package dev.octoshrimpy.quik.feature.compose.part
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.Gravity
-import android.widget.FrameLayout
-import com.moez.QKSMS.contentproviders.MmsPartProvider
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewHolder

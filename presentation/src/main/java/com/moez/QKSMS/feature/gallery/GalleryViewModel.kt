@@ -20,6 +20,8 @@ package dev.octoshrimpy.quik.feature.gallery
 
 import android.content.Context
 import com.moez.QKSMS.contentproviders.MmsPartProvider
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
@@ -29,13 +31,8 @@ import dev.octoshrimpy.quik.interactor.SaveImage
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
-import dev.octoshrimpy.quik.model.MmsPart
 import io.reactivex.Flowable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 import javax.inject.Named
 

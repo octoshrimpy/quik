@@ -21,13 +21,13 @@ package dev.octoshrimpy.quik.common.util
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.FileUtils
+import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 

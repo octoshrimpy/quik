@@ -20,21 +20,14 @@ package dev.octoshrimpy.quik.manager
 
 import android.content.Context
 import android.util.Log
-import dev.octoshrimpy.quik.common.util.extensions.versionCode
-import dev.octoshrimpy.quik.util.Preferences
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import dev.octoshrimpy.quik.common.util.extensions.versionCode
+import dev.octoshrimpy.quik.util.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Response
-import java.io.IOException
 import javax.inject.Inject
 
 class ChangelogManagerImpl @Inject constructor(

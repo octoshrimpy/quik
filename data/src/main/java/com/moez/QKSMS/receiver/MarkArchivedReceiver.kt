@@ -21,8 +21,8 @@ package dev.octoshrimpy.quik.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import dev.octoshrimpy.quik.interactor.MarkArchived
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.interactor.MarkArchived
 import javax.inject.Inject
 
 class MarkArchivedReceiver : BroadcastReceiver() {

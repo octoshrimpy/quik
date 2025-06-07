@@ -18,7 +18,7 @@
  */
 package dev.octoshrimpy.quik.common.util.extensions
 
-import java.util.*
+import java.util.Calendar
 
 fun Calendar.isSameDay(other: Calendar): Boolean {
     return get(Calendar.YEAR) == other.get(Calendar.YEAR) && get(Calendar.DAY_OF_YEAR) == other.get(Calendar.DAY_OF_YEAR)

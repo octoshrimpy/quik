@@ -18,7 +18,6 @@
  */
 package dev.octoshrimpy.quik.manager
 
-import android.content.pm.ShortcutInfo
 import androidx.core.content.pm.ShortcutInfoCompat
 
 interface ShortcutManager {

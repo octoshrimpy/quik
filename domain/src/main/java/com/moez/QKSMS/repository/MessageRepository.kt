@@ -23,7 +23,6 @@ import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import io.realm.RealmResults
-import java.io.File
 
 interface MessageRepository {
 

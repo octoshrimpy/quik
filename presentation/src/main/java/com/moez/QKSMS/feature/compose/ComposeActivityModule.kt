@@ -21,12 +21,11 @@ package dev.octoshrimpy.quik.feature.compose
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import dev.octoshrimpy.quik.injection.ViewModelKey
-import dev.octoshrimpy.quik.model.Attachment
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
-import java.net.URLDecoder
+import dev.octoshrimpy.quik.injection.ViewModelKey
+import dev.octoshrimpy.quik.model.Attachment
 import javax.inject.Named
 
 @Module

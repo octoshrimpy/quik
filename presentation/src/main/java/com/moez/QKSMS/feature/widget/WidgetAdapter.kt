@@ -27,7 +27,6 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
-import androidx.core.text.color
 import androidx.core.text.italic
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.Colors

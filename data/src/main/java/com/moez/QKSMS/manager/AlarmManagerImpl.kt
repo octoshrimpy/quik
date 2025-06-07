@@ -21,7 +21,6 @@ package dev.octoshrimpy.quik.manager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import dev.octoshrimpy.quik.receiver.SendScheduledMessageReceiver
 import javax.inject.Inject
 

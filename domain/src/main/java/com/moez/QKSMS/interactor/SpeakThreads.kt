@@ -18,9 +18,7 @@
  */
 package dev.octoshrimpy.quik.interactor
 
-import android.content.res.Resources
 import com.moez.QKSMS.manager.SpeakManager
-import dev.octoshrimpy.quik.domain.R
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository

@@ -20,19 +20,17 @@ package dev.octoshrimpy.quik.feature.contacts
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.ViewModelFactory
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
-import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
-import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.QkDialog
 import dev.octoshrimpy.quik.extensions.Optional
@@ -40,7 +38,6 @@ import dev.octoshrimpy.quik.feature.compose.editing.ComposeItem
 import dev.octoshrimpy.quik.feature.compose.editing.ComposeItemAdapter
 import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberAction
 import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberPickerAdapter
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject

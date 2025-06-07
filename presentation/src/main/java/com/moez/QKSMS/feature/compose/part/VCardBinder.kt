@@ -19,8 +19,6 @@
 package dev.octoshrimpy.quik.feature.compose.part
 
 import android.content.Context
-import android.view.Gravity
-import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkViewHolder

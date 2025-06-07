@@ -26,8 +26,8 @@ import android.net.Uri
 import android.os.Vibrator
 import android.telephony.SmsMessage
 import android.widget.Toast
-import androidx.core.content.getSystemService
 import androidx.core.content.FileProvider
+import androidx.core.content.getSystemService
 import androidx.core.net.toFile
 import com.google.android.exoplayer2.util.MimeTypes
 import com.moez.QKSMS.common.QkMediaPlayer
@@ -48,7 +48,6 @@ import dev.octoshrimpy.quik.common.util.extensions.makeToast
 import dev.octoshrimpy.quik.common.widget.MicInputCloudView
 import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
 import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
-import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.asObservable
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.extensions.isSmil
@@ -74,9 +73,9 @@ import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.util.ActiveSubscriptionObservable
+import dev.octoshrimpy.quik.util.FileUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
-import dev.octoshrimpy.quik.util.FileUtils
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -89,7 +88,8 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 

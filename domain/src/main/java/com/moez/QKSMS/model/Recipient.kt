@@ -21,7 +21,7 @@ package dev.octoshrimpy.quik.model
 import android.telephony.PhoneNumberUtils
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
+import java.util.Locale
 
 open class Recipient(
     @PrimaryKey var id: Long = 0,
