@@ -487,6 +487,7 @@
     </plurals>
     <string name="notification_message_failed_title">Message not sent</string>
     <string name="notification_message_failed_text">The message to %s failed to send</string>
+    <string name="notification_message_failed_action">Resend</string>
 
     <string-array name="night_modes">
         <item>System</item>
