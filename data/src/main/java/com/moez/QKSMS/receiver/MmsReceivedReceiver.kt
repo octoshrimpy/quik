@@ -22,8 +22,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import com.klinker.android.send_message.MmsReceivedReceiver
-import dev.octoshrimpy.quik.interactor.ReceiveMms
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.interactor.ReceiveMms
 import javax.inject.Inject
 
 class MmsReceivedReceiver : MmsReceivedReceiver() {

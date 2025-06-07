@@ -18,6 +18,8 @@
  */
 package dev.octoshrimpy.quik.injection.android
 
+import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import dev.octoshrimpy.quik.feature.widget.WidgetProvider
 import dev.octoshrimpy.quik.injection.scope.ActivityScope
 import dev.octoshrimpy.quik.receiver.BlockThreadReceiver
@@ -38,8 +40,6 @@ import dev.octoshrimpy.quik.receiver.SmsDeliveredReceiver
 import dev.octoshrimpy.quik.receiver.SmsProviderChangedReceiver
 import dev.octoshrimpy.quik.receiver.SmsReceiver
 import dev.octoshrimpy.quik.receiver.SmsSentReceiver
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
 import dev.octoshrimpy.quik.receiver.SpeakThreadsReceiver
 import dev.octoshrimpy.quik.receiver.StartActivityFromWidgetReceiver
 

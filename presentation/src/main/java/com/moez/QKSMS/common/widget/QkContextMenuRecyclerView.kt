@@ -1,7 +1,6 @@
 package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
-import android.net.Uri
 import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.View

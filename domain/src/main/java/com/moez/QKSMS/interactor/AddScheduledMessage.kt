@@ -23,7 +23,6 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import dev.octoshrimpy.quik.extensions.getName
-import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import io.reactivex.Flowable
 import io.realm.RealmList

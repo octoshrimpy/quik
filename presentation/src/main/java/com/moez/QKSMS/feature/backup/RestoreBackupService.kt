@@ -26,10 +26,10 @@ import android.net.Uri
 import android.os.IBinder
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.common.util.extensions.getLabel
 import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.repository.BackupRepository
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber

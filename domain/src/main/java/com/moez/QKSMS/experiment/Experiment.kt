@@ -21,7 +21,8 @@ package dev.octoshrimpy.quik.experiment
 import android.content.Context
 import android.preference.PreferenceManager
 import dev.octoshrimpy.quik.manager.AnalyticsManager
-import java.util.*
+import java.util.Locale
+import java.util.Random
 
 abstract class Experiment<T>(val context: Context, val analytics: AnalyticsManager) {
 

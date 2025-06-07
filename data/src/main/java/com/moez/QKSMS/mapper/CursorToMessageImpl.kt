@@ -21,11 +21,12 @@ package dev.octoshrimpy.quik.mapper
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.provider.Telephony.*
+import android.provider.Telephony.Mms
+import android.provider.Telephony.MmsSms
+import android.provider.Telephony.Sms
 import com.google.android.mms.pdu_alt.EncodedStringValue
 import com.google.android.mms.pdu_alt.PduHeaders
 import com.google.android.mms.pdu_alt.PduPersister
-import dev.octoshrimpy.quik.extensions.map
 import dev.octoshrimpy.quik.manager.KeyManager
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.model.Message

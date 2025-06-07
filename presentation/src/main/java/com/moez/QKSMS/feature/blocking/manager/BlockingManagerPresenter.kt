@@ -1,6 +1,8 @@
 package dev.octoshrimpy.quik.feature.blocking.manager
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.blocking.CallBlockerBlockingClient
@@ -12,8 +14,6 @@ import dev.octoshrimpy.quik.common.base.QkPresenter
 import dev.octoshrimpy.quik.manager.AnalyticsManager
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign

@@ -26,7 +26,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import dev.octoshrimpy.quik.manager.WidgetManager
 import dev.octoshrimpy.quik.receiver.NightModeReceiver
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton

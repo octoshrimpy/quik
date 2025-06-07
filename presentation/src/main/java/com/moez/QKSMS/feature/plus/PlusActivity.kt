@@ -24,6 +24,7 @@ import androidx.core.view.children
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.BuildConfig
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
@@ -36,7 +37,6 @@ import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.widget.PreferenceView
 import dev.octoshrimpy.quik.feature.plus.experiment.UpgradeButtonExperiment
 import dev.octoshrimpy.quik.manager.BillingManager
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.collapsing_toolbar.*
 import kotlinx.android.synthetic.main.preference_view.view.*
 import kotlinx.android.synthetic.main.qksms_plus_activity.*

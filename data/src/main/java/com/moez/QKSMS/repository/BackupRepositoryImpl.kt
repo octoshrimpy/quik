@@ -27,11 +27,11 @@ import android.provider.Telephony
 import androidx.core.content.contentValuesOf
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
+import com.squareup.moshi.Moshi
 import dev.octoshrimpy.quik.common.util.extensions.now
 import dev.octoshrimpy.quik.model.BackupFile
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.util.Preferences
-import com.squareup.moshi.Moshi
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
@@ -40,7 +40,8 @@ import okio.buffer
 import okio.source
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Timer
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.concurrent.schedule

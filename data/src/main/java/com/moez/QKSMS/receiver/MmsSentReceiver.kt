@@ -29,8 +29,8 @@ import android.provider.Telephony
 import com.google.android.mms.MmsException
 import com.google.android.mms.util_alt.SqliteWrapper
 import com.klinker.android.send_message.Transaction
-import dev.octoshrimpy.quik.interactor.SyncMessage
 import dagger.android.AndroidInjection
+import dev.octoshrimpy.quik.interactor.SyncMessage
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject

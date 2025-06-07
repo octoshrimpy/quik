@@ -20,13 +20,12 @@ package dev.octoshrimpy.quik.feature.settings.swipe
 
 import android.content.Context
 import androidx.annotation.DrawableRes
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkPresenter
 import dev.octoshrimpy.quik.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 
 class SwipeActionsPresenter @Inject constructor(

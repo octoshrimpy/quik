@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.feature.blocking.numbers
 
 import dev.octoshrimpy.quik.model.BlockedNumber
-import io.realm.RealmList
 import io.realm.RealmResults
 
 data class BlockedNumbersState(
