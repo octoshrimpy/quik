@@ -21,9 +21,9 @@ package dev.octoshrimpy.quik.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.interactor.SendScheduledMessage
 import dev.octoshrimpy.quik.repository.MessageRepository
-import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class SendScheduledMessageReceiver : BroadcastReceiver() {

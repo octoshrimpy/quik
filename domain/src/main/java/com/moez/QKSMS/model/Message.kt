@@ -20,7 +20,9 @@ package dev.octoshrimpy.quik.model
 
 import android.content.ContentUris
 import android.net.Uri
-import android.provider.Telephony.*
+import android.provider.Telephony.Mms
+import android.provider.Telephony.MmsSms
+import android.provider.Telephony.Sms
 import dev.octoshrimpy.quik.extensions.joinTo
 import io.realm.RealmList
 import io.realm.RealmObject

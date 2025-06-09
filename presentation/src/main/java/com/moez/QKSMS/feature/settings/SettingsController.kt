@@ -30,6 +30,8 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.longClicks
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.BuildConfig
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.MenuItem
@@ -49,18 +51,16 @@ import dev.octoshrimpy.quik.feature.themepicker.ThemePickerController
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import kotlinx.android.synthetic.main.settings_controller.*
 import kotlinx.android.synthetic.main.settings_controller.view.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import kotlinx.android.synthetic.main.settings_theme_widget.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.resume
 

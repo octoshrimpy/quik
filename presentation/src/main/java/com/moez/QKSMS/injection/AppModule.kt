@@ -26,6 +26,10 @@ import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.WorkerFactory
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Module
+import dagger.Provides
 import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.blocking.BlockingManager
 import dev.octoshrimpy.quik.common.ViewModelFactory
@@ -85,10 +89,6 @@ import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepositoryImpl
 import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.repository.SyncRepositoryImpl
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import dagger.Module
-import dagger.Provides
 import dev.octoshrimpy.quik.worker.InjectionWorkerFactory
 import javax.inject.Singleton
 

@@ -18,7 +18,6 @@
  */
 package dev.octoshrimpy.quik.feature.compose.part
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

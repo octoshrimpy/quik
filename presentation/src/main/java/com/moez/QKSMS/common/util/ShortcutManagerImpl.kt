@@ -21,8 +21,8 @@ package dev.octoshrimpy.quik.common.util
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.content.pm.ShortcutManager
+import android.os.Build
 import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat

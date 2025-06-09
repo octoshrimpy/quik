@@ -19,11 +19,11 @@
 package dev.octoshrimpy.quik.feature.main
 
 import androidx.lifecycle.ViewModel
-import dev.octoshrimpy.quik.injection.ViewModelKey
-import dev.octoshrimpy.quik.injection.scope.ActivityScope
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
+import dev.octoshrimpy.quik.injection.ViewModelKey
+import dev.octoshrimpy.quik.injection.scope.ActivityScope
 import io.reactivex.disposables.CompositeDisposable
 
 @Module

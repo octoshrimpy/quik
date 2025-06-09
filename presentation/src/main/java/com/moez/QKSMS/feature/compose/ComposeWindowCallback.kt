@@ -20,7 +20,6 @@ package dev.octoshrimpy.quik.feature.compose
 
 import android.app.Activity
 import android.graphics.Rect
-import android.os.Build
 import android.view.ActionMode
 import android.view.KeyEvent
 import android.view.Menu
@@ -31,7 +30,6 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
-import androidx.annotation.RequiresApi
 import dev.octoshrimpy.quik.feature.compose.editing.DetailedChipView
 
 class ComposeWindowCallback(

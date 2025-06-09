@@ -18,12 +18,12 @@
  */
 package dev.octoshrimpy.quik.feature.blocking.numbers
 
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.common.base.QkPresenter
 import dev.octoshrimpy.quik.interactor.MarkUnblocked
 import dev.octoshrimpy.quik.repository.BlockingRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 

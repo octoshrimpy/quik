@@ -19,6 +19,8 @@
 package dev.octoshrimpy.quik.feature.main
 
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
@@ -32,6 +34,7 @@ import dev.octoshrimpy.quik.interactor.MarkUnarchived
 import dev.octoshrimpy.quik.interactor.MarkUnpinned
 import dev.octoshrimpy.quik.interactor.MarkUnread
 import dev.octoshrimpy.quik.interactor.MigratePreferences
+import dev.octoshrimpy.quik.interactor.SpeakThreads
 import dev.octoshrimpy.quik.interactor.SyncContacts
 import dev.octoshrimpy.quik.interactor.SyncMessages
 import dev.octoshrimpy.quik.listener.ContactAddedListener
@@ -41,21 +44,17 @@ import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.manager.RatingManager
 import dev.octoshrimpy.quik.model.SyncLog
 import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import dev.octoshrimpy.quik.interactor.SpeakThreads
-import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

@@ -18,15 +18,14 @@
  */
 package dev.octoshrimpy.quik.feature.blocking.messages
 
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkPresenter
 import dev.octoshrimpy.quik.interactor.DeleteConversations
 import dev.octoshrimpy.quik.repository.ConversationRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import io.reactivex.rxkotlin.withLatestFrom
 import javax.inject.Inject
 
 class BlockedMessagesPresenter @Inject constructor(
