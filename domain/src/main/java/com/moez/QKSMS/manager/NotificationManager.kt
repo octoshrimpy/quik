@@ -32,4 +32,6 @@ interface NotificationManager {
 
     fun getNotificationForBackup(): NotificationCompat.Builder
 
+    fun cancel(i: Int)
+
 }

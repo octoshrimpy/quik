@@ -19,12 +19,16 @@
 package dev.octoshrimpy.quik.interactor
 
 import dev.octoshrimpy.quik.extensions.mapNotNull
+import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.Flowable
 import javax.inject.Inject
 
-class RetrySending @Inject constructor(private val messageRepo: MessageRepository) : Interactor<Long>() {
+class RetrySending @Inject constructor(
+    private val messageRepo: MessageRepository,
+    private val notificationManager: NotificationManager
+) : Interactor<Long>() {
 
     override fun buildObservable(params: Long): Flowable<Message> {
         return Flowable.just(params)
@@ -35,6 +39,8 @@ class RetrySending @Inject constructor(private val messageRepo: MessageRepositor
                         true -> messageRepo.sendSms(message)
                         false -> messageRepo.resendMms(message)
                     }
+                    val threadId = message.threadId
+                    notificationManager.cancel(threadId.toInt() + 100000)
                 }
     }
 

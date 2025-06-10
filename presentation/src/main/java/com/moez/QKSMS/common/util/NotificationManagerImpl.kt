@@ -527,4 +527,8 @@ class NotificationManagerImpl @Inject constructor(
                 .setOngoing(true)
     }
 
+    override fun cancel(i: Int) {
+        notificationManager.cancel(i)
+    }
+
 }
