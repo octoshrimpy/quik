@@ -40,6 +40,7 @@ android {
     }
 
     signingConfigs {
+        debug // Uses the default debug keystore.
         release {
             def keystoreProps = new Properties()
             def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
@@ -47,16 +48,13 @@ android {
             keyAlias 'quik_release'
             if (keystorePropsFile.exists()) {
                 keystoreProps.load(new FileInputStream(keystorePropsFile))
-            } else if (System.getenv("CI") == "true") {
-//                do nothing
-            } else {
-                throw new GradleException("Keystore properties file not found.")
-            }
+            } else
+            // do nothing    
             storePassword keystoreProps['storePassword']
             keyPassword keystoreProps['keyPassword']
         }
     }
-    
+
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
         includeInApk = false
@@ -75,6 +73,7 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
             resValue("string", "app_name", "QUIK-Debug")
+            signingConfig signingConfigs.debug
         }
     }
 
@@ -87,13 +86,12 @@ android {
         jvmTarget = "1.8"
     }
 
-
     productFlavors {
         withAnalytics { dimension "analytics" }
         noAnalytics {
-            signingConfig signingConfigs.release
         }
     }
+
     lint {
         abortOnError false
     }
@@ -232,4 +230,14 @@ dependencies {
 if (getGradle().getStartParameter().getTaskRequests().toString().contains("WithAnalytics")) {
     apply plugin: 'com.google.gms.google-services'
     apply plugin: 'com.google.firebase.crashlytics'
+}
+
+// Check to make sure that the keystore file is present when building a release
+gradle.taskGraph.whenReady { taskGraph ->
+    if ((taskGraph.hasTask(':assembleRelease') ||
+            taskGraph.allTasks.any { it.name == 'assembleRelease' }) &&
+            !file('./.gradle/.gradlerc').exists() &&
+            System.getenv("CI") != "true") {
+        throw new GradleException("Keystore properties file not found")
+    }
 }
