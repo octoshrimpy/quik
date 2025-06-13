@@ -44,8 +44,6 @@ import dev.octoshrimpy.quik.manager.ActiveConversationManager
 import dev.octoshrimpy.quik.manager.ActiveConversationManagerImpl
 import dev.octoshrimpy.quik.manager.AlarmManager
 import dev.octoshrimpy.quik.manager.AlarmManagerImpl
-import dev.octoshrimpy.quik.manager.AnalyticsManager
-import dev.octoshrimpy.quik.manager.AnalyticsManagerImpl
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.ChangelogManager
 import dev.octoshrimpy.quik.manager.ChangelogManagerImpl
@@ -142,9 +140,6 @@ class AppModule(private var application: Application) {
 
     @Provides
     fun provideAlarmManager(manager: AlarmManagerImpl): AlarmManager = manager
-
-    @Provides
-    fun provideAnalyticsManager(manager: AnalyticsManagerImpl): AnalyticsManager = manager
 
     @Provides
     fun blockingClient(manager: BlockingManager): BlockingClient = manager

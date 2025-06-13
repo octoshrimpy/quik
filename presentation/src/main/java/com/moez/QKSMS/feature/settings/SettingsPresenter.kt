@@ -29,7 +29,6 @@ import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.makeToast
 import dev.octoshrimpy.quik.interactor.DeleteOldMessages
 import dev.octoshrimpy.quik.interactor.SyncMessages
-import dev.octoshrimpy.quik.manager.AnalyticsManager
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.repository.SyncRepository
@@ -47,7 +46,6 @@ import javax.inject.Inject
 class SettingsPresenter @Inject constructor(
     colors: Colors,
     syncRepo: SyncRepository,
-    private val analytics: AnalyticsManager,
     private val context: Context,
     private val billingManager: BillingManager,
     private val dateFormatter: DateFormatter,
@@ -205,7 +203,6 @@ class SettingsPresenter @Inject constructor(
                         R.id.textSize -> view.showTextSizePicker()
 
                         R.id.autoColor -> {
-                            analytics.setUserProperty("Preference: Auto Color", !prefs.autoColor.get())
                             prefs.autoColor.set(!prefs.autoColor.get())
                         }
 

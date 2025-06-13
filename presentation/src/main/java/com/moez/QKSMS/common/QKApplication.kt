@@ -36,12 +36,10 @@ import dagger.android.HasActivityInjector
 import dagger.android.HasBroadcastReceiverInjector
 import dagger.android.HasServiceInjector
 import dev.octoshrimpy.quik.R
-import dev.octoshrimpy.quik.common.util.CrashlyticsTree
 import dev.octoshrimpy.quik.common.util.FileLoggingTree
 import dev.octoshrimpy.quik.injection.AppComponentManager
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.interactor.SpeakThreads
-import dev.octoshrimpy.quik.manager.AnalyticsManager
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.ReferralManager
 import dev.octoshrimpy.quik.migration.QkMigration
@@ -61,8 +59,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     /**
      * Inject these so that they are forced to initialize
      */
-    @Suppress("unused")
-    @Inject lateinit var analyticsManager: AnalyticsManager
     @Suppress("unused")
     @Inject lateinit var qkMigration: QkMigration
 
@@ -106,7 +102,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         nightModeManager.updateCurrentTheme()
 
         // configure timber logging
-        Timber.plant(Timber.DebugTree(), CrashlyticsTree(), fileLoggingTree)
+        Timber.plant(Timber.DebugTree(), fileLoggingTree)
 
         // configure emoji compatibility with bundled package
         // (bundled library works with no play-services/gsm os versions)

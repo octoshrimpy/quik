@@ -23,7 +23,6 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdk 34
     publishNonDefault true
-    flavorDimensions "analytics"
 
     compileOptions {
         sourceCompatibility 1.8
@@ -38,10 +37,6 @@ android {
         buildConfigField "String", "AMPLITUDE_API_KEY", "\"${System.getenv("AMPLITUDE_API_KEY")}\""
     }
 
-    productFlavors {
-        withAnalytics { dimension "analytics" }
-        noAnalytics { dimension "analytics" }
-    }
     namespace 'dev.octoshrimpy.quik.data'
 }
 
@@ -103,8 +98,6 @@ dependencies {
     implementation project(':common')
     implementation project(':domain')
 
-    withAnalyticsImplementation 'com.android.installreferrer:installreferrer:1.1'
-    withAnalyticsImplementation "com.amplitude:android-sdk:2.16.0"
 }
 
 repositories {
