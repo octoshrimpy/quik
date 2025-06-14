@@ -25,20 +25,20 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        ./gradlew assembleNoAnalyticsDebug \
+        ./gradlew assembleDebug \
           -Dandroid.injected.signing.store.file=${{ github.workspace }}/my-release-key.keystore
   
     - name: Run Tests
       run: ./gradlew test
 
     - name: List APK Output Directory 
-      run: ls -R presentation/build/outputs/apk/noAnalytics/debug
+      run: ls -R presentation/build/outputs/apk/debug
 
     - name: Rename APK
-      run: mv presentation/build/outputs/apk/noAnalytics/debug/QUIK-v*-noAnalytics-debug.apk presentation/build/outputs/apk/noAnalytics/debug/QUIK-noAnalytics-debug.apk
+      run: mv presentation/build/outputs/apk/debug/QUIK-v*-debug.apk presentation/build/outputs/apk/debug/QUIK-debug.apk
       
     - name: Upload App
       uses: actions/upload-artifact@v4
       with:
         name: apk-debug
-        path: presentation/build/outputs/apk/noAnalytics/debug/QUIK-noAnalytics-debug.apk
+        path: presentation/build/outputs/apk/debug/QUIK-debug.apk

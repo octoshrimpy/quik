@@ -30,7 +30,7 @@ jobs:
         
       - name: Build APK
         run: |
-          ./gradlew assembleNoAnalyticsRelease \
+          ./gradlew assembleRelease \
             -Pandroid.injected.signing.store.file=${{ github.workspace }}/my-release-key.keystore \
             -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
@@ -38,13 +38,13 @@ jobs:
             --stacktrace
       
       - name: Rename APK
-        run: mv presentation/build/outputs/apk/noAnalytics/release/QUIK-v*-noAnalytics-release.apk presentation/build/outputs/apk/noAnalytics/release/QUIK-noAnalytics-release.apk
+        run: mv presentation/build/outputs/apk/release/QUIK-v*-release.apk presentation/build/outputs/apk/release/QUIK-release.apk
       
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: presentation/build/outputs/apk/noAnalytics/release/QUIK-noAnalytics-release.apk
+          path: presentation/build/outputs/apk/release/QUIK-release.apk
 
   release:
     name: validate fdroid APK

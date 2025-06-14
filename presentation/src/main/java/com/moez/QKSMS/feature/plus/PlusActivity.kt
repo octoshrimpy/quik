@@ -25,7 +25,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import dagger.android.AndroidInjection
-import dev.octoshrimpy.quik.BuildConfig
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.FontProvider
@@ -102,7 +101,7 @@ class PlusActivity : QkThemedActivity(), PlusView {
         upgrade.text = getString(upgradeButtonExperiment.variant, state.upgradePrice, state.currency)
         upgradeDonate.text = getString(R.string.qksms_plus_upgrade_donate, state.upgradeDonatePrice, state.currency)
 
-        val fdroid = BuildConfig.FLAVOR == "noAnalytics"
+        val fdroid = true
 
         free.setVisible(fdroid)
         toUpgrade.setVisible(!fdroid && !state.upgraded)

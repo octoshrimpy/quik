@@ -21,13 +21,11 @@ package dev.octoshrimpy.quik.feature.main
 import android.content.Context
 import dev.octoshrimpy.quik.experiment.Experiment
 import dev.octoshrimpy.quik.experiment.Variant
-import dev.octoshrimpy.quik.manager.AnalyticsManager
 import javax.inject.Inject
 
 class DrawerBadgesExperiment @Inject constructor(
     context: Context,
-    analyticsManager: AnalyticsManager
-) : Experiment<Boolean>(context, analyticsManager) {
+) : Experiment<Boolean>(context) {
 
     override val key: String = "Drawer Badges"
 

@@ -19,14 +19,12 @@
 package dev.octoshrimpy.quik.mapper
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import dev.octoshrimpy.quik.manager.AnalyticsManager
 import dev.octoshrimpy.quik.manager.RatingManager
 import io.reactivex.rxkotlin.Observables
 import javax.inject.Inject
 
 class RatingManagerImpl @Inject constructor(
     rxPrefs: RxSharedPreferences,
-    private val analyticsManager: AnalyticsManager
 ) : RatingManager {
 
     companion object {
@@ -50,12 +48,10 @@ class RatingManagerImpl @Inject constructor(
     }
 
     override fun rate() {
-//        analyticsManager.track("Clicked Rate")
         rated.set(true)
     }
 
     override fun dismiss() {
-//        analyticsManager.track("Clicked Rate (Dismiss)")
         dismissed.set(true)
     }
 
