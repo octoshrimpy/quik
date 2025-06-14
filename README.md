@@ -3,6 +3,9 @@
 # QUIK
 
 [![Build and Release](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml)
+<a href="https://hosted.weblate.org/engage/quik/">
+<img src="https://hosted.weblate.org/widget/quik/svg-badge.svg" alt="Translation status" />
+</a>
 
 QUIK is an open source replacement to the [stock messaging app](https://github.com/android/platform_packages_apps_mms) on Android. It is a continuation of [QKSMS](https://github.com/moezbhatti/qksms). 
 
@@ -45,6 +48,13 @@ When reporting a bug, please make sure to provide the following information:
 
 ## Contributing
 Contributions welcome! Please see the [contributing guidelines](/CONTRIBUTING.md) for details.
+
+## Translations
+If you'd like to add translations to QUIK, please join the project on [Weblate](https://hosted.weblate.org/engage/quik/)! Translations that are committed directly to source files will not be accepted. For more information see the [translation guidelines](/CONTRIBUTING.md#translate).
+
+<a href="https://hosted.weblate.org/engage/quik/">
+<img src="https://hosted.weblate.org/widget/quik/multi-auto.svg" alt="Translation status" />
+</a>
 
 ## Thank you
 

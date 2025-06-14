@@ -16,12 +16,13 @@ When reporting a bug, please make sure to provide the following information:
 To do this, navigate to the release tab in this repository and click on releases. There are two types of releases in Quik. The first is the `Latest Release`.  This is the version that is distributed over the app stores. The other type is `Pre-Release`, which contains the latest features and may have bugs. To install this, download the apk from the release tab and install it on your phone. (Instructions can be found in the wiki for a more detailed explanation).
 Once you have done this, simply use the app as normal, and report any bugs you come across.
 ## Translate
-To translate this app navigate to `presentation/src/main/res` and find or make a values file with the language you wish to edit. Then copy over the `strings.xml` file from `presentation/src/main/res/values` and translate it. Please do not translate any string with the `translatable=false` attribute. Also, remember to make sure to insert a backslash `\` before any apostrophe `'` or quotes `"`.
-<!--
-## Translations
+To translate this app join our [Weblate project](https://hosted.weblate.org/engage/quik/). From here you can begin editing strings on the web. We have a few guidelines for translations: 
+* Insert a backslash `\` before any apostrophe `'` or quotes `"`.
+* Use `` ` `` instead of single quotes.
+* Follow the punctuation in the English strings as much as possible. For example don't add a `.` when there is none in the original strings.
+* If you are unsure of a translation, consider using a suggestion rather than translating the string. That way other translators can review it.
 
-If you'd like to add translations to QUIK, please join the project on [Crowdin](https://crowdin.com/project/qksms). Translations that are committed directly to source files will not be accepted.
--->
+We recommend checking out the [Weblate documentation](https://docs.weblate.org/en/latest/index.html), and if you need any help please open an issue.
 ## Update the Wiki 
 To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshrimpy/quik/wiki) in this repository, find the file that you need to edit, and then click `Edit Page`. Then you can edit and commit your change. For more sizeable changes, and for feedback and questions please comment in [this discussion](https://github.com/octoshrimpy/quik/discussions/174).
 ## Fix Bugs 
