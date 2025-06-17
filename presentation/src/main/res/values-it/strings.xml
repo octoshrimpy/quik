@@ -48,7 +48,6 @@
     <string name="main_menu_block">Sposta negli indesiderati</string>
     <string name="main_syncing">La sincronizzazione dei messaggi&#8230;</string>
     <string name="main_sender_you">Tu: %s</string>
-    <string name="main_draft">Bozza</string>
     <string name="main_message_results_title">Risultati nei messaggi</string>
     <string name="main_message_results">%d messaggi</string>
     <string name="inbox_empty_text">Le tue conversazioni vengono visualizzate qui</string>
@@ -357,7 +356,6 @@
     <string name="button_set">Set</string>
     <string name="button_undo">Annulla</string>
     <string name="toast_copied">Copiato</string>
-    <string name="toast_archived">Conversazione archiviata</string>
     <string name="toast_qksms_plus">È necessario sbloccare QUIK+ per utilizzare questo</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nuovo messaggio</item>

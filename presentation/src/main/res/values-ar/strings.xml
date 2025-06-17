@@ -48,7 +48,6 @@
     <string name="main_menu_block">حظر</string>
     <string name="main_syncing">مزامنة الرسائل&#8230;</string>
     <string name="main_sender_you">أنت: %s</string>
-    <string name="main_draft">مسودة</string>
     <string name="main_message_results_title">النتائج في الرسائل</string>
     <string name="main_message_results">%d رسائل</string>
     <string name="inbox_empty_text">ستظهر المحادثات الخاصة بك هنا</string>
@@ -374,7 +373,6 @@
     <string name="button_set">تعيين</string>
     <string name="button_undo">تراجع</string>
     <string name="toast_copied">تم النسخ</string>
-    <string name="toast_archived">تم حفظ المحادثة</string>
     <string name="toast_qksms_plus">استخدام هذه الميزة يتطلب فتح QUIK+</string>
     <plurals name="notification_new_messages">
         <item quantity="zero">لا رسائل جديدة</item>

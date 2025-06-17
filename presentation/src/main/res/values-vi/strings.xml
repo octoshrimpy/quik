@@ -48,7 +48,6 @@
     <string name="main_menu_block">Chặn liên hệ</string>
     <string name="main_syncing">Đang đồng bộ tin nhắn&#8230;</string>
     <string name="main_sender_you">Bạn: %s</string>
-    <string name="main_draft">Bản nháp</string>
     <string name="main_message_results_title">Kết quả trong tin nhắn</string>
     <string name="main_message_results">%d tin nhắn</string>
     <string name="inbox_empty_text">Các cuộc trò chuyện của bạn sẽ xuất hiện ở đây</string>
@@ -353,7 +352,6 @@
     <string name="button_set">Chọn</string>
     <string name="button_undo">Undo</string>
     <string name="toast_copied">Đã sao chép</string>
-    <string name="toast_archived">Cuộc trò chuyện đã được lưu trữ</string>
     <string name="toast_qksms_plus">Bạn phải mở khóa QUIK+ để sử dụng chức năng này</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s tin nhắn mới</item>

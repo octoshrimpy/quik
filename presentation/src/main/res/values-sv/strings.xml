@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blockera</string>
     <string name="main_syncing">Synkroniserar meddelanden&#8230;</string>
     <string name="main_sender_you">Du: %s</string>
-    <string name="main_draft">Utkast</string>
     <string name="main_message_results_title">Resultat i meddelanden</string>
     <string name="main_message_results">%d meddelanden</string>
     <string name="inbox_empty_text">Dina konversationer kommer att dyka upp här</string>
@@ -357,7 +356,6 @@
     <string name="button_set">Ställ in</string>
     <string name="button_undo">Ångra</string>
     <string name="toast_copied">Kopierad</string>
-    <string name="toast_archived">Arkiverade konversationer</string>
     <string name="toast_qksms_plus">Du måste låsa upp QUIK+ för att använda det här</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nytt meddelande</item>

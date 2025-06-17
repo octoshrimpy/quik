@@ -48,7 +48,6 @@
     <string name="main_menu_block">חסום</string>
     <string name="main_syncing">מסנכרן הודעות&#8230;</string>
     <string name="main_sender_you">אתה: %s</string>
-    <string name="main_draft">טיוטה</string>
     <string name="main_message_results_title">תוצאות בהודעות</string>
     <string name="main_message_results">%d הודעות</string>
     <string name="inbox_empty_text">ההתכתבויות שלך תופענה כאן</string>
@@ -365,7 +364,6 @@
     <string name="button_set">הגדרה</string>
     <string name="button_undo">ביטול</string>
     <string name="toast_copied">הועתק</string>
-    <string name="toast_archived">התכתבות בארכיון</string>
     <string name="toast_qksms_plus">עליך לשחרר את QUIK+‎ כדי להשתמש בזה</string>
     <plurals name="notification_new_messages">
         <item quantity="one">הודעה חדשה</item>

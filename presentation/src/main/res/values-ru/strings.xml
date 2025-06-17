@@ -48,7 +48,6 @@
     <string name="main_menu_block">Блокировать</string>
     <string name="main_syncing">Синхронизация сообщений&#8230;</string>
     <string name="main_sender_you">Вы: %s</string>
-    <string name="main_draft">Черновик</string>
     <string name="main_message_results_title">Результаты в сообщениях</string>
     <string name="main_message_results">%d сообщений</string>
     <string name="inbox_empty_text">Беседы будут появляться здесь</string>
@@ -365,7 +364,6 @@
     <string name="button_set">Задать</string>
     <string name="button_undo">Отмена</string>
     <string name="toast_copied">Скопировано</string>
-    <string name="toast_archived">Архивированная беседа</string>
     <string name="toast_qksms_plus">Вы должны разблокировать QUIK+, чтобы использовать</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Новое сообщение</item>

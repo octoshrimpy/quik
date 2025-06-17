@@ -48,7 +48,6 @@
     <string name="main_menu_block">Tiltás</string>
     <string name="main_syncing">Üzenetek szinkronizálása&#8230;</string>
     <string name="main_sender_you">Te: %s</string>
-    <string name="main_draft">Vázlat</string>
     <string name="main_message_results_title">Eredmények az üzenetek szövegében</string>
     <string name="main_message_results">%d üzenet</string>
     <string name="inbox_empty_text">A beszélgetéseid itt jelennek meg</string>
@@ -272,7 +271,7 @@
     <string name="blocked_numbers_title">Tiltott számok</string>
     <string name="blocked_numbers_empty">A tiltott számok itt fognak megjelenni</string>
     <string name="blocked_numbers_add_cd">Új szám tiltása</string>
-    <string name="blocked_numbers_dialog_title">Üzenetek tiltása:</string>
+    <string name="blocked_numbers_dialog_title">Üzenetek tiltása</string>
     <string name="blocked_numbers_dialog_hint">Telefonszám</string>
     <string name="blocked_numbers_dialog_block">Blokkolás</string>
     <string name="blocked_messages_title">Tiltott üzenetek</string>
@@ -357,7 +356,6 @@
     <string name="button_set">Beállítás</string>
     <string name="button_undo">Visszavonás</string>
     <string name="toast_copied">Átmásolva</string>
-    <string name="toast_archived">Archivált beszélgetés</string>
     <string name="toast_qksms_plus">Ehhez ki kell nyitnod a QUIK+-t</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Új üzenet</item>

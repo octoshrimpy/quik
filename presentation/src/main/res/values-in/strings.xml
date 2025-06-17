@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blokir</string>
     <string name="main_syncing">Menyinkronkan pesan&#8230;</string>
     <string name="main_sender_you">Anda: %s</string>
-    <string name="main_draft">Draf</string>
     <string name="main_message_results_title">Hasil dalam pesan</string>
     <string name="main_message_results">%d pesan</string>
     <string name="inbox_empty_text">Percakapan anda akan ditampilkan di sini</string>
@@ -353,7 +352,6 @@
     <string name="button_set">Set</string>
     <string name="button_undo">Urungkan</string>
     <string name="toast_copied">Disalin</string>
-    <string name="toast_archived">Percakapan diarsipkan</string>
     <string name="toast_qksms_plus">Anda harus membuka akses QUIK+ untuk menggunakan ini</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s pesan baru</item>

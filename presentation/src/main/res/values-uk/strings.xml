@@ -48,7 +48,6 @@
     <string name="main_menu_block">Блокувати</string>
     <string name="main_syncing">Синхронізація повідомлень&#8230;</string>
     <string name="main_sender_you">Ви: %s</string>
-    <string name="main_draft">Чернетка</string>
     <string name="main_message_results_title">Результати в повідомленнях</string>
     <string name="main_message_results">Повідомлень: %d</string>
     <string name="inbox_empty_text">Ваші бесіди з\'являтимуться тут</string>
@@ -365,7 +364,6 @@
     <string name="button_set">Задати</string>
     <string name="button_undo">Скасувати</string>
     <string name="toast_copied">Скопійовано</string>
-    <string name="toast_archived">Бесіду заархівовано</string>
     <string name="toast_qksms_plus">Для використання ви повинні розблокувати QUIK+</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Нове повідомлення</item>
