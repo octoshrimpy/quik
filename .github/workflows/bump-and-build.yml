@@ -1,117 +1,140 @@
-name: Bump Feature Version and Build Release
-
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+env:
+  APK_PATH: presentation/build/outputs/apk/release/QUIK-release.apk
 
 jobs:
-  bump-feature-version-and-build:
+  prepare:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-
+    outputs:
+      version_name: ${{ steps.bump.outputs.version_name }}
+      version_code: ${{ steps.bump.outputs.version_code }}
+      release_notes: ${{ steps.notes.outputs.notes }}
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # fetch full history for git log & tags
 
-      - name: Set up Git user
+      - name: Configure Git
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      # Ensure gradlew is executable (for fresh clones)
-      - name: Ensure gradlew is executable
-        run: chmod +x ./gradlew
-
-      - name: Bump MINOR version in build.gradle (features update)
+      - name: Bump version in Gradle
+        id: bump
         working-directory: presentation
         run: |
-          # Extract current versionName and versionCode
-          VERSION_LINE=$(grep "versionName" build.gradle)
-          VERSION_NAME=$(echo "$VERSION_LINE" | sed -n "s/.*versionName[ ]*['\"]\([^'\"]*\)['\"].*/\1/p")
-          VERSION_CODE=$(grep "versionCode" build.gradle | awk '{print $2}')
+          LINE=$(grep "versionName" build.gradle)
+          VER=$(echo "$LINE" | sed -E "s/.*versionName ['\"]([0-9]+\.[0-9]+\.[0-9]+)['\"].*/\1/")
+          CODE=$(grep "versionCode" build.gradle | awk '{print $2}')
+          IFS='.' read MAJ MIN PAT <<<"$VER"
+          MIN=$((MIN + 1)); PAT=0
+          NEW_VER="$MAJ.$MIN.$PAT"
+          NEW_CODE=$((CODE + 1))
+          sed -i "s/versionName.*/versionName '$NEW_VER'/" build.gradle
+          sed -i "s/versionCode.*/versionCode $NEW_CODE/" build.gradle
+          echo "version_name=$NEW_VER"   >> $GITHUB_OUTPUT
+          echo "version_code=$NEW_CODE"  >> $GITHUB_OUTPUT
 
-          # Error handling for version parsing
-          if [[ ! "$VERSION_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Error: versionName is not in MAJOR.MINOR.PATCH format: $VERSION_NAME"
-            exit 1
-          fi
-          if ! [[ "$VERSION_CODE" =~ ^[0-9]+$ ]]; then
-            echo "Error: versionCode is not an integer: $VERSION_CODE"
-            exit 1
-          fi
-
-          # Split versionName into major, minor, patch
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_NAME"
-          # Bump minor version, reset patch to 0
-          MINOR=$((MINOR + 1))
-          PATCH=0
-          NEW_VERSION_NAME="$MAJOR.$MINOR.$PATCH"
-          NEW_VERSION_CODE=$((VERSION_CODE + 1))
-
-          # Update build.gradle in-place
-          sed -i "s/versionName.*/versionName '$NEW_VERSION_NAME'/" build.gradle
-          sed -i "s/versionCode.*/versionCode $NEW_VERSION_CODE/" build.gradle
-
-          echo "Bumped version to $NEW_VERSION_NAME ($NEW_VERSION_CODE)"
-
-      - name: Commit version bump and push branch
-        working-directory: presentation
+      - name: Generate release notes from commits
+        id: notes
         run: |
-          BRANCH="bump-feature-version-$(date +'%Y%m%d-%H%M%S')"
+          git fetch --tags
+          # find the previous tag, or root commit if none
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)
+          NOTES=$(git log "$LAST_TAG"..HEAD --pretty=format:"* %s")
+          echo "::set-output name=notes::$NOTES"
+
+      - name: Update changelog.json
+        run: |
+          VN=${{ steps.bump.outputs.version_name }}
+          VC=${{ steps.bump.outputs.version_code }}
+          NOTES="${{ steps.notes.outputs.notes }}"
+          # build JSON array of bullet lines
+          NOTES_JSON=$(printf '%s\n' "$NOTES" | jq -R . | jq -s .)
+          jq \
+            --arg versionName "$VN" \
+            --argjson versionCode "$VC" \
+            --argjson notes "$NOTES_JSON" \
+            '. += [{versionName: $versionName, versionCode: $versionCode, notes: $notes}]' \
+            data/src/main/assets/changelog.json > changelog.tmp.json
+          mv changelog.tmp.json data/src/main/assets/changelog.json
+
+      - name: Commit & push bump + changelog
+        run: |
+          BRANCH="bump/${{ steps.bump.outputs.version_name }}-${{ github.run_id }}"
           git checkout -b "$BRANCH"
-          git add build.gradle
-          git commit -m "chore: bump feature version [skip ci]" || echo "No changes to commit"
-          git push origin "$BRANCH"
-          echo "Pushed to branch $BRANCH. Please open a pull request to merge into master."
-
+          git add presentation/build.gradle data/src/main/assets/changelog.json
+          git commit -m "chore: bump to ${{ steps.bump.outputs.version_name }} & update changelog [skip ci]" || exit 0
+          git push --set-upstream origin "$BRANCH"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "chore: bump feature version [skip ci]"
-          branch: bump-feature-version
-          title: "chore: bump feature version [skip ci]"
-          body: "Automated version bump."
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: bump/${{ steps.bump.outputs.version_name }}-${{ github.run_id }}
           base: master
-          # path: presentation/build.gradle
-          
-      - name: Decode Keystore File
-        run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > ${{ github.workspace }}/my-release-key.keystore
-      
-      - name: Build Release
-        working-directory: presentation
+          title: "chore: bump to ${{ steps.bump.outputs.version_name }}"
+          body: |
+            ## Release ${{ steps.bump.outputs.version_name }}
+            ${{ steps.notes.outputs.notes }}
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decode Keystore
+        run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > my-release-key.keystore
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build Release APK
         run: |
-          ../gradlew assembleRelease \
-            -Pandroid.injected.signing.store.file=${{ github.workspace }}/my-release-key.keystore \
+          ./gradlew presentation:assembleRelease \
+            -Pandroid.injected.signing.store.file=$PWD/my-release-key.keystore \
             -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
             -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
-      
-      - name: Rename APK
-        run: mv presentation/build/outputs/apk/release/QUIK-v*-release.apk presentation/build/outputs/apk/release/QUIK-release.apk
 
-      # Find and upload APK artifacts for easy download
-      - name: Upload APK as artifact
+      - name: Rename APK
+        run: mv presentation/build/outputs/apk/release/QUIK-*-release.apk $APK_PATH
+
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk
-          path: presentation/build/outputs/apk/release/QUIK-release.apk
+          name: QUIK-release.apk
+          path: $APK_PATH
 
-      # Optional: Show APK files found (for debugging)
-      - name: List built APKs
-        working-directory: presentation
-        run: |
-          echo "APK files in build/outputs/apk/release:"
-          ls -lh build/outputs/apk/release || echo "No APKs found"
-          echo "APK files in app/build/outputs/apk/release:"
-          ls -lh app/build/outputs/apk/release || echo "No APKs found"
+  release:
+    if: github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # Documentation for maintainers
-      - name: Workflow summary
+      - name: Generate release notes from commits
+        id: notes
         run: |
-          echo "This workflow:"
-          echo "- Bumps the MINOR version and resets PATCH in presentation/build.gradle"
-          echo "- Commits and pushes the version update"
-          echo "- Builds the release APK"
-          echo "- Uploads the APK as a downloadable artifact"
+          git fetch --tags
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)
+          NOTES=$(git log "$LAST_TAG"..HEAD --pretty=format:"* %s")
+          echo "::set-output name=notes::$NOTES"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          body: ${{ steps.notes.outputs.notes }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
