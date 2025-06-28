@@ -25,14 +25,15 @@ jobs:
       - name: Decode Android keystore
         run: |
           echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > keystore.p12
-      
+
+      # 3) Ensure your repo icon is in the right place
       - name: Install repo icon
         run: |
           mkdir -p repo/icons/metadata/en-US/images
           cp metadata/en-US/images/icon.png \
              repo/icons/metadata/en-US/images/icon.png
 
-      # 3) Write a lowercase-key F-Droid config.yml from secrets
+      # 4) Write a lowercase-key F-Droid config.yml from secrets
       - name: Write F-Droid config.yml
         run: |
           cat > config.yml <<EOF
@@ -43,7 +44,7 @@ jobs:
           repo_icon: metadata/en-US/images/icon.png
           EOF
 
-      # 4) Install fdroidserver & bump metadata.yml non-interactively
+      # 5) Install fdroidserver & bump metadata.yml non-interactively
       - name: Set up Python & fdroidserver
         uses: actions/setup-python@v4
         with:
@@ -53,7 +54,7 @@ jobs:
           pip3 install fdroidserver
           fdroid update
 
-      # 5) Commit F-Droid metadata.yml
+      # 6) Commit F-Droid metadata.yml
       - name: Commit F-Droid metadata.yml
         run: |
           git config user.name "github-actions[bot]"
@@ -61,7 +62,7 @@ jobs:
           git add "$META_YML"
           git diff --quiet --cached || git commit -m "chore: bump F-Droid metadata"
 
-      # 6) Set up Java & jq for the rest
+      # 7) Set up Java & jq for the rest
       - name: Set up Java 17
         uses: actions/setup-java@v3
         with:
@@ -70,7 +71,7 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      # 7) Bump Android versions & capture NEW_CODE/NEW_NAME
+      # 8) Bump Android versions & capture NEW_CODE/NEW_NAME
       - name: Bump Android version & update build.gradle
         id: bump
         shell: bash
@@ -90,7 +91,7 @@ jobs:
           echo "NEW_NAME=$new_name" >> "$GITHUB_ENV"
           echo "✅ Bumped to versionCode $new_code, versionName $new_name"
 
-      # 8) Gather commits & prepend to changelog.json
+      # 9) Gather commits & prepend to changelog.json
       - name: Update changelog.json & write F-Droid txt
         shell: bash
         run: |
@@ -137,16 +138,38 @@ jobs:
             for c in "${commits[@]}"; do echo "- $c"; done
           } > "$out"
 
-      # 9) Commit all metadata, changelog & build.gradle
-      - name: Commit version & changelog
+      # 10) Commit version bump, changelog & metadata TXT
+      - name: Commit version bump & changelog
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add "$GRADLE_FILE" "$CHANGELOG" fdroid/metadata/"${NEW_CODE}".txt
           git diff --quiet --cached || git commit -m "chore: bump to ${NEW_NAME} (${NEW_CODE})"
-          git push
 
-      # 10) Build the APK (using the same keystore.p12)
+      # 11) Push bump branch instead of master
+      - name: Push bump branch
+        run: |
+          git checkout -b bump/${NEW_NAME}-${NEW_CODE}
+          git push --set-upstream origin bump/${NEW_NAME}-${NEW_CODE}
+
+      # 12) Create & auto-merge PR
+      - name: Create & auto-merge PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: chore: bump to ${NEW_NAME} (${NEW_CODE})
+          title: chore: bump to ${NEW_NAME} (${NEW_CODE})
+          body: |
+            This PR bumps:
+            - versionCode → ${NEW_CODE}
+            - versionName → ${NEW_NAME}
+          branch: bump/${NEW_NAME}-${NEW_CODE}
+          base: master
+          labels: automated
+          merge-method: merge
+          auto-merge: true
+
+      # 13) Build the APK (using the same keystore.p12)
       - name: Build release APK
         run: |
           chmod +x ./gradlew
@@ -156,13 +179,16 @@ jobs:
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
             -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-      # 11) Tag & push
+      # 14) Tag & push tag (on master after auto-merge)
       - name: Tag new release
         run: |
+          git fetch origin master
+          git checkout master
+          git pull
           git tag "v${NEW_NAME}"
           git push origin "v${NEW_NAME}"
 
-      # 12) Publish GitHub Release & upload APK
+      # 15) Publish GitHub Release & upload APK
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v1
         with:
@@ -171,7 +197,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 13) Cleanup signing material
+      # 16) Cleanup signing material
       - name: Cleanup keystore/config
         if: always()
         run: |
