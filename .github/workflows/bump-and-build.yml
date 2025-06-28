@@ -25,6 +25,12 @@ jobs:
       - name: Decode Android keystore
         run: |
           echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > keystore.p12
+      
+      - name: Install repo icon
+        run: |
+          mkdir -p repo/icons/metadata/en-US/images
+          cp metadata/en-US/images/icon.png \
+             repo/icons/metadata/en-US/images/icon.png
 
       # 3) Write a lowercase-key F-Droid config.yml from secrets
       - name: Write F-Droid config.yml
