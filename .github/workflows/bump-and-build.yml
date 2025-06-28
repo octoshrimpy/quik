@@ -157,8 +157,8 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: chore: bump to ${NEW_NAME} (${NEW_CODE})
-          title: chore: bump to ${NEW_NAME} (${NEW_CODE})
+          commit-message: "chore: bump to ${NEW_NAME} (${NEW_CODE})"
+          title: "chore: bump to ${NEW_NAME} (${NEW_CODE})"
           body: |
             This PR bumps:
             - versionCode → ${NEW_CODE}
