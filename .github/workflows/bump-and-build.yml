@@ -120,11 +120,18 @@ jobs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git add "$GRADLE_FILE" "$CHANGELOG" "fdroid/metadata/${new_code}.txt"
         git commit -m "chore: bump to $new_name ($new_code)"
-
+    
     - name: Push bump branch
       run: |
-        git checkout -b bump/${{ env.NEW_NAME }}-${{ env.NEW_CODE }}
-        git push --set-upstream origin bump/${{ env.NEW_NAME }}-${{ env.NEW_CODE }}
+        branch="bump/${{ env.NEW_NAME }}-${{ env.NEW_CODE }}"
+        # Create or switch to the branch locally
+        if git rev-parse --verify "$branch" >/dev/null 2>&1; then
+          git checkout "$branch"
+        else
+          git checkout -b "$branch"
+        fi
+        # Force-push safely: only if the remote hasn't moved since last fetched
+        git push --force-with-lease origin HEAD:"$branch"
 
     - name: Open PR (no auto-merge)
       uses: peter-evans/create-pull-request@v5
