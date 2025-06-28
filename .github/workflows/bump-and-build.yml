@@ -19,7 +19,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # fetch full history for git log & tags
+          fetch-depth: 0   # full history & tags
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq dos2unix
 
       - name: Configure Git
         run: |
@@ -30,6 +35,7 @@ jobs:
         id: bump
         working-directory: presentation
         run: |
+          dos2unix build.gradle
           LINE=$(grep "versionName" build.gradle)
           VER=$(echo "$LINE" | sed -E "s/.*versionName ['\"]([0-9]+\.[0-9]+\.[0-9]+)['\"].*/\1/")
           CODE=$(grep "versionCode" build.gradle | awk '{print $2}')
@@ -37,26 +43,25 @@ jobs:
           MIN=$((MIN + 1)); PAT=0
           NEW_VER="$MAJ.$MIN.$PAT"
           NEW_CODE=$((CODE + 1))
-          sed -i "s/versionName.*/versionName '$NEW_VER'/" build.gradle
-          sed -i "s/versionCode.*/versionCode $NEW_CODE/" build.gradle
-          echo "version_name=$NEW_VER"   >> $GITHUB_OUTPUT
-          echo "version_code=$NEW_CODE"  >> $GITHUB_OUTPUT
+          sed -i -E "s/versionName ['\"].*['\"]/versionName '$NEW_VER'/" build.gradle
+          sed -i -E "s/versionCode [0-9]+/versionCode $NEW_CODE/" build.gradle
+          echo "version_name=$NEW_VER" >> $GITHUB_OUTPUT
+          echo "version_code=$NEW_CODE" >> $GITHUB_OUTPUT
 
       - name: Generate release notes from commits
         id: notes
         run: |
           git fetch --tags
-          # find the previous tag, or root commit if none
           LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)
           NOTES=$(git log "$LAST_TAG"..HEAD --pretty=format:"* %s")
           echo "::set-output name=notes::$NOTES"
 
       - name: Update changelog.json
         run: |
+          dos2unix data/src/main/assets/changelog.json
           VN=${{ steps.bump.outputs.version_name }}
           VC=${{ steps.bump.outputs.version_code }}
           NOTES="${{ steps.notes.outputs.notes }}"
-          # build JSON array of bullet lines
           NOTES_JSON=$(printf '%s\n' "$NOTES" | jq -R . | jq -s .)
           jq \
             --arg versionName "$VN" \
@@ -65,6 +70,9 @@ jobs:
             '. += [{versionName: $versionName, versionCode: $versionCode, notes: $notes}]' \
             data/src/main/assets/changelog.json > changelog.tmp.json
           mv changelog.tmp.json data/src/main/assets/changelog.json
+
+      - name: Validate changelog.json
+        run: jq . data/src/main/assets/changelog.json > /dev/null
 
       - name: Commit & push bump + changelog
         run: |
@@ -89,7 +97,8 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > my-release-key.keystore
@@ -105,17 +114,23 @@ jobs:
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
             -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-      - name: Rename APK
-        run: mv presentation/build/outputs/apk/release/QUIK-*-release.apk $APK_PATH
+      - name: Rename APK into known path
+        run: |
+          mkdir -p "$(dirname "${{ env.APK_PATH }}")"
+          mv presentation/build/outputs/apk/release/*.apk "${{ env.APK_PATH }}"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: QUIK-release.apk
-          path: $APK_PATH
+          path: ${{ env.APK_PATH }}
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
 
   release:
-    if: github.event_name == 'push'
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -129,7 +144,8 @@ jobs:
         run: |
           git fetch --tags
           LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)
-          NOTES=$(git log "$LAST_TAG"..HEAD --pretty=format:"* %s")
+          git log "$LAST_TAG"..HEAD --pretty=format:"* %s" > release_notes.md
+          NOTES=$(sed -e ':a;N;$!ba;s/\n/\\n/g' release_notes.md)
           echo "::set-output name=notes::$NOTES"
 
       - name: Create GitHub Release
