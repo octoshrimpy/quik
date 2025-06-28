@@ -1,3 +1,4 @@
+name: Bump Feat. & Build Release
 on:
   workflow_dispatch:
   push:
