@@ -1,157 +1,169 @@
-name: Bump Feat. & Build Release
+name: Bump + Release + F-Droid
+
 on:
   workflow_dispatch:
   push:
     tags:
       - "v*"
 
-env:
-  APK_PATH: presentation/build/outputs/apk/release/QUIK-release.apk
-
 jobs:
-  prepare:
+  release:
     runs-on: ubuntu-latest
-    outputs:
-      version_name: ${{ steps.bump.outputs.version_name }}
-      version_code: ${{ steps.bump.outputs.version_code }}
-      release_notes: ${{ steps.notes.outputs.notes }}
+    env:
+      META_YML: fdroid/metadata/dev.octoshrimpy.quik.yml
+      GRADLE_FILE: presentation/build.gradle
+      CHANGELOG: "data/src/main/assets/changelog.json"
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # 1) Checkout full history so tags are available
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # full history & tags
+          fetch-depth: 0
+          persist-credentials: true
 
-      - name: Install dependencies
+      # 2) Install fdroidserver & bump metadata.yml
+      - name: Set up Python & fdroidserver
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Bump F-Droid metadata
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq dos2unix
-
-      - name: Configure Git
+          pip3 install fdroidserver
+          fdroid update --skip-pulls --checkmetadata "$META_YML"
+      - name: Commit F-Droid metadata.yml
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$META_YML"
+          git diff --quiet --cached || git commit -m "chore: bump F-Droid metadata"
 
-      - name: Bump version in Gradle
+      # 3) Set up Java & jq for the rest
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      # 4) Bump Android versions & capture NEW_CODE/NEW_NAME
+      - name: Bump Android version & update build.gradle
         id: bump
-        working-directory: presentation
         run: |
-          dos2unix build.gradle
-          LINE=$(grep "versionName" build.gradle)
-          VER=$(echo "$LINE" | sed -E "s/.*versionName ['\"]([0-9]+\.[0-9]+\.[0-9]+)['\"].*/\1/")
-          CODE=$(grep "versionCode" build.gradle | awk '{print $2}')
-          IFS='.' read MAJ MIN PAT <<<"$VER"
-          MIN=$((MIN + 1)); PAT=0
-          NEW_VER="$MAJ.$MIN.$PAT"
-          NEW_CODE=$((CODE + 1))
-          sed -i -E "s/versionName ['\"].*['\"]/versionName '$NEW_VER'/" build.gradle
-          sed -i -E "s/versionCode [0-9]+/versionCode $NEW_CODE/" build.gradle
-          echo "version_name=$NEW_VER" >> $GITHUB_OUTPUT
-          echo "version_code=$NEW_CODE" >> $GITHUB_OUTPUT
+          set -euo pipefail
 
-      - name: Generate release notes from commits
-        id: notes
+          # extract current
+          current_code=$(grep -E '^[[:space:]]*versionCode ' "$GRADLE_FILE" | awk '{print $2}')
+          current_name=$(grep -E '^[[:space:]]*versionName ' "$GRADLE_FILE" \
+            | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+
+          # bump
+          new_code=$((current_code + 1))
+          IFS='.' read -r major minor patch <<< "$current_name"
+          new_name="${major}.$((minor + 1)).0"
+
+          # apply
+          sed -i \
+            -e "s|^[[:space:]]*versionCode[[:space:]]\+$current_code|versionCode $new_code|" \
+            -e "s|^[[:space:]]*versionName[[:space:]]\+'$current_name'|versionName '$new_name'|" \
+            "$GRADLE_FILE"
+
+          echo "NEW_CODE=$new_code" >> $GITHUB_ENV
+          echo "NEW_NAME=$new_name" >> $GITHUB_ENV
+          echo "Bumped to $new_name ($new_code)"
+
+      # 5) Gather commits & prepend to changelog.json
+      - name: Update changelog.json & write F-Droid txt
         run: |
-          git fetch --tags
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)
-          NOTES=$(git log "$LAST_TAG"..HEAD --pretty=format:"* %s")
-          echo "::set-output name=notes::$NOTES"
+          set -euo pipefail
 
-      - name: Update changelog.json
+          # determine previous tag or fallback
+          prev_tag="v${{ env.NEW_NAME%.* }}.${{ env.NEW_NAME#*. }}"
+          if git rev-parse --verify --quiet "$prev_tag"; then
+            base="$prev_tag"
+          else
+            # latest numeric tag
+            base=$(git describe --tags --match "v[0-9]*" --abbrev=0 2>/dev/null || echo "")
+          fi
+
+          [[ -n "$base" ]] && range="$base..HEAD" || range="HEAD"
+
+          # gather, clean, dedupe, oldest→newest
+          mapfile -t commits < <(
+            git log --no-merges --reverse --pretty=format:"%s by %an" $range \
+              | sed -E 's/[[:space:]]*\.*[[:space:]]+by/ by/' \
+              | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//' \
+              | awk '!seen[$0]++'
+          )
+
+          # build JSON array
+          if (( ${#commits[@]} )); then
+            changes_json=$(printf '%s\n' "${commits[@]}" | jq -R . | jq -s .)
+          else
+            changes_json="[]"
+          fi
+
+          # prepend new entry
+          jq --argjson changes "$changes_json" \
+            --arg vc "$new_code" \
+            --arg vn "$new_name" \
+            '
+            # 1) helper to capitalize first character
+            def capfirst:
+              sub("^(.)"; "\(ascii_upcase(.1))");
+
+            # 2) apply capitalization to all changes
+            $all := ($changes | map(capfirst));
+
+            # 3) split into fixes vs other changes
+            $fixes  := $all | map(select(test("^(Fix|fix)")));
+            $others  := $all | map(select(test("^(Fix|fix)") | not));
+
+            # 4) build the new entry object with both fields
+            . = [{
+              versionCode: ($vc | tonumber),
+              versionName: $vn,
+              fixes: $fixes,
+              changes: $others
+            }] + .
+            ' \
+            "$CHANGELOG" > "${CHANGELOG}.tmp" \
+          && mv "${CHANGELOG}.tmp" "$CHANGELOG"
+
+          # write fdroid/metadata/<new_code>.txt
+          mkdir -p fdroid/metadata
+          out="fdroid/metadata/${{ env.NEW_CODE }}.txt"
+          {
+            echo "Changes in ${{ env.NEW_NAME }} (${{ env.NEW_CODE }}):"
+            echo
+            for c in "${commits[@]}"; do echo "- $c"; done
+          } > "$out"
+
+      # 6) Commit all metadata, changelog & build.gradle
+      - name: Commit version & changelog
         run: |
-          dos2unix data/src/main/assets/changelog.json
-          VN=${{ steps.bump.outputs.version_name }}
-          VC=${{ steps.bump.outputs.version_code }}
-          NOTES="${{ steps.notes.outputs.notes }}"
-          NOTES_JSON=$(printf '%s\n' "$NOTES" | jq -R . | jq -s .)
-          jq \
-            --arg versionName "$VN" \
-            --argjson versionCode "$VC" \
-            --argjson notes "$NOTES_JSON" \
-            '. += [{versionName: $versionName, versionCode: $versionCode, notes: $notes}]' \
-            data/src/main/assets/changelog.json > changelog.tmp.json
-          mv changelog.tmp.json data/src/main/assets/changelog.json
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$GRADLE_FILE" "$CHANGELOG" fdroid/metadata/"${{ env.NEW_CODE }}".txt
+          git diff --quiet --cached || git commit -m "chore: bump to ${{ env.NEW_NAME }} (${{ env.NEW_CODE }})"
+          git push
 
-      - name: Validate changelog.json
-        run: jq . data/src/main/assets/changelog.json > /dev/null
+      # 7) Build the APK
+      - name: Build release APK
+        run: ./gradlew clean :presentation:assembleRelease
 
-      - name: Commit & push bump + changelog
+      # 8) Tag & push
+      - name: Tag new release
         run: |
-          BRANCH="bump/${{ steps.bump.outputs.version_name }}-${{ github.run_id }}"
-          git checkout -b "$BRANCH"
-          git add presentation/build.gradle data/src/main/assets/changelog.json
-          git commit -m "chore: bump to ${{ steps.bump.outputs.version_name }} & update changelog [skip ci]" || exit 0
-          git push --set-upstream origin "$BRANCH"
+          git tag "v${{ env.NEW_NAME }}"
+          git push origin "v${{ env.NEW_NAME }}"
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+      # 9) Create GitHub Release & upload APK
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: bump/${{ steps.bump.outputs.version_name }}-${{ github.run_id }}
-          base: master
-          title: "chore: bump to ${{ steps.bump.outputs.version_name }}"
-          body: |
-            ## Release ${{ steps.bump.outputs.version_name }}
-            ${{ steps.notes.outputs.notes }}
-
-  build:
-    needs: prepare
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Decode Keystore
-        run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > my-release-key.keystore
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Build Release APK
-        run: |
-          ./gradlew presentation:assembleRelease \
-            -Pandroid.injected.signing.store.file=$PWD/my-release-key.keystore \
-            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
-            -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
-            -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
-
-      - name: Rename APK into known path
-        run: |
-          mkdir -p "$(dirname "${{ env.APK_PATH }}")"
-          mv presentation/build/outputs/apk/release/*.apk "${{ env.APK_PATH }}"
-
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: QUIK-release.apk
-          path: ${{ env.APK_PATH }}
-          if-no-files-found: warn
-          compression-level: 6
-          overwrite: false
-          include-hidden-files: false
-
-  release:
-    if: ${{ github.event_name == 'workflow_dispatch' }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Generate release notes from commits
-        id: notes
-        run: |
-          git fetch --tags
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || git rev-list --max-parents=0 HEAD)
-          git log "$LAST_TAG"..HEAD --pretty=format:"* %s" > release_notes.md
-          NOTES=$(sed -e ':a;N;$!ba;s/\n/\\n/g' release_notes.md)
-          echo "::set-output name=notes::$NOTES"
-
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ github.ref_name }}
-          body: ${{ steps.notes.outputs.notes }}
+          tag_name: "v${{ env.NEW_NAME }}"
+          files: presentation/build/outputs/apk/release/*-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
