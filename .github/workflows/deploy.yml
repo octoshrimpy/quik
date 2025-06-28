@@ -23,8 +23,9 @@ jobs:
           java-version: '17'
 
       - name: Decode Android keystore
-        run: echo "${{ secrets.KEYSTORE_FILE }}" \
-              | base64 --decode > keystore.p12
+        run: |
+          echo "${{ secrets.KEYSTORE_FILE }}" \
+            | base64 --decode > keystore.p12
 
       - name: Build release APK
         run: |
@@ -35,11 +36,20 @@ jobs:
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
             -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
+      # ─────────────────────────────────────────────────────────────────
+      # 1) Extract versionName into an environment variable
+      - name: Extract versionName
+        id: extract
+        run: |
+          version=$(grep versionName $GRADLE_FILE \
+                     | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+          echo "VERSION=$version" >> $GITHUB_ENV
+
+      # 2) Publish using that VERSION
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v$(grep versionName ${{ env.GRADLE_FILE }} \
-                       | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')"
+          tag_name: v${{ env.VERSION }}
           files: presentation/build/outputs/apk/release/*-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
