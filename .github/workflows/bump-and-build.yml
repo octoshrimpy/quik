@@ -21,7 +21,7 @@ jobs:
 
       # Ensure gradlew is executable (for fresh clones)
       - name: Ensure gradlew is executable
-        run: chmod +x ./presentation/gradlew
+        run: chmod +x ./gradlew
 
       - name: Bump MINOR version in build.gradle (features update)
         working-directory: presentation
@@ -61,10 +61,18 @@ jobs:
           git add build.gradle
           git commit -m "chore: bump feature version [skip ci]" || echo "No changes to commit"
           git push
-
+          
+      - name: Decode Keystore File
+        run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > ${{ github.workspace }}/my-release-key.keystore
+      
       - name: Build Release
         working-directory: presentation
-        run: ./gradlew assembleRelease
+        run: |
+          ../gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=${{ github.workspace }}/my-release-key.keystore \
+            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+            -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+            -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
       # Find and upload APK artifacts for easy download
       - name: Upload APK as artifact
