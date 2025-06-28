@@ -477,6 +477,10 @@
         <item quantity="one">Archived conversation</item>
         <item quantity="other">Archived %d conversations</item>
     </plurals>
+    <plurals name="toast_unarchived">
+        <item quantity="one">Unarchived conversation</item>
+        <item quantity="other">Unarchived %d conversations</item>
+    </plurals>
 
     <string name="toast_qksms_plus">You must unlock QUIK+ to use this</string>
 
