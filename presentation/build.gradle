@@ -33,9 +33,6 @@ android {
         versionName '4.1.1'
         setProperty("archivesBaseName", "QUIK-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        setProperty("archivesBaseName", "QUIK-v${versionName}")
-        // versionNameSuffix '-beta'
     }
 
     signingConfigs {
@@ -47,8 +44,9 @@ android {
             keyAlias 'quik_release'
             if (keystorePropsFile.exists()) {
                 keystoreProps.load(new FileInputStream(keystorePropsFile))
-            } else
-            // do nothing    
+            } else {
+                // do nothing
+            }
             storePassword keystoreProps['storePassword']
             keyPassword keystoreProps['keyPassword']
         }
