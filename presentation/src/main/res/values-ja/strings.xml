@@ -48,7 +48,6 @@
     <string name="main_menu_block">ブロック</string>
     <string name="main_syncing">メッセージを同期しています...</string>
     <string name="main_sender_you">あなた: %s</string>
-    <string name="main_draft">下書き</string>
     <string name="main_message_results_title">メッセージ内の検索結果</string>
     <string name="main_message_results">%d 件のメッセージ</string>
     <string name="inbox_empty_text">会話がここに表示されます</string>
@@ -353,7 +352,6 @@
     <string name="button_set">設定</string>
     <string name="button_undo">元に戻す</string>
     <string name="toast_copied">コピーしました</string>
-    <string name="toast_archived">会話をアーカイブしました</string>
     <string name="toast_qksms_plus">使用するには QUIK+ のロックを解除する必要があります</string>
     <plurals name="notification_new_messages">
         <item quantity="other">%s 件の新着メッセージ</item>

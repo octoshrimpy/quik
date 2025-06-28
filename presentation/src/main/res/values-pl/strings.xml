@@ -58,7 +58,6 @@
     <string name="main_menu_rename_conversation">Zmień nazwę rozmowy</string>
     <string name="main_syncing">Synchronizowanie wiadomości&#8230;</string>
     <string name="main_sender_you">Ty: %s</string>
-    <string name="main_draft">Szkic</string>
     <string name="main_message_results_title">Wyniki w wiadomościach</string>
     <string name="main_message_results">%d wiadomości</string>
     <string name="inbox_empty_text">Miejsce dla twoich bieżących rozmów</string>

@@ -48,7 +48,6 @@
     <string name="main_menu_block">Estä</string>
     <string name="main_syncing">Synkronoidaan viestejä&#8230;</string>
     <string name="main_sender_you">Sinä: %s</string>
-    <string name="main_draft">Luonnos: %s</string>
     <string name="main_message_results_title">Tuloksia viesteissä</string>
     <string name="main_message_results">%d viestiä</string>
     <string name="inbox_empty_text">Keskustelusi näkyvät tässä</string>
@@ -357,7 +356,6 @@
     <string name="button_set">Aseta</string>
     <string name="button_undo">Kumoa</string>
     <string name="toast_copied">Kopioitu</string>
-    <string name="toast_archived">Arkistoidut keskustelut</string>
     <string name="toast_qksms_plus">Sinun pitää avata QUIK+ käyttääksesi tätä</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Uusi viesti</item>

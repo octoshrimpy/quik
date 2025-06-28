@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blokuoti</string>
     <string name="main_syncing">Syncing messages&#8230;</string>
     <string name="main_sender_you">Tu: %s</string>
-    <string name="main_draft">Draft</string>
     <string name="main_message_results_title">Results in messages</string>
     <string name="main_message_results">%d messages</string>
     <string name="inbox_empty_text">Tavo žinutės buvo matomos čia</string>
@@ -365,7 +364,6 @@
     <string name="button_set">Padaryti</string>
     <string name="button_undo">Anuliuoti</string>
     <string name="toast_copied">Nukopijuota</string>
-    <string name="toast_archived">Archyvuotas pokalbis</string>
     <string name="toast_qksms_plus">Reikia turėti QUIK+ funkcijos naudojomui</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Naujas pranešimas</item>

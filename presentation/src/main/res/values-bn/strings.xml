@@ -48,7 +48,6 @@
     <string name="main_menu_block">অবরুদ্ধ</string>
     <string name="main_syncing">বার্তাগুলি সিঙ্ক হচ্ছে&#8230;</string>
     <string name="main_sender_you">তুমি: %s</string>
-    <string name="main_draft">খসড়া</string>
     <string name="main_message_results_title">বার্তার ভিতর পাওয়া গেছে</string>
     <string name="main_message_results">%dটি বার্তা</string>
     <string name="inbox_empty_text">তোমার আলাপ এখানে দেখা যাবে</string>
@@ -357,7 +356,6 @@
     <string name="button_set">সেট করুন</string>
     <string name="button_undo">বাতিল করো</string>
     <string name="toast_copied">অনুলিপি করা হয়েছে</string>
-    <string name="toast_archived">আর্কাইভ করা আলাপ</string>
     <string name="toast_qksms_plus">এই ব্যবহার করতে আপনাকে অবশ্যই QUIK + আনলক করতে হবে</string>
     <plurals name="notification_new_messages">
         <item quantity="one">নতুন বার্তা</item>

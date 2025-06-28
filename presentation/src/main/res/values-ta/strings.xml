@@ -48,7 +48,6 @@
     <string name="main_menu_block">தடு</string>
     <string name="main_syncing">செய்திகள் ஒத்திசைக்கப்படுகின்றன&#8230;</string>
     <string name="main_sender_you">நீங்கள்: %s</string>
-    <string name="main_draft">வரைவு</string>
     <string name="main_message_results_title">தகவல்களிலுள்ள முடிவுகள்</string>
     <string name="main_message_results">%d செய்திகள்</string>
     <string name="inbox_empty_text">உங்கள் உரையாடல்கள் இங்கே தோன்றும்</string>
@@ -357,7 +356,6 @@
     <string name="button_set">அமை</string>
     <string name="button_undo">செயல்தவிர்</string>
     <string name="toast_copied">நகலெடுக்கப்பட்டது</string>
-    <string name="toast_archived">காப்பகப்படுத்திய உரையாடல்</string>
     <string name="toast_qksms_plus">இதைப் பயன்படுத்த கட்டாயம் QUIK+ ஐப் பூட்டவிழ்க்க வேண்டும்</string>
     <plurals name="notification_new_messages">
         <item quantity="one">புது தகவல்</item>
