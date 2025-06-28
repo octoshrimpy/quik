@@ -1,0 +1,5 @@
+repo_keystore: keystore.p12
+keystorepass: ekaterina
+repo_keyalias: quik_release
+keypass: ekaterina
+repo_icon: metadata/en-US/images/icon.png
