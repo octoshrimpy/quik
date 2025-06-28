@@ -49,6 +49,7 @@ jobs:
       # 4) Bump Android versions & capture NEW_CODE/NEW_NAME
       - name: Bump Android version & update build.gradle
         id: bump
+        shell: bash
         run: |
           set -euo pipefail
 
@@ -68,8 +69,8 @@ jobs:
             -e "s|^[[:space:]]*versionName[[:space:]]\+'$current_name'|versionName '$new_name'|" \
             "$GRADLE_FILE"
 
-          echo "NEW_CODE=$new_code" >> $GITHUB_ENV
-          echo "NEW_NAME=$new_name" >> $GITHUB_ENV
+          echo "NEW_CODE=$new_code" >> "$GITHUB_ENV"
+          echo "NEW_NAME=$new_name" >> "$GITHUB_ENV"
           echo "Bumped to $new_name ($new_code)"
 
       # 5) Gather commits & prepend to changelog.json
