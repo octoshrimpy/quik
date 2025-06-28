@@ -39,12 +39,14 @@ class PhoneNumberUtils @Inject constructor(context: Context) {
      * This method will run successfully stricter checks without compromising much speed
      */
     fun compare(first: String, second: String): Boolean {
-        if (first.equals(second, true)) {
+        val normalizedFirst = normalizeNumber(first)
+        val normalizedSecond = normalizeNumber(second)
+        if (normalizedFirst.equals(normalizedSecond, true)) {
             return true
         }
 
         if (PhoneNumberUtils.compare(first, second)) {
-            val matchType = phoneNumberUtil.isNumberMatch(first, second)
+            val matchType = phoneNumberUtil.isNumberMatch(normalizedFirst, normalizedSecond)
             if (matchType >= PhoneNumberUtil.MatchType.SHORT_NSN_MATCH) {
                 return true
             }
