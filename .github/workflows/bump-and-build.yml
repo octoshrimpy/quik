@@ -74,7 +74,7 @@ jobs:
           title: "chore: bump feature version [skip ci]"
           body: "Automated version bump."
           base: master
-          path: presentation/build.gradle
+          # path: presentation/build.gradle
           
       - name: Decode Keystore File
         run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > ${{ github.workspace }}/my-release-key.keystore
