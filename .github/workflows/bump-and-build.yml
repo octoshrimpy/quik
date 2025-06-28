@@ -12,7 +12,7 @@ jobs:
     env:
       META_YML: fdroid/metadata/dev.octoshrimpy.quik.yml
       GRADLE_FILE: presentation/build.gradle
-      CHANGELOG: "data/src/main/assets/changelog.json"
+      CHANGELOG: data/src/main/assets/changelog.json
 
     steps:
       # 1) Checkout full history so tags are available
@@ -21,7 +21,23 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      # 2) Install fdroidserver & bump metadata.yml
+      # 2) Decode your signing keystore from the secret
+      - name: Decode Android keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > keystore.p12
+
+      # 3) Write a temporary F-Droid config.yml from secrets
+      - name: Write F-Droid config.yml
+        run: |
+          cat > config.yml <<EOF
+          Keystore: keystore.p12
+          KeystorePass: ${{ secrets.KEYSTORE_PASSWORD }}
+          KeyAlias: ${{ secrets.KEY_ALIAS }}
+          KeyPass: ${{ secrets.KEY_PASSWORD }}
+          Icon: repo/icons/icon.png
+          EOF
+
+      # 4) Install fdroidserver & bump metadata.yml non-interactively
       - name: Set up Python & fdroidserver
         uses: actions/setup-python@v4
         with:
@@ -29,7 +45,8 @@ jobs:
       - name: Bump F-Droid metadata
         run: |
           pip3 install fdroidserver
-          fdroid update
+          fdroid update --non-interactive --package dev.octoshrimpy.quik --config config.yml
+
       - name: Commit F-Droid metadata.yml
         run: |
           git config user.name "github-actions[bot]"
@@ -37,7 +54,7 @@ jobs:
           git add "$META_YML"
           git diff --quiet --cached || git commit -m "chore: bump F-Droid metadata"
 
-      # 3) Set up Java & jq for the rest
+      # 5) Set up Java & jq for the rest
       - name: Set up Java 17
         uses: actions/setup-java@v3
         with:
@@ -46,7 +63,7 @@ jobs:
       - name: Install jq
         run: sudo apt-get update && sudo apt-get install -y jq
 
-      # 4) Bump Android versions & capture NEW_CODE/NEW_NAME
+      # 6) Bump Android versions & capture NEW_CODE/NEW_NAME
       - name: Bump Android version & update build.gradle
         id: bump
         shell: bash
@@ -71,32 +88,24 @@ jobs:
 
           echo "NEW_CODE=$new_code" >> "$GITHUB_ENV"
           echo "NEW_NAME=$new_name" >> "$GITHUB_ENV"
-          echo "Bumped to $new_name ($new_code)"
+          echo "✅ Bumped to versionCode $new_code, versionName $new_name"
 
-      # 5) Gather commits & prepend to changelog.json
+      # 7) Gather commits & prepend to changelog.json
       - name: Update changelog.json & write F-Droid txt
+        shell: bash
         run: |
           set -euo pipefail
 
           # determine previous tag or fallback
-          #  try the exact tag for LAST release, based on NEW_NAME
           prev_tag="v${NEW_NAME}"
           if git rev-parse --verify --quiet "$prev_tag" >/dev/null; then
             base="$prev_tag"
-            echo "ℹ️  Found previous tag $prev_tag"
           else
-            # fallback: latest numeric tag
             base=$(git describe --tags --match "v[0-9]*" --abbrev=0 2>/dev/null || echo "")
-            if [[ -n "$base" ]]; then
-              echo "ℹ️  Previous tag $prev_tag not found; using latest tag $base"
-            else
-              echo "⚠️  No tags found; including entire history"
-            fi
           fi
-
           [[ -n "$base" ]] && range="$base..HEAD" || range="HEAD"
 
-          # gather, clean, dedupe, oldest→newest
+          # collect, clean, dedupe (oldest→newest)
           mapfile -t commits < <(
             git log --no-merges --reverse --pretty=format:"%s by %an" $range \
               | sed -E 's/[[:space:]]*\.*[[:space:]]+by/ by/' \
@@ -111,67 +120,69 @@ jobs:
             changes_json="[]"
           fi
 
-          # prepend new entry
+          # prepend new entry with fixes/changes split + capitalization
           jq --argjson changes "$changes_json" \
-            --arg vc "$new_code" \
-            --arg vn "$new_name" \
-            '
-            # 1) helper to capitalize first character
-            def capfirst:
-              sub("^(.)"; "\(ascii_upcase(.1))");
+             --arg vc "$NEW_CODE" \
+             --arg vn "$NEW_NAME" \
+             '
+             def capfirst: sub("^(.)"; "\(ascii_upcase(.1))");
+             $all := ($changes | map(capfirst));
+             $fixes := $all | map(select(test("^(Fix|fix)")));
+             $others := $all | map(select(test("^(Fix|fix)") | not));
+             . = [{
+               versionCode: ($vc|tonumber),
+               versionName: $vn,
+               fixes: $fixes,
+               changes: $others
+             }] + .
+             ' \
+             "$CHANGELOG" > tmp && mv tmp "$CHANGELOG"
 
-            # 2) apply capitalization to all changes
-            $all := ($changes | map(capfirst));
-
-            # 3) split into fixes vs other changes
-            $fixes  := $all | map(select(test("^(Fix|fix)")));
-            $others  := $all | map(select(test("^(Fix|fix)") | not));
-
-            # 4) build the new entry object with both fields
-            . = [{
-              versionCode: ($vc | tonumber),
-              versionName: $vn,
-              fixes: $fixes,
-              changes: $others
-            }] + .
-            ' \
-            "$CHANGELOG" > "${CHANGELOG}.tmp" \
-          && mv "${CHANGELOG}.tmp" "$CHANGELOG"
-
-          # write fdroid/metadata/<new_code>.txt
+          # write fdroid metadata text
           mkdir -p fdroid/metadata
-          out="fdroid/metadata/${{ env.NEW_CODE }}.txt"
+          out="fdroid/metadata/${NEW_CODE}.txt"
           {
-            echo "Changes in ${{ env.NEW_NAME }} (${{ env.NEW_CODE }}):"
+            echo "Changes in ${NEW_NAME} (${NEW_CODE}):"
             echo
             for c in "${commits[@]}"; do echo "- $c"; done
           } > "$out"
 
-      # 6) Commit all metadata, changelog & build.gradle
+      # 8) Commit all metadata, changelog & build.gradle
       - name: Commit version & changelog
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "$GRADLE_FILE" "$CHANGELOG" fdroid/metadata/"${{ env.NEW_CODE }}".txt
-          git diff --quiet --cached || git commit -m "chore: bump to ${{ env.NEW_NAME }} (${{ env.NEW_CODE }})"
+          git add "$GRADLE_FILE" "$CHANGELOG" fdroid/metadata/"${NEW_CODE}".txt
+          git diff --quiet --cached || git commit -m "chore: bump to ${NEW_NAME} (${NEW_CODE})"
           git push
 
-      # 7) Build the APK
+      # 9) Build the APK (using the same keystore.p12)
       - name: Build release APK
-        run: ./gradlew clean :presentation:assembleRelease
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean :presentation:assembleRelease \
+            -Pandroid.injected.signing.store.file=keystore.p12 \
+            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+            -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+            -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-      # 8) Tag & push
+      # 10) Tag & push
       - name: Tag new release
         run: |
-          git tag "v${{ env.NEW_NAME }}"
-          git push origin "v${{ env.NEW_NAME }}"
+          git tag "v${NEW_NAME}"
+          git push origin "v${NEW_NAME}"
 
-      # 9) Create GitHub Release & upload APK
+      # 11) Publish GitHub Release & upload APK
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v${{ env.NEW_NAME }}"
+          tag_name: "v${NEW_NAME}"
           files: presentation/build/outputs/apk/release/*-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # 12) Cleanup signing material
+      - name: Cleanup keystore/config
+        if: always()
+        run: |
+          shred --remove keystore.p12 config.yml
