@@ -87,17 +87,16 @@ jobs:
             -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
             -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      
+      - name: Rename APK
+        run: mv presentation/build/outputs/apk/release/QUIK-v*-release.apk presentation/build/outputs/apk/release/QUIK-release.apk
 
       # Find and upload APK artifacts for easy download
       - name: Upload APK as artifact
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
-          path: |
-            presentation/build/outputs/apk/release/*.apk
-            presentation/app/build/outputs/apk/release/*.apk
-            # Adjust/add paths if your APKs are elsewhere
+          path: presentation/build/outputs/apk/release/QUIK-release.apk
 
       # Optional: Show APK files found (for debugging)
       - name: List built APKs
