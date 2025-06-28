@@ -29,13 +29,13 @@ android {
         applicationId 'dev.octoshrimpy.quik'
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 2229
-        versionName '4.1.1'
-        setProperty("archivesBaseName", "QUIK-v${versionName}")
+        versionCode 2230
+        versionName '4.2.0'
+        setProperty("archivesBaseName", "QUIK-v${versionName '4.2.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        setProperty("archivesBaseName", "QUIK-v${versionName}")
-        // versionNameSuffix '-beta'
+        setProperty("archivesBaseName", "QUIK-v${versionName '4.2.0'
+        // versionName '4.2.0'
     }
 
     signingConfigs {
@@ -70,7 +70,7 @@ android {
         }
         debug {
             applicationIdSuffix ".debug"
-            versionNameSuffix "-debug"
+            versionName '4.2.0'
             resValue("string", "app_name", "QUIK-Debug")
             signingConfig signingConfigs.debug
         }
