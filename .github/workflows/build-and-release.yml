@@ -29,6 +29,38 @@ jobs:
       - name: List files in the APK directory
         run: ls -Rla ./
         
+      - name: Bump MINOR version in build.gradle (features update)
+        working-directory: presentation
+        run: |
+          # Extract current versionName and versionCode
+          VERSION_LINE=$(grep "versionName" build.gradle)
+          VERSION_NAME=$(echo "$VERSION_LINE" | sed -n "s/.*versionName[ ]*['\"]\([^'\"]*\)['\"].*/\1/p")
+          VERSION_CODE=$(grep "versionCode" build.gradle | awk '{print $2}')
+
+          # Error handling for version parsing
+          if [[ ! "$VERSION_NAME" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: versionName is not in MAJOR.MINOR.PATCH format: $VERSION_NAME"
+            exit 1
+          fi
+          if ! [[ "$VERSION_CODE" =~ ^[0-9]+$ ]]; then
+            echo "Error: versionCode is not an integer: $VERSION_CODE"
+            exit 1
+          fi
+
+          # Split versionName into major, minor, patch
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_NAME"
+          # Bump minor version, reset patch to 0
+          MINOR=$((MINOR + 1))
+          PATCH=0
+          NEW_VERSION_NAME="$MAJOR.$MINOR.$PATCH"
+          NEW_VERSION_CODE=$((VERSION_CODE + 1))
+
+          # Update build.gradle in-place
+          sed -i "s/versionName.*/versionName '$NEW_VERSION_NAME'/" build.gradle
+          sed -i "s/versionCode.*/versionCode $NEW_VERSION_CODE/" build.gradle
+
+          echo "Bumped version to $NEW_VERSION_NAME ($NEW_VERSION_CODE)"
+          
       - name: Build APK
         run: |
           ./gradlew assembleRelease \
