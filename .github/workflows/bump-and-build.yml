@@ -45,7 +45,7 @@ jobs:
       - name: Bump F-Droid metadata
         run: |
           pip3 install fdroidserver
-          fdroid update --non-interactive --package dev.octoshrimpy.quik --config config.yml
+          fdroid update
 
       - name: Commit F-Droid metadata.yml
         run: |
