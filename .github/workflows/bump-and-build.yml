@@ -78,12 +78,19 @@ jobs:
           set -euo pipefail
 
           # determine previous tag or fallback
-          prev_tag="v${{ env.NEW_NAME%.* }}.${{ env.NEW_NAME#*. }}"
-          if git rev-parse --verify --quiet "$prev_tag"; then
+          #  try the exact tag for LAST release, based on NEW_NAME
+          prev_tag="v${NEW_NAME}"
+          if git rev-parse --verify --quiet "$prev_tag" >/dev/null; then
             base="$prev_tag"
+            echo "ℹ️  Found previous tag $prev_tag"
           else
-            # latest numeric tag
+            # fallback: latest numeric tag
             base=$(git describe --tags --match "v[0-9]*" --abbrev=0 2>/dev/null || echo "")
+            if [[ -n "$base" ]]; then
+              echo "ℹ️  Previous tag $prev_tag not found; using latest tag $base"
+            else
+              echo "⚠️  No tags found; including entire history"
+            fi
           fi
 
           [[ -n "$base" ]] && range="$base..HEAD" || range="HEAD"
