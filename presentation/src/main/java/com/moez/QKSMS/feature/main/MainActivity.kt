@@ -440,10 +440,14 @@ class MainActivity : QkThemedActivity(), MainView {
     override fun showChangelog(changelog: ChangelogManager.CumulativeChangelog) =
         changelogDialog.show(changelog)
 
-    override fun showArchivedSnackbar(countConversationsArchived: Int) =
+    override fun showArchivedSnackbar(countConversationsArchived: Int, isArchiving: Boolean) =
         Snackbar.make(
             drawerLayout,
-            resources.getQuantityString(R.plurals.toast_archived, countConversationsArchived, countConversationsArchived),
+            if (isArchiving) {
+                resources.getQuantityString(R.plurals.toast_archived, countConversationsArchived, countConversationsArchived)
+            } else {
+                resources.getQuantityString(R.plurals.toast_unarchived, countConversationsArchived, countConversationsArchived)
+            },
             if (countConversationsArchived < 10) Snackbar.LENGTH_LONG
             else Snackbar.LENGTH_INDEFINITE
         ).let {
