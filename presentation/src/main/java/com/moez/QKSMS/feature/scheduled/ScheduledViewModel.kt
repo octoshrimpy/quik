@@ -52,7 +52,11 @@ class ScheduledViewModel @Inject constructor(
             .filter { it == R.id.delete }
             .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages -> selectedMessages }
             .autoDisposable(view.scope())
-            .subscribe { view.showDeleteDialog(it) }
+            .subscribe {
+                val ids = it.mapNotNull(scheduledMessageRepo::getScheduledMessage).map { it.id }
+                view.showDeleteDialog(ids)
+            }
+
 
         // copy the selected message text to the clipboard
         view.optionsItemIntent
