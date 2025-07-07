@@ -348,7 +348,7 @@ class MainViewModel @Inject constructor(
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markArchived.execute(conversations)
                     lastArchivedThreadIds = conversations.toList()
-                    view.showArchivedSnackbar(lastArchivedThreadIds.count())
+                    view.showArchivedSnackbar(lastArchivedThreadIds.count(), true)
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -358,7 +358,7 @@ class MainViewModel @Inject constructor(
                 .filter { itemId -> itemId == R.id.unarchive }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markUnarchived.execute(conversations.toList())
-                    view.showArchivedSnackbar(conversations.count())
+                    view.showArchivedSnackbar(conversations.count(), false)
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -523,7 +523,7 @@ class MainViewModel @Inject constructor(
                         Preferences.SWIPE_ACTION_ARCHIVE ->
                             markArchived.execute(listOf(threadId)) {
                                 lastArchivedThreadIds = listOf(threadId)
-                                view.showArchivedSnackbar(1)
+                                view.showArchivedSnackbar(1, true)
                             }
                         Preferences.SWIPE_ACTION_DELETE ->
                             view.showDeleteDialog(listOf(threadId))
