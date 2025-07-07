@@ -41,4 +41,6 @@ interface ContactRepository {
 
     fun setDefaultPhoneNumber(lookupKey: String, phoneNumberId: Long)
 
+    fun isContact(address: String): Boolean
+
 }

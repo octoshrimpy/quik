@@ -360,6 +360,16 @@
     <string name="blocked_numbers_dialog_hint">Phone number</string>
     <string name="blocked_numbers_dialog_block">Block</string>
 
+    <string name="message_content_filters_title">Message content filters</string>
+    <string name="message_content_filters_empty">Your message content filters will appear here</string>
+    <string name="message_content_filters_add_cd">Create a new filter</string>
+    <string name="message_content_filters_dialog_title">Drop messages matching</string>
+    <string name="message_content_filters_dialog_hint">Word, phrase or regular expression</string>
+    <string name="message_content_filters_dialog_case_switch">Case sensitive</string>
+    <string name="message_content_filters_dialog_regex_switch">Regular expression</string>
+    <string name="message_content_filters_dialog_contacts_switch">Include contacts</string>
+    <string name="message_content_filters_dialog_create">Create</string>
+
     <string name="blocked_messages_title">Blocked messages</string>
     <string name="blocked_messages_empty">Your blocked messages will appear here</string>
 
