@@ -834,7 +834,8 @@ class ComposeViewModel @Inject constructor(
             .subscribe {
                 newState {
                     copy(
-                        canSend = (it.first.isNotBlank() || (it.second > 0)) || (it.third > 0)
+                        canSend = (it.first.isNotBlank() || (it.second > 0)),
+                        scheduled = it.third
                     )
                 }
             }

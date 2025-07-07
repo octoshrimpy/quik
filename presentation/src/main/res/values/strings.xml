@@ -250,6 +250,7 @@
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
     <string name="scheduled_empty_message_3_timestamp">Sending on December 23rd&#x200A;</string>
     <string name="scheduled_compose_cd">Schedule a message</string>
+    <string name="scheduled_send_cd">Schedule this message</string>
     <string name="scheduled_options_title">Scheduled message</string>
     <string name="attachment_missing">Missing</string>
 

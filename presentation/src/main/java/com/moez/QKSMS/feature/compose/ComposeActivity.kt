@@ -124,6 +124,7 @@ import kotlinx.android.synthetic.main.compose_activity.scheduleLabel
 import kotlinx.android.synthetic.main.compose_activity.scheduledCancel
 import kotlinx.android.synthetic.main.compose_activity.scheduledGroup
 import kotlinx.android.synthetic.main.compose_activity.scheduledTime
+import kotlinx.android.synthetic.main.compose_activity.scheduledSend
 import kotlinx.android.synthetic.main.compose_activity.send
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroup
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
@@ -182,7 +183,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val scheduleSelectedIntent: Subject<Long> = PublishSubject.create()
     override val changeSimIntent by lazy { sim.clicks() }
     override val scheduleCancelIntent by lazy { scheduledCancel.clicks() }
-    override val sendIntent by lazy { send.clicks() }
+    override val sendIntent by lazy {  Observable.merge(send.clicks(), scheduledSend.clicks()) }
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
@@ -532,9 +533,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
         simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()
 
-        // show either send or audio msg record button
-        send.visibility = if (state.canSend && !state.loading) View.VISIBLE else View.INVISIBLE
+        // show either send, audio msg record, or sendScheduled button
+        send.visibility = if (state.canSend && !state.loading && state.scheduled == 0L) View.VISIBLE else View.INVISIBLE
         recordAudioMsg.visibility = if (state.canSend && !state.loading) View.INVISIBLE else View.VISIBLE
+        scheduledSend.visibility = if (state.canSend && (state.scheduled != 0L) && !state.loading) View.VISIBLE else View.INVISIBLE
 
         // if not in editing mode, and there are no non-me participants that can be sent to,
         // hide controls that allow constructing a reply and inform user no valid recipients
