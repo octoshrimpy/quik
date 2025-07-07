@@ -23,7 +23,9 @@ import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.manager.ActiveConversationManager
 import dev.octoshrimpy.quik.manager.NotificationManager
+import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageContentFilterRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.util.Preferences
@@ -39,7 +41,9 @@ class ReceiveMms @Inject constructor(
     private val syncManager: SyncRepository,
     private val messageRepo: MessageRepository,
     private val notificationManager: NotificationManager,
-    private val updateBadge: UpdateBadge
+    private val updateBadge: UpdateBadge,
+    private val filterRepo: MessageContentFilterRepository,
+    private val contactsRepo: ContactRepository
 ) : Interactor<Uri>() {
 
     override fun buildObservable(params: Uri): Flowable<*> {
@@ -73,6 +77,12 @@ class ReceiveMms @Inject constructor(
                         }
                         is BlockingClient.Action.Unblock -> conversationRepo.markUnblocked(message.threadId)
                         else -> Unit
+                    }
+
+                    if (filterRepo.isBlocked(message.getText(), message.address, contactsRepo)) {
+                        Timber.v("message dropped based on content filters")
+                        messageRepo.deleteMessages(listOf(message.id))
+                        return@mapNotNull null
                     }
 
                     message

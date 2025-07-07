@@ -22,7 +22,9 @@ import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.manager.ShortcutManager
+import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.MessageContentFilterRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.Flowable
@@ -36,7 +38,9 @@ class ReceiveSms @Inject constructor(
     private val messageRepo: MessageRepository,
     private val notificationManager: NotificationManager,
     private val updateBadge: UpdateBadge,
-    private val shortcutManager: ShortcutManager
+    private val shortcutManager: ShortcutManager,
+    private val filterRepo: MessageContentFilterRepository,
+    private val contactsRepo: ContactRepository
 ) : Interactor<Long>() {
 
     override fun buildObservable(params: Long): Flowable<*> {
@@ -67,6 +71,12 @@ class ReceiveSms @Inject constructor(
                         Timber.v("unblock conversation if blocked")
                         conversationRepo.markUnblocked(it.threadId)
                     }
+                }
+
+                if (filterRepo.isBlocked(it.getText(), it.address, contactsRepo)) {
+                    Timber.v("message dropped based on content filters")
+                    messageRepo.deleteMessages(listOf(it.id))
+                    return@mapNotNull null
                 }
 
                 // update and fetch conversation

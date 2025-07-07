@@ -29,6 +29,7 @@ import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
 import dev.octoshrimpy.quik.feature.blocking.manager.BlockingManagerController
 import dev.octoshrimpy.quik.feature.blocking.messages.BlockedMessagesController
 import dev.octoshrimpy.quik.feature.blocking.numbers.BlockedNumbersController
+import dev.octoshrimpy.quik.feature.blocking.filters.MessageContentFiltersController
 import dev.octoshrimpy.quik.injection.appComponent
 import kotlinx.android.synthetic.main.blocking_controller.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
@@ -38,6 +39,7 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
 
     override val blockingManagerIntent by lazy { blockingManager.clicks() }
     override val blockedNumbersIntent by lazy { blockedNumbers.clicks() }
+    override val messageContentFiltersIntent by lazy { messageContentFilters.clicks() }
     override val blockedMessagesIntent by lazy { blockedMessages.clicks() }
     override val dropClickedIntent by lazy { drop.clicks() }
 
@@ -72,6 +74,12 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
         router.pushController(RouterTransaction.with(BlockedNumbersController())
                 .pushChangeHandler(QkChangeHandler())
                 .popChangeHandler(QkChangeHandler()))
+    }
+
+    override fun openMessageContentFilters() {
+        router.pushController(RouterTransaction.with(MessageContentFiltersController())
+            .pushChangeHandler(QkChangeHandler())
+            .popChangeHandler(QkChangeHandler()))
     }
 
     override fun openBlockedMessages() {

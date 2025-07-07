@@ -16,21 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dev.octoshrimpy.quik.feature.blocking
+package dev.octoshrimpy.quik.feature.blocking.filters
 
 import dev.octoshrimpy.quik.common.base.QkViewContract
+import dev.octoshrimpy.quik.model.MessageContentFilterData
 import io.reactivex.Observable
 
-interface BlockingView : QkViewContract<BlockingState> {
+interface MessageContentFiltersView : QkViewContract<MessageContentFiltersState> {
 
-    val blockingManagerIntent: Observable<*>
-    val blockedNumbersIntent: Observable<*>
-    val messageContentFiltersIntent: Observable<*>
-    val blockedMessagesIntent: Observable<*>
-    val dropClickedIntent: Observable<*>
+    fun removeFilter(): Observable<Long>
+    fun addFilter(): Observable<*>
+    fun saveFilter(): Observable<MessageContentFilterData>
 
-    fun openBlockingManager()
-    fun openBlockedNumbers()
-    fun openMessageContentFilters()
-    fun openBlockedMessages()
+    fun showAddDialog()
+
 }
