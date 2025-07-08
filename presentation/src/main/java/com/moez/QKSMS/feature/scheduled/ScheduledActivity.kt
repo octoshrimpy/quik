@@ -51,7 +51,9 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
     override val editScheduledMessage: Subject<Long> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ScheduledViewModel::class.java] }
+    private val viewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory)[ScheduledViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

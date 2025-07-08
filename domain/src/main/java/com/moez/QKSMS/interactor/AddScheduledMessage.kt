@@ -20,7 +20,6 @@ package dev.octoshrimpy.quik.interactor
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.net.Uri
 import androidx.core.net.toUri
 import dev.octoshrimpy.quik.extensions.getName
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
@@ -58,7 +57,7 @@ class AddScheduledMessage @Inject constructor(
                 // step 2 - copy attachments to app local storage
                 scheduledMessageDb.attachments = RealmList(
                     *scheduledMessageDb.attachments.mapNotNull {
-                        val inUri = Uri.parse(it)
+                        val inUri = it.toUri()
                         try {
                             // get filename of input uri or use random uuid on fail to get
                             val filename = inUri.getName(context) ?: UUID.randomUUID()
@@ -93,5 +92,4 @@ class AddScheduledMessage @Inject constructor(
             }
             .flatMap { updateScheduledMessageAlarms.buildObservable(Unit) }
     }
-
 }

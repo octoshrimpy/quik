@@ -50,10 +50,12 @@ class ScheduledViewModel @Inject constructor(
         // show the delete message dialog if one or more messages selected
         view.optionsItemIntent
             .filter { it == R.id.delete }
-            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages -> selectedMessages }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages ->
+                selectedMessages }
             .autoDisposable(view.scope())
             .subscribe {
-                val ids = it.mapNotNull(scheduledMessageRepo::getScheduledMessage).map { it.id }
+                val ids = it.mapNotNull(scheduledMessageRepo::getScheduledMessage)
+                    .map { it.id }
                 view.showDeleteDialog(ids)
             }
 
@@ -61,7 +63,8 @@ class ScheduledViewModel @Inject constructor(
         // copy the selected message text to the clipboard
         view.optionsItemIntent
             .filter { it == R.id.copy }
-            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages -> selectedMessages }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages ->
+                selectedMessages }
             .autoDisposable(view.scope())
             .subscribe {
                 val messages = it
@@ -82,14 +85,16 @@ class ScheduledViewModel @Inject constructor(
         // send the messages now menu item selected
         view.optionsItemIntent
             .filter { it == R.id.send_now }
-            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages -> selectedMessages }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages ->
+                selectedMessages }
             .autoDisposable(view.scope())
             .subscribe { view.showSendNowDialog(it) }
 
         // edit message menu item selected
         view.optionsItemIntent
             .filter { it == R.id.edit_message }
-            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessage -> selectedMessage.first() }
+            .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessage ->
+                selectedMessage.first() }
             .autoDisposable(view.scope())
             .subscribe { view.showEditMessageDialog(it) }
 
@@ -130,7 +135,7 @@ class ScheduledViewModel @Inject constructor(
         // navigate back or unselect
         view.optionsItemIntent
             .filter { it == android.R.id.home }
-            .map { Unit }
+            .map { }
             .mergeWith(view.backPressedIntent)
             .withLatestFrom(state) { _, state -> state }
             .autoDisposable(view.scope())

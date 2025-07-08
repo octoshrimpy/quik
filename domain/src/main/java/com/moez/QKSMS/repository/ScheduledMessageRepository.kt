@@ -35,6 +35,9 @@ interface ScheduledMessageRepository {
         attachments: List<String>
     ): ScheduledMessage
 
+    /**
+     * Updates scheduled messages with new uris
+     */
     fun updateScheduledMessage(scheduledMessage: ScheduledMessage)
 
     /**
@@ -52,10 +55,14 @@ interface ScheduledMessageRepository {
      */
     fun deleteScheduledMessage(id: Long)
 
-    // delete multiple scheduled messages by id list
+    /**
+     * Delete multiple scheduled messages by id list
+     */
     fun deleteScheduledMessages(ids: List<Long>)
 
-    // get a list of all scheduled message ids (in scheduled date order)
+    /**
+     * Get a list of all scheduled message ids (in scheduled date order)
+     */
     fun getAllScheduledMessageIdsSnapshot(): List<Long>
 
 }
