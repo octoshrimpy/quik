@@ -139,6 +139,7 @@
     <string name="compose_scheduled_future">Selected time must be in the future!</string>
     <string name="compose_scheduled_plus">You must unlock QUIK+ to use scheduled messaging</string>
     <string name="compose_scheduled_toast">Added to scheduled messages</string>
+    <string name="compose_scheduled_view">Scheduled messages for this conversation</string>
     <string name="compose_hint">Write a message…</string>
     <string name="compose_no_valid_recipients">Can\'t send to other participants</string>
     <string name="compose_menu_copy">Copy text</string>

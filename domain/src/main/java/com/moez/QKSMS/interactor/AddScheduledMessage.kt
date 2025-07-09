@@ -41,7 +41,8 @@ class AddScheduledMessage @Inject constructor(
         val recipients: List<String>,
         val sendAsGroup: Boolean,
         val body: String,
-        val attachments: List<String>
+        val attachments: List<String>,
+        val conversationId: Long
     )
 
     @SuppressLint("Range")
@@ -50,7 +51,13 @@ class AddScheduledMessage @Inject constructor(
         return Flowable.just(params)
             .map {  // step 1 - save, as-is, to db to get primary key id
                 scheduledMessageRepo.saveScheduledMessage(
-                    it.date, it.subId, it.recipients, it.sendAsGroup, it.body, it.attachments
+                    it.date,
+                    it.subId,
+                    it.recipients,
+                    it.sendAsGroup,
+                    it.body,
+                    it.attachments,
+                    it.conversationId
                 )
             }
             .map { scheduledMessageDb ->

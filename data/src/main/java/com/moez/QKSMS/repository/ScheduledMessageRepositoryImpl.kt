@@ -21,7 +21,8 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
         recipients: List<String>,
         sendAsGroup: Boolean,
         body: String,
-        attachments: List<String>
+        attachments: List<String>,
+        conversationId: Long
     ): ScheduledMessage {
         Realm.getDefaultInstance().use { realm ->
             val id = (realm
@@ -34,7 +35,7 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
             val attachmentsRealmList = RealmList(*attachments.toTypedArray())
 
             val message = ScheduledMessage(id, date, subId, recipientsRealmList, sendAsGroup, body,
-                attachmentsRealmList)
+                attachmentsRealmList, conversationId)
 
             realm.executeTransaction { realm.insertOrUpdate(message) }
 
@@ -61,6 +62,13 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
             .where(ScheduledMessage::class.java)
             .equalTo("id", id)
             .findFirst()
+    }
+
+    override fun getScheduledMessagesForConversation(conversationId: Long): RealmResults<ScheduledMessage> {
+        return Realm.getDefaultInstance()
+            .where(ScheduledMessage::class.java)
+            .equalTo("conversationId", conversationId)
+            .findAllAsync()
     }
 
     override fun deleteScheduledMessage(id: Long) {

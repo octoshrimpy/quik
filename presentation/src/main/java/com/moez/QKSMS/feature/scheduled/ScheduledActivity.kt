@@ -99,7 +99,7 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
             ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages == 1))
 
         // show compose button
-        compose.isVisible = state.upgraded
+        compose.isVisible = state.upgraded && (state.conversationId == null)
         upgrade.isVisible = !state.upgraded
     }
 

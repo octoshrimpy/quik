@@ -160,8 +160,9 @@ class Navigator @Inject constructor(
         startActivity(Intent(context, BackupActivity::class.java))
     }
 
-    fun showScheduled() {
+    fun showScheduled(conversationId: Long?) {
         val intent = Intent(context, ScheduledActivity::class.java)
+        conversationId?.let { intent.putExtra("conversationId", it) }
         startActivity(intent)
     }
 

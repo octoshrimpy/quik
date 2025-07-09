@@ -66,7 +66,7 @@ class PlusViewModel @Inject constructor(
 
         view.scheduleClicks
                 .autoDisposable(view.scope())
-                .subscribe { navigator.showScheduled() }
+                .subscribe { navigator.showScheduled(null) }
 
         view.backupClicks
                 .autoDisposable(view.scope())
