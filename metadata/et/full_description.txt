@@ -1,0 +1,12 @@
+Open source replacement to the stock SMS app on Android. A revival of QKSMS.
+## Features
+- Scheduled Messages
+- Message Backup
+- Speech to Text and Text to Speech integrated within the app
+- Message Blocking and Archiving
+- Voice Messages
+- Attachments of any type of file
+- Message Sorting
+- Delayed Sending
+
+You can chat with the community over at <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>
