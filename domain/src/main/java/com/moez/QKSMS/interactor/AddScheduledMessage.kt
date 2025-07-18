@@ -20,7 +20,6 @@ package dev.octoshrimpy.quik.interactor
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.net.Uri
 import androidx.core.net.toUri
 import dev.octoshrimpy.quik.extensions.getName
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
@@ -42,7 +41,8 @@ class AddScheduledMessage @Inject constructor(
         val recipients: List<String>,
         val sendAsGroup: Boolean,
         val body: String,
-        val attachments: List<String>
+        val attachments: List<String>,
+        val conversationId: Long
     )
 
     @SuppressLint("Range")
@@ -51,14 +51,20 @@ class AddScheduledMessage @Inject constructor(
         return Flowable.just(params)
             .map {  // step 1 - save, as-is, to db to get primary key id
                 scheduledMessageRepo.saveScheduledMessage(
-                    it.date, it.subId, it.recipients, it.sendAsGroup, it.body, it.attachments
+                    it.date,
+                    it.subId,
+                    it.recipients,
+                    it.sendAsGroup,
+                    it.body,
+                    it.attachments,
+                    it.conversationId
                 )
             }
             .map { scheduledMessageDb ->
                 // step 2 - copy attachments to app local storage
                 scheduledMessageDb.attachments = RealmList(
                     *scheduledMessageDb.attachments.mapNotNull {
-                        val inUri = Uri.parse(it)
+                        val inUri = it.toUri()
                         try {
                             // get filename of input uri or use random uuid on fail to get
                             val filename = inUri.getName(context) ?: UUID.randomUUID()
@@ -93,5 +99,4 @@ class AddScheduledMessage @Inject constructor(
             }
             .flatMap { updateScheduledMessageAlarms.buildObservable(Unit) }
     }
-
 }

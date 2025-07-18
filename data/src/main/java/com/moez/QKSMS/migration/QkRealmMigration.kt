@@ -36,7 +36,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SchemaVersion: Long = 11
+        const val SchemaVersion: Long = 12
     }
 
     @SuppressLint("ApplySharedPref")
@@ -230,6 +230,14 @@ class QkRealmMigration @Inject constructor(
                         val messageId = part.linkingObjects("Message", "parts").firstOrNull()?.getLong("contentId") ?: 0
                         part.setLong("messageId", messageId)
                     }
+
+            version++
+        }
+        if (version == 11L) {
+            realm.schema.get("ScheduledMessage")
+                ?.addField("conversationId", Long::class.java, FieldAttribute.REQUIRED)
+            // Because there was never any property associated with which conversation/recipients a scheduled message was for,
+            // we can't update this field on a realm migration. It will be set to a default of 0
 
             version++
         }

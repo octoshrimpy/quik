@@ -65,5 +65,4 @@ class ScheduledMessageAttachmentAdapter @Inject constructor(
             else -> holder.fileName.visibility = View.GONE
         }
     }
-
 }

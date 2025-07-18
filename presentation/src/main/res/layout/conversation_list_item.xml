@@ -69,7 +69,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/pinned"
+        app:layout_constraintEnd_toStartOf="@id/scheduled"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="@tools:sample/lorem/random" />
@@ -80,7 +80,21 @@
         android:layout_height="16dp"
         android:layout_marginTop="2dp"
         android:paddingStart="4dp"
+        android:paddingTop="2dp"
         android:src="@drawable/ic_baseline_push_pin_24"
+        android:tint="?android:attr/textColorTertiary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/scheduled"
+        app:layout_constraintTop_toTopOf="@id/snippet"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/scheduled"
+        android:layout_width="20dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="2dp"
+        android:paddingStart="4dp"
+        android:src="@drawable/ic_event_black_24dp"
         android:tint="?android:attr/textColorTertiary"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/unread"

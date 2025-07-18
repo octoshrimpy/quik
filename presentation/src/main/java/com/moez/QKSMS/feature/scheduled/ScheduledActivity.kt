@@ -51,7 +51,9 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
     override val editScheduledMessage: Subject<Long> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
 
-    private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ScheduledViewModel::class.java] }
+    private val viewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory)[ScheduledViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -97,7 +99,7 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
             ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages == 1))
 
         // show compose button
-        compose.isVisible = state.upgraded
+        compose.isVisible = state.upgraded && (state.conversationId == null)
         upgrade.isVisible = !state.upgraded
     }
 

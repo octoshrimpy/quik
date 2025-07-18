@@ -72,6 +72,7 @@ import dev.octoshrimpy.quik.model.getText
 import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import dev.octoshrimpy.quik.util.ActiveSubscriptionObservable
 import dev.octoshrimpy.quik.util.FileUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
@@ -114,6 +115,7 @@ class ComposeViewModel @Inject constructor(
     private val markRead: MarkRead,
     private val messageDetailsFormatter: MessageDetailsFormatter,
     private val messageRepo: MessageRepository,
+    private val scheduledMessageRepo: ScheduledMessageRepository,
     private val navigator: Navigator,
     private val permissionManager: PermissionManager,
     private val phoneNumberUtils: PhoneNumberUtils,
@@ -265,6 +267,22 @@ class ComposeViewModel @Inject constructor(
             newState { copy(subscription = sub) }
         }.subscribe()
 
+        // checks if there are any scheduled messages in convo
+        disposables += conversation
+            .distinctUntilChanged { conversation -> conversation.id }
+            .observeOn(AndroidSchedulers.mainThread())
+            .switchMap { conversation ->
+                scheduledMessageRepo
+                    .getScheduledMessagesForConversation(conversation.id)
+                    .asFlowable()
+                    .toObservable()
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { liveResults ->
+                val hasAny = liveResults.isNotEmpty()
+                newState { copy(hasScheduledMessages = hasAny) }
+            }
+
         // actions
         if (mode == "scheduling")
             newState { copy(scheduling = true) }
@@ -337,6 +355,15 @@ class ComposeViewModel @Inject constructor(
         view.menuReadyIntent
                 .autoDisposable(view.scope())
                 .subscribe { newState { copy() } }
+
+        // Show scheduled messages
+        view.optionsItemIntent
+            .filter {it == R.id.viewScheduledMessages}
+            .withLatestFrom(state, conversation)
+            .autoDisposable(view.scope())
+            .subscribe { (_, _, conversation) ->
+                navigator.showScheduled(conversation.id)
+            }
 
         // toggle select all / select none
         view.optionsItemIntent
@@ -834,7 +861,8 @@ class ComposeViewModel @Inject constructor(
             .subscribe {
                 newState {
                     copy(
-                        canSend = (it.first.isNotBlank() || (it.second > 0)) || (it.third > 0)
+                        canSend = (it.first.isNotBlank() || (it.second > 0)),
+                        scheduled = it.third
                     )
                 }
             }
@@ -1098,6 +1126,7 @@ class ComposeViewModel @Inject constructor(
                 }
 
                 val subId = state.subscription?.subscriptionId ?: -1
+                val conversationId = (conversation.id)
                 val addresses = when (conversation.recipients.isNotEmpty()) {
                     true -> conversation.recipients.map { it.address }
                     false -> chips.map { chip -> chip.address }
@@ -1115,10 +1144,11 @@ class ComposeViewModel @Inject constructor(
                             addresses,
                             sendAsGroup,
                             body.toString(),
-                            state.attachments.map { it.uri.toString() }
+                            state.attachments.map { it.uri.toString() },
+                            conversationId
                         )
                     ).also {
-                        newState { copy(scheduled = 0) }
+                        newState { copy(scheduled = 0, hasScheduledMessages = true ) }
                         showScheduledToast = true
                     }
 

@@ -8,6 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmResults
+import timber.log.Timber
 import javax.inject.Inject
 
 class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRepository {
@@ -20,7 +21,8 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
         recipients: List<String>,
         sendAsGroup: Boolean,
         body: String,
-        attachments: List<String>
+        attachments: List<String>,
+        conversationId: Long
     ): ScheduledMessage {
         Realm.getDefaultInstance().use { realm ->
             val id = (realm
@@ -33,7 +35,7 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
             val attachmentsRealmList = RealmList(*attachments.toTypedArray())
 
             val message = ScheduledMessage(id, date, subId, recipientsRealmList, sendAsGroup, body,
-                attachmentsRealmList)
+                attachmentsRealmList, conversationId)
 
             realm.executeTransaction { realm.insertOrUpdate(message) }
 
@@ -62,6 +64,13 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
             .findFirst()
     }
 
+    override fun getScheduledMessagesForConversation(conversationId: Long): RealmResults<ScheduledMessage> {
+        return Realm.getDefaultInstance()
+            .where(ScheduledMessage::class.java)
+            .equalTo("conversationId", conversationId)
+            .findAllAsync()
+    }
+
     override fun deleteScheduledMessage(id: Long) {
         val subscription = Completable.fromAction {
             Realm.getDefaultInstance().use { realm ->
@@ -71,12 +80,12 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
 
                 realm.executeTransaction { message?.deleteFromRealm() }
             }
-        }.subscribeOn(Schedulers.io()) // Perform the operation in a background thread
-            .observeOn(AndroidSchedulers.mainThread()) // Switch back to the main thread if needed
+        }.subscribeOn(Schedulers.io()) // Run on a background thread and switch to main if needed
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                // Handle completion, e.g., log success or update UI
+                Timber.v("Successfully deleted scheduled messages.")
             }, {
-                // Handle error, e.g., log or show error message
+                Timber.e("Deleting scheduled messages failed.")
             })
 
         disposables.add(subscription)
@@ -95,10 +104,5 @@ class ScheduledMessageRepositoryImpl @Inject constructor() : ScheduledMessageRep
                 .createSnapshot()
                 .map { it.id }
         }
-    }
-
-    // Ensure to clear disposables when the repository is no longer needed
-    fun clearDisposables() {
-        disposables.clear()
     }
 }

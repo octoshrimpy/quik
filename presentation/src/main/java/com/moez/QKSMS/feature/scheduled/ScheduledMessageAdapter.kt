@@ -53,7 +53,8 @@ class ScheduledMessageAdapter @Inject constructor(
     val clicks: Subject<Long> = PublishSubject.create()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.scheduled_message_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.scheduled_message_list_item, parent, false)
 
         view.attachments.adapter = ScheduledMessageAttachmentAdapter(context)
         view.attachments.setRecycledViewPool(imagesViewPool)
@@ -76,7 +77,8 @@ class ScheduledMessageAdapter @Inject constructor(
         val message = getItem(position) ?: return
 
         // GroupAvatarView only accepts recipients, so map the phone numbers to recipients
-        holder.avatars.recipients = message.recipients.map { address -> Recipient(address = address) }
+        holder.avatars.recipients =
+            message.recipients.map { address -> Recipient(address = address) }
 
         holder.recipients.text = message.recipients.joinToString(",") { address ->
             contactCache[address]?.name?.takeIf { it.isNotBlank() } ?: address
@@ -111,10 +113,7 @@ class ScheduledMessageAdapter @Inject constructor(
                     }
                 })
             }
-
             return super.get(key)?.takeIf { it.isValid }
         }
-
     }
-
 }
