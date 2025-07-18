@@ -207,6 +207,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:paddingBottom="2dp"
         android:text="@string/compose_scheduled_for"
         android:textColor="?android:attr/textColorPrimary"
         android:textStyle="bold"
