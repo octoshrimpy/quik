@@ -69,6 +69,10 @@ class BlockingPresenter @Inject constructor(
                     }
                 }
 
+        view.messageContentFiltersIntent
+                .autoDisposable(view.scope())
+                .subscribe { view.openMessageContentFilters() }
+
         view.blockedMessagesIntent
                 .autoDisposable(view.scope())
                 .subscribe { view.openBlockedMessages() }

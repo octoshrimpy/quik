@@ -47,6 +47,12 @@
             app:title="@string/blocked_numbers_title" />
 
         <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/messageContentFilters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/message_content_filters_title" />
+
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
             android:id="@+id/drop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

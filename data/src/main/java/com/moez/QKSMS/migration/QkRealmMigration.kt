@@ -242,6 +242,17 @@ class QkRealmMigration @Inject constructor(
             version++
         }
 
+        if (version == 11L) {
+            realm.schema.create("MessageContentFilter")
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("value", String::class.java, FieldAttribute.REQUIRED)
+                .addField("caseSensitive", Boolean::class.java, FieldAttribute.REQUIRED)
+                .addField("isRegex", Boolean::class.java, FieldAttribute.REQUIRED)
+                .addField("includeContacts", Boolean::class.java, FieldAttribute.REQUIRED)
+
+            version++
+        }
+
         check(version >= newVersion) { "Migration missing from v$oldVersion to v$newVersion" }
     }
 
