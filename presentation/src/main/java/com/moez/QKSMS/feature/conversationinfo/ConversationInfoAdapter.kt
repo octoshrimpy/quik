@@ -31,6 +31,7 @@ class ConversationInfoAdapter @Inject constructor(
     val themeClicks: Subject<Long> = PublishSubject.create()
     val nameClicks: Subject<Unit> = PublishSubject.create()
     val notificationClicks: Subject<Unit> = PublishSubject.create()
+    val markUnreadClicks: Subject<Unit> = PublishSubject.create()
     val archiveClicks: Subject<Unit> = PublishSubject.create()
     val blockClicks: Subject<Unit> = PublishSubject.create()
     val deleteClicks: Subject<Unit> = PublishSubject.create()
@@ -60,6 +61,7 @@ class ConversationInfoAdapter @Inject constructor(
             1 -> QkViewHolder(inflater.inflate(R.layout.conversation_info_settings, parent, false)).apply {
                 groupName.clicks().subscribe(nameClicks)
                 notifications.clicks().subscribe(notificationClicks)
+                markUnread.clicks().subscribe(markUnreadClicks)
                 archive.clicks().subscribe(archiveClicks)
                 block.clicks().subscribe(blockClicks)
                 delete.clicks().subscribe(deleteClicks)
