@@ -22,7 +22,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdk 34
-    publishNonDefault true
 
     compileOptions {
         sourceCompatibility 1.8
@@ -33,8 +32,6 @@ android {
         minSdk 23
         targetSdkVersion 33
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "String", "AMPLITUDE_API_KEY", "\"${System.getenv("AMPLITUDE_API_KEY")}\""
     }
 
     namespace 'dev.octoshrimpy.quik.data'
@@ -59,8 +56,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     //Resolve jdk8+ Generation Annotations - javax annotation does not exist
     implementation 'com.github.pengrad:jdk9-deps:1ffe84c468'
-
-//    look into jakarta.annotation-api when switching to java 9
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     // rxjava
@@ -109,5 +104,4 @@ repositories {
         url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
     mavenCentral()
-    jcenter()
 }

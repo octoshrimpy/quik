@@ -87,6 +87,9 @@ android {
         abortOnError false
     }
     namespace 'dev.octoshrimpy.quik'
+    buildFeatures {
+        buildConfig true
+    }
     if (System.getenv("CI") == "true") {
         signingConfigs.release.storePassword = System.getenv("keystore_password")
         signingConfigs.release.keyAlias = System.getenv("key_alias")
@@ -147,11 +150,8 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-//    compileOnly "javax.annotation:jsr250-api:1.0"
     //Resolve jdk8+ Generation Annotations - javax annotation does not exist
     implementation 'com.github.pengrad:jdk9-deps:1ffe84c468'
-
-//    look into jakarta.annotation-api when switching to java 9
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     // ezvcard
@@ -163,7 +163,6 @@ dependencies {
 
     // realm
     implementation "com.github.realm:realm-android-adapters:$realm_adapters_version"
-//    implementation("io.realm:android-adapters:$realm_adapters_version") { transitive = false }
     kapt "io.realm:realm-annotations:$realm_version"
     kapt "io.realm:realm-annotations-processor:$realm_version"
 
