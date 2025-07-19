@@ -1,12 +1,12 @@
-Open source replacement to the stock SMS app on Android. A revival of QKSMS.
-## Features
-- Scheduled Messages
-- Message Backup
-- Speech to Text and Text to Speech integrated within the app
-- Message Blocking and Archiving
-- Voice Messages
-- Attachments of any type of file
-- Message Sorting
-- Delayed Sending
+Avatud lähtekoodil põhinev asendus Androidi standardsele lühisõnumirakendusele. Varasema QKSMS-nimelise rakenduse edasiarendus.
+## Funktsionaalsused:
+- Sõnumite ajastamine
+- Sõnumite varundus
+- Kõnetuvastus ja kõnesüntees on lõimitud rakendusse
+- Sõnumite blokeerimine ja arhiveerimine
+- Häälsõnumid
+- Kõiki tüüpi failid manustena
+- Sõnumite järjestamine
+- Viivitusega saatmine
 
 Osale kogukonna suhtluses <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a> jututoas
