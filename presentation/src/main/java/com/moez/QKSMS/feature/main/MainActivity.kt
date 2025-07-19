@@ -255,8 +255,10 @@ class MainActivity : QkThemedActivity(), MainView {
             findItem(R.id.add)?.isVisible = addContact && selectedConversations != 0
             findItem(R.id.pin)?.isVisible = markPinned && selectedConversations != 0
             findItem(R.id.unpin)?.isVisible = !markPinned && selectedConversations != 0
-            findItem(R.id.read)?.isVisible = markRead && selectedConversations != 0
-            findItem(R.id.unread)?.isVisible = !markRead && selectedConversations != 0
+            findItem(R.id.read)?.isVisible = ( markRead && selectedConversations != 0 ) ||
+                    selectedConversations > 1
+            findItem(R.id.unread)?.isVisible = ( !markRead && selectedConversations != 0 ) ||
+                    selectedConversations > 1
             findItem(R.id.block)?.isVisible = selectedConversations != 0
             findItem(R.id.rename)?.isVisible = selectedConversations == 1
         }
