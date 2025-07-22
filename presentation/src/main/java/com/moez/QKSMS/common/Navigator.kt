@@ -36,6 +36,7 @@ import dev.octoshrimpy.quik.feature.blocking.BlockingActivity
 import dev.octoshrimpy.quik.feature.compose.ComposeActivity
 import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoActivity
 import dev.octoshrimpy.quik.feature.gallery.GalleryActivity
+import dev.octoshrimpy.quik.feature.main.MainActivity
 import dev.octoshrimpy.quik.feature.notificationprefs.NotificationPrefsActivity
 import dev.octoshrimpy.quik.feature.plus.PlusActivity
 import dev.octoshrimpy.quik.feature.scheduled.ScheduledActivity
@@ -90,6 +91,11 @@ class Navigator @Inject constructor(
             intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.packageName)
             context.startActivity(intent)
         }
+    }
+
+    fun showMainActivity() {
+        val intent = Intent(context, MainActivity::class.java)
+        startActivity(intent)
     }
 
     fun showCompose(body: String? = null, attachments: List<Uri>? = null, mode: String? = null) {

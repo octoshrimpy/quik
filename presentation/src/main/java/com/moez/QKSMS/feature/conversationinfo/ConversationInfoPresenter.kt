@@ -34,6 +34,7 @@ import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoItem.Conver
 import dev.octoshrimpy.quik.interactor.DeleteConversations
 import dev.octoshrimpy.quik.interactor.MarkArchived
 import dev.octoshrimpy.quik.interactor.MarkUnarchived
+import dev.octoshrimpy.quik.interactor.MarkUnread
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.repository.ConversationRepository
@@ -53,6 +54,7 @@ class ConversationInfoPresenter @Inject constructor(
     private val context: Context,
     private val conversationRepo: ConversationRepository,
     private val deleteConversations: DeleteConversations,
+    private val markUnread: MarkUnread,
     private val markArchived: MarkArchived,
     private val markUnarchived: MarkUnarchived,
     private val navigator: Navigator,
@@ -157,6 +159,14 @@ class ConversationInfoPresenter @Inject constructor(
                 .withLatestFrom(conversation) { _, conversation -> conversation }
                 .autoDisposable(view.scope())
                 .subscribe { conversation -> navigator.showNotificationSettings(conversation.id) }
+
+        view.markUnreadClicks()
+                .withLatestFrom(conversation) { _, conversation -> conversation }
+                .autoDisposable(view.scope())
+                .subscribe {conversation ->
+                    markUnread.execute(listOf(conversation.id))
+                    navigator.showMainActivity()
+                }
 
         // Toggle the archived state of the conversation
         view.archiveClicks()
