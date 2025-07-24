@@ -239,10 +239,6 @@ class QkRealmMigration @Inject constructor(
             // Because there was never any property associated with which conversation/recipients a scheduled message was for,
             // we can't update this field on a realm migration. It will be set to a default of 0
 
-            version++
-        }
-
-        if (version == 11L) {
             realm.schema.create("MessageContentFilter")
                 .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
                 .addField("value", String::class.java, FieldAttribute.REQUIRED)
