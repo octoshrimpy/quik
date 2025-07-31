@@ -733,7 +733,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun showDeleteDialog(messages: List<Long>) {
         val count = messages.size
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.dialog_delete_title)
             .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
             .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(messages) }
@@ -742,7 +742,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun showClearCurrentMessageDialog() {
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.dialog_clear_compose_title)
             .setMessage(R.string.dialog_clear_compose)
             .setPositiveButton(R.string.button_clear) { _, _ ->

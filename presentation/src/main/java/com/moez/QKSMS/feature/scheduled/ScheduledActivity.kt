@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.feature.scheduled
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -111,7 +112,7 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
 
     override fun showDeleteDialog(messages: List<Long>) {
         val count = messages.size
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.dialog_delete_title)
             .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
             .setPositiveButton(R.string.button_delete) { _, _ -> deleteScheduledMessages.onNext(messages) }
@@ -121,7 +122,7 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
 
     override fun showSendNowDialog(messages: List<Long>) {
         val count = messages.size
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.main_menu_send_now)
             .setMessage(resources.getQuantityString(R.plurals.dialog_send_now, count, count))
             .setPositiveButton(R.string.main_menu_send_now) { _, _ -> sendScheduledMessages.onNext(messages) }
@@ -130,7 +131,7 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
     }
 
     override fun showEditMessageDialog(message: Long) {
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.dialog_edit_scheduled_message_title)
             .setMessage(R.string.dialog_edit_scheduled_message)
             .setPositiveButton(R.string.dialog_edit_scheduled_message_positive_button) { _, _ ->

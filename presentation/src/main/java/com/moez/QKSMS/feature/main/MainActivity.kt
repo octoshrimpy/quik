@@ -20,7 +20,6 @@ package dev.octoshrimpy.quik.feature.main
 
 import android.Manifest
 import android.animation.ObjectAnimator
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
@@ -31,6 +30,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewStub
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
