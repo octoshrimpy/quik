@@ -171,9 +171,10 @@ open class MessageRepositoryImpl @Inject constructor(
 
         val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(part.type)
             ?: return null
-        val date = part.messages?.first()?.date
-        val fileName = part.name?.takeIf { name -> name.endsWith(extension) }
-            ?: "${part.type.split("/").last()}_$date.$extension"
+        // fileDateAndTime is divided by 1000 in order to remove the extra 0's after date and time
+        // This way the file name isn't so long.
+        val fileDateAndTime = (part.messages?.first()?.date)?.div(1000)
+        val fileName = "QUIK_${part.type.split("/").last()}_$fileDateAndTime.$extension"
 
         val values = contentValuesOf(
             MediaStore.MediaColumns.DISPLAY_NAME to fileName,
