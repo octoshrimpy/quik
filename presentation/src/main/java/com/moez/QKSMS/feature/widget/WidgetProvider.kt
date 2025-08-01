@@ -25,6 +25,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
@@ -109,8 +110,11 @@ class WidgetProvider : AppWidgetProvider() {
         Timber.v("updateWidget appWidgetId: $appWidgetId")
         val remoteViews = RemoteViews(context.packageName, R.layout.widget)
 
+        val nightModeFlags = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isNightMode = nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+
         // Apply colors from theme
-        val night = prefs.night.get()
+        val night = prefs.night.get() || isNightMode
         val black = prefs.black.get()
 
         remoteViews.setInt(R.id.background, "setColorFilter", context.getColorCompat(when {
