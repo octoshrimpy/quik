@@ -36,7 +36,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SchemaVersion: Long = 12
+        const val SchemaVersion: Long = 13
     }
 
     @SuppressLint("ApplySharedPref")
@@ -239,10 +239,6 @@ class QkRealmMigration @Inject constructor(
             // Because there was never any property associated with which conversation/recipients a scheduled message was for,
             // we can't update this field on a realm migration. It will be set to a default of 0
 
-            version++
-        }
-
-        if (version == 11L) {
             realm.schema.create("MessageContentFilter")
                 .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
                 .addField("value", String::class.java, FieldAttribute.REQUIRED)
@@ -250,6 +246,12 @@ class QkRealmMigration @Inject constructor(
                 .addField("isRegex", Boolean::class.java, FieldAttribute.REQUIRED)
                 .addField("includeContacts", Boolean::class.java, FieldAttribute.REQUIRED)
 
+            version++
+        }
+
+        if (version == 12L) {
+            realm.schema.get("Conversation")
+                ?.addField("draftDate", Long::class.java, FieldAttribute.REQUIRED)
             version++
         }
 
