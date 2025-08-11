@@ -26,7 +26,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
 import dagger.android.AndroidInjection
@@ -40,6 +39,7 @@ import dev.octoshrimpy.quik.receiver.StartActivityFromWidgetReceiver
 import dev.octoshrimpy.quik.util.Preferences
 import timber.log.Timber
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 class WidgetProvider : AppWidgetProvider() {
 
@@ -138,7 +138,7 @@ class WidgetProvider : AppWidgetProvider() {
         val intent = Intent(context, WidgetService::class.java)
                 .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 .putExtra("small_widget", smallWidget)
-        intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
+        intent.data = intent.toUri(Intent.URI_INTENT_SCHEME).toUri()
         remoteViews.setRemoteAdapter(R.id.conversations, intent)
 
         // compose new message image color and on click intent
