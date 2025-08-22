@@ -101,7 +101,7 @@ class ShortcutManagerImpl @Inject constructor(
 
     @TargetApi(29)
     private fun createShortcutForConversation(conversation: Conversation): ShortcutInfoCompat {
-        Timber.v("creating shortcut for conversation ${conversation.id} : ${conversation.getTitle()}")
+        Timber.v("creating shortcut for conversation ${conversation.id}")
         val icon = when {
             conversation.recipients.size == 1 -> {
                 val recipient = conversation.recipients.first()!!
