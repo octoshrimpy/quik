@@ -45,7 +45,7 @@ class FileLoggingTree @Inject constructor(
 
     private var logFileUri: Uri? = null
 
-    override fun log(priority: Int, tag: String, message: String, t: Throwable?) {
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         if (!prefs.logging.get()) return
 
         Schedulers.io().scheduleDirect {
