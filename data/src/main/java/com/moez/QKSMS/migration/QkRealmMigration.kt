@@ -36,7 +36,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SchemaVersion: Long = 12
+        const val SchemaVersion: Long = 13
     }
 
     @SuppressLint("ApplySharedPref")
@@ -249,6 +249,28 @@ class QkRealmMigration @Inject constructor(
                 .addField("caseSensitive", Boolean::class.java, FieldAttribute.REQUIRED)
                 .addField("isRegex", Boolean::class.java, FieldAttribute.REQUIRED)
                 .addField("includeContacts", Boolean::class.java, FieldAttribute.REQUIRED)
+
+            version++
+        }
+
+        if (version == 12L) {
+            realm.schema.create("EmojiReaction")
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("targetMessageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+                .addField("reactionMessageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+                .addField("senderAddress", String::class.java, FieldAttribute.REQUIRED)
+                .addField("emoji", String::class.java, FieldAttribute.REQUIRED)
+                .addField("originalMessageText", String::class.java, FieldAttribute.REQUIRED)
+                .addField("threadId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+                .addField("patternType", String::class.java, FieldAttribute.REQUIRED)
+
+            realm.schema.get("Message")
+                ?.addField("isEmojiReaction", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.transform { msg ->
+                    msg.setBoolean("isEmojiReaction", false)
+                }
+
+            // TODO: scan for past emoji reaction messages
 
             version++
         }

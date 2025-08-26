@@ -26,6 +26,7 @@ object BubbleUtils {
 
     const val TIMESTAMP_THRESHOLD = 10
 
+    // TODO: update to consider emoji reactions
     fun canGroup(message: Message, other: Message?): Boolean {
         if (other == null) return false
         val diff = TimeUnit.MILLISECONDS.toMinutes(Math.abs(message.date - other.date))

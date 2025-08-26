@@ -42,6 +42,7 @@ import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.model.PhoneNumber
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.SyncLog
+import dev.octoshrimpy.quik.util.EmojiReactionUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.subjects.BehaviorSubject
@@ -104,6 +105,7 @@ class SyncRepositoryImpl @Inject constructor(
         realm.delete(Message::class.java)
         realm.delete(MmsPart::class.java)
         realm.delete(Recipient::class.java)
+        realm.delete(dev.octoshrimpy.quik.model.EmojiReaction::class.java)
 
         keys.reset()
 
@@ -202,6 +204,39 @@ class SyncRepositoryImpl @Inject constructor(
 
         syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
 
+        // Now that we have all the messages, we can scan for emoji reactions
+        val allMessages = realm.where(Message::class.java)
+            .beginGroup()
+                .beginGroup()
+                    .equalTo("type", "sms")
+                    .isNotEmpty("body")
+                .endGroup()
+                .or()
+                .beginGroup()
+                    .equalTo("type", "mms")
+                    .isNotEmpty("parts.text")
+                .endGroup()
+            .endGroup()
+            .findAll()
+
+        allMessages.forEach { message ->
+            val text = message.getText(false)
+            val parsedReaction = EmojiReactionUtils.parseEmojiReaction(text)
+            if (parsedReaction != null) {
+                val targetMessage = EmojiReactionUtils.findTargetMessage(
+                    message.threadId,
+                    parsedReaction.originalMessage,
+                    realm
+                )
+                EmojiReactionUtils.saveEmojiReaction(
+                    message,
+                    parsedReaction,
+                    targetMessage,
+                    keys,
+                    realm,
+                )
+            }
+        }
 
         realm.insert(SyncLog())
         realm.commitTransaction()
@@ -259,6 +294,27 @@ class SyncRepositoryImpl @Inject constructor(
 
                 conversationRepo.getOrCreateConversation(threadId)
                 insertOrUpdate()
+
+                val text = getText(false)
+                val parsedReaction = EmojiReactionUtils.parseEmojiReaction(text)
+                if (parsedReaction != null) {
+                    Realm.getDefaultInstance().use { realm ->
+                        val targetMessage = EmojiReactionUtils.findTargetMessage(
+                            threadId,
+                            parsedReaction.originalMessage,
+                            realm
+                        )
+                        realm.executeTransaction {
+                            EmojiReactionUtils.saveEmojiReaction(
+                                this,
+                                parsedReaction,
+                                targetMessage,
+                                keys,
+                                realm,
+                            )
+                        }
+                    }
+                }
             }
         }
     }

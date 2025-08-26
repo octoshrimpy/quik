@@ -74,6 +74,7 @@ open class Message : RealmObject() {
     var subject: String = ""
     var textContentType: String = ""
     var parts: RealmList<MmsPart> = RealmList()
+    var isEmojiReaction: Boolean = false
 
     fun getUri(): Uri {
         val baseUri = if (isMms()) Mms.CONTENT_URI else Sms.CONTENT_URI

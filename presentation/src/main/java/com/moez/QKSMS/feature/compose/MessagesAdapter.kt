@@ -64,6 +64,7 @@ import dev.octoshrimpy.quik.feature.compose.BubbleUtils.getBubble
 import dev.octoshrimpy.quik.feature.compose.part.PartsAdapter
 import dev.octoshrimpy.quik.feature.extensions.isEmojiOnly
 import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.EmojiReaction
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
@@ -71,10 +72,13 @@ import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.message_list_item_in.*
 import kotlinx.android.synthetic.main.message_list_item_in.body
+import kotlinx.android.synthetic.main.message_list_item_in.reactionText
 import kotlinx.android.synthetic.main.message_list_item_in.parts
+import kotlinx.android.synthetic.main.message_list_item_in.reactions
 import kotlinx.android.synthetic.main.message_list_item_in.sim
 import kotlinx.android.synthetic.main.message_list_item_in.simIndex
 import kotlinx.android.synthetic.main.message_list_item_in.status
@@ -388,6 +392,59 @@ class MessagesAdapter @Inject constructor(
             setData(message, previous, next, holder, audioState)
             contextMenuValue = message.id
             clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model
+        }
+
+        bindEmojiReactions(holder, message)
+    }
+
+    private fun bindEmojiReactions(holder: QkViewHolder, message: Message) {
+        holder.reactions?.let { reactionsContainer ->
+            val reactions = getReactionsForMessage(message.id)
+            val hasReactions = reactions.isNotEmpty()
+
+            if (hasReactions) {
+                val reactionCounts = reactions.groupBy { it.emoji }
+                    .mapValues { it.value.size }
+                    .toList()
+                    .sortedByDescending { it.second } // Sort by count, most reactions first
+
+                // For now, show just the first (most popular) reaction
+                val topReaction = reactionCounts.first()
+                val reactionText = if (topReaction.second == 1) {
+                    topReaction.first
+                } else {
+                    "${topReaction.first} ${topReaction.second}"
+                }
+
+                holder.reactionText?.text = reactionText
+                reactionsContainer.setVisible(true)
+                makeRoomForEmojis(holder)
+            } else {
+                reactionsContainer.setVisible(false)
+            }
+        }
+    }
+
+    private fun makeRoomForEmojis(holder: QkViewHolder) {
+        val paddingBottom = 21.dpToPx(context)
+
+        // Adjust the container padding
+        (holder.reactions?.parent as? ViewGroup)?.let { parent ->
+            parent.setPadding(
+                parent.paddingLeft,
+                parent.paddingTop,
+                parent.paddingRight,
+                paddingBottom
+            )
+        }
+    }
+
+    private fun getReactionsForMessage(messageId: Long): List<EmojiReaction> {
+        return Realm.getDefaultInstance().use { realm ->
+            realm.where(EmojiReaction::class.java)
+                .equalTo("targetMessageId", messageId)
+                .findAll()
+                .let { realm.copyFromRealm(it) }
         }
     }
 
