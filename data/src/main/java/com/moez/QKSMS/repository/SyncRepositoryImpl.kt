@@ -37,6 +37,7 @@ import dev.octoshrimpy.quik.mapper.CursorToRecipient
 import dev.octoshrimpy.quik.model.Contact
 import dev.octoshrimpy.quik.model.ContactGroup
 import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.EmojiReaction
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.model.PhoneNumber
@@ -105,7 +106,7 @@ class SyncRepositoryImpl @Inject constructor(
         realm.delete(Message::class.java)
         realm.delete(MmsPart::class.java)
         realm.delete(Recipient::class.java)
-        realm.delete(dev.octoshrimpy.quik.model.EmojiReaction::class.java)
+        realm.delete(EmojiReaction::class.java)
 
         keys.reset()
 
