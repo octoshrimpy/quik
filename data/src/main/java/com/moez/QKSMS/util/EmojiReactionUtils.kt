@@ -29,6 +29,15 @@ data class ParsedEmojiReaction(val emoji: String, val originalMessage: String, v
 
 object EmojiReactionUtils {
 
+    val iosTapbacks = mapOf(
+        Regex("^Loved \u201C(.+?)\u201D$") to "❤️",
+        Regex("^Liked \u201C(.+?)\u201D$") to "👍",
+        Regex("^Disliked \u201C(.+?)\u201D$") to "👎",
+        Regex("^Laughed at \u201C(.+?)\u201D$") to "😂",
+        Regex("^Emphasized \u201C(.+?)\u201D$") to "‼️",
+        Regex("^Questioned \u201C(.+?)\u201D$") to "❓",
+    )
+
     fun parseEmojiReaction(body: String): ParsedEmojiReaction? {
         // Log the raw message with unicode escapes for debugging
         val escapedBody = body.map { char ->
@@ -52,6 +61,15 @@ object EmojiReactionUtils {
 
             Timber.d("iOS pattern detected - emoji: '$emoji', original: '$originalMessage'")
             return ParsedEmojiReaction(emoji, originalMessage, "ios")
+        }
+
+        for ((pattern, emoji) in iosTapbacks) {
+            val iosTapbackMatch = pattern.find(body)
+            if (iosTapbackMatch != null) {
+                val originalMessage = iosTapbackMatch.groupValues[1]
+                Timber.d("iOS tapback detected - emoji: '$emoji', original: '$originalMessage'")
+                return ParsedEmojiReaction(emoji, originalMessage, "ios")
+            }
         }
 
         // https://github.com/octoshrimpy/quik/issues/152#issuecomment-2330183516
