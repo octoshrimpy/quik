@@ -218,6 +218,7 @@ class SyncRepositoryImpl @Inject constructor(
                     .isNotEmpty("parts.text")
                 .endGroup()
             .endGroup()
+            .sort("date", Sort.ASCENDING) // parse oldest to newest to handle reactions & removals properly
             .findAll()
 
         allMessages.forEach { message ->

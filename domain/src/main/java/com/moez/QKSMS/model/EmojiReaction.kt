@@ -42,11 +42,4 @@ open class EmojiReaction : RealmObject() {
 
     /** Thread ID for easier querying */
     @Index var threadId: Long = 0
-
-    /**
-     * Pattern type that was matched (for debugging)
-     *
-     * for example, "ios" or "google"
-     */
-    var patternType: String = ""
 }

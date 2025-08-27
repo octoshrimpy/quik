@@ -25,17 +25,46 @@ import io.realm.Realm
 import io.realm.Sort
 import timber.log.Timber
 
-data class ParsedEmojiReaction(val emoji: String, val originalMessage: String, val patternType: String)
+data class ParsedEmojiReaction(val emoji: String, val originalMessage: String, val isRemoval: Boolean = false)
 
 object EmojiReactionUtils {
 
-    val iosTapbacks = mapOf(
-        Regex("^Loved \u201C(.+?)\u201D$") to "❤️",
-        Regex("^Liked \u201C(.+?)\u201D$") to "👍",
-        Regex("^Disliked \u201C(.+?)\u201D$") to "👎",
-        Regex("^Laughed at \u201C(.+?)\u201D$") to "😂",
-        Regex("^Emphasized \u201C(.+?)\u201D$") to "‼️",
-        Regex("^Questioned \u201C(.+?)\u201D$") to "❓",
+    private fun tapback(emoji: String, isRemoval: Boolean = false): (MatchResult) -> ParsedEmojiReaction  {
+        return { match ->
+            ParsedEmojiReaction(emoji, match.groupValues[1], isRemoval)
+        }
+    }
+
+    val reactionPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
+        // https://github.com/octoshrimpy/quik/issues/152#issuecomment-2330183516
+        Regex("^\u200A\u200B(.+?)\u200B to \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
+            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], )
+        },
+        Regex("^Reacted (.+?) to \u201C(.+?)\u201D$") to { match ->
+            if (match.groupValues[1] == "with a sticker")
+                null
+            else
+                ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
+        },
+        Regex("^Loved \u201C(.+?)\u201D$") to tapback("❤️"),
+        Regex("^Liked \u201C(.+?)\u201D$") to tapback("👍"),
+        Regex("^Disliked \u201C(.+?)\u201D$") to tapback("👎"),
+        Regex("^Laughed at \u201C(.+?)\u201D$") to tapback("😂"),
+        Regex("^Emphasized \u201C(.+?)\u201D$") to tapback("‼️"),
+        Regex("^Questioned \u201C(.+?)\u201D$") to tapback("❓"),
+    )
+
+    val removalPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
+        // TODO: google messages removal
+        Regex("^Removed a heart from \u201C(.+?)\u201D$") to tapback("❤️", true),
+        Regex("^Removed a like from \u201C(.+?)\u201D$") to tapback("👍", true),
+        Regex("^Removed a dislike from \u201C(.+?)\u201D$") to tapback("👎", true),
+        Regex("^Removed a laugh from \u201C(.+?)\u201D$") to tapback("😂", true),
+        Regex("^Removed an exclamation from \u201C(.+?)\u201D$") to tapback("‼️", true),
+        Regex("^Removed a question mark from \u201C(.+?)\u201D$") to tapback("❓", true),
+        Regex("^Removed (.+?) from \u201C(.+?)\u201D$") to { match ->
+            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
+        },
     )
 
     fun parseEmojiReaction(body: String): ParsedEmojiReaction? {
@@ -46,40 +75,35 @@ object EmojiReactionUtils {
                 else -> "\\u${char.code.toString(16).padStart(4, '0')}"
             }
         }.joinToString("")
-        Timber.v("Parsing body: \"$escapedBody\"") // TODO: are we okay logging SMS content?
+        Timber.d("Parsing body: \"$escapedBody\"") // TODO: are we okay logging SMS content?
 
-        val iosPattern = Regex("^Reacted (.+?) to \u201C(.+?)\u201D$")
-        val iosMatch = iosPattern.find(body)
-        if (iosMatch != null) {
-            val emoji = iosMatch.groupValues[1]
-            val originalMessage = iosMatch.groupValues[2]
+        val removal = parseRemoval(body)
+        if (removal != null) return removal
 
-            if (emoji == "with a sticker") {
-                Timber.d("Skipping sticker reaction: '$originalMessage'")
-                return null
-            }
+        for ((pattern, parser) in reactionPatterns) {
+            val match = pattern.find(body)
+            if (match == null) continue;
 
-            Timber.d("iOS pattern detected - emoji: '$emoji', original: '$originalMessage'")
-            return ParsedEmojiReaction(emoji, originalMessage, "ios")
+            val result = parser(match)
+            if (result == null) continue
+
+            Timber.d("Reaction found: $result")
+            return result
         }
 
-        for ((pattern, emoji) in iosTapbacks) {
-            val iosTapbackMatch = pattern.find(body)
-            if (iosTapbackMatch != null) {
-                val originalMessage = iosTapbackMatch.groupValues[1]
-                Timber.d("iOS tapback detected - emoji: '$emoji', original: '$originalMessage'")
-                return ParsedEmojiReaction(emoji, originalMessage, "ios")
-            }
-        }
+        return null
+    }
 
-        // https://github.com/octoshrimpy/quik/issues/152#issuecomment-2330183516
-        val googleMessagesPattern = Regex("^\u200A\u200B(.+?)\u200B to \u201C\u200A(.+?)\u200A\u201D\u200A$")
-        val googleMatch = googleMessagesPattern.find(body)
-        if (googleMatch != null) {
-            val emoji = googleMatch.groupValues[1]
-            val originalMessage = googleMatch.groupValues[2]
-            Timber.d("Google Messages pattern detected - emoji: '$emoji', original: '$originalMessage'")
-            return ParsedEmojiReaction(emoji, originalMessage, "google")
+    private fun parseRemoval(body: String): ParsedEmojiReaction? {
+        for ((pattern, parser) in removalPatterns) {
+            val match = pattern.find(body)
+            if (match == null) continue;
+
+            val result = parser(match)
+            if (result == null) continue
+
+            Timber.d("Reaction found: $result")
+            return result
         }
 
         return null
@@ -108,6 +132,36 @@ object EmojiReactionUtils {
         return null
     }
 
+    fun removeEmojiReaction(
+        reactionMessage: Message,
+        parsedReaction: ParsedEmojiReaction,
+        targetMessage: Message?,
+        realm: Realm,
+    ) {
+        if (targetMessage == null) {
+            Timber.w("Cannot remove emoji reaction: no target message found for '${parsedReaction.originalMessage}'")
+            reactionMessage.isEmojiReaction = true
+            realm.insertOrUpdate(reactionMessage)
+            return
+        }
+
+        val existingReaction = realm.where(EmojiReaction::class.java)
+            .equalTo("targetMessageId", targetMessage.id)
+            .equalTo("senderAddress", reactionMessage.address)
+            .equalTo("emoji", parsedReaction.emoji)
+            .findFirst()
+
+        if (existingReaction != null) {
+            existingReaction.deleteFromRealm()
+            Timber.d("Removed emoji reaction: ${parsedReaction.emoji} from ${reactionMessage.address} to message ${targetMessage.id}")
+        } else {
+            Timber.w("No existing emoji reaction found to remove: ${parsedReaction.emoji} from ${reactionMessage.address} to message ${targetMessage.id}")
+        }
+
+        reactionMessage.isEmojiReaction = true
+        realm.insertOrUpdate(reactionMessage)
+    }
+
     fun saveEmojiReaction(
         reactionMessage: Message,
         parsedReaction: ParsedEmojiReaction,
@@ -115,6 +169,11 @@ object EmojiReactionUtils {
         keyManager: KeyManager,
         realm: Realm,
     ) {
+        if (parsedReaction.isRemoval) {
+            removeEmojiReaction(reactionMessage, parsedReaction, targetMessage, realm)
+            return
+        }
+
         val reaction = EmojiReaction().apply {
             id = keyManager.newId()
             reactionMessageId = reactionMessage.id
@@ -123,7 +182,6 @@ object EmojiReactionUtils {
             emoji = parsedReaction.emoji
             originalMessageText = parsedReaction.originalMessage
             threadId = reactionMessage.threadId
-            patternType = parsedReaction.patternType
         }
 
         realm.insertOrUpdate(reaction)
