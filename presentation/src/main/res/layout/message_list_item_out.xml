@@ -150,7 +150,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="18dp"
-                    android:paddingBottom="21dp"
                     android:clipToPadding="false">
 
                     <dev.octoshrimpy.quik.common.widget.TightTextView
