@@ -78,25 +78,12 @@ object EmojiReactionUtils {
             .limit(50) // TODO: should we keep this limit?
             .findAll()
 
-        val exactMatch = messages.find { message ->
+        val match = messages.find { message ->
             message.getText(false).trim() == originalMessageText.trim()
         }
-        if (exactMatch != null) {
-            Timber.d("Found exact match for reaction target: message ID ${exactMatch.id}")
-            return exactMatch
-        }
-
-        // Try partial match (in case of truncation)
-        val partialMatch = messages.find { message ->
-            val text = message.getText(false).trim()
-            text.isNotEmpty() && (
-                text.contains(originalMessageText.trim(), ignoreCase = true) ||
-                originalMessageText.trim().contains(text, ignoreCase = true)
-            )
-        }
-        if (partialMatch != null) {
-            Timber.d("Found partial match for reaction target: message ID ${partialMatch.id}")
-            return partialMatch
+        if (match != null) {
+            Timber.d("Found match for reaction target: message ID ${match.id}")
+            return match
         }
 
         Timber.w("No target message found for reaction text: '$originalMessageText'")
