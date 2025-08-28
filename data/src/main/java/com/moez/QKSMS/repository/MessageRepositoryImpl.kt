@@ -57,6 +57,7 @@ import dev.octoshrimpy.quik.receiver.SendSmsReceiver
 import dev.octoshrimpy.quik.receiver.SmsDeliveredReceiver
 import dev.octoshrimpy.quik.receiver.SmsSentReceiver
 import dev.octoshrimpy.quik.util.ImageUtils
+import dev.octoshrimpy.quik.util.EmojiReactionUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
@@ -88,6 +89,7 @@ open class MessageRepositoryImpl @Inject constructor(
         Realm.getDefaultInstance()
             .where(Message::class.java)
             .equalTo("threadId", threadId)
+            .equalTo("isEmojiReaction", false)
             .let {
                 when (query.isEmpty()) {
                     true -> it
@@ -760,6 +762,26 @@ open class MessageRepositoryImpl @Inject constructor(
                     // Update contentId after the message has been inserted to the content provider
                     realm.executeTransaction { managedMessage?.contentId = id }
                 }
+
+            managedMessage?.let { savedMessage ->
+                val parsedReaction = EmojiReactionUtils.parseEmojiReaction(body)
+                if (parsedReaction != null) {
+                    val targetMessage = EmojiReactionUtils.findTargetMessage(
+                        savedMessage.threadId,
+                        parsedReaction.originalMessage,
+                        realm
+                    )
+                    realm.executeTransaction {
+                        EmojiReactionUtils.saveEmojiReaction(
+                            savedMessage,
+                            parsedReaction,
+                            targetMessage,
+                            messageIds,
+                            realm,
+                        )
+                    }
+                }
+            }
         }
 
         return message
