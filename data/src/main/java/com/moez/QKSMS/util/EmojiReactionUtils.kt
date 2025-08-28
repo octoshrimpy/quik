@@ -68,15 +68,6 @@ object EmojiReactionUtils {
     )
 
     fun parseEmojiReaction(body: String): ParsedEmojiReaction? {
-        // Log the raw message with unicode escapes for debugging
-        val escapedBody = body.map { char ->
-            when (char.code) {
-                in 0x20..0x7E -> char.toString() // printable ASCII
-                else -> "\\u${char.code.toString(16).padStart(4, '0')}"
-            }
-        }.joinToString("")
-        Timber.d("Parsing body: \"$escapedBody\"") // TODO: are we okay logging SMS content?
-
         val removal = parseRemoval(body)
         if (removal != null) return removal
 
@@ -132,14 +123,14 @@ object EmojiReactionUtils {
         return null
     }
 
-    fun removeEmojiReaction(
+    private fun removeEmojiReaction(
         reactionMessage: Message,
-        parsedReaction: ParsedEmojiReaction,
+        reaction: ParsedEmojiReaction,
         targetMessage: Message?,
         realm: Realm,
     ) {
         if (targetMessage == null) {
-            Timber.w("Cannot remove emoji reaction: no target message found for '${parsedReaction.originalMessage}'")
+            Timber.w("Cannot remove emoji reaction '${reaction.emoji}': no target message found")
             reactionMessage.isEmojiReaction = true
             realm.insertOrUpdate(reactionMessage)
             return
@@ -148,14 +139,14 @@ object EmojiReactionUtils {
         val existingReaction = realm.where(EmojiReaction::class.java)
             .equalTo("targetMessageId", targetMessage.id)
             .equalTo("senderAddress", reactionMessage.address)
-            .equalTo("emoji", parsedReaction.emoji)
+            .equalTo("emoji", reaction.emoji)
             .findFirst()
 
         if (existingReaction != null) {
             existingReaction.deleteFromRealm()
-            Timber.d("Removed emoji reaction: ${parsedReaction.emoji} from ${reactionMessage.address} to message ${targetMessage.id}")
+            Timber.d("Removed emoji reaction: ${reaction.emoji} to message ${targetMessage.id}")
         } else {
-            Timber.w("No existing emoji reaction found to remove: ${parsedReaction.emoji} from ${reactionMessage.address} to message ${targetMessage.id}")
+            Timber.w("No existing emoji reaction found to remove: ${reaction.emoji} to message ${targetMessage.id}")
         }
 
         reactionMessage.isEmojiReaction = true
@@ -189,9 +180,9 @@ object EmojiReactionUtils {
         realm.insertOrUpdate(reactionMessage)
 
         if (targetMessage != null) {
-            Timber.i("Saved emoji reaction: ${reaction.emoji} from ${reaction.senderAddress} to message ${targetMessage.id}")
+            Timber.i("Saved emoji reaction: ${reaction.emoji} to message ${targetMessage.id}")
         } else {
-            Timber.w("Saved emoji reaction without target message: ${reaction.emoji} from ${reaction.senderAddress}")
+            Timber.w("Saved emoji reaction without target message: ${reaction.emoji}")
         }
     }
 }
