@@ -186,7 +186,7 @@
                             android:paddingTop="4dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="4dp"
-                            android:text="👍 1"
+                            android:text="👍"
                             android:textColor="?android:attr/textColorPrimary"
                             android:textSize="16sp" />
 
