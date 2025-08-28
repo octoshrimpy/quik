@@ -78,7 +78,7 @@ object EmojiReactionUtils {
             val result = parser(match)
             if (result == null) continue
 
-            Timber.d("Reaction found: $result")
+            Timber.d("Reaction found with ${result.emoji}")
             return result
         }
 
@@ -93,7 +93,7 @@ object EmojiReactionUtils {
             val result = parser(match)
             if (result == null) continue
 
-            Timber.d("Reaction found: $result")
+            Timber.d("Removal found with ${result.emoji}")
             return result
         }
 
@@ -136,11 +136,9 @@ object EmojiReactionUtils {
             return
         }
 
-        val existingReaction = realm.where(EmojiReaction::class.java)
-            .equalTo("targetMessageId", targetMessage.id)
-            .equalTo("senderAddress", reactionMessage.address)
-            .equalTo("emoji", reaction.emoji)
-            .findFirst()
+        val existingReaction = targetMessage.emojiReactions.find { candidate ->
+            candidate.senderAddress == reactionMessage.address && candidate.emoji == reaction.emoji
+        }
 
         if (existingReaction != null) {
             existingReaction.deleteFromRealm()
@@ -168,18 +166,19 @@ object EmojiReactionUtils {
         val reaction = EmojiReaction().apply {
             id = keyManager.newId()
             reactionMessageId = reactionMessage.id
-            targetMessageId = targetMessage?.id ?: 0
             senderAddress = reactionMessage.address
             emoji = parsedReaction.emoji
             originalMessageText = parsedReaction.originalMessage
             threadId = reactionMessage.threadId
         }
-
         realm.insertOrUpdate(reaction)
+
         reactionMessage.isEmojiReaction = true
         realm.insertOrUpdate(reactionMessage)
 
         if (targetMessage != null) {
+            targetMessage.emojiReactions.add(reaction)
+
             Timber.i("Saved emoji reaction: ${reaction.emoji} to message ${targetMessage.id}")
         } else {
             Timber.w("Saved emoji reaction without target message: ${reaction.emoji}")

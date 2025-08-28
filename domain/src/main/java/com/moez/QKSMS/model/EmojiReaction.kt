@@ -25,9 +25,6 @@ import io.realm.annotations.PrimaryKey
 open class EmojiReaction : RealmObject() {
     @PrimaryKey var id: Long = 0
 
-    /** The message this is a reaction to */
-    @Index var targetMessageId: Long = 0
-
     /** The reaction message ID itself */
     @Index var reactionMessageId: Long = 0
 

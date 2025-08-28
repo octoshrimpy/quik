@@ -26,6 +26,7 @@ import android.provider.Telephony.Sms
 import dev.octoshrimpy.quik.extensions.joinTo
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 
@@ -74,7 +75,10 @@ open class Message : RealmObject() {
     var subject: String = ""
     var textContentType: String = ""
     var parts: RealmList<MmsPart> = RealmList()
+    /** is this message a reaction to another message? */
     var isEmojiReaction: Boolean = false
+    /** emoji reactions to this message */
+    val emojiReactions: RealmList<EmojiReaction> = RealmList()
 
     fun getUri(): Uri {
         val baseUri = if (isMms()) Mms.CONTENT_URI else Sms.CONTENT_URI

@@ -64,7 +64,6 @@ import dev.octoshrimpy.quik.feature.compose.BubbleUtils.getBubble
 import dev.octoshrimpy.quik.feature.compose.part.PartsAdapter
 import dev.octoshrimpy.quik.feature.extensions.isEmojiOnly
 import dev.octoshrimpy.quik.model.Conversation
-import dev.octoshrimpy.quik.model.EmojiReaction
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
@@ -72,7 +71,6 @@ import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.message_list_item_in.*
 import kotlinx.android.synthetic.main.message_list_item_in.body
@@ -399,7 +397,7 @@ class MessagesAdapter @Inject constructor(
 
     private fun bindEmojiReactions(holder: QkViewHolder, message: Message) {
         holder.reactions?.let { reactionsContainer ->
-            val reactions = getReactionsForMessage(message.id)
+            val reactions = message.emojiReactions
             val hasReactions = reactions.isNotEmpty()
 
             if (hasReactions) {
@@ -435,15 +433,6 @@ class MessagesAdapter @Inject constructor(
                 parent.paddingRight,
                 paddingBottom
             )
-        }
-    }
-
-    private fun getReactionsForMessage(messageId: Long): List<EmojiReaction> {
-        return Realm.getDefaultInstance().use { realm ->
-            realm.where(EmojiReaction::class.java)
-                .equalTo("targetMessageId", messageId)
-                .findAll()
-                .let { realm.copyFromRealm(it) }
         }
     }
 

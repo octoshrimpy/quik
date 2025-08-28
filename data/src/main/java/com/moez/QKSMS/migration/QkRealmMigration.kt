@@ -254,9 +254,8 @@ class QkRealmMigration @Inject constructor(
         }
 
         if (version == 12L) {
-            realm.schema.create("EmojiReaction")
+            val emojiReactionTable =  realm.schema.create("EmojiReaction")
                 .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
-                .addField("targetMessageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
                 .addField("reactionMessageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
                 .addField("senderAddress", String::class.java, FieldAttribute.REQUIRED)
                 .addField("emoji", String::class.java, FieldAttribute.REQUIRED)
@@ -266,6 +265,7 @@ class QkRealmMigration @Inject constructor(
 
             realm.schema.get("Message")
                 ?.addField("isEmojiReaction", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.addRealmListField("emojiReactions", emojiReactionTable)
                 ?.transform { msg ->
                     msg.setBoolean("isEmojiReaction", false)
                 }
