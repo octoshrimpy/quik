@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">নতুন আলাপ</string>
     <string name="shortcut_compose_short_label">কম্পোজ করো</string>
     <string name="shortcut_compose_disabled_message">শর্টকাট নিষ্ক্রিয়</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">সেটিংস</string>
     <string name="title_notification_prefs">বিজ্ঞপ্তি</string>
     <string name="title_theme">থিম</string>
-    <string name="title_conversations">ইনবক্সে খুঁজো&#8230;</string>
+    <string name="title_conversations">ইনবক্সে খুঁজো…</string>
     <string name="title_compose">নাম বা নম্বর টাইপ করো</string>
     <string name="setup_skip">এড়িয়ে যাও</string>
     <string name="setup_next">আগাও</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">পড়া হয়েছে</string>
     <string name="main_menu_unread">পড়া হয়নি</string>
     <string name="main_menu_block">অবরুদ্ধ</string>
-    <string name="main_syncing">বার্তাগুলি সিঙ্ক হচ্ছে&#8230;</string>
+    <string name="main_syncing">বার্তাগুলি সিঙ্ক হচ্ছে…</string>
     <string name="main_sender_you">তুমি: %s</string>
     <string name="main_message_results_title">বার্তার ভিতর পাওয়া গেছে</string>
     <string name="main_message_results">%dটি বার্তা</string>
@@ -99,7 +98,7 @@
     <string name="compose_scheduled_future">নির্বাচিত সময় অবশ্য ভবিষ্যতে হতে হবে!</string>
     <string name="compose_scheduled_plus">পরিকল্পিত বার্তাপ্রেরক ব্যবহার করতে আপনাকে অবশ্যই QUIK + আনলক করতে হবে</string>
     <string name="compose_scheduled_toast">পূর্বসূচিত বার্তাগুলোতে যোগ করা হয়েছে</string>
-    <string name="compose_hint">একটি বার্তা লিখো&#8230;</string>
+    <string name="compose_hint">একটি বার্তা লিখো…</string>
     <string name="compose_menu_copy">পাঠ্য অনুলিপি করুন</string>
     <string name="compose_menu_forward">সামনে পাঠান</string>
     <string name="compose_menu_delete">মুছে ফেলুন</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">সিম %1$d (%2$s) নির্বাচিত</string>
     <string name="compose_sim_cd">নির্বাচিত, %s সিম কার্ড পরিবর্তন করুন</string>
     <string name="compose_send_cd">বার্তা পাঠাও</string>
-    <string name="message_status_sending">পাঠানো হচ্ছে&#8230;</string>
+    <string name="message_status_sending">পাঠানো হচ্ছে…</string>
     <string name="message_status_delivered">প্রেরিত হয়েছে: %s</string>
     <string name="message_status_failed">পাঠাতে ব্যর্থ। আবার চেষ্টা করতে টিপ দাও</string>
     <string name="info_title">বিস্তারিত</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">ব্যাকআপ ও পুনরুদ্ধার</string>
     <string name="backup_backing_up">মেসেজ ব্যাকআপ হচ্ছে </string>
     <string name="backup_restoring">ব্যাকআপ হতে পুনরুদ্ধার হচ্ছে </string>
-    <string name="backup_loading">লোড হচ্ছে&#8230;</string>
+    <string name="backup_loading">লোড হচ্ছে…</string>
     <string name="backup_never">কখনই না </string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">পুনরুদ্ধার</string>
     <string name="backup_restore_summary">ব্যাকআপ নির্বাচন করুন</string>
     <string name="backup_restore_error_plus">ব্যাকআপ এবং পুনরুদ্ধার ব্যবহার করতে দয়া করে QUIK + আনলক করুন</string>
-    <string name="backup_restore_error_backup">ব্যাক-আপ চলছে&#8230;</string>
-    <string name="backup_restore_error_restore">পুনরুদ্ধার চলছে&#8230;</string>
+    <string name="backup_restore_error_backup">ব্যাক-আপ চলছে…</string>
+    <string name="backup_restore_error_restore">পুনরুদ্ধার চলছে…</string>
     <string name="backup_restore_confirm_title">ব্যাক-আপ থেকে পুনরুদ্ধার করুন</string>
     <string name="backup_restore_stop_title">পুনরুদ্ধার থামান</string>
     <string name="backup_restore_stop_message">ইতিমধ্যে পুনরুদ্ধার করা বার্তাগুলি আপনার ডিভাইসে থাকবে</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">কোন ব্যাকআপ পাওয়া যায়নি</string>
     <string name="backup_disclaimer">এইমুহুর্তে, ব্যাকআপ এবং পুনরুদ্ধার শুধুমাত্র এসএমএস এ করতে পারবেন । এমএমএস সাপর্ট  ও  শিডিউল  ব্যাকআপ শীঘ্রই আসছে!</string>
     <string name="backup_now">ব্যাকআপ করুন </string>
-    <string name="backup_progress_parsing">ব্যাক-আপ পার্স করা হচ্ছে&#8230;</string>
+    <string name="backup_progress_parsing">ব্যাক-আপ পার্স করা হচ্ছে…</string>
     <string name="backup_progress_running">%d/%d বার্তা</string>
-    <string name="backup_progress_saving">ব্যাক-আপ সংরক্ষণ করা হচ্ছে&#8230;</string>
-    <string name="backup_progress_syncing">বার্তাগুলো সিঙ্ক করা হচ্ছে&#8230;</string>
+    <string name="backup_progress_saving">ব্যাক-আপ সংরক্ষণ করা হচ্ছে…</string>
+    <string name="backup_progress_syncing">বার্তাগুলো সিঙ্ক করা হচ্ছে…</string>
     <string name="backup_progress_finished">শেষ হয়েছে!</string>
     <string name="backup_notification_channel_name">ব্যাকআপ ও পুনরুদ্ধার</string>
     <string name="scheduled_title">পরিকল্পিত</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">আগত বার্তার জন্য স্বয়ংক্রিয়ভাবে পূর্বনির্ধারিত প্রতিক্রিয়া পাঠাও</string>
     <string name="qksms_plus_more_title">আরও</string>
     <string name="qksms_plus_more_summary">QUIK সক্রিয় উন্নয়ন অধীনে এবং QUIK+ এর সকাল ভবিষ্যত ফিচার আপনার কেনা অ্যাপেে অন্তর্ভুক্ত থাকবে!</string>
-    <string name="widget_loading">লোড হচ্ছে&#8230;</string>
+    <string name="widget_loading">লোড হচ্ছে…</string>
     <string name="widget_more">আরও আলাপ দেখো</string>
     <string name="qkreply_menu_read">পড়া হয়েছে</string>
     <string name="qkreply_menu_call">কল করুন</string>
