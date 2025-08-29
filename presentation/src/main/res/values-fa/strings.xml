@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">گفتگوی جدید</string>
     <string name="shortcut_compose_short_label">نوشتن</string>
     <string name="shortcut_compose_disabled_message">میانبر غیرفعال شد</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">تنظیمات</string>
     <string name="title_notification_prefs">اعلان‌ها</string>
     <string name="title_theme">پوسته</string>
-    <string name="title_conversations">جستجو در صندوق ورودی&#8230;</string>
+    <string name="title_conversations">جستجو در صندوق ورودی…</string>
     <string name="title_compose">یک نام یا شماره را وارد کنید</string>
     <string name="setup_skip">رد شدن</string>
     <string name="setup_next">ادامه</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">نشان به‌عنوان خوانده شده</string>
     <string name="main_menu_unread">نشان به‌عنوان خوانده نشده</string>
     <string name="main_menu_block">مسدود کردن</string>
-    <string name="main_syncing">در حال همگام‌سازی پیام‌ها&#8230;</string>
+    <string name="main_syncing">در حال همگام‌سازی پیام‌ها…</string>
     <string name="main_sender_you">شما: %s</string>
     <string name="main_message_results_title">نتایج در پیام‌ها</string>
     <string name="main_message_results">%d پیام</string>
@@ -99,7 +98,7 @@
     <string name="compose_scheduled_future">زمان انتخابی باید در آینده باشد!</string>
     <string name="compose_scheduled_plus">برای استفاده از پیام‌های برنامه‌ریزی شده ، باید QUIK+ را باز کنید</string>
     <string name="compose_scheduled_toast">به پیام‌های برنامه‌ریزی شده افزوده شد</string>
-    <string name="compose_hint">نوشتن پیام&#8230;</string>
+    <string name="compose_hint">نوشتن پیام…</string>
     <string name="compose_menu_copy">کپی‌کردن متن</string>
     <string name="compose_menu_forward">هدایت</string>
     <string name="compose_menu_delete">حذف</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">سیم‌کارت %1$d (%2$s) انتخاب شد</string>
     <string name="compose_sim_cd">%s انتخاب شد، سیم‌کارت را عوض کنید</string>
     <string name="compose_send_cd">فرستادن پیام</string>
-    <string name="message_status_sending">در حال فرستادن&#8230;</string>
+    <string name="message_status_sending">در حال فرستادن…</string>
     <string name="message_status_delivered">رسیده %s</string>
     <string name="message_status_failed">ارسال ناموفق بود. برای تلاش دوباره ضربه بزنید</string>
     <string name="info_title">جزئیات</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">پشتیبان‌گیری و بازیابی</string>
     <string name="backup_backing_up">پشتیبان‌گیری از پیام‌ها</string>
     <string name="backup_restoring">بازگرداندن پشتیبان</string>
-    <string name="backup_loading">در حال بارگذاری&#8230;</string>
+    <string name="backup_loading">در حال بارگذاری…</string>
     <string name="backup_never">هرگز</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">بازگردانی</string>
     <string name="backup_restore_summary">یک پشتیبان را برگزینید</string>
     <string name="backup_restore_error_plus">لطفاً QUIK + را باز کنید تا از امکانات پشتیبان و بازیابی بهره ببرید</string>
-    <string name="backup_restore_error_backup">پشتیبان‌گیری در حال انجام است&#8230;</string>
-    <string name="backup_restore_error_restore">بازگردانی در حال انجام است&#8230;</string>
+    <string name="backup_restore_error_backup">پشتیبان‌گیری در حال انجام است…</string>
+    <string name="backup_restore_error_restore">بازگردانی در حال انجام است…</string>
     <string name="backup_restore_confirm_title">بازگردانی از نسخه پشتیبان</string>
     <string name="backup_restore_stop_title">بازگردانی را متوقف کن</string>
     <string name="backup_restore_stop_message">پیام‌هایی که قبلا بازگردانی شده‌اند در دستگاه شما باقی خواهند ماند</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">نسخه پشتیبانی یافت نشد</string>
     <string name="backup_disclaimer">در حال حاضر ، فقط پشتیبان‌گیری و بازگردانی پیامک پشتیبانی می شود. پشتیبان‌گیری و برنامه‌ریزی برای پشتیبان‌گیری از MMS به زودی ارائه می شود!</string>
     <string name="backup_now">اکنون پشتیبان‌گیری کن</string>
-    <string name="backup_progress_parsing">در حال تجزیه پشتیبان&#8230;</string>
+    <string name="backup_progress_parsing">در حال تجزیه پشتیبان…</string>
     <string name="backup_progress_running">%d/%d پیام</string>
-    <string name="backup_progress_saving">در حال ذخیره پشتیبان&#8230;</string>
-    <string name="backup_progress_syncing">در حال همگام‌سازی پیام‌ها&#8230;</string>
+    <string name="backup_progress_saving">در حال ذخیره پشتیبان…</string>
+    <string name="backup_progress_syncing">در حال همگام‌سازی پیام‌ها…</string>
     <string name="backup_progress_finished">تمام شد!</string>
     <string name="backup_notification_channel_name">پشتیبان‌گیری و بازگردانی</string>
     <string name="scheduled_title">برنامه‌ریزی شده</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">پاسخ خودکار به پیام‌های دریافتی با پاسخ از پیش تعیین شده</string>
     <string name="qksms_plus_more_title">بیشتر</string>
     <string name="qksms_plus_more_summary">QUIK در حال توسعه فعال است، و خرید شما شامل تمام ویژگی های آینده QUIK + نیز هست !</string>
-    <string name="widget_loading">درحال بارگذاری&#8230;</string>
+    <string name="widget_loading">درحال بارگذاری…</string>
     <string name="widget_more">مشاهده گفتگوهای بیشتر</string>
     <string name="qkreply_menu_read">نشان به‌عنوان خوانده شده</string>
     <string name="qkreply_menu_call">تماس</string>
