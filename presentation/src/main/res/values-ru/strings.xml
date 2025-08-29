@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Новая беседа</string>
     <string name="shortcut_compose_short_label">Написать</string>
     <string name="shortcut_compose_disabled_message">Ярлык отключён</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Настройки</string>
     <string name="title_notification_prefs">Уведомления</string>
     <string name="title_theme">Тема</string>
-    <string name="title_conversations">Поиск во входящих&#8230;</string>
+    <string name="title_conversations">Поиск во входящих…</string>
     <string name="title_compose">Написать</string>
     <string name="setup_skip">Пропустить</string>
     <string name="setup_next">Продолжить</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Пометить прочитанным</string>
     <string name="main_menu_unread">Пометить непрочитанным</string>
     <string name="main_menu_block">Блокировать</string>
-    <string name="main_syncing">Синхронизация сообщений&#8230;</string>
+    <string name="main_syncing">Синхронизация сообщений…</string>
     <string name="main_sender_you">Вы: %s</string>
     <string name="main_message_results_title">Результаты в сообщениях</string>
     <string name="main_message_results">%d сообщений</string>
@@ -101,7 +100,7 @@
     <string name="compose_scheduled_future">Выбранное время должно быть в будущем!</string>
     <string name="compose_scheduled_plus">Вы должны разблокировать QUIK+, чтобы использовать запланированные сообщения</string>
     <string name="compose_scheduled_toast">Добавлено в планировщик сообщений</string>
-    <string name="compose_hint">Написать сообщение&#8230;</string>
+    <string name="compose_hint">Написать сообщение…</string>
     <string name="compose_menu_copy">Скопировать текст</string>
     <string name="compose_menu_forward">Переслать</string>
     <string name="compose_menu_delete">Удалить</string>
@@ -129,7 +128,7 @@
     <string name="compose_sim_changed_toast">Выбрана SIM-карта %1$d (%2$s)</string>
     <string name="compose_sim_cd">Выбрано %s, сменить SIM-карту</string>
     <string name="compose_send_cd">Отправить сообщение</string>
-    <string name="message_status_sending">Отправка&#8230;</string>
+    <string name="message_status_sending">Отправка…</string>
     <string name="message_status_delivered">Доставлено %s</string>
     <string name="message_status_failed">Не удалось отправить. Нажмите, чтобы попробовать ещё раз.</string>
     <string name="info_title">Подробности</string>
@@ -147,15 +146,15 @@
     <string name="backup_title">Резервное копирование</string>
     <string name="backup_backing_up">Резервное копирование сообщений</string>
     <string name="backup_restoring">Восстановление из резервной копии</string>
-    <string name="backup_loading">Загрузка&#8230;</string>
+    <string name="backup_loading">Загрузка…</string>
     <string name="backup_never">Никогда</string>
     <string name="backup_location_title">Путь резервной копии</string>
     <string name="backup_location_summary">Выбор папки</string>
     <string name="backup_restore_title">Восстановление</string>
     <string name="backup_restore_summary">Выберите резервную копию</string>
     <string name="backup_restore_error_plus">Пожалуйста, разблокируйте QUIK+ для использования резервного копирования и восстановления</string>
-    <string name="backup_restore_error_backup">Выполняется резервное копирование&#8230;</string>
-    <string name="backup_restore_error_restore">Выполняется восстановление&#8230;</string>
+    <string name="backup_restore_error_backup">Выполняется резервное копирование…</string>
+    <string name="backup_restore_error_restore">Выполняется восстановление…</string>
     <string name="backup_restore_confirm_title">Восстановление из резервной копии</string>
     <string name="backup_restore_stop_title">Остановить восстановление</string>
     <string name="backup_restore_stop_message">Сообщения, которые уже были восстановлены останутся на вашем устройстве</string>
@@ -169,10 +168,10 @@
     <string name="backup_restore_dialog_empty">Резервные копии не найдены</string>
     <string name="backup_disclaimer">В настоящее время поддерживается резервное копирование и восстановление только SMS. Поддержка MMS и регулярные резервные копии появятся в ближайшее время!</string>
     <string name="backup_now">Резервировать</string>
-    <string name="backup_progress_parsing">Анализ резервной копии&#8230;</string>
+    <string name="backup_progress_parsing">Анализ резервной копии…</string>
     <string name="backup_progress_running">%d/%d сообщений</string>
-    <string name="backup_progress_saving">Сохранение резервной копии&#8230;</string>
-    <string name="backup_progress_syncing">Синхронизация сообщений&#8230;</string>
+    <string name="backup_progress_saving">Сохранение резервной копии…</string>
+    <string name="backup_progress_syncing">Синхронизация сообщений…</string>
     <string name="backup_progress_finished">Завершено!</string>
     <string name="backup_notification_channel_name">Резервирование</string>
     <string name="scheduled_title">Планировщик</string>
@@ -334,7 +333,7 @@
     <string name="qksms_plus_respond_summary">Автоматически отвечать на входящие сообщения предустановленным ответом</string>
     <string name="qksms_plus_more_title">Ещё</string>
     <string name="qksms_plus_more_summary">QUIK находится в активной разработке и ваша покупка будет включать в себя все функции QUIK+ в будущем!</string>
-    <string name="widget_loading">Загрузка&#8230;</string>
+    <string name="widget_loading">Загрузка…</string>
     <string name="widget_more">Посмотреть больше бесед</string>
     <string name="qkreply_menu_read">Прочитано</string>
     <string name="qkreply_menu_call">Позвонить</string>
