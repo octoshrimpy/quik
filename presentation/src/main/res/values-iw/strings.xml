@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">התכתבות חדשה</string>
     <string name="shortcut_compose_short_label">כתוב הודעה</string>
     <string name="shortcut_compose_disabled_message">קיצור הדרך הושבת</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">הגדרות</string>
     <string name="title_notification_prefs">התראות</string>
     <string name="title_theme">ערכת נושא</string>
-    <string name="title_conversations">חיפוש בהודעות נכנסות&#8230;</string>
+    <string name="title_conversations">חיפוש בהודעות נכנסות…</string>
     <string name="title_compose">נא להקליד שם או מספר</string>
     <string name="setup_skip">דלג</string>
     <string name="setup_next">המשך</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">סמן כהודעה שנקראה</string>
     <string name="main_menu_unread">סמן כהודעה שלא נקראה</string>
     <string name="main_menu_block">חסום</string>
-    <string name="main_syncing">מסנכרן הודעות&#8230;</string>
+    <string name="main_syncing">מסנכרן הודעות…</string>
     <string name="main_sender_you">אתה: %s</string>
     <string name="main_message_results_title">תוצאות בהודעות</string>
     <string name="main_message_results">%d הודעות</string>
@@ -101,7 +100,7 @@
     <string name="compose_scheduled_future">הזמן הנבחר חייב להיות בעתיד!</string>
     <string name="compose_scheduled_plus">עליך לשחרר את QUIK+‎ כדי להשתמש בהודעות מתוזמנות</string>
     <string name="compose_scheduled_toast">הוספה להודעות המתוזמנות</string>
-    <string name="compose_hint">כתוב הודעה&#8230;</string>
+    <string name="compose_hint">כתוב הודעה…</string>
     <string name="compose_menu_copy">העתק טקסט</string>
     <string name="compose_menu_forward">העבר</string>
     <string name="compose_menu_delete">מחק</string>
@@ -129,7 +128,7 @@
     <string name="compose_sim_changed_toast">נבחר SIM מס׳ %1$d ‏(%2$s)</string>
     <string name="compose_sim_cd">%s נבחר, החלף כרטיס SIM</string>
     <string name="compose_send_cd">שלח הודעה</string>
-    <string name="message_status_sending">שולח&#8230;</string>
+    <string name="message_status_sending">שולח…</string>
     <string name="message_status_delivered">%s נמסרה</string>
     <string name="message_status_failed">השליחה נכשלה. הקש כדי לנסות שוב</string>
     <string name="info_title">פרטים</string>
@@ -147,15 +146,15 @@
     <string name="backup_title">גיבוי ושחזור</string>
     <string name="backup_backing_up">מגבה הודעות</string>
     <string name="backup_restoring">משחזר מגיבוי</string>
-    <string name="backup_loading">טוען&#8230;</string>
+    <string name="backup_loading">טוען…</string>
     <string name="backup_never">לעולם לא</string>
     <string name="backup_location_title">מיקום הגיבוי</string>
     <string name="backup_location_summary">הגדרת תיקייה</string>
     <string name="backup_restore_title">שחזור</string>
     <string name="backup_restore_summary">בחר גיבוי</string>
     <string name="backup_restore_error_plus">נא לשחרר את QUIK+‎ כדי להשתמש בגיבוי ובשחזור</string>
-    <string name="backup_restore_error_backup">מתבצע גיבוי&#8230;</string>
-    <string name="backup_restore_error_restore">מתבצע שחזור&#8230;</string>
+    <string name="backup_restore_error_backup">מתבצע גיבוי…</string>
+    <string name="backup_restore_error_restore">מתבצע שחזור…</string>
     <string name="backup_restore_confirm_title">שחזר מגיבוי</string>
     <string name="backup_restore_stop_title">עצור שחזור</string>
     <string name="backup_restore_stop_message">הודעות שכבר שוחזרו יישארו במכשיר שלך</string>
@@ -169,10 +168,10 @@
     <string name="backup_restore_dialog_empty">לא נמצאו גיבויים</string>
     <string name="backup_disclaimer">נכון לעכשיו, קיימת תמיכה בהודעות מסוג SMS בתכונת הגיבוי והשחזור. תמיכה ב־MMS וגיבויים מתוזמנים יגיעו בעתיד הקרוב!</string>
     <string name="backup_now">גבה כעת</string>
-    <string name="backup_progress_parsing">הגיבוי מפוענח&#8230;</string>
+    <string name="backup_progress_parsing">הגיבוי מפוענח…</string>
     <string name="backup_progress_running">%d/%d הודעות</string>
-    <string name="backup_progress_saving">שומר גיבוי&#8230;</string>
-    <string name="backup_progress_syncing">מסנכרן הודעות&#8230;</string>
+    <string name="backup_progress_saving">שומר גיבוי…</string>
+    <string name="backup_progress_syncing">מסנכרן הודעות…</string>
     <string name="backup_progress_finished">הסתיים!</string>
     <string name="backup_notification_channel_name">גיבוי ושחזור</string>
     <string name="scheduled_title">מתוזמן</string>
@@ -334,7 +333,7 @@
     <string name="qksms_plus_respond_summary">להגיב אוטומטית להודעות נכנסות עם תשובה שנכתבה מראש</string>
     <string name="qksms_plus_more_title">עוד</string>
     <string name="qksms_plus_more_summary">הפיתוח של QUIK מתקיים בימים אלו והרכישה שלך תכלול את כל התכונות העתידיות של QUIK+‎!</string>
-    <string name="widget_loading">בטעינה&#8230;</string>
+    <string name="widget_loading">בטעינה…</string>
     <string name="widget_more">הצגת התכתבויות נוספות</string>
     <string name="qkreply_menu_read">סימון כהודעה שנקראה</string>
     <string name="qkreply_menu_call">להתקשר</string>
