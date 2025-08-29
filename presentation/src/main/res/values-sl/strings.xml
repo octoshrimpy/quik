@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Nov pogovor</string>
     <string name="shortcut_compose_short_label">Sestavi</string>
     <string name="shortcut_compose_disabled_message">Bližnjica onemogočena</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Nastavitve</string>
     <string name="title_notification_prefs">Obvestila</string>
     <string name="title_theme">Tema</string>
-    <string name="title_conversations">Išči po prejetih sporočilih&#8230;</string>
+    <string name="title_conversations">Išči po prejetih sporočilih…</string>
     <string name="title_compose">Vnesi ime ali številko</string>
     <string name="setup_skip">Preskoči</string>
     <string name="setup_next">Nadaljuj</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Označi kot prebrano</string>
     <string name="main_menu_unread">Označi kot neprebrano</string>
     <string name="main_menu_block">Blokiraj</string>
-    <string name="main_syncing">Sinhroniziranje sporočil&#8230;</string>
+    <string name="main_syncing">Sinhroniziranje sporočil…</string>
     <string name="main_sender_you">Vi: %s</string>
     <string name="main_message_results_title">Rezultati v sporočilih</string>
     <string name="main_message_results">%d sporočil</string>
@@ -101,7 +100,7 @@
     <string name="compose_scheduled_future">Izbran čas mora biti v prihodnosti!</string>
     <string name="compose_scheduled_plus">Da lahko uporabiš načrtovano sporočanje, moraš odkleniti QUIK+</string>
     <string name="compose_scheduled_toast">Dodano k načrtovanim sporočilom</string>
-    <string name="compose_hint">Napiši sporočilo&#8230;</string>
+    <string name="compose_hint">Napiši sporočilo…</string>
     <string name="compose_menu_copy">Kopiraj besedilo</string>
     <string name="compose_menu_forward">Posreduj</string>
     <string name="compose_menu_delete">Izbriši</string>
@@ -129,7 +128,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) izbrana</string>
     <string name="compose_sim_cd">%s izbran, zamenjaj kartico SIM</string>
     <string name="compose_send_cd">Pošlji sporočilo</string>
-    <string name="message_status_sending">Pošiljanje&#8230;</string>
+    <string name="message_status_sending">Pošiljanje…</string>
     <string name="message_status_delivered">Dostavljeno %s</string>
     <string name="message_status_failed">Napaka pri pošiljanju. Pritisni za ponovni poskus</string>
     <string name="info_title">Podrobnosti</string>
@@ -147,15 +146,15 @@
     <string name="backup_title">Varnostna kopija in obnovitev</string>
     <string name="backup_backing_up">Ustvarjanje varnostne kopije sporočil</string>
     <string name="backup_restoring">Obnovitev varnostne kopije</string>
-    <string name="backup_loading">Nalaganje&#8230;</string>
+    <string name="backup_loading">Nalaganje…</string>
     <string name="backup_never">Nikoli</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Obnovi</string>
     <string name="backup_restore_summary">Izberi varnostno kopijo</string>
     <string name="backup_restore_error_plus">Prosimo odklenite QUIK+ da omogočite uporabo varnostnih kopij in njihove obnove</string>
-    <string name="backup_restore_error_backup">Varnostna kopija se izvaja&#8230;</string>
-    <string name="backup_restore_error_restore">Obnavljanje varnostne kopije se izvaja&#8230;</string>
+    <string name="backup_restore_error_backup">Varnostna kopija se izvaja…</string>
+    <string name="backup_restore_error_restore">Obnavljanje varnostne kopije se izvaja…</string>
     <string name="backup_restore_confirm_title">Obnovi iz varnotsne kopije</string>
     <string name="backup_restore_stop_title">Prekliči obnovitev varnostne kopije</string>
     <string name="backup_restore_stop_message">Sporočila, ki so že bila obnovljena, bodo ostala na vaši napravi</string>
@@ -169,10 +168,10 @@
     <string name="backup_restore_dialog_empty">Ni najdenih varnostnih kopij</string>
     <string name="backup_disclaimer">Trenutno so za ustvarjanje in obnovo varnostnih kopij podprta le sporočila SMS. MMS podpora in varnostne kopije pridejo kmalu!</string>
     <string name="backup_now">Ustvari varnostno kopijo</string>
-    <string name="backup_progress_parsing">Razčlenjevanje varnostne kopije&#8230;</string>
+    <string name="backup_progress_parsing">Razčlenjevanje varnostne kopije…</string>
     <string name="backup_progress_running">%d/%d sporočil</string>
-    <string name="backup_progress_saving">Shranjevanje varnostne kopije&#8230;</string>
-    <string name="backup_progress_syncing">Sinhroniziranje sporočil&#8230;</string>
+    <string name="backup_progress_saving">Shranjevanje varnostne kopije…</string>
+    <string name="backup_progress_syncing">Sinhroniziranje sporočil…</string>
     <string name="backup_progress_finished">Končano!</string>
     <string name="backup_notification_channel_name">Varnostna kopija in obnovitev</string>
     <string name="scheduled_title">Načrtovano</string>
@@ -334,7 +333,7 @@
     <string name="qksms_plus_respond_summary">Samodejno odgovori na prihajajoča sporočila s prednastavljenim sporočilom</string>
     <string name="qksms_plus_more_title">Več</string>
     <string name="qksms_plus_more_summary">QUIK je pod aktivnim razvojem in vaš nakup QUIK+ bo vseboval vse prihodnje funkcije!</string>
-    <string name="widget_loading">Nalaganje&#8230;</string>
+    <string name="widget_loading">Nalaganje…</string>
     <string name="widget_more">Poglej več pogovorov</string>
     <string name="qkreply_menu_read">Označi kot prebrano</string>
     <string name="qkreply_menu_call">Pokliči</string>
