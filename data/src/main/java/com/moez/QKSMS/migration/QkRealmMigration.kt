@@ -36,7 +36,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SchemaVersion: Long = 12
+        const val SchemaVersion: Long = 13
     }
 
     @SuppressLint("ApplySharedPref")
@@ -246,6 +246,12 @@ class QkRealmMigration @Inject constructor(
                 .addField("isRegex", Boolean::class.java, FieldAttribute.REQUIRED)
                 .addField("includeContacts", Boolean::class.java, FieldAttribute.REQUIRED)
 
+            version++
+        }
+
+        if (version == 12L) {
+            realm.schema.get("Conversation")
+                ?.addField("draftDate", Long::class.java, FieldAttribute.REQUIRED)
             version++
         }
 
