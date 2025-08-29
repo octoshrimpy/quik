@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
   ~
@@ -15,31 +16,25 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Nowa rozmowa</string>
     <string name="shortcut_compose_short_label">Napisz</string>
     <string name="shortcut_compose_disabled_message">Skrót wyłączony</string>
-
     <string name="title_archived">Archiwum</string>
     <string name="title_settings">Ustawienia</string>
     <string name="title_notification_prefs">Powiadomienia</string>
     <string name="title_theme">Motyw</string>
-    <string name="title_conversations">Przeszukaj skrzynkę odbiorczą&#8230;</string>
+    <string name="title_conversations">Przeszukaj skrzynkę odbiorczą…</string>
     <string name="title_compose">Wpisz nazwisko lub numer</string>
-
     <string name="setup_skip">Pomiń</string>
     <string name="setup_next">Kontynuuj</string>
-
     <string name="menu_add_person">Dodaj osobę</string>
     <string name="menu_call">Zadzwoń</string>
     <string name="menu_info">Szczegóły</string>
-
     <string name="menu_mms_part_save">Zapisz w galerii</string>
     <string name="menu_mms_part_share">Udostępnij</string>
     <string name="menu_mms_part_forward">Przekaż</string>
     <string name="menu_mms_part_open">Otwórz zewnętrznie</string>
-
     <string name="main_drawer_open_cd">Otwórz panel nawigacyjny</string>
     <string name="main_title_selected">%d wybrano</string>
     <string name="main_menu_clear">Wyczyść</string>
@@ -56,7 +51,7 @@
     <string name="main_menu_send_now">Wyślij teraz</string>
     <string name="main_menu_edit_message">Edytuj wiadomość</string>
     <string name="main_menu_rename_conversation">Zmień nazwę rozmowy</string>
-    <string name="main_syncing">Synchronizowanie wiadomości&#8230;</string>
+    <string name="main_syncing">Synchronizowanie wiadomości…</string>
     <string name="main_sender_you">Ty: %s</string>
     <string name="main_message_results_title">Wyniki w wiadomościach</string>
     <string name="main_message_results">%d wiadomości</string>
@@ -72,10 +67,8 @@
     <string name="main_permission_contacts">QUIK wymaga uprawnień do przeglądania kontaktów</string>
     <string name="main_permission_notifications">QUIK potrzebuje uprawnień do wyświetlania powiadomień</string>
     <string name="main_permission_allow">Zezwól</string>
-
     <string name="scheduled_menu_send_now">Wyślij teraz</string>
     <string name="scheduled_menu_edit_message">Edytuj wiadomość</string>
-
     <string name="drawer_inbox">Odebrane</string>
     <string name="drawer_archived">Zarchiwizowane</string>
     <string name="drawer_scheduled">Zaplanowane</string>
@@ -85,12 +78,10 @@
     <string name="drawer_help">Pomoc i opinie</string>
     <string name="drawer_invite">Poleć znajomym</string>
     <string name="drawer_plus_banner_summary">Odblokuj nowe funkcje i wesprzyj rozwój aplikacji</string>
-
     <string name="rate_title">Lubisz QUIK?</string>
     <string name="rate_summary">Podziel się miłością i oceń nas w Sklepie Google Play!</string>
     <string name="rate_okay">W PORZĄDKU!</string>
     <string name="rate_dismiss">ODMAWIAM</string>
-
     <string name="dialog_delete_title">Usuń</string>
     <plurals name="dialog_delete_message">
         <item quantity="one">Czy na pewno chcesz usunąć tę rozmowę?</item>
@@ -110,20 +101,16 @@
         <item quantity="many">Czy na pewno chcesz wysłać te %d wiadomości teraz?</item>
         <item quantity="other">Czy na pewno chcesz wysłać te %d wiadomości teraz?</item>
     </plurals>
-
     <string name="dialog_edit_scheduled_message_title">Edytuj wiadomość</string>
     <string name="dialog_edit_scheduled_message">Edycja tej wiadomości spowoduje usunięcie jej z harmonogramu.\n\nUpewnij się, że prześlesz ją ponownie na następnym ekranie, w przeciwnym razie zostanie ona utracona!\n\nCzy chcesz kontynuować?</string>
     <string name="dialog_edit_scheduled_message_positive_button">Tak, edytuj wiadomość</string>
-
     <string name="dialog_clear_compose_title">Wyczyść wiadomość</string>
     <string name="dialog_clear_compose">Wyczyścić wiadomość? Tej akcji nie można cofnąć.</string>
-
     <string-array name="message_options">
         <item>Kopiuj tekst</item>
         <item>Przekaż</item>
         <item>Usuń</item>
     </string-array>
-
     <string name="compose_number_picker_title">Wybierz numer telefonu</string>
     <string name="compose_number_picker_default">%s ∙ Domyślny</string>
     <string name="compose_number_picker_once">Tylko raz</string>
@@ -138,7 +125,7 @@
     <string name="compose_scheduled_future">Wybrany czas musi być w przyszłości!</string>
     <string name="compose_scheduled_plus">Musisz odblokować QUIK+, aby móc używac planowanych widomości</string>
     <string name="compose_scheduled_toast">Dodano do zaplanowanych wiadomości</string>
-    <string name="compose_hint">Napisz wiadomość&#8230;</string>
+    <string name="compose_hint">Napisz wiadomość…</string>
     <string name="compose_no_valid_recipients">Nie można wysłać do innych uczestników</string>
     <string name="compose_menu_copy">Kopiuj tekst</string>
     <string name="compose_menu_forward">Przekaż</string>
@@ -172,23 +159,18 @@
     <string name="compose_sim_cd">Wybrano %s, zmień kartę SIM</string>
     <string name="compose_send_cd">Wyślij wiadomość</string>
     <string name="compose_record_audio_msg_cd">Nagraj wiadomość głosową</string>
-
     <string name="compose_record_audio_msg_abort_cd">Anuluj wiadomość głosową</string>
     <string name="compose_record_audio_msg_attach_cd">Załącz wiadomość głosową</string>
     <string name="compose_record_audio_msg_play_pause_cd">Odtwórz lub wstrzymaj wiadomość głosową</string>
-
     <string name="compose_message_cancel">Anuluj</string>
     <string name="compose_message_send_now">Wyślij teraz</string>
     <string name="compose_message_sim">Numer karty SIM</string>
     <string name="compose_message_item">Element wiadomości</string>
     <string name="compose_message_attachment">Załącznik</string>
-
     <string name="compose_toast_drag_stt">Przesuń przycisk zamiany mowy na tekst w dowolne miejsce</string>
-
-    <string name="message_status_sending">Wysyłanie&#8230;</string>
+    <string name="message_status_sending">Wysyłanie…</string>
     <string name="message_status_delivered">Dostarczono %s</string>
     <string name="message_status_failed">Nie udało się wysłać wiadomości. Dotknij, aby spróbować ponownie</string>
-
     <string name="info_title">Szczegóły</string>
     <string name="info_copied_address">Adres został skopiowany</string>
     <string name="info_name">Tytuł rozmowy</string>
@@ -199,22 +181,20 @@
     <string name="info_block">Zablokuj</string>
     <string name="info_unblock">Odblokuj</string>
     <string name="info_delete">Usuń rozmowę</string>
-
     <string name="gallery_error">Nie można wczytać multimediów</string>
     <string name="gallery_toast_saved">Zapisano w galerii</string>
-
     <string name="backup_title">Kopia zapasowa i przywracanie</string>
     <string name="backup_backing_up">Tworzenie kopii zapasowej wiadomości</string>
     <string name="backup_restoring">Przywracanie z kopii zapasowej</string>
-    <string name="backup_loading">Wcztywanie&#8230;</string>
+    <string name="backup_loading">Wcztywanie…</string>
     <string name="backup_never">Nigdy</string>
     <string name="backup_location_title">Lokalizacja kopii zapasowej</string>
     <string name="backup_location_summary">Ustaw katalog</string>
     <string name="backup_restore_title">Przywróć</string>
     <string name="backup_restore_summary">Wybierz kopię zapasową</string>
     <string name="backup_restore_error_plus">Odblokuj QUIK+, aby używać kopii i przywracania</string>
-    <string name="backup_restore_error_backup">Tworzenie kopii zapasowej&#8230;</string>
-    <string name="backup_restore_error_restore">Przywracanie kopii zapasowej&#8230;</string>
+    <string name="backup_restore_error_backup">Tworzenie kopii zapasowej…</string>
+    <string name="backup_restore_error_restore">Przywracanie kopii zapasowej…</string>
     <string name="backup_restore_confirm_title">Przywróć z kopii zapasowej</string>
     <string name="backup_restore_stop_title">Zatrzymaj przywracanie</string>
     <string name="backup_restore_stop_message">Wiadomości, które już zostały przywrócone, pozostaną w urządzeniu</string>
@@ -228,13 +208,12 @@
     <string name="backup_restore_dialog_empty">Nie znaleziono kopii zapasowych</string>
     <string name="backup_disclaimer">Obecnie można wykonywać i przwracać tylko kopie zapasowe SMSów. Wsparcie dla MMSów i planowane kopie zapasowe zostaną wprawdzone wkrótce.</string>
     <string name="backup_now">Utwórz kopię zapasową teraz</string>
-    <string name="backup_progress_parsing">Przetwarzanie kopii zapasowej&#8230;</string>
+    <string name="backup_progress_parsing">Przetwarzanie kopii zapasowej…</string>
     <string name="backup_progress_running">%d/%d wiadomości</string>
-    <string name="backup_progress_saving">Zapisywanie kopii zapasowej&#8230;</string>
-    <string name="backup_progress_syncing">Synchronizowanie wiadomości&#8230;</string>
+    <string name="backup_progress_saving">Zapisywanie kopii zapasowej…</string>
+    <string name="backup_progress_syncing">Synchronizowanie wiadomości…</string>
     <string name="backup_progress_finished">Zakończono</string>
     <string name="backup_notification_channel_name">Kopia zapasowa i przywracanie</string>
-
     <string name="scheduled_title">Zaplanowane</string>
     <string name="scheduled_empty_description">Automatyczne wysyłanie wiadomości, w dowolnym wybranym przez Ciebie momencie</string>
     <string name="scheduled_empty_message_1">Cześć! Możesz powtórzyć kiedy były Twoje urodziny?</string>
@@ -245,11 +224,9 @@
     <string name="scheduled_compose_cd">Zaplanuj wiadomość</string>
     <string name="scheduled_options_title">Zaplanowana wiadomość</string>
     <string name="attachment_missing">Brak</string>
-
     <string name="settings_category_appearance">Wygląd</string>
     <string name="settings_category_general">Ogólne</string>
     <string name="settings_category_qkreply">Szybka odpowiedź</string>
-
     <string name="settings_theme_title">Motyw</string>
     <string name="settings_night_title">Tryb nocny</string>
     <string name="settings_black_title">Czarne tło w trybie nocnym</string>
@@ -326,14 +303,11 @@
     <string name="settings_version">Wersja %s</string>
     <string name="settings_logging_enabled">Logi włączone</string>
     <string name="settings_logging_disabled">Logi wyłączone</string>
-
     <string name="settings_delay_duration_hint">Wprowadź czas (w sekundach)</string>
-
     <string name="blocking_title">Blokowanie</string>
     <string name="blocking_drop_title">Odrzuć wiadomości</string>
     <string name="blocking_drop_summary">Odrzuć przychodzące wiadomości od zablokowanych nadawców zamiast ich ukrywać</string>
     <string name="blocking_conversations">Zablokowane rozmowy</string>
-
     <string name="blocking_manager_title">Menadżer Blokowania</string>
     <string name="blocking_manager_qksms_summary">Wbudowana funkcja blokowania w QUIK</string>
     <string name="blocking_manager_call_blocker_summary">Blokuj spam, numery i połączenia od nieznajomych za pomocą czarnej listy i harmonogramu.</string>
@@ -341,17 +315,14 @@
     <string name="blocking_manager_sia_summary">Automatycznie filtruj wiadomości od niechcianych numerów za pomocą aplikacji \"Should I Answer?\"</string>
     <string name="blocking_manager_copy_title">Skopiuj zablokowane numery</string>
     <string name="blocking_manager_copy_summary">Kontynuuj do %s i skopiuj twoje obecnie blokowane numery</string>
-
     <string name="blocked_numbers_title">Zablokowane numery</string>
     <string name="blocked_numbers_empty">Twoje zablokowane numery się tutaj pojawią</string>
     <string name="blocked_numbers_add_cd">Zablokuj nowy numer</string>
     <string name="blocked_numbers_dialog_title">Blokuj wiadomości od</string>
     <string name="blocked_numbers_dialog_hint">Numer telefonu</string>
     <string name="blocked_numbers_dialog_block">Blokuj</string>
-
     <string name="blocked_messages_title">Zablokowane wiadomości</string>
     <string name="blocked_messages_empty">Miejsce dla twoich zablokowanych wiadomości</string>
-
     <string name="blocking_block_title">Zablokuj</string>
     <string name="blocking_unblock_title">Odblokuj</string>
     <plurals name="blocking_block_external">
@@ -366,7 +337,6 @@
         <item quantity="many">Kontynuuj do %s i odblokuj te numery</item>
         <item quantity="other">Kontynuuj do %s i odblokuj te numery</item>
     </plurals>
-
     <string name="about_title">O aplikacji</string>
     <string name="about_version_title">Wersja</string>
     <string name="about_developer_title">Programista</string>
@@ -375,7 +345,6 @@
     <string name="about_contact_title">Kontakt</string>
     <string name="about_license_title">Licencja</string>
     <string name="about_copyright_title">Prawa autorskie</string>
-
     <string name="qksms_plus_description_title">Wesprzyj rozwój, odblokuj wszystko</string>
     <string name="qksms_plus_description_summary">Możesz wesprzeć programistę za jedyne %s</string>
     <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
@@ -408,21 +377,17 @@
     <string name="qksms_plus_respond_summary">Automatyczne odpowiadaj na przychodzące wiadomości korzystając z gotowych odpowiedzi.</string>
     <string name="qksms_plus_more_title">Więcej</string>
     <string name="qksms_plus_more_summary">QUIK jest aktywnie rozwijany, twój zakup będzie zawierać wszelkie przyszłe fukcje QUIK+</string>
-
-    <string name="widget_loading">Ładowanie&#8230;</string>
+    <string name="widget_loading">Ładowanie…</string>
     <string name="widget_more">Zobacz więcej rozmów</string>
-
     <string name="qkreply_menu_read">Oznacz jako przeczytane</string>
     <string name="qkreply_menu_call">Zadzwoń</string>
     <string name="qkreply_menu_delete">Usuń</string>
     <string name="qkreply_menu_expand">Pokaż więcej</string>
     <string name="qkreply_menu_collapse">Pokaż mniej</string>
     <string name="qkreply_menu_view">Otwórz rozmowę</string>
-
     <string name="theme_material">Material</string>
     <string name="theme_hex">HEX</string>
     <string name="theme_apply">Zastosuj</string>
-
     <string-array name="notification_actions">
         <item>Brak</item>
         <item>Archiwizuj</item>
@@ -433,7 +398,6 @@
         <item>Odpowiedz</item>
         <item>Mów</item>
     </string-array>
-
     <string name="button_yes">Tak</string>
     <string name="button_continue">Kontynuuj</string>
     <string name="button_cancel">Anuluj</string>
@@ -444,7 +408,6 @@
     <string name="button_set">Ustaw</string>
     <string name="button_undo">Cofnij</string>
     <string name="button_clear">Wyczyść</string>
-
     <string name="toast_copied">Skopiowano</string>
     <plurals name="toast_archived">
         <item quantity="one">Zarchiwizowano rozmowę</item>
@@ -452,9 +415,7 @@
         <item quantity="many">Zarchiwizowano %d rozmów</item>
         <item quantity="other">Zarchiwizowano %d rozmów</item>
     </plurals>
-
     <string name="toast_qksms_plus">Musisz odblokować QUIK+, aby używać tej funkcji</string>
-
     <plurals name="notification_new_messages">
         <item quantity="one">Nowa wiadomość</item>
         <item quantity="few">%s nowe wiadomości</item>
@@ -463,20 +424,17 @@
     </plurals>
     <string name="notification_message_failed_title">Wiadomość nie została wysłana</string>
     <string name="notification_message_failed_text">Wiadomość %s nie została wysłana</string>
-
     <string-array name="night_modes">
         <item>Systemowy</item>
         <item>Wyłączony</item>
         <item>Zawsze włączony</item>
         <item>Automatyczny</item>
     </string-array>
-
     <string-array name="notification_preview_options">
         <item>Pokazuj nadawcę i treść wiadomości</item>
         <item>Pokazuj nadawcę</item>
         <item>Ukryj zawartość</item>
     </string-array>
-
     <string-array name="text_sizes">
         <item>Mały</item>
         <item>Normalny</item>
@@ -484,14 +442,12 @@
         <item>Bardzo duży</item>
         <item>Wielki</item>
     </string-array>
-
     <string-array name="delayed_sending_labels">
         <item>Bez opóźnienia</item>
         <item>3 sekundy</item>
         <item>5 sekund</item>
         <item>10 sekund</item>
     </string-array>
-
     <string-array name="mms_sizes">
         <item>Automatyczna</item>
         <item>100 KB</item>
@@ -502,7 +458,6 @@
         <item>2000 KB</item>
         <item>Bez kompresji</item>
     </string-array>
-
     <integer-array name="mms_sizes_ids">
         <item>-1</item>
         <item>100</item>
@@ -513,19 +468,16 @@
         <item>2000</item>
         <item>0</item>
     </integer-array>
-
     <string-array name="messageLinkHandlings">
         <item>Blokuj</item>
         <item>Zezwalaj</item>
         <item>Pytaj przed otwarciem</item>
     </string-array>
-
     <integer-array name="messageLinkHandling_ids">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </integer-array>
-
     <string-array name="qk_responses">
         <item>OK</item>
         <item>Daj mi chwilę</item>
