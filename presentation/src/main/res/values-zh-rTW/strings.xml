@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">新對話</string>
     <string name="shortcut_compose_short_label">撰寫</string>
     <string name="shortcut_compose_disabled_message">捷徑已停用</string>
@@ -178,7 +177,7 @@
     <string name="scheduled_empty_message_2">是 12 月 23 日</string>
     <string name="scheduled_empty_message_3">生日快樂！看看我是一個多麼棒的朋友，我還記得你的生日！</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">在 12 月 23 日傳送&#x200A;</string>
+    <string name="scheduled_empty_message_3_timestamp">在 12 月 23 日傳送 </string>
     <string name="scheduled_compose_cd">新增排程訊息</string>
     <string name="scheduled_options_title">排程訊息</string>
     <string-array name="scheduled_options">
@@ -367,27 +366,23 @@
         <item>總是啟用</item>
         <item>自動</item>
     </string-array>
-
     <string-array name="notification_preview_options">
         <item>顯示姓名和訊息</item>
         <item>只顯示姓名</item>
         <item>隱藏內容</item>
     </string-array>
-
     <string-array name="text_sizes">
         <item>小</item>
         <item>一般</item>
         <item>大</item>
         <item>更大</item>
     </string-array>
-
     <string-array name="delayed_sending_labels">
         <item>無延遲</item>
         <item>3 秒</item>
         <item>5 秒</item>
         <item>10 秒</item>
     </string-array>
-
     <string-array name="mms_sizes">
         <item>自動</item>
         <item>100KB</item>
@@ -398,7 +393,6 @@
         <item>2000KB</item>
         <item>無壓縮</item>
     </string-array>
-
     <string-array name="qk_responses">
         <item>好的</item>
         <item>請稍等片刻</item>
@@ -413,5 +407,4 @@
         <item>笑死</item>
         <item>沒關係</item>
     </string-array>
-
 </resources>

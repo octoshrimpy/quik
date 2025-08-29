@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">新对话</string>
     <string name="shortcut_compose_short_label">编写</string>
     <string name="shortcut_compose_disabled_message">快捷方式已禁用</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">设置</string>
     <string name="title_notification_prefs">通知</string>
     <string name="title_theme">主题</string>
-    <string name="title_conversations">搜索收件箱&#8230;</string>
+    <string name="title_conversations">搜索收件箱…</string>
     <string name="title_compose">撰写</string>
     <string name="setup_skip">跳过</string>
     <string name="setup_next">继续</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">标记为已读</string>
     <string name="main_menu_unread">标记为未读</string>
     <string name="main_menu_block">拦截</string>
-    <string name="main_syncing">正在同步信息&#8230;</string>
+    <string name="main_syncing">正在同步信息…</string>
     <string name="main_sender_you">你：%s</string>
     <string name="main_message_results_title">信息中的结果</string>
     <string name="main_message_results">%d 条信息</string>
@@ -144,15 +143,15 @@
     <string name="backup_title">备份和还原</string>
     <string name="backup_backing_up">正在备份消息</string>
     <string name="backup_restoring">正在从备份还原</string>
-    <string name="backup_loading">正在加载&#8230;</string>
+    <string name="backup_loading">正在加载…</string>
     <string name="backup_never">从未</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">还原</string>
     <string name="backup_restore_summary">选择备份</string>
     <string name="backup_restore_error_plus">请解锁 QUIK+ 以使用备份和还原</string>
-    <string name="backup_restore_error_backup">正在进行备份&#8230;</string>
-    <string name="backup_restore_error_restore">正在还原&#8230;</string>
+    <string name="backup_restore_error_backup">正在进行备份…</string>
+    <string name="backup_restore_error_restore">正在还原…</string>
     <string name="backup_restore_confirm_title">从备份还原</string>
     <string name="backup_restore_stop_title">停止还原</string>
     <string name="backup_restore_stop_message">已还原的消息将保留在您的设备上</string>
@@ -166,10 +165,10 @@
     <string name="backup_restore_dialog_empty">找不到备份</string>
     <string name="backup_disclaimer">目前只有短信支持备份和恢复。彩信支持和定时备份将很快到来!</string>
     <string name="backup_now">立即备份</string>
-    <string name="backup_progress_parsing">正在分析备份&#8230;</string>
+    <string name="backup_progress_parsing">正在分析备份…</string>
     <string name="backup_progress_running">%d/%d 消息</string>
-    <string name="backup_progress_saving">正在保存备份&#8230;</string>
-    <string name="backup_progress_syncing">正在同步信息&#8230;</string>
+    <string name="backup_progress_saving">正在保存备份…</string>
+    <string name="backup_progress_syncing">正在同步信息…</string>
     <string name="backup_progress_finished">完成！</string>
     <string name="backup_notification_channel_name">备份和还原</string>
     <string name="scheduled_title">预约</string>

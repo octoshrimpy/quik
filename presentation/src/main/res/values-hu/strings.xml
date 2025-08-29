@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Új beszélgetés</string>
     <string name="shortcut_compose_short_label">Írás</string>
     <string name="shortcut_compose_disabled_message">Rövidítés letiltva</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Beállítások</string>
     <string name="title_notification_prefs">Értesítések</string>
     <string name="title_theme">Téma</string>
-    <string name="title_conversations">Keresés az üzenetek között&#8230;</string>
+    <string name="title_conversations">Keresés az üzenetek között…</string>
     <string name="title_compose">Adj meg egy nevet vagy telefonszámot</string>
     <string name="setup_skip">Kihagy</string>
     <string name="setup_next">Tovább</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Megjelölés olvasottként</string>
     <string name="main_menu_unread">Megjelölés olvasatlanként</string>
     <string name="main_menu_block">Tiltás</string>
-    <string name="main_syncing">Üzenetek szinkronizálása&#8230;</string>
+    <string name="main_syncing">Üzenetek szinkronizálása…</string>
     <string name="main_sender_you">Te: %s</string>
     <string name="main_message_results_title">Eredmények az üzenetek szövegében</string>
     <string name="main_message_results">%d üzenet</string>
@@ -99,7 +98,7 @@
     <string name="compose_scheduled_future">A kiválasztott időpontnak a jövőben kell lennie!</string>
     <string name="compose_scheduled_plus">Aktiválnod kell a QUIK+-t hogy időzített üzeneteteket tudj használni</string>
     <string name="compose_scheduled_toast">Hozzáadva az időzített üzenetekhez</string>
-    <string name="compose_hint">Írj egy üzenetet&#8230;</string>
+    <string name="compose_hint">Írj egy üzenetet…</string>
     <string name="compose_menu_copy">Szöveg másolás</string>
     <string name="compose_menu_forward">Továbbítás</string>
     <string name="compose_menu_delete">Törlés</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) kiválasztva</string>
     <string name="compose_sim_cd">%s kiválasztva, cserélj SIM kártyát</string>
     <string name="compose_send_cd">Üzenet küldése</string>
-    <string name="message_status_sending">Küldés&#8230;</string>
+    <string name="message_status_sending">Küldés…</string>
     <string name="message_status_delivered">Kézbesítve %s</string>
     <string name="message_status_failed">Sikertelen küldés. Érintsd meg az újraküldéshez</string>
     <string name="info_title">Részletek</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">Mentés és visszaállítás</string>
     <string name="backup_backing_up">Üzenetek mentése</string>
     <string name="backup_restoring">Üzenetek visszaállítása mentésből</string>
-    <string name="backup_loading">Betöltés&#8230;</string>
+    <string name="backup_loading">Betöltés…</string>
     <string name="backup_never">Soha</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Visszaállítás</string>
     <string name="backup_restore_summary">Válassz egy mentést</string>
     <string name="backup_restore_error_plus">Oldd fel a QUIK+-t a mentés és visszaállítás használatához</string>
-    <string name="backup_restore_error_backup">Mentés folyamatban&#8230;</string>
-    <string name="backup_restore_error_restore">Visszaállítás folyamatban&#8230;</string>
+    <string name="backup_restore_error_backup">Mentés folyamatban…</string>
+    <string name="backup_restore_error_restore">Visszaállítás folyamatban…</string>
     <string name="backup_restore_confirm_title">Visszaállítás mentésből</string>
     <string name="backup_restore_stop_title">Visszaállítás megállítása</string>
     <string name="backup_restore_stop_message">A már visszaállított üzenetek a készülékeden maradnak</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Nincsenek mentések</string>
     <string name="backup_disclaimer">Jelenleg a mentés csak az SMS üzeneteket menti. Az MMS támogatás és az időzített mentések hamarosan jönnek!</string>
     <string name="backup_now">Mentés most</string>
-    <string name="backup_progress_parsing">Mentés elemzése&#8230;</string>
+    <string name="backup_progress_parsing">Mentés elemzése…</string>
     <string name="backup_progress_running">%d/%d üzenet</string>
-    <string name="backup_progress_saving">Mentés&#8230;</string>
-    <string name="backup_progress_syncing">Üzenetek szinkronizálása&#8230;</string>
+    <string name="backup_progress_saving">Mentés…</string>
+    <string name="backup_progress_syncing">Üzenetek szinkronizálása…</string>
     <string name="backup_progress_finished">Kész!</string>
     <string name="backup_notification_channel_name">Mentés és visszaállítás</string>
     <string name="scheduled_title">Ütemezés</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">Előre megadott sablonok küldése bejövő üzenetekre</string>
     <string name="qksms_plus_more_title">Tovább</string>
     <string name="qksms_plus_more_summary">A QUIK folyamatos fejlesztés alatt áll és a vásárlásod a jövőbeni QUIK+ funkciókat is tartalmazza!</string>
-    <string name="widget_loading">Betöltés&#8230;</string>
+    <string name="widget_loading">Betöltés…</string>
     <string name="widget_more">További társalgások megtekintése</string>
     <string name="qkreply_menu_read">Megjelölés olvasottként</string>
     <string name="qkreply_menu_call">Hívás</string>

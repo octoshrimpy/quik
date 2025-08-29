@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Yeni konuşma</string>
     <string name="shortcut_compose_short_label">Oluştur</string>
     <string name="shortcut_compose_disabled_message">Kısayol devre dışı</string>
@@ -167,7 +166,7 @@
     <string name="backup_restore_dialog_empty">Yedekleme bulunamadı</string>
     <string name="backup_disclaimer">Şu anda, sadece SMS yedekleme ve geri yükleme desteklenmektedir. MMS desteği ve zamanlanmış mesaj yedeklemeleri çok yakında !</string>
     <string name="backup_now">Şimdi yedekle</string>
-    <string name="backup_progress_parsing">Yedekleme ayrılıyor&#8230;</string>
+    <string name="backup_progress_parsing">Yedekleme ayrılıyor…</string>
     <string name="backup_progress_running">%d%d mesajlar</string>
     <string name="backup_progress_saving">Yedekleme kaydediliyor...</string>
     <string name="backup_progress_syncing">Mesajlar senkronize ediliyor...</string>

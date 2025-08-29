@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">புதிய உரையாடல்</string>
     <string name="shortcut_compose_short_label">எழுது</string>
     <string name="shortcut_compose_disabled_message">குறுக்குவழி முடக்கப்பட்டது</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">அமைப்புகள்</string>
     <string name="title_notification_prefs">அறிவிப்புகள்</string>
     <string name="title_theme">நிற அமைப்பு</string>
-    <string name="title_conversations">உட்பெட்டியை தேடு&#8230;</string>
+    <string name="title_conversations">உட்பெட்டியை தேடு…</string>
     <string name="title_compose">பெயர் அ எண்ணைத் தட்டச்சு செய்</string>
     <string name="setup_skip">தவிர்</string>
     <string name="setup_next">தொடர்</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">வாசித்ததாக குறி</string>
     <string name="main_menu_unread">வாசிக்காததாக குறி</string>
     <string name="main_menu_block">தடு</string>
-    <string name="main_syncing">செய்திகள் ஒத்திசைக்கப்படுகின்றன&#8230;</string>
+    <string name="main_syncing">செய்திகள் ஒத்திசைக்கப்படுகின்றன…</string>
     <string name="main_sender_you">நீங்கள்: %s</string>
     <string name="main_message_results_title">தகவல்களிலுள்ள முடிவுகள்</string>
     <string name="main_message_results">%d செய்திகள்</string>
@@ -99,7 +98,7 @@
     <string name="compose_scheduled_future">தேர்ந்தெடுக்கப்பட்ட நேரம் எதிர்காலத்தில் இருக்க வேண்டும்!</string>
     <string name="compose_scheduled_plus">நேரங்குறித்த தகவல்களை பயன்படுத்த QUIK+ஐ நீங்கள் பூட்டவிழ்க்க வேண்டும்</string>
     <string name="compose_scheduled_toast">நேரங்குறிக்கப்பட்ட தகவல்களுக்கு சேர்க்கப்பட்டது</string>
-    <string name="compose_hint">ஒரு தகவலை எழுது&#8230;</string>
+    <string name="compose_hint">ஒரு தகவலை எழுது…</string>
     <string name="compose_menu_copy">சொற்சரத்தை நகலெடு</string>
     <string name="compose_menu_forward">முன்னனுப்பு</string>
     <string name="compose_menu_delete">நீக்கு</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s selected, change SIM card</string>
     <string name="compose_send_cd">தகவல் அனுப்பு</string>
-    <string name="message_status_sending">அனுப்புகிறது&#8230;</string>
+    <string name="message_status_sending">அனுப்புகிறது…</string>
     <string name="message_status_delivered">%s வழங்கப்பட்டது</string>
     <string name="message_status_failed">அனுப்பப்படவில்லை. மீண்டும் முயல தட்டு</string>
     <string name="info_title">விவரங்கள்</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">காப்பு மற்றும் மீட்பு</string>
     <string name="backup_backing_up">செய்திகளைக் காப்புப் பிரதி எடுக்கிறது</string>
     <string name="backup_restoring">காப்புப்பிரதியிலிருந்து மீட்டமைக்கிறது</string>
-    <string name="backup_loading">ஏற்றுகிறது&#8230;</string>
+    <string name="backup_loading">ஏற்றுகிறது…</string>
     <string name="backup_never">எப்போதும் வேண்டாம்</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">மீட்டமை</string>
     <string name="backup_restore_summary">காப்புப்பிரதியைத் தேர்ந்தெடு</string>
     <string name="backup_restore_error_plus">காப்புப்பிரதி மற்றும் மீட்டமைப்பை பயன்படுத்த QUIK+ஐ பூட்டவிழ்க்கவும்</string>
-    <string name="backup_restore_error_backup"> செயலில் காப்புப்பிரதி&#8230;</string>
-    <string name="backup_restore_error_restore">செயலில் மீட்டெடுப்பு&#8230;</string>
+    <string name="backup_restore_error_backup"> செயலில் காப்புப்பிரதி…</string>
+    <string name="backup_restore_error_restore">செயலில் மீட்டெடுப்பு…</string>
     <string name="backup_restore_confirm_title">காப்புப்பிரதியிலிருந்து மீட்டமை</string>
     <string name="backup_restore_stop_title">மீட்டமைப்பதை நிறுத்து</string>
     <string name="backup_restore_stop_message">ஏற்கனவே மீட்டமைக்கப்பட்ட செய்திகள் உங்கள் சாதனத்தில் இருக்கும்</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">காப்புப்பிரதிகள் ஏதுமில்லை</string>
     <string name="backup_disclaimer">தற்போது, எஸ்எம்எஸ் மட்டுமே காப்பு மற்றும் மீட்டமைப்பால் ஆதரிக்கப்படுகிறது. எம்எம்எஸ் ஆதரவு மற்றும் திட்டமிடப்பட்ட காப்புப்பிரதிகள் விரைவில் வரும்!</string>
     <string name="backup_now">இப்போது காப்புப்பிரதி செய்</string>
-    <string name="backup_progress_parsing">காப்புப் பிரதி பாகுபடுத்துகிறது&#8230;</string>
+    <string name="backup_progress_parsing">காப்புப் பிரதி பாகுபடுத்துகிறது…</string>
     <string name="backup_progress_running">%d/%d செய்திகள்</string>
-    <string name="backup_progress_saving">காப்புப்பிரதியைச் சேமிக்கிறது&#8230;</string>
-    <string name="backup_progress_syncing">செய்திகளை ஒத்திசைக்கிறது&#8230;</string>
+    <string name="backup_progress_saving">காப்புப்பிரதியைச் சேமிக்கிறது…</string>
+    <string name="backup_progress_syncing">செய்திகளை ஒத்திசைக்கிறது…</string>
     <string name="backup_progress_finished">முடிந்தது!</string>
     <string name="backup_notification_channel_name">காப்பு மற்றும் மீட்பு</string>
     <string name="scheduled_title">திட்டமிடப்பட்டது</string>

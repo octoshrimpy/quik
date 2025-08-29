@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Ny konversation</string>
     <string name="shortcut_compose_short_label">Skriv</string>
     <string name="shortcut_compose_disabled_message">Genvägen inaktiverades</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Inställningar</string>
     <string name="title_notification_prefs">Aviseringar</string>
     <string name="title_theme">Tema</string>
-    <string name="title_conversations">Sök i inkorg&#8230;</string>
+    <string name="title_conversations">Sök i inkorg…</string>
     <string name="title_compose">Ange ett namn eller nummer</string>
     <string name="setup_skip">Hoppa över</string>
     <string name="setup_next">Fortsätt</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Markera som läst</string>
     <string name="main_menu_unread">Markera som oläst</string>
     <string name="main_menu_block">Blockera</string>
-    <string name="main_syncing">Synkroniserar meddelanden&#8230;</string>
+    <string name="main_syncing">Synkroniserar meddelanden…</string>
     <string name="main_sender_you">Du: %s</string>
     <string name="main_message_results_title">Resultat i meddelanden</string>
     <string name="main_message_results">%d meddelanden</string>
@@ -99,7 +98,7 @@
     <string name="compose_scheduled_future">Den valda tiden måste vara i framtiden!</string>
     <string name="compose_scheduled_plus">Du måste låsa upp QUIK+ om du vill använda schemalagda meddelanden</string>
     <string name="compose_scheduled_toast">Lades till i schemalagda meddelanden</string>
-    <string name="compose_hint">Skriv ett meddelande&#8230;</string>
+    <string name="compose_hint">Skriv ett meddelande…</string>
     <string name="compose_menu_copy">Kopiera text</string>
     <string name="compose_menu_forward">Vidarebefordra</string>
     <string name="compose_menu_delete">Radera</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) valdes</string>
     <string name="compose_sim_cd">%s valt, byt SIM-kort</string>
     <string name="compose_send_cd">Skicka meddelandet</string>
-    <string name="message_status_sending">Skickar&#8230;</string>
+    <string name="message_status_sending">Skickar…</string>
     <string name="message_status_delivered">Levererade %s</string>
     <string name="message_status_failed">Misslyckades med att skicka. Knacka för att försöka igen</string>
     <string name="info_title">Detaljer</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">Säkerhetskopiera och återställ</string>
     <string name="backup_backing_up">Säkerhetskopierar meddelandena</string>
     <string name="backup_restoring">Återställer från säkerhetskopia</string>
-    <string name="backup_loading">Laddar&#8230;</string>
+    <string name="backup_loading">Laddar…</string>
     <string name="backup_never">Aldrig</string>
     <string name="backup_location_title">Plats för säkerhetskopiering</string>
     <string name="backup_location_summary">Ange mapp</string>
     <string name="backup_restore_title">Återställ</string>
     <string name="backup_restore_summary">Välj en säkerhetskopia</string>
     <string name="backup_restore_error_plus">Vänligen lås upp QUIK+ för att använda säkerhetskopiera och återställ</string>
-    <string name="backup_restore_error_backup">Säkerhetskopiering pågår&#8230;</string>
-    <string name="backup_restore_error_restore">Återställning pågår&#8230;</string>
+    <string name="backup_restore_error_backup">Säkerhetskopiering pågår…</string>
+    <string name="backup_restore_error_restore">Återställning pågår…</string>
     <string name="backup_restore_confirm_title">Återställ från säkerhetskopia</string>
     <string name="backup_restore_stop_title">Stoppa återställningen</string>
     <string name="backup_restore_stop_message">Meddelanden som redan har blivit återställda kommer att stanna kvar i din enhet</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Inga säkerhetskopior kunde hittas</string>
     <string name="backup_disclaimer">För närvarande så stöds endast SMS av Säkerhetskopiera och Återställ. MMS-stöd och schemalagda säkerhetskopieringar kommer att dyka upp inom kort!</string>
     <string name="backup_now">Säkerhetskopiera nu</string>
-    <string name="backup_progress_parsing">Tolkar säkerhetskopieringen&#8230;</string>
+    <string name="backup_progress_parsing">Tolkar säkerhetskopieringen…</string>
     <string name="backup_progress_running">%d/%d meddelanden</string>
-    <string name="backup_progress_saving">Sparar säkerhetskopian&#8230;</string>
-    <string name="backup_progress_syncing">Synkroniserar meddelandena&#8230;</string>
+    <string name="backup_progress_saving">Sparar säkerhetskopian…</string>
+    <string name="backup_progress_syncing">Synkroniserar meddelandena…</string>
     <string name="backup_progress_finished">Avslutad!</string>
     <string name="backup_notification_channel_name">Säkerhetskopiera och återställ</string>
     <string name="scheduled_title">Schemalagda</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">Svara automatiskt på inkommande meddelanden med ett förinställt svar</string>
     <string name="qksms_plus_more_title">Mer</string>
     <string name="qksms_plus_more_summary">QUIK är under aktiv utveckling, och dina köp kommer att inkludera alla kommande QUIK+-funktioner!</string>
-    <string name="widget_loading">Laddar&#8230;</string>
+    <string name="widget_loading">Laddar…</string>
     <string name="widget_more">Visa fler konversationer</string>
     <string name="qkreply_menu_read">Markera som läst</string>
     <string name="qkreply_menu_call">Ring</string>
