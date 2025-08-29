@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Nova conversa</string>
     <string name="shortcut_compose_short_label">Escrever</string>
     <string name="shortcut_compose_disabled_message">Atalho desativado</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Configurações</string>
     <string name="title_notification_prefs">Notificações</string>
     <string name="title_theme">Tema</string>
-    <string name="title_conversations">Buscar na caixa de entrada&#8230;</string>
+    <string name="title_conversations">Buscar na caixa de entrada…</string>
     <string name="title_compose">Digite um nome ou número</string>
     <string name="setup_skip">Pular</string>
     <string name="setup_next">Continuar</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Marcar como lida</string>
     <string name="main_menu_unread">Marcar como não lida</string>
     <string name="main_menu_block">Bloquear</string>
-    <string name="main_syncing">Sincronizando mensagens&#8230;</string>
+    <string name="main_syncing">Sincronizando mensagens…</string>
     <string name="main_sender_you">Você: %s</string>
     <string name="main_message_results_title">Resultados nas mensagens</string>
     <string name="main_message_results">%d mensagem(s)</string>
@@ -99,7 +98,7 @@
     <string name="compose_scheduled_future">O tempo selecionado deve ser no futuro!</string>
     <string name="compose_scheduled_plus">Você deve desbloquear o QUIK+ para agendar mensagens</string>
     <string name="compose_scheduled_toast">Adicionada às mensagens agendadas</string>
-    <string name="compose_hint">Escrever uma mensagem&#8230;</string>
+    <string name="compose_hint">Escrever uma mensagem…</string>
     <string name="compose_menu_copy">Copiar texto</string>
     <string name="compose_menu_forward">Encaminhar</string>
     <string name="compose_menu_delete">Excluir</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">Cartão SIM %1$d (%2$s) selecionado</string>
     <string name="compose_sim_cd">%s selecionado, altere o cartão SIM</string>
     <string name="compose_send_cd">Enviar mensagem</string>
-    <string name="message_status_sending">Enviando&#8230;</string>
+    <string name="message_status_sending">Enviando…</string>
     <string name="message_status_delivered">Entregue %s</string>
     <string name="message_status_failed">Falha ao enviar. Toque para tentar novamente</string>
     <string name="info_title">Detalhes</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">Backup e recuperação</string>
     <string name="backup_backing_up">Fazendo backup de mensagens</string>
     <string name="backup_restoring">Recuperando do backup</string>
-    <string name="backup_loading">Carregando&#8230;</string>
+    <string name="backup_loading">Carregando…</string>
     <string name="backup_never">Nunca</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Recuperar</string>
     <string name="backup_restore_summary">Selecione um backup</string>
     <string name="backup_restore_error_plus">Por favor, desbloqueie o QUIK+ para fazer backup e recuperar</string>
-    <string name="backup_restore_error_backup">Backup em andamento&#8230;</string>
-    <string name="backup_restore_error_restore">Recuperação em andamento&#8230;</string>
+    <string name="backup_restore_error_backup">Backup em andamento…</string>
+    <string name="backup_restore_error_restore">Recuperação em andamento…</string>
     <string name="backup_restore_confirm_title">Recuperar do backup</string>
     <string name="backup_restore_stop_title">Parar de recuperar</string>
     <string name="backup_restore_stop_message">Mensagens que foram recuperadas permanecerão em seu dispositivo</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Nenhum backup encontrado</string>
     <string name="backup_disclaimer">Atualmente, apenas SMS é suportado para Backup e Recuperação. Suporte a MMS e backups agendados virão em breve!</string>
     <string name="backup_now">Fazer backup agora</string>
-    <string name="backup_progress_parsing">Analisando backup&#8230;</string>
+    <string name="backup_progress_parsing">Analisando backup…</string>
     <string name="backup_progress_running">%d/%d mensagens</string>
-    <string name="backup_progress_saving">Salvando backup&#8230;</string>
-    <string name="backup_progress_syncing">Sincronizando mensagens&#8230;</string>
+    <string name="backup_progress_saving">Salvando backup…</string>
+    <string name="backup_progress_syncing">Sincronizando mensagens…</string>
     <string name="backup_progress_finished">Concluído!</string>
     <string name="backup_notification_channel_name">Backup e recuperação</string>
     <string name="scheduled_title">Agendada</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">Responde automaticamente às mensagens recebidas com uma resposta predefinida</string>
     <string name="qksms_plus_more_title">Mais</string>
     <string name="qksms_plus_more_summary">O QUIK está em desenvolvimento ativo e sua compra incluirá todos os futuros recursos do QUIK+!</string>
-    <string name="widget_loading">Carregando&#8230;</string>
+    <string name="widget_loading">Carregando…</string>
     <string name="widget_more">Ver mais conversas</string>
     <string name="qkreply_menu_read">Marcar como lida</string>
     <string name="qkreply_menu_call">Ligar</string>
