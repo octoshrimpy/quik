@@ -419,4 +419,48 @@
         <item>LOL</item>
         <item>Это нормально</item>
     </string-array>
+    <string name="main_menu_select_all">Выбрать всё</string>
+    <string name="main_menu_send_now">Отправить сейчас</string>
+    <string name="main_menu_edit_message">Редактировать сообщение</string>
+    <string name="main_menu_rename_conversation">Переименовать разговор</string>
+    <string name="main_sender_draft">Черновик: %s</string>
+    <string name="scheduled_menu_send_now">Отправить сейчас</string>
+    <string name="scheduled_menu_edit_message">Редактировать сообщение</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Вы уверены, что хотите удалить это сообщение?</item>
+        <item quantity="few">Вы уверены, что хотите удалить %d сообщений?</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Вы уверены, что хотите отправить это сообщение прямо сейчас?</item>
+        <item quantity="few">Вы уверены, что хотите отправить прямо сейчас %d сообщений?</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Редактировать сообщение</string>
+    <string name="dialog_edit_scheduled_message">Редактирование этого сообщения удалит его из планировщика.\n\nУбедитесь, что вы повторно отправите его на следующем экране, иначе оно будет потеряно.\n\nХотите продолжить?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Да, редактировать сообщение</string>
+    <string name="dialog_clear_compose_title">Стереть сообщение</string>
+    <string name="dialog_clear_compose">Стереть сообщение? Эта операция не может быть отменена.</string>
+    <string name="compose_scheduled_view">Запланированные сообщения для этого разговора</string>
+    <string name="compose_no_valid_recipients">Не могу отправить другим участникам</string>
+    <string name="compose_menu_show_status">Показать статус</string>
+    <string name="compose_attach_file_cd">Прикрепить файл</string>
+    <string name="compose_audio_message_cd">Записать аудиосообщение</string>
+    <string name="compose_schedule_cancel_cd">Отменить запланированное сообщение</string>
+    <string name="compose_record_audio_msg_cd">Записать аудиосообщение</string>
+    <string name="compose_record_audio_msg_abort_cd">Отменить аудиосообщение</string>
+    <string name="compose_record_audio_msg_attach_cd">Прикрепить аудиосообщение</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Проиграть или поставить на паузу аудиосообщение</string>
+    <string name="compose_message_cancel">Отменить</string>
+    <string name="compose_message_send_now">Отправить сейчас</string>
+    <string name="compose_message_sim">Номер SIM-карты</string>
+    <string name="compose_message_item">Элемент сообщения</string>
+    <string name="compose_message_attachment">Прикреплено</string>
+    <string name="compose_toast_drag_stt">Переместите кнопку преобразования речи в текст в любое желаемое место</string>
+    <string name="message_body_too_long_to_display">⚠ Сообщение длинное. Скопируйте или сохраните для полного текста</string>
+    <string name="clipboard_too_large_to_copy">Размер данных превышает лимит буфера обмена</string>
+    <string name="clipboard_unable_to_copy_to">Не удалось скопировать в буфер обмена</string>
+    <string name="scheduled_send_cd">Запланировать это сообщение</string>
 </resources>
