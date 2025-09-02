@@ -26,7 +26,6 @@ import android.provider.Telephony.Sms
 import dev.octoshrimpy.quik.extensions.joinTo
 import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.RealmResults
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 

@@ -392,10 +392,10 @@ class MessagesAdapter @Inject constructor(
             clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model
         }
 
-        bindEmojiReactions(holder, message)
+        showEmojiReactions(holder, message)
     }
 
-    private fun bindEmojiReactions(holder: QkViewHolder, message: Message) {
+    private fun showEmojiReactions(holder: QkViewHolder, message: Message) {
         holder.reactions?.let { reactionsContainer ->
             val reactions = message.emojiReactions
             val hasReactions = reactions.isNotEmpty()
