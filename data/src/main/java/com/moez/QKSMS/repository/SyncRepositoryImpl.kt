@@ -45,7 +45,6 @@ import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.model.PhoneNumber
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.SyncLog
-import dev.octoshrimpy.quik.util.EmojiReactionUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.subjects.BehaviorSubject
@@ -70,7 +69,8 @@ class SyncRepositoryImpl @Inject constructor(
     private val cursorToContactGroupMember: CursorToContactGroupMember,
     private val keys: KeyManager,
     private val phoneNumberUtils: PhoneNumberUtils,
-    private val rxPrefs: RxSharedPreferences
+    private val rxPrefs: RxSharedPreferences,
+    private val reactions: EmojiReactionRepository,
 ) : SyncRepository {
 
     override val syncProgress: Subject<SyncRepository.SyncProgress> =
@@ -248,18 +248,17 @@ class SyncRepositoryImpl @Inject constructor(
 
                 allMessages.forEach { message ->
                     val text = message.getText(false)
-                    val parsedReaction = EmojiReactionUtils.parseEmojiReaction(text)
+                    val parsedReaction = reactions.parseEmojiReaction(text)
                     if (parsedReaction != null) {
-                        val targetMessage = EmojiReactionUtils.findTargetMessage(
+                        val targetMessage = reactions.findTargetMessage(
                             message.threadId,
                             parsedReaction.originalMessage,
                             realm
                         )
-                        EmojiReactionUtils.saveEmojiReaction(
+                        reactions.saveEmojiReaction(
                             message,
                             parsedReaction,
                             targetMessage,
-                            keys,
                             realm,
                         )
                     }
@@ -326,20 +325,19 @@ class SyncRepositoryImpl @Inject constructor(
                 insertOrUpdate()
 
                 val text = getText(false)
-                val parsedReaction = EmojiReactionUtils.parseEmojiReaction(text)
+                val parsedReaction = reactions.parseEmojiReaction(text)
                 if (parsedReaction != null) {
                     Realm.getDefaultInstance().use { realm ->
-                        val targetMessage = EmojiReactionUtils.findTargetMessage(
+                        val targetMessage = reactions.findTargetMessage(
                             threadId,
                             parsedReaction.originalMessage,
                             realm
                         )
                         realm.executeTransaction {
-                            EmojiReactionUtils.saveEmojiReaction(
+                            reactions.saveEmojiReaction(
                                 this,
                                 parsedReaction,
                                 targetMessage,
-                                keys,
                                 realm,
                             )
                         }

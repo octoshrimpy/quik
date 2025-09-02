@@ -57,7 +57,6 @@ import dev.octoshrimpy.quik.receiver.SendSmsReceiver
 import dev.octoshrimpy.quik.receiver.SmsDeliveredReceiver
 import dev.octoshrimpy.quik.receiver.SmsSentReceiver
 import dev.octoshrimpy.quik.util.ImageUtils
-import dev.octoshrimpy.quik.util.EmojiReactionUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
@@ -79,6 +78,7 @@ open class MessageRepositoryImpl @Inject constructor(
     private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences,
     private val syncRepository: SyncRepository,
+    private val reactions: EmojiReactionRepository,
 ) : MessageRepository {
 
     companion object {
@@ -765,19 +765,18 @@ open class MessageRepositoryImpl @Inject constructor(
                 }
 
             managedMessage?.let { savedMessage ->
-                val parsedReaction = EmojiReactionUtils.parseEmojiReaction(body)
+                val parsedReaction = reactions.parseEmojiReaction(body)
                 if (parsedReaction != null) {
-                    val targetMessage = EmojiReactionUtils.findTargetMessage(
+                    val targetMessage = reactions.findTargetMessage(
                         savedMessage.threadId,
                         parsedReaction.originalMessage,
                         realm
                     )
                     realm.executeTransaction {
-                        EmojiReactionUtils.saveEmojiReaction(
+                        reactions.saveEmojiReaction(
                             savedMessage,
                             parsedReaction,
                             targetMessage,
-                            messageIds,
                             realm,
                         )
                     }

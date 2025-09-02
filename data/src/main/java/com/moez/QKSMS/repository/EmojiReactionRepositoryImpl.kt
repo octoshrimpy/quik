@@ -16,65 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with QUIK.  If not, see <http://www.gnu.org/licenses/>.
  */
-package dev.octoshrimpy.quik.util
+package dev.octoshrimpy.quik.repository
 
 import dev.octoshrimpy.quik.manager.KeyManager
 import dev.octoshrimpy.quik.model.EmojiReaction
 import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.repository.EmojiReactionUtils.reactionPatterns
+import dev.octoshrimpy.quik.repository.EmojiReactionUtils.removalPatterns
 import io.realm.Realm
 import io.realm.Sort
 import timber.log.Timber
+import javax.inject.Inject
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.iterator
 
-data class ParsedEmojiReaction(val emoji: String, val originalMessage: String, val isRemoval: Boolean = false)
-
-object EmojiReactionUtils {
-
-    private fun tapback(emoji: String, isRemoval: Boolean = false): (MatchResult) -> ParsedEmojiReaction  {
-        return { match ->
-            ParsedEmojiReaction(emoji, match.groupValues[1], isRemoval)
-        }
-    }
-
-    val reactionPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
-        // Google Messages - https://github.com/octoshrimpy/quik/issues/152#issuecomment-2330183516
-        Regex("^\u200A\u200B(.+?)\u200B to \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
-            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
-        },
-        // iOS
-        Regex("^Reacted (.+?) to \u201C(.+?)\u201D$") to { match ->
-            if (match.groupValues[1] == "with a sticker")
-                null
-            else
-                ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
-        },
-        // iOS tapbacks
-        Regex("^Loved \u201C(.+?)\u201D$") to tapback("❤️"),
-        Regex("^Liked \u201C(.+?)\u201D$") to tapback("👍"),
-        Regex("^Disliked \u201C(.+?)\u201D$") to tapback("👎"),
-        Regex("^Laughed at \u201C(.+?)\u201D$") to tapback("😂"),
-        Regex("^Emphasized \u201C(.+?)\u201D$") to tapback("‼️"),
-        Regex("^Questioned \u201C(.+?)\u201D$") to tapback("❓"),
-    )
-
-    val removalPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
-        // Google Messages
-        Regex("^\u200ARemoved \u200C(.+?)\u200C from \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
-            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
-        },
-        // iOS tapbacks
-        Regex("^Removed a heart from \u201C(.+?)\u201D$") to tapback("❤️", true),
-        Regex("^Removed a like from \u201C(.+?)\u201D$") to tapback("👍", true),
-        Regex("^Removed a dislike from \u201C(.+?)\u201D$") to tapback("👎", true),
-        Regex("^Removed a laugh from \u201C(.+?)\u201D$") to tapback("😂", true),
-        Regex("^Removed an exclamation from \u201C(.+?)\u201D$") to tapback("‼️", true),
-        Regex("^Removed a question mark from \u201C(.+?)\u201D$") to tapback("❓", true),
-        // iOS emoji - keep this below tapbacks as this regex would otherwise also match the patterns above
-        Regex("^Removed (.+?) from \u201C(.+?)\u201D$") to { match ->
-            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
-        },
-    )
-
-    fun parseEmojiReaction(body: String): ParsedEmojiReaction? {
+class EmojiReactionRepositoryImpl @Inject constructor(
+    private val keyManager: KeyManager
+) : EmojiReactionRepository {
+    override fun parseEmojiReaction(body: String): ParsedEmojiReaction? {
         val removal = parseRemoval(body)
         if (removal != null) return removal
 
@@ -111,7 +71,7 @@ object EmojiReactionUtils {
      * Search for messages in the same thread with matching text content
      * We'll search recent messages first (within reasonable time window)
      */
-    fun findTargetMessage(threadId: Long, originalMessageText: String, realm: Realm): Message? {
+    override fun findTargetMessage(threadId: Long, originalMessageText: String, realm: Realm): Message? {
         val messages = realm.where(Message::class.java)
             .equalTo("threadId", threadId)
             .sort("date", Sort.DESCENDING)
@@ -158,11 +118,10 @@ object EmojiReactionUtils {
         realm.insertOrUpdate(reactionMessage)
     }
 
-    fun saveEmojiReaction(
+    override fun saveEmojiReaction(
         reactionMessage: Message,
         parsedReaction: ParsedEmojiReaction,
         targetMessage: Message?,
-        keyManager: KeyManager,
         realm: Realm,
     ) {
         if (parsedReaction.isRemoval) {
@@ -191,4 +150,52 @@ object EmojiReactionUtils {
             Timber.w("Saved emoji reaction without target message: ${reaction.emoji}")
         }
     }
+
+}
+
+object EmojiReactionUtils {
+    private fun tapback(emoji: String, isRemoval: Boolean = false): (MatchResult) -> ParsedEmojiReaction {
+        return { match ->
+            ParsedEmojiReaction(emoji, match.groupValues[1], isRemoval)
+        }
+    }
+
+    val reactionPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
+        // Google Messages - https://github.com/octoshrimpy/quik/issues/152#issuecomment-2330183516
+        Regex("^\u200A\u200B(.+?)\u200B to \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
+            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
+        },
+        // iOS
+        Regex("^Reacted (.+?) to \u201C(.+?)\u201D$") to { match ->
+            if (match.groupValues[1] == "with a sticker")
+                null
+            else
+                ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
+        },
+        // iOS tapbacks
+        Regex("^Loved \u201C(.+?)\u201D$") to tapback("❤️"),
+        Regex("^Liked \u201C(.+?)\u201D$") to tapback("👍"),
+        Regex("^Disliked \u201C(.+?)\u201D$") to tapback("👎"),
+        Regex("^Laughed at \u201C(.+?)\u201D$") to tapback("😂"),
+        Regex("^Emphasized \u201C(.+?)\u201D$") to tapback("‼️"),
+        Regex("^Questioned \u201C(.+?)\u201D$") to tapback("❓"),
+    )
+
+    val removalPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
+        // Google Messages
+        Regex("^\u200ARemoved \u200C(.+?)\u200C from \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
+            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
+        },
+        // iOS tapbacks
+        Regex("^Removed a heart from \u201C(.+?)\u201D$") to tapback("❤️", true),
+        Regex("^Removed a like from \u201C(.+?)\u201D$") to tapback("👍", true),
+        Regex("^Removed a dislike from \u201C(.+?)\u201D$") to tapback("👎", true),
+        Regex("^Removed a laugh from \u201C(.+?)\u201D$") to tapback("😂", true),
+        Regex("^Removed an exclamation from \u201C(.+?)\u201D$") to tapback("‼️", true),
+        Regex("^Removed a question mark from \u201C(.+?)\u201D$") to tapback("❓", true),
+        // iOS emoji - keep this below tapbacks as this regex would otherwise also match the patterns above
+        Regex("^Removed (.+?) from \u201C(.+?)\u201D$") to { match ->
+            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
+        },
+    )
 }
