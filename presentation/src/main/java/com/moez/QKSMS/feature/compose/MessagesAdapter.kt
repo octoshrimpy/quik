@@ -424,7 +424,7 @@ class MessagesAdapter @Inject constructor(
     }
 
     private fun makeRoomForEmojis(holder: QkViewHolder) {
-        val paddingBottom = 21.dpToPx(context)
+        val paddingBottom = 25.dpToPx(context)
 
         (holder.reactions?.parent as? ViewGroup)?.let { parent ->
             parent.setPadding(

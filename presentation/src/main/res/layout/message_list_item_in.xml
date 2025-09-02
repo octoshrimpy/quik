@@ -93,7 +93,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:clipToPadding="false">
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp">
 
                 <dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerViewLongMmsPart
                     android:id="@+id/parts"
