@@ -36,16 +36,18 @@ object EmojiReactionUtils {
     }
 
     val reactionPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
-        // https://github.com/octoshrimpy/quik/issues/152#issuecomment-2330183516
+        // Google Messages - https://github.com/octoshrimpy/quik/issues/152#issuecomment-2330183516
         Regex("^\u200A\u200B(.+?)\u200B to \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
-            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], )
+            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
         },
+        // iOS
         Regex("^Reacted (.+?) to \u201C(.+?)\u201D$") to { match ->
             if (match.groupValues[1] == "with a sticker")
                 null
             else
                 ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
         },
+        // iOS tapbacks
         Regex("^Loved \u201C(.+?)\u201D$") to tapback("❤️"),
         Regex("^Liked \u201C(.+?)\u201D$") to tapback("👍"),
         Regex("^Disliked \u201C(.+?)\u201D$") to tapback("👎"),
@@ -55,13 +57,18 @@ object EmojiReactionUtils {
     )
 
     val removalPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
-        // TODO: google messages removal
+        // Google Messages
+        Regex("^\u200ARemoved \u200C(.+?)\u200C from \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
+            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
+        },
+        // iOS tapbacks
         Regex("^Removed a heart from \u201C(.+?)\u201D$") to tapback("❤️", true),
         Regex("^Removed a like from \u201C(.+?)\u201D$") to tapback("👍", true),
         Regex("^Removed a dislike from \u201C(.+?)\u201D$") to tapback("👎", true),
         Regex("^Removed a laugh from \u201C(.+?)\u201D$") to tapback("😂", true),
         Regex("^Removed an exclamation from \u201C(.+?)\u201D$") to tapback("‼️", true),
         Regex("^Removed a question mark from \u201C(.+?)\u201D$") to tapback("❓", true),
+        // iOS emoji - keep this below tapbacks as this regex would otherwise also match the patterns above
         Regex("^Removed (.+?) from \u201C(.+?)\u201D$") to { match ->
             ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
         },

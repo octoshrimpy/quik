@@ -261,7 +261,6 @@ class QkRealmMigration @Inject constructor(
                 .addField("emoji", String::class.java, FieldAttribute.REQUIRED)
                 .addField("originalMessageText", String::class.java, FieldAttribute.REQUIRED)
                 .addField("threadId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
-                .addField("patternType", String::class.java, FieldAttribute.REQUIRED)
 
             realm.schema.get("Message")
                 ?.addField("isEmojiReaction", Boolean::class.java, FieldAttribute.REQUIRED)
