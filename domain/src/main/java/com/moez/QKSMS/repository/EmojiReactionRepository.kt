@@ -16,4 +16,6 @@ interface EmojiReactionRepository {
         targetMessage: Message?,
         realm: Realm,
     )
+
+    fun deleteAndReparseAllEmojiReactions(realm: Realm)
 }

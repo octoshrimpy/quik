@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 class QkRealmMigration @Inject constructor(
     private val cursorToContact: CursorToContactImpl,
-    private val prefs: Preferences
+    private val prefs: Preferences,
 ) : RealmMigration {
 
     companion object {
@@ -257,7 +257,7 @@ class QkRealmMigration @Inject constructor(
         }
 
         if (version == 13L) {
-            val emojiReactionTable =  realm.schema.create("EmojiReaction")
+            val emojiReactionTable = realm.schema.create("EmojiReaction")
                 .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
                 .addField("reactionMessageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
                 .addField("senderAddress", String::class.java, FieldAttribute.REQUIRED)
@@ -272,7 +272,10 @@ class QkRealmMigration @Inject constructor(
                     msg.setBoolean("isEmojiReaction", false)
                 }
 
-            // TODO: scan for past emoji reaction messages
+            realm.schema.create("EmojiSyncNeeded")
+                .addField("createdAt", Long::class.java, FieldAttribute.REQUIRED)
+
+            realm.createObject("EmojiSyncNeeded")
 
             version++
         }

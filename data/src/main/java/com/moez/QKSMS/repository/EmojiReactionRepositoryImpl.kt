@@ -27,9 +27,6 @@ import io.realm.Realm
 import io.realm.Sort
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.iterator
 
 class EmojiReactionRepositoryImpl @Inject constructor(
     private val keyManager: KeyManager
@@ -72,7 +69,6 @@ class EmojiReactionRepositoryImpl @Inject constructor(
      * We'll search recent messages first (within reasonable time window)
      */
     override fun findTargetMessage(threadId: Long, originalMessageText: String, realm: Realm): Message? {
-        // log time taken
         val startTime = System.currentTimeMillis()
         val messages = realm.where(Message::class.java)
             .equalTo("threadId", threadId)
@@ -102,7 +98,6 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         if (targetMessage == null) {
             Timber.w("Cannot remove emoji reaction '${reaction.emoji}': no target message found")
             reactionMessage.isEmojiReaction = true
-            realm.insertOrUpdate(reactionMessage)
             return
         }
 
@@ -118,7 +113,6 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         }
 
         reactionMessage.isEmojiReaction = true
-        realm.insertOrUpdate(reactionMessage)
     }
 
     override fun saveEmojiReaction(
@@ -143,7 +137,6 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         realm.insertOrUpdate(reaction)
 
         reactionMessage.isEmojiReaction = true
-        realm.insertOrUpdate(reactionMessage)
 
         if (targetMessage != null) {
             targetMessage.emojiReactions.add(reaction)
@@ -152,6 +145,51 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         } else {
             Timber.w("Saved emoji reaction without target message: ${reaction.emoji}")
         }
+    }
+
+    override fun deleteAndReparseAllEmojiReactions(realm: Realm) {
+        val startTime = System.currentTimeMillis()
+
+        realm.delete(EmojiReaction::class.java)
+        realm.where(Message::class.java).findAll().map {
+            it.isEmojiReaction = false
+        }
+
+        val allMessages = realm.where(Message::class.java)
+            .beginGroup()
+                .beginGroup()
+                    .equalTo("type", "sms")
+                    .isNotEmpty("body")
+                .endGroup()
+                .or()
+                .beginGroup()
+                    .equalTo("type", "mms")
+                    .isNotEmpty("parts.text")
+                .endGroup()
+            .endGroup()
+            .sort("date", Sort.ASCENDING) // parse oldest to newest to handle reactions & removals properly
+            .findAll()
+
+        allMessages.forEach { message ->
+            val text = message.getText(false)
+            val parsedReaction = parseEmojiReaction(text)
+            if (parsedReaction != null) {
+                val targetMessage = findTargetMessage(
+                    message.threadId,
+                    parsedReaction.originalMessage,
+                    realm
+                )
+                saveEmojiReaction(
+                    message,
+                    parsedReaction,
+                    targetMessage,
+                    realm,
+                )
+            }
+        }
+
+        val endTime = System.currentTimeMillis()
+        Timber.d("Deleted and reparsed all emoji reactions in ${endTime - startTime}ms")
     }
 
 }

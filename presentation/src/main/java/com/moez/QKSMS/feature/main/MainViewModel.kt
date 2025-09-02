@@ -42,8 +42,10 @@ import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.ChangelogManager
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.manager.RatingManager
+import dev.octoshrimpy.quik.model.EmojiSyncNeeded
 import dev.octoshrimpy.quik.model.SyncLog
 import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.EmojiReactionRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.util.Preferences
@@ -79,6 +81,7 @@ class MainViewModel @Inject constructor(
     private val permissionManager: PermissionManager,
     private val prefs: Preferences,
     private val ratingManager: RatingManager,
+    private val reactions: EmojiReactionRepository,
     private val syncContacts: SyncContacts,
     private val syncMessages: SyncMessages
 ) : QkViewModel<MainView, MainState>(
@@ -119,6 +122,15 @@ class MainViewModel @Inject constructor(
         val lastSync = Realm.getDefaultInstance().use { realm -> realm.where(SyncLog::class.java)?.max("date") ?: 0 }
         if (lastSync == 0 && permissionManager.isDefaultSms() && permissionManager.hasReadSms() && permissionManager.hasContacts()) {
             syncMessages.execute(Unit)
+        }
+
+        // This is only used when we update to a version that newly supports emoji reactions
+        Realm.getDefaultInstance().executeTransactionAsync { realm ->
+            val emojiSyncNeeded = realm.where(EmojiSyncNeeded::class.java).findFirst()
+            if (emojiSyncNeeded != null) {
+                reactions.deleteAndReparseAllEmojiReactions(realm)
+                emojiSyncNeeded.deleteFromRealm()
+            }
         }
 
         // Sync contacts when we detect a change

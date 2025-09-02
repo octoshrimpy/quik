@@ -231,38 +231,7 @@ class SyncRepositoryImpl @Inject constructor(
                 syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
 
                 // Now that we have all the messages, we can scan for emoji reactions
-                val allMessages = realm.where(Message::class.java)
-                    .beginGroup()
-                        .beginGroup()
-                            .equalTo("type", "sms")
-                            .isNotEmpty("body")
-                        .endGroup()
-                        .or()
-                        .beginGroup()
-                            .equalTo("type", "mms")
-                            .isNotEmpty("parts.text")
-                        .endGroup()
-                    .endGroup()
-                    .sort("date", Sort.ASCENDING) // parse oldest to newest to handle reactions & removals properly
-                    .findAll()
-
-                allMessages.forEach { message ->
-                    val text = message.getText(false)
-                    val parsedReaction = reactions.parseEmojiReaction(text)
-                    if (parsedReaction != null) {
-                        val targetMessage = reactions.findTargetMessage(
-                            message.threadId,
-                            parsedReaction.originalMessage,
-                            realm
-                        )
-                        reactions.saveEmojiReaction(
-                            message,
-                            parsedReaction,
-                            targetMessage,
-                            realm,
-                        )
-                    }
-                }
+                reactions.deleteAndReparseAllEmojiReactions(realm)
 
                 realm.insert(SyncLog())
             }, {
@@ -436,7 +405,6 @@ class SyncRepositoryImpl @Inject constructor(
         realm.delete(Message::class.java)
         realm.delete(MmsPart::class.java)
         realm.delete(Recipient::class.java)
-        realm.delete(EmojiReaction::class.java)
     }
 
 }
