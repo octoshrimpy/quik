@@ -72,11 +72,14 @@ class EmojiReactionRepositoryImpl @Inject constructor(
      * We'll search recent messages first (within reasonable time window)
      */
     override fun findTargetMessage(threadId: Long, originalMessageText: String, realm: Realm): Message? {
+        // log time taken
+        val startTime = System.currentTimeMillis()
         val messages = realm.where(Message::class.java)
             .equalTo("threadId", threadId)
             .sort("date", Sort.DESCENDING)
-            .limit(50) // TODO: should we keep this limit?
             .findAll()
+        val endTime = System.currentTimeMillis()
+        Timber.d("Found ${messages.size} messages as emoji targets in ${endTime - startTime}ms")
 
         val match = messages.find { message ->
             message.getText(false).trim() == originalMessageText.trim()
