@@ -353,6 +353,7 @@ class ConversationRepositoryImpl @Inject constructor(
 
             realm.executeTransaction {
                 conversation?.takeIf { it.isValid }?.draft = draft
+                conversation?.takeIf { it.isValid }?.draftDate = System.currentTimeMillis()
             }
         }
 
