@@ -66,7 +66,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
 
     /**
      * Search for messages in the same thread with matching text content
-     * We'll search recent messages first (within reasonable time window)
+     * We'll search recent messages first
      */
     override fun findTargetMessage(threadId: Long, originalMessageText: String, realm: Realm): Message? {
         val startTime = System.currentTimeMillis()

@@ -32,7 +32,7 @@ import javax.inject.Inject
 
 class QkRealmMigration @Inject constructor(
     private val cursorToContact: CursorToContactImpl,
-    private val prefs: Preferences,
+    private val prefs: Preferences
 ) : RealmMigration {
 
     companion object {
