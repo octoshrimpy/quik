@@ -18,19 +18,98 @@
  */
 package dev.octoshrimpy.quik.repository
 
+import android.content.Context
+import com.squareup.moshi.Moshi
 import dev.octoshrimpy.quik.manager.KeyManager
 import dev.octoshrimpy.quik.model.EmojiReaction
 import dev.octoshrimpy.quik.model.Message
-import dev.octoshrimpy.quik.repository.EmojiReactionUtils.reactionPatterns
-import dev.octoshrimpy.quik.repository.EmojiReactionUtils.removalPatterns
 import io.realm.Realm
 import io.realm.Sort
 import timber.log.Timber
 import javax.inject.Inject
 
 class EmojiReactionRepositoryImpl @Inject constructor(
-    private val keyManager: KeyManager
+    private val context: Context,
+    private val keyManager: KeyManager,
+    private val moshi: Moshi,
 ) : EmojiReactionRepository {
+
+    // We use an ordered map to make sure we test tapback regexes before generic ones
+    private val reactionPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?> = linkedMapOf()
+    private val removalPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?> = linkedMapOf()
+
+    init {
+        val assetEntries = loadEmojiPatternEntriesFromAssets()
+        assetEntries.forEach { (localeTag, strings) ->
+            try {
+                addPatternsForLocaleStrings(localeTag, strings, reactionPatterns, removalPatterns)
+            } catch (e: Exception) {
+                Timber.w(e, "Failed to load asset patterns for locale: $localeTag")
+            }
+        }
+        Timber.i("Loaded emoji reaction patterns for locales: ${assetEntries.map { it.first }}")
+    }
+
+    private fun addPatternsForLocaleStrings(
+        localeTag: String,
+        strings: EmojiPatternStrings,
+        reactionPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?>,
+        removalPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?>
+    ) {
+        // Google Messages
+        reactionPatterns[Regex(strings.googleAdded)] = { match -> ParsedEmojiReaction(match.groupValues[1], match.groupValues[2]) }
+        removalPatterns[Regex(strings.googleRemoved)] = { match -> ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true) }
+
+        // iOS tapbacks (order matters: specific before generic)
+        val tapbacks = listOf(
+            Triple("❤️", strings.iosHeartAdded, strings.iosHeartRemoved),
+            Triple("👍", strings.iosLikeAdded, strings.iosLikeRemoved),
+            Triple("👎", strings.iosDislikeAdded, strings.iosDislikeRemoved),
+            Triple("😂", strings.iosLaughAdded, strings.iosLaughRemoved),
+            Triple("‼️", strings.iosExclamationAdded, strings.iosExclamationRemoved),
+            Triple("❓", strings.iosQuestionMarkAdded, strings.iosQuestionMarkRemoved)
+        )
+        tapbacks.forEach { (emoji, added, removed) ->
+            reactionPatterns[Regex(added)] = { match -> ParsedEmojiReaction(emoji, match.groupValues[1]) }
+
+            removalPatterns[Regex(removed)] = { match -> ParsedEmojiReaction(emoji, match.groupValues[1], isRemoval = true) }
+        }
+
+        // Generic iOS emoji patterns
+        reactionPatterns[Regex(strings.iosGenericAdded)] = { match ->
+            if (match.groupValues.getOrNull(1) == "with a sticker") null // TODO: localize "with a sticker"
+            else ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
+        }
+        removalPatterns[Regex(strings.iosGenericRemoved)] = { match ->
+            // TODO: sticker?
+            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
+        }
+
+        Timber.d("Loaded emoji regex patterns for $localeTag from assets")
+    }
+
+    private fun loadEmojiPatternEntriesFromAssets(): List<Pair<String, EmojiPatternStrings>> {
+        val dir = "emojis"
+        val files = context.assets.list(dir) ?: emptyArray()
+        return files.filter { it.endsWith(".json", ignoreCase = true) }
+            .mapNotNull { filename ->
+                val localeTag = filename.removeSuffix(".json")
+                try {
+                    val json = context.assets.open("$dir/$filename").bufferedReader().use { it.readText() }
+                    val data = parseEmojiPatternsJson(json)
+                    localeTag to data
+                } catch (e: Exception) {
+                    Timber.w(e, "Failed parsing emoji patterns asset: $filename")
+                    null
+                }
+            }
+    }
+
+    private fun parseEmojiPatternsJson(json: String): EmojiPatternStrings {
+        val adapter = moshi.adapter(EmojiPatternStrings::class.java)
+        return requireNotNull(adapter.fromJson(json)) { "Invalid emoji patterns JSON" }
+    }
+
     override fun parseEmojiReaction(body: String): ParsedEmojiReaction? {
         val removal = parseRemoval(body)
         if (removal != null) return removal
@@ -68,7 +147,11 @@ class EmojiReactionRepositoryImpl @Inject constructor(
      * Search for messages in the same thread with matching text content
      * We'll search recent messages first
      */
-    override fun findTargetMessage(threadId: Long, originalMessageText: String, realm: Realm): Message? {
+    override fun findTargetMessage(
+        threadId: Long,
+        originalMessageText: String,
+        realm: Realm
+    ): Message? {
         val startTime = System.currentTimeMillis()
         val messages = realm.where(Message::class.java)
             .equalTo("threadId", threadId)
@@ -93,7 +176,6 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         reactionMessage: Message,
         reaction: ParsedEmojiReaction,
         targetMessage: Message?,
-        realm: Realm,
     ) {
         if (targetMessage == null) {
             Timber.w("Cannot remove emoji reaction '${reaction.emoji}': no target message found")
@@ -122,7 +204,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         realm: Realm,
     ) {
         if (parsedReaction.isRemoval) {
-            removeEmojiReaction(reactionMessage, parsedReaction, targetMessage, realm)
+            removeEmojiReaction(reactionMessage, parsedReaction, targetMessage)
             return
         }
 
@@ -192,51 +274,4 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         Timber.d("Deleted and reparsed all emoji reactions in ${endTime - startTime}ms")
     }
 
-}
-
-object EmojiReactionUtils {
-    private fun tapback(emoji: String, isRemoval: Boolean = false): (MatchResult) -> ParsedEmojiReaction {
-        return { match ->
-            ParsedEmojiReaction(emoji, match.groupValues[1], isRemoval)
-        }
-    }
-
-    val reactionPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
-        // Google Messages - https://github.com/octoshrimpy/quik/issues/152#issuecomment-2330183516
-        Regex("^\u200A\u200B(.+?)\u200B to \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
-            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
-        },
-        // iOS
-        Regex("^Reacted (.+?) to \u201C(.+?)\u201D$") to { match ->
-            if (match.groupValues[1] == "with a sticker")
-                null
-            else
-                ParsedEmojiReaction(match.groupValues[1], match.groupValues[2])
-        },
-        // iOS tapbacks
-        Regex("^Loved \u201C(.+?)\u201D$") to tapback("❤️"),
-        Regex("^Liked \u201C(.+?)\u201D$") to tapback("👍"),
-        Regex("^Disliked \u201C(.+?)\u201D$") to tapback("👎"),
-        Regex("^Laughed at \u201C(.+?)\u201D$") to tapback("😂"),
-        Regex("^Emphasized \u201C(.+?)\u201D$") to tapback("‼️"),
-        Regex("^Questioned \u201C(.+?)\u201D$") to tapback("❓"),
-    )
-
-    val removalPatterns: Map<Regex, (MatchResult) -> ParsedEmojiReaction?> = mapOf(
-        // Google Messages
-        Regex("^\u200ARemoved \u200C(.+?)\u200C from \u201C\u200A(.+?)\u200A\u201D\u200A$") to { match ->
-            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
-        },
-        // iOS tapbacks
-        Regex("^Removed a heart from \u201C(.+?)\u201D$") to tapback("❤️", true),
-        Regex("^Removed a like from \u201C(.+?)\u201D$") to tapback("👍", true),
-        Regex("^Removed a dislike from \u201C(.+?)\u201D$") to tapback("👎", true),
-        Regex("^Removed a laugh from \u201C(.+?)\u201D$") to tapback("😂", true),
-        Regex("^Removed an exclamation from \u201C(.+?)\u201D$") to tapback("‼️", true),
-        Regex("^Removed a question mark from \u201C(.+?)\u201D$") to tapback("❓", true),
-        // iOS emoji - keep this below tapbacks as this regex would otherwise also match the patterns above
-        Regex("^Removed (.+?) from \u201C(.+?)\u201D$") to { match ->
-            ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true)
-        },
-    )
 }
