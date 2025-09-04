@@ -22,8 +22,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
@@ -35,16 +38,50 @@ abstract class QkActivity : AppCompatActivity() {
 
     protected val menu: Subject<Menu> = BehaviorSubject.create()
 
+    private var scaleGestureDetector: ScaleGestureDetector? = null
+
     @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onNewIntent(intent)
         disableScreenshots(prefs.disableScreenshots.get())
+
+        scaleGestureDetector = ScaleGestureDetector(
+            this.applicationContext,
+            object: ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                override fun onScaleEnd(detector: ScaleGestureDetector) {
+                    var currentTextSize = prefs.textSize.get()
+
+                    // large enough pinch changes text size
+                    if (detector.scaleFactor < 0.8) currentTextSize--
+                    if (detector.scaleFactor > 1.2) currentTextSize++
+
+                    // bounds check
+                    if (currentTextSize < 0)
+                        currentTextSize = 0
+                    else {
+                        val maxSize =
+                            (this@QkActivity.resources.getStringArray(R.array.text_sizes).size - 1)
+                        if (currentTextSize > maxSize)
+                            currentTextSize = maxSize
+                    }
+
+                    prefs.textSize.set(currentTextSize)
+                }
+            }
+        )
     }
 
     override fun onResume() {
         super.onResume()
         disableScreenshots(prefs.disableScreenshots.get())
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev != null)
+            scaleGestureDetector?.onTouchEvent(ev)
+
+        return super.dispatchTouchEvent(ev)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
