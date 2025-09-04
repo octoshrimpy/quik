@@ -89,6 +89,7 @@ android {
     namespace 'dev.octoshrimpy.quik'
     buildFeatures {
         buildConfig true
+        viewBinding true
     }
     if (System.getenv("CI") == "true") {
         signingConfigs.release.storePassword = System.getenv("keystore_password")
