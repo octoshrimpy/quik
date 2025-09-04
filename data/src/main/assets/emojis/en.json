@@ -1,7 +1,4 @@
 {
-  "emoji_reaction_google_messages_added": "^\u200A\u200B(.+?)\u200B to “\u200A(.+?)\u200A”\u200A$",
-  "emoji_reaction_google_messages_removed": "^\u200ARemoved \u200C(.+?)\u200C from “\u200A(.+?)\u200A”\u200A$",
-
   "emoji_reaction_ios_generic_added": "^Reacted (.+?) to “(.+?)”$",
   "emoji_reaction_ios_generic_removed": "^Removed (.+?) from “(.+?)”$",
 

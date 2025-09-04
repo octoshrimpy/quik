@@ -5,9 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
 data class EmojiPatternStrings(
-    @Json(name = "emoji_reaction_google_messages_added") val googleAdded: String? = null,
-    @Json(name = "emoji_reaction_google_messages_removed") val googleRemoved: String? = null,
-
     @Json(name = "emoji_reaction_ios_generic_added") val iosGenericAdded: String? = null,
     @Json(name = "emoji_reaction_ios_generic_removed") val iosGenericRemoved: String? = null,
 

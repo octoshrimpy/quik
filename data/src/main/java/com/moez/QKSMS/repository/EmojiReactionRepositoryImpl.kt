@@ -34,10 +34,17 @@ class EmojiReactionRepositoryImpl @Inject constructor(
     private val keyManager: KeyManager,
     private val moshi: Moshi,
 ) : EmojiReactionRepository {
-
-    // We use an ordered map to make sure we test tapback regexes before generic ones
-    private val reactionPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?> = linkedMapOf()
-    private val removalPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?> = linkedMapOf()
+    // We use an ordered map to make sure we can test tapback regexes before generic ones
+    private val reactionPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?> = linkedMapOf(
+        Regex( // Google Messages
+            "(?s)^\u200a[^\u200b\u200a]*\u200b([^\u200b]*)\u200b[^\u200b\u200a]*\u200a(.*)\u200a[^\u200b\u200a]*\u200a\\Z"
+        ) to { match -> ParsedEmojiReaction(match.groupValues[1], match.groupValues[2]) }
+    )
+    private val removalPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?> = linkedMapOf(
+        Regex( // Google Messages
+            "(?s)^\u200a[^\u200c\u200a]*\u200c([^\u200c]*)\u200c[^\u200c\u200a]*\u200a(.*)\u200a[^\u200c\u200a]*\u200a\\Z"
+        ) to { match -> ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true) }
+    )
 
     init {
         val assetEntries = loadEmojiPatternEntriesFromAssets()
@@ -57,14 +64,6 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         reactionPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?>,
         removalPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?>
     ) {
-        // Google Messages
-        strings.googleAdded?.let { pattern ->
-            reactionPatterns[Regex(pattern)] = { match -> ParsedEmojiReaction(match.groupValues[1], match.groupValues[2]) }
-        }
-        strings.googleRemoved?.let { pattern ->
-            removalPatterns[Regex(pattern)] = { match -> ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true) }
-        }
-
         // iOS tapbacks (important to add these before generic emoji patterns as the regexes may overlap)
         listOf(
             Triple("❤️", strings.iosHeartAdded, strings.iosHeartRemoved),
