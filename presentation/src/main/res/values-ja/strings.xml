@@ -404,4 +404,5 @@
         <item>爆笑</item>
         <item>大丈夫</item>
     </string-array>
+    <string name="menu_mms_part_share">共有</string>
 </resources>
