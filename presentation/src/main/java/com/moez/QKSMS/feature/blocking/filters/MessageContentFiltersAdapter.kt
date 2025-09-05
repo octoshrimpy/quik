@@ -23,33 +23,32 @@ import android.view.View
 import android.view.ViewGroup
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.model.MessageContentFilter
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.message_content_filter_list_item.*
-import kotlinx.android.synthetic.main.message_content_filter_list_item.view.*
+import dev.octoshrimpy.quik.databinding.MessageContentFilterListItemBinding
 
-class MessageContentFiltersAdapter : QkRealmAdapter<MessageContentFilter, QkViewHolder>() {
+class MessageContentFiltersAdapter : QkRealmAdapter<MessageContentFilter, QkBindingViewHolder<MessageContentFilterListItemBinding>>() {
 
     val removeMessageContentFilter: Subject<Long> = PublishSubject.create()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.message_content_filter_list_item, parent, false)
-        return QkViewHolder(view).apply {
-            containerView.removeFilter.setOnClickListener {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<MessageContentFilterListItemBinding> {
+        val binding = MessageContentFilterListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return QkBindingViewHolder(binding).apply {
+            binding.removeFilter.setOnClickListener {
                 val filter = getItem(adapterPosition) ?: return@setOnClickListener
                 removeMessageContentFilter.onNext(filter.id)
             }
         }
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<MessageContentFilterListItemBinding>, position: Int) {
         val item = getItem(position)!!
-        holder.caseIcon.visibility = if (item.caseSensitive) View.VISIBLE else View.GONE
-        holder.regexIcon.visibility = if (item.isRegex) View.VISIBLE else View.GONE
-        holder.contactsIcon.visibility = if (item.includeContacts) View.VISIBLE else View.GONE
-        holder.filter.text = item.value
+        holder.binding.caseIcon.visibility = if (item.caseSensitive) View.VISIBLE else View.GONE
+        holder.binding.regexIcon.visibility = if (item.isRegex) View.VISIBLE else View.GONE
+        holder.binding.contactsIcon.visibility = if (item.includeContacts) View.VISIBLE else View.GONE
+        holder.binding.filter.text = item.value
     }
 
 }

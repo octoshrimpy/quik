@@ -38,6 +38,8 @@ class PreferenceView @JvmOverloads constructor(
 
     private var layout: PreferenceViewBinding
 
+    val titleTextView: TextView get() = layout.titleView
+
     var title: String? = null
         set(value) {
             field = value
