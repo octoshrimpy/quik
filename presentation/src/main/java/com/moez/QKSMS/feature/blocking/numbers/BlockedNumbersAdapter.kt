@@ -29,7 +29,7 @@ import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.blocked_number_list_item.*
 import kotlinx.android.synthetic.main.blocked_number_list_item.view.*
 
-class BlockedNumbersAdapter : QkRealmAdapter<BlockedNumber>() {
+class BlockedNumbersAdapter : QkRealmAdapter<BlockedNumber, QkViewHolder>() {
 
     val unblockAddress: Subject<Long> = PublishSubject.create()
 

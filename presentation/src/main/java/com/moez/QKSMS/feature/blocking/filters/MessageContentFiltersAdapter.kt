@@ -30,7 +30,7 @@ import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.message_content_filter_list_item.*
 import kotlinx.android.synthetic.main.message_content_filter_list_item.view.*
 
-class MessageContentFiltersAdapter : QkRealmAdapter<MessageContentFilter>() {
+class MessageContentFiltersAdapter : QkRealmAdapter<MessageContentFilter, QkViewHolder>() {
 
     val removeMessageContentFilter: Subject<Long> = PublishSubject.create()
 

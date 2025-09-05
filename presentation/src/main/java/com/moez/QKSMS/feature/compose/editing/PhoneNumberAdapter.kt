@@ -22,23 +22,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
+import dev.octoshrimpy.quik.databinding.ContactNumberListItemBinding
 import dev.octoshrimpy.quik.model.PhoneNumber
-import kotlinx.android.synthetic.main.contact_number_list_item.*
 
-class PhoneNumberAdapter : QkAdapter<PhoneNumber, QkViewHolder>() {
+class PhoneNumberAdapter : QkAdapter<PhoneNumber, QkBindingViewHolder<ContactNumberListItemBinding>>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.contact_number_list_item, parent, false)
-        return QkViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<ContactNumberListItemBinding> {
+        val binding = ContactNumberListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return QkBindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<ContactNumberListItemBinding>, position: Int) {
         val number = getItem(position)
 
-        holder.address.text = number.address
-        holder.type.text = number.type
+        holder.binding.address.text = number.address
+        holder.binding.type.text = number.type
     }
 
     override fun areItemsTheSame(old: PhoneNumber, new: PhoneNumber): Boolean {
