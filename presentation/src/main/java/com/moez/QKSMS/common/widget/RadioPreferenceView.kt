@@ -40,7 +40,7 @@ class RadioPreferenceView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs) {
 
     @Inject lateinit var colors: Colors
-    private lateinit var layout: RadioPreferenceViewBinding
+    private var layout: RadioPreferenceViewBinding
 
     var title: String? = null
         set(value) {

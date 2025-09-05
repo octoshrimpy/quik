@@ -36,7 +36,7 @@ class PreferenceView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : LinearLayoutCompat(context, attrs) {
 
-    private lateinit var layout: PreferenceViewBinding
+    private var layout: PreferenceViewBinding
 
     var title: String? = null
         set(value) {

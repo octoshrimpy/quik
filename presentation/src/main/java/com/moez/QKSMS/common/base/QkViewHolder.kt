@@ -20,8 +20,11 @@ package dev.octoshrimpy.quik.common.base
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import kotlinx.android.extensions.LayoutContainer
 
 open class QkViewHolder(view: View) : RecyclerView.ViewHolder(view), LayoutContainer {
     override val containerView: View = view
 }
+
+open class QkBindingViewHolder<T : ViewBinding>(val binding: T) : QkViewHolder(binding.root)

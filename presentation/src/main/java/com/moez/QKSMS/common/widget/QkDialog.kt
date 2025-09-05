@@ -23,7 +23,6 @@ import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.databinding.QkDialogBinding
 

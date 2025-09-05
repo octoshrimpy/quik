@@ -27,7 +27,6 @@ import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
-import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.forEach
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
