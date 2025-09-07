@@ -95,13 +95,6 @@ android {
         signingConfigs.release.keyAlias = System.getenv("key_alias")
         signingConfigs.release.keyPassword = System.getenv("key_password")
     }
-
-    bundle {
-        language {
-            // avoid splitting out languages because we want to handle an emoji reaction in any language
-            enableSplit = false
-        }
-    }
 }
 
 androidExtensions {

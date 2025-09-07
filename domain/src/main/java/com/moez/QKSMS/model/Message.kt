@@ -74,9 +74,7 @@ open class Message : RealmObject() {
     var subject: String = ""
     var textContentType: String = ""
     var parts: RealmList<MmsPart> = RealmList()
-    /** is this message a reaction to another message? */
     var isEmojiReaction: Boolean = false
-    /** emoji reactions to this message */
     val emojiReactions: RealmList<EmojiReaction> = RealmList()
 
     fun getUri(): Uri {
