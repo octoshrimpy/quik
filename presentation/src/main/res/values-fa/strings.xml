@@ -17,29 +17,29 @@
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   --><resources>
-    <string name="shortcut_compose_long_label">گفتگوی جدید</string>
+    <string name="shortcut_compose_long_label">گفتگوی نو</string>
     <string name="shortcut_compose_short_label">نوشتن</string>
     <string name="shortcut_compose_disabled_message">میانبر غیرفعال شد</string>
     <string name="title_archived">بایگانی شد</string>
     <string name="title_settings">تنظیمات</string>
-    <string name="title_notification_prefs">اعلان‌ها</string>
+    <string name="title_notification_prefs">آگاهنده‌ها</string>
     <string name="title_theme">پوسته</string>
-    <string name="title_conversations">جستجو در صندوق ورودی…</string>
-    <string name="title_compose">یک نام یا شماره را وارد کنید</string>
+    <string name="title_conversations">جستجو در دریافتی …</string>
+    <string name="title_compose">نام یا شماره‌ای را اندر نشانید</string>
     <string name="setup_skip">رد شدن</string>
     <string name="setup_next">ادامه</string>
-    <string name="menu_add_person">افزودن شخص</string>
+    <string name="menu_add_person">افزودن کَس</string>
     <string name="menu_call">تماس</string>
     <string name="menu_info">جزئیات</string>
     <string name="menu_mms_part_save">ذخیره در گالری</string>
     <string name="compose_menu_share">هم‌رسانی</string>
     <string name="main_drawer_open_cd">بازکردن کشو ناوبری</string>
     <string name="main_title_selected">%d انتخاب شده</string>
-    <string name="main_menu_clear">پاکسازی</string>
+    <string name="main_menu_clear">پاک‌کردن</string>
     <string name="main_menu_archive">بایگانی</string>
-    <string name="main_menu_unarchive">بیرون آوردن از بایگانی</string>
-    <string name="main_menu_delete">حذف</string>
-    <string name="main_menu_add_contact">افزودن به مخاطبین</string>
+    <string name="main_menu_unarchive">وابایگانی</string>
+    <string name="main_menu_delete">سِتُردن</string>
+    <string name="main_menu_add_contact">افزودن به هَمدرِنگان</string>
     <string name="main_menu_pin">سنجاق به بالای صفحه</string>
     <string name="main_menu_unpin">رها کردن</string>
     <string name="main_menu_read">نشان به‌عنوان خوانده شده</string>
@@ -67,17 +67,17 @@
     <string name="drawer_blocking">مسدود</string>
     <string name="drawer_more">بيشتر</string>
     <string name="drawer_settings">تنظیمات</string>
-    <string name="drawer_help">راهنما &amp; بازخورد</string>
+    <string name="drawer_help">راهنما اود بازخورد</string>
     <string name="drawer_invite">دعوت دوستان</string>
     <string name="drawer_plus_banner_summary">ویژگی های جدید شگفت انگیز را باز کرده و از توسعه نرم‌افزار پشتیبانی کنید</string>
     <string name="rate_title">از QUIK لذت می برید؟</string>
     <string name="rate_summary">علاقه ی خود رابا امتیاز دادن به ما در گوگل پلی به اشتراک بگذارید</string>
-    <string name="rate_okay">باشه!</string>
-    <string name="rate_dismiss">رد شدن</string>
-    <string name="dialog_delete_title">حذف</string>
+    <string name="rate_okay">باشد!</string>
+    <string name="rate_dismiss">هلیدن</string>
+    <string name="dialog_delete_title">سِتُردن</string>
     <plurals name="dialog_delete_message">
-        <item quantity="one">آیا مطمئن هستید که می خواهید این گفتگو را حذف کنید؟</item>
-        <item quantity="other">آیا مطمئن هستید که می خواهید %d گفتگو را حذف کنید؟</item>
+        <item quantity="one">آیا آسوده‌دل هستید که می خواهید این گفتگو را بسِتُردانید؟</item>
+        <item quantity="other">آیا آسوده‌دل هستید که می خواهید %d گفتگو را بسِتُردانید؟</item>
     </plurals>
     <string-array name="message_options">
         <item>کپی متن</item>
@@ -86,23 +86,23 @@
     </string-array>
     <string name="compose_number_picker_title">یک شماره تلفن انتخاب کنید</string>
     <string name="compose_number_picker_default">%s ∙ پیش‌فرض</string>
-    <string name="compose_number_picker_once">فقط یک بار</string>
+    <string name="compose_number_picker_once">تنها یک‌بار</string>
     <string name="compose_number_picker_always">همیشه</string>
     <string name="compose_title_selected">%d انتخاب شده</string>
     <string name="compose_subtitle_results">نتایج %1$d از %2$d</string>
     <string name="compose_send_group_title">ارسال به‌صورت پیام گروهی</string>
     <string name="compose_send_group_summary">گیرندگان و پاسخ‌ها برای همه قابل مشاهده خواهد بود</string>
-    <string name="compose_messages_empty">این آغاز گفتگوی شماست. یه چیز خوب بگو!</string>
+    <string name="compose_messages_empty">این آغاز گفتگوی شماست. چیز خوبی بگویید!</string>
     <string name="compose_vcard_label">کارت تماس</string>
-    <string name="compose_scheduled_for">برنامه‌ریزی شده برای</string>
-    <string name="compose_scheduled_future">زمان انتخابی باید در آینده باشد!</string>
+    <string name="compose_scheduled_for">زمان برنامه‌ریزی‌شده:</string>
+    <string name="compose_scheduled_future">زمان برگزیده باید در آینده باشد!</string>
     <string name="compose_scheduled_plus">برای استفاده از پیام‌های برنامه‌ریزی شده ، باید QUIK+ را باز کنید</string>
     <string name="compose_scheduled_toast">به پیام‌های برنامه‌ریزی شده افزوده شد</string>
     <string name="compose_hint">نوشتن پیام…</string>
     <string name="compose_menu_copy">کپی‌کردن متن</string>
     <string name="compose_menu_forward">هدایت</string>
-    <string name="compose_menu_delete">حذف</string>
-    <string name="compose_menu_previous">قبلی</string>
+    <string name="compose_menu_delete">سِتُردن</string>
+    <string name="compose_menu_previous">پیشین</string>
     <string name="compose_menu_next">بعدی</string>
     <string name="compose_menu_clear">پاک‌سازی</string>
     <string name="compose_details_title">جزئیات پیام</string>
@@ -347,8 +347,8 @@
     </string-array>
     <string name="button_yes">بله</string>
     <string name="button_continue">ادامه</string>
-    <string name="button_cancel">لغو</string>
-    <string name="button_delete">حذف</string>
+    <string name="button_cancel">وازدن</string>
+    <string name="button_delete">سِتُردن</string>
     <string name="button_save">ذخیره</string>
     <string name="button_stop">توقف</string>
     <string name="button_more">بيشتر</string>
@@ -409,4 +409,20 @@
         <item>خخخخ</item>
         <item>خوبه</item>
     </string-array>
+    <string name="menu_mms_part_share">همرسانی</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">آیا آسوده‌دل هستید که می خواهید این پیام را بسِتُردانید؟</item>
+        <item quantity="other">آیا آسوده‌دل هستید که می خواهید %d پیام را بسِتُردانید؟</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">آیا آسوده‌دل هستید که می خواهید این پیام را بفرستید؟</item>
+        <item quantity="other">آیا آسوده‌دل هستید که می خواهید %d پیام را بفرستید؟</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">ویرایش پیام</string>
+    <string name="dialog_edit_scheduled_message_positive_button">آری، پیام را ویرایش کنید</string>
+    <string name="dialog_clear_compose">پیام پاک شود؟ این کار برگشت‌ناپذیر است.</string>
+    <string name="compose_scheduled_view">پیام برنامه‌ریزی شده برای این گفتگو</string>
+    <string name="dialog_clear_compose_title">پاک‌کردن پیام</string>
+    <string name="compose_attach_file_cd">پیوست هر پرونده</string>
+    <string name="compose_message_cancel">لغو</string>
 </resources>
