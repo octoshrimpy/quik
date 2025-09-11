@@ -30,7 +30,7 @@
     <string name="setup_next">ادامه</string>
     <string name="menu_add_person">افزودن کَس</string>
     <string name="menu_call">تماس</string>
-    <string name="menu_info">جزئیات</string>
+    <string name="menu_info">گوکان</string>
     <string name="menu_mms_part_save">ذخیره در گالری</string>
     <string name="compose_menu_share">هم‌رسانی</string>
     <string name="main_drawer_open_cd">بازکردن کشو ناوبری</string>
@@ -345,22 +345,22 @@
         <item>نشان به‌عنوان خوانده شده</item>
         <item>پاسخ</item>
     </string-array>
-    <string name="button_yes">بله</string>
+    <string name="button_yes">آری</string>
     <string name="button_continue">ادامه</string>
     <string name="button_cancel">وازدن</string>
     <string name="button_delete">سِتُردن</string>
     <string name="button_save">ذخیره</string>
-    <string name="button_stop">توقف</string>
+    <string name="button_stop">ایست</string>
     <string name="button_more">بيشتر</string>
     <string name="button_set">تنظیم</string>
     <string name="button_undo">برگرده</string>
     <string name="toast_copied">کپی شد</string>
     <string name="toast_qksms_plus">باید نسخه پیشرفته را فعال کنید</string>
     <plurals name="notification_new_messages">
-        <item quantity="one">پیام جدید</item>
-        <item quantity="other">پیام جدید</item>
+        <item quantity="one">پیام نو</item>
+        <item quantity="other">%s پیام نو</item>
     </plurals>
-    <string name="notification_message_failed_title">پیام ارسال نشد</string>
+    <string name="notification_message_failed_title">پیام فرستاده نشد</string>
     <string name="notification_message_failed_text">پیام به %s فرستاده نشد</string>
     <string-array name="night_modes">
         <item>سامانه</item>
@@ -425,4 +425,21 @@
     <string name="dialog_clear_compose_title">پاک‌کردن پیام</string>
     <string name="compose_attach_file_cd">پیوست هر پرونده</string>
     <string name="compose_message_cancel">لغو</string>
+    <string name="main_menu_select_all">گزیدن همه</string>
+    <string name="messages_text_share_file_error">اُخ! اشکالی هنگام همرسانی پیش آمد</string>
+    <string name="stt_toast_extra_prompt">گفتن پیام شما</string>
+    <string name="messageLinkHandling_dialog_positive">آری، پیوند را باز کنید</string>
+    <string name="messageLinkHandling_dialog_negative">نه</string>
+    <string name="notification_message_failed_action">بازفرستادن</string>
+    <string name="speak_no_messages">بی‌پیام</string>
+    <string name="speak_unseen_messages">گفتن پیام‌های خوانده نشده</string>
+    <plurals name="toast_archived">
+        <item quantity="one">گفتگو بایگانی شد</item>
+        <item quantity="other">%d گفتگو بایگانی شدند</item>
+    </plurals>
+    <plurals name="toast_unarchived">
+        <item quantity="one">گفتگو وابایگانی شد</item>
+        <item quantity="other">%d گفتگو وابایگانی شدند</item>
+    </plurals>
+    <string name="all_conversations_widget_title">همه‌ی گفتگو‌ها</string>
 </resources>
