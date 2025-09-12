@@ -21,7 +21,7 @@
     <string name="shortcut_compose_short_label">نوشتن</string>
     <string name="shortcut_compose_disabled_message">میانبر غیرفعال شد</string>
     <string name="title_archived">بایگانی شد</string>
-    <string name="title_settings">تنظیمات</string>
+    <string name="title_settings">پیکربندی</string>
     <string name="title_notification_prefs">آگاهنده‌ها</string>
     <string name="title_theme">پوسته</string>
     <string name="title_conversations">جستجو در دریافتی …</string>
@@ -58,7 +58,7 @@
     <string name="main_default_sms_change">تغییر</string>
     <string name="main_permission_required">نیاز به اجازه</string>
     <string name="main_permission_sms">QUIK برای ارسال و مشاهده پیام‌ها نیاز به اجازه دارد</string>
-    <string name="main_permission_contacts">QUIK نیاز به اجازه برای مشاهده مخاطبین شما دارد</string>
+    <string name="main_permission_contacts">QUIK نیاز به هیشتن برای دیدن هَمدرِنگان شما دارد</string>
     <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
     <string name="main_permission_allow">اجازه</string>
     <string name="drawer_inbox">صندوق ورودی</string>
@@ -120,7 +120,7 @@
     <string name="compose_gallery_cd">پیوست یک عکس</string>
     <string name="compose_camera_cd">گرفتن عکس</string>
     <string name="compose_schedule_cd">زمان‌بندی پیام</string>
-    <string name="compose_contact_cd">یک مخاطب پیوست کنید</string>
+    <string name="compose_contact_cd">پیوست یک هَمدرِنگ</string>
     <string name="compose_contact_error">خطا در خواندن مخاطب</string>
     <!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">سیم‌کارت %1$d (%2$s) انتخاب شد</string>
@@ -442,4 +442,11 @@
         <item quantity="other">%d گفتگو وابایگانی شدند</item>
     </plurals>
     <string name="all_conversations_widget_title">همه‌ی گفتگو‌ها</string>
+    <string name="menu_mms_part_forward">بازفرست</string>
+    <string name="menu_mms_part_open">گشودن برونی</string>
+    <string name="main_menu_send_now">اکنون بفرست</string>
+    <string name="main_menu_edit_message">ویرایش پیام</string>
+    <string name="scheduled_menu_send_now">اکنون بفرست</string>
+    <string name="scheduled_menu_edit_message">ویرایش پیام</string>
+    <string name="dialog_edit_scheduled_message">ویرایش این پیام آن را از زمان‌بندی می‌سترداند.\n\nا\n\nآیا می‌خواهید ادامه دهید؟</string>
 </resources>
