@@ -411,7 +411,8 @@ class MessagesAdapter @Inject constructor(
                 val reactionText = if (topReaction.second == 1) {
                     topReaction.first
                 } else {
-                    "${topReaction.first} ${topReaction.second}"
+                    // Use a non-breaking space to keep the emoji and count together
+                    "${topReaction.first}\u00A0${topReaction.second}"
                 }
 
                 holder.reactionText?.text = reactionText

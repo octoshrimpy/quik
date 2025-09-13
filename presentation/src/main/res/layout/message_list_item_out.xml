@@ -183,6 +183,7 @@
                             android:background="@drawable/message_only"
                             android:backgroundTint="?android:attr/colorBackground"
                             android:elevation="2dp"
+                            android:maxLines="1"
                             android:paddingStart="8dp"
                             android:paddingTop="4dp"
                             android:paddingEnd="8dp"
