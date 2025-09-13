@@ -190,7 +190,6 @@ class EmojiReactionRepositoryImpl @Inject constructor(
     ) {
         if (targetMessage == null) {
             Timber.w("Cannot remove emoji reaction '${reaction.emoji}': no target message found")
-            reactionMessage.isEmojiReaction = true
             return
         }
 
@@ -229,14 +228,13 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         }
         realm.insertOrUpdate(reaction)
 
-        reactionMessage.isEmojiReaction = true
-
         if (targetMessage != null) {
+            reactionMessage.isEmojiReaction = true
             targetMessage.emojiReactions.add(reaction)
 
             Timber.i("Saved emoji reaction: ${reaction.emoji} to message ${targetMessage.id}")
         } else {
-            Timber.w("Saved emoji reaction without target message: ${reaction.emoji}")
+            Timber.w("No target message, cannot save emoji reaction: ${reaction.emoji}")
         }
     }
 
