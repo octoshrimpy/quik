@@ -230,6 +230,11 @@ class EmojiReactionRepositoryImpl @Inject constructor(
 
         if (targetMessage != null) {
             reactionMessage.isEmojiReaction = true
+
+            // Overwrite any previous reaction from this sender for this target
+            val priorFromSender = targetMessage.emojiReactions.filter { it.senderAddress == reaction.senderAddress }
+            priorFromSender.forEach { it.deleteFromRealm() }
+
             targetMessage.emojiReactions.add(reaction)
 
             Timber.i("Saved emoji reaction: ${reaction.emoji} to message ${targetMessage.id}")
