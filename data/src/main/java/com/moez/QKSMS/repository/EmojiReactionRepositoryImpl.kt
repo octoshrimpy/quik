@@ -258,7 +258,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
                     .isNotEmpty("body")
                 .endGroup()
                 .or()
-                 .beginGroup()
+                .beginGroup()
                     .equalTo("type", "mms")
                     .notEqualTo("messageType", 130.toLong())
                     .isNotEmpty("parts.text")
