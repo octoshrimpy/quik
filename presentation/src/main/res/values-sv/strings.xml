@@ -94,7 +94,7 @@
     <string name="compose_send_group_summary">Mottagare och svar kommer att vara synligt för alla</string>
     <string name="compose_messages_empty">Det här är början på din konversation. Säg något snällt!</string>
     <string name="compose_vcard_label">Kontaktkort</string>
-    <string name="compose_scheduled_for">Schemalagd för</string>
+    <string name="compose_scheduled_for">Schemalagd tid:</string>
     <string name="compose_scheduled_future">Den valda tiden måste vara i framtiden!</string>
     <string name="compose_scheduled_plus">Du måste låsa upp QUIK+ om du vill använda schemalagda meddelanden</string>
     <string name="compose_scheduled_toast">Lades till i schemalagda meddelanden</string>
@@ -409,4 +409,25 @@
         <item>LOL</item>
         <item>Det är okej</item>
     </string-array>
+    <string name="menu_mms_part_share">Dela</string>
+    <string name="menu_mms_part_forward">Vidarebefordra</string>
+    <string name="menu_mms_part_open">Öppna externt</string>
+    <string name="main_menu_select_all">Välj alla</string>
+    <string name="main_menu_send_now">Skicka nu</string>
+    <string name="main_menu_edit_message">Redigera meddelande</string>
+    <string name="main_menu_rename_conversation">Byt namn på konversation</string>
+    <string name="scheduled_menu_send_now">Skicka nu</string>
+    <string name="scheduled_menu_edit_message">Redigera meddelande</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Är du säker på att du vill ta bort detta meddelande?</item>
+        <item quantity="other">Är du säker på att du vill ta bort %d meddelanden?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Är du säker på att du vill skicka detta meddelande nu?</item>
+        <item quantity="other">Är du säker på att du vill skicka %d meddelanden nu?</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Redigera meddelande</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Ja, redigera meddelandet</string>
+    <string name="dialog_clear_compose_title">Rensa meddelande</string>
+    <string name="dialog_clear_compose">Rensa meddelandet? Denna åtgärd kan inte ångras.</string>
 </resources>
