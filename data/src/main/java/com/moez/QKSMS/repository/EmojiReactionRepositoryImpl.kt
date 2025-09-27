@@ -169,7 +169,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
             .sort("date", Sort.DESCENDING)
             .findAll()
         val endTime = System.currentTimeMillis()
-        Timber.d("Found ${messages.size} messages as emoji targets in ${endTime - startTime}ms")
+        Timber.d("Found ${messages.size} messages as potential emoji targets in ${endTime - startTime}ms")
 
         val match = messages.find { message ->
             message.getText(false).trim() == originalMessageText.trim()
