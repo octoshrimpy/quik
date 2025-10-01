@@ -20,6 +20,7 @@ package dev.octoshrimpy.quik.repository
 
 import android.content.Context
 import com.squareup.moshi.Moshi
+import dev.octoshrimpy.quik.extensions.insertOrUpdate
 import dev.octoshrimpy.quik.manager.KeyManager
 import dev.octoshrimpy.quik.model.EmojiReaction
 import dev.octoshrimpy.quik.model.Message
@@ -187,6 +188,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         reactionMessage: Message,
         reaction: ParsedEmojiReaction,
         targetMessage: Message?,
+        realm: Realm,
     ) {
         if (targetMessage == null) {
             Timber.w("Cannot remove emoji reaction '${reaction.emoji}': no target message found")
@@ -205,6 +207,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         }
 
         reactionMessage.isEmojiReaction = true
+        realm.insertOrUpdate(reactionMessage)
     }
 
     override fun saveEmojiReaction(
@@ -214,7 +217,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         realm: Realm,
     ) {
         if (parsedReaction.isRemoval) {
-            removeEmojiReaction(reactionMessage, parsedReaction, targetMessage)
+            removeEmojiReaction(reactionMessage, parsedReaction, targetMessage, realm)
             return
         }
 
@@ -230,6 +233,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
 
         if (targetMessage != null) {
             reactionMessage.isEmojiReaction = true
+            realm.insertOrUpdate(reactionMessage)
 
             // Overwrite any previous reaction from this sender for this target
             val priorFromSender = targetMessage.emojiReactions.filter { it.senderAddress == reaction.senderAddress }
