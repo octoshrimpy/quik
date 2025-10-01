@@ -139,7 +139,9 @@
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/sendNowIcon"
                 android:layout_toEndOf="@id/cancelFrame"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <View
                     android:layout_width="0dp"

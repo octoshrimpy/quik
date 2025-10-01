@@ -79,7 +79,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:clipToPadding="false"
+            android:clipChildren="false">
 
             <dev.octoshrimpy.quik.common.widget.AvatarView
                 android:id="@+id/avatar"
