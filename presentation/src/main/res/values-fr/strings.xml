@@ -21,7 +21,7 @@
     <string name="shortcut_compose_long_label">Nouvelle conversation</string>
     <string name="shortcut_compose_short_label">Rédiger</string>
     <string name="shortcut_compose_disabled_message">Raccourci désactivé</string>
-    <string name="title_archived">Archivées</string>
+    <string name="title_archived">Archives</string>
     <string name="title_settings">Paramètres</string>
     <string name="title_notification_prefs">Notifications</string>
     <string name="title_theme">Thème</string>
@@ -36,7 +36,7 @@
     <string name="menu_mms_part_save">Enregistrer dans la galerie</string>
     <string name="menu_mms_part_share">Partager</string>
     <string name="menu_mms_part_forward">Transférer</string>
-    <string name="menu_mms_part_open">Ouvrir dans la galerie</string>
+    <string name="menu_mms_part_open">Ouvrir en dehors de l\'appli</string>
     <string name="main_drawer_open_cd">Ouvrir le tiroir de navigation</string>
     <string name="main_title_selected">%d sélectionnée</string>
     <string name="main_menu_clear">Effacer</string>
@@ -62,7 +62,7 @@
     <string name="archived_empty_text">Vos conversations archivées apparaîtront ici</string>
     <string name="main_fab_cd">Débuter une nouvelle conversation</string>
     <string name="main_default_sms_title">Réapprenez à aimer les textos</string>
-    <string name="main_default_sms_message">Faire de QUIK votre application SMS par défaut</string>
+    <string name="main_default_sms_message">Faire de QUIK votre appli SMS par défaut</string>
     <string name="main_default_sms_change">Changer</string>
     <string name="main_permission_required">Autorisation requise</string>
     <string name="main_permission_sms">QUIK a besoin de l’autorisation d’envoyer et de consulter les messages SMS</string>
@@ -78,18 +78,19 @@
     <string name="drawer_more">Plus</string>
     <string name="drawer_settings">Paramètres</string>
     <string name="drawer_plus" translatable="false">DEPRECATED - drawer_plus</string>
-    <string name="drawer_help">Aide &amp; commentaire</string>
+    <string name="drawer_help">Aide &amp; commentaires</string>
     <string name="drawer_invite">Inviter des amis</string>
     <string name="drawer_plus_banner_title" translatable="false">DEPRECATED - drawer_plus_banner_title</string>
-    <string name="drawer_plus_banner_summary">Débloquer les nouvelles fonctions sensationnelles et soutenir le développement</string>
-    <string name="rate_title">Vous aimez QUIK ?</string>
-    <string name="rate_summary">Partagez un peu d’amour et évaluez-nous sur le Play Store !</string>
-    <string name="rate_okay">OK !</string>
+    <string name="drawer_plus_banner_summary">Débloquez des nouvelles fonctionnalités incroyables et soutenez le développement</string>
+    <string name="rate_title">Vous aimez QUIK ?</string>
+    <string name="rate_summary">Partagez votre amour et laissez nous une Étoile sur GitHub !</string>
+    <string name="rate_okay">OK !</string>
     <string name="rate_dismiss">ANNULER</string>
     <string name="dialog_delete_title">Supprimer</string>
     <plurals name="dialog_delete_message">
-        <item quantity="one">Voulez-vous vraiment supprimer cette conversation ?</item>
-        <item quantity="other">Voulez-vous vraiment supprimer %d conversations ?</item>
+        <item quantity="one">Voulez-vous vraiment supprimer cette conversation ?</item>
+        <item quantity="many"></item>
+        <item quantity="other">Voulez-vous vraiment supprimer %d conversations ?</item>
     </plurals>
     <plurals name="dialog_delete_chat">
         <item quantity="one">Voulez-vous vraiment supprimer ce message ?</item>
@@ -100,7 +101,7 @@
         <item quantity="other">Voulez-vous vraiment envoyer %d messages maintenant ?</item>
     </plurals>
     <string name="dialog_edit_scheduled_message_title">Modifier le message</string>
-    <string name="dialog_edit_scheduled_message">Modifier ce message va le retirer des messages programmés.\n\nAssurez-vous de le resoumettre au prochain écran, ou il sera perdu.\n\nVoulez-vous continuer ?</string>
+    <string name="dialog_edit_scheduled_message">Modifier ce message va le retirer des messages programmés.\n\nAssurez-vous de le réenvoyer au prochain écran, ou il sera perdu.\n\nVoulez-vous continuer ?</string>
     <string name="dialog_edit_scheduled_message_positive_button">Oui, modifier le message</string>
     <string name="dialog_clear_compose_title">Effacer le message</string>
     <string name="dialog_clear_compose">Effacer ce message ? Cette action ne peut être annulée.</string>
@@ -119,7 +120,7 @@
     <string name="compose_send_group_summary">Les destinataires et les réponses seront visibles par tout le monde</string>
     <string name="compose_messages_empty">C’est le début de votre conversation. Dites quelque chose de sympa !</string>
     <string name="compose_vcard_label">Fiche du contact</string>
-    <string name="compose_scheduled_for">Programmé pour</string>
+    <string name="compose_scheduled_for">Heure d\'envoi prévue :</string>
     <string name="compose_scheduled_future">Le moment choisi doit être dans le futur !</string>
     <string name="compose_scheduled_plus">Vous devez déverrouiller QUIK+ pour utiliser la programmation de message</string>
     <string name="compose_scheduled_toast">Ajouté aux messages programmés</string>
@@ -518,4 +519,23 @@
     <string name="error_stt_toast">Désolé, il y a eu une erreur au chargement du fournisseur de saisie vocale.</string>
     <string name="stt_toast_extra_prompt">Exprimez votre message</string>
     <string name="messages_text_share_file_error">Oups ! Quelque chose s’est mal déroulé pendant le partage</string>
+    <string name="main_sender_draft">Brouillon : %s</string>
+    <string name="compose_scheduled_view">Messages programmés pour cette conversation</string>
+    <string name="scheduled_send_cd">Programmer l\'envoi de ce message</string>
+    <string name="message_content_filters_title">Filtres de contenu des messages</string>
+    <string name="message_content_filters_empty">Les filtres de contenu des messages apparaîtront ici</string>
+    <string name="message_content_filters_add_cd">Créer un nouveau filtre</string>
+    <string name="message_content_filters_dialog_title">Ne pas récupérer les messages contenant</string>
+    <string name="message_content_filters_dialog_hint">Mot, phrase, expression régulière</string>
+    <string name="message_content_filters_dialog_case_switch">Sensible à la casse</string>
+    <string name="message_content_filters_dialog_regex_switch">Expression régulière</string>
+    <string name="message_content_filters_dialog_contacts_switch">Inclure les contacts</string>
+    <string name="message_content_filters_dialog_create">Créer</string>
+    <string name="all_conversations_widget_title">Toutes les conversations</string>
+    <plurals name="toast_unarchived">
+        <item quantity="one">Conversation désarchivée</item>
+        <item quantity="many">%d conversations désarchivées</item>
+        <item quantity="other">%d conversations désarchivées</item>
+    </plurals>
+    <string name="notification_message_failed_action">Réenvoyer</string>
 </resources>
