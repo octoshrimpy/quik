@@ -314,7 +314,7 @@ class ConversationRepositoryImpl @Inject constructor(
         getConversation(listOf(recipient))
 
     override fun getConversation(recipients: Collection<String>) =
-        Realm.getDefaultInstance().use { realm ->
+        Realm.getDefaultInstance().let { realm ->
             realm.refresh()
             realm.where(Conversation::class.java)
                 .findAll()
