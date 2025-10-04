@@ -30,7 +30,7 @@ import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
 import timber.log.Timber
 
-abstract class QkRealmAdapter<T : RealmModel> : RealmRecyclerViewAdapter<T, QkViewHolder>(null, true) {
+abstract class QkRealmAdapter<T : RealmModel, VH : QkViewHolder> : RealmRecyclerViewAdapter<T, VH>(null, true) {
 
     /**
      * This view can be set, and the adapter will automatically control the visibility of this view

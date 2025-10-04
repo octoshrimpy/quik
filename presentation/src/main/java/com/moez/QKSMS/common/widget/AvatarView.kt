@@ -20,17 +20,17 @@ package dev.octoshrimpy.quik.common.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.FrameLayout
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.databinding.AvatarViewBinding
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.GlideApp
-import kotlinx.android.synthetic.main.avatar_view.view.*
 import javax.inject.Inject
 
 class AvatarView @JvmOverloads constructor(
@@ -45,6 +45,7 @@ class AvatarView @JvmOverloads constructor(
     private var photoUri: String? = null
     private var lastUpdated: Long? = null
     private var theme: Colors.Theme
+    private var layout: AvatarViewBinding
 
     init {
         if (!isInEditMode) {
@@ -53,7 +54,7 @@ class AvatarView @JvmOverloads constructor(
 
         theme = colors.theme()
 
-        View.inflate(context, R.layout.avatar_view, this)
+        layout = AvatarViewBinding.inflate(LayoutInflater.from(context), this)
         setBackgroundResource(R.drawable.circle)
         clipToOutline = true
     }
@@ -81,8 +82,8 @@ class AvatarView @JvmOverloads constructor(
     private fun updateView() {
         // Apply theme
         setBackgroundTint(theme.theme)
-        initial.setTextColor(theme.textPrimary)
-        icon.setTint(theme.textPrimary)
+        layout.initial.setTextColor(theme.textPrimary)
+        layout.icon.setTint(theme.textPrimary)
 
         val initials = fullName
                 ?.substringBefore(',')
@@ -93,18 +94,18 @@ class AvatarView @JvmOverloads constructor(
                 .map { initial -> initial.toString() }
 
         if (initials.isNotEmpty()) {
-            initial.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
-            icon.visibility = GONE
+            layout.initial.text = if (initials.size > 1) initials.first() + initials.last() else initials.first()
+            layout.icon.visibility = GONE
         } else {
-            initial.text = null
-            icon.visibility = VISIBLE
+            layout.initial.text = null
+            layout.icon.visibility = VISIBLE
         }
 
-        photo.setImageDrawable(null)
+        layout.photo.setImageDrawable(null)
         photoUri?.let { photoUri ->
-            GlideApp.with(photo)
+            GlideApp.with(layout.photo)
                     .load(photoUri)
-                    .into(photo)
+                    .into(layout.photo)
         }
     }
 }

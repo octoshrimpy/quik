@@ -23,36 +23,34 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
-import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
+import dev.octoshrimpy.quik.databinding.ContactChipBinding
 import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.contact_chip.*
 import javax.inject.Inject
 
-class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkViewHolder>() {
+class ChipsAdapter @Inject constructor() : QkAdapter<Recipient, QkBindingViewHolder<ContactChipBinding>>() {
 
     var view: RecyclerView? = null
     val chipDeleted: PublishSubject<Recipient> = PublishSubject.create<Recipient>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.contact_chip, parent, false)
-        return QkViewHolder(view).apply {
-            view.setOnClickListener {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<ContactChipBinding> {
+        val binding = ContactChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return QkBindingViewHolder(binding).apply {
+            binding.root.setOnClickListener {
                 val chip = getItem(adapterPosition)
-                showDetailedChip(view.context, chip)
+                showDetailedChip(binding.root.context, chip)
             }
         }
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<ContactChipBinding>, position: Int) {
         val recipient = getItem(position)
 
-        holder.avatar.setRecipient(recipient)
-        holder.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
+        holder.binding.avatar.setRecipient(recipient)
+        holder.binding.name.text = recipient.contact?.name?.takeIf { it.isNotBlank() } ?: recipient.address
     }
 
     /**

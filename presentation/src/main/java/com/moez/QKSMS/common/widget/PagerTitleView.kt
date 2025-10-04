@@ -27,16 +27,15 @@ import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.uber.autodispose.android.ViewScopeProvider
 import com.uber.autodispose.autoDisposable
-import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.forEach
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
+import dev.octoshrimpy.quik.databinding.TabViewBinding
 import dev.octoshrimpy.quik.extensions.Optional
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.tab_view.view.*
 import javax.inject.Inject
 
 class PagerTitleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : LinearLayout(context, attrs) {
@@ -66,11 +65,11 @@ class PagerTitleView @JvmOverloads constructor(context: Context, attrs: Attribut
         removeAllViews()
 
         pager?.adapter?.count?.forEach { position ->
-            val view = LayoutInflater.from(context).inflate(R.layout.tab_view, this, false)
+            val view = TabViewBinding.inflate(LayoutInflater.from(context), this, false)
             view.label.text = pager?.adapter?.getPageTitle(position)
-            view.setOnClickListener { pager?.currentItem = position }
+            view.root.setOnClickListener { pager?.currentItem = position }
 
-            addView(view)
+            addView(view.root)
         }
 
         childCount.forEach { index ->

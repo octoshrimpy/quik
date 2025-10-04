@@ -48,7 +48,7 @@ class ConversationsAdapter @Inject constructor(
     private val scheduledMessageRepo: ScheduledMessageRepository,
     private val navigator: Navigator,
     private val phoneNumberUtils: PhoneNumberUtils
-) : QkRealmAdapter<Conversation>() {
+) : QkRealmAdapter<Conversation, QkViewHolder>() {
     private val disposables = CompositeDisposable()
 
     init {

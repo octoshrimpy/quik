@@ -25,18 +25,20 @@ import com.bluelinelabs.conductor.RouterTransaction
 import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
-import kotlinx.android.synthetic.main.container_activity.*
+import dev.octoshrimpy.quik.databinding.ContainerActivityBinding
 
 class BlockingActivity : QkThemedActivity() {
 
     private lateinit var router: Router
+    private lateinit var binding: ContainerActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.container_activity)
+        binding = ContainerActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        router = Conductor.attachRouter(this, container, savedInstanceState)
+        router = Conductor.attachRouter(this, binding.container, savedInstanceState)
         if (!router.hasRootController()) {
             router.setRoot(RouterTransaction.with(BlockingController()))
         }

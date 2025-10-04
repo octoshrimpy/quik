@@ -26,7 +26,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
+import dev.octoshrimpy.quik.databinding.ScheduledMessageListItemBinding
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.model.Contact
 import dev.octoshrimpy.quik.model.Recipient
@@ -35,8 +36,6 @@ import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.scheduled_message_list_item.*
-import kotlinx.android.synthetic.main.scheduled_message_list_item.view.*
 import javax.inject.Inject
 
 class ScheduledMessageAdapter @Inject constructor(
@@ -44,7 +43,7 @@ class ScheduledMessageAdapter @Inject constructor(
     private val contactRepo: ContactRepository,
     private val dateFormatter: DateFormatter,
     private val phoneNumberUtils: PhoneNumberUtils
-) : QkRealmAdapter<ScheduledMessage>() {
+) : QkRealmAdapter<ScheduledMessage, QkBindingViewHolder<ScheduledMessageListItemBinding>>() {
 
     private val contacts by lazy { contactRepo.getContacts() }
     private val contactCache = ContactCache()
@@ -52,47 +51,48 @@ class ScheduledMessageAdapter @Inject constructor(
 
     val clicks: Subject<Long> = PublishSubject.create()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.scheduled_message_list_item, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<ScheduledMessageListItemBinding> {
+        val binding = ScheduledMessageListItemBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
 
-        view.attachments.adapter = ScheduledMessageAttachmentAdapter(context)
-        view.attachments.setRecycledViewPool(imagesViewPool)
+        binding.attachments.adapter = ScheduledMessageAttachmentAdapter(context)
+        binding.attachments.setRecycledViewPool(imagesViewPool)
 
-        return QkViewHolder(view).apply {
-            view.setOnClickListener {
+        return QkBindingViewHolder(binding).apply {
+            binding.root.setOnClickListener {
                 val message = getItem(adapterPosition) ?: return@setOnClickListener
                 if (toggleSelection(message.id, false))
-                    view.isActivated = isSelected(message.id)
+                    binding.root.isActivated = isSelected(message.id)
             }
-            view.setOnClickListener {
+            binding.root.setOnClickListener {
                 val message = getItem(adapterPosition) ?: return@setOnClickListener
                 toggleSelection(message.id)
-                view.isActivated = isSelected(message.id)
+                binding.root.isActivated = isSelected(message.id)
             }
         }
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<ScheduledMessageListItemBinding>, position: Int) {
         val message = getItem(position) ?: return
 
         // GroupAvatarView only accepts recipients, so map the phone numbers to recipients
-        holder.avatars.recipients =
+        holder.binding.avatars.recipients =
             message.recipients.map { address -> Recipient(address = address) }
 
-        holder.recipients.text = message.recipients.joinToString(",") { address ->
+        holder.binding.recipients.text = message.recipients.joinToString(",") { address ->
             contactCache[address]?.name?.takeIf { it.isNotBlank() } ?: address
         }
 
-        holder.date.text = dateFormatter.getScheduledTimestamp(message.date)
-        holder.body.text = message.body
+        holder.binding.date.text = dateFormatter.getScheduledTimestamp(message.date)
+        holder.binding.body.text = message.body
 
         // update the selected/highlighted state
-        holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
+        holder.binding.root.isActivated = isSelected(message.id) || highlight == message.id
 
-        val adapter = holder.attachments.adapter as ScheduledMessageAttachmentAdapter
+        val adapter = holder.binding.attachments.adapter as ScheduledMessageAttachmentAdapter
         adapter.data = message.attachments.map(Uri::parse)
-        holder.attachments.isVisible = message.attachments.isNotEmpty()
+        holder.binding.attachments.isVisible = message.attachments.isNotEmpty()
     }
 
     override fun getItemId(position: Int): Long {

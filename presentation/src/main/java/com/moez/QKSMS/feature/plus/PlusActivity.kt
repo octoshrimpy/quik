@@ -36,9 +36,7 @@ import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.widget.PreferenceView
 import dev.octoshrimpy.quik.feature.plus.experiment.UpgradeButtonExperiment
 import dev.octoshrimpy.quik.manager.BillingManager
-import kotlinx.android.synthetic.main.collapsing_toolbar.*
-import kotlinx.android.synthetic.main.preference_view.view.*
-import kotlinx.android.synthetic.main.qksms_plus_activity.*
+import dev.octoshrimpy.quik.databinding.QksmsPlusActivityBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -52,66 +50,68 @@ class PlusActivity : QkThemedActivity(), PlusView {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[PlusViewModel::class.java] }
+    private lateinit var binding: QksmsPlusActivityBinding
 
-    override val upgradeIntent by lazy { upgrade.clicks() }
-    override val upgradeDonateIntent by lazy { upgradeDonate.clicks() }
-    override val donateIntent by lazy { donate.clicks() }
-    override val themeClicks by lazy { themes.clicks() }
-    override val scheduleClicks by lazy { schedule.clicks() }
-    override val backupClicks by lazy { backup.clicks() }
-    override val delayedClicks by lazy { delayed.clicks() }
-    override val nightClicks by lazy { night.clicks() }
+    override val upgradeIntent get() = binding.upgrade.clicks()
+    override val upgradeDonateIntent get() = binding.upgradeDonate.clicks()
+    override val donateIntent get() = binding.donate.clicks()
+    override val themeClicks get() = binding.themes.clicks()
+    override val scheduleClicks get() = binding.schedule.clicks()
+    override val backupClicks get() = binding.backup.clicks()
+    override val delayedClicks get() = binding.delayed.clicks()
+    override val nightClicks get() = binding.night.clicks()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.qksms_plus_activity)
+        binding = QksmsPlusActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setTitle(R.string.title_qksms_plus)
         showBackButton(true)
         viewModel.bindView(this)
 
-        free.setVisible(false)
+        binding.free.setVisible(false)
 
         if (!prefs.systemFont.get()) {
             fontProvider.getLato { lato ->
                 val typeface = Typeface.create(lato, Typeface.BOLD)
-                collapsingToolbar.setCollapsedTitleTypeface(typeface)
-                collapsingToolbar.setExpandedTitleTypeface(typeface)
+                binding.toolbarLayout.collapsingToolbar.setCollapsedTitleTypeface(typeface)
+                binding.toolbarLayout.collapsingToolbar.setExpandedTitleTypeface(typeface)
             }
         }
 
         // Make the list titles bold
-        linearLayout.children
-                .mapNotNull { it as? PreferenceView }
-                .map { it.titleView }
-                .forEach { it.setTypeface(it.typeface, Typeface.BOLD) }
+        binding.linearLayout.children
+            .mapNotNull { it as? PreferenceView }
+            .map { it.titleTextView }
+            .forEach { it.setTypeface(it.typeface, Typeface.BOLD) }
 
         val textPrimary = resolveThemeColor(android.R.attr.textColorPrimary)
-        collapsingToolbar.setCollapsedTitleTextColor(textPrimary)
-        collapsingToolbar.setExpandedTitleColor(textPrimary)
+        binding.toolbarLayout.collapsingToolbar.setCollapsedTitleTextColor(textPrimary)
+        binding.toolbarLayout.collapsingToolbar.setExpandedTitleColor(textPrimary)
 
         val theme = colors.theme().theme
-        donate.setBackgroundTint(theme)
-        upgrade.setBackgroundTint(theme)
-        thanksIcon.setTint(theme)
+        binding.donate.setBackgroundTint(theme)
+        binding.upgrade.setBackgroundTint(theme)
+        binding.thanksIcon.setTint(theme)
     }
 
     override fun render(state: PlusState) {
-        description.text = getString(R.string.qksms_plus_description_summary, state.upgradePrice)
-        upgrade.text = getString(upgradeButtonExperiment.variant, state.upgradePrice, state.currency)
-        upgradeDonate.text = getString(R.string.qksms_plus_upgrade_donate, state.upgradeDonatePrice, state.currency)
+        binding.description.text = getString(R.string.qksms_plus_description_summary, state.upgradePrice)
+        binding.upgrade.text = getString(upgradeButtonExperiment.variant, state.upgradePrice, state.currency)
+        binding.upgradeDonate.text = getString(R.string.qksms_plus_upgrade_donate, state.upgradeDonatePrice, state.currency)
 
         val fdroid = true
 
-        free.setVisible(fdroid)
-        toUpgrade.setVisible(!fdroid && !state.upgraded)
-        upgraded.setVisible(!fdroid && state.upgraded)
+        binding.free.setVisible(fdroid)
+        binding.toUpgrade.setVisible(!fdroid && !state.upgraded)
+        binding.upgraded.setVisible(!fdroid && state.upgraded)
 
-        themes.isEnabled = state.upgraded
-        schedule.isEnabled = state.upgraded
-        backup.isEnabled = state.upgraded
-        delayed.isEnabled = state.upgraded
-        night.isEnabled = state.upgraded
+        binding.themes.isEnabled = state.upgraded
+        binding.schedule.isEnabled = state.upgraded
+        binding.backup.isEnabled = state.upgraded
+        binding.delayed.isEnabled = state.upgraded
+        binding.night.isEnabled = state.upgraded
     }
 
     override fun initiatePurchaseFlow(billingManager: BillingManager, sku: String) {

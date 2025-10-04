@@ -23,16 +23,16 @@ import android.content.DialogInterface
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import dev.octoshrimpy.quik.R
-import kotlinx.android.synthetic.main.text_input_dialog.view.*
+import dev.octoshrimpy.quik.databinding.TextInputDialogBinding
 
 class TextInputDialog(context: Activity, hint: String, listener: (String) -> Unit) : AlertDialog(context) {
 
-    private val layout = LayoutInflater.from(context).inflate(R.layout.text_input_dialog, null)
+    private val layout = TextInputDialogBinding.inflate(LayoutInflater.from(context))
 
     init {
         layout.field.hint = hint
 
-        setView(layout)
+        setView(layout.root)
         setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.button_cancel)) { _, _ -> }
         setButton(DialogInterface.BUTTON_NEGATIVE, context.getString(R.string.button_delete)) { _, _ -> listener("") }
         setButton(DialogInterface.BUTTON_POSITIVE, context.getString(R.string.button_save)) { _, _ ->

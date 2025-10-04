@@ -99,7 +99,7 @@ class MessagesAdapter @Inject constructor(
     private val prefs: Preferences,
     private val textViewStyler: TextViewStyler,
     private val navigator: Navigator,
-) : QkRealmAdapter<Message>() {
+) : QkRealmAdapter<Message, QkViewHolder>() {
     class AudioState(
         var partId: Long = -1,
         var state: QkMediaPlayer.PlayingState = QkMediaPlayer.PlayingState.Stopped,
