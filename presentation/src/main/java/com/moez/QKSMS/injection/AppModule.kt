@@ -81,6 +81,8 @@ import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ContactRepositoryImpl
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.ConversationRepositoryImpl
+import dev.octoshrimpy.quik.repository.EmojiReactionRepository
+import dev.octoshrimpy.quik.repository.EmojiReactionRepositoryImpl
 import dev.octoshrimpy.quik.repository.MessageContentFilterRepository
 import dev.octoshrimpy.quik.repository.MessageContentFilterRepositoryImpl
 import dev.octoshrimpy.quik.repository.MessageRepository
@@ -218,6 +220,9 @@ class AppModule(private var application: Application) {
 
     @Provides
     fun provideSyncRepository(repository: SyncRepositoryImpl): SyncRepository = repository
+
+    @Provides
+    fun provideEmojiReactionRepository(repository: EmojiReactionRepositoryImpl): EmojiReactionRepository = repository
 
     // worker factory
     @Provides

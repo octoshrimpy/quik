@@ -78,6 +78,7 @@ open class MessageRepositoryImpl @Inject constructor(
     private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences,
     private val syncRepository: SyncRepository,
+    private val reactions: EmojiReactionRepository,
 ) : MessageRepository {
 
     companion object {
@@ -88,6 +89,7 @@ open class MessageRepositoryImpl @Inject constructor(
         Realm.getDefaultInstance()
             .where(Message::class.java)
             .equalTo("threadId", threadId)
+            .equalTo("isEmojiReaction", false)
             .let {
                 when (query.isEmpty()) {
                     true -> it
@@ -761,6 +763,25 @@ open class MessageRepositoryImpl @Inject constructor(
                     // Update contentId after the message has been inserted to the content provider
                     realm.executeTransaction { managedMessage?.contentId = id }
                 }
+
+            managedMessage?.let { savedMessage ->
+                val parsedReaction = reactions.parseEmojiReaction(body)
+                if (parsedReaction != null) {
+                    val targetMessage = reactions.findTargetMessage(
+                        savedMessage.threadId,
+                        parsedReaction.originalMessage,
+                        realm
+                    )
+                    realm.executeTransaction {
+                        reactions.saveEmojiReaction(
+                            savedMessage,
+                            parsedReaction,
+                            targetMessage,
+                            realm,
+                        )
+                    }
+                }
+            }
         }
 
         return message

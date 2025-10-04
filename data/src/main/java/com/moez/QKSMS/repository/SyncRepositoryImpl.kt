@@ -39,6 +39,7 @@ import dev.octoshrimpy.quik.mapper.CursorToRecipient
 import dev.octoshrimpy.quik.model.Contact
 import dev.octoshrimpy.quik.model.ContactGroup
 import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.model.EmojiReaction
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.model.PhoneNumber
@@ -68,7 +69,8 @@ class SyncRepositoryImpl @Inject constructor(
     private val cursorToContactGroupMember: CursorToContactGroupMember,
     private val keys: KeyManager,
     private val phoneNumberUtils: PhoneNumberUtils,
-    private val rxPrefs: RxSharedPreferences
+    private val rxPrefs: RxSharedPreferences,
+    private val reactions: EmojiReactionRepository,
 ) : SyncRepository {
 
     override val syncProgress: Subject<SyncRepository.SyncProgress> =
@@ -228,6 +230,9 @@ class SyncRepositoryImpl @Inject constructor(
 
                 syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
 
+                // Now that we have all the messages, we can scan for emoji reactions
+                reactions.deleteAndReparseAllEmojiReactions(realm)
+
                 realm.insert(SyncLog())
             }, {
                 handlerThread.quitSafely()
@@ -287,6 +292,26 @@ class SyncRepositoryImpl @Inject constructor(
 
                 conversationRepo.getOrCreateConversation(threadId)
                 insertOrUpdate()
+
+                val text = getText(false)
+                val parsedReaction = reactions.parseEmojiReaction(text)
+                if (parsedReaction != null) {
+                    Realm.getDefaultInstance().use { realm ->
+                        val targetMessage = reactions.findTargetMessage(
+                            threadId,
+                            parsedReaction.originalMessage,
+                            realm
+                        )
+                        realm.executeTransaction {
+                            reactions.saveEmojiReaction(
+                                this,
+                                parsedReaction,
+                                targetMessage,
+                                realm,
+                            )
+                        }
+                    }
+                }
             }
         }
     }

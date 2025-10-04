@@ -1,0 +1,22 @@
+{
+  "emoji_reaction_ios_generic_added": "^(?s)Reacted (.+?) to “(.+?)”$",
+  "emoji_reaction_ios_generic_removed": "^(?s)Removed (.+?) from “(.+?)”$",
+
+  "emoji_reaction_ios_heart_added": "^(?s)Loved “(.+?)”$",
+  "emoji_reaction_ios_heart_removed": "^(?s)Removed a heart from “(.+?)”$",
+
+  "emoji_reaction_ios_like_added": "^(?s)Liked “(.+?)”$",
+  "emoji_reaction_ios_like_removed": "^(?s)Removed a like from “(.+?)”$",
+
+  "emoji_reaction_ios_dislike_added": "^(?s)Disliked “(.+?)”$",
+  "emoji_reaction_ios_dislike_removed": "^(?s)Removed a dislike from “(.+?)”$",
+
+  "emoji_reaction_ios_laugh_added": "^(?s)Laughed at “(.+?)”$",
+  "emoji_reaction_ios_laugh_removed": "^(?s)Removed a laugh from “(.+?)”$",
+
+  "emoji_reaction_ios_exclamation_added": "^(?s)Emphasized “(.+?)”$",
+  "emoji_reaction_ios_exclamation_removed": "^(?s)Removed an exclamation from “(.+?)”$",
+
+  "emoji_reaction_ios_question_mark_added": "^(?s)Questioned “(.+?)”$",
+  "emoji_reaction_ios_question_mark_removed": "^(?s)Removed a question mark from “(.+?)”$"
+}

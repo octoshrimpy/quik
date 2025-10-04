@@ -36,7 +36,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SchemaVersion: Long = 13
+        const val SchemaVersion: Long = 14
     }
 
     @SuppressLint("ApplySharedPref")
@@ -252,6 +252,31 @@ class QkRealmMigration @Inject constructor(
         if (version == 12L) {
             realm.schema.get("Conversation")
                 ?.addField("draftDate", Long::class.java, FieldAttribute.REQUIRED)
+
+            version++
+        }
+
+        if (version == 13L) {
+            val emojiReactionTable = realm.schema.create("EmojiReaction")
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("reactionMessageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+                .addField("senderAddress", String::class.java, FieldAttribute.REQUIRED)
+                .addField("emoji", String::class.java, FieldAttribute.REQUIRED)
+                .addField("originalMessageText", String::class.java, FieldAttribute.REQUIRED)
+                .addField("threadId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+
+            realm.schema.get("Message")
+                ?.addField("isEmojiReaction", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.addRealmListField("emojiReactions", emojiReactionTable)
+                ?.transform { msg ->
+                    msg.setBoolean("isEmojiReaction", false)
+                }
+
+            realm.schema.create("EmojiSyncNeeded")
+                .addField("createdAt", Long::class.java, FieldAttribute.REQUIRED)
+
+            realm.createObject("EmojiSyncNeeded")
+
             version++
         }
 
