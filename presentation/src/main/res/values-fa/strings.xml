@@ -146,8 +146,6 @@
     <string name="backup_restoring">بازگرداندن پشتیبان</string>
     <string name="backup_loading">در حال بارگذاری…</string>
     <string name="backup_never">هرگز</string>
-    <string name="backup_location_title"></string>
-    <string name="backup_location_summary"></string>
     <string name="backup_restore_title">بازگردانی</string>
     <string name="backup_restore_summary">یک پشتیبان را برگزینید</string>
     <string name="backup_restore_error_plus">لطفاً QUIK + را باز کنید تا از امکانات پشتیبان و بازیابی بهره ببرید</string>
