@@ -20,12 +20,12 @@ package dev.octoshrimpy.quik.manager
 
 import android.content.Context
 import android.util.Log
-import dev.octoshrimpy.quik.common.util.extensions.versionCode
-import dev.octoshrimpy.quik.util.Preferences
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import dev.octoshrimpy.quik.common.util.extensions.versionCode
+import dev.octoshrimpy.quik.util.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

@@ -18,7 +18,9 @@
  */
 package dev.octoshrimpy.quik.repository
 
+import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.ScheduledMessage
+import io.realm.RealmList
 import io.realm.RealmResults
 
 interface ScheduledMessageRepository {
@@ -32,9 +34,13 @@ interface ScheduledMessageRepository {
         recipients: List<String>,
         sendAsGroup: Boolean,
         body: String,
-        attachments: List<String>
+        attachments: List<String>,
+        conversationId: Long
     ): ScheduledMessage
 
+    /**
+     * Updates scheduled messages with new uris
+     */
     fun updateScheduledMessage(scheduledMessage: ScheduledMessage)
 
     /**
@@ -48,14 +54,23 @@ interface ScheduledMessageRepository {
     fun getScheduledMessage(id: Long): ScheduledMessage?
 
     /**
+     * Returns all scheduled messages with the given [conversationId]
+     */
+    fun getScheduledMessagesForConversation(conversationId: Long): RealmResults<ScheduledMessage>
+
+    /**
      * Deletes the scheduled message with the given [id]
      */
     fun deleteScheduledMessage(id: Long)
 
-    // delete multiple scheduled messages by id list
+    /**
+     * Delete multiple scheduled messages by id list
+     */
     fun deleteScheduledMessages(ids: List<Long>)
 
-    // get a list of all scheduled message ids (in scheduled date order)
+    /**
+     * Get a list of all scheduled message ids (in scheduled date order)
+     */
     fun getAllScheduledMessageIdsSnapshot(): List<Long>
 
 }

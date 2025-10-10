@@ -19,8 +19,8 @@
 package dev.octoshrimpy.quik.feature.blocking
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
+import androidx.appcompat.app.AlertDialog
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.interactor.MarkBlocked

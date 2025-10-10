@@ -37,7 +37,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SCHEMA_VERSION: Long = 12
+        const val SCHEMA_VERSION: Long = 14
     }
 
     @SuppressLint("ApplySharedPref")
@@ -234,8 +234,19 @@ class QkRealmMigration @Inject constructor(
 
             version++
         }
-
         if (version == 11L) {
+            realm.schema.get("ScheduledMessage")
+                ?.addField("conversationId", Long::class.java, FieldAttribute.REQUIRED)
+            // Because there was never any property associated with which conversation/recipients a scheduled message was for,
+            // we can't update this field on a realm migration. It will be set to a default of 0
+
+            realm.schema.create("MessageContentFilter")
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("value", String::class.java, FieldAttribute.REQUIRED)
+                .addField("caseSensitive", Boolean::class.java, FieldAttribute.REQUIRED)
+                .addField("isRegex", Boolean::class.java, FieldAttribute.REQUIRED)
+                .addField("includeContacts", Boolean::class.java, FieldAttribute.REQUIRED)
+
             realm.schema.get("Conversation")
                 ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
                 ?.transform { conversation ->
@@ -247,6 +258,38 @@ class QkRealmMigration @Inject constructor(
 
             realm.schema.get("Message")
                 ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+
+
+            version++
+        }
+
+        if (version == 12L) {
+            realm.schema.get("Conversation")
+                ?.addField("draftDate", Long::class.java, FieldAttribute.REQUIRED)
+
+            version++
+        }
+
+        if (version == 13L) {
+            val emojiReactionTable = realm.schema.create("EmojiReaction")
+                .addField("id", Long::class.java, FieldAttribute.PRIMARY_KEY, FieldAttribute.REQUIRED)
+                .addField("reactionMessageId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+                .addField("senderAddress", String::class.java, FieldAttribute.REQUIRED)
+                .addField("emoji", String::class.java, FieldAttribute.REQUIRED)
+                .addField("originalMessageText", String::class.java, FieldAttribute.REQUIRED)
+                .addField("threadId", Long::class.java, FieldAttribute.INDEXED, FieldAttribute.REQUIRED)
+
+            realm.schema.get("Message")
+                ?.addField("isEmojiReaction", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.addRealmListField("emojiReactions", emojiReactionTable)
+                ?.transform { msg ->
+                    msg.setBoolean("isEmojiReaction", false)
+                }
+
+            realm.schema.create("EmojiSyncNeeded")
+                .addField("createdAt", Long::class.java, FieldAttribute.REQUIRED)
+
+            realm.createObject("EmojiSyncNeeded")
 
             version++
         }

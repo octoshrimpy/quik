@@ -20,7 +20,6 @@ package dev.octoshrimpy.quik.feature.main
 
 import android.Manifest
 import android.animation.ObjectAnimator
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
@@ -31,6 +30,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewStub
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
@@ -41,6 +41,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.androidxcompat.drawerOpen
@@ -52,16 +55,13 @@ import dev.octoshrimpy.quik.common.util.extensions.scrapViews
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.common.widget.TextInputDialog
 import dev.octoshrimpy.quik.feature.blocking.BlockingDialog
 import dev.octoshrimpy.quik.feature.changelog.ChangelogDialog
 import dev.octoshrimpy.quik.feature.conversations.ConversationItemTouchCallback
 import dev.octoshrimpy.quik.feature.conversations.ConversationsAdapter
 import dev.octoshrimpy.quik.manager.ChangelogManager
 import dev.octoshrimpy.quik.repository.SyncRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import dagger.android.AndroidInjection
-import dev.octoshrimpy.quik.common.widget.TextInputDialog
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -255,8 +255,10 @@ class MainActivity : QkThemedActivity(), MainView {
             findItem(R.id.add)?.isVisible = addContact && selectedConversations != 0
             findItem(R.id.pin)?.isVisible = markPinned && selectedConversations != 0
             findItem(R.id.unpin)?.isVisible = !markPinned && selectedConversations != 0
-            findItem(R.id.read)?.isVisible = markRead && selectedConversations != 0
-            findItem(R.id.unread)?.isVisible = !markRead && selectedConversations != 0
+            findItem(R.id.read)?.isVisible = ( markRead && selectedConversations != 0 ) ||
+                    selectedConversations > 1
+            findItem(R.id.unread)?.isVisible = ( !markRead && selectedConversations != 0 ) ||
+                    selectedConversations > 1
             findItem(R.id.block)?.isVisible = selectedConversations != 0
             findItem(R.id.rename)?.isVisible = selectedConversations == 1
         }
@@ -440,10 +442,14 @@ class MainActivity : QkThemedActivity(), MainView {
     override fun showChangelog(changelog: ChangelogManager.CumulativeChangelog) =
         changelogDialog.show(changelog)
 
-    override fun showArchivedSnackbar(countConversationsArchived: Int) =
+    override fun showArchivedSnackbar(countConversationsArchived: Int, isArchiving: Boolean) =
         Snackbar.make(
             drawerLayout,
-            resources.getQuantityString(R.plurals.toast_archived, countConversationsArchived, countConversationsArchived),
+            if (isArchiving) {
+                resources.getQuantityString(R.plurals.toast_archived, countConversationsArchived, countConversationsArchived)
+            } else {
+                resources.getQuantityString(R.plurals.toast_unarchived, countConversationsArchived, countConversationsArchived)
+            },
             if (countConversationsArchived < 10) Snackbar.LENGTH_LONG
             else Snackbar.LENGTH_INDEFINITE
         ).let {

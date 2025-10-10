@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blokkeren</string>
     <string name="main_syncing">Berichten synchroniseren&#8230;</string>
     <string name="main_sender_you">Jij: %s</string>
-    <string name="main_draft">Concept</string>
     <string name="main_message_results_title">Resultaten in berichten</string>
     <string name="main_message_results">%d berichten</string>
     <string name="inbox_empty_text">Je conversaties verschijnen hier</string>
@@ -357,7 +356,6 @@
     <string name="button_set">Instellen</string>
     <string name="button_undo">Ongedaan maken</string>
     <string name="toast_copied">Gekopieerd</string>
-    <string name="toast_archived">Conversatie gearchiveerd</string>
     <string name="toast_qksms_plus">Je dient QUIK+ te ontgrendelen om dit te gebruiken</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nieuw bericht</item>

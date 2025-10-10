@@ -1,23 +1,24 @@
 package dev.octoshrimpy.quik.feature.scheduled
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
+import dev.octoshrimpy.quik.common.util.ClipboardUtils
+import dev.octoshrimpy.quik.interactor.DeleteScheduledMessages
 import dev.octoshrimpy.quik.interactor.SendScheduledMessage
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import dev.octoshrimpy.quik.common.util.ClipboardUtils
-import dev.octoshrimpy.quik.interactor.DeleteScheduledMessages
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
+import javax.inject.Named
 
 class ScheduledViewModel @Inject constructor(
+    @Named("conversationId") private val conversationId: Long?,
     billingManager: BillingManager,
     private val context: Context,
     private val navigator: Navigator,
@@ -25,10 +26,12 @@ class ScheduledViewModel @Inject constructor(
     private val sendScheduledMessageInteractor: SendScheduledMessage,
     private val deleteScheduledMessagesInteractor: DeleteScheduledMessages,
 ) : QkViewModel<ScheduledView, ScheduledState>(ScheduledState(
-    scheduledMessages = scheduledMessageRepo.getScheduledMessages()
+    scheduledMessages = scheduledMessageRepo.getScheduledMessages(),
+    conversationId = conversationId
 )) {
 
     init {
+        loadMessages(conversationId)
         disposables += billingManager.upgradeStatus
             .subscribe { upgraded -> newState { copy(upgraded = upgraded) } }
     }
@@ -52,10 +55,14 @@ class ScheduledViewModel @Inject constructor(
         view.optionsItemIntent
             .filter { it == R.id.delete }
             .withLatestFrom(view.messagesSelectedIntent) { _, selectedMessages ->
-                view.showDeleteDialog(selectedMessages)
-            }
+                selectedMessages }
             .autoDisposable(view.scope())
-            .subscribe()
+            .subscribe { it ->
+                val ids = it.mapNotNull(scheduledMessageRepo::getScheduledMessage)
+                    .map { it.id }
+                view.showDeleteDialog(ids)
+            }
+
 
         // copy the selected message text to the clipboard
         view.optionsItemIntent
@@ -156,5 +163,13 @@ class ScheduledViewModel @Inject constructor(
         view.upgradeIntent
             .autoDisposable(view.scope())
             .subscribe { navigator.showQksmsPlusActivity("schedule_fab") }
+    }
+
+    private fun loadMessages(conversationId: Long?) {
+        val results = if (conversationId != null)
+            scheduledMessageRepo.getScheduledMessagesForConversation(conversationId)
+        else
+            scheduledMessageRepo.getScheduledMessages()
+        newState { copy(scheduledMessages = results) }
     }
 }

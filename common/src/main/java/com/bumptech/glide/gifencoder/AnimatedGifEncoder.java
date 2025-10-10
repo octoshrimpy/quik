@@ -4,14 +4,16 @@ package com.bumptech.glide.gifencoder;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import timber.log.Timber;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import timber.log.Timber;
 
 public class AnimatedGifEncoder {
 

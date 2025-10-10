@@ -18,15 +18,22 @@
  */
 package dev.octoshrimpy.quik.interactor
 
+import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.Flowable
 import javax.inject.Inject
 
 class SendExistingMessage @Inject constructor(
-    private val messageRepo: MessageRepository
+    private val messageRepo: MessageRepository,
+    private val notificationManager: NotificationManager
 ) : Interactor<Long>() {
     override fun buildObservable(params: Long): Flowable<Long> =
         Flowable.just(params)
-            .doOnNext { messageId -> messageRepo.sendMessage(messageId) }
+            .doOnNext { messageId ->
+                val message = messageRepo.getMessage(messageId)
+                messageRepo.sendMessage(messageId)
 
+                val threadId = message!!.threadId
+                notificationManager.cancel(threadId.toInt() + 100000)
+            }
 }

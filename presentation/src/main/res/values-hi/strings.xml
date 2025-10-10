@@ -48,7 +48,6 @@
     <string name="main_menu_block">ब्लॉक</string>
     <string name="main_syncing">संदेशों को सिंक्रनाइज़ कर रहा है.. ।</string>
     <string name="main_sender_you">आप: %s</string>
-    <string name="main_draft">प्रारूप</string>
     <string name="main_message_results_title">संदेशों में परिणाम</string>
     <string name="main_message_results">%d संदेश</string>
     <string name="inbox_empty_text">आपकी बातचीत यहां दिखाई देगी</string>
@@ -357,7 +356,6 @@
     <string name="button_set">सेट करें</string>
     <string name="button_undo">पूर्ववत करें</string>
     <string name="toast_copied">प्रतिलिपि बनाई गई हैं।</string>
-    <string name="toast_archived">संग्रहीत बातचीत</string>
     <string name="toast_qksms_plus">इसका उपयोग करने के लिए आपको QUIK+ को अनलॉक करना होगा</string>
     <plurals name="notification_new_messages">
         <item quantity="one">नई संदेश</item>

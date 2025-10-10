@@ -43,8 +43,8 @@ import android.view.DragEvent.ACTION_DROP
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
@@ -90,11 +90,14 @@ import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.compose_activity.attach
 import kotlinx.android.synthetic.main.compose_activity.attachAFileIcon
 import kotlinx.android.synthetic.main.compose_activity.attachAFileLabel
+import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageIcon
+import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageLabel
 import kotlinx.android.synthetic.main.compose_activity.attaching
-import kotlinx.android.synthetic.main.compose_activity.shadeBackground
 import kotlinx.android.synthetic.main.compose_activity.audioMsgAbort
 import kotlinx.android.synthetic.main.compose_activity.audioMsgAttach
 import kotlinx.android.synthetic.main.compose_activity.audioMsgBackground
+import kotlinx.android.synthetic.main.compose_activity.audioMsgBluetooth
+import kotlinx.android.synthetic.main.compose_activity.audioMsgDuration
 import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerBackground
 import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerPlayPause
 import kotlinx.android.synthetic.main.compose_activity.audioMsgPlayerSeekBar
@@ -111,25 +114,23 @@ import kotlinx.android.synthetic.main.compose_activity.gallery
 import kotlinx.android.synthetic.main.compose_activity.galleryLabel
 import kotlinx.android.synthetic.main.compose_activity.loading
 import kotlinx.android.synthetic.main.compose_activity.message
+import kotlinx.android.synthetic.main.compose_activity.messageAttachments
 import kotlinx.android.synthetic.main.compose_activity.messageList
 import kotlinx.android.synthetic.main.compose_activity.messagesEmpty
 import kotlinx.android.synthetic.main.compose_activity.noValidRecipients
-import kotlinx.android.synthetic.main.compose_activity.messageAttachments
-import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageIcon
-import kotlinx.android.synthetic.main.compose_activity.attachAnAudioMessageLabel
-import kotlinx.android.synthetic.main.compose_activity.audioMsgBluetooth
-import kotlinx.android.synthetic.main.compose_activity.audioMsgDuration
 import kotlinx.android.synthetic.main.compose_activity.recordAudioMsg
 import kotlinx.android.synthetic.main.compose_activity.schedule
 import kotlinx.android.synthetic.main.compose_activity.scheduleLabel
 import kotlinx.android.synthetic.main.compose_activity.scheduledCancel
 import kotlinx.android.synthetic.main.compose_activity.scheduledGroup
 import kotlinx.android.synthetic.main.compose_activity.scheduledTime
+import kotlinx.android.synthetic.main.compose_activity.scheduledSend
 import kotlinx.android.synthetic.main.compose_activity.send
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroup
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSummary
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSwitch
+import kotlinx.android.synthetic.main.compose_activity.shadeBackground
 import kotlinx.android.synthetic.main.compose_activity.sim
 import kotlinx.android.synthetic.main.compose_activity.simIndex
 import kotlinx.android.synthetic.main.compose_activity.speechToTextFrame
@@ -183,7 +184,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val scheduleSelectedIntent: Subject<Long> = PublishSubject.create()
     override val changeSimIntent by lazy { sim.clicks() }
     override val scheduleCancelIntent by lazy { scheduledCancel.clicks() }
-    override val sendIntent by lazy { send.clicks() }
+    override val sendIntent by lazy {  Observable.merge(send.clicks(), scheduledSend.clicks()) }
     override val viewQksmsPlusIntent: Subject<Unit> = PublishSubject.create()
     override val backPressedIntent: Subject<Unit> = PublishSubject.create()
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
@@ -469,6 +470,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         // Don't set the adapters unless needed
         if (state.editingMode && chips.adapter == null) chips.adapter = chipsAdapter
 
+        toolbar.menu.findItem(R.id.viewScheduledMessages)?.isVisible = !state.editingMode && state.selectedMessages == 0
+                && state.query.isEmpty() && state.hasScheduledMessages
         toolbar.menu.findItem(R.id.select_all)?.isVisible = !state.editingMode && (messageAdapter.itemCount > 1) && state.selectedMessages != 0
         toolbar.menu.findItem(R.id.add)?.isVisible = state.editingMode
         toolbar.menu.findItem(R.id.call)?.isVisible = !state.editingMode && state.selectedMessages == 0
@@ -537,9 +540,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         sim.contentDescription = getString(R.string.compose_sim_cd, state.subscription?.displayName)
         simIndex.text = state.subscription?.simSlotIndex?.plus(1)?.toString()
 
-        // show either send or audio msg record button
-        send.visibility = if (state.canSend && !state.loading) View.VISIBLE else View.INVISIBLE
+        // show either send, audio msg record, or sendScheduled button
+        send.visibility = if (state.canSend && !state.loading && state.scheduled == 0L) View.VISIBLE else View.INVISIBLE
         recordAudioMsg.visibility = if (state.canSend && !state.loading) View.INVISIBLE else View.VISIBLE
+        scheduledSend.visibility = if (state.canSend && (state.scheduled != 0L) && !state.loading) View.VISIBLE else View.INVISIBLE
 
         // if not in editing mode, and there are no non-me participants that can be sent to,
         // hide controls that allow constructing a reply and inform user no valid recipients
@@ -734,7 +738,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun showDeleteDialog(messages: List<Long>) {
         val count = messages.size
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.dialog_delete_title)
             .setMessage(resources.getQuantityString(R.plurals.dialog_delete_chat, count, count))
             .setPositiveButton(R.string.button_delete) { _, _ -> confirmDeleteIntent.onNext(messages) }
@@ -743,7 +747,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun showClearCurrentMessageDialog() {
-        android.app.AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setTitle(R.string.dialog_clear_compose_title)
             .setMessage(R.string.dialog_clear_compose)
             .setPositiveButton(R.string.button_clear) { _, _ ->

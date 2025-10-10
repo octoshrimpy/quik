@@ -192,6 +192,7 @@
         </receiver>
         <receiver
             android:name=".feature.widget.WidgetProvider"
+            android:label="@string/all_conversations_widget_title"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

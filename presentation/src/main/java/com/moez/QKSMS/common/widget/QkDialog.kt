@@ -23,13 +23,12 @@ import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
-import kotlinx.android.synthetic.main.qk_dialog.view.*
+import dev.octoshrimpy.quik.databinding.QkDialogBinding
 
 class QkDialog(private val context: Activity) : AlertDialog(context) {
 
-    private val view = LayoutInflater.from(context).inflate(R.layout.qk_dialog, null)
+    private val view = QkDialogBinding.inflate(LayoutInflater.from(context))
 
     @StringRes
     var titleRes: Int? = null
@@ -99,7 +98,7 @@ class QkDialog(private val context: Activity) : AlertDialog(context) {
         }
 
     init {
-        setView(view)
+        setView(view.root)
     }
 
 }

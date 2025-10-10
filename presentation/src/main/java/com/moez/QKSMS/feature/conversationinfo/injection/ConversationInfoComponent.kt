@@ -18,9 +18,9 @@
  */
 package dev.octoshrimpy.quik.feature.conversationinfo.injection
 
+import dagger.Subcomponent
 import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoController
 import dev.octoshrimpy.quik.injection.scope.ControllerScope
-import dagger.Subcomponent
 
 @ControllerScope
 @Subcomponent(modules = [ConversationInfoModule::class])

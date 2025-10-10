@@ -1,0 +1,13 @@
+{
+  "emoji_reaction_ios_heart_added": "^(?s)Очень понравилось «(.+?)»$",
+
+  "emoji_reaction_ios_like_added": "^(?s)Понравилось «(.+?)»$",
+
+  "emoji_reaction_ios_dislike_added": "^(?s)Не понравилось «(.+?)»$",
+
+  "emoji_reaction_ios_laugh_added": "^(?s)Посмеялись над «(.+?)»$",
+
+  "emoji_reaction_ios_exclamation_added": "^(?s)Отмечено «(.+?)»$",
+
+  "emoji_reaction_ios_question_mark_added": "^(?s)Поставлен вопрос на «(.+?)»$"
+}

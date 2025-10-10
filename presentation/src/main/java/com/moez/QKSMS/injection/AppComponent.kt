@@ -18,6 +18,8 @@
  */
 package dev.octoshrimpy.quik.injection
 
+import dagger.Component
+import dagger.android.support.AndroidSupportInjectionModule
 import dev.octoshrimpy.quik.common.QKApplication
 import dev.octoshrimpy.quik.common.QkDialog
 import dev.octoshrimpy.quik.common.util.QkChooserTargetService
@@ -30,6 +32,7 @@ import dev.octoshrimpy.quik.common.widget.QkTextView
 import dev.octoshrimpy.quik.common.widget.RadioPreferenceView
 import dev.octoshrimpy.quik.feature.backup.BackupController
 import dev.octoshrimpy.quik.feature.blocking.BlockingController
+import dev.octoshrimpy.quik.feature.blocking.filters.MessageContentFiltersController
 import dev.octoshrimpy.quik.feature.blocking.manager.BlockingManagerController
 import dev.octoshrimpy.quik.feature.blocking.messages.BlockedMessagesController
 import dev.octoshrimpy.quik.feature.blocking.numbers.BlockedNumbersController
@@ -43,8 +46,6 @@ import dev.octoshrimpy.quik.feature.widget.WidgetAdapter
 import dev.octoshrimpy.quik.injection.android.ActivityBuilderModule
 import dev.octoshrimpy.quik.injection.android.BroadcastReceiverBuilderModule
 import dev.octoshrimpy.quik.injection.android.ServiceBuilderModule
-import dagger.Component
-import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
@@ -65,6 +66,7 @@ interface AppComponent {
     fun inject(controller: BackupController)
     fun inject(controller: BlockedMessagesController)
     fun inject(controller: BlockedNumbersController)
+    fun inject(controller: MessageContentFiltersController)
     fun inject(controller: BlockingController)
     fun inject(controller: BlockingManagerController)
     fun inject(controller: SettingsController)

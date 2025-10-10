@@ -18,13 +18,16 @@
  */
 package dev.octoshrimpy.quik.common.androidxcompat;
 
+import static com.jakewharton.rxbinding2.internal.Preconditions.checkMainThread;
+
 import android.view.View;
+
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.jakewharton.rxbinding2.InitialValueObservable;
+
 import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
-
-import static com.jakewharton.rxbinding2.internal.Preconditions.checkMainThread;
 
 final class DrawerLayoutDrawerOpenedObservable extends InitialValueObservable<Boolean> {
   private final DrawerLayout view;

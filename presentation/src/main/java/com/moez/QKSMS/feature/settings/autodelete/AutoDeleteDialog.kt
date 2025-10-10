@@ -23,14 +23,14 @@ import android.content.DialogInterface
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import dev.octoshrimpy.quik.R
-import kotlinx.android.synthetic.main.settings_auto_delete_dialog.view.*
+import dev.octoshrimpy.quik.databinding.SettingsAutoDeleteDialogBinding
 
 class AutoDeleteDialog(context: Activity, listener: (Int) -> Unit) : AlertDialog(context) {
 
-    private val layout = LayoutInflater.from(context).inflate(R.layout.settings_auto_delete_dialog, null)
+    private val layout = SettingsAutoDeleteDialogBinding.inflate(LayoutInflater.from(context))
 
     init {
-        setView(layout)
+        setView(layout.root)
         setTitle(R.string.settings_auto_delete)
         setMessage(context.getString(R.string.settings_auto_delete_dialog_message))
         setButton(DialogInterface.BUTTON_NEUTRAL, context.getString(R.string.button_cancel)) { _, _ -> }

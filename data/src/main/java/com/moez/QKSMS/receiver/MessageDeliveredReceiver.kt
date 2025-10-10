@@ -22,9 +22,9 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.interactor.MarkDelivered
 import dev.octoshrimpy.quik.interactor.MarkDeliveryFailed
-import dagger.android.AndroidInjection
 import timber.log.Timber
 import javax.inject.Inject
 

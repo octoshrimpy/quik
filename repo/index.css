@@ -1,0 +1,228 @@
+/* auto-generated - fdroid index updates will overwrite this file */
+BODY {
+  font-family         : Arial, Helvetica, Sans-Serif;
+  color               : #0000ee;
+  background-color    : #ffffff;
+}
+p {
+  text-align          : justify;
+}
+p.center {
+  text-align          : center;
+}
+TD {
+  font-family         : Arial, Helvetica, Sans-Serif;
+  color               : #0000ee;
+}
+body,td {
+  font-size           : 14px;
+}
+TH {
+  font-family         : Arial, Helvetica, Sans-Serif;
+  color               : #0000ee;
+  background-color    : #F5EAD4;
+}
+a:link {
+  color               : #bb0000;
+}
+a:visited {
+  color               : #ff0000;
+}
+.zitat {
+  margin-left         : 1cm;
+  margin-right        : 1cm;
+  font-style          : italic;
+}
+#intro {
+  border-spacing      : 1em;
+  border              : 1px solid gray;
+  border-radius       : 0.5em;
+  box-shadow          : 10px 10px 5px #888;
+  margin              : 1.5em;
+  font-size           : .9em;
+  width               : 600px;
+  max-width           : 90%;
+  display             : table;
+  margin-left         : auto;
+  margin-right        : auto;
+  font-size           : .8em;
+  color               : #555555;
+}
+#intro > p {
+  margin-top          : 0;
+}
+#intro p:last-child {
+  margin-bottom       : 0;
+}
+.last {
+  border-bottom       : 1px solid black;
+  padding-bottom      : .5em;
+  text-align          : center;
+}
+table {
+  border-collapse     : collapse;
+}
+h2 {
+  text-align          : center;
+}
+.perms {
+  font-family         : monospace;
+  font-size           : .8em;
+}
+.repoapplist {
+  display             : table;
+  border-collapse     : collapse;
+  margin-left         : auto;
+  margin-right        : auto;
+  width               : 600px;
+  max-width           : 90%;
+}
+.approw, appdetailrow {
+  display             : table-row;
+}
+.appdetailrow {
+  display             : flex;
+  padding             : .5em;
+}
+.appiconbig, .appdetailblock, .appdetailcell {
+  display             : table-cell
+}
+.appiconbig {
+  vertical-align      : middle;
+  text-align          : center;
+}
+.appdetailinner {
+  width               : 100%;
+}
+.applinkcell {
+  text-align          : center;
+  float               : right;
+  width               : 100%;
+  margin-bottom       : .1em;
+}
+.paddedlink {
+  margin              : 1em;
+}
+.approw {
+  border-spacing      : 1em;
+  border              : 1px solid gray;
+  border-radius       : 0.5em;
+  padding             : 0.5em;
+  margin              : 1.5em;
+}
+.appdetailinner .appdetailrow:first-child {
+  background-color    : #d5d5d5;
+}
+.appdetailinner .appdetailrow:first-child .appdetailcell {
+  min-width           : 33%;
+  flex                : 1 33%;
+  text-align          : center;
+}
+.appdetailinner .appdetailrow:first-child .appdetailcell:first-child {
+  text-align          : left;
+}
+.appdetailinner .appdetailrow:first-child .appdetailcell:last-child {
+  float               : none;
+  text-align          : right;
+}
+.minor-details {
+  font-size           : .8em;
+  color               : #555555;
+}
+.boldname {
+  font-weight         : bold;
+}
+#appcount {
+  text-align          : center;
+  margin-bottom       : .5em;
+}
+kbd {
+  padding             : 0.1em 0.6em;
+  border              : 1px solid #CCC;
+  background-color    : #F7F7F7;
+  color               : #333;
+  box-shadow          : 0px 1px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 2px #FFF inset;
+  border-radius       : 3px;
+  display             : inline-block;
+  margin              : 0px 0.1em;
+  text-shadow         : 0px 1px 0px #FFF;
+  white-space         : nowrap;
+}
+div.filterline, div.repoline {
+  display             : table;
+  margin-left         : auto;
+  margin-right        : auto;
+  margin-bottom       : 1em;
+  vertical-align      : middle;
+  display             : table;
+  font-size           : .8em;
+}
+.filterline form {
+  display             : table-row;
+}
+.filterline .filtercell {
+  display             : table-cell;
+  vertical-align      : middle;
+}
+fieldset {
+  float               : left;
+}
+fieldset select, fieldset input, #reposelect select, #reposelect input {
+  font-size           : .9em;
+}
+.pager {
+  display             : table;
+  margin-left         : auto;
+  margin-right        : auto;
+  width               : 600px;
+  max-width           : 90%;
+  padding-top         : .6em;
+}
+/* should correspond to .repoapplist */
+.pagerrow {
+  display             : table-row;
+}
+.pagercell {
+  display             : table-cell;
+}
+.pagercell.left {
+  text-align          : left;
+  padding-right       : 1em;
+}
+.pagercell.middle {
+  text-align          : center;
+  font-size           : .9em;
+  color               : #555;
+}
+.pagercell.right {
+  text-align          : right;
+  padding-left        : 1em;
+}
+.anti {
+  color               : peru;
+}
+.antibold {
+  color               : crimson;
+}
+#footer {
+  text-align          : center;
+  margin-top          : 1em;
+  font-size           : 11px;
+  color               : #555;
+}
+#footer img {
+  vertical-align      : middle;
+}
+@media (max-width: 600px) {
+  .repoapplist {
+    display             : block;
+  }
+  .appdetailinner, .appdetailrow {
+    display             : block;
+  }
+  .appdetailcell {
+    display             : block;
+    float               : left;
+    line-height         : 1.5em;
+  }
+}

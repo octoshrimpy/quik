@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.interactor
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import dev.octoshrimpy.quik.extensions.getName
 import dev.octoshrimpy.quik.extensions.getResourceBytes
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
@@ -42,7 +43,8 @@ class AddScheduledMessage @Inject constructor(
         val recipients: List<String>,
         val sendAsGroup: Boolean,
         val body: String,
-        val attachments: List<Uri>
+        val attachments: List<Uri>,
+        val conversationId: Long
     )
 
     @SuppressLint("Range")
@@ -52,7 +54,13 @@ class AddScheduledMessage @Inject constructor(
             .map {  // step 1 - save, without attachments, to db to get primary key id which is
                     // needed for building the save file location dir name in step 2
                 scheduledMessageRepo.saveScheduledMessage(
-                    it.date, it.subId, it.recipients, it.sendAsGroup, it.body, listOf()
+                    it.date,
+                    it.subId,
+                    it.recipients,
+                    it.sendAsGroup,
+                    it.body,
+                    listOf(),
+                    it.conversationId
                 )
             }
             .map { scheduledMessage ->
@@ -86,5 +94,4 @@ class AddScheduledMessage @Inject constructor(
             }
             .flatMap { updateScheduledMessageAlarms.buildObservable(Unit) }
     }
-
 }

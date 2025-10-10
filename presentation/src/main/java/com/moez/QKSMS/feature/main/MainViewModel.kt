@@ -19,6 +19,8 @@
 package dev.octoshrimpy.quik.feature.main
 
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkViewModel
@@ -32,6 +34,7 @@ import dev.octoshrimpy.quik.interactor.MarkUnarchived
 import dev.octoshrimpy.quik.interactor.MarkUnpinned
 import dev.octoshrimpy.quik.interactor.MarkUnread
 import dev.octoshrimpy.quik.interactor.MigratePreferences
+import dev.octoshrimpy.quik.interactor.SpeakThreads
 import dev.octoshrimpy.quik.interactor.SyncContacts
 import dev.octoshrimpy.quik.interactor.SyncMessages
 import dev.octoshrimpy.quik.listener.ContactAddedListener
@@ -39,23 +42,21 @@ import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.ChangelogManager
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.manager.RatingManager
+import dev.octoshrimpy.quik.model.EmojiSyncNeeded
 import dev.octoshrimpy.quik.model.SyncLog
 import dev.octoshrimpy.quik.repository.ConversationRepository
+import dev.octoshrimpy.quik.repository.EmojiReactionRepository
+import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
-import dev.octoshrimpy.quik.interactor.SpeakThreads
-import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -80,6 +81,7 @@ class MainViewModel @Inject constructor(
     private val permissionManager: PermissionManager,
     private val prefs: Preferences,
     private val ratingManager: RatingManager,
+    private val reactions: EmojiReactionRepository,
     private val syncContacts: SyncContacts,
     private val syncMessages: SyncMessages
 ) : QkViewModel<MainView, MainState>(
@@ -120,6 +122,15 @@ class MainViewModel @Inject constructor(
         val lastSync = Realm.getDefaultInstance().use { realm -> realm.where(SyncLog::class.java)?.max("date") ?: 0 }
         if (lastSync == 0 && permissionManager.isDefaultSms() && permissionManager.hasReadSms() && permissionManager.hasContacts()) {
             syncMessages.execute(Unit)
+        }
+
+        // This is only used when we update to a version that newly supports emoji reactions
+        Realm.getDefaultInstance().executeTransactionAsync { realm ->
+            val emojiSyncNeeded = realm.where(EmojiSyncNeeded::class.java).findFirst()
+            if (emojiSyncNeeded != null) {
+                reactions.deleteAndReparseAllEmojiReactions(realm)
+                emojiSyncNeeded.deleteFromRealm()
+            }
         }
 
         // Sync contacts when we detect a change
@@ -318,7 +329,7 @@ class MainViewModel @Inject constructor(
                             else -> newState { copy(hasError = true) }
                         }
                         NavItem.BACKUP -> navigator.showBackup()
-                        NavItem.SCHEDULED -> navigator.showScheduled()
+                        NavItem.SCHEDULED -> navigator.showScheduled(null)
                         NavItem.BLOCKING -> navigator.showBlockedConversations()
                         NavItem.SETTINGS -> navigator.showSettings()
 //                        NavItem.PLUS -> navigator.showQksmsPlusActivity("main_menu")
@@ -349,7 +360,7 @@ class MainViewModel @Inject constructor(
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markArchived.execute(conversations)
                     lastArchivedThreadIds = conversations.toList()
-                    view.showArchivedSnackbar(lastArchivedThreadIds.count())
+                    view.showArchivedSnackbar(lastArchivedThreadIds.count(), true)
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -359,7 +370,7 @@ class MainViewModel @Inject constructor(
                 .filter { itemId -> itemId == R.id.unarchive }
                 .withLatestFrom(view.conversationsSelectedIntent) { _, conversations ->
                     markUnarchived.execute(conversations.toList())
-                    view.showArchivedSnackbar(conversations.count())
+                    view.showArchivedSnackbar(conversations.count(), false)
                     view.clearSelection()
                 }
                 .autoDisposable(view.scope())
@@ -468,7 +479,11 @@ class MainViewModel @Inject constructor(
                             ?.recipients?.first()
                             ?.takeIf { recipient -> recipient.contact == null } != null
                     val pin = conversations.sumBy { if (it.pinned) -1 else 1 } >= 0
-                    val read = conversations.sumBy { if (!it.unread) -1 else 1 } >= 0
+                    val read = when (conversations.size) {
+                        0    -> false
+                        1    -> conversations[0].unread
+                        else -> true
+                    }
                     val selected = selection.size
 
                     when (state.page) {
@@ -524,7 +539,7 @@ class MainViewModel @Inject constructor(
                         Preferences.SWIPE_ACTION_ARCHIVE ->
                             markArchived.execute(listOf(threadId)) {
                                 lastArchivedThreadIds = listOf(threadId)
-                                view.showArchivedSnackbar(1)
+                                view.showArchivedSnackbar(1, true)
                             }
                         Preferences.SWIPE_ACTION_DELETE ->
                             view.showDeleteDialog(listOf(threadId))

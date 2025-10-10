@@ -92,7 +92,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clipToPadding="false">
 
             <FrameLayout
                 android:id="@+id/cancelFrame"
@@ -138,24 +139,64 @@
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/sendNowIcon"
                 android:layout_toEndOf="@id/cancelFrame"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <dev.octoshrimpy.quik.common.widget.TightTextView
-                    android:id="@+id/body"
-                    style="@style/TextPrimary"
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:autoLink="email|phone|web"
-                    android:background="@drawable/message_only"
-                    android:backgroundTint="?attr/bubbleColor"
-                    android:gravity="start|center_vertical"
-                    android:minHeight="36dp"
-                    android:textIsSelectable="true" />
+                    android:paddingStart="18dp"
+                    android:clipToPadding="false"
+                    android:clipChildren="false">
+
+                    <dev.octoshrimpy.quik.common.widget.TightTextView
+                        android:id="@+id/body"
+                        style="@style/TextPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:autoLink="email|phone|web"
+                        android:background="@drawable/message_only"
+                        android:backgroundTint="?attr/bubbleColor"
+                        android:gravity="start|center_vertical"
+                        android:minHeight="36dp"
+                        android:textIsSelectable="true" />
+
+                    <LinearLayout
+                        android:id="@+id/reactions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|start"
+                        android:layout_marginStart="-16dp"
+                        android:layout_marginBottom="-20dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/reactionText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/message_only"
+                            android:backgroundTint="?android:attr/colorBackground"
+                            android:elevation="2dp"
+                            android:maxLines="1"
+                            android:paddingStart="8dp"
+                            android:paddingTop="4dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="4dp"
+                            android:text="👍"
+                            android:textColor="?android:attr/textColorPrimary"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
             </LinearLayout>
 
             <ImageView

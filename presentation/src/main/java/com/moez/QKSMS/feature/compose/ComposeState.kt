@@ -47,6 +47,7 @@ data class ComposeState(
     val remaining: String = "",
     val subscription: SubscriptionInfoCompat? = null,
     val canSend: Boolean = false,
+    val hasScheduledMessages: Boolean = false,
     val validRecipientNumbers: Int = 1,
     val recipientCount: Int = 1,
     val audioMsgRecording: Boolean = false,

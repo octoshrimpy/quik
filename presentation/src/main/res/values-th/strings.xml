@@ -48,7 +48,6 @@
     <string name="main_menu_block">ปิดกั้น</string>
     <string name="main_syncing">กำลังปรับแต่งเพิ่มประสิทธิภาพฐานข้อมูล อาจใช้เวลาสักครู่&#8230;</string>
     <string name="main_sender_you">คุณ: %s</string>
-    <string name="main_draft">Draft</string>
     <string name="main_message_results_title">ผลลัพธ์ในข้อความ</string>
     <string name="main_message_results">%d ข้อความ</string>
     <string name="inbox_empty_text">บทสนทนาของคุณจะปรากฏที่นี่</string>
@@ -353,7 +352,6 @@
     <string name="button_set">ตั้งค่า</string>
     <string name="button_undo">ย้อนกลับ</string>
     <string name="toast_copied">คัดลอกแล้ว</string>
-    <string name="toast_archived">จัดเก็บการสนทนาแล้ว</string>
     <string name="toast_qksms_plus">คุณต้องปลดล็อก QUIK+ เพื่อใช้งานคุณสมบัตินี้</string>
     <plurals name="notification_new_messages">
         <item quantity="other">มี %s ข้อความใหม่</item>

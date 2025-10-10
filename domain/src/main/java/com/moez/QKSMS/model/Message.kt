@@ -20,7 +20,9 @@ package dev.octoshrimpy.quik.model
 
 import android.content.ContentUris
 import android.net.Uri
-import android.provider.Telephony.*
+import android.provider.Telephony.Mms
+import android.provider.Telephony.MmsSms
+import android.provider.Telephony.Sms
 import dev.octoshrimpy.quik.extensions.joinTo
 import io.realm.RealmList
 import io.realm.RealmObject
@@ -76,6 +78,8 @@ open class Message : RealmObject() {
     var subject: String = ""
     var textContentType: String = ""
     var parts: RealmList<MmsPart> = RealmList()
+    var isEmojiReaction: Boolean = false
+    val emojiReactions: RealmList<EmojiReaction> = RealmList()
 
     var sendAsGroup: Boolean = false
 

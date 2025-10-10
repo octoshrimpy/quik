@@ -36,11 +36,11 @@ import dev.octoshrimpy.quik.feature.blocking.BlockingActivity
 import dev.octoshrimpy.quik.feature.compose.ComposeActivity
 import dev.octoshrimpy.quik.feature.conversationinfo.ConversationInfoActivity
 import dev.octoshrimpy.quik.feature.gallery.GalleryActivity
+import dev.octoshrimpy.quik.feature.main.MainActivity
 import dev.octoshrimpy.quik.feature.notificationprefs.NotificationPrefsActivity
 import dev.octoshrimpy.quik.feature.plus.PlusActivity
 import dev.octoshrimpy.quik.feature.scheduled.ScheduledActivity
 import dev.octoshrimpy.quik.feature.settings.SettingsActivity
-import dev.octoshrimpy.quik.manager.AnalyticsManager
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.manager.PermissionManager
@@ -51,7 +51,6 @@ import javax.inject.Singleton
 @Singleton
 class Navigator @Inject constructor(
     private val context: Context,
-    private val analyticsManager: AnalyticsManager,
     private val billingManager: BillingManager,
     private val notificationManager: NotificationManager,
     private val permissions: PermissionManager
@@ -75,7 +74,6 @@ class Navigator @Inject constructor(
      * one of [main_menu, compose_schedule, settings_night, settings_theme]
      */
     fun showQksmsPlusActivity(source: String) {
-//        analyticsManager.track("Viewed QKSMS+", Pair("source", source))
         val intent = Intent(context, PlusActivity::class.java)
         startActivity(intent)
     }
@@ -93,6 +91,11 @@ class Navigator @Inject constructor(
             intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, context.packageName)
             context.startActivity(intent)
         }
+    }
+
+    fun showMainActivity() {
+        val intent = Intent(context, MainActivity::class.java)
+        startActivity(intent)
     }
 
     fun showCompose(body: String? = null, attachments: List<Uri>? = null, mode: String? = null) {
@@ -160,13 +163,12 @@ class Navigator @Inject constructor(
     }
 
     fun showBackup() {
-//        analyticsManager.track("Viewed Backup")
         startActivity(Intent(context, BackupActivity::class.java))
     }
 
-    fun showScheduled() {
-//        analyticsManager.track("Viewed Scheduled")
+    fun showScheduled(conversationId: Long?) {
         val intent = Intent(context, ScheduledActivity::class.java)
+        conversationId?.let { intent.putExtra("conversationId", it) }
         startActivity(intent)
     }
 
@@ -264,14 +266,12 @@ class Navigator @Inject constructor(
                 .append("Device: ${Build.BRAND} ${Build.MODEL}\n")
                 .append("SDK: ${Build.VERSION.SDK_INT}\n")
                 .append("Upgraded"
-                        .takeIf { BuildConfig.FLAVOR != "noAnalytics" }
                         .takeIf { billingManager.upgradeStatus.blockingFirst() } ?: "")
                 .toString())
         startActivityExternal(intent)
     }
 
     fun showInvite() {
-//        analyticsManager.track("Clicked Invite")
         Intent(Intent.ACTION_SEND)
                 .setType("text/plain")
                 .putExtra(Intent.EXTRA_TEXT, "https://github.com/octoshrimpy/quik/releases/latest")

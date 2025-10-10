@@ -26,6 +26,10 @@ import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.WorkerFactory
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Module
+import dagger.Provides
 import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.blocking.BlockingManager
 import dev.octoshrimpy.quik.common.ViewModelFactory
@@ -40,8 +44,6 @@ import dev.octoshrimpy.quik.manager.ActiveConversationManager
 import dev.octoshrimpy.quik.manager.ActiveConversationManagerImpl
 import dev.octoshrimpy.quik.manager.AlarmManager
 import dev.octoshrimpy.quik.manager.AlarmManagerImpl
-import dev.octoshrimpy.quik.manager.AnalyticsManager
-import dev.octoshrimpy.quik.manager.AnalyticsManagerImpl
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.ChangelogManager
 import dev.octoshrimpy.quik.manager.ChangelogManagerImpl
@@ -79,16 +81,16 @@ import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ContactRepositoryImpl
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.ConversationRepositoryImpl
+import dev.octoshrimpy.quik.repository.EmojiReactionRepository
+import dev.octoshrimpy.quik.repository.EmojiReactionRepositoryImpl
+import dev.octoshrimpy.quik.repository.MessageContentFilterRepository
+import dev.octoshrimpy.quik.repository.MessageContentFilterRepositoryImpl
 import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.repository.MessageRepositoryImpl
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepositoryImpl
 import dev.octoshrimpy.quik.repository.SyncRepository
 import dev.octoshrimpy.quik.repository.SyncRepositoryImpl
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import dagger.Module
-import dagger.Provides
 import dev.octoshrimpy.quik.worker.InjectionWorkerFactory
 import javax.inject.Singleton
 
@@ -142,9 +144,6 @@ class AppModule(private var application: Application) {
 
     @Provides
     fun provideAlarmManager(manager: AlarmManagerImpl): AlarmManager = manager
-
-    @Provides
-    fun provideAnalyticsManager(manager: AnalyticsManagerImpl): AnalyticsManager = manager
 
     @Provides
     fun blockingClient(manager: BlockingManager): BlockingClient = manager
@@ -205,6 +204,9 @@ class AppModule(private var application: Application) {
     fun provideBlockingRepository(repository: BlockingRepositoryImpl): BlockingRepository = repository
 
     @Provides
+    fun provideMessageContentFilterRepository(repository: MessageContentFilterRepositoryImpl): MessageContentFilterRepository = repository
+
+    @Provides
     fun provideContactRepository(repository: ContactRepositoryImpl): ContactRepository = repository
 
     @Provides
@@ -218,6 +220,9 @@ class AppModule(private var application: Application) {
 
     @Provides
     fun provideSyncRepository(repository: SyncRepositoryImpl): SyncRepository = repository
+
+    @Provides
+    fun provideEmojiReactionRepository(repository: EmojiReactionRepositoryImpl): EmojiReactionRepository = repository
 
     // worker factory
     @Provides

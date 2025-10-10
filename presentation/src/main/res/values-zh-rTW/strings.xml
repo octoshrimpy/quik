@@ -48,7 +48,6 @@
     <string name="main_menu_block">封鎖</string>
     <string name="main_syncing">正在同步訊息…</string>
     <string name="main_sender_you">您：%s</string>
-    <string name="main_draft">草稿</string>
     <string name="main_message_results_title">訊息中的結果</string>
     <string name="main_message_results">%d 條訊息</string>
     <string name="inbox_empty_text">對話會在這裡顯示</string>
@@ -355,7 +354,6 @@
     <string name="button_set">設定</string>
     <string name="button_undo">復原</string>
     <string name="toast_copied">已複製</string>
-    <string name="toast_archived">封存的對話</string>
     <string name="toast_qksms_plus">您必須解鎖 QUIK+ 才能使用此功能</string>
     <plurals name="notification_new_messages">
         <item quantity="one">新訊息</item>

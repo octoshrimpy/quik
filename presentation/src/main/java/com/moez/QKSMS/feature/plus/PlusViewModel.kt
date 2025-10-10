@@ -18,18 +18,16 @@
  */
 package dev.octoshrimpy.quik.feature.plus
 
-import dev.octoshrimpy.quik.common.Navigator
-import dev.octoshrimpy.quik.common.base.QkViewModel
-import dev.octoshrimpy.quik.manager.AnalyticsManager
-import dev.octoshrimpy.quik.manager.BillingManager
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
+import dev.octoshrimpy.quik.common.Navigator
+import dev.octoshrimpy.quik.common.base.QkViewModel
+import dev.octoshrimpy.quik.manager.BillingManager
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 
 class PlusViewModel @Inject constructor(
-    private val analyticsManager: AnalyticsManager,
     private val billingManager: BillingManager,
     private val navigator: Navigator
 ) : QkViewModel<PlusView, PlusState>(PlusState()) {
@@ -55,7 +53,6 @@ class PlusViewModel @Inject constructor(
         Observable.merge(
                 view.upgradeIntent.map { BillingManager.SKU_PLUS },
                 view.upgradeDonateIntent.map { BillingManager.SKU_PLUS_DONATE })
-//                .doOnNext { sku -> analyticsManager.track("Clicked Upgrade", Pair("sku", sku)) }
                 .autoDisposable(view.scope())
                 .subscribe { sku -> view.initiatePurchaseFlow(billingManager, sku) }
 
@@ -69,7 +66,7 @@ class PlusViewModel @Inject constructor(
 
         view.scheduleClicks
                 .autoDisposable(view.scope())
-                .subscribe { navigator.showScheduled() }
+                .subscribe { navigator.showScheduled(null) }
 
         view.backupClicks
                 .autoDisposable(view.scope())

@@ -79,7 +79,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:clipToPadding="false"
+            android:clipChildren="false">
 
             <dev.octoshrimpy.quik.common.widget.AvatarView
                 android:id="@+id/avatar"
@@ -89,16 +91,21 @@
                 app:layout_constraintBottom_toBottomOf="@id/body"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:orientation="vertical">
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:paddingEnd="4dp"
+                android:paddingStart="4dp">
 
                 <dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerViewLongMmsPart
                     android:id="@+id/parts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:nestedScrollingEnabled="false"
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -110,6 +117,8 @@
                     style="@style/TextPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/parts"
                     android:layout_marginTop="2dp"
                     android:autoLink="email|phone|web"
                     android:background="@drawable/message_only"
@@ -118,7 +127,38 @@
                     android:textIsSelectable="true"
                     tools:backgroundTint="@color/tools_theme"
                     tools:text="@tools:sample/lorem/random" />
-            </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/reactions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/body"
+                    android:layout_alignEnd="@id/body"
+                    android:layout_marginEnd="-12dp"
+                    android:layout_marginBottom="-20dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/reactionText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/message_only"
+                        android:backgroundTint="?android:attr/colorBackground"
+                        android:elevation="2dp"
+                        android:maxLines="1"
+                        android:paddingStart="8dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="4dp"
+                        android:text="😂 2"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </LinearLayout>
 

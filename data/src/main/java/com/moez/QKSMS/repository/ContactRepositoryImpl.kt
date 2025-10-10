@@ -171,4 +171,14 @@ class ContactRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun isContact(address: String): Boolean {
+        val uri : Uri
+        if (address.contains('@')) {
+            uri = Uri.withAppendedPath(Email.CONTENT_FILTER_URI, Uri.encode(address))
+        } else {
+            uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(address))
+        }
+        return context.contentResolver.query(uri, arrayOf(BaseColumns._ID), null, null, null)?.count!! > 0
+    }
+
 }

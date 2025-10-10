@@ -20,10 +20,10 @@ package dev.octoshrimpy.quik.experiment
 
 import android.content.Context
 import android.preference.PreferenceManager
-import dev.octoshrimpy.quik.manager.AnalyticsManager
-import java.util.*
+import java.util.Locale
+import java.util.Random
 
-abstract class Experiment<T>(val context: Context, val analytics: AnalyticsManager) {
+abstract class Experiment<T>(val context: Context) {
 
     private val prefs by lazy { PreferenceManager.getDefaultSharedPreferences(context) }
     private val prefKey: String
@@ -48,7 +48,6 @@ abstract class Experiment<T>(val context: Context, val analytics: AnalyticsManag
 
             else -> { // Variant hasn't been set yet
                 variants[Random().nextInt(variants.size)].also { variant ->
-                    analytics.setUserProperty("Experiment: $key", variant.key)
                     prefs.edit().putString(prefKey, variant.key).apply()
                 }.value
             }

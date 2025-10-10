@@ -23,8 +23,8 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.buildSpannedString
-import androidx.core.text.color
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
@@ -34,7 +34,9 @@ import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.model.Conversation
+import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.conversation_list_item.*
 import kotlinx.android.synthetic.main.conversation_list_item.view.*
 import javax.inject.Inject
@@ -43,9 +45,11 @@ class ConversationsAdapter @Inject constructor(
     private val colors: Colors,
     private val context: Context,
     private val dateFormatter: DateFormatter,
+    private val scheduledMessageRepo: ScheduledMessageRepository,
     private val navigator: Navigator,
     private val phoneNumberUtils: PhoneNumberUtils
-) : QkRealmAdapter<Conversation>() {
+) : QkRealmAdapter<Conversation, QkViewHolder>() {
+    private val disposables = CompositeDisposable()
 
     init {
         // This is how we access the threadId for the swipe actions
@@ -118,6 +122,16 @@ class ConversationsAdapter @Inject constructor(
         // Make the preview in italics if draft
         if (conversation.draft.isNotEmpty()) holder.snippet.setTypeface(null, Typeface.ITALIC)
 
+        // Get Scheduled Messages
+        val disposable = scheduledMessageRepo
+            .getScheduledMessagesForConversation(conversation.id)
+            .asFlowable()
+            .toObservable()
+            .subscribe { messages ->
+                holder.scheduled.isVisible = messages.isNotEmpty()
+            }
+        disposables.add(disposable)
+
         holder.pinned.isVisible = conversation.pinned
         holder.unread.setTint(theme)
     }
@@ -129,5 +143,11 @@ class ConversationsAdapter @Inject constructor(
     override fun getItemViewType(position: Int): Int {
         return if (getItem(position)?.unread == false) 0 else 1
     }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        disposables.clear()
+    }
+
 
 }

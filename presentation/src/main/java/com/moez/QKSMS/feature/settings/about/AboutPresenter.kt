@@ -18,11 +18,11 @@
  */
 package dev.octoshrimpy.quik.feature.settings.about
 
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkPresenter
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import javax.inject.Inject
 
 class AboutPresenter @Inject constructor(

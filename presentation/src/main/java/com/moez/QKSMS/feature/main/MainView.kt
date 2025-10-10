@@ -54,7 +54,7 @@ interface MainView : QkView<MainState> {
     fun showDeleteDialog(conversations: List<Long>)
     fun showRenameDialog(conversationName: String)
     fun showChangelog(changelog: ChangelogManager.CumulativeChangelog)
-    fun showArchivedSnackbar(countConversationsArchived: Int)
+    fun showArchivedSnackbar(countConversationsArchived: Int, isArchiving: Boolean)
     fun drawerToggled(opened: Boolean)
 }
 

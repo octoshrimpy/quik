@@ -21,8 +21,8 @@ package dev.octoshrimpy.quik.common.util
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.content.pm.ShortcutManager
+import android.os.Build
 import androidx.core.app.Person
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -101,7 +101,7 @@ class ShortcutManagerImpl @Inject constructor(
 
     @TargetApi(29)
     private fun createShortcutForConversation(conversation: Conversation): ShortcutInfoCompat {
-        Timber.v("creating shortcut for conversation ${conversation.id} : ${conversation.getTitle()}")
+        Timber.v("creating shortcut for conversation ${conversation.id}")
         val icon = when {
             conversation.recipients.size == 1 -> {
                 val recipient = conversation.recipients.first()!!

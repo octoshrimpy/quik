@@ -8,8 +8,6 @@ on:
 jobs:
   vvm:
     runs-on: ubuntu-latest
-    env:
-      DEFAULT_BRANCH: auto-update-mms-configs
       
     steps:
       - name: Checkout repository
@@ -34,6 +32,9 @@ jobs:
           
       - name: Download Messaging APK 
         run: apkeep -a com.google.android.apps.messaging -o device=walleye /home/runner/work/quik/quik
+
+      - name: List files in directory
+        run: ls /home/runner/work/quik/quik
 
       - name: Unzip the Messaging APK from XAPK
         run: |
@@ -78,4 +79,5 @@ jobs:
               - Updated by [Auto-Update MMS configs] [Auto-Update MMS configs](./.github%2Fworkflows%2Fauto-update-mms-configs.yml)
           add-paths: android-smsmms/src/main/res/xml-mcc*
           branch: ${{ env.NEW_BRANCH }}
-          base: ${{ env.DEFAULT_BRANCH }}
+          base: master
+          labels: automated

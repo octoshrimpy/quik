@@ -1,0 +1,148 @@
+name: Bump Version & Prepare F-Droid Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    env:
+      META_YML: fdroid/metadata/dev.octoshrimpy.quik.yml
+      GRADLE_FILE: presentation/build.gradle
+      CHANGELOG: data/src/main/assets/changelog.json
+
+    steps:
+    - name: Checkout full history
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: true
+
+    - name: Decode Android keystore
+      run: |
+        echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > keystore.p12
+
+    - name: Install repo icon
+      run: |
+        mkdir -p repo/icons/metadata/en-US/images
+        cp metadata/en-US/images/icon.png \
+           repo/icons/metadata/en-US/images/icon.png
+
+    - name: Write F-Droid config.yml
+      run: |
+        cat > config.yml <<EOF
+        repo_keystore: keystore.p12
+        keystorepass: ${{ secrets.KEYSTORE_PASSWORD }}
+        repo_keyalias: ${{ secrets.KEY_ALIAS }}
+        keypass: ${{ secrets.KEY_PASSWORD }}
+        repo_icon: metadata/en-US/images/icon.png
+        EOF
+
+    - name: Bump F-Droid metadata
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - run: |
+        pip3 install fdroidserver
+        fdroid update
+
+    - name: Commit F-Droid metadata bump
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add "$META_YML"
+        git diff --quiet --cached || git commit -m "chore: bump F-Droid metadata"
+
+    - name: Set up Java & jq
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: '17'
+    - run: sudo apt-get update && sudo apt-get install -y jq
+
+    - name: Bump Android version & changelog
+      id: bump
+      shell: bash
+      run: |
+        set -euo pipefail
+        # extract current values
+        current_code=$(grep -E '^[[:space:]]*versionCode ' "$GRADLE_FILE" | awk '{print $2}')
+        current_name=$(grep -E 'versionName' "$GRADLE_FILE" | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+')
+        # bump
+        new_code=$((current_code + 1))
+        IFS='.' read -r major minor patch <<< "$current_name"
+        new_name="${major}.$((minor + 1)).0"
+        # apply to build.gradle
+        sed -i \
+          -e "s|^[[:space:]]*versionCode[[:space:]]\+$current_code|versionCode $new_code|" \
+          -e "s|versionName[[:space:]]\+'$current_name'|versionName '$new_name'|" \
+          "$GRADLE_FILE"
+        echo "NEW_CODE=$new_code" >> "$GITHUB_ENV"
+        echo "NEW_NAME=$new_name" >> "$GITHUB_ENV"
+        # prepend to changelog.json
+        prev_tag="v${new_name}"
+        if git rev-parse --verify --quiet "$prev_tag" >/dev/null; then
+          base="$prev_tag"
+        else
+          base=$(git describe --tags --match "v[0-9]*" --abbrev=0 2>/dev/null || echo "")
+        fi
+        [[ -n "$base" ]] && range="$base..HEAD" || range="HEAD"
+        mapfile -t commits < <(
+          git log --no-merges --reverse --pretty=format:"%s by %an" $range \
+            | sed -E 's/[[:space:]]*\.*[[:space:]]+by/ by/' \
+            | sed -E 's/^[[:space:]]+//;s/[[:space:]]+$//' \
+            | awk '!seen[$0]++'
+        )
+        changes_json=$(printf '%s\n' "${commits[@]:-}" | jq -R . | jq -s .)
+        jq --argjson changes "$changes_json" \
+           --arg vc "$new_code" \
+           --arg vn "$new_name" \
+           '
+             def capfirst: sub("^(.)"; "\(ascii_upcase(.1))");
+             $all := ($changes | map(capfirst));
+             $fixes := $all | map(select(test("^(Fix|fix)")));
+             $others := $all | map(select(test("^(Fix|fix)") | not));
+             . = [{
+               versionCode: ($vc|tonumber),
+               versionName: $vn,
+               fixes: $fixes,
+               changes: $others
+             }] + .
+           ' "$CHANGELOG" > tmp && mv tmp "$CHANGELOG"
+        # write F-Droid .txt summary
+        mkdir -p fdroid/metadata
+        {
+          echo "Changes in $new_name ($new_code):"
+          echo
+          for c in "${commits[@]}"; do echo "- $c"; done
+        } > fdroid/metadata/"${new_code}".txt
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add "$GRADLE_FILE" "$CHANGELOG" "fdroid/metadata/${new_code}.txt"
+        git commit -m "chore: bump to $new_name ($new_code)"
+    
+    - name: Push bump branch
+      run: |
+        branch="bump/${{ env.NEW_NAME }}-${{ env.NEW_CODE }}"
+        # Create or switch to the branch locally
+        if git rev-parse --verify "$branch" >/dev/null 2>&1; then
+          git checkout "$branch"
+        else
+          git checkout -b "$branch"
+        fi
+        # Force-push safely: only if the remote hasn't moved since last fetched
+        git push --force-with-lease origin HEAD:"$branch"
+
+    - name: Open PR (no auto-merge)
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "chore: bump to ${{ env.NEW_NAME }} (${{ env.NEW_CODE }})"
+        title: "chore: bump to ${{ env.NEW_NAME }} (${{ env.NEW_CODE }})"
+        body: |
+          This PR bumps:
+          - versionCode → ${{ env.NEW_CODE }}
+          - versionName → ${{ env.NEW_NAME }}
+        branch: bump/${{ env.NEW_NAME }}-${{ env.NEW_CODE }}
+        base: master
+        labels: automated

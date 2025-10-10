@@ -81,6 +81,8 @@ open class MessageRepositoryImpl @Inject constructor(
     private val messageIds: KeyManager,
     private val phoneNumberUtils: PhoneNumberUtils,
     private val prefs: Preferences,
+    private val syncRepository: SyncRepository,
+    private val reactions: EmojiReactionRepository,
     private val cursorToMessage: CursorToMessage,
     private val cursorToPart: CursorToPart,
 ) : MessageRepository {
@@ -93,6 +95,7 @@ open class MessageRepositoryImpl @Inject constructor(
         Realm.getDefaultInstance()
             .where(Message::class.java)
             .equalTo("threadId", threadId)
+            .equalTo("isEmojiReaction", false)
             .let {
                 when (query.isEmpty()) {
                     true -> it
@@ -188,9 +191,10 @@ open class MessageRepositoryImpl @Inject constructor(
 
         val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(part.type)
             ?: return null
-        val date = part.messages?.first()?.date
-        val fileName = part.name?.takeIf { name -> name.endsWith(extension) }
-            ?: "${part.type.split("/").last()}_$date.$extension"
+        // fileDateAndTime is divided by 1000 in order to remove the extra 0's after date and time
+        // This way the file name isn't so long.
+        val fileDateAndTime = (part.messages?.first()?.date)?.div(1000)
+        val fileName = "QUIK_${part.type.split("/").last()}_$fileDateAndTime.$extension"
 
         val values = contentValuesOf(
             MediaStore.MediaColumns.DISPLAY_NAME to fileName,
@@ -731,7 +735,33 @@ open class MessageRepositoryImpl @Inject constructor(
         }
 
         Realm.getDefaultInstance().use { realm ->
-            realm.executeTransaction { realm.copyToRealmOrUpdate(message) }
+            var managedMessage: Message? = null
+            realm.executeTransaction { managedMessage = realm.copyToRealmOrUpdate(message) }
+
+            context.contentResolver.insert(Sms.Inbox.CONTENT_URI, values)
+                ?.lastPathSegment?.toLong()?.let { id ->
+                    // Update contentId after the message has been inserted to the content provider
+                    realm.executeTransaction { managedMessage?.contentId = id }
+                }
+
+            managedMessage?.let { savedMessage ->
+                val parsedReaction = reactions.parseEmojiReaction(body)
+                if (parsedReaction != null) {
+                    val targetMessage = reactions.findTargetMessage(
+                        savedMessage.threadId,
+                        parsedReaction.originalMessage,
+                        realm
+                    )
+                    realm.executeTransaction {
+                        reactions.saveEmojiReaction(
+                            savedMessage,
+                            parsedReaction,
+                            targetMessage,
+                            realm,
+                        )
+                    }
+                }
+            }
         }
 
         return message

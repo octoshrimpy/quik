@@ -22,9 +22,9 @@ import android.app.IntentService
 import android.content.Intent
 import android.net.Uri
 import android.telephony.TelephonyManager
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.interactor.SendNewMessage
 import dev.octoshrimpy.quik.repository.ConversationRepository
-import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class HeadlessSmsSendService : IntentService("HeadlessSmsSendService") {

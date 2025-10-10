@@ -38,7 +38,7 @@ import javax.inject.Inject
 class BlockedMessagesAdapter @Inject constructor(
     private val context: Context,
     private val dateFormatter: DateFormatter
-) : QkRealmAdapter<Conversation>() {
+) : QkRealmAdapter<Conversation, QkViewHolder>() {
 
     val clicks: PublishSubject<Long> = PublishSubject.create()
 

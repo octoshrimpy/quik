@@ -19,12 +19,12 @@
 package dev.octoshrimpy.quik.feature.blocking
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.common.base.QkPresenter
 import dev.octoshrimpy.quik.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 
@@ -68,6 +68,10 @@ class BlockingPresenter @Inject constructor(
                         blockingClient.openSettings()
                     }
                 }
+
+        view.messageContentFiltersIntent
+                .autoDisposable(view.scope())
+                .subscribe { view.openMessageContentFilters() }
 
         view.blockedMessagesIntent
                 .autoDisposable(view.scope())

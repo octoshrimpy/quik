@@ -48,7 +48,6 @@
     <string name="main_menu_block">Zablokovať</string>
     <string name="main_syncing">Synchronizácia správ&#8230;</string>
     <string name="main_sender_you">Vy: %s</string>
-    <string name="main_draft">Koncept</string>
     <string name="main_message_results_title">Výsledky v správach</string>
     <string name="main_message_results">%d správ</string>
     <string name="inbox_empty_text">Tu sa zobrazia vaše konverzácie</string>
@@ -365,7 +364,6 @@
     <string name="button_set">Nastaviť</string>
     <string name="button_undo">Vrátiť späť</string>
     <string name="toast_copied">Skopírované</string>
-    <string name="toast_archived">Archivované konverzácie</string>
     <string name="toast_qksms_plus">Pre použitie aktivujte QUIK+</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nová správa</item>

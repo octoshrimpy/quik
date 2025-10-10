@@ -19,6 +19,8 @@
 package dev.octoshrimpy.quik.feature.contacts
 
 import android.view.inputmethod.EditorInfo
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.common.base.QkViewModel
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.extensions.removeAccents
@@ -35,12 +37,9 @@ import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import io.realm.RealmList
 import kotlinx.coroutines.runBlocking

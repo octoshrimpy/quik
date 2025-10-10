@@ -24,7 +24,8 @@ import dev.octoshrimpy.quik.common.util.extensions.isSameDay
 import dev.octoshrimpy.quik.common.util.extensions.isSameWeek
 import dev.octoshrimpy.quik.common.util.extensions.isSameYear
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 

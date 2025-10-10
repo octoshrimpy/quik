@@ -48,7 +48,6 @@
     <string name="main_menu_block">Blokér</string>
     <string name="main_syncing">Synkroniserer beskeder&#8230;</string>
     <string name="main_sender_you">Dig: %s</string>
-    <string name="main_draft">Udkast</string>
     <string name="main_message_results_title">Resultater i beskeder</string>
     <string name="main_message_results">%d beskeder</string>
     <string name="inbox_empty_text">Dine samtaler vil fremgå her</string>
@@ -357,7 +356,6 @@
     <string name="button_set">Indstil</string>
     <string name="button_undo">Fortryd</string>
     <string name="toast_copied">Kopieret</string>
-    <string name="toast_archived">Arkiveret samtale</string>
     <string name="toast_qksms_plus">Dette kræver oplåsning af QUIK+</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Ny besked</item>

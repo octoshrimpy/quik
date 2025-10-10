@@ -24,7 +24,6 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdk 34
-    flavorDimensions "analytics"
 
     defaultConfig {
         applicationId 'dev.octoshrimpy.quik'
@@ -34,12 +33,10 @@ android {
         versionName '4.1.1'
         setProperty("archivesBaseName", "QUIK-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        setProperty("archivesBaseName", "QUIK-v${versionName}")
-        // versionNameSuffix '-beta'
     }
 
     signingConfigs {
+        debug // Uses the default debug keystore.
         release {
             def keystoreProps = new Properties()
             def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
@@ -47,16 +44,14 @@ android {
             keyAlias 'quik_release'
             if (keystorePropsFile.exists()) {
                 keystoreProps.load(new FileInputStream(keystorePropsFile))
-            } else if (System.getenv("CI") == "true") {
-//                do nothing
             } else {
-                throw new GradleException("Keystore properties file not found.")
+                // do nothing
             }
             storePassword keystoreProps['storePassword']
             keyPassword keystoreProps['keyPassword']
         }
     }
-    
+
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
         includeInApk = false
@@ -76,6 +71,7 @@ android {
             versionNameSuffix "-debug"
             resValue("string", "app_name", "QUIK-Debug")
             resValue("string", "application_id", defaultConfig.applicationId)
+            signingConfig signingConfigs.debug
         }
     }
 
@@ -88,17 +84,14 @@ android {
         jvmTarget = "1.8"
     }
 
-
-    productFlavors {
-        withAnalytics { dimension "analytics" }
-        noAnalytics {
-            signingConfig signingConfigs.release
-        }
-    }
     lint {
         abortOnError false
     }
     namespace 'dev.octoshrimpy.quik'
+    buildFeatures {
+        buildConfig true
+        viewBinding true
+    }
     if (System.getenv("CI") == "true") {
         signingConfigs.release.storePassword = System.getenv("keystore_password")
         signingConfigs.release.keyAlias = System.getenv("key_alias")
@@ -111,10 +104,8 @@ androidExtensions {
 }
 
 configurations {
-    noAnalyticsDebug
-    noAnalyticsRelease
-    withAnalyticsDebug
-    withAnalyticsRelease
+    debug
+    release
 }
 
 dependencies {
@@ -161,11 +152,8 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-//    compileOnly "javax.annotation:jsr250-api:1.0"
     //Resolve jdk8+ Generation Annotations - javax annotation does not exist
     implementation 'com.github.pengrad:jdk9-deps:1ffe84c468'
-
-//    look into jakarta.annotation-api when switching to java 9
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     // ezvcard
@@ -177,7 +165,6 @@ dependencies {
 
     // realm
     implementation "com.github.realm:realm-android-adapters:$realm_adapters_version"
-//    implementation("io.realm:android-adapters:$realm_adapters_version") { transitive = false }
     kapt "io.realm:realm-annotations:$realm_version"
     kapt "io.realm:realm-annotations-processor:$realm_version"
 
@@ -221,16 +208,13 @@ dependencies {
     implementation project(':data')
     implementation project(':domain')
 
-    withAnalyticsImplementation 'com.google.firebase:firebase-crashlytics:17.3.0'
-    withAnalyticsImplementation "com.android.billingclient:billing:$billing_version"
-    withAnalyticsImplementation "com.android.billingclient:billing-ktx:$billing_version"
-    noAnalyticsDebug project(path: ':data', configuration: 'noAnalyticsDebug')
-    noAnalyticsRelease project(path: ':data', configuration: 'noAnalyticsRelease')
-    withAnalyticsDebug project(path: ':data', configuration: 'withAnalyticsDebug')
-    withAnalyticsRelease project(path: ':data', configuration: 'withAnalyticsRelease')
 }
-
-if (getGradle().getStartParameter().getTaskRequests().toString().contains("WithAnalytics")) {
-    apply plugin: 'com.google.gms.google-services'
-    apply plugin: 'com.google.firebase.crashlytics'
+// Check to make sure that the keystore file is present when building a release
+gradle.taskGraph.whenReady { taskGraph ->
+    if ((taskGraph.hasTask(':assembleRelease') ||
+            taskGraph.allTasks.any { it.name == 'assembleRelease' }) &&
+            !file('./.gradle/.gradlerc').exists() &&
+            System.getenv("CI") != "true") {
+        throw new GradleException("Keystore properties file not found")
+    }
 }

@@ -22,12 +22,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.RemoteInput
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
 import dev.octoshrimpy.quik.interactor.MarkRead
 import dev.octoshrimpy.quik.interactor.SendNewMessage
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
-import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class RemoteMessagingReceiver : BroadcastReceiver() {

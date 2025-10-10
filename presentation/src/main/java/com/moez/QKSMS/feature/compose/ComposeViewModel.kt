@@ -26,8 +26,8 @@ import android.net.Uri
 import android.os.Vibrator
 import android.telephony.SmsMessage
 import android.widget.Toast
-import androidx.core.content.getSystemService
 import androidx.core.content.FileProvider
+import androidx.core.content.getSystemService
 import androidx.core.net.toFile
 import com.google.android.exoplayer2.util.MimeTypes
 import com.moez.QKSMS.common.QkMediaPlayer
@@ -72,13 +72,14 @@ import dev.octoshrimpy.quik.model.getText
 import dev.octoshrimpy.quik.repository.ContactRepository
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
+import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import dev.octoshrimpy.quik.util.ActiveSubscriptionObservable
+import dev.octoshrimpy.quik.util.FileUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.extensions.getResourceBytes
 import dev.octoshrimpy.quik.util.Constants.Companion.DELAY_CANCELLED_CACHED_ATTACHMENTS_FILE_PREFIX
 import dev.octoshrimpy.quik.util.Constants.Companion.SAVED_MESSAGE_TEXT_FILE_PREFIX
-import dev.octoshrimpy.quik.util.FileUtils
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -91,7 +92,8 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -116,6 +118,7 @@ class ComposeViewModel @Inject constructor(
     private val markRead: MarkRead,
     private val messageDetailsFormatter: MessageDetailsFormatter,
     private val messageRepo: MessageRepository,
+    private val scheduledMessageRepo: ScheduledMessageRepository,
     private val navigator: Navigator,
     private val permissionManager: PermissionManager,
     private val phoneNumberUtils: PhoneNumberUtils,
@@ -137,6 +140,7 @@ class ComposeViewModel @Inject constructor(
     private val searchSelection: Subject<Long> = BehaviorSubject.createDefault(-1)
 
     private var shouldShowContacts = threadId == 0L && addresses.isEmpty()
+    private var showScheduledToast = false
 
     private var bluetoothMicManager: BluetoothMicManager? = null
 
@@ -280,6 +284,22 @@ class ComposeViewModel @Inject constructor(
             newState { copy(subscription = sub) }
         }.subscribe()
 
+        // checks if there are any scheduled messages in convo
+        disposables += conversation
+            .distinctUntilChanged { conversation -> conversation.id }
+            .observeOn(AndroidSchedulers.mainThread())
+            .switchMap { conversation ->
+                scheduledMessageRepo
+                    .getScheduledMessagesForConversation(conversation.id)
+                    .asFlowable()
+                    .toObservable()
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { liveResults ->
+                val hasAny = liveResults.isNotEmpty()
+                newState { copy(hasScheduledMessages = hasAny) }
+            }
+
         // actions
         if (mode == "scheduling")
             newState { copy(scheduling = true) }
@@ -352,6 +372,15 @@ class ComposeViewModel @Inject constructor(
         view.menuReadyIntent
                 .autoDisposable(view.scope())
                 .subscribe { newState { copy() } }
+
+        // Show scheduled messages
+        view.optionsItemIntent
+            .filter {it == R.id.viewScheduledMessages}
+            .withLatestFrom(state, conversation)
+            .autoDisposable(view.scope())
+            .subscribe { (_, _, conversation) ->
+                navigator.showScheduled(conversation.id)
+            }
 
         // toggle select all / select none
         view.optionsItemIntent
@@ -887,7 +916,8 @@ class ComposeViewModel @Inject constructor(
             .subscribe {
                 newState {
                     copy(
-                        canSend = (it.first.isNotBlank() || (it.second > 0)) || (it.third > 0)
+                        canSend = (it.first.isNotBlank() || (it.second > 0)),
+                        scheduled = it.third
                     )
                 }
             }
@@ -1151,6 +1181,7 @@ class ComposeViewModel @Inject constructor(
                 }
 
                 val subId = state.subscription?.subscriptionId ?: -1
+                val conversationId = (conversation.id)
                 val addresses = when (conversation.recipients.isNotEmpty()) {
                     true -> conversation.recipients.map { it.address }
                     false -> chips.map { chip -> chip.address }
@@ -1169,9 +1200,13 @@ class ComposeViewModel @Inject constructor(
                                 addresses,
                                 sendAsGroup,
                                 body.toString(),
-                                state.attachments.map { it.uri }
-                            )
+                                state.attachments.map { it.uri },
+                                conversationId
                         )
+                    ).also {
+                        newState { copy(scheduled = 0) }
+                        showScheduledToast = true
+                    }
 
                         scheduled = true
                     }
@@ -1194,8 +1229,10 @@ class ComposeViewModel @Inject constructor(
             .doOnNext { scheduled ->
                 view.focusMessage()
 
-                if (scheduled)
+                if (showScheduledToast) {
                     context.makeToast(R.string.compose_scheduled_toast)
+                    showScheduledToast = false
+                }
             }
             .autoDisposable(view.scope())
             .subscribe()

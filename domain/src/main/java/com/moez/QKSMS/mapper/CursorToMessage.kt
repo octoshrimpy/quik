@@ -19,7 +19,9 @@
 package dev.octoshrimpy.quik.mapper
 
 import android.database.Cursor
-import android.provider.Telephony.*
+import android.provider.Telephony.Mms
+import android.provider.Telephony.MmsSms
+import android.provider.Telephony.Sms
 import dev.octoshrimpy.quik.model.Message
 import timber.log.Timber
 

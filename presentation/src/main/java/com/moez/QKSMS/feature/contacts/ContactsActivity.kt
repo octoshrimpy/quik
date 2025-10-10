@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
+import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.ViewModelFactory
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
@@ -37,7 +38,6 @@ import dev.octoshrimpy.quik.feature.compose.editing.ComposeItem
 import dev.octoshrimpy.quik.feature.compose.editing.ComposeItemAdapter
 import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberAction
 import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberPickerAdapter
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject

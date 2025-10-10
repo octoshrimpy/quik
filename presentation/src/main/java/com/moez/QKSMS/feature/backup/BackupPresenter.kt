@@ -19,6 +19,8 @@
 package dev.octoshrimpy.quik.feature.backup
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkPresenter
@@ -27,11 +29,8 @@ import dev.octoshrimpy.quik.common.util.extensions.makeToast
 import dev.octoshrimpy.quik.interactor.PerformBackup
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.repository.BackupRepository
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

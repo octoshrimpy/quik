@@ -22,13 +22,11 @@ import android.content.Context
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.experiment.Experiment
 import dev.octoshrimpy.quik.experiment.Variant
-import dev.octoshrimpy.quik.manager.AnalyticsManager
 import javax.inject.Inject
 
 class UpgradeButtonExperiment @Inject constructor(
     context: Context,
-    analytics: AnalyticsManager
-) : Experiment<Int>(context, analytics) {
+) : Experiment<Int>(context) {
 
     override val key: String = "Upgrade Button"
 

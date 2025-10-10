@@ -22,11 +22,11 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import dev.octoshrimpy.quik.BuildConfig
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.databinding.ChangelogDialogBinding
 import dev.octoshrimpy.quik.feature.main.MainActivity
 import dev.octoshrimpy.quik.manager.ChangelogManager
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.changelog_dialog.view.*
 
 class ChangelogDialog(activity: MainActivity) {
 
@@ -36,11 +36,11 @@ class ChangelogDialog(activity: MainActivity) {
     private val adapter = ChangelogAdapter(activity)
 
     init {
-        val layout = LayoutInflater.from(activity).inflate(R.layout.changelog_dialog, null)
+        val layout = ChangelogDialogBinding.inflate(LayoutInflater.from(activity))
 
         dialog = AlertDialog.Builder(activity)
                 .setCancelable(true)
-                .setView(layout)
+                .setView(layout.root)
                 .create()
 
         layout.version.text = activity.getString(R.string.changelog_version, BuildConfig.VERSION_NAME)

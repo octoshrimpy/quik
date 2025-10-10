@@ -1,6 +1,8 @@
 package dev.octoshrimpy.quik.feature.blocking.manager
 
 import android.content.Context
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.autoDisposable
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.blocking.BlockingClient
 import dev.octoshrimpy.quik.blocking.CallBlockerBlockingClient
@@ -9,11 +11,8 @@ import dev.octoshrimpy.quik.blocking.QksmsBlockingClient
 import dev.octoshrimpy.quik.blocking.ShouldIAnswerBlockingClient
 import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.base.QkPresenter
-import dev.octoshrimpy.quik.manager.AnalyticsManager
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.util.Preferences
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
@@ -21,7 +20,6 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class BlockingManagerPresenter @Inject constructor(
-    private val analytics: AnalyticsManager,
     private val callBlocker: CallBlockerBlockingClient,
     private val callControl: CallControlBlockingClient,
     private val context: Context,
@@ -69,7 +67,6 @@ class BlockingManagerPresenter @Inject constructor(
                 .switchMap { numbers -> qksms.block(numbers).andThen(Observable.just(Unit)) } // Hack
                 .autoDisposable(view.scope())
                 .subscribe {
-                    analytics.setUserProperty("Blocking Manager", "QKSMS")
                     prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_QKSMS)
                 }
 
@@ -77,7 +74,6 @@ class BlockingManagerPresenter @Inject constructor(
                 .filter {
                     val installed = callBlocker.isAvailable()
                     if (!installed) {
-                        analytics.track("Install Call Blocker")
                         navigator.installCallBlocker()
                     }
 
@@ -86,7 +82,6 @@ class BlockingManagerPresenter @Inject constructor(
                 }
                 .autoDisposable(view.scope())
                 .subscribe {
-                    analytics.setUserProperty("Blocking Manager", "Call Blocker")
                     prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_CB)
                 }
 
@@ -94,7 +89,6 @@ class BlockingManagerPresenter @Inject constructor(
                 .filter {
                     val installed = callControl.isAvailable()
                     if (!installed) {
-                        analytics.track("Install Call Control")
                         navigator.installCallControl()
                     }
 
@@ -119,7 +113,6 @@ class BlockingManagerPresenter @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe {
                     callControl.shouldBlock("callcontrol").blockingGet()
-                    analytics.setUserProperty("Blocking Manager", "Call Control")
                     prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_CC)
                 }
 
@@ -127,7 +120,6 @@ class BlockingManagerPresenter @Inject constructor(
                 .filter {
                     val installed = shouldIAnswer.isAvailable()
                     if (!installed) {
-                        analytics.track("Install SIA")
                         navigator.installSia()
                     }
 
@@ -136,7 +128,6 @@ class BlockingManagerPresenter @Inject constructor(
                 }
                 .autoDisposable(view.scope())
                 .subscribe {
-                    analytics.setUserProperty("Blocking Manager", "SIA")
                     prefs.blockingManager.set(Preferences.BLOCKING_MANAGER_SIA)
                 }
     }

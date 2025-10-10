@@ -44,6 +44,13 @@
         app:title="@string/info_notifications" />
 
     <dev.octoshrimpy.quik.common.widget.PreferenceView
+        android:id="@+id/markUnread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_markunread_black_24dp"
+        app:title="@string/main_menu_unread" />
+
+    <dev.octoshrimpy.quik.common.widget.PreferenceView
         android:id="@+id/archive"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
