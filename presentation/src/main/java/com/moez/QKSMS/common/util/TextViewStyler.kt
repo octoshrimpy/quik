@@ -61,13 +61,13 @@ class TextViewStyler @Inject constructor(
                 var textSizeAttr = 0
 
                 when (this) {
-                    is QkTextView -> context.obtainStyledAttributes(attrs, R.styleable.QkTextView)?.run {
+                    is QkTextView -> context.obtainStyledAttributes(attrs, R.styleable.QkTextView).run {
                         colorAttr = getInt(R.styleable.QkTextView_textColor, -1)
                         textSizeAttr = getInt(R.styleable.QkTextView_textSize, -1)
                         recycle()
                     }
 
-                    is QkEditText -> context.obtainStyledAttributes(attrs, R.styleable.QkEditText)?.run {
+                    is QkEditText -> context.obtainStyledAttributes(attrs, R.styleable.QkEditText).run {
                         colorAttr = getInt(R.styleable.QkEditText_textColor, -1)
                         textSizeAttr = getInt(R.styleable.QkEditText_textSize, -1)
                         recycle()

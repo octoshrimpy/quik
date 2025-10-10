@@ -31,15 +31,19 @@ import android.net.Uri;
 import android.provider.Telephony.Mms;
 import android.provider.Telephony.MmsSms;
 import android.provider.Telephony.MmsSms.PendingMessages;
+
+import com.android.mms.logs.LogTag;
 import com.android.mms.util.DownloadManager;
 import com.google.android.mms.pdu_alt.PduHeaders;
 import com.google.android.mms.pdu_alt.PduPersister;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 import com.klinker.android.send_message.BroadcastUtils;
 import com.klinker.android.send_message.R;
-import timber.log.Timber;
 
 public class RetryScheduler implements Observer {
-    private static final boolean LOCAL_LOGV = false;
+    private static final String TAG = LogTag.TAG;
+    private static final boolean DEBUG = false;
+    private static final boolean LOCAL_LOGV = true;
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -68,7 +72,9 @@ public class RetryScheduler implements Observer {
         try {
             Transaction t = (Transaction) observable;
 
-            Timber.v("[RetryScheduler] update " + observable);
+            if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                Timber.v("[RetryScheduler] update " + observable);
+            }
 
             // We are only supposed to handle M-Notification.ind, M-Send.req
             // and M-ReadRec.ind.
@@ -143,11 +149,6 @@ public class RetryScheduler implements Observer {
                             case PduHeaders.RESPONSE_STATUS_ERROR_PERMANENT_MESSAGE_NOT_FOUND:
                                 errorString = R.string.service_message_not_found;
                                 break;
-                            case PduHeaders.RESPONSE_STATUS_ERROR_CONTENT_NOT_ACCEPTED:
-                            case PduHeaders.RESPONSE_STATUS_ERROR_PERMANENT_CONTENT_NOT_ACCEPTED:
-                                errorString = R.string.service_message_content_not_accepted;
-                                break;
-
                         }
                         if (errorString != 0) {
                             DownloadManager.init(mContext.getApplicationContext());
@@ -172,8 +173,10 @@ public class RetryScheduler implements Observer {
                     if ((retryIndex < scheme.getRetryLimit()) && retry) {
                         long retryAt = current + scheme.getWaitingInterval();
 
-                        Timber.v("scheduleRetry: retry for " + uri + " is scheduled at "
-                            + (retryAt - System.currentTimeMillis()) + "ms from now");
+                        if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                            Timber.v("scheduleRetry: retry for " + uri + " is scheduled at "
+                                    + (retryAt - System.currentTimeMillis()) + "ms from now");
+                        }
 
                         values.put(PendingMessages.DUE_TIME, retryAt);
 
@@ -296,7 +299,9 @@ public class RetryScheduler implements Observer {
             cursor.close();
         }
         if (retrieveStatus != 0) {
-            Timber.v("Retrieve status is: " + retrieveStatus);
+            if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                Timber.v("Retrieve status is: " + retrieveStatus);
+            }
         }
         return retrieveStatus;
     }
@@ -314,12 +319,15 @@ public class RetryScheduler implements Observer {
                     Intent service = new Intent(TransactionService.ACTION_ONALARM,
                                         null, context, TransactionService.class);
                     PendingIntent operation = PendingIntent.getService(
-                            context, 0, service, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+                            context, 0, service, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
                     AlarmManager am = (AlarmManager) context.getSystemService(
                             Context.ALARM_SERVICE);
                     am.set(AlarmManager.RTC, retryAt, operation);
 
-                    Timber.v("Next retry is scheduled at" + (retryAt - System.currentTimeMillis()) + "ms from now");
+                    if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                        Timber.v("Next retry is scheduled at"
+                                + (retryAt - System.currentTimeMillis()) + "ms from now");
+                    }
                 }
             } finally {
                 cursor.close();

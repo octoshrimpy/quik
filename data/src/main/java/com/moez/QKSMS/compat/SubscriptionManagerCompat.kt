@@ -58,7 +58,7 @@ class SubscriptionManagerCompat @Inject constructor(context: Context, private va
 
     abstract class OnSubscriptionsChangedListener {
 
-        val listener: SubscriptionManager.OnSubscriptionsChangedListener? =
+        val listener: SubscriptionManager.OnSubscriptionsChangedListener =
             object : SubscriptionManager.OnSubscriptionsChangedListener() {
                 override fun onSubscriptionsChanged() {
                     this@OnSubscriptionsChangedListener.onSubscriptionsChanged()

@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.media.AudioAttributes
 import android.media.MediaMetadataRetriever
+import android.media.MediaMetadataRetriever.METADATA_KEY_TITLE
 import android.view.View
 import android.widget.SeekBar
 import com.moez.QKSMS.common.QkMediaPlayer
@@ -51,10 +52,6 @@ import javax.inject.Inject
 
 class AudioBinder @Inject constructor(colors: Colors, private val context: Context) :
     PartBinder() {
-
-    companion object {
-        const val DEFAULT_SHARE_FILENAME = "quik-audio-attachment.mp3"
-    }
 
     @Inject lateinit var navigator: Navigator
 
@@ -237,54 +234,60 @@ class AudioBinder @Inject constructor(colors: Colors, private val context: Conte
         }
 
         MediaMetadataRetriever().apply {
-            if (part.getUri().resourceExists(context))
-                setDataSource(context, part.getUri())
+            try {
+                if (part.getUri().resourceExists(context))
+                    setDataSource(context, part.getUri())
 
-            // metadata title
-            holder.metadataTitle.apply {
-                text = extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+                // metadata title
+                holder.metadataTitle.apply {
+                    text = extractMetadata(METADATA_KEY_TITLE)
 
-                if (text.isEmpty())
-                    visibility = View.GONE
-                else {
-                    visibility = View.VISIBLE
-                    setTextColor(primaryColor)
-                    setBackgroundTint(secondaryColor.withAlpha(0xcc))    // hex value is alpha
+                    if (text.isEmpty())
+                        visibility = View.GONE
+                    else {
+                        visibility = View.VISIBLE
+                        setTextColor(primaryColor)
+                        setBackgroundTint(secondaryColor.withAlpha(0xcc))    // hex value is alpha
+                    }
                 }
+
+                // bubble / embedded image
+                holder.thumbnail.apply {
+                    bubbleStyle = when {
+                        !canGroupWithPrevious && canGroupWithNext ->
+                            if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
+
+                        canGroupWithPrevious && canGroupWithNext ->
+                            if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
+
+                        canGroupWithPrevious && !canGroupWithNext ->
+                            if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
+
+                        else -> BubbleImageView.Style.ONLY
+                    }
+
+                    val embeddedPicture = embeddedPicture
+                    if (embeddedPicture == null) {
+                        holder.frame.layoutParams.height = (holder.frame.layoutParams.width / 2)
+                        setTint(secondaryColor)
+                        setImageResource(R.drawable.rectangle)
+                    } else {
+                        holder.frame.layoutParams.height = holder.frame.layoutParams.width
+                        setTint(null)
+                        GlideApp.with(context)
+                            .asBitmap()
+                            .load(embeddedPicture)
+                            .override(
+                                holder.frame.layoutParams.width,
+                                holder.frame.layoutParams.height
+                            )
+                            .into(this)
+                    }
+                }
+            } catch (e: Exception) { /* nothing */ }
+            finally {
+                release()
             }
-
-            // bubble / embedded image
-            holder.thumbnail.apply {
-                bubbleStyle = when {
-                    !canGroupWithPrevious && canGroupWithNext ->
-                        if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
-                    canGroupWithPrevious && canGroupWithNext ->
-                        if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
-                    canGroupWithPrevious && !canGroupWithNext ->
-                        if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
-                    else -> BubbleImageView.Style.ONLY
-                }
-
-                val embeddedPicture = embeddedPicture
-                if (embeddedPicture == null) {
-                    holder.frame.layoutParams.height = (holder.frame.layoutParams.width / 2)
-                    setTint(secondaryColor)
-                    setImageResource(R.drawable.rectangle)
-                } else {
-                    holder.frame.layoutParams.height = holder.frame.layoutParams.width
-                    setTint(null)
-                    GlideApp.with(context)
-                        .asBitmap()
-                        .load(embeddedPicture)
-                        .override(
-                            holder.frame.layoutParams.width,
-                            holder.frame.layoutParams.height
-                        )
-                        .into(this)
-                }
-            }
-
-            release()
         }
     }
 }

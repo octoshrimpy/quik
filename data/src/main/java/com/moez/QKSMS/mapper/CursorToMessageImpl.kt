@@ -20,7 +20,6 @@ package dev.octoshrimpy.quik.mapper
 
 import android.content.Context
 import android.database.Cursor
-import android.net.Uri
 import android.provider.Telephony.Mms
 import android.provider.Telephony.MmsSms
 import android.provider.Telephony.Sms
@@ -34,16 +33,16 @@ import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.SqliteWrapper
 import dev.octoshrimpy.quik.util.tryOrNull
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 class CursorToMessageImpl @Inject constructor(
     private val context: Context,
-    private val cursorToPart: CursorToPart,
     private val keys: KeyManager,
     private val permissionManager: PermissionManager,
     private val preferences: Preferences
 ) : CursorToMessage {
 
-    private val uri = Uri.parse("content://mms-sms/complete-conversations")
+    private val uri = "content://mms-sms/complete-conversations".toUri()
     private val projection = arrayOf(
             MmsSms.TYPE_DISCRIMINATOR_COLUMN,
             MmsSms._ID,
@@ -67,7 +66,7 @@ class CursorToMessageImpl @Inject constructor(
             Mms.MESSAGE_BOX,
             Mms.DELIVERY_REPORT,
             Mms.READ_REPORT,
-            MmsSms.PendingMessages.ERROR_TYPE,
+//            MmsSms.PendingMessages.ERROR_TYPE,
             Mms.STATUS
     )
 
@@ -78,8 +77,8 @@ class CursorToMessageImpl @Inject constructor(
         return Message().apply {
             type = when {
                 cursor.getColumnIndex(MmsSms.TYPE_DISCRIMINATOR_COLUMN) != -1 -> cursor.getString(columnsMap.msgType)
-                cursor.getColumnIndex(Mms.SUBJECT) != -1 -> "mms"
-                cursor.getColumnIndex(Sms.ADDRESS) != -1 -> "sms"
+                cursor.getColumnIndex(Mms.SUBJECT) != -1 -> Message.TYPE_MMS
+                cursor.getColumnIndex(Sms.ADDRESS) != -1 -> Message.TYPE_SMS
                 else -> "unknown"
             }
 
@@ -93,7 +92,8 @@ class CursorToMessageImpl @Inject constructor(
             subId = if (columnsMap.subId != -1) cursor.getInt(columnsMap.subId) else -1
 
             when (type) {
-                "sms" -> {
+                Message.TYPE_SMS -> {
+                    type = Message.TYPE_SMS
                     address = cursor.getString(columnsMap.smsAddress) ?: ""
                     boxId = cursor.getInt(columnsMap.smsType)
                     seen = cursor.getInt(columnsMap.smsSeen) != 0
@@ -106,14 +106,15 @@ class CursorToMessageImpl @Inject constructor(
                     deliveryStatus = cursor.getInt(columnsMap.smsStatus)
                 }
 
-                "mms" -> {
+                Message.TYPE_MMS -> {
+                    type = Message.TYPE_MMS
                     address = getMmsAddress(contentId)
                     boxId = cursor.getInt(columnsMap.mmsMessageBox)
                     date *= 1000L
                     dateSent *= 1000L
                     seen = cursor.getInt(columnsMap.mmsSeen) != 0
                     mmsDeliveryStatusString = cursor.getString(columnsMap.mmsDeliveryReport) ?: ""
-                    errorType = if (columnsMap.mmsErrorType != -1) cursor.getInt(columnsMap.mmsErrorType) else 0
+//                    errorType = if (columnsMap.mmsErrorType != -1) cursor.getInt(columnsMap.mmsErrorType) else 0
                     messageSize = 0
                     readReportString = cursor.getString(columnsMap.mmsReadReport) ?: ""
                     messageType = cursor.getInt(columnsMap.mmsMessageType)

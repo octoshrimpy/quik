@@ -70,6 +70,7 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
             resValue("string", "app_name", "QUIK-Debug")
+            resValue("string", "application_id", defaultConfig.applicationId)
             signingConfig signingConfigs.debug
         }
     }

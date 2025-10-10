@@ -26,7 +26,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Telephony.Mms;
+
+import com.android.mms.logs.LogTag;
+import timber.log.Timber; import android.util.Log;
 import android.widget.Toast;
+
 import com.android.internal.telephony.TelephonyProperties;
 import com.android.mms.service_alt.SystemPropertiesProxy;
 import com.google.android.mms.MmsException;
@@ -34,10 +38,11 @@ import com.google.android.mms.pdu_alt.EncodedStringValue;
 import com.google.android.mms.pdu_alt.NotificationInd;
 import com.google.android.mms.pdu_alt.PduPersister;
 import com.klinker.android.send_message.R;
-import timber.log.Timber;
 
 public class DownloadManager {
-    private static final boolean LOCAL_LOGV = false;
+    private static final String TAG = LogTag.TAG;
+    private static final boolean DEBUG = false;
+    private static final boolean LOCAL_LOGV = true;
 
     public static final int DEFERRED_MASK           = 0x04;
 
@@ -142,7 +147,7 @@ public class DownloadManager {
                 return;
             }
         } catch(MmsException e) {
-            Timber.e(e, e.getMessage());
+            Timber.e(e.getMessage(), e);
             return;
         }
 
@@ -154,7 +159,7 @@ public class DownloadManager {
                         Toast.makeText(mContext, getMessage(uri),
                                 Toast.LENGTH_LONG).show();
                     } catch (MmsException e) {
-                        Timber.e(e, e.getMessage());
+                        Timber.e(e.getMessage(), e);
                     }
                 }
             });
@@ -177,7 +182,7 @@ public class DownloadManager {
                 try {
                     Toast.makeText(mContext, errStr, Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
-                    Timber.e("Caught an exception in showErrorCodeToast");
+                    Log.e(TAG,"Caught an exception in showErrorCodeToast");
                 }
             }
         });

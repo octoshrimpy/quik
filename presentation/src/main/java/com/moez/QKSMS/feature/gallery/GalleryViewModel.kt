@@ -45,10 +45,6 @@ class GalleryViewModel @Inject constructor(
     private val saveImage: SaveImage,
     private val permissions: PermissionManager
 ) : QkViewModel<GalleryView, GalleryState>(GalleryState()) {
-    companion object {
-        const val DEFAULT_SHARE_FILENAME = "quik-media-attachment.jpg"
-    }
-
     init {
         disposables += Flowable.just(partId)
                 .mapNotNull(messageRepo::getMessageForPart)
@@ -87,7 +83,7 @@ class GalleryViewModel @Inject constructor(
                 .autoDisposable(view.scope())
                 .subscribe {
                     navigator.shareFile(
-                        MmsPartProvider.getUriForMmsPartId(it.id, it.getBestFilename()),
+                        MmsPartProvider().getUriForMmsPartId(context, it.id, it.getBestFilename()),
                         it.type
                     )
                 }
@@ -106,7 +102,7 @@ class GalleryViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe {
                 navigator.viewFile(
-                    MmsPartProvider.getUriForMmsPartId(it.id, it.getBestFilename()),
+                    MmsPartProvider().getUriForMmsPartId(context, it.id, it.getBestFilename()),
                     it.type
                 )
             }

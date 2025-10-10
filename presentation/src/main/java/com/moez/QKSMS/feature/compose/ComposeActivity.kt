@@ -128,6 +128,7 @@ import kotlinx.android.synthetic.main.compose_activity.scheduledSend
 import kotlinx.android.synthetic.main.compose_activity.send
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroup
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupBackground
+import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSummary
 import kotlinx.android.synthetic.main.compose_activity.sendAsGroupSwitch
 import kotlinx.android.synthetic.main.compose_activity.shadeBackground
 import kotlinx.android.synthetic.main.compose_activity.sim
@@ -158,7 +159,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val activityVisibleIntent: Subject<Boolean> = PublishSubject.create()
     override val chipsSelectedIntent: Subject<HashMap<String, String?>> = PublishSubject.create()
     override val chipDeletedIntent: Subject<Recipient> by lazy { chipsAdapter.chipDeleted }
-    override val menuReadyIntent: Observable<Unit> = menu.map { Unit }
+    override val menuReadyIntent: Observable<Unit> = menu.map { }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val contextItemIntent: Subject<MenuItem> = PublishSubject.create()
     override val scheduleAction: Subject<Boolean> = PublishSubject.create()
@@ -166,17 +167,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val messagePartClickIntent: Subject<Long> by lazy { messageAdapter.partClicks }
     override val messagePartContextMenuRegistrar: Subject<View> by lazy { messageAdapter.partContextMenuRegistrar }
     override val messagesSelectedIntent by lazy { messageAdapter.selectionChanges }
-    override val cancelSendingIntent: Subject<Long> by lazy { messageAdapter.cancelSendingClicks }
-    override val sendNowIntent: Subject<Long> by lazy { messageAdapter.sendNowClicks }
+    override val cancelDelayedIntent: Subject<Long> by lazy { messageAdapter.cancelSendingClicks }
+    override val sendDelayedNowIntent: Subject<Long> by lazy { messageAdapter.sendNowClicks }
     override val resendIntent: Subject<Long> by lazy { messageAdapter.resendClicks }
     override val attachmentDeletedIntent: Subject<Attachment> by lazy { composeAttachmentAdapter.attachmentDeleted }
     override val textChangedIntent by lazy { message.textChanges() }
-    override val attachIntent by lazy { Observable.merge(attach.clicks(), shadeBackground.clicks()) }
-    override val cameraIntent by lazy { Observable.merge(camera.clicks(), cameraLabel.clicks()) }
-    override val attachImageFileIntent by lazy { Observable.merge(gallery.clicks(), galleryLabel.clicks()) }
-    override val attachAnyFileIntent by lazy { Observable.merge(attachAFileIcon.clicks(), attachAFileLabel.clicks()) }
-    override val scheduleIntent by lazy { Observable.merge(schedule.clicks(), scheduleLabel.clicks()) }
-    override val attachContactIntent by lazy { Observable.merge(contact.clicks(), contactLabel.clicks()) }
+    override val attachIntent: Observable<Unit> by lazy { Observable.merge(attach.clicks(), shadeBackground.clicks()) }
+    override val cameraIntent: Observable<Unit> by lazy { Observable.merge(camera.clicks(), cameraLabel.clicks()) }
+    override val attachImageFileIntent: Observable<Unit> by lazy { Observable.merge(gallery.clicks(), galleryLabel.clicks()) }
+    override val attachAnyFileIntent: Observable<Unit> by lazy { Observable.merge(attachAFileIcon.clicks(), attachAFileLabel.clicks()) }
+    override val scheduleIntent: Observable<Unit> by lazy { Observable.merge(schedule.clicks(), scheduleLabel.clicks()) }
+    override val attachContactIntent: Observable<Unit> by lazy { Observable.merge(contact.clicks(), contactLabel.clicks()) }
     override val attachAnyFileSelectedIntent: Subject<Uri> = PublishSubject.create()
     override val contactSelectedIntent: Subject<Uri> = PublishSubject.create()
     override val inputContentIntent by lazy { message.inputContentSelected }
@@ -192,7 +193,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val speechRecogniserIntent by lazy { speechToTextIcon.clicks() }
     override val shadeIntent by lazy { shadeBackground.clicks() }
     override val recordAudioStartStopRecording: Subject<Boolean> = PublishSubject.create()
-    override val recordAnAudioMessage by lazy {
+    override val recordAnAudioMessage: Observable<Unit> by lazy {
         Observable.merge(recordAudioMsg.clicks(),
             attachAnAudioMessageIcon.clicks(),
             attachAnAudioMessageLabel.clicks())
@@ -493,8 +494,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         loading.setVisible(state.loading)
 
-        sendAsGroup.setVisible(state.editingMode && state.selectedChips.size >= 2)
+        sendAsGroup.setVisible(state.recipientCount > 1)
         sendAsGroupSwitch.isChecked = state.sendAsGroup
+        sendAsGroupSummary.setText(
+            if (sendAsGroupSwitch.isChecked) R.string.compose_send_group_summary_on
+            else R.string.compose_send_group_summary_off
+        )
 
         messageList.setVisible(!state.editingMode || state.sendAsGroup || state.selectedChips.size == 1)
         messageAdapter.data = state.messages
@@ -636,8 +641,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun requestDatePicker() {
         val calendar = Calendar.getInstance()
-        DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
-            TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+        DatePickerDialog(this, { _, year, month, day ->
+            TimePickerDialog(this, { _, hour, minute ->
                 calendar.set(Calendar.YEAR, year)
                 calendar.set(Calendar.MONTH, month)
                 calendar.set(Calendar.DAY_OF_MONTH, day)
@@ -656,16 +661,16 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         val intent = Intent(Intent.ACTION_PICK)
             .setType(ContactsContract.Contacts.CONTENT_TYPE)
 
-        startActivityForResult(Intent.createChooser(intent, null), ComposeView.AttachContactRequestCode)
+        startActivityForResult(Intent.createChooser(intent, null), ComposeView.ATTACH_CONTACT_REQUEST_CODE)
     }
 
     override fun showContacts(sharing: Boolean, chips: List<Recipient>) {
         message.hideKeyboard()
         val serialized = HashMap(chips.associate { chip -> chip.address to chip.contact?.lookupKey })
         val intent = Intent(this, ContactsActivity::class.java)
-            .putExtra(ContactsActivity.SharingKey, sharing)
-            .putExtra(ContactsActivity.ChipsKey, serialized)
-        startActivityForResult(intent, ComposeView.SelectContactRequestCode)
+            .putExtra(ContactsActivity.SHARING_KEY, sharing)
+            .putExtra(ContactsActivity.CHIPS_KEY, serialized)
+        startActivityForResult(intent, ComposeView.SELECT_CONTACT_REQUEST_CODE)
     }
 
     override fun startSpeechRecognition() {
@@ -674,7 +679,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             }
             try {
-                startActivityForResult(intent, ComposeView.SpeechRecognitionRequestCode)
+                startActivityForResult(intent, ComposeView.SPEECH_RECOGNITION_REQUEST_CODE)
             } catch (e: ActivityNotFoundException) {
                 Toast.makeText(this, getString(R.string.error_stt_toast), Toast.LENGTH_SHORT).show()
             }
@@ -698,7 +703,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             .putExtra(MediaStore.EXTRA_OUTPUT, cameraDestination)
-        startActivityForResult(Intent.createChooser(intent, null), ComposeView.TakePhotoRequestCode)
+        startActivityForResult(Intent.createChooser(intent, null), ComposeView.TAKE_PHOTOS_REQUEST_CODE)
     }
 
     override fun requestGallery(mimeType: String, requestCode: Int) {
@@ -746,7 +751,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .setTitle(R.string.dialog_clear_compose_title)
             .setMessage(R.string.dialog_clear_compose)
             .setPositiveButton(R.string.button_clear) { _, _ ->
-                clearCurrentMessageIntent.onNext(false)
+                clearCurrentMessageIntent.onNext(true)
             }
             .setNegativeButton(R.string.button_cancel, null)
             .show()
@@ -786,17 +791,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             return
 
         when (requestCode) {
-            ComposeView.SelectContactRequestCode -> {
-                chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.ChipsKey)
+            ComposeView.SELECT_CONTACT_REQUEST_CODE -> {
+                chipsSelectedIntent.onNext(data?.getSerializableExtra(ContactsActivity.CHIPS_KEY)
                     ?.let { serializable -> serializable as? HashMap<String, String?> }
                     ?: hashMapOf())
             }
 
-            ComposeView.TakePhotoRequestCode -> {
+            ComposeView.TAKE_PHOTOS_REQUEST_CODE -> {
                 cameraDestination?.let(attachAnyFileSelectedIntent::onNext)
             }
 
-            ComposeView.AttachAFileRequestCode -> {
+            ComposeView.ATTACH_FILE_REQUEST_CODE -> {
                 data?.clipData?.itemCount
                     ?.let { count -> 0 until count }
                     ?.mapNotNull { i -> data.clipData?.getItemAt(i)?.uri }
@@ -804,11 +809,11 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     ?: data?.data?.let(attachAnyFileSelectedIntent::onNext)
             }
 
-            ComposeView.AttachContactRequestCode -> {
+            ComposeView.ATTACH_CONTACT_REQUEST_CODE -> {
                 data?.data?.let(contactSelectedIntent::onNext)
             }
 
-            ComposeView.SpeechRecognitionRequestCode -> {
+            ComposeView.SPEECH_RECOGNITION_REQUEST_CODE -> {
                 // check returned results are good
                 val match = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 if ((match !== null) && (match.size > 0) && (!match[0].isNullOrEmpty())) {
@@ -828,12 +833,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(ComposeView.CameraDestinationKey, cameraDestination)
+        outState.putParcelable(ComposeView.CAMERA_DESTINATION_KEY, cameraDestination)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        cameraDestination = savedInstanceState.getParcelable(ComposeView.CameraDestinationKey)
+        cameraDestination = savedInstanceState.getParcelable(ComposeView.CAMERA_DESTINATION_KEY)
         super.onRestoreInstanceState(savedInstanceState)
     }
 

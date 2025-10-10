@@ -18,6 +18,7 @@
  */
 package dev.octoshrimpy.quik.repository
 
+import com.moez.QKSMS.manager.QkTransaction
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ContentUris
@@ -35,33 +36,36 @@ import android.telephony.SmsManager
 import android.webkit.MimeTypeMap
 import androidx.core.content.contentValuesOf
 import com.google.android.mms.ContentType
-import com.google.android.mms.MMSPart
-import com.google.android.mms.pdu_alt.MultimediaMessagePdu
-import com.google.android.mms.pdu_alt.PduPersister
 import com.klinker.android.send_message.SmsManagerFactory
-import com.klinker.android.send_message.StripAccents
-import com.klinker.android.send_message.Transaction
 import dev.octoshrimpy.quik.common.util.extensions.now
 import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.anyOf
+import dev.octoshrimpy.quik.extensions.insertOrUpdate
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.extensions.isVideo
+import dev.octoshrimpy.quik.extensions.map
 import dev.octoshrimpy.quik.extensions.resourceExists
 import dev.octoshrimpy.quik.manager.ActiveConversationManager
 import dev.octoshrimpy.quik.manager.KeyManager
+import dev.octoshrimpy.quik.mapper.CursorToMessage
+import dev.octoshrimpy.quik.mapper.CursorToPart
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.Message.Companion.TYPE_MMS
+import dev.octoshrimpy.quik.model.Message.Companion.TYPE_SMS
 import dev.octoshrimpy.quik.model.MmsPart
-import dev.octoshrimpy.quik.receiver.SendSmsReceiver
-import dev.octoshrimpy.quik.receiver.SmsDeliveredReceiver
-import dev.octoshrimpy.quik.receiver.SmsSentReceiver
+import dev.octoshrimpy.quik.receiver.MessageDeliveredReceiver
+import dev.octoshrimpy.quik.receiver.MessageSentReceiver
+import dev.octoshrimpy.quik.receiver.SendDelayedMessageReceiver
+import dev.octoshrimpy.quik.receiver.SendDelayedMessageReceiver.Companion.MESSAGE_ID_EXTRA
 import dev.octoshrimpy.quik.util.ImageUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.realm.Case
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.RealmResults
 import io.realm.Sort
 import timber.log.Timber
@@ -79,6 +83,8 @@ open class MessageRepositoryImpl @Inject constructor(
     private val prefs: Preferences,
     private val syncRepository: SyncRepository,
     private val reactions: EmojiReactionRepository,
+    private val cursorToMessage: CursorToMessage,
+    private val cursorToPart: CursorToPart,
 ) : MessageRepository {
 
     companion object {
@@ -109,12 +115,24 @@ open class MessageRepositoryImpl @Inject constructor(
     override fun getMessagesSync(threadId: Long, query: String): RealmResults<Message> =
         getMessagesBase(threadId, query).findAll()
 
-    override fun getMessage(id: Long) =
+    override fun getMessage(messageId: Long) =
         Realm.getDefaultInstance()
             .also { it.refresh() }
             .where(Message::class.java)
-            .equalTo("id", id)
+            .equalTo("id", messageId)
             .findFirst()
+
+    override fun getUnmanagedMessage(messageId: Long) =
+        Realm.getDefaultInstance().use { realm ->
+            getMessage(messageId)?.let(realm::copyFromRealm)
+        }
+
+    override fun getMessages(messageIds: Collection<Long>): RealmResults<Message> =
+        Realm.getDefaultInstance()
+            .also { it.refresh() }
+            .where(Message::class.java)
+            .anyOf("id", messageIds.toLongArray())
+            .findAll()
 
     override fun getMessageForPart(id: Long) =
         Realm.getDefaultInstance()
@@ -128,12 +146,12 @@ open class MessageRepositoryImpl @Inject constructor(
             .equalTo("threadId", threadId)
             .beginGroup()
             .beginGroup()
-            .equalTo("type", "sms")
+            .equalTo("type", TYPE_SMS)
             .`in`("boxId", arrayOf(Sms.MESSAGE_TYPE_INBOX, Sms.MESSAGE_TYPE_ALL))
             .endGroup()
             .or()
             .beginGroup()
-            .equalTo("type", "mms")
+            .equalTo("type", TYPE_MMS)
             .`in`("boxId", arrayOf(Mms.MESSAGE_BOX_INBOX, Mms.MESSAGE_BOX_ALL))
             .endGroup()
             .endGroup()
@@ -199,6 +217,7 @@ open class MessageRepositoryImpl @Inject constructor(
             part.isVideo() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ->
                 MediaStore.Downloads.EXTERNAL_CONTENT_URI
+
             else -> MediaStore.Files.getContentUri("external")
         }
 
@@ -279,26 +298,20 @@ open class MessageRepositoryImpl @Inject constructor(
             threadIds.chunked(TELEPHONY_UPDATE_CHUNK_SIZE).forEach {
                 // chunked for smaller where clause size
                 val values = contentValuesOf(Sms.SEEN to seen)
-                val whereClause ="${Sms.SEEN} = ${if (seen) 0 else 1} " +
+                val whereClause = "${Sms.SEEN} = ${if (seen) 0 else 1} " +
                         "and ${Sms.THREAD_ID} in (${it.joinToString(",")})"
 
                 // sms messages
                 tryOrNull(true) {
                     countUpdated += context.contentResolver.update(
-                        Sms.CONTENT_URI,
-                        values,
-                        whereClause,
-                        null
+                        Sms.CONTENT_URI, values, whereClause, null
                     )
                 }
 
                 // mms messages
                 tryOrNull(true) {
                     countUpdated += context.contentResolver.update(
-                        Mms.CONTENT_URI,
-                        values,
-                        whereClause,
-                        null
+                        Mms.CONTENT_URI, values, whereClause, null
                     )
                 }
             }
@@ -327,10 +340,10 @@ open class MessageRepositoryImpl @Inject constructor(
             }
         }
 
-    override fun markSeen(threadId: Long) =
+    override fun markSeen(threadIds: Collection<Long>) =
         Realm.getDefaultInstance().use { realm ->
             realm.where(Message::class.java)
-                .equalTo("threadId", threadId)
+                .anyOf("threadId", threadIds.toLongArray())
                 .equalTo("seen", false)
                 .findAll()
                 .let { messages ->
@@ -339,7 +352,7 @@ open class MessageRepositoryImpl @Inject constructor(
                     }
                 }
         }.run {
-            telephonyMarkSeenRead(true, null, listOf(threadId))
+            telephonyMarkSeenRead(true, null, threadIds)
         }
 
     override fun markRead(threadIds: Collection<Long>) =
@@ -360,7 +373,7 @@ open class MessageRepositoryImpl @Inject constructor(
                             }
                         }
                 }.run {
-                    telephonyMarkSeenRead(true, true, threadIds)
+                    telephonyMarkSeenRead(seen = true, read = true, threadIds = threadIds)
                 }
             }
             ?: 0
@@ -383,67 +396,70 @@ open class MessageRepositoryImpl @Inject constructor(
             }
             ?: 0
 
-    override fun sendMessage(
-        subId: Int,
-        threadId: Long,
-        addresses: Collection<String>,
-        body: String,
-        attachments: Collection<Attachment>,
-        delay: Int
-    ) {
-        val signedBody = when {
-            prefs.signature.get().isEmpty() -> body
-            body.isNotEmpty() -> body + '\n' + prefs.signature.get()
-            else -> prefs.signature.get()
+    private fun syncProviderMessage(uri: Uri, sendAsGroup: Boolean): Message? {
+        // if uri doesn't have valid type
+        val type = when {
+            uri.toString().contains(TYPE_MMS) -> TYPE_MMS
+            uri.toString().contains(TYPE_SMS) -> TYPE_SMS
+            else -> return null
         }
 
-        val smsManager = subId.takeIf { it != -1 }
-            ?.let(SmsManagerFactory::createSmsManager)
-            ?: SmsManager.getDefault()
+        // if uri doesn't have a valid id, fail
+        val contentId = tryOrNull(false) { ContentUris.parseId(uri) } ?: return null
 
-        // We only care about stripping SMS
-        val strippedBody = when (prefs.unicode.get()) {
-            true -> StripAccents.stripAccents(signedBody)
-            false -> signedBody
+        val stableUri = when (type) {
+            TYPE_MMS -> ContentUris.withAppendedId(Mms.CONTENT_URI, contentId)
+            else -> ContentUris.withAppendedId(Sms.CONTENT_URI, contentId)
         }
 
-        val parts = smsManager.divideMessage(strippedBody).orEmpty()
-        val forceMms = prefs.longAsMms.get() && parts.size > 1
+        return context.contentResolver.query(
+            stableUri, null, null, null, null
+        )?.use { cursor ->
+            // if there are no rows, return null. else, move to the first row
+            if (!cursor.moveToFirst())
+                return null
 
-        if (addresses.size == 1 && attachments.isEmpty() && !forceMms) { // SMS
-            if (delay > 0) { // With delay
-                val sendTime = System.currentTimeMillis() + delay
-                val message = insertSentSms(
-                    subId,
-                    threadId,
-                    addresses.first(),
-                    strippedBody,
-                    sendTime
-                )
+            cursorToMessage.map(Pair(cursor, CursorToMessage.MessageColumns(cursor))).apply {
+                this.sendAsGroup = sendAsGroup
 
-                val intent = getIntentForDelayedSms(message.id)
+                if (isMms()) {
+                    parts = RealmList<MmsPart>().apply {
+                        addAll(
+                            cursorToPart.getPartsCursor(contentId)
+                                ?.map { cursorToPart.map(it) }
+                                .orEmpty()
+                        )
+                    }
+                }
 
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, sendTime, intent)
-            } else { // No delay
-                val message = insertSentSms(
-                    subId,
-                    threadId,
-                    addresses.first(),
-                    strippedBody, now()
-                )
-                sendSms(message)
+                insertOrUpdate()
             }
-        } else { // MMS
-            val parts = arrayListOf<MMSPart>()
+        }
+    }
+
+    override fun sendNewMessages(
+        subId: Int, toAddresses: Collection<String>, body: String,
+        attachments: Collection<Attachment>, sendAsGroup: Boolean, delayMs: Int
+    ): Collection<Message> {
+        Timber.v("sending message(s)")
+
+        val parts = mutableListOf<com.google.android.mms.MMSPart>()
+
+        if (attachments.isNotEmpty()) {
+            Timber.v("has attachments")
+            val smsManager = subId.takeIf { it != -1 }
+                ?.let(SmsManagerFactory::createSmsManager)
+                ?: SmsManager.getDefault()
 
             val maxWidth = smsManager.carrierConfigValues
                 .getInt(SmsManager.MMS_CONFIG_MAX_IMAGE_WIDTH)
-                .takeIf { prefs.mmsSize.get() == -1 } ?: Int.MAX_VALUE
+                .takeIf { prefs.mmsSize.get() == -1 }
+                ?: Int.MAX_VALUE
 
             val maxHeight = smsManager.carrierConfigValues
                 .getInt(SmsManager.MMS_CONFIG_MAX_IMAGE_HEIGHT)
-                .takeIf { prefs.mmsSize.get() == -1 } ?: Int.MAX_VALUE
+                .takeIf { prefs.mmsSize.get() == -1 }
+                ?: Int.MAX_VALUE
 
             var remainingBytes = when (prefs.mmsSize.get()) {
                 -1 -> smsManager.carrierConfigValues.getInt(SmsManager.MMS_CONFIG_MAX_MESSAGE_SIZE)
@@ -451,10 +467,7 @@ open class MessageRepositoryImpl @Inject constructor(
                 else -> prefs.mmsSize.get() * 1024
             } * 0.9 // Ugly, but buys us a bit of wiggle room
 
-            signedBody.takeIf { it.isNotEmpty() }?.toByteArray()?.let { bytes ->
-                remainingBytes -= bytes.size
-                parts += MMSPart("text", ContentType.TEXT_PLAIN, bytes)
-            }
+            remainingBytes -= body.takeIf { it.isNotEmpty() }?.toByteArray()?.size ?: 0
 
             // Attach those that can't be compressed (ie. everything but images)
             parts += attachments
@@ -464,16 +477,16 @@ open class MessageRepositoryImpl @Inject constructor(
                 .filter { it.uri.resourceExists(context) }
                 .map {
                     remainingBytes -= it.getResourceBytes(context).size
-                    val mmsPart = MMSPart(
-                        it.getName(context),
-                        it.getType(context),
-                        it.getResourceBytes(context)
-                    )
+                    val part = com.google.android.mms.MMSPart().apply {
+                        MimeType = it.getType(context)
+                        Name = it.getName(context)
+                        Data = it.getResourceBytes(context)
+                    }
 
                     // release the attachment hold on the image bytes so the GC can reclaim
                     it.releaseResourceBytes()
 
-                    mmsPart
+                    part
                 }
 
             val imageBytesByAttachment = attachments
@@ -514,8 +527,11 @@ open class MessageRepositoryImpl @Inject constructor(
                         // too big, we'll need to try smaller and smaller values
                         val scale = maxBytes / originalBytes.size * (0.9 - attempts * 0.2)
                         if (scale <= 0) {
-                            Timber.w("Failed to compress ${originalBytes.size / 1024
-                            }Kb to ${maxBytes.toInt() / 1024}Kb")
+                            Timber.w(
+                                "Failed to compress ${
+                                    originalBytes.size / 1024
+                                }Kb to ${maxBytes.toInt() / 1024}Kb"
+                            )
                             return@forEach
                         }
 
@@ -526,233 +542,197 @@ open class MessageRepositoryImpl @Inject constructor(
                         attempts++
                         scaledBytes = when (attachment.getType(context) == "image/gif") {
                             true -> ImageUtils.getScaledGif(
-                                context,
-                                attachment.uri,
-                                newWidth,
-                                newHeight
+                                context, attachment.uri, newWidth, newHeight
                             )
+
                             false -> ImageUtils.getScaledImage(
-                                context,
-                                attachment.uri,
-                                newWidth,
-                                newHeight
+                                context, attachment.uri, newWidth, newHeight
                             )
                         }
 
-                        Timber.d("Compression attempt $attempts: ${scaledBytes.size / 1024
-                        }/${maxBytes.toInt() / 1024}Kb ($width*$height -> $newWidth*${
-                            newHeight})")
+                        Timber.d(
+                            "Compression attempt $attempts: ${
+                                scaledBytes.size / 1024
+                            }/${maxBytes.toInt() / 1024}Kb ($width*$height -> $newWidth*${
+                                newHeight
+                            })"
+                        )
 
                         // release the attachment hold on the image bytes so the GC can reclaim
                         attachment.releaseResourceBytes()
                     }
 
-                    Timber.v("Compressed ${originalBytes.size / 1024}Kb to ${
-                        scaledBytes.size / 1024}Kb with a target size of ${
-                        maxBytes.toInt() / 1024}Kb in $attempts attempts")
+                    Timber.v(
+                        "Compressed ${originalBytes.size / 1024}Kb to ${
+                            scaledBytes.size / 1024
+                        }Kb with a target size of ${
+                            maxBytes.toInt() / 1024
+                        }Kb in $attempts attempts"
+                    )
                     imageBytesByAttachment[attachment] = scaledBytes
                 }
             }
 
             imageBytesByAttachment.forEach { (attachment, bytes) ->
-                parts += when (attachment.getType(context) == "image/gif") {
-                    true -> MMSPart(attachment.getName(context), ContentType.IMAGE_GIF, bytes)
-                    false -> MMSPart(attachment.getName(context), ContentType.IMAGE_JPEG, bytes)
+                parts += com.google.android.mms.MMSPart().apply {
+                    MimeType =
+                        if (attachment.getType(context) == "image/gif") ContentType.IMAGE_GIF
+                        else ContentType.IMAGE_JPEG
+                    Name = attachment.getName(context)
+                    Data = bytes
+                }
+            }
+        }
+
+        Timber.v("create os provider message")
+
+        // 3 stage sending process - stage 1, create records in os provider
+        val group = (sendAsGroup && (toAddresses.size > 1))
+        val messageUri = QkTransaction.createMessage(
+            context, subId, body, prefs.signature.get(),
+            toAddresses.map(phoneNumberUtils::normalizeNumber).toTypedArray(),
+            parts, group, prefs.longAsMms.get(), prefs.unicode.get()
+        )
+
+        if (messageUri == Uri.EMPTY) {
+            Timber.v("create os provider message failed")
+            return listOf()
+        }
+
+        val message = syncProviderMessage(messageUri, group)
+        if (message == null) {
+            Timber.v("sync message failed for uri $messageUri")
+            return listOf()
+        }
+
+        Timber.v("created message id ${message.id} from uri $messageUri")
+
+        if (delayMs > 0) {  // if delaying
+            val sendTime = (now() + delayMs)
+
+            // set delay time on the db message
+            Realm.getDefaultInstance().use { realm ->
+                realm.executeTransaction {
+                    realm.copyToRealmOrUpdate(message.apply { date = sendTime })
                 }
             }
 
-            // We need to strip the separators from outgoing MMS, or else they'll appear to have
-            // sent and not go through
-            val transaction = Transaction(context)
-            val recipients = addresses.map(phoneNumberUtils::normalizeNumber)
-            transaction.sendNewMessage(
-                subId,
-                threadId,
-                recipients,
-                parts,
-                null,
-                null
-            )
+            // create alarm that will trigger sending the message
+            (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
+                .setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP, sendTime, getIntentForDelayedSms(message.id)
+                )
+
+            Timber.v("set ${delayMs}ms delay for message id ${message.id}")
+
+            return listOf(message)
         }
+
+        // send now (message will be exploded, as required, and all sent)
+        return sendMessage(message)
     }
 
-    override fun sendSms(message: Message) {
-        val smsManager = message.subId.takeIf { it != -1 }
-            ?.let(SmsManagerFactory::createSmsManager)
-            ?: SmsManager.getDefault()
+    override fun sendMessage(message: Message): Collection<Message> {
+        val retVal = mutableListOf<Message>()
 
-        val parts = smsManager.divideMessage(
-            if (prefs.unicode.get()) StripAccents.stripAccents(message.body)
-            else message.body
-        )
-            ?: arrayListOf()
+        tryOrNull(true) {
+            // explode message if needed
+            val explodedMessages = QkTransaction.explodeMessage(
+                context, message.getUri(), message.sendAsGroup
+            ).filter { explodedMessageUri -> (explodedMessageUri != Uri.EMPTY) }
 
-        try {
-            smsManager.sendMultipartTextMessage(
-                message.address,
-                null,
-                parts,
-                ArrayList(
-                    parts.map {
-                        PendingIntent.getBroadcast(
-                            context,
-                            message.id.toInt(),
-                            Intent(context, SmsSentReceiver::class.java)
-                                .putExtra("id", message.id),
-                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                        )
+            // if multiple messages to send, create each and recurse to send
+            if (explodedMessages.size > 1) {
+                explodedMessages.forEach { explodedMessageUri ->
+                    val childMessage = syncProviderMessage(explodedMessageUri, message.sendAsGroup)
+                    if (childMessage != null) {
+                        Timber.v("created message id ${childMessage.id} from uri $explodedMessageUri")
+                        retVal.addAll(sendMessage(childMessage))
                     }
-                ),
-                ArrayList(
-                    parts.map {
-                        val pendingIntent = PendingIntent.getBroadcast(
-                            context,
-                            message.id.toInt(),
-                            Intent(context, SmsDeliveredReceiver::class.java)
-                                .putExtra("id", message.id),
-                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                        )
-                        if (prefs.delivery.get()) pendingIntent else null
-                    }
-                )
-            )
-        } catch (e: IllegalArgumentException) {
-            Timber.w(e, "Message body lengths: ${parts.map { it?.length }}")
-            markFailed(message.id, Telephony.MmsSms.ERR_TYPE_GENERIC)
-        }
-    }
+                    else
+                        Timber.e("sync failed for uri $explodedMessageUri")
+                }
 
-    override fun resendMms(message: Message) =
-        tryOrNull {
-            PduPersister.getPduPersister(context).load(message.getUri()) as MultimediaMessagePdu
-        }
-            ?.let { pdu ->
-                Transaction(context).sendNewMessage(
-                    message.subId,
-                    message.threadId,
-                    pdu.to.map { it.string }.filter { it.isNotBlank() },
-                    message.parts.mapNotNull { part ->
-                        val bytes = tryOrNull(false) {
-                            context.contentResolver.openInputStream(part.getUri())?.use {
-                                    inputStream -> inputStream.readBytes()
-                            }
-                        } ?: return@mapNotNull null
+                // mark original message as sent
+                markSent(message.id)
+            } else {
+                markSending(message.id)
 
-                        MMSPart(part.name.orEmpty(), part.type, bytes)
-                    },
-                    message.subject,
-                    message.getUri()
-                )
+                // individual message to send, send it
+                val sentIntent = Intent(context, MessageSentReceiver::class.java)
+                    .putExtra(MessageSentReceiver.EXTRA_QUIK_MESSAGE_ID, message.id)
+
+                val deliveryIntent =
+                    if (prefs.delivery.get())
+                        Intent(context, MessageDeliveredReceiver::class.java)
+                            .putExtra(MessageDeliveredReceiver.EXTRA_QUIK_MESSAGE_ID, message.id)
+                    else null
+
+                // use values from os provider to resend the message, except subId
+                if (!QkTransaction.sendMessage(context, message.getUri(), sentIntent, deliveryIntent))
+                    Timber.e("message id ${message.id} not sent by smsmms")
             }
-            ?: Unit
 
-    override fun cancelDelayedSms(id: Long) =
+            retVal.add(message)
+        }
+
+        return retVal
+    }
+
+    override fun sendMessage(messageId: Long) =
+        getMessage(messageId)
+            ?.let { message -> sendMessage(message) }
+            ?: listOf()
+
+    override fun cancelDelayedSmsAlarm(messageId: Long) =
         (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager)
-            .cancel(getIntentForDelayedSms(id))
+            .cancel(getIntentForDelayedSms(messageId))
 
-    private fun getIntentForDelayedSms(id: Long) =
+    private fun getIntentForDelayedSms(messageId: Long) =
         PendingIntent.getBroadcast(
             context,
-            id.toInt(),
-            Intent(context, SendSmsReceiver::class.java).putExtra("id", id),
+            messageId.toInt(),
+            Intent(context, SendDelayedMessageReceiver::class.java)
+                .putExtra(MESSAGE_ID_EXTRA, messageId),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-    override fun insertSentSms(
-        subId: Int,
-        threadId: Long,
-        address: String,
-        body: String,
-        date: Long
-    ): Message {
-        // Insert the message to Realm
-        val message = Message().apply {
-            this.threadId = threadId
-            this.address = address
-            this.body = body
-            this.date = date
-            this.subId = subId
+    override fun insertReceivedSms(subId: Int, address: String, body: String, sentTime: Long)
+    : Message {
+        val threadId = TelephonyCompat.getOrCreateThreadId(context, address)
 
-            id = messageIds.newId()
-            boxId = Sms.MESSAGE_TYPE_OUTBOX
-            type = "sms"
-            read = true
-            seen = true
-        }
-
-        // Insert the message to the native content provider
+        // insert the message to the native content provider
         val values = contentValuesOf(
             Sms.ADDRESS to address,
             Sms.BODY to body,
-            Sms.DATE to System.currentTimeMillis(),
-            Sms.READ to true,
-            Sms.SEEN to true,
-            Sms.TYPE to Sms.MESSAGE_TYPE_OUTBOX,
+            Sms.DATE_SENT to sentTime,
             Sms.THREAD_ID to threadId
         )
 
         if (prefs.canUseSubId.get())
-            values.put(Sms.SUBSCRIPTION_ID, message.subId)
+            values.put(Sms.SUBSCRIPTION_ID, subId)
 
-        var uri: Uri?
-        var managedMessage: Message? = null
+        val providerContentId = context.contentResolver.insert(Sms.Inbox.CONTENT_URI, values)
+            ?.let { insertedUri -> ContentUris.parseId(insertedUri) }
+            ?: 0
 
-        Realm.getDefaultInstance().use { realm ->
-            realm.executeTransaction { managedMessage = realm.copyToRealmOrUpdate(message) }
-
-            // Update the contentId after the message has been inserted to the content provider
-            // The message might have been deleted by now, so only proceed if it's valid
-            //
-            // do this after inserting the message because it might be slow, and we want the message
-            // to be inserted into Realm immediately. We don't need to do this after receiving one
-            uri = context.contentResolver.insert(Sms.CONTENT_URI, values)?.apply {
-                lastPathSegment?.toLong()?.let { id ->
-                    realm.executeTransaction {
-                        managedMessage?.takeIf { it.isValid }?.contentId = id
-                    }
-                }
-            }
-        }
-
-        // On some devices, we can't obtain a threadId until after the first message is sent in a
-        // conversation. In this case, update the message's threadId after it gets added
-        // to the native ContentProvider
-        if (threadId == 0L)
-            uri?.let(syncRepository::syncMessage)
-
-        return message
-    }
-
-    override fun insertReceivedSms(
-        subId: Int,
-        address: String,
-        body: String,
-        sentTime: Long
-    ): Message {
-        // Insert the message to Realm
+        // insert the message to Realm
         val message = Message().apply {
+            id = messageIds.newId()
+
             this.address = address
             this.body = body
             this.dateSent = sentTime
-            this.date = System.currentTimeMillis()
+            this.threadId = threadId
             this.subId = subId
 
-            id = messageIds.newId()
-            threadId = TelephonyCompat.getOrCreateThreadId(context, address)
+            date = System.currentTimeMillis()
+
+            contentId = providerContentId
             boxId = Sms.MESSAGE_TYPE_INBOX
-            type = "sms"
-            read = activeConversationManager.getActiveConversation() == threadId
+            type = TYPE_SMS
+            read = (activeConversationManager.getActiveConversation() == threadId)
         }
-
-        // Insert the message to the native content provider
-        val values = contentValuesOf(
-            Sms.ADDRESS to address,
-            Sms.BODY to body,
-            Sms.DATE_SENT to sentTime
-        )
-
-        if (prefs.canUseSubId.get())
-            values.put(Sms.SUBSCRIPTION_ID, message.subId)
 
         Realm.getDefaultInstance().use { realm ->
             var managedMessage: Message? = null
@@ -790,12 +770,12 @@ open class MessageRepositoryImpl @Inject constructor(
     /**
      * Marks the message as sending, in case we need to retry sending it
      */
-    override fun markSending(id: Long) =
+    override fun markSending(messageId: Long) =
         Realm.getDefaultInstance().use { realm ->
             realm.refresh()
 
             realm.where(Message::class.java)
-                .equalTo("id", id)
+                .equalTo("id", messageId)
                 .findFirst()
                 ?.let { message ->
                     // Update the message in realm
@@ -820,62 +800,112 @@ open class MessageRepositoryImpl @Inject constructor(
             Unit
         }
 
-    override fun markSent(id: Long) =
+    override fun markSent(messageId: Long) {
+        Timber.v("mark message id $messageId as sent")
+
         Realm.getDefaultInstance().use { realm ->
             realm.refresh()
 
-            realm.where(Message::class.java)
-                .equalTo("id", id)
-                .findFirst()
+            realm.where(Message::class.java).equalTo("id", messageId).findFirst()
                 ?.let { message ->
-                    // Update the message in realm
-                    realm.executeTransaction { message.boxId = Sms.MESSAGE_TYPE_SENT }
+                    if (message.isSms()) {
+                        // update the message in realm
+                        realm.executeTransaction { message.boxId = Sms.MESSAGE_TYPE_SENT }
 
-                    // Update the message in the native ContentProvider
-                    context.contentResolver.update(
-                        message.getUri(),
-                        contentValuesOf(Sms.TYPE to Sms.MESSAGE_TYPE_SENT),
-                        null,
-                        null
-                    )
-                }
-            Unit
-        }
+                        // Update the message in the native ContentProvider
+                        context.contentResolver.update(
+                            message.getUri(),
+                            contentValuesOf(Sms.TYPE to Sms.MESSAGE_TYPE_SENT),
+                            null,
+                            null
+                        )
+                    } else {
+                        // update the message in realm
+                        realm.executeTransaction { message.boxId = Mms.MESSAGE_BOX_SENT }
 
-    override fun markFailed(id: Long, resultCode: Int) =
-        Realm.getDefaultInstance().use { realm ->
-            realm.refresh()
-
-            realm.where(Message::class.java)
-                .equalTo("id", id)
-                .findFirst()
-                ?.let { message ->
-                    // Update the message in realm
-                    realm.executeTransaction {
-                        message.boxId = Sms.MESSAGE_TYPE_FAILED
-                        message.errorCode = resultCode
+                        // Update the message in the native ContentProvider
+                        context.contentResolver.update(
+                            message.getUri(),
+                            contentValuesOf(Mms.MESSAGE_BOX to Mms.MESSAGE_BOX_SENT),
+                            null,
+                            null
+                        )
                     }
-
-                    // Update the message in the native ContentProvider
-                    context.contentResolver.update(
-                        message.getUri(),
-                        contentValuesOf(
-                            Sms.TYPE to Sms.MESSAGE_TYPE_FAILED,
-                            Sms.ERROR_CODE to resultCode,
-                        ),
-                        null,
-                        null
-                    )
                 }
-            Unit
+        }
+    }
+
+    override fun markFailed(messageId: Long, resultCode: Int) =
+        Realm.getDefaultInstance().use { realm ->
+            Timber.v("mark message id $messageId as failed. code $resultCode")
+
+            realm.refresh()
+
+            realm.where(Message::class.java).equalTo("id", messageId).findFirst()
+                ?.let { message ->
+                    if (message.isSms()) {
+                        if (message.boxId != Sms.MESSAGE_TYPE_FAILED) {
+                            // Update the message in realm
+                            realm.executeTransaction {
+                                message.boxId = Sms.MESSAGE_TYPE_FAILED
+                                message.errorCode = resultCode
+                            }
+
+                            // Update the message in the native ContentProvider
+                            context.contentResolver.update(
+                                message.getUri(),
+                                contentValuesOf(
+                                    Sms.TYPE to Sms.MESSAGE_TYPE_FAILED,
+                                    Sms.ERROR_CODE to resultCode,
+                                ),
+                                null,
+                                null
+                            )
+                            true
+                        } else false
+                    } else {  // mms
+                        if (message.boxId != Mms.MESSAGE_BOX_FAILED) {
+                            // Update the message in realm
+                            realm.executeTransaction {
+                                message.boxId = Mms.MESSAGE_BOX_FAILED
+                                message.errorCode = resultCode
+                            }
+
+                            // Update the message in the native ContentProvider
+                            context.contentResolver.update(
+                                message.getUri(),
+                                contentValuesOf(
+                                    Mms.MESSAGE_BOX to Mms.MESSAGE_BOX_FAILED
+                                ),
+                                null,
+                                null
+                            )
+
+                            // TODO this query isn't able to find any results
+                            // Need to figure out why the message isn't appearing in the PendingMessages Uri,
+                            // so that we can properly assign the error type
+                            context.contentResolver.update(
+                                Telephony.MmsSms.PendingMessages.CONTENT_URI,
+                                contentValuesOf(
+                                    Telephony.MmsSms.PendingMessages.ERROR_TYPE to Telephony.MmsSms.ERR_TYPE_GENERIC_PERMANENT
+                                ),
+                                "${Telephony.MmsSms.PendingMessages.MSG_ID} = ?",
+                                arrayOf(message.id.toString())
+                            )
+                            true
+                        } else false
+                    }
+            } ?: false
         }
 
-    override fun markDelivered(id: Long) =
+    override fun markDelivered(messageId: Long) =
         Realm.getDefaultInstance().use { realm ->
+            Timber.v("mark message id $messageId as delivered")
+
             realm.refresh()
 
             realm.where(Message::class.java)
-                .equalTo("id", id)
+                .equalTo("id", messageId)
                 .findFirst()
                 ?.let { message ->
                     // Update the message in realm
@@ -900,12 +930,14 @@ open class MessageRepositoryImpl @Inject constructor(
             Unit
         }
 
-    override fun markDeliveryFailed(id: Long, resultCode: Int) =
+    override fun markDeliveryFailed(messageId: Long, resultCode: Int) =
         Realm.getDefaultInstance().use { realm ->
+            Timber.v("mark message id $messageId as delivery failed result code $resultCode")
+
             realm.refresh()
 
             realm.where(Message::class.java)
-                .equalTo("id", id)
+                .equalTo("id", messageId)
                 .findFirst()
                 ?.let { message ->
                     // Update the message in realm
@@ -936,17 +968,18 @@ open class MessageRepositoryImpl @Inject constructor(
         Realm.getDefaultInstance().use { realm ->
             realm.refresh()
 
-            val messages = realm.where(Message::class.java)
+            realm.where(Message::class.java)
                 .anyOf("id", messageIds.toLongArray())
                 .findAll()
+                ?.let { messages ->
+                    messages.mapNotNull { message ->
+                        val uri = message.getUri()
+                        if (uri != Uri.EMPTY)
+                            context.contentResolver.delete(uri, null, null)
+                    }
 
-            val uris = messages.map { it.getUri() }
-
-            realm.executeTransaction { messages.deleteAllFromRealm() }
-
-            uris.forEach {
-                uri -> context.contentResolver.delete(uri, null, null)
-            }
+                    realm.executeTransaction { messages.deleteAllFromRealm() }
+                } ?: Unit
         }
 
     override fun getOldMessageCounts(maxAgeDays: Int) =
@@ -979,3 +1012,4 @@ open class MessageRepositoryImpl @Inject constructor(
             }
         }
 }
+

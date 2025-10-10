@@ -26,8 +26,8 @@ import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.moez.QKSMS.manager.MediaRecorderManager
-import com.moez.QKSMS.util.Constants
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
+import dev.octoshrimpy.quik.util.Constants
 import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -77,6 +77,8 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
 
         removeSavedMessagesTexts(twoHoursAgo)
 
+        removeOrphanedComposeDelayCancelledAttachments(twoHoursAgo)
+
         return Result.success()
     }
 
@@ -87,7 +89,7 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
         // remove orphaned scheduled message dirs in files dir
         File(applicationContext.filesDir,"")
             // get dirs that match prefix 'scheduled-'
-            .listFiles { entry -> entry.isDirectory && entry.name.startsWith("scheduled-") }
+            .listFiles { entry -> entry.isDirectory && entry.name.startsWith(Constants.SCHEDULED_MESSAGE_FILE_PREFIX) }
             // filter out any dirs that have an associated scheduled message in db
             ?.filterNot {
                 scheduledMessageIds.contains(it.name.substringAfter('-').toLong())
@@ -112,5 +114,13 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
                     entry.name.startsWith(Constants.SAVED_MESSAGE_TEXT_FILE_PREFIX) &&
                     (entry.lastModified() < removeOlderThan)
         }?.forEach { it.delete() }  // delete message text file
+
+    private fun removeOrphanedComposeDelayCancelledAttachments(removeOlderThan: Long) =
+        // find dirs in cache dir
+        applicationContext.cacheDir.listFiles { entry ->
+            entry.isDirectory &&
+                    entry.name.startsWith(Constants.DELAY_CANCELLED_CACHED_ATTACHMENTS_FILE_PREFIX)
+                    (entry.lastModified() < removeOlderThan)
+        }?.forEach { it.deleteRecursively() }  // recursively delete dir
 
 }
