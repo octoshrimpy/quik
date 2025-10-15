@@ -409,4 +409,8 @@
         <item>JAJAJA</item>
         <item>Está bien</item>
     </string-array>
+    <string name="menu_mms_part_share">Compartir</string>
+    <string name="main_menu_select_all">Seleccionar todo</string>
+    <string name="main_menu_send_now">Enviar ahora</string>
+    <string name="scheduled_menu_send_now">Enviar ahora</string>
 </resources>
