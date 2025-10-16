@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">新しい会話</string>
     <string name="shortcut_compose_short_label">新規作成</string>
     <string name="shortcut_compose_disabled_message">ショートカットが無効です</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">設定</string>
     <string name="title_notification_prefs">通知</string>
     <string name="title_theme">テーマ</string>
-    <string name="title_conversations">受信トレイを検索&#8230;</string>
+    <string name="title_conversations">受信トレイを検索…</string>
     <string name="title_compose">名前または電話番号を入力</string>
     <string name="setup_skip">スキップ</string>
     <string name="setup_next">続行</string>
@@ -98,7 +97,7 @@
     <string name="compose_scheduled_future">今より先の時間を選択してください！</string>
     <string name="compose_scheduled_plus">メッセージの送信予約には、QUIK+ のロックを解除する必要があります</string>
     <string name="compose_scheduled_toast">送信予約メッセージに追加されました</string>
-    <string name="compose_hint">メッセージを書いてください&#8230;</string>
+    <string name="compose_hint">メッセージを書いてください…</string>
     <string name="compose_menu_copy">テキストをコピー</string>
     <string name="compose_menu_forward">転送</string>
     <string name="compose_menu_delete">削除</string>
@@ -126,7 +125,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) を選択しました</string>
     <string name="compose_sim_cd">%s 選択、SIM カードを変更</string>
     <string name="compose_send_cd">メッセージを送信</string>
-    <string name="message_status_sending">送信中&#8230;</string>
+    <string name="message_status_sending">送信中…</string>
     <string name="message_status_delivered">%s を配信しました</string>
     <string name="message_status_failed">送信に失敗しました。タップすると、もう一度やり直します</string>
     <string name="info_title">詳細</string>
@@ -151,8 +150,8 @@
     <string name="backup_restore_title">復元</string>
     <string name="backup_restore_summary">バックアップを選択</string>
     <string name="backup_restore_error_plus">バックアップと復元を使用するには QUIK+ のロックを解除してください</string>
-    <string name="backup_restore_error_backup">バックアップ中&#8230;</string>
-    <string name="backup_restore_error_restore">復元中&#8230;</string>
+    <string name="backup_restore_error_backup">バックアップ中…</string>
+    <string name="backup_restore_error_restore">復元中…</string>
     <string name="backup_restore_confirm_title">バックアップから復元</string>
     <string name="backup_restore_stop_title">復元を停止</string>
     <string name="backup_restore_stop_message">既に復元されたメッセージはあなたのデバイスに残ります</string>
@@ -405,4 +404,5 @@
         <item>爆笑</item>
         <item>大丈夫</item>
     </string-array>
+    <string name="menu_mms_part_share">共有</string>
 </resources>

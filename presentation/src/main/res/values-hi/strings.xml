@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">नई बातचीत</string>
     <string name="shortcut_compose_short_label">रचना</string>
     <string name="shortcut_compose_disabled_message">शॉर्टकट अक्षम किया गया</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">सेटिंग्स</string>
     <string name="title_notification_prefs">सूचनाएं</string>
     <string name="title_theme">विषय</string>
-    <string name="title_conversations">इनबॉक्स खोजें&#8230;</string>
+    <string name="title_conversations">इनबॉक्स खोजें…</string>
     <string name="title_compose">रचना</string>
     <string name="setup_skip">छोड़</string>
     <string name="setup_next">जारी रखें</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">सिम %1$d (%2$s) चयनित</string>
     <string name="compose_sim_cd">%s चयनित, सिम कार्ड बदलें</string>
     <string name="compose_send_cd">संदेश भेजें</string>
-    <string name="message_status_sending">भेज रहा है&#8230;</string>
+    <string name="message_status_sending">भेज रहा है…</string>
     <string name="message_status_delivered">%s वितरित</string>
     <string name="message_status_failed">भेजने में असफल। पुनः प्रयास करें</string>
     <string name="info_title">विवरण</string>
@@ -152,8 +151,8 @@
     <string name="backup_restore_title">पुनर्स्थापित</string>
     <string name="backup_restore_summary">किसी बैकअप का चयन करें</string>
     <string name="backup_restore_error_plus">बैकअप का उपयोग करने और पुनर्स्थापित करने के लिए कृपया QUIK+ अनलॉक करें</string>
-    <string name="backup_restore_error_backup">Backup in progress&#8230;</string>
-    <string name="backup_restore_error_restore"> पुनःस्थापन प्रगति में&#8230;</string>
+    <string name="backup_restore_error_backup">Backup in progress…</string>
+    <string name="backup_restore_error_restore"> पुनःस्थापन प्रगति में…</string>
     <string name="backup_restore_confirm_title">बैकअप से रीस्टोर करें</string>
     <string name="backup_restore_stop_title">पुनर्स्थापना बंद करो</string>
     <string name="backup_restore_stop_message">संदेश जो पहले ही बहाल हो चुके हैं वे आपके डिवाइस पर बने रहेंगे</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">पूर्व निर्धारित प्रतिक्रिया के साथ आने वाले संदेशों का स्वचालित रूप से जवाब दें</string>
     <string name="qksms_plus_more_title">अधिक</string>
     <string name="qksms_plus_more_summary">QUIK सक्रिय विकास के अधीन है, और आपकी खरीदारी में भविष्य की सभी QUIK+ सुविधाएँ शामिल होंगी!</string>
-    <string name="widget_loading">तैयार हो रहा है&#8230;</string>
+    <string name="widget_loading">तैयार हो रहा है…</string>
     <string name="widget_more">अधिक वार्तालाप देखें</string>
     <string name="qkreply_menu_read">पढ़ा हुआ चिह्नित करें</string>
     <string name="qkreply_menu_call">कॉल</string>

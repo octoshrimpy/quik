@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Ny samtale</string>
     <string name="shortcut_compose_short_label">Skriv</string>
     <string name="shortcut_compose_disabled_message">Snarvei deaktivert</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Innstillinger</string>
     <string name="title_notification_prefs">Varsler</string>
     <string name="title_theme">Drakt</string>
-    <string name="title_conversations">Søk i innboks &#8230;</string>
+    <string name="title_conversations">Søk i innboks …</string>
     <string name="title_compose">Skriv navn eller nummer</string>
     <string name="setup_skip">Hopp over</string>
     <string name="setup_next">Fortsett</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Mark read</string>
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">Blokker</string>
-    <string name="main_syncing">Synkroniserer meldinger&#8230;</string>
+    <string name="main_syncing">Synkroniserer meldinger…</string>
     <string name="main_sender_you">Du: %s</string>
     <string name="main_message_results_title">Resultater i meldinger</string>
     <string name="main_message_results">%d meldinger</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selected</string>
     <string name="compose_sim_cd">%s er valgt, velg annet SIM-kort</string>
     <string name="compose_send_cd">Send melding</string>
-    <string name="message_status_sending">Sender &#8230;</string>
+    <string name="message_status_sending">Sender …</string>
     <string name="message_status_delivered">Levert %s</string>
     <string name="message_status_failed">Feil ved sending. Trykk for å prøve igjen</string>
     <string name="info_title">Detaljer</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">Sikret</string>
     <string name="backup_backing_up">Sikkerhetskopierer meldinger</string>
     <string name="backup_restoring">Gjenoppretter fra sikkerhetskopi</string>
-    <string name="backup_loading">Henter &#8230;</string>
+    <string name="backup_loading">Henter …</string>
     <string name="backup_never">Aldri</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Gjenopprett</string>
     <string name="backup_restore_summary">Velg en sikkerhetskopi</string>
     <string name="backup_restore_error_plus">Vennligst aktiver QUIK+ for å bruke sikkerhetskopiering og gjenoppretting</string>
-    <string name="backup_restore_error_backup">Sikkerhetskopiering pågår &#8230;</string>
-    <string name="backup_restore_error_restore">Gjenoppretting pågår &#8230;</string>
+    <string name="backup_restore_error_backup">Sikkerhetskopiering pågår …</string>
+    <string name="backup_restore_error_restore">Gjenoppretting pågår …</string>
     <string name="backup_restore_confirm_title">Gjenopprett fra sikkerhetskopi</string>
     <string name="backup_restore_stop_title">Avbryt gjenoppretting</string>
     <string name="backup_restore_stop_message">Meldinger som allerede er gjenopprettet vil forbli på din enhet</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Fant ingen sikkerhetskopier</string>
     <string name="backup_disclaimer">Per idag er bare mulig å sikkerhetskopiere SMS. MMS og planlagte sikkerhetskopier kommer snart.</string>
     <string name="backup_now">Sikkerhetskopier nå</string>
-    <string name="backup_progress_parsing">Ser gjennom sikkerhetskopien &#8230;</string>
+    <string name="backup_progress_parsing">Ser gjennom sikkerhetskopien …</string>
     <string name="backup_progress_running">%d/%d meldinger</string>
-    <string name="backup_progress_saving">Lagrer sikkerhetskopi &#8230;</string>
-    <string name="backup_progress_syncing">Synkroniserer meldinger &#8230;</string>
+    <string name="backup_progress_saving">Lagrer sikkerhetskopi …</string>
+    <string name="backup_progress_syncing">Synkroniserer meldinger …</string>
     <string name="backup_progress_finished">Ferdig!</string>
     <string name="backup_notification_channel_name">Sikkerhetskopiering og gjenoppretting</string>
     <string name="scheduled_title">Planlagt</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">Svar på innkommende meldinger automatisk med et forhåndsdefinert svar</string>
     <string name="qksms_plus_more_title">Mer</string>
     <string name="qksms_plus_more_summary">QUIK er i stadig utvikling og ditt kjøp inkluderer alle fremtidige QUIK+ funksjoner!</string>
-    <string name="widget_loading">Laster inn &#8230;</string>
+    <string name="widget_loading">Laster inn …</string>
     <string name="widget_more">Last inn flere samtaler</string>
     <string name="qkreply_menu_read">Mark read</string>
     <string name="qkreply_menu_call">Ring</string>

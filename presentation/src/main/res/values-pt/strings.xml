@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Nova conversa</string>
     <string name="shortcut_compose_short_label">Escrever</string>
     <string name="shortcut_compose_disabled_message">Atalho desativado</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Definições</string>
     <string name="title_notification_prefs">Notificações</string>
     <string name="title_theme">Tema</string>
-    <string name="title_conversations">Pesquisar caixa de entrada&#8230;</string>
+    <string name="title_conversations">Pesquisar caixa de entrada…</string>
     <string name="title_compose">Digite um nome ou um número</string>
     <string name="setup_skip">Ignorar</string>
     <string name="setup_next">Continuar</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Marcar como lida</string>
     <string name="main_menu_unread">Marcar como não lida</string>
     <string name="main_menu_block">Bloquear</string>
-    <string name="main_syncing">Sincronização de mensagens&#8230;</string>
+    <string name="main_syncing">Sincronização de mensagens…</string>
     <string name="main_sender_you">Você: %s</string>
     <string name="main_message_results_title">Resultados nas mensagens</string>
     <string name="main_message_results">%d mensagens</string>
@@ -99,7 +98,7 @@
     <string name="compose_scheduled_future">A hora escolhida tem que ser futura!</string>
     <string name="compose_scheduled_plus">Para utilizar esta funcionalidade, necessita do QUIK+</string>
     <string name="compose_scheduled_toast">Adicionada às mensagens agendadas</string>
-    <string name="compose_hint">Escrever uma mensagem&#8230;</string>
+    <string name="compose_hint">Escrever uma mensagem…</string>
     <string name="compose_menu_copy">Copiar texto</string>
     <string name="compose_menu_forward">Reencaminhar</string>
     <string name="compose_menu_delete">Apagar</string>
@@ -127,7 +126,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) selecionado</string>
     <string name="compose_sim_cd">%s selecionado, alterar cartão SIM</string>
     <string name="compose_send_cd">Enviar mensagem</string>
-    <string name="message_status_sending">A enviar&#8230;</string>
+    <string name="message_status_sending">A enviar…</string>
     <string name="message_status_delivered">%s entregue</string>
     <string name="message_status_failed">Falha ao enviar. Toque para tentar novamente</string>
     <string name="info_title">Detalhes</string>
@@ -145,15 +144,15 @@
     <string name="backup_title">Backup e restauro</string>
     <string name="backup_backing_up">Backup de mensagens</string>
     <string name="backup_restoring">Restauro de backup</string>
-    <string name="backup_loading">A carregar&#8230;</string>
+    <string name="backup_loading">A carregar…</string>
     <string name="backup_never">Nunca</string>
     <string name="backup_location_title">Localização do backup</string>
     <string name="backup_location_summary">Definir pasta</string>
     <string name="backup_restore_title">Restaurar</string>
     <string name="backup_restore_summary">Selecionar backup</string>
     <string name="backup_restore_error_plus">Tem que ter QUIK+ para poder usar o backup e restauro</string>
-    <string name="backup_restore_error_backup">A criar backup&#8230;</string>
-    <string name="backup_restore_error_restore">A restaurar&#8230;</string>
+    <string name="backup_restore_error_backup">A criar backup…</string>
+    <string name="backup_restore_error_restore">A restaurar…</string>
     <string name="backup_restore_confirm_title">Restaurar de backup</string>
     <string name="backup_restore_stop_title">Parar restauro</string>
     <string name="backup_restore_stop_message">As mensagens que tiverem sido restauradas irão permanecer no dispositivo</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Backup não encontrado</string>
     <string name="backup_disclaimer">Atualmente, apenas está disponível o backup e restauro de SMS. O suporte a MMS e o agendamento de backups será adicionado brevemente!</string>
     <string name="backup_now">Criar backup</string>
-    <string name="backup_progress_parsing">A analisar backup&#8230;</string>
+    <string name="backup_progress_parsing">A analisar backup…</string>
     <string name="backup_progress_running">%d/%d mensagens</string>
-    <string name="backup_progress_saving">A guardar backup&#8230;</string>
-    <string name="backup_progress_syncing">A sincronizar mensagens&#8230;</string>
+    <string name="backup_progress_saving">A guardar backup…</string>
+    <string name="backup_progress_syncing">A sincronizar mensagens…</string>
     <string name="backup_progress_finished">Terminado!</string>
     <string name="backup_notification_channel_name">Backup e restauro</string>
     <string name="scheduled_title">Agendada</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">Enviar automaticamente um resposta tendo por base os modelos</string>
     <string name="qksms_plus_more_title">Mais</string>
     <string name="qksms_plus_more_summary">Esta aplicação está a ser desenvolvida e a sua compra disponibiliza todas as futuras funcionalidades do QUIK+!</string>
-    <string name="widget_loading">A carregar&#8230;</string>
+    <string name="widget_loading">A carregar…</string>
     <string name="widget_more">Ver mais conversas</string>
     <string name="qkreply_menu_read">Marcar como lida</string>
     <string name="qkreply_menu_call">Ligar</string>

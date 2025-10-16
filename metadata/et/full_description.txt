@@ -1,0 +1,12 @@
+Avatud lähtekoodil põhinev asendus Androidi standardsele lühisõnumirakendusele. Varasema QKSMS-nimelise rakenduse edasiarendus.
+## Funktsionaalsused:
+- Sõnumite ajastamine
+- Sõnumite varundus
+- Kõnetuvastus ja kõnesüntees on lõimitud rakendusse
+- Sõnumite blokeerimine ja arhiveerimine
+- Häälsõnumid
+- Kõiki tüüpi failid manustena
+- Sõnumite järjestamine
+- Viivitusega saatmine
+
+Osale kogukonna suhtluses <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a> jututoas
