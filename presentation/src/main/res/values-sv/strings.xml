@@ -430,4 +430,9 @@
     <string name="dialog_edit_scheduled_message_positive_button">Ja, redigera meddelandet</string>
     <string name="dialog_clear_compose_title">Rensa meddelande</string>
     <string name="dialog_clear_compose">Rensa meddelandet? Denna åtgärd kan inte ångras.</string>
+    <string name="notification_message_failed_action">Skicka igen</string>
+    <string name="speak_no_messages">Inga meddelanden</string>
+    <string name="messageLinkHandling_dialog_title">Varning för extern länk</string>
+    <string name="message_content_filters_add_cd">Skapa ett nytt filter</string>
+    <string name="message_content_filters_dialog_hint">Ord, fras eller reguljärt uttryck</string>
 </resources>
