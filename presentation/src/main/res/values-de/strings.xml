@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Neue Unterhaltung</string>
     <string name="shortcut_compose_short_label">Verfassen</string>
     <string name="shortcut_compose_disabled_message">Schnellzugriff deaktiviert</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Einstellungen</string>
     <string name="title_notification_prefs">Benachrichtigungen</string>
     <string name="title_theme">Erscheinungsbild</string>
-    <string name="title_conversations">In Posteingang suchen&#8230;</string>
+    <string name="title_conversations">In Posteingang suchen…</string>
     <string name="title_compose">Verfassen</string>
     <string name="setup_skip">Überspringen</string>
     <string name="setup_next">Weiter</string>
@@ -33,8 +32,8 @@
     <string name="menu_call">Anrufen</string>
     <string name="menu_info">Details</string>
     <string name="menu_mms_part_save">In Galerie speichern</string>
-    <string name="compose_menu_share">Teilen</string>
-    <string name="main_drawer_open_cd">Öffne den Navigation Drawer</string>
+    <string name="compose_menu_share">Text teilen</string>
+    <string name="main_drawer_open_cd">Navigationsmenü öffnen</string>
     <string name="main_title_selected">%d ausgewählt</string>
     <string name="main_menu_clear">Zurücksetzen</string>
     <string name="main_menu_archive">Archivieren</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Als gelesen markieren</string>
     <string name="main_menu_unread">Als ungelesen markieren</string>
     <string name="main_menu_block">Blockieren</string>
-    <string name="main_syncing">Synchronisiere Nachrichten&#8230;</string>
+    <string name="main_syncing">Synchronisiere Nachrichten…</string>
     <string name="main_sender_you">Du: %s</string>
     <string name="main_message_results_title">Ergebnisse in Nachrichten</string>
     <string name="main_message_results">%d Nachrichten</string>
@@ -54,7 +53,7 @@
     <string name="inbox_search_empty_text">Keine Ergebnisse</string>
     <string name="archived_empty_text">Archivierte Unterhaltungen werden hier angezeigt</string>
     <string name="main_fab_cd">Neue Unterhaltung starten</string>
-    <string name="main_default_sms_title">Liebe es wieder, SMS zu schreiben</string>
+    <string name="main_default_sms_title">Liebe es, wieder SMS zu schreiben</string>
     <string name="main_default_sms_message">QUIK als Standard-SMS-App festlegen</string>
     <string name="main_default_sms_change">Ändern</string>
     <string name="main_permission_required">Berechtigung erforderlich</string>
@@ -85,7 +84,7 @@
         <item>Weiterleiten</item>
         <item>Löschen</item>
     </string-array>
-    <string name="compose_number_picker_title">Wählen Sie eine Telefonnummer</string>
+    <string name="compose_number_picker_title">Telefonnummer auswählen</string>
     <string name="compose_number_picker_default">%s - Standard</string>
     <string name="compose_number_picker_once">Nur einmal</string>
     <string name="compose_number_picker_always">Immer</string>
@@ -95,11 +94,11 @@
     <string name="compose_send_group_summary">Empfänger und Antworten werden für jeden sichtbar sein</string>
     <string name="compose_messages_empty">Das ist der Beginn der Unterhaltung. Sag\' etwas Nettes!</string>
     <string name="compose_vcard_label">Kontaktkarte</string>
-    <string name="compose_scheduled_for">Geplant für</string>
+    <string name="compose_scheduled_for">Geplante Zeit:</string>
     <string name="compose_scheduled_future">Gewählte Zeit muss in der Zukunft liegen!</string>
-    <string name="compose_scheduled_plus">Für diese Funktion muss QUIK+ freigeschalten werden</string>
+    <string name="compose_scheduled_plus">Du musst QUIK+ freischalten, um geplante Nachrichten nutzen zu können</string>
     <string name="compose_scheduled_toast">Zu geplanten Nachrichten hinzugefügt</string>
-    <string name="compose_hint">Schreibe eine Nachricht&#8230;</string>
+    <string name="compose_hint">Schreibe eine Nachricht…</string>
     <string name="compose_menu_copy">Text kopieren</string>
     <string name="compose_menu_forward">Weiterleiten</string>
     <string name="compose_menu_delete">Löschen</string>
@@ -120,14 +119,14 @@
     <string name="compose_attach_cd">Anhang hinzufügen</string>
     <string name="compose_gallery_cd">Foto anhängen</string>
     <string name="compose_camera_cd">Foto aufnehmen</string>
-    <string name="compose_schedule_cd">Plane Nachricht</string>
+    <string name="compose_schedule_cd">Nachricht planen</string>
     <string name="compose_contact_cd">Kontakt anhängen</string>
     <string name="compose_contact_error">Fehler beim Lesen des Kontaktes</string>
     <!-- Example: SIM 1 (Verizon) selected-->
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) ausgewählt</string>
     <string name="compose_sim_cd">%s ausgewählt, SIM-Karte ändern</string>
     <string name="compose_send_cd">Nachricht senden</string>
-    <string name="message_status_sending">Wird gesendet&#8230;</string>
+    <string name="message_status_sending">Wird gesendet…</string>
     <string name="message_status_delivered">Zugestellt %s</string>
     <string name="message_status_failed">Fehler beim Senden. Tippen, um es erneut zu versuchen</string>
     <string name="info_title">Details</string>
@@ -145,20 +144,20 @@
     <string name="backup_title">Sichern und Wiederherstellen</string>
     <string name="backup_backing_up">Sichere Nachrichten</string>
     <string name="backup_restoring">Aus Sicherung wiederherstellen</string>
-    <string name="backup_loading">Lade&#8230;</string>
+    <string name="backup_loading">Lade…</string>
     <string name="backup_never">Niemals</string>
     <string name="backup_location_title">Sicherungsort</string>
     <string name="backup_location_summary">Ordner festlegen</string>
     <string name="backup_restore_title">Wiederherstellen</string>
     <string name="backup_restore_summary">Sicherung auswählen</string>
     <string name="backup_restore_error_plus">Bitte QUIK+ freischalten, um die Sicherung und Wiederherstellung zu nutzen</string>
-    <string name="backup_restore_error_backup">Sicherung wird durchgeführt&#8230;</string>
-    <string name="backup_restore_error_restore">Wiederherstellung wird durchgeführt&#8230;</string>
+    <string name="backup_restore_error_backup">Sicherung wird durchgeführt…</string>
+    <string name="backup_restore_error_restore">Wiederherstellung wird durchgeführt…</string>
     <string name="backup_restore_confirm_title">Aus einer Sicherung wiederherstellen</string>
     <string name="backup_restore_stop_title">Wiederherstellung abbrechen</string>
-    <string name="backup_restore_stop_message">Nachrichten, die bereits wiederhergestellt wurden, werden auf Ihrem Gerät bleiben</string>
+    <string name="backup_restore_stop_message">Nachrichten, die bereits wiederhergestellt wurden, werden auf deinem Gerät bleiben</string>
     <string name="backup_select_location_rationale_title">Sicherungsort auswählen</string>
-    <string name="backup_select_location_rationale_message">Bitte wählen Sie einen Ordner in dem Sie Ihre Sicherungen speichern möchten</string>
+    <string name="backup_select_location_rationale_message">Bitte wähle einen Ordner in dem du deine Sicherungen speichern möchtest</string>
     <string name="backup_details">%1$s\n%2$d Nachrichten</string>
     <string name="backup_selected_backup_error_title">Fehler</string>
     <string name="backup_selected_backup_error_message">Sicherungsdatei konnte nicht gelesen werden</string>
@@ -167,10 +166,10 @@
     <string name="backup_restore_dialog_empty">Keine Sicherungen gefunden</string>
     <string name="backup_disclaimer">Derzeit wird nur das Sichern und Wiederherstellen von SMS unterstützt. Die Unterstützung für MMS und geplante Sicherungen folgen demnächst!</string>
     <string name="backup_now">Jetzt sichern</string>
-    <string name="backup_progress_parsing">Analysiere Sicherung&#8230;</string>
+    <string name="backup_progress_parsing">Analysiere Sicherung…</string>
     <string name="backup_progress_running">%d/%d Nachrichten</string>
-    <string name="backup_progress_saving">Sicherung wird gespeichert&#8230;</string>
-    <string name="backup_progress_syncing">Synchronisiere Nachrichten&#8230;</string>
+    <string name="backup_progress_saving">Sicherung wird gespeichert…</string>
+    <string name="backup_progress_syncing">Synchronisiere Nachrichten…</string>
     <string name="backup_progress_finished">Fertig!</string>
     <string name="backup_notification_channel_name">Sicherung und Wiederherstellung</string>
     <string name="scheduled_title">Geplant</string>
@@ -180,7 +179,7 @@
     <string name="scheduled_empty_message_3">Alles Gute zum Geburtstag! Schau was für ein großartiger Freund ich bin, dass ich an deinen Geburtstag denke</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
     <string name="scheduled_empty_message_3_timestamp">Am 23. Dezember senden </string>
-    <string name="scheduled_compose_cd">Nachricht verschieben</string>
+    <string name="scheduled_compose_cd">Eine Nachricht planen</string>
     <string name="scheduled_options_title">Geplante Nachricht</string>
     <string-array name="scheduled_options">
         <item>Sofort senden</item>
@@ -215,8 +214,8 @@
     <string name="settings_qkreply_tap_dismiss_title">Zum Verwerfen tippen</string>
     <string name="settings_qkreply_tap_dismiss_summary">Tippe außerhalb des Popup um es zu schließen</string>
     <string name="settings_delayed_title">Verzögertes Senden</string>
-    <string name="settings_swipe_actions">Gesten</string>
-    <string name="settings_swipe_actions_summary">Konfiguriere Gesten für Unterhaltungen</string>
+    <string name="settings_swipe_actions">Wisch-Gesten</string>
+    <string name="settings_swipe_actions_summary">Konfiguriere Wisch-Gesten für Unterhaltungen</string>
     <string name="settings_swipe_actions_right">Nach rechts wischen</string>
     <string name="settings_swipe_actions_left">Nach links wischen</string>
     <string name="settings_swipe_actions_change">ÄNDERN</string>
@@ -242,13 +241,13 @@
     <string name="settings_auto_delete_dialog_hint">Anzahl der Tage</string>
     <string name="settings_auto_delete_never">Niemals</string>
     <string name="settings_auto_delete_warning">Alte Nachrichten automatisch löschen?</string>
-    <string name="settings_auto_delete_warning_message">Wenn Sie fortfahren, werden jetzt %1$d Nachrichten gelöscht</string>
+    <string name="settings_auto_delete_warning_message">Wenn du fortfährst, werden jetzt %1$d Nachrichten gelöscht</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">Nach 1 Tag</item>
         <item quantity="other">Nach %d Tagen</item>
     </plurals>
     <string name="settings_long_as_mms_title">Lange Nachrichten als MMS senden</string>
-    <string name="settings_long_as_mms_summary">Wenn Ihre längeren Textnachrichten nicht gesendet oder in der falsche Reihenfolge gesendet werden, können Sie sie stattdessen als MMS-Nachrichten senden. Dafür können zusätzliche Gebühren anfallen.</string>
+    <string name="settings_long_as_mms_summary">Wenn deine längeren Textnachrichten nicht gesendet oder in der falsche Reihenfolge gesendet werden, kannst du sie stattdessen als MMS-Nachrichten senden. Dafür können zusätzliche Gebühren anfallen</string>
     <string name="settings_mms_size_title">MMS-Anhänge automatisch komprimieren</string>
     <string name="settings_sync_title">Nachrichten synchronisieren</string>
     <string name="settings_sync_summary">Nachrichten mit der Android SMS-Datenbank abgleichen</string>
@@ -264,7 +263,7 @@
     <string name="blocking_manager_title">Blockiermanager</string>
     <string name="blocking_manager_qksms_summary">In QUIK integrierte Blockierfunktion</string>
     <string name="blocking_manager_call_blocker_summary">Spam-Nachrichten und Nummern &amp; unbekannte Anrufe mit Sperrliste &amp; Zeitplan blockieren</string>
-    <string name="blocking_manager_call_control_summary">Filtern Sie automatisch Ihre Anrufe und Nachrichten in einer geeigneten Umgeben! Community IQ™ erlaubt es Ihnen unerwünschte Nachrichten von bekannten Spamnern zu unterbinden</string>
+    <string name="blocking_manager_call_control_summary">Filtere deine Anrufe und Nachrichten automatisch an einem praktischen Ort! Mit Community IQ™ kannst du unerwünschte Nachrichten von bekannten Community-Spammern verhindern</string>
     <string name="blocking_manager_sia_summary">Nachrichten von unerwünschten Nummern automatisch mit Hilfe der App \"Should I Answer?\" filtern</string>
     <string name="blocking_manager_copy_title">blockierte Nummer(n) kopieren</string>
     <string name="blocking_manager_copy_summary">Zu %s wechseln und zu den existierenden blockierten Nummern kopieren</string>
@@ -302,7 +301,7 @@
     <string name="qksms_plus_upgrade_donate">Entsperren &amp; Spenden für %1$s %2$s</string>
     <string name="qksms_plus_thanks_title">Vielen Dank für die Unterstützung von QUIK!</string>
     <string name="qksms_plus_thanks_summary">Du kannst jetzt alle QUIK+ Funktionen verwenden</string>
-    <string name="qksms_plus_error">Ein Fehler ist aufgetreten, bitte versuchen Sie es erneut</string>
+    <string name="qksms_plus_error">Ein Fehler ist aufgetreten, bitte versuche es erneut</string>
     <string name="qksms_plus_free_title">QUIK+ ist für Nutzer von F-Droid kostenfrei! Spende gerne um die Entwicklung zu Unterstützen.</string>
     <string name="qksms_plus_donate">Spenden per PayPal</string>
     <string name="qksms_plus_coming_soon">Demnächst verfügbar</string>
@@ -326,7 +325,7 @@
     <string name="qksms_plus_respond_summary">Eingehende Nachrichten werden mit einer voreingestellten Antwort beantwortet</string>
     <string name="qksms_plus_more_title">Mehr</string>
     <string name="qksms_plus_more_summary">QUIK wird aktiv weiterentwickelt und Dein Erwerb wird alle zukünftigen Funktionen enthalten!</string>
-    <string name="widget_loading">Lädt&#8230;</string>
+    <string name="widget_loading">Lädt…</string>
     <string name="widget_more">Weitere Unterhaltungen anzeigen</string>
     <string name="qkreply_menu_read">Als gelesen markieren</string>
     <string name="qkreply_menu_call">Anrufen</string>
@@ -410,4 +409,86 @@
         <item>LOL</item>
         <item>Das ist OK</item>
     </string-array>
+    <string name="menu_mms_part_share">Teilen</string>
+    <string name="menu_mms_part_forward">Weiterleiten</string>
+    <string name="menu_mms_part_open">Extern öffnen</string>
+    <string name="main_menu_select_all">Alle auswählen</string>
+    <string name="main_menu_send_now">Jetzt senden</string>
+    <string name="main_menu_edit_message">Nachricht bearbeiten</string>
+    <string name="main_menu_rename_conversation">Unterhaltung umbenennen</string>
+    <string name="main_sender_draft">Entwurf: %s</string>
+    <string name="scheduled_menu_send_now">Jetzt senden</string>
+    <string name="scheduled_menu_edit_message">Nachricht bearbeiten</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Bist du sicher, dass du diese Nachricht löschen möchtest?</item>
+        <item quantity="other">Bist du sicher, dass du %d Nachrichten löschen möchtest?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Bist du sicher, dass du diese Nachricht jetzt senden möchtest?</item>
+        <item quantity="other">Bist du sicher, dass du %d Nachrichten jetzt senden möchtest?</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Nachricht bearbeiten</string>
+    <string name="dialog_edit_scheduled_message">Das Bearbeiten dieser Nachricht entfernt sie aus dem Zeitplan.\n\nStelle sicher, dass du sie auf dem nächsten Bildschirm erneut abschickst, sonst geht sie verloren.\n\nWillst du weitermachen?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Ja, Nachricht bearbeiten</string>
+    <string name="dialog_clear_compose_title">Nachricht löschen</string>
+    <string name="dialog_clear_compose">Die Nachricht löschen? Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="compose_scheduled_view">Geplante Nachrichten für diese Unterhaltung</string>
+    <string name="compose_no_valid_recipients">Kann sie nicht an andere Empfänger senden</string>
+    <string name="compose_menu_show_status">Status anzeigen</string>
+    <string name="compose_attach_file_cd">Beliebige Datei anhängen</string>
+    <string name="compose_audio_message_cd">Audio-Nachricht aufnehmen</string>
+    <string name="compose_schedule_cancel_cd">Geplante Nachricht abbrechen</string>
+    <string name="compose_record_audio_msg_cd">Audio-Nachricht aufnehmen</string>
+    <string name="compose_record_audio_msg_abort_cd">Audio-Nachricht abbrechen</string>
+    <string name="compose_record_audio_msg_attach_cd">Audio-Nachricht anhängen</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Audio-Nachricht abspielen oder pausieren</string>
+    <string name="compose_message_cancel">Abbrechen</string>
+    <string name="compose_message_send_now">Jetzt senden</string>
+    <string name="compose_message_sim">SIM Nummer</string>
+    <string name="compose_message_item">Nachrichtenelement</string>
+    <string name="compose_message_attachment">Anhang</string>
+    <string name="compose_toast_drag_stt">Verschiebe den Sprache-zu-Text-Knopf an eine beliebige Stelle</string>
+    <string name="message_body_too_long_to_display">⚠ Die Nachricht ist lang. Kopieren oder speichern für den vollständigen Text</string>
+    <string name="clipboard_too_large_to_copy">Datengröße überschreitet Zwischenablagegrenze</string>
+    <string name="clipboard_unable_to_copy_to">In Zwischenablage kopieren nicht möglich</string>
+    <string name="scheduled_send_cd">Diese Nachricht planen</string>
+    <string name="attachment_missing">Fehlt</string>
+    <string name="settings_system_show_stt_title">„Sprache-zu-Text“-Knopf anzeigen</string>
+    <string name="settings_notification_previews_summary">Name und Nachricht anzeigen</string>
+    <string name="settings_notification_silent_title">Stumm, wenn kein Kontakt</string>
+    <string name="settings_notification_silent_summary">Stummschalten von Benachrichtigungen für Nachrichten ohne Empfänger in deinen Kontakten</string>
+    <string name="settings_unread_at_top_title">Ungelesene oben</string>
+    <string name="settings_unread_at_top_summary">Ungelesene Unterhaltungen oben anzeigen</string>
+    <string name="settings_mms_weblink_title">Linkverarbeitung in Nachrichten</string>
+    <string name="settings_disable_screenshots_title">Screenshots deaktivieren</string>
+    <string name="settings_diable_screenshots_summary">Verhindert, dass dein Betriebssystem und andere Apps Screenshots der App machen.</string>
+    <string name="message_content_filters_title">Nachrichteninhaltsfilter</string>
+    <string name="message_content_filters_empty">Hier werden deine Nachrichteninhaltsfilter angezeigt</string>
+    <string name="message_content_filters_add_cd">Neuen Filter erstellen</string>
+    <string name="message_content_filters_dialog_title">Nachrichten löschen, die übereinstimmen</string>
+    <string name="message_content_filters_dialog_hint">Wort, Phrase oder regulärer Ausdruck</string>
+    <string name="message_content_filters_dialog_case_switch">Groß- und Kleinschreibung</string>
+    <string name="message_content_filters_dialog_regex_switch">Regulärer Ausdruck</string>
+    <string name="message_content_filters_dialog_contacts_switch">Inklusive Kontakte</string>
+    <string name="message_content_filters_dialog_create">Erstellen</string>
+    <string name="all_conversations_widget_title">Alle Unterhaltungen</string>
+    <string name="button_clear">Leeren</string>
+    <plurals name="toast_archived">
+        <item quantity="one">Unterhaltung archiviert</item>
+        <item quantity="other">%d Unterhaltungen archiviert</item>
+    </plurals>
+    <plurals name="toast_unarchived">
+        <item quantity="one">Unterhaltung wiederhergestellt</item>
+        <item quantity="other">%d Unterhaltungen wiederhergestellt</item>
+    </plurals>
+    <string name="notification_message_failed_action">Erneut senden</string>
+    <string name="speak_no_messages">Keine Nachrichten</string>
+    <string name="speak_unseen_messages">Ungesehen e Nachrichten vorlesen</string>
+    <string name="messageLinkHandling_dialog_title">Warnung vor externem Link</string>
+    <string name="messageLinkHandling_dialog_body">Einige Links können unsicher sein oder dich unerwartet weiterleiten. Überprüfe den untenstehenden Link, bevor du fortfährst:\n\n%1$s\n\nWillst du weitermachen?</string>
+    <string name="messageLinkHandling_dialog_positive">Ja, Link öffnen</string>
+    <string name="messageLinkHandling_dialog_negative">Nein</string>
+    <string name="error_stt_toast">Leider ist beim Laden des Sprache-zu-Text-Anbieters ein Fehler aufgetreten.</string>
+    <string name="stt_toast_extra_prompt">Sprich deine Nachricht</string>
+    <string name="messages_text_share_file_error">Ups! Beim Teilen ist etwas schief gelaufen</string>
 </resources>

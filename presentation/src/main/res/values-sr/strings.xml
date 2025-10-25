@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Нови разговор</string>
     <string name="shortcut_compose_short_label">Нова порука</string>
     <string name="shortcut_compose_disabled_message">Пречица је онемогућена</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Означи као прочитано</string>
     <string name="main_menu_unread">Означи као непрочитано</string>
     <string name="main_menu_block">Блокирај</string>
-    <string name="main_syncing">Синхронизујем поруке&#8230;</string>
+    <string name="main_syncing">Синхронизујем поруке…</string>
     <string name="main_sender_you">Ја: %s</string>
     <string name="main_message_results_title">Пронађено у порукама</string>
     <string name="main_message_results">%d поруке</string>
@@ -100,7 +99,7 @@
     <string name="compose_scheduled_future">Изабрано време мора бити у будућности!</string>
     <string name="compose_scheduled_plus">Да би заказивао поруке мораш откључати QUIK+</string>
     <string name="compose_scheduled_toast">Додато у заказане поруке</string>
-    <string name="compose_hint">Напиши поруку&#8230;</string>
+    <string name="compose_hint">Напиши поруку…</string>
     <string name="compose_menu_copy">Копирај текст</string>
     <string name="compose_menu_forward">Проследи</string>
     <string name="compose_menu_delete">Обриши</string>
@@ -128,7 +127,7 @@
     <string name="compose_sim_changed_toast">Изабрана SIM картица %1$d (%2$s)</string>
     <string name="compose_sim_cd">Изабрано: %s; промените SIM картицу</string>
     <string name="compose_send_cd">Пошаљи поруку</string>
-    <string name="message_status_sending">Шаљем&#8230;</string>
+    <string name="message_status_sending">Шаљем…</string>
     <string name="message_status_delivered">Испоручено %s</string>
     <string name="message_status_failed">Слање неуспешно. Додирните да покушате поново.</string>
     <string name="info_title">Детаљи</string>
@@ -146,15 +145,15 @@
     <string name="backup_title">Резервнe копијe</string>
     <string name="backup_backing_up">Правим копију</string>
     <string name="backup_restoring">Враћање резервне копије</string>
-    <string name="backup_loading">Учитавање&#8230;</string>
+    <string name="backup_loading">Учитавање…</string>
     <string name="backup_never">Никад</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Поврати копију</string>
     <string name="backup_restore_summary">Изабери резервну копију</string>
     <string name="backup_restore_error_plus">Молимо откључајте QUIK+ да бисте користили опцију за прављење резервне копије</string>
-    <string name="backup_restore_error_backup">Правим резервну копију&#8230;</string>
-    <string name="backup_restore_error_restore">Враћам резервну копију&#8230;</string>
+    <string name="backup_restore_error_backup">Правим резервну копију…</string>
+    <string name="backup_restore_error_restore">Враћам резервну копију…</string>
     <string name="backup_restore_confirm_title">Поврати резервну копију</string>
     <string name="backup_restore_stop_title">Заустави повраћај</string>
     <string name="backup_restore_stop_message">Поруке које су већ повраћене ће остати сачуване на Вашем уређају</string>
@@ -168,10 +167,10 @@
     <string name="backup_restore_dialog_empty">Нема резервних копија</string>
     <string name="backup_disclaimer">Тренутно су подржане резервне копије само SMS порука. Ускоро очекујте подршку за MMS поруке и заказано прављење резервних копија!</string>
     <string name="backup_now">Одмах направите копију</string>
-    <string name="backup_progress_parsing">Обрађујем копију&#8230;</string>
+    <string name="backup_progress_parsing">Обрађујем копију…</string>
     <string name="backup_progress_running">%d/%d порука</string>
-    <string name="backup_progress_saving">Сачувавам резерну копију&#8230;</string>
-    <string name="backup_progress_syncing">Синхронизујем поруке&#8230;</string>
+    <string name="backup_progress_saving">Сачувавам резерну копију…</string>
+    <string name="backup_progress_syncing">Синхронизујем поруке…</string>
     <string name="backup_progress_finished">Завршено!</string>
     <string name="backup_notification_channel_name">Резервне копије</string>
     <string name="scheduled_title">Заказано</string>
@@ -330,7 +329,7 @@
     <string name="qksms_plus_respond_summary">Предефинисани аутоматски одговор на долазне поруке</string>
     <string name="qksms_plus_more_title">Још</string>
     <string name="qksms_plus_more_summary">QUIK се активно развија и једнократним плаћањем добијаш и све будуће QUIK+ могућности!</string>
-    <string name="widget_loading">Учитавање&#8230;</string>
+    <string name="widget_loading">Учитавање…</string>
     <string name="widget_more">Прикажи више разговора</string>
     <string name="qkreply_menu_read">Означи као прочитано</string>
     <string name="qkreply_menu_call">Позови</string>

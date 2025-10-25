@@ -1,3 +1,12 @@
-Remplacement open source de l'application SMS d'origine d'Android. Renaissance de QKSMS.
+Remplacement open-source de l'application SMS de base sur Android. Une résurrection du projet QKSMS.
+## Fonctionnalités
+- Messages programmés dans le temps
+- Sauvegarde des messages
+- Dictez vos SMS à la voix et faites lire vos SMS textuels par une voix synthétisée
+- Blocage et Archivage de messages
+- Messages vocaux
+- Mettez n'importe quel fichier en pièce jointe
+- Triez vos messages
+- Envoi retardé de messages
 
-Vous pouvez discuter avec la communauté sur <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>
+Vous pouvez clavarder avec la communauté en suivant ce lien : <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
   ~
@@ -15,35 +16,27 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-
+  --><resources>
     <string name="app_name" translatable="false">QUIK</string>
-  
     <string name="shortcut_compose_long_label">Nouvelle conversation</string>
     <string name="shortcut_compose_short_label">Rédiger</string>
     <string name="shortcut_compose_disabled_message">Raccourci désactivé</string>
-  
-    <string name="title_archived">Archivées</string>
+    <string name="title_archived">Archives</string>
     <string name="title_settings">Paramètres</string>
     <string name="title_notification_prefs">Notifications</string>
     <string name="title_theme">Thème</string>
-    <string name="title_conversations">Rechercher dans les conversations&#8230;</string>
+    <string name="title_conversations">Rechercher dans les conversations…</string>
     <string name="title_compose">Entrer un nom ou un numéro</string>
     <string name="title_qksms_plus" translatable="false">If you see this, send in an issue please!</string>
-  
     <string name="setup_skip">Ignorer</string>
     <string name="setup_next">Continuer</string>
-  
     <string name="menu_add_person">Ajouter quelqu’un</string>
     <string name="menu_call">Appeler</string>
     <string name="menu_info">Détails</string>
-  
     <string name="menu_mms_part_save">Enregistrer dans la galerie</string>
     <string name="menu_mms_part_share">Partager</string>
     <string name="menu_mms_part_forward">Transférer</string>
-    <string name="menu_mms_part_open">Ouvrir dans la galerie</string>
-  
+    <string name="menu_mms_part_open">Ouvrir en dehors de l\'appli</string>
     <string name="main_drawer_open_cd">Ouvrir le tiroir de navigation</string>
     <string name="main_title_selected">%d sélectionnée</string>
     <string name="main_menu_clear">Effacer</string>
@@ -60,8 +53,8 @@
     <string name="main_menu_send_now">Envoyer maintenant</string>
     <string name="main_menu_edit_message">Modifier le message</string>
     <string name="main_menu_rename_conversation">Renommer la conversation</string>
-    <string name="main_syncing">Synchronisation des messages&#8230;</string>
-    <string name="main_sender_you">Vous&#160;: %s</string>
+    <string name="main_syncing">Synchronisation des messages…</string>
+    <string name="main_sender_you">Vous : %s</string>
     <string name="main_message_results_title">Résultats dans les messages</string>
     <string name="main_message_results">%d messages</string>
     <string name="inbox_empty_text">Vos conversations apparaîtront ici</string>
@@ -69,17 +62,15 @@
     <string name="archived_empty_text">Vos conversations archivées apparaîtront ici</string>
     <string name="main_fab_cd">Débuter une nouvelle conversation</string>
     <string name="main_default_sms_title">Réapprenez à aimer les textos</string>
-    <string name="main_default_sms_message">Faire de QUIK votre application SMS par défaut</string>
+    <string name="main_default_sms_message">Faire de QUIK votre appli SMS par défaut</string>
     <string name="main_default_sms_change">Changer</string>
     <string name="main_permission_required">Autorisation requise</string>
     <string name="main_permission_sms">QUIK a besoin de l’autorisation d’envoyer et de consulter les messages SMS</string>
     <string name="main_permission_contacts">QUIK a besoin de l’autorisation d’accéder aux contacts</string>
     <string name="main_permission_notifications">QUIK a besoin de l’autorisation d’afficher des notifications</string>
     <string name="main_permission_allow">Autoriser</string>
-
     <string name="scheduled_menu_send_now">Envoyer maintenant</string>
     <string name="scheduled_menu_edit_message">Modifier le message</string>
-  
     <string name="drawer_inbox">Boite de réception</string>
     <string name="drawer_archived">Archivées</string>
     <string name="drawer_scheduled">Programmés</string>
@@ -87,43 +78,38 @@
     <string name="drawer_more">Plus</string>
     <string name="drawer_settings">Paramètres</string>
     <string name="drawer_plus" translatable="false">DEPRECATED - drawer_plus</string>
-    <string name="drawer_help">Aide &amp; commentaire</string>
+    <string name="drawer_help">Aide &amp; commentaires</string>
     <string name="drawer_invite">Inviter des amis</string>
     <string name="drawer_plus_banner_title" translatable="false">DEPRECATED - drawer_plus_banner_title</string>
-    <string name="drawer_plus_banner_summary">Débloquer les nouvelles fonctions sensationnelles et soutenir le développement</string>
-  
-    <string name="rate_title">Vous aimez QUIK&#160;?</string>
-    <string name="rate_summary">Partagez un peu d’amour et évaluez-nous sur le Play Store&#160;!</string>
-    <string name="rate_okay">OK&#160;!</string>
+    <string name="drawer_plus_banner_summary">Débloquez des nouvelles fonctionnalités incroyables et soutenez le développement</string>
+    <string name="rate_title">Vous aimez QUIK ?</string>
+    <string name="rate_summary">Partagez votre amour et laissez nous une Étoile sur GitHub !</string>
+    <string name="rate_okay">OK !</string>
     <string name="rate_dismiss">ANNULER</string>
-  
     <string name="dialog_delete_title">Supprimer</string>
     <plurals name="dialog_delete_message">
-        <item quantity="one">Voulez-vous vraiment supprimer cette conversation&#160;?</item>
-        <item quantity="other">Voulez-vous vraiment supprimer %d conversations&#160;?</item>
+        <item quantity="one">Voulez-vous vraiment supprimer cette conversation ?</item>
+        <item quantity="many"></item>
+        <item quantity="other">Voulez-vous vraiment supprimer %d conversations ?</item>
     </plurals>
     <plurals name="dialog_delete_chat">
-        <item quantity="one">Voulez-vous vraiment supprimer ce message&#160;?</item>
-        <item quantity="other">Voulez-vous vraiment supprimer %d messages&#160;?</item>
+        <item quantity="one">Voulez-vous vraiment supprimer ce message ?</item>
+        <item quantity="other">Voulez-vous vraiment supprimer %d messages ?</item>
     </plurals>
     <plurals name="dialog_send_now">
-        <item quantity="one">Voulez-vous vraiment envoyer ce message maintenant&#160;?</item>
-        <item quantity="other">Voulez-vous vraiment envoyer %d messages maintenant&#160;?</item>
+        <item quantity="one">Voulez-vous vraiment envoyer ce message maintenant ?</item>
+        <item quantity="other">Voulez-vous vraiment envoyer %d messages maintenant ?</item>
     </plurals>
-
     <string name="dialog_edit_scheduled_message_title">Modifier le message</string>
-    <string name="dialog_edit_scheduled_message">Modifier ce message va le retirer des messages programmés.\n\nAssurez-vous de le resoumettre au prochain écran, ou il sera perdu.\n\nVoulez-vous continuer&#160;?</string>
+    <string name="dialog_edit_scheduled_message">Modifier ce message va le retirer des messages programmés.\n\nAssurez-vous de le réenvoyer au prochain écran, ou il sera perdu.\n\nVoulez-vous continuer ?</string>
     <string name="dialog_edit_scheduled_message_positive_button">Oui, modifier le message</string>
-
     <string name="dialog_clear_compose_title">Effacer le message</string>
-    <string name="dialog_clear_compose">Effacer ce message&#160;? Cette action ne peut être annulée.</string>
-
+    <string name="dialog_clear_compose">Effacer ce message ? Cette action ne peut être annulée.</string>
     <string-array name="message_options">
         <item>Copier le texte</item>
         <item>Transférer</item>
         <item>Supprimer</item>
     </string-array>
-  
     <string name="compose_number_picker_title">Choisir un numéro de téléphone</string>
     <string name="compose_number_picker_default">%s • Défaut</string>
     <string name="compose_number_picker_once">Une seule fois</string>
@@ -132,13 +118,13 @@
     <string name="compose_subtitle_results">%1$d sur %2$d résultats</string>
     <string name="compose_send_group_title">Envoyer en tant que message groupé</string>
     <string name="compose_send_group_summary">Les destinataires et les réponses seront visibles par tout le monde</string>
-    <string name="compose_messages_empty">C’est le début de votre conversation. Dites quelque chose de sympa&#160;!</string>
+    <string name="compose_messages_empty">C’est le début de votre conversation. Dites quelque chose de sympa !</string>
     <string name="compose_vcard_label">Fiche du contact</string>
-    <string name="compose_scheduled_for">Programmé pour</string>
-    <string name="compose_scheduled_future">Le moment choisi doit être dans le futur&#160;!</string>
+    <string name="compose_scheduled_for">Heure d\'envoi prévue :</string>
+    <string name="compose_scheduled_future">Le moment choisi doit être dans le futur !</string>
     <string name="compose_scheduled_plus">Vous devez déverrouiller QUIK+ pour utiliser la programmation de message</string>
     <string name="compose_scheduled_toast">Ajouté aux messages programmés</string>
-    <string name="compose_hint">Écrire un message&#8230;</string>
+    <string name="compose_hint">Écrire un message…</string>
     <string name="compose_no_valid_recipients">Impossible d’envoyer aux autres participants</string>
     <string name="compose_menu_copy">Copier le texte</string>
     <string name="compose_menu_share">Partager</string>
@@ -149,16 +135,16 @@
     <string name="compose_menu_next">Suivant</string>
     <string name="compose_menu_clear">Effacer</string>
     <string name="compose_details_title">Détails du message</string>
-    <string name="compose_details_type">Type&#160;: %s</string>
-    <string name="compose_details_from">De&#160;: %s</string>
-    <string name="compose_details_to">À&#160;: %s</string>
-    <string name="compose_details_subject">Objet&#160;: %s</string>
-    <string name="compose_details_priority">Priorité&#160;: %s</string>
-    <string name="compose_details_size">Taille&#160;: %s</string>
-    <string name="compose_details_sent">Envoyé&#160;: %s</string>
-    <string name="compose_details_received">Reçu&#160;: %s</string>
-    <string name="compose_details_delivered">Délivré&#160;: %s</string>
-    <string name="compose_details_error_code">Code erreur&#160;: %d</string>
+    <string name="compose_details_type">Type : %s</string>
+    <string name="compose_details_from">De : %s</string>
+    <string name="compose_details_to">À : %s</string>
+    <string name="compose_details_subject">Objet : %s</string>
+    <string name="compose_details_priority">Priorité : %s</string>
+    <string name="compose_details_size">Taille : %s</string>
+    <string name="compose_details_sent">Envoyé : %s</string>
+    <string name="compose_details_received">Reçu : %s</string>
+    <string name="compose_details_delivered">Délivré : %s</string>
+    <string name="compose_details_error_code">Code erreur : %d</string>
     <string name="compose_attach_cd">Ajouter une pièce jointe</string>
     <string name="compose_attach_file_cd">Ajouter un fichier</string>
     <string name="compose_gallery_cd">Joindre une photo</string>
@@ -173,24 +159,19 @@
     <string name="compose_sim_cd">%s sélectionné, changer la carte SIM</string>
     <string name="compose_send_cd">Envoyer un message</string>
     <string name="compose_record_audio_msg_cd">Enregistrer un message audio</string>
-
     <string name="compose_record_audio_msg_abort_cd">Annuler le message audio</string>
     <string name="compose_record_audio_msg_attach_cd">Joindre un message audio</string>
     <string name="compose_record_audio_msg_play_pause_cd">Jouer ou mettre en pause le message audio</string>
-
     <string name="compose_message_cancel">Annuler</string>
     <string name="compose_message_send_now">Envoyer maintenant</string>
     <string name="compose_message_sim">Numéro SIM</string>
     <string name="compose_message_item">Objet du message</string>
     <string name="compose_message_attachment">Pièce jointe</string>
-
     <string name="compose_toast_drag_stt">Déplacez le bouton de saisie vocale où vous le souhaitez</string>
-  
-    <string name="message_status_sending">Envoi&#8230;</string>
+    <string name="message_status_sending">Envoi…</string>
     <string name="message_status_delivered">Délivré %s</string>
     <string name="message_status_failed">Échec de l’envoi. Appuyer pour réessayer</string>
     <string name="message_body_too_long_to_display">⚠ Le message est long. Copiez ou Sauvegardez pour le texte entier</string>
-  
     <string name="info_title">Détails</string>
     <string name="info_copied_address">Adresse copiée</string>
     <string name="info_name">Titre de la conversation</string>
@@ -201,22 +182,20 @@
     <string name="info_block">Bloquer</string>
     <string name="info_unblock">Débloquer</string>
     <string name="info_delete">Supprimer la conversation</string>
-  
     <string name="gallery_error">Impossible de charger le média</string>
     <string name="gallery_toast_saved">Enregistré dans la galerie</string>
-  
     <string name="backup_title">Sauvegarde et restauration</string>
     <string name="backup_backing_up">Sauvegarde des messages</string>
     <string name="backup_restoring">Restaurer à partir d’une sauvegarde</string>
-    <string name="backup_loading">Chargement&#8230;</string>
+    <string name="backup_loading">Chargement…</string>
     <string name="backup_never">Jamais</string>
     <string name="backup_location_title">Emplacement de sauvegarde</string>
     <string name="backup_location_summary">Définir le dossier</string>
     <string name="backup_restore_title">Restauration</string>
     <string name="backup_restore_summary">Sélectionner une sauvegarde</string>
     <string name="backup_restore_error_plus">Déverrouillez QUIK+ pour utiliser la sauvegarde et la restauration</string>
-    <string name="backup_restore_error_backup">Sauvegarde en cours&#8230;</string>
-    <string name="backup_restore_error_restore">Restauration en cours&#8230;</string>
+    <string name="backup_restore_error_backup">Sauvegarde en cours…</string>
+    <string name="backup_restore_error_restore">Restauration en cours…</string>
     <string name="backup_restore_confirm_title">Restaurer à partir d’une sauvegarde</string>
     <string name="backup_restore_stop_title">Arrêter la restauration</string>
     <string name="backup_restore_stop_message">Les messages qui ont déjà été restaurés resteront sur votre appareil</string>
@@ -229,33 +208,29 @@
     <string name="backup_restore_dialog_title">Sauvegardes</string>
     <string name="backup_restore_dialog_summary" translatable="false">/QUIK/Backups</string>
     <string name="backup_restore_dialog_empty">Aucune sauvegarde trouvée</string>
-    <string name="backup_disclaimer">Actuellement, seules la sauvegarde et la restauration des SMS sont pris en charge. Les MMS et les sauvegardes planifiées arriveront bientôt&#160;!</string>
+    <string name="backup_disclaimer">Actuellement, seules la sauvegarde et la restauration des SMS sont pris en charge. Les MMS et les sauvegardes planifiées arriveront bientôt !</string>
     <string name="backup_now">Sauvegarder maintenant</string>
-    <string name="backup_progress_parsing">Analyse de la sauvegarde&#8230;</string>
+    <string name="backup_progress_parsing">Analyse de la sauvegarde…</string>
     <string name="backup_progress_running">%d/%d messages</string>
-    <string name="backup_progress_saving">Enregistrement de la sauvegarde&#8230;</string>
-    <string name="backup_progress_syncing">Synchronisation des messages&#8230;</string>
-    <string name="backup_progress_finished">Terminé&#160;!</string>
+    <string name="backup_progress_saving">Enregistrement de la sauvegarde…</string>
+    <string name="backup_progress_syncing">Synchronisation des messages…</string>
+    <string name="backup_progress_finished">Terminé !</string>
     <string name="backup_notification_channel_name">Sauvegarde et restauration</string>
-
     <string name="clipboard_too_large_to_copy">La taille des données dépasse la limite du presse-papier</string>
     <string name="clipboard_unable_to_copy_to">Impossible de copier dans le presse-papier</string>
-  
     <string name="scheduled_title">Programmé</string>
     <string name="scheduled_empty_description">Envoyer automatiquement un message, au moment précis que vous souhaitez</string>
-    <string name="scheduled_empty_message_1">Hé&#160;! Quand était ton anniversaire déjà&#160;?</string>
+    <string name="scheduled_empty_message_1">Hé ! Quand était ton anniversaire déjà ?</string>
     <string name="scheduled_empty_message_2">C’est le 23 décembre</string>
-    <string name="scheduled_empty_message_3">Joyeux anniversaire&#160;! Regarde le grand ami que je suis, je me souviens de ton anniversaire</string>
+    <string name="scheduled_empty_message_3">Joyeux anniversaire ! Regarde le grand ami que je suis, je me souviens de ton anniversaire</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
     <string name="scheduled_empty_message_3_timestamp">Envoyé le 23 décembre </string>
     <string name="scheduled_compose_cd">Programmer un message</string>
     <string name="scheduled_options_title">Message programmé</string>
     <string name="attachment_missing">Manquant</string>
-  
     <string name="settings_category_appearance">Apparence</string>
     <string name="settings_category_general">Général</string>
     <string name="settings_category_qkreply">Réponse QK</string>
-  
     <string name="settings_theme_title">Thème</string>
     <string name="settings_night_title">Mode nuit</string>
     <string name="settings_black_title">Mode noir pur</string>
@@ -314,7 +289,7 @@
     <string name="settings_auto_delete_dialog_message">Les messages seront supprimés après le nombre de jours spécifié</string>
     <string name="settings_auto_delete_dialog_hint">Nombre de jours</string>
     <string name="settings_auto_delete_never">Jamais</string>
-    <string name="settings_auto_delete_warning">Supprimer les anciens messages automatiquement&#160;?</string>
+    <string name="settings_auto_delete_warning">Supprimer les anciens messages automatiquement ?</string>
     <string name="settings_auto_delete_warning_message">Si vous continuez, %1$d messages seront supprimés maintenant</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="zero">Jamais</item>
@@ -333,35 +308,29 @@
     <string name="settings_version">Version %s</string>
     <string name="settings_logging_enabled">Journal de débogage activé</string>
     <string name="settings_logging_disabled">Journal de débogage désactivé</string>
-  
     <string name="settings_delay_duration_hint">Entrez la durée (en secondes)</string>
-  
     <string name="blocking_title">Blocage</string>
     <string name="blocking_drop_title">Supprimer les messages</string>
     <string name="blocking_drop_summary">Supprimer les messages entrants des expéditeurs bloqués au lieu de les masquer</string>
     <string name="blocking_conversations">Conversations bloquées</string>
-  
     <string name="blocking_manager_title">Gestionnaire de blocage</string>
     <string name="blocking_manager_qksms_summary">Fonction de blocage intégrée dans QUIK</string>
     <string name="blocking_manager_call_blocker_title" translatable="false">Call Blocker - Incoming/Outgoing</string>
     <string name="blocking_manager_call_blocker_summary">Bloquer les spams, les numéros &amp; les appels inconnus avec une liste noire &amp; planifier</string>
     <string name="blocking_manager_call_control_title" translatable="false">Call Control</string>
-    <string name="blocking_manager_call_control_summary">Filtrez automatiquement vos appels et vos messages dans un seul endroit pratique&#160;! La communauté IQ™ vous permet d’éviter les messages indésirables des spammeurs connus de celle-ci</string>
+    <string name="blocking_manager_call_control_summary">Filtrez automatiquement vos appels et vos messages dans un seul endroit pratique ! La communauté IQ™ vous permet d’éviter les messages indésirables des spammeurs connus de celle-ci</string>
     <string name="blocking_manager_sia_title" translatable="false">Should I Answer?</string>
-    <string name="blocking_manager_sia_summary">Filtrer automatiquement les messages de numéros non sollicités à l’aide de l’application «&#160;Devrais-je répondre&#160;»</string>
+    <string name="blocking_manager_sia_summary">Filtrer automatiquement les messages de numéros non sollicités à l’aide de l’application « Devrais-je répondre »</string>
     <string name="blocking_manager_copy_title">Copier les numéros bloqués</string>
     <string name="blocking_manager_copy_summary">Utiliser %s et écraser vos numéros bloqués existants</string>
-  
     <string name="blocked_numbers_title">Numéros bloqués</string>
     <string name="blocked_numbers_empty">Vos numéros bloqués apparaîtront ici</string>
     <string name="blocked_numbers_add_cd">Bloquer un nouveau numéro</string>
     <string name="blocked_numbers_dialog_title">Bloquer les messages de</string>
     <string name="blocked_numbers_dialog_hint">Numéro de téléphone</string>
     <string name="blocked_numbers_dialog_block">Bloquer</string>
-  
     <string name="blocked_messages_title">Messages bloqués</string>
     <string name="blocked_messages_empty">Vos messages bloqués apparaîtront ici</string>
-  
     <string name="blocking_block_title">Bloquer</string>
     <string name="blocking_unblock_title">Débloquer</string>
     <plurals name="blocking_block_external">
@@ -372,7 +341,6 @@
         <item quantity="one">Continuer à %s et autoriser ce numéro</item>
         <item quantity="other">Continuer à %s et autoriser ces numéros</item>
     </plurals>
-  
     <string name="about_title">À propos</string>
     <string name="about_version_title">Version</string>
     <string name="about_developer_title">Développeur</string>
@@ -381,7 +349,6 @@
     <string name="about_contact_title">Contact</string>
     <string name="about_license_title">Licence</string>
     <string name="about_copyright_title">Droits d’auteur</string>
-  
     <string name="qksms_plus_description_title">Soutenir le développement, tout déverrouiller</string>
     <string name="qksms_plus_description_summary">Vous pouvez sauver un développeur affamé pour seulement %s</string>
     <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
@@ -391,10 +358,10 @@
     <string name="qksms_plus_upgrade_d" translatable="false">One-time purchase of %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
     <string name="qksms_plus_upgrade_donate">Déverrouiller + faire un don pour %1$s %2$s</string>
-    <string name="qksms_plus_thanks_title">Merci de soutenir QUIK&#160;!</string>
+    <string name="qksms_plus_thanks_title">Merci de soutenir QUIK !</string>
     <string name="qksms_plus_thanks_summary">Vous avez maintenant accès à toutes les fonctionnalités de QUIK+</string>
     <string name="qksms_plus_error">Une erreur s’est produite. Merci de réessayer.</string>
-    <string name="qksms_plus_free_title">QUIK + est gratuit pour les utilisateurs de F-Droid&#160;! Si vous souhaitez soutenir le développement, n’hésitez pas à faire un don.</string>
+    <string name="qksms_plus_free_title">QUIK + est gratuit pour les utilisateurs de F-Droid ! Si vous souhaitez soutenir le développement, n’hésitez pas à faire un don.</string>
     <string name="qksms_plus_donate">Faire un don avec PayPal</string>
     <string name="qksms_plus_coming_soon">Prochainement</string>
     <string name="qksms_plus_themes_title">Thèmes premium</string>
@@ -416,30 +383,25 @@
     <string name="qksms_plus_respond_title">Réponse automatique</string>
     <string name="qksms_plus_respond_summary">Répondre automatiquement aux messages entrants avec une réponse prédéfinie</string>
     <string name="qksms_plus_more_title">Plus</string>
-    <string name="qksms_plus_more_summary">QUIK est en cours de développement actif, et votre achat comprendra toutes les futures fonctionnalités QUIK +&#160;!</string>
-  
-    <string name="widget_loading">Chargement&#8230;</string>
+    <string name="qksms_plus_more_summary">QUIK est en cours de développement actif, et votre achat comprendra toutes les futures fonctionnalités QUIK + !</string>
+    <string name="widget_loading">Chargement…</string>
     <string name="widget_more">Afficher plus de conversations</string>
-  
     <string name="qkreply_menu_read">Marquer comme lu</string>
     <string name="qkreply_menu_call">Appeler</string>
     <string name="qkreply_menu_delete">Supprimer</string>
     <string name="qkreply_menu_expand">Afficher plus</string>
     <string name="qkreply_menu_collapse">Afficher moins</string>
     <string name="qkreply_menu_view">Ouvrir la conversation</string>
-  
     <string name="theme_material">Material</string>
     <string name="theme_plus" translatable="false">Custom Color</string>
     <string name="theme_hex">HEX</string>
     <string name="theme_apply">Appliquer</string>
-
     <string name="about_developer" translatable="false">Marcos Jones</string>
     <string name="about_source" translatable="false">https://github.com/octoshrimpy/quik</string>
     <string name="about_changelog" translatable="false">https://github.com/octoshrimpy/quik/releases</string>
     <string name="about_contact" translatable="false">quik@octo.sh</string>
     <string name="about_license" translatable="false">GNU General Public License v3.0</string>
     <string name="about_copyright" translatable="false">© 2014–2024</string>
-
     <string name="changelog_title" translatable="false">New in QUIK</string>
     <string name="changelog_version" translatable="false">Version %s</string>
     <string name="changelog_added" translatable="false">Added</string>
@@ -448,7 +410,6 @@
     <string name="changelog_removed" translatable="false">Removed</string>
     <string name="changelog_more" translatable="false">More</string>
     <string name="changelog_dismiss" translatable="false">Dismiss</string>
-  
     <string-array name="notification_actions">
         <item>Aucune</item>
         <item>Archiver</item>
@@ -459,7 +420,6 @@
         <item>Répondre</item>
         <item>Parler</item>
     </string-array>
-  
     <string name="button_yes">Oui</string>
     <string name="button_continue">Continuer</string>
     <string name="button_cancel">Annuler</string>
@@ -470,35 +430,29 @@
     <string name="button_set">Choisir</string>
     <string name="button_undo">Annuler</string>
     <string name="button_clear">Nettoyer</string>
-  
     <string name="toast_copied">Copié</string>
     <plurals name="toast_archived">
         <item quantity="one">Conversation archivée</item>
         <item quantity="other">%d Conversations archivées</item>
     </plurals>
-
     <string name="toast_qksms_plus">Vous devez déverrouiller QUIK+ pour utiliser cela</string>
-  
     <plurals name="notification_new_messages">
         <item quantity="one">Nouveau message</item>
         <item quantity="other">%s nouveaux messages</item>
     </plurals>
     <string name="notification_message_failed_title">Message non envoyé</string>
     <string name="notification_message_failed_text">Le message à %s n’a pu être envoyé</string>
-  
     <string-array name="night_modes">
         <item>Système</item>
         <item>Désactivé</item>
         <item>Toujours activé</item>
         <item>Automatique</item>
     </string-array>
-  
     <string-array name="notification_preview_options">
         <item>Afficher le nom et le message</item>
         <item>Afficher le nom</item>
         <item>Masquer le contenu</item>
     </string-array>
-  
     <string-array name="text_sizes">
         <item>Petit</item>
         <item>Normal</item>
@@ -506,14 +460,12 @@
         <item>Très grand</item>
         <item>Énorme</item>
     </string-array>
-  
     <string-array name="delayed_sending_labels">
         <item>Aucun retard</item>
         <item>3 secondes</item>
         <item>5 secondes</item>
         <item>10 secondes</item>
     </string-array>
-  
     <string-array name="mms_sizes">
         <item>Automatique</item>
         <item>100KB</item>
@@ -524,7 +476,6 @@
         <item>2000KB</item>
         <item>Pas de compression</item>
     </string-array>
-
     <integer-array name="mms_sizes_ids">
         <item>-1</item>
         <item>100</item>
@@ -535,26 +486,23 @@
         <item>2000</item>
         <item>0</item>
     </integer-array>
-
     <string-array name="messageLinkHandlings">
         <item>Bloquer</item>
         <item>Autoriser</item>
         <item>Demander avant d’ouvrir</item>
     </string-array>
-
     <integer-array name="messageLinkHandling_ids">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </integer-array>
-  
     <string-array name="qk_responses">
         <item>OK</item>
         <item>Donnez-moi un moment</item>
         <item>J’arrive</item>
         <item>Merci</item>
         <item>Ça a l’air bien</item>
-        <item>Quoi de neuf&#160;?</item>
+        <item>Quoi de neuf ?</item>
         <item>D’accord</item>
         <item>Non</item>
         <item>Je t’aime</item>
@@ -565,11 +513,29 @@
     <string name="speak_no_messages">Aucun message</string>
     <string name="speak_unseen_messages">Exprimer les messages non vus</string>
     <string name="messageLinkHandling_dialog_title">Alerte de lien extérieur</string>
-    <string name="messageLinkHandling_dialog_body">Certains liens pourraient être non sécurisés ou vous rediriger frauduleusement. Vérifiez le lien ci-dessous avant de continuer&#160;:\n\n%1$s\n\nVoulez-vous continuer&#160;?</string>
+    <string name="messageLinkHandling_dialog_body">Certains liens pourraient être non sécurisés ou vous rediriger frauduleusement. Vérifiez le lien ci-dessous avant de continuer :\n\n%1$s\n\nVoulez-vous continuer ?</string>
     <string name="messageLinkHandling_dialog_positive">Oui, ouvrir le lien</string>
     <string name="messageLinkHandling_dialog_negative">Non</string>
     <string name="error_stt_toast">Désolé, il y a eu une erreur au chargement du fournisseur de saisie vocale.</string>
     <string name="stt_toast_extra_prompt">Exprimez votre message</string>
-
-    <string name="messages_text_share_file_error">Oups&#160;! Quelque chose s’est mal déroulé pendant le partage</string>
+    <string name="messages_text_share_file_error">Oups ! Quelque chose s’est mal déroulé pendant le partage</string>
+    <string name="main_sender_draft">Brouillon : %s</string>
+    <string name="compose_scheduled_view">Messages programmés pour cette conversation</string>
+    <string name="scheduled_send_cd">Programmer l\'envoi de ce message</string>
+    <string name="message_content_filters_title">Filtres de contenu des messages</string>
+    <string name="message_content_filters_empty">Les filtres de contenu des messages apparaîtront ici</string>
+    <string name="message_content_filters_add_cd">Créer un nouveau filtre</string>
+    <string name="message_content_filters_dialog_title">Ne pas récupérer les messages contenant</string>
+    <string name="message_content_filters_dialog_hint">Mot, phrase, expression régulière</string>
+    <string name="message_content_filters_dialog_case_switch">Sensible à la casse</string>
+    <string name="message_content_filters_dialog_regex_switch">Expression régulière</string>
+    <string name="message_content_filters_dialog_contacts_switch">Inclure les contacts</string>
+    <string name="message_content_filters_dialog_create">Créer</string>
+    <string name="all_conversations_widget_title">Toutes les conversations</string>
+    <plurals name="toast_unarchived">
+        <item quantity="one">Conversation désarchivée</item>
+        <item quantity="many">%d conversations désarchivées</item>
+        <item quantity="other">%d conversations désarchivées</item>
+    </plurals>
+    <string name="notification_message_failed_action">Réenvoyer</string>
 </resources>
