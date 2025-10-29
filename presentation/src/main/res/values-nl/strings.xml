@@ -59,7 +59,7 @@
     <string name="main_permission_required">Toestemming vereist</string>
     <string name="main_permission_sms">QUIK machtigen voor het verzenden en bekijken van SMS-berichten</string>
     <string name="main_permission_contacts">QUIK machtigen om uw contactpersonen te bekijken</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_notifications">QUIK heeft toestemming nodig om mededelingen te tonen</string>
     <string name="main_permission_allow">Toestaan</string>
     <string name="drawer_inbox">Inbox</string>
     <string name="drawer_archived">Archief</string>
@@ -72,7 +72,7 @@
     <string name="drawer_plus_banner_summary">Ontgrendel geweldig nieuwe functies en ondersteun verdere ontwikkeling</string>
     <string name="rate_title">Aan het genieten van QUIK?</string>
     <string name="rate_summary">Deel je liefde voor QUIK door een beoordeling op Google Play te plaatsen!</string>
-    <string name="rate_okay">Ok</string>
+    <string name="rate_okay">Oke!</string>
     <string name="rate_dismiss">Sluiten</string>
     <string name="dialog_delete_title">Verwijderen</string>
     <plurals name="dialog_delete_message">
@@ -94,7 +94,7 @@
     <string name="compose_send_group_summary">Ontvangers en antwoorden zijn zichtbaar voor iedereen</string>
     <string name="compose_messages_empty">Dit is het begin van je conversatie. Zeg iets leuks!</string>
     <string name="compose_vcard_label">Contactpersoonkaart</string>
-    <string name="compose_scheduled_for">Gepland voor</string>
+    <string name="compose_scheduled_for">Geplande tijd:</string>
     <string name="compose_scheduled_future">De geselecteerde tijd moet in de toekomst liggen!</string>
     <string name="compose_scheduled_plus">Je hebt QUIK+ nodig om geplande berichten te gebruiken</string>
     <string name="compose_scheduled_toast">Toegevoegd aan geplande berichten</string>
@@ -146,8 +146,8 @@
     <string name="backup_restoring">Bezig met het terugzetten van berichten</string>
     <string name="backup_loading">Bezig met laden…</string>
     <string name="backup_never">Nooit</string>
-    <string name="backup_location_title">Backup location</string>
-    <string name="backup_location_summary">Set folder</string>
+    <string name="backup_location_title">Back-up locatie</string>
+    <string name="backup_location_summary">Map instellen</string>
     <string name="backup_restore_title">Herstellen</string>
     <string name="backup_restore_summary">Selecteer een back-up</string>
     <string name="backup_restore_error_plus">Je dient QUIK+ te hebben alvorens je gebruik kan maken van Back-up en herstellen</string>
@@ -156,11 +156,11 @@
     <string name="backup_restore_confirm_title">Herstel van back-up</string>
     <string name="backup_restore_stop_title">Stop herstellen</string>
     <string name="backup_restore_stop_message">Berichten die al hersteld zijn zullen worden behouden op je toestel</string>
-    <string name="backup_select_location_rationale_title">Select backup location</string>
-    <string name="backup_select_location_rationale_message">Please select a folder to save your backups to</string>
+    <string name="backup_select_location_rationale_title">Selecteer de back-up locatie</string>
+    <string name="backup_select_location_rationale_message">Selecteer een map waar uw de back-ups wilt opslaan</string>
     <string name="backup_details">%1$s\n%2$d messages</string>
     <string name="backup_selected_backup_error_title">Error</string>
-    <string name="backup_selected_backup_error_message">Couldn\'t read backup file</string>
+    <string name="backup_selected_backup_error_message">Mislukt het back-up bestand te lezen</string>
     <string name="backup_selected_backup_details_title">Backup details</string>
     <string name="backup_restore_dialog_title">Back-ups</string>
     <string name="backup_restore_dialog_empty">Geen back-ups gevonden</string>
@@ -201,9 +201,9 @@
     <string name="settings_notifications_title">Notificaties</string>
     <string name="settings_notifications_o_summary">Tikken om aan te passen</string>
     <string name="settings_notification_actions_title">Acties</string>
-    <string name="settings_notification_action_1">Button 1</string>
-    <string name="settings_notification_action_2">Button 2</string>
-    <string name="settings_notification_action_3">Button 3</string>
+    <string name="settings_notification_action_1">Knop 1</string>
+    <string name="settings_notification_action_2">Knop 2</string>
+    <string name="settings_notification_action_3">Knop 3</string>
     <string name="settings_notification_previews_title">Notificatievoorbeeld</string>
     <string name="settings_notification_wake_title">Scherm activeren</string>
     <string name="settings_vibration_title">Trillen</string>
@@ -425,7 +425,7 @@
     </plurals>
     <plurals name="dialog_send_now">
         <item quantity="one">Weet je zeker dat je dit bericht nu wilt versturen?</item>
-        <item quantity="other">"Weet je zeker dat je  %d berichten nu wilt versturen?"</item>
+        <item quantity="other">Weet je zeker dat je %d berichten nu wilt versturen?</item>
     </plurals>
     <string name="dialog_edit_scheduled_message_title">Bewerk bericht</string>
     <string name="dialog_edit_scheduled_message">Bewerken van dit bericht zal het verwijderen uit de planner.\n\nControleer en zorg dat het wordt toegevoegd in het volgende scherm, of het gaat verloren.\n\nWilt u doorgaan?</string>
