@@ -409,4 +409,81 @@
         <item>LOL</item>
         <item>Dat is oke</item>
     </string-array>
+    <string name="menu_mms_part_share">Delen</string>
+    <string name="menu_mms_part_forward">Doorsturen</string>
+    <string name="menu_mms_part_open">Extern openen</string>
+    <string name="main_menu_select_all">Alles selecteren</string>
+    <string name="main_menu_send_now">Verzenden</string>
+    <string name="main_menu_edit_message">Bewerk bericht</string>
+    <string name="main_menu_rename_conversation">Hernoem conversatie</string>
+    <string name="main_sender_draft">Concept: %s</string>
+    <string name="scheduled_menu_send_now">Zend nu</string>
+    <string name="scheduled_menu_edit_message">Bewerk bericht</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Weet je zeker dat je dit bericht wilt verwijderen?</item>
+        <item quantity="other">Weet je zeker dat je %d berichten wilt verwijderen?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Weet je zeker dat je dit bericht nu wilt versturen?</item>
+        <item quantity="other">"Weet je zeker dat je  %d berichten nu wilt versturen?"</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Bewerk bericht</string>
+    <string name="dialog_edit_scheduled_message">Bewerken van dit bericht zal het verwijderen uit de planner.\n\nControleer en zorg dat het wordt toegevoegd in het volgende scherm, of het gaat verloren.\n\nWilt u doorgaan?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Ja, bewerk dit bericht</string>
+    <string name="dialog_clear_compose_title">Wissen bericht</string>
+    <string name="dialog_clear_compose">Wis het bericht? Deze actie kan niet ongedaan worden gemaakt.</string>
+    <string name="compose_scheduled_view">Geplande berichten voor deze conversatie</string>
+    <string name="compose_no_valid_recipients">Kan niet versturen naar andere participanten</string>
+    <string name="compose_menu_show_status">Toon status</string>
+    <string name="compose_attach_file_cd">Bestand toevoegen</string>
+    <string name="compose_audio_message_cd">Audio bericht opnemen</string>
+    <string name="compose_schedule_cancel_cd">Annuleer gepland bericht</string>
+    <string name="compose_record_audio_msg_cd">Audio bericht opnemen</string>
+    <string name="compose_record_audio_msg_abort_cd">Annuleer audio bericht</string>
+    <string name="compose_record_audio_msg_attach_cd">Audio bericht toevoegen</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Speel of pauzeer audio bericht</string>
+    <string name="compose_message_cancel">Annuleer</string>
+    <string name="compose_message_send_now">Versturen</string>
+    <string name="compose_message_sim">SIM nummer</string>
+    <string name="compose_message_attachment">Bijlage</string>
+    <string name="compose_toast_drag_stt">Verplaats de spraak-naar-tekst knop naar door u gelieve plaats</string>
+    <string name="message_body_too_long_to_display">⚠ Bericht is te lang. Kopieer of Bewaar voor de volledige tekst</string>
+    <string name="clipboard_too_large_to_copy">Data grote overstijgt kladbord limiet</string>
+    <string name="clipboard_unable_to_copy_to">Mislukt te kopiëren naar kladblok</string>
+    <string name="scheduled_send_cd">Plan dit bericht</string>
+    <string name="attachment_missing">Ontbreekt</string>
+    <string name="settings_system_show_stt_title">Toon de spraak-naar-tekst knop</string>
+    <string name="settings_notification_previews_summary">Toon naam en bericht</string>
+    <string name="settings_notification_silent_title">Stil wanneer geen contact</string>
+    <string name="settings_notification_silent_summary">Stille notificaties voor berichten zonder ontvanger in uw contacten lijst</string>
+    <string name="settings_unread_at_top_title">Ongelezen bovenaan</string>
+    <string name="settings_unread_at_top_summary">Toon ongelezen conversaties bovenaan</string>
+    <string name="settings_mms_weblink_title">Link afhandeling in berichten</string>
+    <string name="settings_disable_screenshots_title">Schermafbeeldingen uitschakelen</string>
+    <string name="settings_diable_screenshots_summary">Verhinder dat uw OS en andere apps afbeeldingen kunnen maken van deze app.</string>
+    <string name="message_content_filters_title">Bericht inhoud filters</string>
+    <string name="message_content_filters_empty">Uw bericht inhoud filters verschijnen hier</string>
+    <string name="message_content_filters_add_cd">Maak een nieuwe filter</string>
+    <string name="message_content_filters_dialog_case_switch">Hoofdlettergevoelig</string>
+    <string name="message_content_filters_dialog_contacts_switch">Contacten toevoegen</string>
+    <string name="all_conversations_widget_title">Alle conversaties</string>
+    <string name="button_clear">Wissen</string>
+    <plurals name="toast_archived">
+        <item quantity="one">Gearchiveerde conversatie</item>
+        <item quantity="other">Gearchiveerd %d conversaties</item>
+    </plurals>
+    <plurals name="toast_unarchived">
+        <item quantity="one">Niet gearchiveerde conversatie</item>
+        <item quantity="other">Niet gearchiveerde conversaties %d</item>
+    </plurals>
+    <string name="notification_message_failed_action">Opnieuw versturen</string>
+    <string name="speak_no_messages">Geen berichten</string>
+    <string name="speak_unseen_messages">Spreek ongelezen berichten</string>
+    <string name="messageLinkHandling_dialog_title">Externe link waarschuwing</string>
+    <string name="messageLinkHandling_dialog_body">Sommige links zijn mogelijk onveilig of sturen u onbedoeld door. Controleer de link hieronder voor u doorgaat:\n\n%1$s\n\nWilt u doorgaan?</string>
+    <string name="messageLinkHandling_dialog_positive">Ja, open de link</string>
+    <string name="messageLinkHandling_dialog_negative">Nee</string>
+    <string name="error_stt_toast">Sorry, er was een fout bij het laden van de spraak-naar-tekst provider.</string>
+    <string name="stt_toast_extra_prompt">Spreek uw bericht</string>
+    <string name="messages_text_share_file_error">Oeps! Iets ging er fout bij het delen</string>
 </resources>
