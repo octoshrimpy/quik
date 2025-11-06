@@ -5,9 +5,15 @@ on:
   schedule:
     - cron: '0 0 1 1,4,7,10 *'
 
+concurrency:
+  group: auto-update-mms-configs
+  cancel-in-progress: false
+
 jobs:
   vvm:
     runs-on: ubuntu-latest
+    env:
+      APKEEP_VERSION: 0.9.0
       
     steps:
       - name: Checkout repository
@@ -15,20 +21,37 @@ jobs:
         with:
           fetch-depth: 0 
       
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-apkeep-${{ env.APKEEP_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-apkeep-
+      
       - name: Set Branch Name
         run: echo "NEW_BRANCH=update-mms-configs-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
       
       - name: Install apkeep
-        run: cargo install apkeep
+        shell: bash
+        run: |
+          set -euo pipefail
+          if command -v apkeep >/dev/null 2>&1; then
+            installed_version=$(apkeep --version | awk '{print $2}')
+            if [[ "$installed_version" == "$APKEEP_VERSION" ]]; then
+              echo "apkeep ${APKEEP_VERSION} already installed."
+              exit 0
+            fi
+          fi
+          cargo install apkeep --locked --version "$APKEEP_VERSION"
         
-      - name: Install aapt and unzip
+      - name: Install APK tooling
         run: |
-          sudo apt update
-          sudo apt -y install aapt unzip
-          
-      - name: Install Apktool
-        run: |
-          wget https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.11.1.jar
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends aapt apktool unzip
           
       - name: Download Messaging APK 
         run: apkeep -a com.google.android.apps.messaging -o device=walleye /home/runner/work/quik/quik
@@ -41,13 +64,21 @@ jobs:
           unzip /home/runner/work/quik/quik/com.google.android.apps.messaging.xapk -d /home/runner/work/quik/quik
                 
       - name: Decompile Messaging using apktool
-        run: java -jar apktool_2.11.1.jar decode com.google.android.apps.messaging.apk -o dump
+        run: apktool d com.google.android.apps.messaging.apk -o dump
         
       - name: Copy MMS configs
+        shell: bash
         run: |
-          rm -rv android-smsmms/src/main/res/xml-mcc*
-          cp -rv dump/res/xml-mcc* android-smsmms/src/main/res/
-          rm -rv android-smsmms/src/main/res/xml-mcc*/*_config_override.xml
+          set -euo pipefail
+          shopt -s nullglob
+          rm -rfv android-smsmms/src/main/res/xml-mcc*
+          source_dirs=(dump/res/xml-mcc*)
+          if [[ "${#source_dirs[@]}" -eq 0 ]]; then
+            echo "No MMS config directories found in dump." >&2
+            exit 1
+          fi
+          cp -rv "${source_dirs[@]}" android-smsmms/src/main/res/
+          find android-smsmms/src/main/res/xml-mcc* -name '*_config_override.xml' -print -delete
 
       - name: Remove Duplicate MMS Config Files
         run: |
