@@ -62,10 +62,10 @@ class MessageContentFilterRepositoryImpl @Inject constructor() : MessageContentF
                     } else if (filter.isRegex) {
                         Regex(filter.value).matches(messageBody)
                     } else if (filter.caseSensitive) {
-                        val regexp = ".*\\b" + Regex.escape(filter.value) + "\\b.*"
+                        val regexp = "[\\s\\S]*\\b" + Regex.escape(filter.value) + "\\b[\\s\\S]*"
                         Regex(regexp).matches(messageBody)
                     } else {
-                        val regexp = ".*\\b" + Regex.escape(filter.value.lowercase()) + "\\b.*"
+                        val regexp = "[\\s\\S]*\\b" + Regex.escape(filter.value.lowercase()) + "\\b[\\s\\S]*"
                         Regex(regexp).matches(messageBody.lowercase())
                     }
                 }
