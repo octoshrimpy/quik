@@ -47,8 +47,7 @@ class ComposeWindowCallback(
 
     override fun dispatchTouchEvent(motionEvent: MotionEvent): Boolean {
         if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-            val v = activity.currentFocus
-            when (v) {
+            when (val v = activity.currentFocus) {
                 is DetailedChipView -> {
                     val rect = Rect().apply { v.getGlobalVisibleRect(this) }
                     if (!rect.contains(motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {

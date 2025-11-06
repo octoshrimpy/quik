@@ -48,9 +48,12 @@ open class MmsPart : RealmObject() {
         .build()
 
     fun getBestFilename(): String =
-        if (File(name).extension.isNotEmpty()) name ?: "unknown"
-        else "$name." + (MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
-            ?: type.substringAfter("/"))
+        if (name.isNullOrBlank()) "unknown"
+        else if (File(name!!).extension.isNotEmpty()) name!!
+        else "$name" +
+                if (type.isBlank()) ""
+                else ".${MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+                    ?: type.substringAfter("/")}"
 
     fun getSummary(): String? = when {
         type == "application/smil" -> null

@@ -24,19 +24,16 @@ import android.animation.ObjectAnimator
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.changehandler.AnimatorChangeHandler
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 
 class QkChangeHandler : AnimatorChangeHandler(250, true) {
 
-    @NonNull
     override fun getAnimator(
-        @NonNull container: ViewGroup,
-        @Nullable from: View?,
-        @Nullable to: View?,
+        container: ViewGroup,
+        from: View?,
+        to: View?,
         isPush: Boolean,
         toAddedToContainer: Boolean
     ): Animator {
@@ -66,12 +63,11 @@ class QkChangeHandler : AnimatorChangeHandler(250, true) {
         return animatorSet
     }
 
-    override fun resetFromView(@NonNull from: View) {
+    override fun resetFromView(from: View) {
         from.translationX = 0f
         from.translationZ = 0f
     }
 
-    @NonNull
     override fun copy(): ControllerChangeHandler {
         return QkChangeHandler()
     }

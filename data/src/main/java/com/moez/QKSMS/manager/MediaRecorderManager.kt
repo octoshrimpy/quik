@@ -40,8 +40,7 @@ object MediaRecorderManager : MediaRecorder() {
     const val AUDIO_FILE_PREFIX = "recorded-"
     const val AUDIO_FILE_SUFFIX = ".3ga"
 
-    var recordingState: RecordingState = RecordingState.Initial
-        private set
+    private var recordingState: RecordingState = RecordingState.Initial
 
     var uri: Uri = Uri.EMPTY
         private set
@@ -64,7 +63,7 @@ object MediaRecorderManager : MediaRecorder() {
     fun startRecording(context: Context, preferredAudioDevice: AudioDeviceInfo? = null): Uri {
         return try {
             val (newUri, e) = FileUtils.create(
-                FileUtils.Companion.Location.Cache,
+                FileUtils.Location.Cache,
                 context,
                 "$AUDIO_FILE_PREFIX${UUID.randomUUID()}$AUDIO_FILE_SUFFIX",
                 ""

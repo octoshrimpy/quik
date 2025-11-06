@@ -50,12 +50,6 @@ class BluetoothMicManager(
         })
     }
 
-    enum class StartBluetoothDevice {
-        NoDevice,
-        Connecting,
-        Connected
-    }
-
     var device: AudioDeviceInfo? = null
         private set
 

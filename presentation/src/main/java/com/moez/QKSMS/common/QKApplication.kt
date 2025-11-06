@@ -27,7 +27,6 @@ import androidx.emoji2.text.EmojiCompat
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import androidx.work.WorkerFactory
-import com.moez.QKSMS.manager.SpeakManager
 import com.uber.rxdogtag.RxDogTag
 import com.uber.rxdogtag.autodispose.AutoDisposeConfigurer
 import dagger.android.AndroidInjector
@@ -75,9 +74,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     override fun onCreate() {
         super.onCreate()
 
-        // set application context for SpeakManager
-        SpeakManager.setContext(this)
-
         // set translated "no messages" string for speakThreads interactor
         SpeakThreads.setNoMessagesString(getString(R.string.speak_no_messages))
 
@@ -88,7 +84,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
         Realm.setDefaultConfiguration(RealmConfiguration.Builder()
                 .compactOnLaunch()
                 .migration(realmMigration)
-                .schemaVersion(QkRealmMigration.SchemaVersion)
+                .schemaVersion(QkRealmMigration.SCHEMA_VERSION)
                 .build())
 
         qkMigration.performMigration()

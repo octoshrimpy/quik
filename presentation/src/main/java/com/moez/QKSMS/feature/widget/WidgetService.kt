@@ -24,7 +24,7 @@ import android.widget.RemoteViewsService
 
 class WidgetService : RemoteViewsService() {
 
-    override fun onGetViewFactory(intent: Intent): RemoteViewsService.RemoteViewsFactory {
+    override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
         return WidgetAdapter(intent)
     }
 

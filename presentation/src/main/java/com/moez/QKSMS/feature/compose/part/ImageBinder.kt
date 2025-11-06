@@ -29,6 +29,7 @@ import dev.octoshrimpy.quik.extensions.isVideo
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.util.GlideApp
+import dev.octoshrimpy.quik.util.tryOrNull
 import kotlinx.android.synthetic.main.mms_image_preview_list_item.*
 import javax.inject.Inject
 
@@ -56,7 +57,9 @@ class ImageBinder @Inject constructor(colors: Colors, private val context: Conte
             else -> BubbleImageView.Style.ONLY
         }
 
-        GlideApp.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
+        tryOrNull(true) {
+            GlideApp.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
+        }
     }
 
 }

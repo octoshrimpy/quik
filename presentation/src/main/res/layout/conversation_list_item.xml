@@ -82,7 +82,7 @@
         android:paddingStart="4dp"
         android:paddingTop="2dp"
         android:src="@drawable/ic_baseline_push_pin_24"
-        android:tint="?android:attr/textColorTertiary"
+        app:tint="?android:attr/textColorTertiary"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@id/scheduled"
         app:layout_constraintTop_toTopOf="@id/snippet"

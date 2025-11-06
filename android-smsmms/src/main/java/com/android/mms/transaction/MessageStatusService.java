@@ -27,7 +27,9 @@ import android.net.Uri;
 import android.provider.Telephony.Sms;
 import android.provider.Telephony.Sms.Inbox;
 import android.telephony.SmsMessage;
-import timber.log.Timber;
+import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
+
+import com.android.mms.logs.LogTag;
 
 /**
  * Service that gets started by the MessageStatusReceiver when a message status report is
@@ -35,6 +37,7 @@ import timber.log.Timber;
  */
 public class MessageStatusService extends IntentService {
     private static final String[] ID_PROJECTION = new String[] { Sms._ID };
+    private static final String LOG_TAG = LogTag.TAG;
     private static final Uri STATUS_URI = Uri.parse("content://sms/status");
 
     public MessageStatusService() {
@@ -86,8 +89,10 @@ public class MessageStatusService extends IntentService {
                 boolean isStatusReport = message.isStatusReportMessage();
                 ContentValues contentValues = new ContentValues(2);
 
-                log("updateMessageStatus: msgUrl=" + messageUri + ", status=" + status
-                        + ", isStatusReport=" + isStatusReport);
+                if (Timber_isLoggable(LogTag.TAG, Log.DEBUG)) {
+                    log("updateMessageStatus: msgUrl=" + messageUri + ", status=" + status +
+                            ", isStatusReport=" + isStatusReport);
+                }
 
                 contentValues.put(Sms.STATUS, status);
                 contentValues.put(Inbox.DATE_SENT, System.currentTimeMillis());
@@ -103,10 +108,10 @@ public class MessageStatusService extends IntentService {
     }
 
     private void error(String message) {
-        Timber.e("[MessageStatusReceiver] " + message);
+        Log.e(LOG_TAG, "[MessageStatusReceiver] " + message);
     }
 
     private void log(String message) {
-        Timber.d("[MessageStatusReceiver] " + message);
+        Log.d(LOG_TAG, "[MessageStatusReceiver] " + message);
     }
 }

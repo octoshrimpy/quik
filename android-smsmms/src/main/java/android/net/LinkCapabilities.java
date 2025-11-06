@@ -18,7 +18,7 @@ package android.net;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import timber.log.Timber;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,6 +32,7 @@ import java.util.Set;
  * @hide
  */
 public class LinkCapabilities implements Parcelable {
+    private static final String TAG = "LinkCapabilities";
     private static final boolean DBG = false;
 
     /**

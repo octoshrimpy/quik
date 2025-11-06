@@ -42,7 +42,7 @@ class BlockedNumbersPresenter @Inject constructor(
             .observeOn(Schedulers.io())
             .doOnNext { id ->
                 blockingRepo.getBlockedNumber(id)?.address
-                    ?.let(conversationRepo::getConversation)
+                    ?.let { address -> conversationRepo.getConversation(listOf(address)) }
                     ?.let { conversation -> markUnblocked.execute(listOf(conversation.id)) }
             }
             .doOnNext(blockingRepo::unblockNumber)

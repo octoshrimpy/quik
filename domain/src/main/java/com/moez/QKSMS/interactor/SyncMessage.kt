@@ -29,13 +29,17 @@ class SyncMessage @Inject constructor(
     private val conversationRepo: ConversationRepository,
     private val syncManager: SyncRepository,
     private val updateBadge: UpdateBadge
-) : Interactor<Uri>() {
+) : Interactor<SyncMessage.Params>() {
 
-    override fun buildObservable(params: Uri): Flowable<*> {
+    data class Params(val uri: Uri, val messageId: Long = 0)
+
+    override fun buildObservable(params: Params): Flowable<*> {
         return Flowable.just(params)
-                .mapNotNull { uri -> syncManager.syncMessage(uri) }
-                .doOnNext { message -> conversationRepo.updateConversations(message.threadId) }
-                .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
+            .mapNotNull { syncManager.syncMessage(it.uri, it.messageId) }
+            .doOnNext {
+                message -> conversationRepo.updateConversations(listOf(message.threadId))
+            }
+            .flatMap { updateBadge.buildObservable(Unit) } // Update the badge
     }
 
 }

@@ -53,7 +53,7 @@
         android:elevation="8dp"
         android:padding="16dp"
         android:src="@drawable/ic_add_black_24dp"
-        android:tint="@color/white"
+        app:tint="@color/white"
         tools:backgroundTint="@color/tools_theme" />
 
 </FrameLayout>

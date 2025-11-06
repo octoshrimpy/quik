@@ -16,12 +16,13 @@
 
 package com.android.mms.transaction;
 
-import android.content.Context;
-import android.net.http.AndroidHttpClient;
-import android.telephony.TelephonyManager;
-import android.text.TextUtils;
-import android.util.Config;
-import com.android.mms.MmsConfig;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Locale;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
@@ -33,16 +34,19 @@ import org.apache.http.conn.params.ConnRouteParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
-import timber.log.Timber;
 
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Locale;
+import android.content.Context;
+import android.net.http.AndroidHttpClient;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+import android.util.Config;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
+
+import com.android.mms.logs.LogTag;
+import com.android.mms.MmsConfig;
 
 public class HttpUtils {
+    private static final String TAG = LogTag.TRANSACTION;
 
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = DEBUG ? Config.LOGD : Config.LOGV;
@@ -93,16 +97,19 @@ public class HttpUtils {
             throw new IllegalArgumentException("URL must not be null.");
         }
 
-        Timber.v("httpConnection: params list");
-        Timber.v("\ttoken\t\t= " + token);
-        Timber.v("\turl\t\t= " + url);
-        Timber.v("\tmethod\t\t= " + ((method == HTTP_POST_METHOD) ? "POST"
-                : ((method == HTTP_GET_METHOD) ? "GET" : "UNKNOWN")));
-        Timber.v("\tisProxySet\t= " + isProxySet);
-        Timber.v("\tproxyHost\t= " + proxyHost);
-        Timber.v("\tproxyPort\t= " + proxyPort);
-        // TODO Print out binary data more readable.
-        //Timber.v("\tpdu\t\t= " + Arrays.toString(pdu));
+        if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+            Timber.v("httpConnection: params list");
+            Timber.v("\ttoken\t\t= " + token);
+            Timber.v("\turl\t\t= " + url);
+            Timber.v("\tmethod\t\t= "
+                    + ((method == HTTP_POST_METHOD) ? "POST"
+                            : ((method == HTTP_GET_METHOD) ? "GET" : "UNKNOWN")));
+            Timber.v("\tisProxySet\t= " + isProxySet);
+            Timber.v("\tproxyHost\t= " + proxyHost);
+            Timber.v("\tproxyPort\t= " + proxyPort);
+            // TODO Print out binary data more readable.
+            //Timber.v("\tpdu\t\t= " + Arrays.toString(pdu));
+        }
 
         AndroidHttpClient client = null;
 
@@ -150,7 +157,10 @@ public class HttpUtils {
                 String xWapProfileTagName = MmsConfig.getUaProfTagName();
                 String xWapProfileUrl = MmsConfig.getUaProfUrl();
                 if (xWapProfileUrl != null) {
-                    Timber.d("[HttpUtils] httpConn: xWapProfUrl=" + xWapProfileUrl);
+                    if (Timber_isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+                        Log.d(LogTag.TRANSACTION,
+                                "[HttpUtils] httpConn: xWapProfUrl=" + xWapProfileUrl);
+                    }
                     req.addHeader(xWapProfileTagName, xWapProfileUrl);
                 }
             }
@@ -224,7 +234,8 @@ public class HttpUtils {
                                     bytesRead = dis.read(tempBody, offset, bytesTobeRead);
                                 } catch (IOException e) {
                                     readError = true;
-                                    Timber.e("httpConnection: error reading input stream" + e.getMessage());
+                                    Timber.e("httpConnection: error reading input stream"
+                                        + e.getMessage());
                                     break;
                                 }
                                 if (bytesRead > 0) {
@@ -237,7 +248,8 @@ public class HttpUtils {
                                 // bytesRead will be -1 if the data was read till the eof
                                 body = new byte[offset];
                                 System.arraycopy(tempBody, 0, body, 0, offset);
-                                Timber.v("httpConnection: Chunked response length [" + Integer.toString(offset) + "]");
+                                Timber.v("httpConnection: Chunked response length ["
+                                    + Integer.toString(offset) + "]");
                             } else {
                                 Timber.e("httpConnection: Response entity too large or empty");
                             }
@@ -293,7 +305,10 @@ public class HttpUtils {
         // set the socket timeout
         int soTimeout = MmsConfig.getHttpSocketTimeout();
 
-        Timber.d("[HttpUtils] createHttpClient w/ socket timeout " + soTimeout + " ms, " + ", UA=" + userAgent);
+        if (Timber_isLoggable(LogTag.TRANSACTION, Log.DEBUG)) {
+            Timber.d("[HttpUtils] createHttpClient w/ socket timeout " + soTimeout + " ms, "
+                    + ", UA=" + userAgent);
+        }
         HttpConnectionParams.setSoTimeout(params, soTimeout);
         return client;
     }

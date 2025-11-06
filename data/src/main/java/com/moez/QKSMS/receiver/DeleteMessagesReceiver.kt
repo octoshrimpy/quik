@@ -23,19 +23,25 @@ import android.content.Context
 import android.content.Intent
 import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.interactor.DeleteMessages
+import timber.log.Timber
 import javax.inject.Inject
 
 class DeleteMessagesReceiver : BroadcastReceiver() {
-
     @Inject lateinit var deleteMessages: DeleteMessages
 
     override fun onReceive(context: Context, intent: Intent) {
         AndroidInjection.inject(this, context)
 
-        val pendingResult = goAsync()
-        val threadId = intent.getLongExtra("threadId", 0)
-        val messageIds = intent.getLongArrayExtra("messageIds") ?: longArrayOf()
-        deleteMessages.execute(DeleteMessages.Params(messageIds.toList(), threadId)) { pendingResult.finish() }
+        Timber.v("received")
+
+        intent.getLongExtra("threadId", 0).takeIf { it > 0 }?.let { threadId ->
+            intent.getLongArrayExtra("messageIds")?.let { messageIds ->
+                val pendingResult = goAsync()
+                deleteMessages.execute(DeleteMessages.Params(messageIds.toList(), threadId)) {
+                    pendingResult.finish()
+                }
+            }
+        }
     }
 
 }

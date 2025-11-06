@@ -128,7 +128,7 @@ class ContactRepositoryImpl @Inject constructor(
                     }
                 }
                 .map { contacts ->
-                    contacts.sortedWith(Comparator { c1, c2 ->
+                    contacts.sortedWith { c1, c2 ->
                         val initial = c1.name.firstOrNull()
                         val other = c2.name.firstOrNull()
                         if (initial?.isLetter() == true && other?.isLetter() != true) {
@@ -138,7 +138,7 @@ class ContactRepositoryImpl @Inject constructor(
                         } else {
                             c1.name.compareTo(c2.name, ignoreCase = true)
                         }
-                    })
+                    }
                 }
     }
 

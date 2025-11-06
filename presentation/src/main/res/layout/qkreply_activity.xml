@@ -107,7 +107,7 @@
         android:contentDescription="@string/compose_sim_cd"
         android:padding="10dp"
         android:src="@drawable/ic_sim_card_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="@id/message"
         app:layout_constraintEnd_toEndOf="@id/messageBackground" />
 
@@ -147,7 +147,7 @@
         android:contentDescription="@string/compose_send_cd"
         android:padding="10dp"
         android:src="@drawable/ic_send_black_24dp"
-        android:tint="?android:textColorSecondary"
+        app:tint="?android:textColorSecondary"
         app:layout_constraintBottom_toBottomOf="@id/message"
         app:layout_constraintEnd_toEndOf="parent"
         tools:backgroundTint="@color/tools_theme" />

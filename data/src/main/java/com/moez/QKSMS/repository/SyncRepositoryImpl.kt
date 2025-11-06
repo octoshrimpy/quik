@@ -246,33 +246,40 @@ class SyncRepositoryImpl @Inject constructor(
                 })
         }
     }
-    override fun syncMessage(uri: Uri): Message? {
+
+    override fun syncMessage(uri: Uri, messageId: Long): Message? {
 
         // If we don't have a valid type, return null
         val type = when {
-            uri.toString().contains("mms") -> "mms"
-            uri.toString().contains("sms") -> "sms"
+            uri.toString().contains(Message.TYPE_MMS) -> Message.TYPE_MMS
+            uri.toString().contains(Message.TYPE_SMS) -> Message.TYPE_SMS
             else -> return null
         }
 
         // If we don't have a valid id, return null
-        val id = tryOrNull(false) { ContentUris.parseId(uri) } ?: return null
+        val contentId = tryOrNull(false) { ContentUris.parseId(uri) } ?: return null
 
         // Check if the message already exists, so we can reuse the id
         val existingId = Realm.getDefaultInstance().use { realm ->
             realm.refresh()
             realm.where(Message::class.java)
-                    .equalTo("type", type)
-                    .equalTo("contentId", id)
-                    .findFirst()
-                    ?.id
+                .equalTo("type", type)
+                .equalTo("contentId", contentId)
+                .or()
+                .beginGroup()
+                .equalTo("id", messageId)
+                .and()
+                .equalTo("contentId", 0L)
+                .endGroup()
+                .findFirst()
+                ?.id
         }
 
         // The uri might be something like content://mms/inbox/id
         // The box might change though, so we should just use the mms/id uri
         val stableUri = when (type) {
-            "mms" -> ContentUris.withAppendedId(Telephony.Mms.CONTENT_URI, id)
-            else -> ContentUris.withAppendedId(Telephony.Sms.CONTENT_URI, id)
+            Message.TYPE_MMS -> ContentUris.withAppendedId(Telephony.Mms.CONTENT_URI, contentId)
+            else -> ContentUris.withAppendedId(Telephony.Sms.CONTENT_URI, contentId)
         }
 
         return contentResolver.query(stableUri, null, null, null, null)?.use { cursor ->

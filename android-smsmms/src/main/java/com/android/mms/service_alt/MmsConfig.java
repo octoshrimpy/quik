@@ -24,8 +24,9 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Base64;
+import timber.log.Timber; import android.util.Log; import static com.klinker.android.timberworkarounds.TimberExtensionsKt.Timber_isLoggable; // inserted with sed
+
 import com.klinker.android.send_message.R;
-import timber.log.Timber;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
@@ -44,6 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 4. Add key/value for relevant mms_config.xml of a specific carrier (mcc/mnc)
  */
 public class MmsConfig {
+    private static final String TAG = "MmsConfig";
 
     private static final String DEFAULT_HTTP_KEY_X_WAP_PROFILE = "x-wap-profile";
 
@@ -336,11 +338,16 @@ public class MmsConfig {
         final TelephonyManager telephonyManager =
                 (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-        mUserAgent = telephonyManager.getMmsUserAgent();
-        mUaProfUrl = telephonyManager.getMmsUAProfUrl();
-        // defaults for nexus 6, seems to work well.
-        //mUserAgent = "nexus6";
-        //mUaProfUrl = "http://uaprof.motorola.com/phoneconfig/nexus6/Profile/nexus6.rdf";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mUserAgent = telephonyManager.getMmsUserAgent();
+            mUaProfUrl = telephonyManager.getMmsUAProfUrl();
+            // defaults for nexus 6, seems to work well.
+            //mUserAgent = "nexus6";
+            //mUaProfUrl = "http://uaprof.motorola.com/phoneconfig/nexus6/Profile/nexus6.rdf";
+        } else {
+            mUserAgent = "Android Messaging";
+            mUaProfUrl = "http://www.gstatic.com/android/hangouts/hangouts_mms_ua_profile.xml";
+        }
     }
 
     private void loadFromResources(Context context) {
@@ -551,11 +558,15 @@ public class MmsConfig {
             final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(
                     Context.TELEPHONY_SERVICE);
 
-            try {
-                Method method = telephonyManager.getClass().getMethod("getLine1NumberForSubscriber", int.class);
-                return (String) method.invoke(telephonyManager, subId);
-            } catch (Exception e) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 return telephonyManager.getLine1Number();
+            } else {
+                try {
+                    Method method = telephonyManager.getClass().getMethod("getLine1NumberForSubscriber", int.class);
+                    return (String) method.invoke(telephonyManager, subId);
+                } catch (Exception e) {
+                    return telephonyManager.getLine1Number();
+                }
             }
         }
 
@@ -577,15 +588,21 @@ public class MmsConfig {
 
             String nai = "";
 
-            try {
-                Method method = telephonyManager.getClass().getMethod("getNai", int.class);
-                Method getSlotId = SubscriptionManager.class.getMethod("getSlotId", int.class);
-                nai = (String) method.invoke(telephonyManager, getSlotId.invoke(null, subId));
-            } catch (Exception e) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
                 nai = SystemPropertiesProxy.get(context, "persist.radio.cdma.nai");
+            } else {
+                try {
+                    Method method = telephonyManager.getClass().getMethod("getNai", int.class);
+                    Method getSlotId = SubscriptionManager.class.getMethod("getSlotId", int.class);
+                    nai = (String) method.invoke(telephonyManager, getSlotId.invoke(null, subId));
+                } catch (Exception e) {
+                    nai = SystemPropertiesProxy.get(context, "persist.radio.cdma.nai");
+                }
             }
 
-            Timber.v("MmsConfig.getNai: nai=" + nai);
+            if (Timber_isLoggable(TAG, Log.VERBOSE)) {
+                Timber.v("MmsConfig.getNai: nai=" + nai);
+            }
 
             if (!TextUtils.isEmpty(nai)) {
                 String naiSuffix = getNaiSuffix();

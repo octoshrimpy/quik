@@ -108,7 +108,7 @@
         android:background="?attr/selectableItemBackground"
         android:padding="16dp"
         android:src="@drawable/ic_cancel_black_24dp"
-        android:tint="?android:attr/textColorSecondary"
+        app:tint="?android:attr/textColorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -29,6 +29,7 @@ import android.provider.Telephony.Mms.Inbox;
 import android.provider.Telephony.Threads;
 import android.telephony.TelephonyManager;
 
+import com.android.mms.logs.LogTag;
 import com.android.mms.MmsConfig;
 import com.android.mms.util.DownloadManager;
 import com.google.android.mms.MmsException;
@@ -40,11 +41,12 @@ import com.google.android.mms.pdu_alt.PduHeaders;
 import com.google.android.mms.pdu_alt.PduParser;
 import com.google.android.mms.pdu_alt.PduPersister;
 import com.google.android.mms.pdu_alt.RetrieveConf;
+import timber.log.Timber;
+
 import com.klinker.android.send_message.BroadcastUtils;
+import com.klinker.android.send_message.Settings;
 
 import java.io.IOException;
-
-import timber.log.Timber;
 
 import static com.android.mms.transaction.TransactionState.FAILED;
 import static com.android.mms.transaction.TransactionState.INITIALIZED;
@@ -71,6 +73,8 @@ import static com.google.android.mms.pdu_alt.PduHeaders.STATUS_UNRECOGNIZED;
  * in case the client is in immediate retrieve mode.
  */
 public class NotificationTransaction extends Transaction implements Runnable {
+    private static final String TAG = LogTag.TAG;
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private Uri mUri;
@@ -88,7 +92,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
             mNotificationInd = (NotificationInd)
                     PduPersister.getPduPersister(context).load(mUri);
         } catch (MmsException e) {
-            Timber.e(e, "Failed to load NotificationInd from: " + uriString);
+            Timber.e("Failed to load NotificationInd from: " + uriString, e);
             throw new IllegalArgumentException();
         }
 
@@ -110,10 +114,20 @@ public class NotificationTransaction extends Transaction implements Runnable {
         try {
             // Save the pdu. If we can start downloading the real pdu immediately, don't allow
             // persist() to create a thread for the notificationInd because it causes UI jank.
-            mUri = PduPersister.getPduPersister(context).persist(ind, Inbox.CONTENT_URI,
-                    PduPersister.DUMMY_THREAD_ID, !allowAutoDownload(mContext), true, null);
+            boolean group;
+            int subId = Settings.DEFAULT_SUBSCRIPTION_ID;
+
+            try {
+                group = com.klinker.android.send_message.Transaction.settings.getGroup();
+                subId = com.klinker.android.send_message.Transaction.settings.getSubscriptionId();
+            } catch (Exception e) {
+                group = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("group_message", true);
+            }
+            mUri = PduPersister.getPduPersister(context).persist(
+                        ind, Inbox.CONTENT_URI, !allowAutoDownload(mContext),
+                        group, null, subId);
         } catch (MmsException e) {
-            Timber.e(e, "Failed to save NotificationInd in constructor.");
+            Timber.e("Failed to save NotificationInd in constructor.", e);
             throw new IllegalArgumentException();
         }
 
@@ -184,18 +198,20 @@ public class NotificationTransaction extends Transaction implements Runnable {
                 } else {
                     // Save the received PDU (must be a M-RETRIEVE.CONF).
                     PduPersister p = PduPersister.getPduPersister(mContext);
-                    Uri uri = p.persist(pdu, Inbox.CONTENT_URI, PduPersister.DUMMY_THREAD_ID,
-                            true, true, null);
-
-                    RetrieveConf retrieveConf = (RetrieveConf) pdu;
+                    Uri uri = p.persist(pdu, Inbox.CONTENT_URI, true,
+                            com.klinker.android.send_message.Transaction.settings.getGroup(), null, com.klinker.android.send_message.Transaction.settings.getSubscriptionId());
 
                     // Use local time instead of PDU time
                     ContentValues values = new ContentValues(2);
                     values.put(Mms.DATE, System.currentTimeMillis() / 1000L);
+
                     try {
+                        // Store PDU time as sent time for received message
+                        RetrieveConf retrieveConf = (RetrieveConf) pdu;
                         values.put(Mms.DATE_SENT, retrieveConf.getDate());
-                    } catch (Exception ignored) {
+                    } catch (Exception e) {
                     }
+
                     SqliteWrapper.update(mContext, mContext.getContentResolver(),
                             uri, values, null, null);
 
@@ -237,7 +253,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
 
             sendNotifyRespInd(status);
         } catch (Throwable t) {
-            Timber.e(t, "error");
+            Timber.e("error", t);
         } finally {
             mTransactionState.setContentUri(mUri);
             if (!autoDownload) {
