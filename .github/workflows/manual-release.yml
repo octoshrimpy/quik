@@ -75,7 +75,7 @@ jobs:
           new_name = f"{major}.{minor}.{patch}"
           new_code = current_code + 1
 
-          content, code_count = code_pattern.subn(rf"\1{new_code}", content, count=1)
+          content, code_count = code_pattern.subn(lambda m: f"{m.group(1)}{new_code}", content, count=1)
           content, name_count = name_pattern.subn(lambda m: f"{m.group(1)}{new_name}{m.group(3)}", content, count=1)
 
           if code_count != 1 or name_count != 1:
