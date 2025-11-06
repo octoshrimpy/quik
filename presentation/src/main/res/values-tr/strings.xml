@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Yeni konuşma</string>
     <string name="shortcut_compose_short_label">Oluştur</string>
     <string name="shortcut_compose_disabled_message">Kısayol devre dışı</string>
@@ -95,7 +94,7 @@
     <string name="compose_send_group_summary">Alıcılar ve yanıtlar herkese görünür olacak</string>
     <string name="compose_messages_empty">Senin konuşma başlıyor. Güzel bir şey söyle!</string>
     <string name="compose_vcard_label">Kişi Kartı</string>
-    <string name="compose_scheduled_for">Planlanan</string>
+    <string name="compose_scheduled_for">Planlanan zaman:</string>
     <string name="compose_scheduled_future">Seçilen zaman gelecekte olmalı!</string>
     <string name="compose_scheduled_plus">Zamanlanmış mesajlaşma kullanmak için QUIK+ kilidini kaldırmak gerekir</string>
     <string name="compose_scheduled_toast">Zamanlanmış iletilere eklendi</string>
@@ -167,7 +166,7 @@
     <string name="backup_restore_dialog_empty">Yedekleme bulunamadı</string>
     <string name="backup_disclaimer">Şu anda, sadece SMS yedekleme ve geri yükleme desteklenmektedir. MMS desteği ve zamanlanmış mesaj yedeklemeleri çok yakında !</string>
     <string name="backup_now">Şimdi yedekle</string>
-    <string name="backup_progress_parsing">Yedekleme ayrılıyor&#8230;</string>
+    <string name="backup_progress_parsing">Yedekleme ayrılıyor…</string>
     <string name="backup_progress_running">%d%d mesajlar</string>
     <string name="backup_progress_saving">Yedekleme kaydediliyor...</string>
     <string name="backup_progress_syncing">Mesajlar senkronize ediliyor...</string>
@@ -412,4 +411,42 @@ BAĞLAM İSTEĞİ</string>
         <item>He</item>
         <item>Tamam o zaman</item>
     </string-array>
+    <string name="menu_mms_part_share">Paylaş</string>
+    <string name="menu_mms_part_forward">İleri</string>
+    <string name="menu_mms_part_open">Harici olarak aç</string>
+    <string name="main_menu_select_all">Hepsini seç</string>
+    <string name="main_menu_send_now">Şimdi gönder</string>
+    <string name="main_menu_edit_message">Mesajı düzenle</string>
+    <string name="main_menu_rename_conversation">Konuşmayı yeniden adlandır</string>
+    <string name="main_sender_draft">Taslak: %s</string>
+    <string name="scheduled_menu_send_now">Şimdi gönder</string>
+    <string name="scheduled_menu_edit_message">Mesajı düzenle</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Bu mesajı silmek istediğinizden emin misiniz?</item>
+        <item quantity="other">%d mesajı silmek istediğinizden emin misiniz?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Bu mesajı şimdi göndermek istediğinizden emin misiniz?</item>
+        <item quantity="other">%d mesajı şimdi göndermek istediğinizden emin misiniz?</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Mesajı düzenle</string>
+    <string name="dialog_edit_scheduled_message">Bu mesajı düzenlemek onu takvimden silecektir.\n\nSonraki ekranda tekrardan gönderdiğinizden emin olun yoksa silinecektir.\n\nDevam etmek istiyor musunuz?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Evet, mesajı düzenle</string>
+    <string name="dialog_clear_compose_title">Mesajı temizle</string>
+    <string name="dialog_clear_compose">Mesaj temizlensin mi? Bu işlem geri alınamaz.</string>
+    <string name="compose_scheduled_view">Bu sohbet için planlanmış mesajlar</string>
+    <string name="compose_menu_show_status">Durumu göster</string>
+    <string name="compose_attach_file_cd">Herhangi bir dosya ekleyin</string>
+    <string name="compose_audio_message_cd">Bir sesli mesaj kaydedin</string>
+    <string name="compose_schedule_cancel_cd">Zamanlanmış mesajı iptal edin</string>
+    <string name="compose_record_audio_msg_cd">Sesli mesaj kaydedin</string>
+    <string name="compose_record_audio_msg_abort_cd">Sesli mesajı iptal edin</string>
+    <string name="compose_record_audio_msg_attach_cd">Sesli mesaj yükleyin</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Sesli mesajı oynatın veya durdurun</string>
+    <string name="compose_message_cancel">İptal et</string>
+    <string name="compose_message_send_now">Şimdi gönder</string>
+    <string name="compose_message_sim">SIM numarası</string>
+    <string name="compose_message_attachment">Ek</string>
+    <string name="compose_toast_drag_stt">Sesle yazma butonunu istediğiniz yere taşıyın</string>
+    <string name="message_body_too_long_to_display">⚠ Mesaj çok uzun. Metnin tümü için Kopyala yada Kaydet.</string>
 </resources>

@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Conversație nouă</string>
     <string name="shortcut_compose_short_label">Compune</string>
     <string name="shortcut_compose_disabled_message">Comanda rapidă dezactivată</string>
@@ -218,7 +217,7 @@
     <string name="scheduled_empty_message_2">Este pe 23 decembrie</string>
     <string name="scheduled_empty_message_3">La mulți ani! Uită-te la ce prieten grozav sunt, amintindu-ți ziua ta de naștere</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
-    <string name="scheduled_empty_message_3_timestamp">Trimite pe 23 decembrie&#x200A;</string>
+    <string name="scheduled_empty_message_3_timestamp">Trimite pe 23 decembrie </string>
     <string name="scheduled_compose_cd">Programează un mesaj</string>
     <string name="scheduled_options_title">Mesaj programat</string>
     <string name="attachment_missing">Lipsește</string>

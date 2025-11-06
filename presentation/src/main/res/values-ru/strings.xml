@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Новая беседа</string>
     <string name="shortcut_compose_short_label">Написать</string>
     <string name="shortcut_compose_disabled_message">Ярлык отключён</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Настройки</string>
     <string name="title_notification_prefs">Уведомления</string>
     <string name="title_theme">Тема</string>
-    <string name="title_conversations">Поиск во входящих&#8230;</string>
+    <string name="title_conversations">Поиск во входящих…</string>
     <string name="title_compose">Написать</string>
     <string name="setup_skip">Пропустить</string>
     <string name="setup_next">Продолжить</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Пометить прочитанным</string>
     <string name="main_menu_unread">Пометить непрочитанным</string>
     <string name="main_menu_block">Блокировать</string>
-    <string name="main_syncing">Синхронизация сообщений&#8230;</string>
+    <string name="main_syncing">Синхронизация сообщений…</string>
     <string name="main_sender_you">Вы: %s</string>
     <string name="main_message_results_title">Результаты в сообщениях</string>
     <string name="main_message_results">%d сообщений</string>
@@ -97,11 +96,11 @@
     <string name="compose_send_group_summary">Получатели и ответы будут видны всем</string>
     <string name="compose_messages_empty">Это начало вашей беседы. Скажите что-нибудь приятное!</string>
     <string name="compose_vcard_label">Карточка контакта</string>
-    <string name="compose_scheduled_for">Запланировано на</string>
+    <string name="compose_scheduled_for">Запланировано на:</string>
     <string name="compose_scheduled_future">Выбранное время должно быть в будущем!</string>
     <string name="compose_scheduled_plus">Вы должны разблокировать QUIK+, чтобы использовать запланированные сообщения</string>
     <string name="compose_scheduled_toast">Добавлено в планировщик сообщений</string>
-    <string name="compose_hint">Написать сообщение&#8230;</string>
+    <string name="compose_hint">Написать сообщение…</string>
     <string name="compose_menu_copy">Скопировать текст</string>
     <string name="compose_menu_forward">Переслать</string>
     <string name="compose_menu_delete">Удалить</string>
@@ -129,7 +128,7 @@
     <string name="compose_sim_changed_toast">Выбрана SIM-карта %1$d (%2$s)</string>
     <string name="compose_sim_cd">Выбрано %s, сменить SIM-карту</string>
     <string name="compose_send_cd">Отправить сообщение</string>
-    <string name="message_status_sending">Отправка&#8230;</string>
+    <string name="message_status_sending">Отправка…</string>
     <string name="message_status_delivered">Доставлено %s</string>
     <string name="message_status_failed">Не удалось отправить. Нажмите, чтобы попробовать ещё раз.</string>
     <string name="info_title">Подробности</string>
@@ -147,15 +146,15 @@
     <string name="backup_title">Резервное копирование</string>
     <string name="backup_backing_up">Резервное копирование сообщений</string>
     <string name="backup_restoring">Восстановление из резервной копии</string>
-    <string name="backup_loading">Загрузка&#8230;</string>
+    <string name="backup_loading">Загрузка…</string>
     <string name="backup_never">Никогда</string>
     <string name="backup_location_title">Путь резервной копии</string>
     <string name="backup_location_summary">Выбор папки</string>
     <string name="backup_restore_title">Восстановление</string>
     <string name="backup_restore_summary">Выберите резервную копию</string>
     <string name="backup_restore_error_plus">Пожалуйста, разблокируйте QUIK+ для использования резервного копирования и восстановления</string>
-    <string name="backup_restore_error_backup">Выполняется резервное копирование&#8230;</string>
-    <string name="backup_restore_error_restore">Выполняется восстановление&#8230;</string>
+    <string name="backup_restore_error_backup">Выполняется резервное копирование…</string>
+    <string name="backup_restore_error_restore">Выполняется восстановление…</string>
     <string name="backup_restore_confirm_title">Восстановление из резервной копии</string>
     <string name="backup_restore_stop_title">Остановить восстановление</string>
     <string name="backup_restore_stop_message">Сообщения, которые уже были восстановлены останутся на вашем устройстве</string>
@@ -169,10 +168,10 @@
     <string name="backup_restore_dialog_empty">Резервные копии не найдены</string>
     <string name="backup_disclaimer">В настоящее время поддерживается резервное копирование и восстановление только SMS. Поддержка MMS и регулярные резервные копии появятся в ближайшее время!</string>
     <string name="backup_now">Резервировать</string>
-    <string name="backup_progress_parsing">Анализ резервной копии&#8230;</string>
+    <string name="backup_progress_parsing">Анализ резервной копии…</string>
     <string name="backup_progress_running">%d/%d сообщений</string>
-    <string name="backup_progress_saving">Сохранение резервной копии&#8230;</string>
-    <string name="backup_progress_syncing">Синхронизация сообщений&#8230;</string>
+    <string name="backup_progress_saving">Сохранение резервной копии…</string>
+    <string name="backup_progress_syncing">Синхронизация сообщений…</string>
     <string name="backup_progress_finished">Завершено!</string>
     <string name="backup_notification_channel_name">Резервирование</string>
     <string name="scheduled_title">Планировщик</string>
@@ -334,7 +333,7 @@
     <string name="qksms_plus_respond_summary">Автоматически отвечать на входящие сообщения предустановленным ответом</string>
     <string name="qksms_plus_more_title">Ещё</string>
     <string name="qksms_plus_more_summary">QUIK находится в активной разработке и ваша покупка будет включать в себя все функции QUIK+ в будущем!</string>
-    <string name="widget_loading">Загрузка&#8230;</string>
+    <string name="widget_loading">Загрузка…</string>
     <string name="widget_more">Посмотреть больше бесед</string>
     <string name="qkreply_menu_read">Прочитано</string>
     <string name="qkreply_menu_call">Позвонить</string>
@@ -420,4 +419,94 @@
         <item>LOL</item>
         <item>Это нормально</item>
     </string-array>
+    <string name="main_menu_select_all">Выбрать всё</string>
+    <string name="main_menu_send_now">Отправить сейчас</string>
+    <string name="main_menu_edit_message">Редактировать сообщение</string>
+    <string name="main_menu_rename_conversation">Переименовать разговор</string>
+    <string name="main_sender_draft">Черновик: %s</string>
+    <string name="scheduled_menu_send_now">Отправить сейчас</string>
+    <string name="scheduled_menu_edit_message">Редактировать сообщение</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Вы уверены, что хотите удалить это сообщение?</item>
+        <item quantity="few">Вы уверены, что хотите удалить %d сообщений?</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Вы уверены, что хотите отправить это сообщение прямо сейчас?</item>
+        <item quantity="few">Вы уверены, что хотите отправить прямо сейчас %d сообщений?</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Редактировать сообщение</string>
+    <string name="dialog_edit_scheduled_message">Редактирование этого сообщения удалит его из планировщика.\n\nУбедитесь, что вы повторно отправите его на следующем экране, иначе оно будет потеряно.\n\nХотите продолжить?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Да, редактировать сообщение</string>
+    <string name="dialog_clear_compose_title">Стереть сообщение</string>
+    <string name="dialog_clear_compose">Стереть сообщение? Эта операция не может быть отменена.</string>
+    <string name="compose_scheduled_view">Запланированные сообщения для этого разговора</string>
+    <string name="compose_no_valid_recipients">Не могу отправить другим участникам</string>
+    <string name="compose_menu_show_status">Показать статус</string>
+    <string name="compose_attach_file_cd">Прикрепить файл</string>
+    <string name="compose_audio_message_cd">Записать аудиосообщение</string>
+    <string name="compose_schedule_cancel_cd">Отменить запланированное сообщение</string>
+    <string name="compose_record_audio_msg_cd">Записать аудиосообщение</string>
+    <string name="compose_record_audio_msg_abort_cd">Отменить аудиосообщение</string>
+    <string name="compose_record_audio_msg_attach_cd">Прикрепить аудиосообщение</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Проиграть или поставить на паузу аудиосообщение</string>
+    <string name="compose_message_cancel">Отменить</string>
+    <string name="compose_message_send_now">Отправить сейчас</string>
+    <string name="compose_message_sim">Номер SIM-карты</string>
+    <string name="compose_message_item">Элемент сообщения</string>
+    <string name="compose_message_attachment">Прикреплено</string>
+    <string name="compose_toast_drag_stt">Переместите кнопку преобразования речи в текст в любое желаемое место</string>
+    <string name="message_body_too_long_to_display">⚠ Сообщение длинное. Скопируйте или сохраните для полного текста</string>
+    <string name="clipboard_too_large_to_copy">Размер данных превышает лимит буфера обмена</string>
+    <string name="clipboard_unable_to_copy_to">Не удалось скопировать в буфер обмена</string>
+    <string name="scheduled_send_cd">Запланировать это сообщение</string>
+    <string name="menu_mms_part_share">Поделиться</string>
+    <string name="menu_mms_part_forward">Переслать</string>
+    <string name="menu_mms_part_open">Открыть снаружи</string>
+    <string name="attachment_missing">Отсутствует</string>
+    <string name="settings_system_show_stt_title">Показать кнопку перевода речи в текст</string>
+    <string name="settings_notification_previews_summary">Показать имя и сообщение</string>
+    <string name="settings_notification_silent_title">Заглушить, если не в контактах</string>
+    <string name="settings_notification_silent_summary">Заглушает уведомления для сообщений без получателей из вашего списка контактов</string>
+    <string name="settings_unread_at_top_title">Непрочитанные сверху</string>
+    <string name="settings_unread_at_top_summary">Показывать непрочитанные разговоры наверху</string>
+    <string name="settings_mms_weblink_title">Обрабатывать ссылки в сообщениях</string>
+    <string name="settings_disable_screenshots_title">Отключить Скриншоты</string>
+    <string name="settings_diable_screenshots_summary">Запретить вашей ОС и другим приложениям делать скриншоты приложения.</string>
+    <string name="message_content_filters_title">Фильтры содержимого сообщений</string>
+    <string name="message_content_filters_empty">Здесь появятся ваши фильтры содержимого сообщений</string>
+    <string name="message_content_filters_add_cd">Создать новый фильтр</string>
+    <string name="message_content_filters_dialog_title">Пропуск соответствующих сообщений,</string>
+    <string name="message_content_filters_dialog_hint">Словао, фраза или регулярное выражение</string>
+    <string name="message_content_filters_dialog_case_switch">С учётом регистра</string>
+    <string name="message_content_filters_dialog_regex_switch">Регулярное выражение</string>
+    <string name="message_content_filters_dialog_contacts_switch">Включить контакты</string>
+    <string name="message_content_filters_dialog_create">Создать</string>
+    <string name="all_conversations_widget_title">Все Разговоры</string>
+    <string name="button_clear">Очистить</string>
+    <plurals name="toast_archived">
+        <item quantity="one">Архивирован %d разговор</item>
+        <item quantity="few">Архивированы %d разговора</item>
+        <item quantity="many">Архивированы %d разговоров</item>
+        <item quantity="other">Архивированы %d разговоров</item>
+    </plurals>
+    <plurals name="toast_unarchived">
+        <item quantity="one">Разархивирован %d разговор</item>
+        <item quantity="few">Разархивированы %d разговора</item>
+        <item quantity="many">Разархивированы %d разговоров</item>
+        <item quantity="other">Разархивированы %d разговоров</item>
+    </plurals>
+    <string name="notification_message_failed_action">Отправить повторно</string>
+    <string name="speak_no_messages">Нет Сообщений</string>
+    <string name="speak_unseen_messages">Проговорить непрочитанные сообщения</string>
+    <string name="messageLinkHandling_dialog_title">Предупреждение о внешних ссылках</string>
+    <string name="messageLinkHandling_dialog_body">Некоторые ссылки могут быть небезопасными или неожиданно перенаправить вас. Прежде чем продолжить, ознакомьтесь с приведенной ниже ссылкой:\n\n%1$s\n\nВы хотите продолжить?</string>
+    <string name="messageLinkHandling_dialog_positive">Да, открыть ссылку</string>
+    <string name="messageLinkHandling_dialog_negative">Нет</string>
+    <string name="error_stt_toast">Извините, произошла ошибка при загрузке провайдера Speech-To-Text.</string>
+    <string name="stt_toast_extra_prompt">Произнесите своё сообщение</string>
+    <string name="messages_text_share_file_error">Упс! Что-то пошло не так во время обмена</string>
 </resources>

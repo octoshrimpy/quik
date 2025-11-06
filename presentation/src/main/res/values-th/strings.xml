@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">New conversation</string>
     <string name="shortcut_compose_short_label">Compose</string>
     <string name="shortcut_compose_disabled_message">Shortcut disabled</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">การตั้งค่า</string>
     <string name="title_notification_prefs">การแจ้งเตือน</string>
     <string name="title_theme">รูปแบบการแสดงผล</string>
-    <string name="title_conversations">ค้นหากล่องขาเข้า&#8230;</string>
+    <string name="title_conversations">ค้นหากล่องขาเข้า…</string>
     <string name="title_compose">พิมพ์ชื่อหรือหมายเลข</string>
     <string name="setup_skip">ข้าม</string>
     <string name="setup_next">ทำต่อ</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Mark read</string>
     <string name="main_menu_unread">Mark unread</string>
     <string name="main_menu_block">ปิดกั้น</string>
-    <string name="main_syncing">กำลังปรับแต่งเพิ่มประสิทธิภาพฐานข้อมูล อาจใช้เวลาสักครู่&#8230;</string>
+    <string name="main_syncing">กำลังปรับแต่งเพิ่มประสิทธิภาพฐานข้อมูล อาจใช้เวลาสักครู่…</string>
     <string name="main_sender_you">คุณ: %s</string>
     <string name="main_message_results_title">ผลลัพธ์ในข้อความ</string>
     <string name="main_message_results">%d ข้อความ</string>
@@ -144,15 +143,15 @@
     <string name="backup_title">Backup and restore</string>
     <string name="backup_backing_up">Backing up messages</string>
     <string name="backup_restoring">Restoring from backup</string>
-    <string name="backup_loading">Loading&#8230;</string>
+    <string name="backup_loading">Loading…</string>
     <string name="backup_never">Never</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Restore</string>
     <string name="backup_restore_summary">Select a backup</string>
     <string name="backup_restore_error_plus">Please unlock QUIK+ to use backup and restore</string>
-    <string name="backup_restore_error_backup">Backup in progress&#8230;</string>
-    <string name="backup_restore_error_restore">Restore in progress&#8230;</string>
+    <string name="backup_restore_error_backup">Backup in progress…</string>
+    <string name="backup_restore_error_restore">Restore in progress…</string>
     <string name="backup_restore_confirm_title">Restore from backup</string>
     <string name="backup_restore_stop_title">Stop restore</string>
     <string name="backup_restore_stop_message">Messages that have already been restored will remain on your device</string>
@@ -166,10 +165,10 @@
     <string name="backup_restore_dialog_empty">No backups found</string>
     <string name="backup_disclaimer">Currently, only SMS is supported by Backup and Restore. MMS support and scheduled backups will be coming soon!</string>
     <string name="backup_now">Backup now</string>
-    <string name="backup_progress_parsing">Parsing backup&#8230;</string>
+    <string name="backup_progress_parsing">Parsing backup…</string>
     <string name="backup_progress_running">%d/%d messages</string>
-    <string name="backup_progress_saving">Saving backup&#8230;</string>
-    <string name="backup_progress_syncing">Syncing messages&#8230;</string>
+    <string name="backup_progress_saving">Saving backup…</string>
+    <string name="backup_progress_syncing">Syncing messages…</string>
     <string name="backup_progress_finished">Finished!</string>
     <string name="backup_notification_channel_name">Backup and restore</string>
     <string name="scheduled_title">กำหนดการ</string>
@@ -322,7 +321,7 @@
     <string name="qksms_plus_respond_summary">ตอบกลับข้อความที่เข้ามาอัตโนมัติ โดยใช้ข้อความที่จัดเตรียมไว้</string>
     <string name="qksms_plus_more_title">เพิ่มเติม</string>
     <string name="qksms_plus_more_summary">QUIK is under active development, and your purchase will include all future QUIK+ features!</string>
-    <string name="widget_loading">กำลังโหลด&#8230;</string>
+    <string name="widget_loading">กำลังโหลด…</string>
     <string name="widget_more">ดูการสนทนาเพิ่มเติม</string>
     <string name="qkreply_menu_read">Mark read</string>
     <string name="qkreply_menu_call">โทร</string>

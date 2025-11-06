@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">新對話</string>
     <string name="shortcut_compose_short_label">撰寫</string>
     <string name="shortcut_compose_disabled_message">捷徑已停用</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">標示已讀</string>
     <string name="main_menu_unread">標示未讀</string>
     <string name="main_menu_block">攔截</string>
-    <string name="main_syncing">正在同步&#8230;</string>
+    <string name="main_syncing">正在同步…</string>
     <string name="main_sender_you">您：%s</string>
     <string name="main_message_results_title">信息中的結果</string>
     <string name="main_message_results">%d 條信息</string>
@@ -98,7 +97,7 @@
     <string name="compose_scheduled_future">所選時間必須是未來時間</string>
     <string name="compose_scheduled_plus">您必須解鎖 QUIK+ 以使用排程簡訊</string>
     <string name="compose_scheduled_toast">已新增至排程訊息</string>
-    <string name="compose_hint">寫一條訊息&#8230;</string>
+    <string name="compose_hint">寫一條訊息…</string>
     <string name="compose_menu_copy">複製文本</string>
     <string name="compose_menu_forward">轉寄</string>
     <string name="compose_menu_delete">刪除</string>
@@ -126,7 +125,7 @@
     <string name="compose_sim_changed_toast">已選取%1$d (%2$s) SIM卡</string>
     <string name="compose_sim_cd">%s 已選擇，變更 SIM 卡</string>
     <string name="compose_send_cd">發送訊息</string>
-    <string name="message_status_sending">正在發送&#8230;</string>
+    <string name="message_status_sending">正在發送…</string>
     <string name="message_status_delivered">已傳遞 %s</string>
     <string name="message_status_failed">發送失敗，點擊重試</string>
     <string name="info_title">詳細資訊</string>
@@ -144,15 +143,15 @@
     <string name="backup_title">備份和還原</string>
     <string name="backup_backing_up">正在備份訊息</string>
     <string name="backup_restoring">正在從備份還原</string>
-    <string name="backup_loading">載入中&#8230;</string>
+    <string name="backup_loading">載入中…</string>
     <string name="backup_never">從未備份</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">還原</string>
     <string name="backup_restore_summary">選擇備份</string>
     <string name="backup_restore_error_plus">請解鎖 QUIK+ 以使用備份和還原功能</string>
-    <string name="backup_restore_error_backup">正在進行備份&#8230;</string>
-    <string name="backup_restore_error_restore">正在進行還原&#8230;</string>
+    <string name="backup_restore_error_backup">正在進行備份…</string>
+    <string name="backup_restore_error_restore">正在進行還原…</string>
     <string name="backup_restore_confirm_title">從備份還原</string>
     <string name="backup_restore_stop_title">停止還原</string>
     <string name="backup_restore_stop_message">已還原的訊息將保留在您的裝置上</string>
@@ -166,10 +165,10 @@
     <string name="backup_restore_dialog_empty">未能找到備份</string>
     <string name="backup_disclaimer">目前只有簡訊支援備份和還原，多媒體和排程簡訊備份將在不久後加入！</string>
     <string name="backup_now">立即備份</string>
-    <string name="backup_progress_parsing">正在解析備份&#8230;</string>
+    <string name="backup_progress_parsing">正在解析備份…</string>
     <string name="backup_progress_running">%d/%d 條訊息</string>
-    <string name="backup_progress_saving">正在儲存備份&#8230;</string>
-    <string name="backup_progress_syncing">正在同步訊息&#8230;</string>
+    <string name="backup_progress_saving">正在儲存備份…</string>
+    <string name="backup_progress_syncing">正在同步訊息…</string>
     <string name="backup_progress_finished">完成！</string>
     <string name="backup_notification_channel_name">備份和還原</string>
     <string name="scheduled_title">排程</string>
@@ -322,7 +321,7 @@
     <string name="qksms_plus_respond_summary">使用預設回應自動回覆傳入郵件</string>
     <string name="qksms_plus_more_title">更多</string>
     <string name="qksms_plus_more_summary">QUIK 正在積極開發中，您的購買將包含後續 QUIK+ 的所有功能！</string>
-    <string name="widget_loading">載入中&#8230;</string>
+    <string name="widget_loading">載入中…</string>
     <string name="widget_more">查看更多對話</string>
     <string name="qkreply_menu_read">標示已讀</string>
     <string name="qkreply_menu_call">致電</string>
