@@ -16,8 +16,7 @@
   ~
   ~ You should have received a copy of the GNU General Public License
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="shortcut_compose_long_label">Percakapan baru</string>
     <string name="shortcut_compose_short_label">Buat</string>
     <string name="shortcut_compose_disabled_message">Pintasan nonaktif</string>
@@ -25,7 +24,7 @@
     <string name="title_settings">Setelan</string>
     <string name="title_notification_prefs">Notifikasi</string>
     <string name="title_theme">Tema</string>
-    <string name="title_conversations">Cari kotak masuk&#8230;</string>
+    <string name="title_conversations">Cari kotak masuk…</string>
     <string name="title_compose">Ketik nama atau nomor</string>
     <string name="setup_skip">Lewati</string>
     <string name="setup_next">Lanjut</string>
@@ -46,7 +45,7 @@
     <string name="main_menu_read">Tandai dibaca</string>
     <string name="main_menu_unread">Tandai belum dibaca</string>
     <string name="main_menu_block">Blokir</string>
-    <string name="main_syncing">Menyinkronkan pesan&#8230;</string>
+    <string name="main_syncing">Menyinkronkan pesan…</string>
     <string name="main_sender_you">Anda: %s</string>
     <string name="main_message_results_title">Hasil dalam pesan</string>
     <string name="main_message_results">%d pesan</string>
@@ -98,7 +97,7 @@
     <string name="compose_scheduled_future">Waktu yang dipilih harus berada di masa depan!</string>
     <string name="compose_scheduled_plus">Anda harus membuka akses QUIK+ untuk menggunakan pesan terjadwal</string>
     <string name="compose_scheduled_toast">Ditambahkan ke pesan terjadwal</string>
-    <string name="compose_hint">Tulis pesan&#8230;</string>
+    <string name="compose_hint">Tulis pesan…</string>
     <string name="compose_menu_copy">Salin teks</string>
     <string name="compose_menu_forward">Teruskan</string>
     <string name="compose_menu_delete">Hapus</string>
@@ -126,7 +125,7 @@
     <string name="compose_sim_changed_toast">SIM %1$d (%2$s) dipilih</string>
     <string name="compose_sim_cd">%s dipilih, ganti kartu SIM</string>
     <string name="compose_send_cd">Kirim pesan</string>
-    <string name="message_status_sending">Mengirim&#8230;</string>
+    <string name="message_status_sending">Mengirim…</string>
     <string name="message_status_delivered">%s terkirim</string>
     <string name="message_status_failed">Gagal mengirim. Ketuk untuk mencoba lagi</string>
     <string name="info_title">Detail</string>
@@ -144,15 +143,15 @@
     <string name="backup_title">Cadangan dan pemulihan</string>
     <string name="backup_backing_up">Mencadangankan pesan</string>
     <string name="backup_restoring">Memulihkan cadangan pesan</string>
-    <string name="backup_loading">Memuat&#8230;</string>
+    <string name="backup_loading">Memuat…</string>
     <string name="backup_never">Tidak pernah</string>
     <string name="backup_location_title">Backup location</string>
     <string name="backup_location_summary">Set folder</string>
     <string name="backup_restore_title">Pulihkan</string>
     <string name="backup_restore_summary">Pilih cadangan</string>
     <string name="backup_restore_error_plus">Silakan buka akses QUIK+ untuk menggunakan fitur cadangan dan pemulihan</string>
-    <string name="backup_restore_error_backup">Pencadangan sedang berlangsung&#8230;</string>
-    <string name="backup_restore_error_restore">Pemulihan sedang berlangsung&#8230;</string>
+    <string name="backup_restore_error_backup">Pencadangan sedang berlangsung…</string>
+    <string name="backup_restore_error_restore">Pemulihan sedang berlangsung…</string>
     <string name="backup_restore_confirm_title">Pulihkan dari cadangan</string>
     <string name="backup_restore_stop_title">Setop pemulihan</string>
     <string name="backup_restore_stop_message">Pesan yang telah dipulihkan akan tetap berada di perangkat anda</string>
@@ -166,10 +165,10 @@
     <string name="backup_restore_dialog_empty">Cadangan tidak ditemukan</string>
     <string name="backup_disclaimer">Saat ini, Cadangan dan Pemulihan hanya mendukung pesan SMS. Dukungan MMS dan cadangan terjadwal akan segera datang!</string>
     <string name="backup_now">Cadangkan sekarang</string>
-    <string name="backup_progress_parsing">Membaca cadangan&#8230;</string>
+    <string name="backup_progress_parsing">Membaca cadangan…</string>
     <string name="backup_progress_running">%d/%d pesan</string>
-    <string name="backup_progress_saving">Menyimpan cadangan&#8230;</string>
-    <string name="backup_progress_syncing">Menyinkronkan pesan&#8230;</string>
+    <string name="backup_progress_saving">Menyimpan cadangan…</string>
+    <string name="backup_progress_syncing">Menyinkronkan pesan…</string>
     <string name="backup_progress_finished">Selesai!</string>
     <string name="backup_notification_channel_name">Cadangan dan pemulihan</string>
     <string name="scheduled_title">Terjadwal</string>
@@ -322,7 +321,7 @@
     <string name="qksms_plus_respond_summary">Secara otomatis membalas pesan masuk dengan pesan balasan khusus</string>
     <string name="qksms_plus_more_title">Lainnya</string>
     <string name="qksms_plus_more_summary">QUIK sedang dalam pengembangan aktif, dan pembelian anda juga mencakup semua fitur QUIK+ yang akan datang!</string>
-    <string name="widget_loading">Memuat&#8230;</string>
+    <string name="widget_loading">Memuat…</string>
     <string name="widget_more">Lihat percakapan lainnya</string>
     <string name="qkreply_menu_read">Tandai dibaca</string>
     <string name="qkreply_menu_call">Panggil</string>

@@ -56,3 +56,4 @@ freeline_project_description.json
 # secrets
 my-release-key.keystore
 my-release-key.keystore.base64
+.secrets
