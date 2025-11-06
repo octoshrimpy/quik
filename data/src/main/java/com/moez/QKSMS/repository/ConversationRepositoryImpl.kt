@@ -313,8 +313,8 @@ class ConversationRepositoryImpl @Inject constructor(
     override fun getConversation(recipient: String) =
         getConversation(listOf(recipient))
 
-    override fun getConversation(recipients: Collection<String>) =
-        Realm.getDefaultInstance().let { realm ->
+    override fun getConversation(recipients: Collection<String>): Conversation? =
+        Realm.getDefaultInstance().use { realm ->
             realm.refresh()
             realm.where(Conversation::class.java)
                 .findAll()
@@ -325,6 +325,7 @@ class ConversationRepositoryImpl @Inject constructor(
                         recipients.any { recipient -> phoneNumberUtils.compare(recipient, address) }
                     }
                 }
+                ?.let { realm.copyFromRealm(it) }
         }
 
     override fun getOrCreateConversation(threadId: Long) =
