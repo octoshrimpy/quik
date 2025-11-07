@@ -472,4 +472,9 @@
     <string name="error_stt_toast">ببخشید،‌ ایرنگی هنگام بارگذاری فراهم آورنده‌ی گفتار به نوشتار پیش آمد.</string>
     <string name="messageLinkHandling_dialog_body">برخی پیوند‌ها ممکن است ناامن باشند یا سرزده شما را دگرش رسگ دهند. پیوند زیر را پیش از ادامه دادن بازنگری کنید.\n\n%1$s\n\nآیا می‌خواهید ادامه دهید؟</string>
     <string name="button_clear">پاک کردن</string>
+    <string name="backup_location_title">مکان پشتیبان گیری</string>
+    <string name="backup_location_summary">تنظیم پوشه</string>
+    <string name="clipboard_too_large_to_copy">حجم مورد نظر از ظرفیت کلیپ‌بورد بیشتر است</string>
+    <string name="clipboard_unable_to_copy_to">کپی کردن به کلیپ‌بورد با مشکل مواجه شد</string>
+    <string name="settings_notification_previews_summary">نشان‌دادن اسم و پیام</string>
 </resources>
