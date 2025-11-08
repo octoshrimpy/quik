@@ -69,9 +69,9 @@
     <string name="drawer_settings">Einstellungen</string>
     <string name="drawer_help">Hilfe &amp; Feedback</string>
     <string name="drawer_invite">Freunde einladen</string>
-    <string name="drawer_plus_banner_summary">Schalte erstaunliche Neue Funktionen frei und unterstütze die Entwicklung</string>
+    <string name="drawer_plus_banner_summary">Schalte erstaunliche neue Funktionen frei und unterstütze die Entwicklung</string>
     <string name="rate_title">Gefällt dir QUIK?</string>
-    <string name="rate_summary">Teile etwas von deiner Liebe und Bewerte uns auf Google Play!</string>
+    <string name="rate_summary">Teile etwas von deiner Liebe und gib uns einen Stern auf GitHub!</string>
     <string name="rate_okay">OKAY!</string>
     <string name="rate_dismiss">VERWERFEN</string>
     <string name="dialog_delete_title">Löschen</string>
@@ -212,10 +212,10 @@
     <string name="settings_qkreply_title">Schnellantwort</string>
     <string name="settings_qkreply_summary">Popup für neue Nachrichten</string>
     <string name="settings_qkreply_tap_dismiss_title">Zum Verwerfen tippen</string>
-    <string name="settings_qkreply_tap_dismiss_summary">Tippe außerhalb des Popup um es zu schließen</string>
+    <string name="settings_qkreply_tap_dismiss_summary">Tippe außerhalb des Popups, um es zu schließen</string>
     <string name="settings_delayed_title">Verzögertes Senden</string>
-    <string name="settings_swipe_actions">Wisch-Gesten</string>
-    <string name="settings_swipe_actions_summary">Konfiguriere Wisch-Gesten für Unterhaltungen</string>
+    <string name="settings_swipe_actions">Wischgesten</string>
+    <string name="settings_swipe_actions_summary">Konfiguriere Wischgesten für Unterhaltungen</string>
     <string name="settings_swipe_actions_right">Nach rechts wischen</string>
     <string name="settings_swipe_actions_left">Nach links wischen</string>
     <string name="settings_swipe_actions_change">ÄNDERN</string>
@@ -265,9 +265,9 @@
     <string name="blocking_manager_call_blocker_summary">Spam-Nachrichten und Nummern &amp; unbekannte Anrufe mit Sperrliste &amp; Zeitplan blockieren</string>
     <string name="blocking_manager_call_control_summary">Filtere deine Anrufe und Nachrichten automatisch an einem praktischen Ort! Mit Community IQ™ kannst du unerwünschte Nachrichten von bekannten Community-Spammern verhindern</string>
     <string name="blocking_manager_sia_summary">Nachrichten von unerwünschten Nummern automatisch mit Hilfe der App \"Should I Answer?\" filtern</string>
-    <string name="blocking_manager_copy_title">blockierte Nummer(n) kopieren</string>
+    <string name="blocking_manager_copy_title">Blockierte Nummer(n) kopieren</string>
     <string name="blocking_manager_copy_summary">Zu %s wechseln und zu den existierenden blockierten Nummern kopieren</string>
-    <string name="blocked_numbers_title">blockierte Nummern</string>
+    <string name="blocked_numbers_title">Blockierte Nummern</string>
     <string name="blocked_numbers_empty">Ihre blockierte Nummern werden hier angezeigt</string>
     <string name="blocked_numbers_add_cd">Eine neue Nummer blockieren</string>
     <string name="blocked_numbers_dialog_title">Blockiere Texte von</string>
@@ -324,7 +324,7 @@
     <string name="qksms_plus_respond_title">Automatische Antwort</string>
     <string name="qksms_plus_respond_summary">Eingehende Nachrichten werden mit einer voreingestellten Antwort beantwortet</string>
     <string name="qksms_plus_more_title">Mehr</string>
-    <string name="qksms_plus_more_summary">QUIK wird aktiv weiterentwickelt und Dein Erwerb wird alle zukünftigen Funktionen enthalten!</string>
+    <string name="qksms_plus_more_summary">QUIK wird aktiv weiterentwickelt und dein Erwerb wird alle zukünftigen Funktionen enthalten!</string>
     <string name="widget_loading">Lädt…</string>
     <string name="widget_more">Weitere Unterhaltungen anzeigen</string>
     <string name="qkreply_menu_read">Als gelesen markieren</string>
@@ -444,7 +444,7 @@
     <string name="compose_record_audio_msg_play_pause_cd">Audio-Nachricht abspielen oder pausieren</string>
     <string name="compose_message_cancel">Abbrechen</string>
     <string name="compose_message_send_now">Jetzt senden</string>
-    <string name="compose_message_sim">SIM Nummer</string>
+    <string name="compose_message_sim">SIM-Nummer</string>
     <string name="compose_message_item">Nachrichtenelement</string>
     <string name="compose_message_attachment">Anhang</string>
     <string name="compose_toast_drag_stt">Verschiebe den Sprache-zu-Text-Knopf an eine beliebige Stelle</string>
@@ -483,7 +483,7 @@
     </plurals>
     <string name="notification_message_failed_action">Erneut senden</string>
     <string name="speak_no_messages">Keine Nachrichten</string>
-    <string name="speak_unseen_messages">Ungesehen e Nachrichten vorlesen</string>
+    <string name="speak_unseen_messages">Ungesehene Nachrichten vorlesen</string>
     <string name="messageLinkHandling_dialog_title">Warnung vor externem Link</string>
     <string name="messageLinkHandling_dialog_body">Einige Links können unsicher sein oder dich unerwartet weiterleiten. Überprüfe den untenstehenden Link, bevor du fortfährst:\n\n%1$s\n\nWillst du weitermachen?</string>
     <string name="messageLinkHandling_dialog_positive">Ja, Link öffnen</string>
