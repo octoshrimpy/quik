@@ -258,7 +258,7 @@
     <string name="settings_delay_duration_hint">Dauer eingeben (in Sekunden)</string>
     <string name="blocking_title">Blockieren</string>
     <string name="blocking_drop_title">Nachrichten verwerfen</string>
-    <string name="blocking_drop_summary">Eingehende Nachrichten von blockierten Absendern verwefen anstatt sie auszublenden</string>
+    <string name="blocking_drop_summary">Eingehende Nachrichten von blockierten Absendern verwefen, anstatt sie auszublenden</string>
     <string name="blocking_conversations">Blockierte Unterhaltungen</string>
     <string name="blocking_manager_title">Blockiermanager</string>
     <string name="blocking_manager_qksms_summary">In QUIK integrierte Blockierfunktion</string>
@@ -268,13 +268,13 @@
     <string name="blocking_manager_copy_title">Blockierte Nummer(n) kopieren</string>
     <string name="blocking_manager_copy_summary">Zu %s wechseln und zu den existierenden blockierten Nummern kopieren</string>
     <string name="blocked_numbers_title">Blockierte Nummern</string>
-    <string name="blocked_numbers_empty">Ihre blockierte Nummern werden hier angezeigt</string>
+    <string name="blocked_numbers_empty">Deine blockierte Nummern werden hier angezeigt</string>
     <string name="blocked_numbers_add_cd">Eine neue Nummer blockieren</string>
     <string name="blocked_numbers_dialog_title">Blockiere Texte von</string>
     <string name="blocked_numbers_dialog_hint">Telefonnummer</string>
     <string name="blocked_numbers_dialog_block">Blockieren</string>
     <string name="blocked_messages_title">Blockierte Nachrichten</string>
-    <string name="blocked_messages_empty">Ihre blockierte Nachrichten werden hier angezeigt</string>
+    <string name="blocked_messages_empty">Deine blockierte Nachrichten werden hier angezeigt</string>
     <string name="blocking_block_title">Blockieren</string>
     <string name="blocking_unblock_title">Freigeben</string>
     <plurals name="blocking_block_external">
