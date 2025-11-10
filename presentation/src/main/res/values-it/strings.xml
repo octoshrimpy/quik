@@ -453,7 +453,7 @@
     <string name="main_menu_rename_conversation">Rinomina conversazione</string>
     <plurals name="toast_unarchived">
         <item quantity="one">Conversazione non archiviata</item>
-        <item quantity="many"></item>
+        <item quantity="many"/>
         <item quantity="other">%d conversazioni non archiviate</item>
     </plurals>
     <string name="compose_attach_file_cd">Allega qualsiasi file</string>
@@ -469,4 +469,9 @@
     <string name="compose_message_item">Elemento del messaggio</string>
     <string name="speak_unseen_messages">Pronuncia i messaggi non visualizzati</string>
     <string name="settings_diable_screenshots_summary">Impedisci al tuo sistema operativo e ad altre app di acquisire screenshot dell’app.</string>
+    <string name="message_content_filters_title">Filtri dei contenuti dei messaggi</string>
+    <string name="message_content_filters_empty">I tuoi filtri dei contenuti dei messaggi verranno visualizzati qui</string>
+    <string name="message_content_filters_add_cd">Crea un nuovo filtro</string>
+    <string name="stt_toast_extra_prompt">Pronuncia il tuo messaggio</string>
+    <string name="message_content_filters_dialog_title">Elimina i messaggi corrispondenti</string>
 </resources>
