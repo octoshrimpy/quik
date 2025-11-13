@@ -97,8 +97,9 @@ jobs:
             exit 1
           fi
 
-          echo "$KEYSTORE_B64" | base64 -d > my-release-key.keystore
-          chmod 600 my-release-key.keystore
+          mkdir -p presentation
+          echo "$KEYSTORE_B64" | base64 -d > presentation/my-release-key.keystore
+          chmod 600 presentation/my-release-key.keystore
 
           {
             echo "keystore_password=$KEYSTORE_PASSWORD"
@@ -124,12 +125,6 @@ jobs:
           out = pathlib.Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(f"version_code={code_match.group(1)}\nversion_name={name_match.group(1)}\ntag_name=v{name_match.group(1)}\n")
           PY
-      
-      - name: Decode Android keystore
-        run: |
-          mkdir -p presentation
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > presentation/my-release-key.keystore
-
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -248,4 +243,5 @@ jobs:
 
       - name: Cleanup signing key
         if: always()
-        run: rm -f my-release-key.keystore
+        run: rm -f presentation/my-release-key.keystore
+
