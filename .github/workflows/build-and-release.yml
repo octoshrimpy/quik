@@ -124,6 +124,12 @@ jobs:
           out = pathlib.Path(os.environ["GITHUB_OUTPUT"])
           out.write_text(f"version_code={code_match.group(1)}\nversion_name={name_match.group(1)}\ntag_name=v{name_match.group(1)}\n")
           PY
+      
+      - name: Decode Android keystore
+        run: |
+          mkdir -p presentation
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > presentation/my-release-key.keystore
+
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
