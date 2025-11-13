@@ -7,6 +7,7 @@ on:
         description: Branch or tag to build from
         required: false
         default: master
+        type: string
       publish_release:
         description: Publish the GitHub Release immediately (disable to keep it as a draft)
         type: boolean
