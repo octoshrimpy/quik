@@ -98,21 +98,37 @@ class Navigator @Inject constructor(
         startActivity(intent)
     }
 
-    fun showCompose(body: String? = null, attachments: List<Uri>? = null, mode: String? = null) {
+    /**
+     * Launch a new Compose screen with optional text, attachments, and prefilled recipient addresses.
+     * Used by "Duplicate Conversation" feature.
+     */
+    fun showCompose(
+        body: String? = null,
+        attachments: List<Uri>? = null,
+        addresses: List<String>? = null,
+        threadId: Long = 0L,
+        mode: String? = null
+    ) {
         val intent = Intent(context, ComposeActivity::class.java)
-        intent.putExtra(Intent.EXTRA_TEXT, body)
-        intent.putExtra("mode", mode)
 
-        attachments
-            ?.takeIf { it.isNotEmpty() }
-            ?.mapNotNull {
-                if (it.resourceExists(context)) it
-                else null
-            }
-            ?.let { intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(it)) }
+        intent.putExtra("threadId", threadId)
+        intent.putExtra("mode", mode ?: "")
+
+        if (!addresses.isNullOrEmpty()) {
+            intent.putStringArrayListExtra("addresses", ArrayList(addresses))
+        }
+
+        if (body != null) {
+            intent.putExtra(Intent.EXTRA_TEXT, body)
+        }
+
+        attachments?.let {
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(it))
+        }
 
         startActivity(intent)
     }
+
 
     fun showCompose(scheduledMessage: ScheduledMessage) {
         val scheduledThreadId = TelephonyCompat.getOrCreateThreadId(

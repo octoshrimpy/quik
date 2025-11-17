@@ -104,6 +104,7 @@ class ComposeViewModel @Inject constructor(
     @Named("subscriptionId") val sharedSubscriptionId: Int,
     @Named("sendAsGroup") val sharedSendAsGroup: Boolean?,
     @Named("scheduleDateTime") val sharedScheduledDateTime: Long,
+
     private val contactRepo: ContactRepository,
     private val context: Context,
     private val activeConversationManager: ActiveConversationManager,
@@ -124,11 +125,14 @@ class ComposeViewModel @Inject constructor(
     private val sendMessage: SendMessage,
     private val subscriptionManager: SubscriptionManagerCompat,
     private val saveImage: SaveImage,
-) : QkViewModel<ComposeView, ComposeState>(ComposeState(
+) : QkViewModel<ComposeView, ComposeState>(
+    ComposeState(
         editingMode = threadId == 0L && addresses.isEmpty(),
         threadId = threadId,
-        query = query)
+        query = query
+    )
 ) {
+
     private val chipsReducer: Subject<(List<Recipient>) -> List<Recipient>> = PublishSubject.create()
     private val conversation: Subject<Conversation> = BehaviorSubject.create()
     private val messages: Subject<List<Message>> = BehaviorSubject.create()
@@ -141,8 +145,10 @@ class ComposeViewModel @Inject constructor(
 
     private var bluetoothMicManager: BluetoothMicManager? = null
 
+
     init {
-        // set shared subscription into state if set
+
+            // set shared subscription into state if set
         subscriptionManager.activeSubscriptionInfoList.firstOrNull {
             it.subscriptionId == sharedSubscriptionId
         }?.let { newState { copy(subscription = it)} }
@@ -293,6 +299,26 @@ class ComposeViewModel @Inject constructor(
         super.bindView(view)
 
         val sharing = (sharedText.isNotEmpty() || sharedAttachments.isNotEmpty())
+
+        // Prompt once on entry if this thread can't be replied to via SMS/MMS
+        disposables += state
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { Triple(it.validRecipientNumbers, it.editingMode, it.threadId) }
+            .distinctUntilChanged()
+            .filter { (valid, editing, threadId) ->
+                valid == 0 && !editing && threadId != 0L
+            }
+            .take(1)
+            .withLatestFrom(conversation) { _, convo -> convo }
+            .autoDisposable(view.scope())    // ★ REQUIRED ★
+            .subscribe { convo ->
+                Timber.d("DuplicatePrompt -> thread=${convo.id}")
+                view.showDuplicateConversationDialog(convo.id, convo.recipients)
+            }
+
+
+
+
         if (shouldShowContacts) {
             shouldShowContacts = false
             view.showContacts(sharing, selectedChips.blockingFirst())
@@ -1103,6 +1129,16 @@ class ComposeViewModel @Inject constructor(
                 conversation,
                 selectedChips
             ) { _, body, state, conversation, chips ->
+
+                // to check if the user has agreed to duplicate the message or not
+                if (state.validRecipientNumbers == 0) {
+                    // we’re in a group we can’t reply to → show dialog instead of sending
+                    view.showDuplicateConversationDialog(conversation.id,
+                        conversation.recipients)
+                    return@withLatestFrom
+
+                }
+
                 if (!permissionManager.isDefaultSms()) {
                     view.requestDefaultSms()
                     return@withLatestFrom
@@ -1246,5 +1282,21 @@ class ComposeViewModel @Inject constructor(
                 }
             }
     }
+
+    // ============================================================
+    // 🔹 Duplicate group conversation
+    // ============================================================
+    fun onDuplicateConfirmed(recipients: List<Recipient>) {
+        val addresses = recipients.map { it.address }
+
+        Timber.d("onDuplicateConfirmed → addresses=%s", addresses)
+
+        // Just open a normal compose with these recipients.
+        // No special "duplicate mode", no threadId.
+        navigator.showCompose(
+            addresses = addresses
+        )
+    }
+
 
 }

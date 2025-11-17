@@ -358,6 +358,11 @@ class ConversationRepositoryImpl @Inject constructor(
             }
         }
 
+    override fun getOrCreateThreadId(addresses: List<String>): Long {
+        return TelephonyCompat.getOrCreateThreadId(context, addresses.toSet())
+    }
+
+
     override fun updateConversations(vararg threadIds: Long) =
         Realm.getDefaultInstance().use { realm ->
             realm.refresh()
