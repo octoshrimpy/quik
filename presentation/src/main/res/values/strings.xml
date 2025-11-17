@@ -581,6 +581,7 @@
         <item>LOL</item>
         <item>That\'s okay</item>
     </string-array>
+
     <string name="speak_no_messages">No Messages</string>
     <string name="speak_unseen_messages">Speak unseen messages</string>
     <string name="messageLinkHandling_dialog_title">External Link Warning</string>
@@ -591,4 +592,13 @@
     <string name="stt_toast_extra_prompt">Speak your message</string>
 
     <string name="messages_text_share_file_error">Oops! Something went wrong while sharing</string>
+
+    <string name="dialog_duplicate_group_title">Duplicate Conversation</string>
+    <string name="dialog_duplicate_group_message">
+            This conversation cannot be replied to via SMS.
+            Would you like to duplicate this group with the same participants (%1$s)?
+    </string>
+    <string name="dialog_duplicate_group_confirm">Duplicate</string>
+    <string name="dialog_duplicate_group_cancel">Cancel</string>
+
 </resources>

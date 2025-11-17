@@ -113,4 +113,6 @@ interface ComposeView : QkView<ComposeState> {
     fun showClearCurrentMessageDialog()
     fun startSpeechRecognition()
     fun focusMessage()
+    fun showDuplicateConversationDialog(threadId: Long, recipients: List<Recipient>)
+
 }
