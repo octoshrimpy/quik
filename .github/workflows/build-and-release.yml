@@ -87,7 +87,7 @@ jobs:
         run: |
           set -euo pipefail
           missing=0
-          for var in KEYSTORE_B64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+          for var in ANDROID_KEYSTORE_B64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
             if [[ -z "${!var:-}" ]]; then
               echo "::error title=Missing secret::${var} is not set."
               missing=1
@@ -98,13 +98,13 @@ jobs:
           fi
 
           mkdir -p presentation
-          echo "$KEYSTORE_B64" | base64 -d > presentation/my-release-key.keystore
+          echo "$ANDROID_KEYSTORE_B64" | base64 -d > presentation/my-release-key.keystore
           chmod 600 presentation/my-release-key.keystore
 
           {
-            echo "keystore_password=$KEYSTORE_PASSWORD"
-            echo "key_alias=$KEY_ALIAS"
-            echo "key_password=$KEY_PASSWORD"
+            echo "keystore_password=$ANDROID_KEYSTORE_PASSWORD"
+            echo "key_alias=$ANDROID_KEY_ALIAS"
+            echo "key_password=$ANDROID_KEY_PASSWORD"
           } >> "$GITHUB_ENV"
 
       - name: Capture version metadata
