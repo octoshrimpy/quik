@@ -212,6 +212,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     private var cameraDestination: Uri? = null
 
+    companion object {
+        const val EXTRA_THREAD_ID = "thread_id"
+    }
+
     private fun getSeekBarUpdater(): ObservableSubscribeProxy<Long> {
         return Observable.interval(500, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.single())
@@ -447,6 +451,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         QkMediaPlayer.reset()
 
         seekBarUpdater?.dispose()
+
     }
 
 
