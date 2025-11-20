@@ -73,4 +73,7 @@ interface ConversationRepository {
 
     // NEW CLEAN METHOD — NO context reference here
     fun getOrCreateThreadId(addresses: List<String>): Long
+
+    // 🆕 New helper for duplication / shadow RCS
+    fun duplicateOrShadowConversation(addresses: List<String>, originalThreadId: Long?): Conversation
 }

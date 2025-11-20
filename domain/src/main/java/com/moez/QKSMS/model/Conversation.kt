@@ -25,18 +25,28 @@ import io.realm.annotations.PrimaryKey
 
 open class Conversation(
     @PrimaryKey var id: Long = 0,
-    @Index var archived: Boolean = false,
-    @Index var blocked: Boolean = false,
+//    @Index var archived: Boolean = false,
+//    @Index var blocked: Boolean = false,
     @Index var pinned: Boolean = false,
     var recipients: RealmList<Recipient> = RealmList(),
     var lastMessage: Message? = null,
     var draft: String = "",
     var draftDate: Long = 0,
-
+//    var date: Long = 0,
     var blockingClient: Int? = null,
     var blockReason: String? = null,
+    var read: Boolean = false,
+    var archived: Boolean = false,
+    var blocked: Boolean = false,
+    var mute: Boolean = false,
+    var participants: RealmList<String> = RealmList(),
+    // 🆕 Add these fields for shadow groups
+    var isShadowOfRcs: Boolean = false,
+    var originalThreadId: Long? = null,
+    var metadata: String? = null,
 
     var name: String = "" // For group chats, the user is allowed to set a custom title for the conversation
+
 ) : RealmObject() {
 
     val date: Long get() = lastMessage?.date ?: if (draft.isNotEmpty()) draftDate else 0

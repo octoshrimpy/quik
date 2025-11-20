@@ -44,6 +44,7 @@ import dev.octoshrimpy.quik.feature.settings.SettingsActivity
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.manager.PermissionManager
+import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.ScheduledMessage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -364,5 +365,21 @@ class Navigator @Inject constructor(
             startActivity(intent)
         }
     }
+
+    fun openShadowConversation(conversation: Conversation) {
+        val intent = Intent(context, ComposeActivity::class.java).apply {
+            putExtra("conversation_id", conversation.id)
+            putExtra("is_shadow_of_rcs", true)
+            // keep your existing extras here
+
+            // 🔑 If we're not using an Activity context, we MUST open in a new task
+            if (context !is Activity) {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        }
+
+        context.startActivity(intent)
+    }
+
 
 }
