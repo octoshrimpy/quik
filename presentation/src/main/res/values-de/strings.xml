@@ -265,7 +265,7 @@
     <string name="blocking_manager_call_blocker_summary">Spam-Nachrichten und Nummern &amp; unbekannte Anrufe mit Sperrliste &amp; Zeitplan blockieren</string>
     <string name="blocking_manager_call_control_summary">Filtere deine Anrufe und Nachrichten automatisch an einem praktischen Ort! Mit Community IQ™ kannst du unerwünschte Nachrichten von bekannten Community-Spammern verhindern</string>
     <string name="blocking_manager_sia_summary">Nachrichten von unerwünschten Nummern automatisch mit Hilfe der App \"Should I Answer?\" filtern</string>
-    <string name="blocking_manager_copy_title">Blockierte Nummer(n) kopieren</string>
+    <string name="blocking_manager_copy_title">Blockierte Nummern kopieren</string>
     <string name="blocking_manager_copy_summary">Zu %s wechseln und zu den existierenden blockierten Nummern kopieren</string>
     <string name="blocked_numbers_title">Blockierte Nummern</string>
     <string name="blocked_numbers_empty">Deine blockierte Nummern werden hier angezeigt</string>
