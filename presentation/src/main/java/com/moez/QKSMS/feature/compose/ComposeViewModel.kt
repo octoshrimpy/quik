@@ -87,6 +87,12 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
+import io.realm.Realm
+import io.reactivex.rxkotlin.withLatestFrom
+//import io.reactivex.android.schedulers.AndroidSchedulers
+//import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -288,15 +294,68 @@ class ComposeViewModel @Inject constructor(
             newState { copy(scheduling = true) }
     }
 
+    private fun checkIfDuplicated(threadId: Long): Boolean = true
+
     @SuppressLint("StringFormatInvalid")
     override fun bindView(view: ComposeView) {
         super.bindView(view)
 
         val sharing = (sharedText.isNotEmpty() || sharedAttachments.isNotEmpty())
+        // Prompt once on entry if this thread can't be replied to via SMS/MMS
+        disposables += state
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { Triple(it.validRecipientNumbers, it.editingMode, it.threadId) }
+            .distinctUntilChanged()
+            .filter { (valid, editing, threadId) ->
+                valid == 0 && !editing && threadId != 0L
+            }
+            .take(1)
+            .withLatestFrom(conversation) { _, convo -> convo }
+            .autoDisposable(view.scope())    // ★ REQUIRED ★
+            .subscribe { convo ->
+                Timber.d("DuplicatePrompt -> thread=${convo.id}")
+                view.showDuplicateConversationDialog(convo.id, convo.recipients)
+            }
+
+        // NEW: Check if conversation is duplicated when loading
+        disposables += conversation
+            .take(1)
+            .subscribe { conv ->
+                val isDuplicated = checkIfDuplicated(conv.id)
+                newState {
+                    copy(
+                        isDuplicatedConversation = isDuplicated,
+                        isSelectionMode = if (!isDuplicated) false else isSelectionMode,
+                        selectedTexts = if (!isDuplicated) emptySet() else selectedTexts
+                    )
+                }
+            }
+
         if (shouldShowContacts) {
             shouldShowContacts = false
             view.showContacts(sharing, selectedChips.blockingFirst())
         }
+
+        // ADD: Handle "Select All Messages" menu item (around line 400)
+        view.optionsItemIntent
+            .filter { it == R.id.select_all_messages }
+            .autoDisposable(view.scope())
+            .subscribe { view.toggleSelectAll() }
+
+        // ADD: Handle "Clear Selection" menu item
+        view.optionsItemIntent
+            .filter { it == R.id.clear_selection }
+            .autoDisposable(view.scope())
+            .subscribe { view.clearSelection() }
+
+        // ADD: Handle "Export Messages" menu item
+        view.optionsItemIntent
+            .filter { it == R.id.export_messages }
+            .withLatestFrom(state) { _, state ->
+                exportMessages(state.selectedTexts)
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         view.chipsSelectedIntent
                 .withLatestFrom(selectedChips) { hashmap, chips ->
@@ -1245,6 +1304,69 @@ class ComposeViewModel @Inject constructor(
                     )
                 }
             }
+        // Handle message selection changes from adapter
+        view.messageSelectedIntent
+            .withLatestFrom(state) { messageId, state ->
+                val newSelection = state.selectedTexts.toMutableSet()
+                if (newSelection.contains(messageId)) {
+                    newSelection.remove(messageId)
+                } else {
+                    newSelection.add(messageId)
+                }
+                newState {
+                    copy(
+                        selectedTexts = newSelection,
+                        isSelectionMode = newSelection.isNotEmpty()
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle select all messages
+        view.selectAllMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                val threadId = state.threadId
+                val messages = messageRepo.getMessagesSync(threadId)
+                val allMessageIds = messages.map { it.id }.toSet()
+                newState {
+                    copy(
+                        selectedTexts = allMessageIds,
+                        isSelectionMode = true
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle clear selection
+        view.clearMessageSelectionIntent
+            .autoDisposable(view.scope())
+            .subscribe {
+                newState {
+                    copy(
+                        selectedTexts = emptySet(),
+                        isSelectionMode = false
+                    )
+                }
+            }
+
+        // Handle export selected messages
+        view.exportSelectedMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                exportMessages(state.selectedTexts)
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+    }
+
+    private fun exportMessages(messageIds: Set<Long>) {
+        // Placeholder for HTTP export - will implement next
+        Timber.d("Selected messages for export: $messageIds")
+
+        // Get actual message objects
+        val messages = messageIds.mapNotNull { messageRepo.getMessage(it) }
+        Timber.d("Found ${messages.size} messages to export")
     }
 
 }

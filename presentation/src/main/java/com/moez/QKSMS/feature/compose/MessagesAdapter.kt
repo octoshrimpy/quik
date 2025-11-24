@@ -20,6 +20,7 @@ package dev.octoshrimpy.quik.feature.compose
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
@@ -69,8 +70,6 @@ import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.message_list_item_in.*
 import kotlinx.android.synthetic.main.message_list_item_in.body
@@ -88,6 +87,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Provider
+import io.reactivex.subjects.Subject
+import io.reactivex.subjects.PublishSubject
 
 class MessagesAdapter @Inject constructor(
     subscriptionManager: SubscriptionManagerCompat,
@@ -146,6 +147,57 @@ class MessagesAdapter @Inject constructor(
 
     private val audioState = AudioState()
 
+    private val messageSelection = mutableSetOf<Long>()
+    private var messageSelectionMode = false
+    val messageSelectionChanges: Subject<Set<Long>> = PublishSubject.create()
+
+    fun toggleMessageSelection(messageId: Long, longPress: Boolean = false): Boolean {
+        // If long press and not in selection mode, enter selection mode
+        if (longPress && !messageSelectionMode) {
+            messageSelectionMode = true
+            messageSelection.clear()
+        }
+
+        // Toggle selection (ADD/REMOVE)
+        if (messageSelection.contains(messageId)) {
+            messageSelection.remove(messageId)  // ✅ DESELECT if already selected
+        } else {
+            messageSelection.add(messageId)     // ✅ SELECT if not selected
+        }
+
+        // Exit selection mode if no items selected
+        if (messageSelection.isEmpty()) {
+            messageSelectionMode = false
+        }
+
+        messageSelectionChanges.onNext(messageSelection.toSet())
+        notifyDataSetChanged()  // ✅ Make sure this is here to update UI
+        return messageSelectionMode
+    }
+
+    fun selectAllMessages() {
+        messageSelectionMode = true
+        messageSelection.clear()
+        data?.second?.forEach { message ->
+            messageSelection.add(message.id)
+        }
+        messageSelectionChanges.onNext(messageSelection.toSet())
+        notifyDataSetChanged()
+    }
+
+    fun clearMessageSelection() {
+        messageSelectionMode = false
+        messageSelection.clear()
+        messageSelectionChanges.onNext(emptySet())
+        notifyDataSetChanged()
+    }
+
+    fun isMessageSelected(messageId: Long): Boolean = messageSelection.contains(messageId)
+
+    fun isInMessageSelectionMode(): Boolean = messageSelectionMode
+
+    fun getSelectedMessageIds(): Set<Long> = messageSelection.toSet()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         // Use the parent's context to inflate the layout, otherwise link clicks will crash the app
         val inflater = LayoutInflater.from(parent.context)
@@ -167,20 +219,31 @@ class MessagesAdapter @Inject constructor(
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
-                getItem(adapterPosition)?.let {
-                    when (toggleSelection(it.id, false)) {
-                        true -> view.isActivated = isSelected(it.id)
-                        false -> {
-                            expanded[it.id] = view.status.visibility != View.VISIBLE
-                            notifyItemChanged(adapterPosition)
+                getItem(adapterPosition)?.let { message ->
+                    // Check if we're in selection mode
+                    if (isInMessageSelectionMode()) {
+                        toggleMessageSelection(message.id)
+                        view.isActivated = isMessageSelected(message.id)
+                        notifyDataSetChanged()
+                    } else {
+                        // Normal click behavior
+                        when (toggleSelection(message.id, false)) {
+                            true -> view.isActivated = isSelected(message.id)
+                            false -> {
+                                expanded[message.id] = view.status.visibility != View.VISIBLE
+                                notifyItemChanged(adapterPosition)
+                            }
                         }
                     }
                 }
             }
+
             view.setOnLongClickListener {
-                getItem(adapterPosition)?.let {
-                    toggleSelection(it.id)
-                    view.isActivated = isSelected(it.id)
+                getItem(adapterPosition)?.let { message ->
+                    // Long press enters selection mode
+                    toggleMessageSelection(message.id, longPress = true)
+                    view.isActivated = isMessageSelected(message.id)
+                    notifyDataSetChanged()
                 }
                 true
             }
@@ -198,7 +261,16 @@ class MessagesAdapter @Inject constructor(
         }
 
         // Update the selected state
-        holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
+        holder.containerView.isActivated = isSelected(message.id) ||
+                highlight == message.id ||
+                isMessageSelected(message.id)
+        if (isMessageSelected(message.id)) {
+            // 30% opacity (subtle but visible)
+            val selectionColor = theme.theme and 0x00FFFFFF or 0x4D000000
+            holder.containerView.setBackgroundColor(selectionColor)
+        } else {
+            holder.containerView.setBackgroundColor(Color.TRANSPARENT)
+        }
 
         // Bind the cancelFrame (cancel button) view
         holder.cancelFrame?.let {

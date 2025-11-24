@@ -21,6 +21,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/select_all_messages"
+        android:title="@string/menu_select_all_messages"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/clear_selection"
+        android:title="@string/menu_clear_selection"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/export_messages"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="@string/menu_export_messages"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/add"
         android:icon="@drawable/ic_person_add_black_24dp"
         android:title="@string/menu_add_person"
