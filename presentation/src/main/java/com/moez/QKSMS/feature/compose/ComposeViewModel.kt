@@ -52,6 +52,7 @@ import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
 import dev.octoshrimpy.quik.extensions.asObservable
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.extensions.isSmil
+import dev.octoshrimpy.quik.extensions.isText
 import dev.octoshrimpy.quik.extensions.isVideo
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.interactor.AddScheduledMessage
@@ -90,9 +91,10 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.realm.Realm
+import io.reactivex.rxkotlin.withLatestFrom
 //import io.reactivex.android.schedulers.AndroidSchedulers
 //import io.reactivex.schedulers.Schedulers
-
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -346,6 +348,8 @@ class ComposeViewModel @Inject constructor(
             newState { copy(scheduling = true) }
     }
 
+    private fun checkIfDuplicated(threadId: Long): Boolean = true
+
     @SuppressLint("StringFormatInvalid")
     override fun bindView(view: ComposeView) {
         super.bindView(view)
@@ -368,13 +372,46 @@ class ComposeViewModel @Inject constructor(
                 view.showDuplicateConversationDialog(convo.id, convo.recipients)
             }
 
-
+        // NEW: Check if conversation is duplicated when loading
+        disposables += conversation
+            .take(1)
+            .subscribe { conv ->
+                val isDuplicated = checkIfDuplicated(conv.id)
+                newState {
+                    copy(
+                        isDuplicatedConversation = isDuplicated,
+                        isSelectionMode = if (!isDuplicated) false else isSelectionMode,
+                        selectedTexts = if (!isDuplicated) emptySet() else selectedTexts
+                    )
+                }
+            }
 
 
         if (shouldShowContacts) {
             shouldShowContacts = false
             view.showContacts(sharing, selectedChips.blockingFirst())
         }
+
+        // ADD: Handle "Select All Messages" menu item (around line 400)
+        view.optionsItemIntent
+            .filter { it == R.id.select_all_messages }
+            .autoDisposable(view.scope())
+            .subscribe { view.toggleSelectAll() }
+
+        // ADD: Handle "Clear Selection" menu item
+        view.optionsItemIntent
+            .filter { it == R.id.clear_selection }
+            .autoDisposable(view.scope())
+            .subscribe { view.clearSelection() }
+
+        // ADD: Handle "Export Messages" menu item
+        view.optionsItemIntent
+            .filter { it == R.id.export_messages }
+            .withLatestFrom(state) { _, state ->
+                exportMessages(state.selectedTexts)
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
 
         view.chipsSelectedIntent
                 .withLatestFrom(selectedChips) { hashmap, chips ->
@@ -1333,6 +1370,168 @@ class ComposeViewModel @Inject constructor(
                     )
                 }
             }
+
+        // Handle message selection changes from adapter
+        view.messageSelectedIntent
+            .withLatestFrom(state) { messageId, state ->
+                val newSelection = state.selectedTexts.toMutableSet()
+                if (newSelection.contains(messageId)) {
+                    newSelection.remove(messageId)
+                } else {
+                    newSelection.add(messageId)
+                }
+                newState {
+                    copy(
+                        selectedTexts = newSelection,
+                        isSelectionMode = newSelection.isNotEmpty()
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle select all messages
+        view.selectAllMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                val threadId = state.threadId
+                val messages = messageRepo.getMessagesSync(threadId)
+                val allMessageIds = messages.map { it.id }.toSet()
+                newState {
+                    copy(
+                        selectedTexts = allMessageIds,
+                        isSelectionMode = true
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle clear selection
+        view.clearMessageSelectionIntent
+            .autoDisposable(view.scope())
+            .subscribe {
+                newState {
+                    copy(
+                        selectedTexts = emptySet(),
+                        isSelectionMode = false
+                    )
+                }
+            }
+
+        // Handle export selected messages
+        view.exportSelectedMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                exportMessages(state.selectedTexts)
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle message selection changes from adapter
+        view.messageSelectedIntent
+            .withLatestFrom(state) { messageId, state ->
+                val newSelection = state.selectedTexts.toMutableSet()
+                if (newSelection.contains(messageId)) {
+                    newSelection.remove(messageId)
+                } else {
+                    newSelection.add(messageId)
+                }
+                newState {
+                    copy(
+                        selectedTexts = newSelection,
+                        isSelectionMode = newSelection.isNotEmpty()
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle select all messages
+        view.selectAllMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                val threadId = state.threadId
+                val messages = messageRepo.getMessagesSync(threadId)
+                val allMessageIds = messages.map { it.id }.toSet()
+                newState {
+                    copy(
+                        selectedTexts = allMessageIds,
+                        isSelectionMode = true
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle clear selection
+        view.clearMessageSelectionIntent
+            .autoDisposable(view.scope())
+            .subscribe {
+                newState {
+                    copy(
+                        selectedTexts = emptySet(),
+                        isSelectionMode = false
+                    )
+                }
+            }
+
+        // Handle export selected messages
+        view.exportSelectedMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                exportMessages(state.selectedTexts)
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+    }
+
+    private fun exportMessages(messageIds: Set<Long>) {
+        Timber.d("=== Starting export of ${messageIds.size} messages ===")
+
+        // Get actual message objects
+        val messages = messageIds
+            .mapNotNull { messageRepo.getMessage(it) }
+            .sortedBy { it.date }  // Sort by date (oldest first)
+
+        Timber.d("Found ${messages.size} messages to export")
+
+        // Log each message's contents
+        messages.forEachIndexed { index, message ->
+            Timber.d("--- Message ${index + 1} of ${messages.size} ---")
+            Timber.d("ID: ${message.id}")
+            Timber.d("Thread ID: ${message.threadId}")
+            Timber.d("Address: ${message.address}")
+            Timber.d("Type: ${if (message.isMe()) "OUTGOING" else "INCOMING"}")
+
+            // Get message text content
+            val messageText = message.getText()
+            Timber.d("Text: ${if (messageText.isBlank()) "[NO TEXT]" else messageText}")
+
+            // Get subject if exists
+            val subject = message.getCleansedSubject()
+            if (subject.isNotBlank()) {
+                Timber.d("Subject: $subject")
+            }
+
+            // Check for attachments
+            if (message.parts.isNotEmpty()) {
+                Timber.d("Parts: ${message.parts.size}")
+                message.parts.forEachIndexed { partIndex, part ->
+                    if (!part.isSmil() && !part.isText()) {
+                        Timber.d("  Part ${partIndex + 1}: ${part.type} (${part.name ?: "unnamed"})")
+                    }
+                }
+            }
+
+            // Message status
+            when {
+                message.isSending() -> Timber.d("Status: SENDING")
+                message.isDelivered() -> Timber.d("Status: DELIVERED")
+                message.isFailedMessage() -> Timber.d("Status: FAILED")
+                else -> Timber.d("Status: RECEIVED")
+            }
+
+            Timber.d("") // Blank line for readability
+        }
+
+        Timber.d("=== Export complete ===")
     }
 
     // ============================================================
@@ -1381,10 +1580,4 @@ class ComposeViewModel @Inject constructor(
 
         backgroundDisposables.add(disposable)
     }
-
-
-
-
-
-
 }

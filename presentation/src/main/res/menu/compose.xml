@@ -116,4 +116,20 @@
         android:visible="false"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/select_all_messages"
+        android:title="@string/menu_select_all_messages"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/clear_selection"
+        android:title="@string/menu_clear_selection"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/export_messages"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="@string/menu_export_messages"
+        app:showAsAction="ifRoom" />
+
 </menu>

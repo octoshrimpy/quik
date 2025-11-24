@@ -205,6 +205,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val recordAudioMsgRecordVisible: Subject<Boolean> = PublishSubject.create()
     override val recordAudioChronometer: Subject<Boolean> = PublishSubject.create()
     override val recordAudioRecord: Subject<MicInputCloudView.ViewState> = PublishSubject.create()
+    override val messageSelectedIntent: Subject<Long> = PublishSubject.create()
+    override val selectAllMessagesIntent: Subject<Unit> = PublishSubject.create()
+    override val clearMessageSelectionIntent: Subject<Unit> = PublishSubject.create()
+    override val exportSelectedMessagesIntent: Subject<Unit> = PublishSubject.create()
 
     private var seekBarUpdater: Disposable? = null
 
@@ -240,6 +244,17 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         viewModel.bindView(this)
 
+        // Connect adapter selection changes to clear selection when empty
+        messageAdapter.messageSelectionChanges
+            .autoDisposable(scope())
+            .subscribe { selectedIds ->
+                if (selectedIds.isEmpty()) {
+                    clearMessageSelectionIntent.onNext(Unit)
+                } else {
+                    messageSelectedIntent.onNext(selectedIds.lastOrNull() ?: 0L)
+                }
+            }
+
         contentView.layoutTransition = LayoutTransition().apply {
             disableTransitionType(LayoutTransition.CHANGING)
         }
@@ -250,6 +265,15 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
             messageAdapter.autoScrollToStart(messageList)
             messageAdapter.emptyView = messagesEmpty
+
+            messageAdapter.messageSelectionChanges
+                .autoDisposable(scope())
+                .subscribe { selectedIds ->
+                    // Update state when selection changes
+                    if (selectedIds.isNotEmpty()) {
+                        messageSelectedIntent.onNext(selectedIds.last())
+                    }
+                }
 
             messageList.setHasFixedSize(true)
             messageList.adapter = messageAdapter
@@ -590,6 +614,26 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 speechToTextFrame.x = (contentView.x + (xPercent * contentView.width))
                 speechToTextFrame.y = (contentView.y + (yPercent * contentView.height))
             }
+        }
+
+        // Update menu based on selection
+        toolbar.menu.apply {
+            findItem(R.id.select_all_messages)?.isVisible = state.isSelectionMode
+            findItem(R.id.clear_selection)?.isVisible = state.selectedTexts.isNotEmpty()
+            findItem(R.id.export_messages)?.isVisible = state.selectedTexts.isNotEmpty()
+        }
+
+        // Show selection count in toolbar
+        if (state.selectedTexts.isNotEmpty()) {
+            title = getString(R.string.messages_selected, state.selectedTexts.size)
+        }
+
+        // Update title based on selection state
+        title = when {
+            state.selectedTexts.isNotEmpty() ->
+                getString(R.string.messages_selected, state.selectedTexts.size)
+            state.query.isNotEmpty() -> state.query
+            else -> state.conversationtitle
         }
     }
 
