@@ -1372,4 +1372,69 @@ class ComposeViewModel @Inject constructor(
         Timber.d("Found ${messages.size} messages to export")
     }
 
+        // Handle message selection changes from adapter
+        view.messageSelectedIntent
+            .withLatestFrom(state) { messageId, state ->
+                val newSelection = state.selectedTexts.toMutableSet()
+                if (newSelection.contains(messageId)) {
+                    newSelection.remove(messageId)
+                } else {
+                    newSelection.add(messageId)
+                }
+                newState {
+                    copy(
+                        selectedTexts = newSelection,
+                        isSelectionMode = newSelection.isNotEmpty()
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle select all messages
+        view.selectAllMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                val threadId = state.threadId
+                val messages = messageRepo.getMessagesSync(threadId)
+                val allMessageIds = messages.map { it.id }.toSet()
+                newState {
+                    copy(
+                        selectedTexts = allMessageIds,
+                        isSelectionMode = true
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle clear selection
+        view.clearMessageSelectionIntent
+            .autoDisposable(view.scope())
+            .subscribe {
+                newState {
+                    copy(
+                        selectedTexts = emptySet(),
+                        isSelectionMode = false
+                    )
+                }
+            }
+
+        // Handle export selected messages
+        view.exportSelectedMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                exportMessages(state.selectedTexts)
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+    }
+
+    private fun exportMessages(messageIds: Set<Long>) {
+        // Placeholder for HTTP export - will implement next
+        Timber.d("Selected messages for export: $messageIds")
+
+        // Get actual message objects
+        val messages = messageIds.mapNotNull { messageRepo.getMessage(it) }
+        Timber.d("Found ${messages.size} messages to export")
+    }
+
 }
