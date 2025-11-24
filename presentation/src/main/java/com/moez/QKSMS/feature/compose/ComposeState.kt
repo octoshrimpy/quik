@@ -51,4 +51,7 @@ data class ComposeState(
     val validRecipientNumbers: Int = 1,
     val audioMsgRecording: Boolean = false,
     val saveDraft: Boolean = true,
+    val selectedTexts: Set<Long> = emptySet(),
+    val isSelectionMode: Boolean = false,
+    val isDuplicatedConversation: Boolean = false
 )
