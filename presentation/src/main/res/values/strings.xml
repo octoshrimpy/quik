@@ -581,6 +581,7 @@
         <item>LOL</item>
         <item>That\'s okay</item>
     </string-array>
+
     <string name="speak_no_messages">No Messages</string>
     <string name="speak_unseen_messages">Speak unseen messages</string>
     <string name="messageLinkHandling_dialog_title">External Link Warning</string>

@@ -41,16 +41,19 @@ class ComposeActivityModule {
 
     @Provides
     @Named("addresses")
-    fun provideAddresses(activity: ComposeActivity): List<String> =
-        if ((activity.intent?.data?.scheme == "sms") || (activity.intent?.data?.scheme == "smsto"))
-            activity.intent?.data
-                ?.schemeSpecificPart
-                ?.removeSuffix("?${activity.intent?.data?.query}")
-                ?.split(",", ";")
-                ?.filter { it.isNotEmpty() }
-                ?: listOf()
-        else
-            listOf()
+    fun provideAddresses(activity: ComposeActivity): List<String> {
+
+        val explicit = activity.intent.getStringArrayListExtra("addresses")
+        if (explicit != null && explicit.isNotEmpty()) return explicit
+
+        return emptyList()
+    }
+
+    @Provides
+    @Named("mode")
+    fun provideMode(activity: ComposeActivity): String =
+        activity.intent.getStringExtra("mode") ?: ""
+
 
     @Provides
     @Named("text")
@@ -92,10 +95,10 @@ class ComposeActivityModule {
         return uris.mapNotNull { Attachment(activity, it) }
     }
 
-    @Provides
-    @Named("mode")
-    fun provideSharedAction(activity: ComposeActivity): String =
-        activity.intent.getStringExtra("mode") ?: ""
+//    @Provides
+//    @Named("mode")
+//    fun provideSharedAction(activity: ComposeActivity): String =
+//        activity.intent.getStringExtra("mode") ?: ""
 
     @Provides
     @Named("subscriptionId")

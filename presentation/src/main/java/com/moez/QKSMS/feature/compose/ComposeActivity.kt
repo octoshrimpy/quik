@@ -216,6 +216,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     private var cameraDestination: Uri? = null
 
+    companion object {
+        const val EXTRA_THREAD_ID = "thread_id"
+    }
+
     private fun getSeekBarUpdater(): ObservableSubscribeProxy<Long> {
         return Observable.interval(500, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.single())
@@ -232,6 +236,12 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.compose_activity)
         showBackButton(true)
+
+        val modeFromIntent = intent.getStringExtra("mode") ?: ""
+        val addressesFromIntent = intent.getStringArrayListExtra("addresses") ?: arrayListOf()
+        val threadIdFromIntent = intent.getLongExtra("threadId", 0L)
+
+
         viewModel.bindView(this)
 
         // Connect adapter selection changes to clear selection when empty
@@ -465,14 +475,15 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         QkMediaPlayer.reset()
 
         seekBarUpdater?.dispose()
+
     }
 
 
     override fun render(state: ComposeState) {
-        if (state.hasError) {
+        if (state.hasError && !state.editingMode) {
             finish()
-            return
         }
+
 
         threadId.onNext(state.threadId)
 
@@ -566,13 +577,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
         // if not in editing mode, and there are no non-me participants that can be sent to,
         // hide controls that allow constructing a reply and inform user no valid recipients
-        if (!state.editingMode && (state.validRecipientNumbers == 0)) {
+        // 🚫 DO NOT collapse UI for duplicate conversation screens
+        if (!state.editingMode && (state.validRecipientNumbers == 0) && state.mode != "duplicate") {
             composeBar.visibility = View.GONE
             sim.visibility = View.GONE
             recordAudioMsg.visibility = View.GONE
             noValidRecipients.visibility = View.VISIBLE
 
-            // change constraint of messageList to constrain bottom to top of noValidRecipients
+        // change constraint of messageList to constrain bottom to top of noValidRecipients
             ConstraintSet().apply {
                 clone(contentView)
                 connect(
@@ -795,6 +807,29 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .setNegativeButton(R.string.button_cancel, null)
             .show()
     }
+
+    override fun showDuplicateConversationDialog(threadId: Long, recipients: List<Recipient>) {
+        val names = recipients.joinToString(", ") { recipient ->
+            recipient.contact?.name ?: recipient.address
+        }
+
+
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.dialog_duplicate_group_title))
+            .setMessage(
+                getString(
+                    R.string.dialog_duplicate_group_message,
+                    names
+                )
+            )
+            .setPositiveButton(R.string.dialog_duplicate_group_confirm) { _, _ ->
+                // ✅ call ViewModel to start the duplicate conversation
+                viewModel.onDuplicateConfirmed(recipients)
+            }
+            .setNegativeButton(R.string.dialog_duplicate_group_cancel, null)
+            .show()
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.compose, menu)

@@ -44,6 +44,7 @@ import dev.octoshrimpy.quik.feature.settings.SettingsActivity
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.manager.PermissionManager
+import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.ScheduledMessage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -98,21 +99,37 @@ class Navigator @Inject constructor(
         startActivity(intent)
     }
 
-    fun showCompose(body: String? = null, attachments: List<Uri>? = null, mode: String? = null) {
+    /**
+     * Launch a new Compose screen with optional text, attachments, and prefilled recipient addresses.
+     * Used by "Duplicate Conversation" feature.
+     */
+    fun showCompose(
+        body: String? = null,
+        attachments: List<Uri>? = null,
+        addresses: List<String>? = null,
+        threadId: Long = 0L,
+        mode: String? = null
+    ) {
         val intent = Intent(context, ComposeActivity::class.java)
-        intent.putExtra(Intent.EXTRA_TEXT, body)
-        intent.putExtra("mode", mode)
 
-        attachments
-            ?.takeIf { it.isNotEmpty() }
-            ?.mapNotNull {
-                if (it.resourceExists(context)) it
-                else null
-            }
-            ?.let { intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(it)) }
+        intent.putExtra("threadId", threadId)
+        intent.putExtra("mode", mode ?: "")
+
+        if (!addresses.isNullOrEmpty()) {
+            intent.putStringArrayListExtra("addresses", ArrayList(addresses))
+        }
+
+        if (body != null) {
+            intent.putExtra(Intent.EXTRA_TEXT, body)
+        }
+
+        attachments?.let {
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(it))
+        }
 
         startActivity(intent)
     }
+
 
     fun showCompose(scheduledMessage: ScheduledMessage) {
         val scheduledThreadId = TelephonyCompat.getOrCreateThreadId(
@@ -348,5 +365,21 @@ class Navigator @Inject constructor(
             startActivity(intent)
         }
     }
+
+    fun openShadowConversation(conversation: Conversation) {
+        val intent = Intent(context, ComposeActivity::class.java).apply {
+            putExtra("conversation_id", conversation.id)
+            putExtra("is_shadow_of_rcs", true)
+            // keep your existing extras here
+
+            // 🔑 If we're not using an Activity context, we MUST open in a new task
+            if (context !is Activity) {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        }
+
+        context.startActivity(intent)
+    }
+
 
 }

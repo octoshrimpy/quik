@@ -1,21 +1,3 @@
-/*
- * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
- *
- * This file is part of QKSMS.
- *
- * QKSMS is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * QKSMS is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
- */
 package dev.octoshrimpy.quik.repository
 
 import dev.octoshrimpy.quik.model.Conversation
@@ -31,9 +13,6 @@ interface ConversationRepository {
 
     fun getConversationsSnapshot(unreadAtTop: Boolean): List<Conversation>
 
-    /**
-     * Returns the top conversations that were active in the last week
-     */
     fun getTopConversations(): List<Conversation>
 
     fun setConversationName(id: Long, name: String): Completable
@@ -54,9 +33,6 @@ interface ConversationRepository {
 
     fun getConversationAndLastSenderContactName(threadId: Long): Pair<Conversation?, String?>?
 
-    /**
-     * Returns all conversations with an id in [threadIds]
-     */
     fun getConversations(vararg threadIds: Long): RealmResults<Conversation>
 
     fun getUnmanagedConversations(): Observable<List<Conversation>>
@@ -79,9 +55,6 @@ interface ConversationRepository {
 
     fun saveDraft(threadId: Long, draft: String)
 
-    /**
-     * Updates message-related fields in the conversation, like the date and snippet
-     */
     fun updateConversations(vararg threadIds: Long)
 
     fun markArchived(vararg threadIds: Long)
@@ -98,4 +71,9 @@ interface ConversationRepository {
 
     fun deleteConversations(vararg threadIds: Long)
 
+    // NEW CLEAN METHOD — NO context reference here
+    fun getOrCreateThreadId(addresses: List<String>): Long
+
+    // 🆕 New helper for duplication / shadow RCS
+    fun duplicateOrShadowConversation(addresses: List<String>, originalThreadId: Long?): Conversation
 }

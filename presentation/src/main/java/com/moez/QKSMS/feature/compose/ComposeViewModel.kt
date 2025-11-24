@@ -29,6 +29,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.core.net.toFile
+import com.google.android.exoplayer2.util.Log
 import com.google.android.exoplayer2.util.MimeTypes
 import com.moez.QKSMS.common.QkMediaPlayer
 import com.moez.QKSMS.contentproviders.MmsPartProvider
@@ -110,6 +111,7 @@ class ComposeViewModel @Inject constructor(
     @Named("subscriptionId") val sharedSubscriptionId: Int,
     @Named("sendAsGroup") val sharedSendAsGroup: Boolean?,
     @Named("scheduleDateTime") val sharedScheduledDateTime: Long,
+
     private val contactRepo: ContactRepository,
     private val context: Context,
     private val activeConversationManager: ActiveConversationManager,
@@ -130,11 +132,16 @@ class ComposeViewModel @Inject constructor(
     private val sendMessage: SendMessage,
     private val subscriptionManager: SubscriptionManagerCompat,
     private val saveImage: SaveImage,
-) : QkViewModel<ComposeView, ComposeState>(ComposeState(
+
+) : QkViewModel<ComposeView, ComposeState>(
+    ComposeState(
         editingMode = threadId == 0L && addresses.isEmpty(),
         threadId = threadId,
-        query = query)
+        query = query
+    )
 ) {
+
+
     private val chipsReducer: Subject<(List<Recipient>) -> List<Recipient>> = PublishSubject.create()
     private val conversation: Subject<Conversation> = BehaviorSubject.create()
     private val messages: Subject<List<Message>> = BehaviorSubject.create()
@@ -147,8 +154,21 @@ class ComposeViewModel @Inject constructor(
 
     private var bluetoothMicManager: BluetoothMicManager? = null
 
+    // ============================================================
+    // Rx lifecycle
+    // ============================================================
+    private val backgroundDisposables = CompositeDisposable()
+
+    override fun onCleared() {
+        super.onCleared()
+        backgroundDisposables.clear()
+    }
+
+
+
     init {
-        // set shared subscription into state if set
+
+            // set shared subscription into state if set
         subscriptionManager.activeSubscriptionInfoList.firstOrNull {
             it.subscriptionId == sharedSubscriptionId
         }?.let { newState { copy(subscription = it)} }
@@ -164,6 +184,10 @@ class ComposeViewModel @Inject constructor(
         // set shared attachments into state
         newState { copy(attachments = sharedAttachments) }
 
+
+
+
+
         val initialConversation = threadId.takeIf { it != 0L }
             ?.let(conversationRepo::getConversationAsync)
             ?.asObservable()
@@ -178,14 +202,31 @@ class ComposeViewModel @Inject constructor(
             .doOnNext { addresses -> conversationRepo.getOrCreateConversation(addresses) }
             .observeOn(AndroidSchedulers.mainThread())
             .switchMap { addresses ->
-                // monitors convos and triggers when wanted convo is present
                 conversationRepo.getConversations(false)
                     .asObservable()
                     .filter { conversations -> conversations.isLoaded }
-                    .mapNotNull { conversationRepo.getConversation(addresses) }
-                    .doOnNext { newState { copy(loading = false) } }
-                    .switchMap { conversation -> conversation.asObservable() }
-                }
+                    .mapNotNull {
+                        // IMPORTANT: this must return the conversation *from Realm*
+                        // (managed), or at least a plain object we don't try to observe.
+                        conversationRepo.getConversation(addresses)
+                    }
+                    // We only need one Conversation per address change
+                    .take(1)
+                    .doOnNext {
+                        newState { copy(loading = false) }
+                    }
+                // NOTE: no conversation.asObservable() here!
+            }
+
+//            .switchMap { addresses ->
+//                // monitors convos and triggers when wanted convo is present
+//                conversationRepo.getConversations(false)
+//                    .asObservable()
+//                    .filter { conversations -> conversations.isLoaded }
+//                    .mapNotNull { conversationRepo.getConversation(addresses) }
+//                    .doOnNext { newState { copy(loading = false) } }
+//                    .switchMap { conversation -> conversation.asObservable() }
+//                }
 
         // Merges two potential conversation sources (constructor threadId and contact selection)
         // into a single stream of conversations. If the conversation was deleted, notify the
@@ -194,7 +235,19 @@ class ComposeViewModel @Inject constructor(
             .mergeWith(initialConversation)
             .filter { it.isLoaded }
             .filter { it.isValid.also { if (!it) newState { copy(hasError = true) } } }
-            .subscribe(conversation::onNext)
+            .subscribe(
+                { conv -> conversation.onNext(conv) },
+                { error ->
+                    Log.e("ComposeViewModel", "Error in selectedConversation", error)
+                    newState { copy(loading = false, hasError = true) }
+                }
+            )
+
+//        disposables += selectedConversation
+//            .mergeWith(initialConversation)
+//            .filter { it.isLoaded }
+//            .filter { it.isValid.also { if (!it) newState { copy(hasError = true) } } }
+//            .subscribe(conversation::onNext)
 
         if (addresses.isNotEmpty())
             selectedChips.onNext(addresses.map { address -> Recipient(address = address) })
@@ -1164,6 +1217,16 @@ class ComposeViewModel @Inject constructor(
                 conversation,
                 selectedChips
             ) { _, body, state, conversation, chips ->
+
+                // to check if the user has agreed to duplicate the message or not
+                if (state.validRecipientNumbers == 0) {
+                    // we’re in a group we can’t reply to → show dialog instead of sending
+                    view.showDuplicateConversationDialog(conversation.id,
+                        conversation.recipients)
+                    return@withLatestFrom
+
+                }
+
                 if (!permissionManager.isDefaultSms()) {
                     view.requestDefaultSms()
                     return@withLatestFrom
@@ -1436,5 +1499,57 @@ class ComposeViewModel @Inject constructor(
         val messages = messageIds.mapNotNull { messageRepo.getMessage(it) }
         Timber.d("Found ${messages.size} messages to export")
     }
+
+    // ============================================================
+// 🔹 Duplicate group conversation (background-safe)
+// ============================================================
+    fun onDuplicateConfirmed(recipients: List<Recipient>) {
+        Timber.d("onDuplicateConfirmed() called with %d recipients", recipients.size)
+
+        val explicitSmsAddresses: List<String> =
+            recipients.map { it.address }
+                .filter { phoneNumberUtils.isPossibleNumber(it) }
+                .distinct()
+
+        val oldThreadId =
+            try { conversation.blockingFirst()?.id }
+            catch (_: Throwable) { threadId }
+
+        val disposable = Single.fromCallable {
+            // Off the UI thread – safe for Realm writes
+            conversationRepo.duplicateOrShadowConversation(explicitSmsAddresses, oldThreadId)
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ newConvOrNull ->
+                if (newConvOrNull != null) {
+                    // ✅ Successfully created SMS shadow conversation
+                    navigator.openShadowConversation(newConvOrNull)
+                } else {
+                    // ❌ Could not infer any SMS-capable numbers
+                    Timber.w("duplicateOrShadowConversation returned null; no SMS numbers found")
+                    Toast.makeText(
+                        context,
+                        "Couldn’t duplicate this RCS group to SMS (no phone numbers found).",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    // We simply stay on the current RCS conversation.
+                }
+            }, { error ->
+                Timber.e(error, "Failed to duplicate or shadow conversation")
+                Toast.makeText(
+                    context,
+                    "Failed to duplicate conversation",
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
+
+        backgroundDisposables.add(disposable)
+    }
+
+
+
+
+
 
 }

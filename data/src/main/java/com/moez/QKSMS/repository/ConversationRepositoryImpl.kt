@@ -54,6 +54,101 @@ class ConversationRepositoryImpl @Inject constructor(
     private val phoneNumberUtils: PhoneNumberUtils
 ) : ConversationRepository {
 
+    override fun duplicateOrShadowConversation(
+        addresses: List<String>,
+        originalThreadId: Long?
+    ): Conversation {
+
+        val realm = Realm.getDefaultInstance()
+        var result: Conversation? = null
+
+        realm.executeTransaction { r ->
+
+            // 1️⃣ Load original conversation (if exists)
+            val original = originalThreadId?.let { id ->
+                r.where(Conversation::class.java)
+                    .equalTo("id", id)
+                    .findFirst()
+            }
+
+            // 2️⃣ If original already has valid SMS recipients, just reuse those
+            val smsRecipientsFromOriginal: List<String> =
+                original?.recipients
+                    ?.map { it.address }
+                    ?.filter { phoneNumberUtils.isPossibleNumber(it) }
+                    ?.distinct()
+                    ?: emptyList()
+
+            // Prefer addresses from the original convo if we have them,
+            // otherwise fall back to the addresses argument:
+            val candidateAddresses: List<String> =
+                if (smsRecipientsFromOriginal.isNotEmpty()) {
+                    smsRecipientsFromOriginal
+                } else {
+                    addresses
+                }
+
+            // Try to keep only real phone numbers
+            var smsAddresses: List<String> =
+                candidateAddresses
+                    .filter { phoneNumberUtils.isPossibleNumber(it) }
+                    .distinct()
+
+            // If we couldn't detect valid numbers, fall back to all candidate addresses
+            if (smsAddresses.isEmpty()) {
+                smsAddresses = candidateAddresses.distinct()
+            }
+
+            // 3️⃣ Create SHADOW conversation with new ID
+            val nextConvId =
+                (r.where(Conversation::class.java).max("id")?.toLong() ?: 0L) + 1L
+
+            val shadow = r.createObject(Conversation::class.java, nextConvId)
+
+            // 4️⃣ Create new Recipients with unique PKs, one per address
+            smsAddresses.forEach { addr ->
+                val nextRecipientId =
+                    (r.where(Recipient::class.java).max("id")?.toLong() ?: 0L) + 1L
+
+                val rec = r.createObject(Recipient::class.java, nextRecipientId)
+                rec.address = addr
+                rec.lastUpdate = System.currentTimeMillis()
+
+                shadow.recipients.add(rec)
+                shadow.participants.add(addr)
+            }
+
+            // 5️⃣ Metadata for tracking / UI
+            shadow.isShadowOfRcs = true
+            shadow.originalThreadId = originalThreadId
+            shadow.metadata = "shadow_of_rcs:${originalThreadId ?: "unknown"}"
+
+            shadow.read = true
+            shadow.archived = false
+            shadow.blocked = false
+            shadow.mute = false
+            shadow.draft = ""
+            shadow.draftDate = System.currentTimeMillis()
+            shadow.lastMessage = null
+            shadow.name = ""
+
+            // Detach from Realm so we can safely use it on the main thread
+            result = r.copyFromRealm(shadow)
+        }
+
+        realm.close()
+
+        // At this point we *expect* result to be non-null; if not, hard-fail loudly
+        return result ?: throw IllegalStateException(
+            "duplicateOrShadowConversation failed to create a Conversation"
+        )
+    }
+
+
+
+
+
+
     override fun getConversations(unreadAtTop: Boolean, archived: Boolean): RealmResults<Conversation> {
         val sortOrder: MutableList<String> = arrayListOf("pinned", "draft", "lastMessage.date")
         val sortDirections: MutableList<Sort> = arrayListOf(Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING)
@@ -357,6 +452,11 @@ class ConversationRepositoryImpl @Inject constructor(
                 conversation?.takeIf { it.isValid }?.draftDate = System.currentTimeMillis()
             }
         }
+
+    override fun getOrCreateThreadId(addresses: List<String>): Long {
+        return TelephonyCompat.getOrCreateThreadId(context, addresses.toSet())
+    }
+
 
     override fun updateConversations(vararg threadIds: Long) =
         Realm.getDefaultInstance().use { realm ->
