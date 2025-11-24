@@ -52,6 +52,7 @@ import dev.octoshrimpy.quik.compat.SubscriptionManagerCompat
 import dev.octoshrimpy.quik.extensions.asObservable
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.extensions.isSmil
+import dev.octoshrimpy.quik.extensions.isText
 import dev.octoshrimpy.quik.extensions.isVideo
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.interactor.AddScheduledMessage
@@ -1424,16 +1425,6 @@ class ComposeViewModel @Inject constructor(
             }
             .autoDisposable(view.scope())
             .subscribe()
-    }
-
-    private fun exportMessages(messageIds: Set<Long>) {
-        // Placeholder for HTTP export - will implement next
-        Timber.d("Selected messages for export: $messageIds")
-
-        // Get actual message objects
-        val messages = messageIds.mapNotNull { messageRepo.getMessage(it) }
-        Timber.d("Found ${messages.size} messages to export")
-    }
 
         // Handle message selection changes from adapter
         view.messageSelectedIntent
@@ -1492,12 +1483,55 @@ class ComposeViewModel @Inject constructor(
     }
 
     private fun exportMessages(messageIds: Set<Long>) {
-        // Placeholder for HTTP export - will implement next
-        Timber.d("Selected messages for export: $messageIds")
+        Timber.d("=== Starting export of ${messageIds.size} messages ===")
 
         // Get actual message objects
-        val messages = messageIds.mapNotNull { messageRepo.getMessage(it) }
+        val messages = messageIds
+            .mapNotNull { messageRepo.getMessage(it) }
+            .sortedBy { it.date }  // Sort by date (oldest first)
+
         Timber.d("Found ${messages.size} messages to export")
+
+        // Log each message's contents
+        messages.forEachIndexed { index, message ->
+            Timber.d("--- Message ${index + 1} of ${messages.size} ---")
+            Timber.d("ID: ${message.id}")
+            Timber.d("Thread ID: ${message.threadId}")
+            Timber.d("Address: ${message.address}")
+            Timber.d("Type: ${if (message.isMe()) "OUTGOING" else "INCOMING"}")
+
+            // Get message text content
+            val messageText = message.getText()
+            Timber.d("Text: ${if (messageText.isBlank()) "[NO TEXT]" else messageText}")
+
+            // Get subject if exists
+            val subject = message.getCleansedSubject()
+            if (subject.isNotBlank()) {
+                Timber.d("Subject: $subject")
+            }
+
+            // Check for attachments
+            if (message.parts.isNotEmpty()) {
+                Timber.d("Parts: ${message.parts.size}")
+                message.parts.forEachIndexed { partIndex, part ->
+                    if (!part.isSmil() && !part.isText()) {
+                        Timber.d("  Part ${partIndex + 1}: ${part.type} (${part.name ?: "unnamed"})")
+                    }
+                }
+            }
+
+            // Message status
+            when {
+                message.isSending() -> Timber.d("Status: SENDING")
+                message.isDelivered() -> Timber.d("Status: DELIVERED")
+                message.isFailedMessage() -> Timber.d("Status: FAILED")
+                else -> Timber.d("Status: RECEIVED")
+            }
+
+            Timber.d("") // Blank line for readability
+        }
+
+        Timber.d("=== Export complete ===")
     }
 
     // ============================================================
@@ -1546,10 +1580,4 @@ class ComposeViewModel @Inject constructor(
 
         backgroundDisposables.add(disposable)
     }
-
-
-
-
-
-
 }
