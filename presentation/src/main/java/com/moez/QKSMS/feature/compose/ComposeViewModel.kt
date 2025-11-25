@@ -1483,6 +1483,11 @@ class ComposeViewModel @Inject constructor(
     }
 
     private fun exportMessages(messageIds: Set<Long>) {
+        // for now just print
+        printMessages(messageIds);
+    }
+
+    private fun printMessages(messageIds: Set<Long>) {
         Timber.d("=== Starting export of ${messageIds.size} messages ===")
 
         // Get actual message objects
