@@ -135,6 +135,7 @@ class Preferences @Inject constructor(
     val disableScreenshots = rxPrefs.getBoolean("disableScreenshots", false)
     val logging = rxPrefs.getBoolean("logging", false)
     val unreadAtTop = rxPrefs.getBoolean("unreadAtTop", false)
+    val messageExportAuthToken = rxPrefs.getString("message_export_auth_token", "")
 
     init {
         // Migrate from old night mode preference to new one, now that we support android Q night mode
