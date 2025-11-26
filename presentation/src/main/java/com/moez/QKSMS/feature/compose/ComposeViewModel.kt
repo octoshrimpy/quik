@@ -1339,48 +1339,57 @@ class ComposeViewModel @Inject constructor(
 // 🔹 Duplicate group conversation (background-safe)
 // ============================================================
     fun onDuplicateConfirmed(recipients: List<Recipient>) {
-        Timber.d("onDuplicateConfirmed() called with %d recipients", recipients.size)
-
-        val explicitSmsAddresses: List<String> =
+        Timber.d(
+            "onDuplicateConfirmed() called with recipients=%s",
             recipients.map { it.address }
-                .filter { phoneNumberUtils.isPossibleNumber(it) }
-                .distinct()
+        )
 
         val oldThreadId =
             try { conversation.blockingFirst()?.id }
             catch (_: Throwable) { threadId }
 
         val disposable = Single.fromCallable {
-            // Off the UI thread – safe for Realm writes
-            conversationRepo.duplicateOrShadowConversation(explicitSmsAddresses, oldThreadId)
+            // Runs off the UI thread
+            conversationRepo.duplicateOrShadowConversation(
+                addresses = recipients.map { it.address },
+                originalThreadId = oldThreadId
+            )
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ newConvOrNull ->
-                if (newConvOrNull != null) {
-                    // ✅ Successfully created SMS shadow conversation
-                    navigator.openShadowConversation(newConvOrNull)
+            .subscribe({ newConv: Conversation? ->
+                if (newConv != null) {
+                    Timber.d(
+                        "onDuplicateConfirmed() created shadow convo id=%d participants=%s",
+                        newConv.id,
+                        newConv.participants
+                    )
+                    navigator.openShadowConversation(newConv)
                 } else {
-                    // ❌ Could not infer any SMS-capable numbers
-                    Timber.w("duplicateOrShadowConversation returned null; no SMS numbers found")
+                    Timber.w("onDuplicateConfirmed(): repo returned null (no SMS-like addresses)")
                     Toast.makeText(
                         context,
-                        "Couldn’t duplicate this RCS group to SMS (no phone numbers found).",
+                        "Couldn't detect phone numbers for this group.",
                         Toast.LENGTH_LONG
                     ).show()
-                    // We simply stay on the current RCS conversation.
+                    // stay in current RCS thread
                 }
             }, { error ->
-                Timber.e(error, "Failed to duplicate or shadow conversation")
+                Timber.e(error, "onDuplicateConfirmed() error")
                 Toast.makeText(
                     context,
-                    "Failed to duplicate conversation",
-                    Toast.LENGTH_SHORT
+                    "Couldn't duplicate this conversation; please create an SMS group manually.",
+                    Toast.LENGTH_LONG
                 ).show()
+                // stay in current RCS thread
             })
 
         backgroundDisposables.add(disposable)
     }
+
+
+
+
 
 
 
