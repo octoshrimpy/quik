@@ -78,6 +78,6 @@ interface ConversationRepository {
     fun duplicateOrShadowConversation(
         addresses: List<String>,
         originalThreadId: Long?
-    ): Conversation?
+    ): List<String>
 }
 

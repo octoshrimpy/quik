@@ -90,6 +90,8 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import dev.octoshrimpy.quik.compat.TelephonyCompat
+
 //import io.reactivex.android.schedulers.AndroidSchedulers
 //import io.reactivex.schedulers.Schedulers
 
@@ -1344,36 +1346,55 @@ class ComposeViewModel @Inject constructor(
             recipients.map { it.address }
         )
 
+        // Best-effort original thread id
         val oldThreadId =
             try { conversation.blockingFirst()?.id }
             catch (_: Throwable) { threadId }
 
+        val rawAddresses = recipients.map { it.address }
+
         val disposable = Single.fromCallable {
-            // Runs off the UI thread
+            // OFF the UI thread: just resolve SMS numbers
             conversationRepo.duplicateOrShadowConversation(
-                addresses = recipients.map { it.address },
+                addresses = rawAddresses,
                 originalThreadId = oldThreadId
             )
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ newConv: Conversation? ->
-                if (newConv != null) {
-                    Timber.d(
-                        "onDuplicateConfirmed() created shadow convo id=%d participants=%s",
-                        newConv.id,
-                        newConv.participants
+            .subscribe({ smsAddresses ->
+                if (smsAddresses.isEmpty()) {
+                    Timber.w(
+                        "onDuplicateConfirmed(): no SMS-like addresses for threadId=%s",
+                        oldThreadId?.toString() ?: "null"
                     )
-                    navigator.openShadowConversation(newConv)
-                } else {
-                    Timber.w("onDuplicateConfirmed(): repo returned null (no SMS-like addresses)")
                     Toast.makeText(
                         context,
                         "Couldn't detect phone numbers for this group.",
                         Toast.LENGTH_LONG
                     ).show()
-                    // stay in current RCS thread
+                    return@subscribe
                 }
+
+                Timber.d(
+                    "onDuplicateConfirmed(): resolved SMS participants=%s",
+                    smsAddresses
+                )
+
+                // 🔴 CHANGE IS HERE – create a real system thread, then open it
+                val smsThreadId = TelephonyCompat.getOrCreateThreadId(
+                    context,
+                    smsAddresses
+                )
+
+                Timber.d(
+                    "onDuplicateConfirmed(): created/loaded SMS threadId=%d",
+                    smsThreadId
+                )
+
+                // Open it like any normal conversation
+                navigator.showConversation(smsThreadId)
+
             }, { error ->
                 Timber.e(error, "onDuplicateConfirmed() error")
                 Toast.makeText(
@@ -1381,19 +1402,9 @@ class ComposeViewModel @Inject constructor(
                     "Couldn't duplicate this conversation; please create an SMS group manually.",
                     Toast.LENGTH_LONG
                 ).show()
-                // stay in current RCS thread
             })
 
         backgroundDisposables.add(disposable)
     }
-
-
-
-
-
-
-
-
-
 
 }

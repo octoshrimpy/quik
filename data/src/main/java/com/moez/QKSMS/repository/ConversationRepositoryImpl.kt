@@ -48,6 +48,11 @@ import timber.log.Timber
 import io.realm.Sort
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import android.telephony.TelephonyManager
+import android.telephony.SubscriptionManager
+import android.os.Build
+import android.telephony.PhoneNumberUtils as AndroidPhoneNumberUtils
+
 
 class ConversationRepositoryImpl @Inject constructor(
     private val context: Context,
@@ -101,125 +106,129 @@ class ConversationRepositoryImpl @Inject constructor(
     override fun duplicateOrShadowConversation(
         addresses: List<String>,
         originalThreadId: Long?
-    ): Conversation? {
+    ): List<String> {
 
         val realm = Realm.getDefaultInstance()
-        var result: Conversation? = null
 
-        try {
-            realm.executeTransaction { r ->
+        return try {
+            // Make sure we see the latest Realm state
+            realm.refresh()
 
-                // 1) Load original conversation (if we have a thread id)
-                val original = originalThreadId?.let { id ->
-                    r.where(Conversation::class.java)
-                        .equalTo("id", id)
-                        .findFirst()
+            val candidateNumbers = linkedSetOf<String>() // keeps order, de-dups
+
+            // 1) Any explicit addresses passed in from ComposeViewModel
+            addresses.forEach { addr ->
+                if (phoneNumberUtils.isPossibleNumber(addr)) {
+                    candidateNumbers.add(addr)
                 }
+            }
 
-                // 2) Build a set of candidate phone numbers
-                val candidateNumbers = linkedSetOf<String>() // preserves order, dedup
+            // 2) Look up the original conversation (if we know the thread id)
+            val original = originalThreadId?.let { id ->
+                realm.where(Conversation::class.java)
+                    .equalTo("id", id)
+                    .findFirst()
+            }
 
-                // 2a) Use any phone-like addresses passed in from ComposeViewModel
-                addresses.forEach { addr ->
-                    if (phoneNumberUtils.isPossibleNumber(addr)) {
-                        candidateNumbers.add(addr)
+            // 2a) recipients' own addresses
+            original?.recipients?.forEach { rec ->
+                val addr = rec.address
+                if (phoneNumberUtils.isPossibleNumber(addr)) {
+                    candidateNumbers.add(addr)
+                }
+            }
+
+            // 2b) any phone numbers on the linked Contact
+            original?.recipients?.forEach { rec ->
+                rec.contact?.numbers?.forEach { pn ->
+                    val pnAddr = pn.address
+                    if (phoneNumberUtils.isPossibleNumber(pnAddr)) {
+                        candidateNumbers.add(pnAddr)
                     }
                 }
+            }
 
-                // 2b) From original recipients' own addresses
-                original?.recipients?.forEach { rec ->
-                    val addr = rec.address
-                    if (phoneNumberUtils.isPossibleNumber(addr)) {
-                        candidateNumbers.add(addr)
-                    }
-                }
-
-                // 2c) From Contact.numbers
-                original?.recipients?.forEach { rec ->
-                    rec.contact?.numbers?.forEach { pn ->
-                        val pnAddr = pn.address
-                        if (phoneNumberUtils.isPossibleNumber(pnAddr)) {
-                            candidateNumbers.add(pnAddr)
-                        }
-                    }
-                }
-
-                // 2d) From Message.address (all messages in this thread)
-                if (candidateNumbers.isEmpty() && originalThreadId != null) {
-                    val msgs = r.where(Message::class.java)
-                        .equalTo("threadId", originalThreadId)
-                        .findAll()
-
-                    msgs.forEach { msg ->
+            // 2c) fallback: look at Message.address for this thread
+            if (candidateNumbers.isEmpty() && originalThreadId != null) {
+                realm.where(Message::class.java)
+                    .equalTo("threadId", originalThreadId)
+                    .findAll()
+                    ?.forEach { msg ->
                         val addr = msg.address
                         if (phoneNumberUtils.isPossibleNumber(addr)) {
                             candidateNumbers.add(addr)
                         }
                     }
-                }
-
-                // 2e) Last fallback – try Contacts provider using RCS handle(s)
-                if (candidateNumbers.isEmpty() && original != null) {
-                    candidateNumbers.addAll(
-                        resolvePhoneNumbersForRcsParticipants(
-                            context = context,
-                            recipients = original.recipients
-                        )
-                    )
-                }
-
-                // 3) If we *still* have nothing, give up gracefully
-                if (candidateNumbers.isEmpty()) {
-                    Timber.w(
-                        "duplicateOrShadowConversation: no SMS-like addresses for threadId=%s",
-                        originalThreadId?.toString() ?: "null"
-                    )
-                    result = null
-                    return@executeTransaction
-                }
-
-                // 4) Create the new "shadow" conversation
-                val nextConvId =
-                    (r.where(Conversation::class.java).max("id")?.toLong() ?: 0L) + 1L
-
-                val shadow = r.createObject(Conversation::class.java, nextConvId)
-
-                candidateNumbers.forEach { number ->
-                    val nextRecipientId =
-                        (r.where(Recipient::class.java).max("id")?.toLong() ?: 0L) + 1L
-
-                    val rec = r.createObject(Recipient::class.java, nextRecipientId)
-                    rec.address = number
-                    rec.lastUpdate = System.currentTimeMillis()
-
-                    shadow.recipients.add(rec)
-                    shadow.participants.add(number)
-                }
-
-                // 5) Metadata / defaults
-                shadow.isShadowOfRcs = true
-                shadow.originalThreadId = originalThreadId
-                shadow.metadata = "shadow_of_rcs:${originalThreadId ?: "unknown"}"
-
-                shadow.read = true
-                shadow.archived = false
-                shadow.blocked = false
-                shadow.mute = false
-                shadow.draft = ""
-                shadow.draftDate = System.currentTimeMillis()
-                shadow.lastMessage = null
-                shadow.name = ""
-
-                // Detach from Realm
-                result = r.copyFromRealm(shadow)
             }
+
+            // 2d) last resort: Contacts lookup by RCS handle
+            if (candidateNumbers.isEmpty() && original != null) {
+                candidateNumbers.addAll(
+                    resolvePhoneNumbersForRcsParticipants(
+                        context = context,
+                        recipients = original.recipients
+                    )
+                )
+            }
+            // 🔹 Strip out any numbers that belong to this device (self),
+            // so Telephony sees only "other people" as recipients.
+            filterOutSelfNumbers(candidateNumbers)
         } finally {
             realm.close()
+
         }
 
-        return result
     }
 
+    /**
+     * Try to discover all phone numbers that belong to *this* device (SIMs),
+     * normalize them, and use that to filter "self" out of a recipients list.
+     */
+    private fun filterOutSelfNumbers(numbers: Set<String>): List<String> {
+        val telephonyManager =
+            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+        val selfRaw = mutableSetOf<String>()
+
+        // Newer Android: get numbers from active subscriptions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            val subMgr = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+            val subs = try { subMgr.activeSubscriptionInfoList } catch (_: SecurityException) { null }
+
+            subs?.forEach { info ->
+                info.number
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { selfRaw.add(it) }
+            }
+        }
+
+        // Fallback: line1Number
+        telephonyManager.line1Number
+            ?.takeIf { it.isNotBlank() }
+            ?.let { selfRaw.add(it) }
+
+        if (selfRaw.isEmpty()) {
+            // We don't know our own MSISDN -> just return original list
+            Timber.w("filterOutSelfNumbers: no self numbers detected, leaving list as-is")
+            return numbers.toList()
+        }
+
+        fun norm(s: String): String =
+            AndroidPhoneNumberUtils.normalizeNumber(s) ?: s
+
+        val selfNorm = selfRaw.map(::norm).toSet()
+
+        val filtered = numbers.filter { norm(it) !in selfNorm }
+
+        Timber.d(
+            "filterOutSelfNumbers: in=%s self=%s out=%s",
+            numbers,
+            selfNorm,
+            filtered
+        )
+
+        return filtered
+    }
 
 
     /**

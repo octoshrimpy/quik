@@ -131,7 +131,6 @@ class Navigator @Inject constructor(
         startActivity(intent)
     }
 
-
     fun showCompose(scheduledMessage: ScheduledMessage) {
         val scheduledThreadId = TelephonyCompat.getOrCreateThreadId(
             context,
