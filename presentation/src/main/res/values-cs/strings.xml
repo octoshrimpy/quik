@@ -96,7 +96,7 @@
     <string name="compose_send_group_summary">Příjemci a odpovědi budou viditelné všem</string>
     <string name="compose_messages_empty">Toto je začátek vaší konverzace. Řekněte něco hezkého!</string>
     <string name="compose_vcard_label">Karta kontaktu</string>
-    <string name="compose_scheduled_for">Naplánováno na</string>
+    <string name="compose_scheduled_for">Plánovaný čas:</string>
     <string name="compose_scheduled_future">Vybraný čas musí teprve nastat (musí být v budoucnu).</string>
     <string name="compose_scheduled_plus">Pro použití plánování zpráv je třeba povýšit na QUIK+</string>
     <string name="compose_scheduled_toast">Přidáno do naplánovaných zpráv</string>
@@ -419,4 +419,47 @@
         <item>LOL</item>
         <item>To je v pořádku</item>
     </string-array>
+    <string name="menu_mms_part_share">Sdílet</string>
+    <string name="menu_mms_part_forward">Vpřed</string>
+    <string name="menu_mms_part_open">Otevřít externě</string>
+    <string name="main_menu_select_all">Vybrat vše</string>
+    <string name="main_menu_send_now">Odeslat nyní</string>
+    <string name="main_menu_edit_message">Upravit zprávu</string>
+    <string name="main_menu_rename_conversation">Přejmenovat konverzaci</string>
+    <string name="main_sender_draft">Koncept: %s</string>
+    <string name="scheduled_menu_send_now">Odeslat nyní</string>
+    <string name="scheduled_menu_edit_message">Upravit zprávu</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Jste si jistý/á, že chcete tuto zprávu smazat?</item>
+        <item quantity="few">Jste si jisti, že chcete smazat %d zpráv?</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Jste si jistý/á, že chcete tuto zprávu nyní odeslat?</item>
+        <item quantity="few">Jste si jisti, že chcete nyní odeslat %d zpráv?</item>
+        <item quantity="many">Jste si jisti, že chcete nyní odeslat %d zpráv?</item>
+        <item quantity="other">Jste si jisti, že chcete nyní odeslat %d zpráv?</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Upravit zprávu</string>
+    <string name="dialog_edit_scheduled_message">Úpravou této zprávy ji odstraníte z plánu.\n\nNezapomeňte ji znovu odeslat na další obrazovce, jinak bude ztracena.\n\nChcete pokračovat?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Ano, upravit zprávu</string>
+    <string name="dialog_clear_compose_title">Vymazat zprávu</string>
+    <string name="dialog_clear_compose">Vymazat zprávu? Tuto akci nelze vrátit zpět.</string>
+    <string name="compose_scheduled_view">Naplánované zprávy pro tuto konverzaci</string>
+    <string name="compose_no_valid_recipients">Nelze odeslat ostatním účastníkům</string>
+    <string name="compose_menu_show_status">Zobrazit stav</string>
+    <string name="compose_attach_file_cd">Přiložte libovolný soubor</string>
+    <string name="compose_audio_message_cd">Nahrávání zvukové zprávy</string>
+    <string name="compose_schedule_cancel_cd">Zrušit plánovanou zprávu</string>
+    <string name="compose_record_audio_msg_cd">Nahrát zvukovou zprávu</string>
+    <string name="compose_record_audio_msg_abort_cd">Zrušit zvukovou zprávu</string>
+    <string name="compose_record_audio_msg_attach_cd">Připojit zvukovou zprávu</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Přehrát nebo pozastavit zvukovou zprávu</string>
+    <string name="compose_message_cancel">Zrušit</string>
+    <string name="compose_message_send_now">Odeslat nyní</string>
+    <string name="compose_message_sim">Číslo SIM karty</string>
+    <string name="compose_message_item">Položka zprávy</string>
+    <string name="compose_message_attachment">Příloha</string>
+    <string name="compose_toast_drag_stt">Přesuňte tlačítko pro převod řeči na text kamkoli chcete</string>
 </resources>
