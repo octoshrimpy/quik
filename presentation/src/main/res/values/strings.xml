@@ -601,4 +601,9 @@
     <string name="dialog_duplicate_group_confirm">Duplicate</string>
     <string name="dialog_duplicate_group_cancel">Cancel</string>
 
+    <string name="menu_select_all_messages">Select all messages</string>
+    <string name="menu_clear_selection">Clear selection</string>
+    <string name="menu_export_messages">Export selected</string>
+    <string name="messages_selected">%d selected</string>
+
 </resources>

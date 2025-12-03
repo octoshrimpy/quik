@@ -89,6 +89,10 @@ interface ComposeView : QkView<ComposeState> {
     val recordAudioMsgRecordVisible: Subject<Boolean>
     val recordAudioRecord: Subject<MicInputCloudView.ViewState>
     val recordAudioChronometer: Subject<Boolean>
+    val messageSelectedIntent: Observable<Long> // messageId
+    val selectAllMessagesIntent: Observable<Unit>
+    val clearMessageSelectionIntent: Observable<Unit>
+    val exportSelectedMessagesIntent: Observable<Unit>
 
     fun clearSelection()
     fun toggleSelectAll()

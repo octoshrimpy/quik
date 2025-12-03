@@ -1,0 +1,247 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+    inputs: &release-inputs
+      release_ref:
+        description: Branch or tag to build from
+        required: false
+        default: master
+        type: string
+      publish_release:
+        description: Publish the GitHub Release immediately (disable to keep it as a draft)
+        type: boolean
+        default: true
+      prerelease:
+        description: Mark the GitHub Release as a pre-release
+        type: boolean
+        default: false
+  workflow_call:
+    inputs: *release-inputs
+
+concurrency:
+  group: build-and-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    env:
+      RELEASE_REF: ${{ inputs.release_ref || 'master' }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ env.RELEASE_REF }}
+
+      - name: Ensure release ref is merged into master
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin master
+          if ! git merge-base --is-ancestor HEAD origin/master; then
+            echo "::error title=Release blocked::${RELEASE_REF} is not merged into master. Merge the release PR first."
+            exit 1
+          fi
+
+      - name: Checkout published F-Droid repo (if available)
+        id: checkout_pages
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Restore previous F-Droid artifacts
+        if: steps.checkout_pages.outcome == 'success'
+        run: |
+          set -euo pipefail
+          if [[ -d gh-pages/fdroid ]]; then
+            rm -rf repo
+            mkdir -p repo
+            cp -a gh-pages/fdroid/. repo/
+          else
+            mkdir -p repo
+          fi
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Validate signing configuration
+        id: signing
+        shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          missing=0
+          for var in ANDROID_KEYSTORE_B64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [[ -z "${!var:-}" ]]; then
+              echo "::error title=Missing secret::${var} is not set."
+              missing=1
+            fi
+          done
+          if [[ "$missing" -ne 0 ]]; then
+            exit 1
+          fi
+
+          mkdir -p presentation
+          echo "$ANDROID_KEYSTORE_B64" | base64 -d > presentation/my-release-key.keystore
+          chmod 600 presentation/my-release-key.keystore
+
+          {
+            echo "keystore_password=$ANDROID_KEYSTORE_PASSWORD"
+            echo "key_alias=$ANDROID_KEY_ALIAS"
+            echo "key_password=$ANDROID_KEY_PASSWORD"
+          } >> "$GITHUB_ENV"
+
+      - name: Capture version metadata
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          import os
+          import pathlib
+          import re
+
+          gradle = pathlib.Path("presentation/build.gradle").read_text()
+          code_match = re.search(r"^\s*versionCode\s+(\d+)", gradle, re.MULTILINE)
+          name_match = re.search(r"^\s*versionName\s+['\"]([\d\.]+)['\"]", gradle, re.MULTILINE)
+          if not code_match or not name_match:
+              raise SystemExit("Unable to read versionCode/versionName from presentation/build.gradle")
+          out = pathlib.Path(os.environ["GITHUB_OUTPUT"])
+          out.write_text(f"version_code={code_match.group(1)}\nversion_name={name_match.group(1)}\ntag_name=v{name_match.group(1)}\n")
+          PY
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Build signed release APK
+        run: ./gradlew clean assembleRelease
+
+      - name: Locate release artifact
+        id: artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=(presentation/build/outputs/apk/release/QUIK-v*-release.apk)
+          if [[ "${#files[@]}" -ne 1 ]]; then
+            echo "::error title=APK lookup failed::Expected 1 APK, found ${#files[@]} (${files[*]:-none})."
+            exit 1
+          fi
+          echo "apk_path=${files[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate release notes
+        id: notes
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const tagName = 'v${{ steps.version.outputs.version_name }}';
+            const {owner, repo} = context.repo;
+
+            const {data: tags} = await github.rest.repos.listTags({
+              owner,
+              repo,
+              per_page: 100,
+            });
+
+            const previousTag = tags.find(tag => /^v\d/.test(tag.name) && tag.name !== tagName)?.name;
+
+            const payload = {
+              owner,
+              repo,
+              tag_name: tagName,
+              target_commitish: '${{ env.RELEASE_REF }}',
+            };
+
+            if (previousTag) {
+              payload.previous_tag_name = previousTag;
+            }
+
+            const response = await github.request('POST /repos/{owner}/{repo}/releases/generate-notes', payload);
+            const notes = response.data.body || '';
+            core.setOutput('release_notes', notes);
+
+      - name: Sanitize release notes
+        id: clean_notes
+        shell: bash
+        env:
+          NOTES: ${{ steps.notes.outputs.release_notes }}
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          import os
+          import pathlib
+          import re
+
+          notes = os.environ.get("NOTES", "")
+          clean = re.sub(r'(?<!\w)@([A-Za-z0-9][A-Za-z0-9-]*)', r'\1', notes)
+          pathlib.Path("sanitized_notes.txt").write_text(clean)
+          PY
+          {
+            echo "clean_notes<<EOF"
+            cat sanitized_notes.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag_name }}
+          name: QUIK v${{ steps.version.outputs.version_name }}
+          draft: ${{ inputs.publish_release != true }}
+          prerelease: ${{ inputs.prerelease }}
+          body: ${{ steps.clean_notes.outputs.clean_notes }}
+          files: ${{ steps.artifact.outputs.apk_path }}
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install F-Droid tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fdroidserver aapt apksigner
+
+      - name: Update F-Droid repo contents
+        env:
+          APK_PATH: ${{ steps.artifact.outputs.apk_path }}
+          VERSION_NAME: ${{ steps.version.outputs.version_name }}
+          VERSION_CODE: ${{ steps.version.outputs.version_code }}
+        run: |
+          set -euo pipefail
+
+          mkdir -p repo
+          target_apk="repo/dev.octoshrimpy.quik_${VERSION_CODE}.apk"
+          cp "$APK_PATH" "$target_apk"
+
+          fdroid update --config config.yml --pretty
+
+      - name: Publish F-Droid repo to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: repo
+          destination_dir: fdroid
+          user_name: github-actions[bot]
+          user_email: github-actions[bot]@users.noreply.github.com
+
+      - name: Cleanup signing key
+        if: always()
+        run: rm -f presentation/my-release-key.keystore
+
