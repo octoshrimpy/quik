@@ -202,8 +202,15 @@ class ConversationRepositoryImpl @Inject constructor(
             }
         }
 
-        // Fallback: line1Number
-        telephonyManager.line1Number
+        // Fallback: line1Number (guarded for missing permission)
+        val lineNumber = try {
+            telephonyManager.line1Number
+        } catch (e: SecurityException) {
+            Timber.w(e, "filterOutSelfNumbers: unable to read line1Number (missing permission?)")
+            null
+        }
+
+        lineNumber
             ?.takeIf { it.isNotBlank() }
             ?.let { selfRaw.add(it) }
 
