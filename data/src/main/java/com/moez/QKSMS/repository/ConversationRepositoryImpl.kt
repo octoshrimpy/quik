@@ -33,6 +33,7 @@ import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.SearchResult
+import dev.octoshrimpy.quik.model.PhoneNumber
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.Completable
@@ -42,9 +43,16 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults
+import io.realm.RealmList
+import timber.log.Timber
 import io.realm.Sort
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import android.telephony.TelephonyManager
+import android.telephony.SubscriptionManager
+import android.os.Build
+import android.telephony.PhoneNumberUtils as AndroidPhoneNumberUtils
+
 
 class ConversationRepositoryImpl @Inject constructor(
     private val context: Context,
@@ -54,95 +62,225 @@ class ConversationRepositoryImpl @Inject constructor(
     private val phoneNumberUtils: PhoneNumberUtils
 ) : ConversationRepository {
 
+    @Suppress("Range")
+    private fun resolvePhoneNumbersForRcsParticipants(
+        context: Context,
+        recipients: List<Recipient>
+    ): List<String> {
+
+        val resolver = context.contentResolver
+        val resolvedNumbers = mutableListOf<String>()
+
+        for (rcsRecipient in recipients) {
+            val rawAddr = rcsRecipient.address ?: continue
+
+            // If it already looks like a phone number, use it
+            if (android.telephony.PhoneNumberUtils.isGlobalPhoneNumber(rawAddr)) {
+                resolvedNumbers.add(rawAddr)
+                continue
+            }
+
+            // Try to find phone numbers for contacts whose display name resembles this RCS handle
+            val cursor = resolver.query(
+                android.provider.ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                arrayOf(android.provider.ContactsContract.CommonDataKinds.Phone.NUMBER),
+                "${android.provider.ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME} LIKE ?",
+                arrayOf("%${rawAddr.take(10)}%"),
+                null
+            )
+
+            cursor?.use {
+                while (it.moveToNext()) {
+                    val number = it.getString(0)
+                    if (!number.isNullOrBlank()) {
+                        resolvedNumbers.add(number)
+                    }
+                }
+            }
+        }
+
+        return resolvedNumbers.distinct()
+    }
+
+
     override fun duplicateOrShadowConversation(
         addresses: List<String>,
         originalThreadId: Long?
-    ): Conversation {
+    ): List<String> {
 
         val realm = Realm.getDefaultInstance()
-        var result: Conversation? = null
 
-        realm.executeTransaction { r ->
+        return try {
+            // Make sure we see the latest Realm state
+            realm.refresh()
 
-            // 1️⃣ Load original conversation (if exists)
+            val candidateNumbers = linkedSetOf<String>() // keeps order, de-dups
+
+            // 1) Any explicit addresses passed in from ComposeViewModel
+            addresses.forEach { addr ->
+                if (phoneNumberUtils.isPossibleNumber(addr)) {
+                    candidateNumbers.add(addr)
+                }
+            }
+
+            // 2) Look up the original conversation (if we know the thread id)
             val original = originalThreadId?.let { id ->
-                r.where(Conversation::class.java)
+                realm.where(Conversation::class.java)
                     .equalTo("id", id)
                     .findFirst()
             }
 
-            // 2️⃣ If original already has valid SMS recipients, just reuse those
-            val smsRecipientsFromOriginal: List<String> =
-                original?.recipients
-                    ?.map { it.address }
-                    ?.filter { phoneNumberUtils.isPossibleNumber(it) }
-                    ?.distinct()
-                    ?: emptyList()
-
-            // Prefer addresses from the original convo if we have them,
-            // otherwise fall back to the addresses argument:
-            val candidateAddresses: List<String> =
-                if (smsRecipientsFromOriginal.isNotEmpty()) {
-                    smsRecipientsFromOriginal
-                } else {
-                    addresses
+            // 2a) recipients' own addresses
+            original?.recipients?.forEach { rec ->
+                val addr = rec.address
+                if (phoneNumberUtils.isPossibleNumber(addr)) {
+                    candidateNumbers.add(addr)
                 }
-
-            // Try to keep only real phone numbers
-            var smsAddresses: List<String> =
-                candidateAddresses
-                    .filter { phoneNumberUtils.isPossibleNumber(it) }
-                    .distinct()
-
-            // If we couldn't detect valid numbers, fall back to all candidate addresses
-            if (smsAddresses.isEmpty()) {
-                smsAddresses = candidateAddresses.distinct()
             }
 
-            // 3️⃣ Create SHADOW conversation with new ID
-            val nextConvId =
-                (r.where(Conversation::class.java).max("id")?.toLong() ?: 0L) + 1L
-
-            val shadow = r.createObject(Conversation::class.java, nextConvId)
-
-            // 4️⃣ Create new Recipients with unique PKs, one per address
-            smsAddresses.forEach { addr ->
-                val nextRecipientId =
-                    (r.where(Recipient::class.java).max("id")?.toLong() ?: 0L) + 1L
-
-                val rec = r.createObject(Recipient::class.java, nextRecipientId)
-                rec.address = addr
-                rec.lastUpdate = System.currentTimeMillis()
-
-                shadow.recipients.add(rec)
-                shadow.participants.add(addr)
+            // 2b) any phone numbers on the linked Contact
+            original?.recipients?.forEach { rec ->
+                rec.contact?.numbers?.forEach { pn ->
+                    val pnAddr = pn.address
+                    if (phoneNumberUtils.isPossibleNumber(pnAddr)) {
+                        candidateNumbers.add(pnAddr)
+                    }
+                }
             }
 
-            // 5️⃣ Metadata for tracking / UI
-            shadow.isShadowOfRcs = true
-            shadow.originalThreadId = originalThreadId
-            shadow.metadata = "shadow_of_rcs:${originalThreadId ?: "unknown"}"
+            // 2c) fallback: look at Message.address for this thread
+            if (candidateNumbers.isEmpty() && originalThreadId != null) {
+                realm.where(Message::class.java)
+                    .equalTo("threadId", originalThreadId)
+                    .findAll()
+                    ?.forEach { msg ->
+                        val addr = msg.address
+                        if (phoneNumberUtils.isPossibleNumber(addr)) {
+                            candidateNumbers.add(addr)
+                        }
+                    }
+            }
 
-            shadow.read = true
-            shadow.archived = false
-            shadow.blocked = false
-            shadow.mute = false
-            shadow.draft = ""
-            shadow.draftDate = System.currentTimeMillis()
-            shadow.lastMessage = null
-            shadow.name = ""
+            // 2d) last resort: Contacts lookup by RCS handle
+            if (candidateNumbers.isEmpty() && original != null) {
+                candidateNumbers.addAll(
+                    resolvePhoneNumbersForRcsParticipants(
+                        context = context,
+                        recipients = original.recipients
+                    )
+                )
+            }
+            // 🔹 Strip out any numbers that belong to this device (self),
+            // so Telephony sees only "other people" as recipients.
+            filterOutSelfNumbers(candidateNumbers)
+        } finally {
+            realm.close()
 
-            // Detach from Realm so we can safely use it on the main thread
-            result = r.copyFromRealm(shadow)
         }
 
-        realm.close()
-
-        // At this point we *expect* result to be non-null; if not, hard-fail loudly
-        return result ?: throw IllegalStateException(
-            "duplicateOrShadowConversation failed to create a Conversation"
-        )
     }
+
+    /**
+     * Try to discover all phone numbers that belong to *this* device (SIMs),
+     * normalize them, and use that to filter "self" out of a recipients list.
+     */
+    private fun filterOutSelfNumbers(numbers: Set<String>): List<String> {
+        val telephonyManager =
+            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+        val selfRaw = mutableSetOf<String>()
+
+        // Newer Android: get numbers from active subscriptions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            val subMgr = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+            val subs = try { subMgr.activeSubscriptionInfoList } catch (_: SecurityException) { null }
+
+            subs?.forEach { info ->
+                info.number
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { selfRaw.add(it) }
+            }
+        }
+
+        // Fallback: line1Number (guarded for missing permission)
+        val lineNumber = try {
+            telephonyManager.line1Number
+        } catch (e: SecurityException) {
+            Timber.w(e, "filterOutSelfNumbers: unable to read line1Number (missing permission?)")
+            null
+        }
+
+        lineNumber
+            ?.takeIf { it.isNotBlank() }
+            ?.let { selfRaw.add(it) }
+
+        if (selfRaw.isEmpty()) {
+            // We don't know our own MSISDN -> just return original list
+            Timber.w("filterOutSelfNumbers: no self numbers detected, leaving list as-is")
+            return numbers.toList()
+        }
+
+        fun norm(s: String): String =
+            AndroidPhoneNumberUtils.normalizeNumber(s) ?: s
+
+        val selfNorm = selfRaw.map(::norm).toSet()
+
+        val filtered = numbers.filter { norm(it) !in selfNorm }
+
+        Timber.d(
+            "filterOutSelfNumbers: in=%s self=%s out=%s",
+            numbers,
+            selfNorm,
+            filtered
+        )
+
+        return filtered
+    }
+
+
+    /**
+     * Pull all phone numbers we can from a Contact's RealmList<PhoneNumber>,
+     * without relying on the exact field name.
+     */
+    private fun extractPhonesFromContact(contact: Contact?): List<String> {
+        if (contact == null) return emptyList()
+
+        val out = mutableListOf<String>()
+
+        contact.javaClass.declaredFields.forEach { field ->
+            if (RealmList::class.java.isAssignableFrom(field.type)) {
+                field.isAccessible = true
+                val value = field.get(contact)
+                if (value is RealmList<*>) {
+                    value.filterIsInstance<PhoneNumber>().forEach { phone ->
+                        val addr = phone.address
+                        if (!addr.isNullOrBlank()) {
+                            out += addr
+                        }
+                    }
+                }
+            }
+        }
+
+        return out
+    }
+
+    /**
+     * Very forgiving "does this look like a phone number?" check.
+     */
+    private fun isSmsLike(raw: String): Boolean {
+        if (raw.isBlank()) return false
+
+        // libphonenumber-style check via your PhoneNumberUtils
+        if (phoneNumberUtils.isPossibleNumber(raw)) return true
+
+        // Strip everything except + and digits and try again
+        val normalized = raw.filter { it == '+' || it.isDigit() }
+        return normalized.isNotBlank() && phoneNumberUtils.isPossibleNumber(normalized)
+    }
+
+
+
 
 
 

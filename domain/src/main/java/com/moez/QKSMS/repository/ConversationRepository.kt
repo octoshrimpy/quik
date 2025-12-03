@@ -75,5 +75,9 @@ interface ConversationRepository {
     fun getOrCreateThreadId(addresses: List<String>): Long
 
     // 🆕 New helper for duplication / shadow RCS
-    fun duplicateOrShadowConversation(addresses: List<String>, originalThreadId: Long?): Conversation
+    fun duplicateOrShadowConversation(
+        addresses: List<String>,
+        originalThreadId: Long?
+    ): List<String>
 }
+

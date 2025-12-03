@@ -91,6 +91,8 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import dev.octoshrimpy.quik.compat.TelephonyCompat
+
 import io.realm.Realm
 import io.reactivex.rxkotlin.withLatestFrom
 //import io.reactivex.android.schedulers.AndroidSchedulers
@@ -1822,46 +1824,70 @@ class ComposeViewModel @Inject constructor(
 // 🔹 Duplicate group conversation (background-safe)
 // ============================================================
     fun onDuplicateConfirmed(recipients: List<Recipient>) {
-        Timber.d("onDuplicateConfirmed() called with %d recipients", recipients.size)
-
-        val explicitSmsAddresses: List<String> =
+        Timber.d(
+            "onDuplicateConfirmed() called with recipients=%s",
             recipients.map { it.address }
-                .filter { phoneNumberUtils.isPossibleNumber(it) }
-                .distinct()
+        )
 
+        // Best-effort original thread id
         val oldThreadId =
             try { conversation.blockingFirst()?.id }
             catch (_: Throwable) { threadId }
 
+        val rawAddresses = recipients.map { it.address }
+
         val disposable = Single.fromCallable {
-            // Off the UI thread – safe for Realm writes
-            conversationRepo.duplicateOrShadowConversation(explicitSmsAddresses, oldThreadId)
+            // OFF the UI thread: just resolve SMS numbers
+            conversationRepo.duplicateOrShadowConversation(
+                addresses = rawAddresses,
+                originalThreadId = oldThreadId
+            )
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ newConvOrNull ->
-                if (newConvOrNull != null) {
-                    // ✅ Successfully created SMS shadow conversation
-                    navigator.openShadowConversation(newConvOrNull)
-                } else {
-                    // ❌ Could not infer any SMS-capable numbers
-                    Timber.w("duplicateOrShadowConversation returned null; no SMS numbers found")
+            .subscribe({ smsAddresses ->
+                if (smsAddresses.isEmpty()) {
+                    Timber.w(
+                        "onDuplicateConfirmed(): no SMS-like addresses for threadId=%s",
+                        oldThreadId?.toString() ?: "null"
+                    )
                     Toast.makeText(
                         context,
-                        "Couldn’t duplicate this RCS group to SMS (no phone numbers found).",
+                        "Couldn't detect phone numbers for this group.",
                         Toast.LENGTH_LONG
                     ).show()
-                    // We simply stay on the current RCS conversation.
+                    return@subscribe
                 }
+
+                Timber.d(
+                    "onDuplicateConfirmed(): resolved SMS participants=%s",
+                    smsAddresses
+                )
+
+                // 🔴 CHANGE IS HERE – create a real system thread, then open it
+                val smsThreadId = TelephonyCompat.getOrCreateThreadId(
+                    context,
+                    smsAddresses
+                )
+
+                Timber.d(
+                    "onDuplicateConfirmed(): created/loaded SMS threadId=%d",
+                    smsThreadId
+                )
+
+                // Open it like any normal conversation
+                navigator.showConversation(smsThreadId)
+
             }, { error ->
-                Timber.e(error, "Failed to duplicate or shadow conversation")
+                Timber.e(error, "onDuplicateConfirmed() error")
                 Toast.makeText(
                     context,
-                    "Failed to duplicate conversation",
-                    Toast.LENGTH_SHORT
+                    "Couldn't duplicate this conversation; please create an SMS group manually.",
+                    Toast.LENGTH_LONG
                 ).show()
             })
 
         backgroundDisposables.add(disposable)
     }
+
 }

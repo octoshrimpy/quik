@@ -46,6 +46,7 @@ import dev.octoshrimpy.quik.manager.NotificationManager
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.ScheduledMessage
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -129,7 +130,6 @@ class Navigator @Inject constructor(
 
         startActivity(intent)
     }
-
 
     fun showCompose(scheduledMessage: ScheduledMessage) {
         val scheduledThreadId = TelephonyCompat.getOrCreateThreadId(
@@ -367,19 +367,17 @@ class Navigator @Inject constructor(
     }
 
     fun openShadowConversation(conversation: Conversation) {
-        val intent = Intent(context, ComposeActivity::class.java).apply {
-            putExtra("conversation_id", conversation.id)
-            putExtra("is_shadow_of_rcs", true)
-            // keep your existing extras here
+        Timber.d(
+            "Navigator.openShadowConversation id=%d participants=%s",
+            conversation.id,
+            conversation.participants
+        )
 
-            // 🔑 If we're not using an Activity context, we MUST open in a new task
-            if (context !is Activity) {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-        }
-
-        context.startActivity(intent)
+        // 👇 THIS is the correct navigation call.
+        showConversation(threadId = conversation.id)
     }
+
+
 
 
 }
