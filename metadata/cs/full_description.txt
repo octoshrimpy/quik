@@ -1,12 +1,12 @@
-Open source replacement to the stock SMS app on Android. A revival of QKSMS.
-## Features
-- Scheduled Messages
-- Message Backup
-- Speech to Text and Text to Speech integrated within the app
-- Message Blocking and Archiving
-- Voice Messages
-- Attachments of any type of file
-- Message Sorting
-- Delayed Sending
+Open source náhrada za standardní aplikaci SMS v systému Android. Oživení pomocí aplikace QKSMS.
+## Funkce
+- Naplánované zprávy
+- Zálohování zpráv
+- Integrovaná funkce převodu řeči na text a textu na řeč
+- Blokování a archivace zpráv
+- Hlasové zprávy
+- Přílohy libovolného typu souboru
+- Třídění zpráv
+- Odložené odesílání
 
-You can chat with the community over at <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>
+Můžete chatovat s komunitou na <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>
