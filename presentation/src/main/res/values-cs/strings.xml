@@ -18,21 +18,21 @@
   ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
   --><resources>
     <string name="shortcut_compose_long_label">Nová konverzace</string>
-    <string name="shortcut_compose_short_label">Nová zpráva</string>
+    <string name="shortcut_compose_short_label">Skládat</string>
     <string name="shortcut_compose_disabled_message">Zkratka vypnuta</string>
     <string name="title_archived">Archivováno</string>
     <string name="title_settings">Nastavení</string>
     <string name="title_notification_prefs">Oznámení</string>
     <string name="title_theme">Motiv vzhledu</string>
     <string name="title_conversations">Hledat…</string>
-    <string name="title_compose">Nová zpráva</string>
+    <string name="title_compose">Zadejte jméno nebo číslo</string>
     <string name="setup_skip">Přeskočit</string>
     <string name="setup_next">Pokračovat</string>
     <string name="menu_add_person">Přidat osobu</string>
     <string name="menu_call">Volat</string>
     <string name="menu_info">Podrobnosti</string>
     <string name="menu_mms_part_save">Uložit do galerie</string>
-    <string name="compose_menu_share">Sdílet</string>
+    <string name="compose_menu_share">Sdílet text</string>
     <string name="main_drawer_open_cd">Otevřít menu</string>
     <string name="main_title_selected">Vybráno: %d</string>
     <string name="main_menu_clear">Vymazat</string>
@@ -59,7 +59,7 @@
     <string name="main_permission_required">Vyžadováno oprávnění</string>
     <string name="main_permission_sms">QUIK potřebuje oprávnění pro odesílání a zobrazení SMS zpráv</string>
     <string name="main_permission_contacts">QUIK potřebuje oprávnění pro zobrazení vašich kontaktů</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_notifications">QUIK potřebuje povolení k zobrazování oznámení</string>
     <string name="main_permission_allow">Povolit</string>
     <string name="drawer_inbox">Příchozí zprávy</string>
     <string name="drawer_archived">Archivováno</string>
@@ -97,7 +97,7 @@
     <string name="compose_messages_empty">Toto je začátek vaší konverzace. Řekněte něco hezkého!</string>
     <string name="compose_vcard_label">Karta kontaktu</string>
     <string name="compose_scheduled_for">Plánovaný čas:</string>
-    <string name="compose_scheduled_future">Vybraný čas musí teprve nastat (musí být v budoucnu).</string>
+    <string name="compose_scheduled_future">Vybraný čas musí teprve nastat (musí být v budoucnu)!</string>
     <string name="compose_scheduled_plus">Pro použití plánování zpráv je třeba povýšit na QUIK+</string>
     <string name="compose_scheduled_toast">Přidáno do naplánovaných zpráv</string>
     <string name="compose_hint">Napsat zprávu…</string>
@@ -148,8 +148,8 @@
     <string name="backup_restoring">Obnovení ze zálohy</string>
     <string name="backup_loading">Načítání…</string>
     <string name="backup_never">Nikdy</string>
-    <string name="backup_location_title">Backup location</string>
-    <string name="backup_location_summary">Set folder</string>
+    <string name="backup_location_title">Umístění zálohy</string>
+    <string name="backup_location_summary">Nastavit složku</string>
     <string name="backup_restore_title">Obnovit</string>
     <string name="backup_restore_summary">Vybrat zálohu</string>
     <string name="backup_restore_error_plus">Odemkněte QUIK+ pro použití funkce zálohování a obnovení</string>
@@ -158,11 +158,11 @@
     <string name="backup_restore_confirm_title">Obnovit ze zálohy</string>
     <string name="backup_restore_stop_title">Zastavit obnovu</string>
     <string name="backup_restore_stop_message">Dříve obnovené zprávy zůstanou ve vašem zařízení</string>
-    <string name="backup_select_location_rationale_title">Select backup location</string>
-    <string name="backup_select_location_rationale_message">Please select a folder to save your backups to</string>
+    <string name="backup_select_location_rationale_title">Vyberte umístění zálohy</string>
+    <string name="backup_select_location_rationale_message">Vyberte složku, do které chcete uložit zálohy</string>
     <string name="backup_details">%1$s\n%2$d messages</string>
     <string name="backup_selected_backup_error_title">Error</string>
-    <string name="backup_selected_backup_error_message">Couldn\'t read backup file</string>
+    <string name="backup_selected_backup_error_message">Nelze přečíst záložní soubor</string>
     <string name="backup_selected_backup_details_title">Backup details</string>
     <string name="backup_restore_dialog_title">Zálohy</string>
     <string name="backup_restore_dialog_empty">Nenalezeny žádné zálohy</string>
@@ -210,7 +210,7 @@
     <string name="settings_notification_wake_title">Rozsvítit displej</string>
     <string name="settings_vibration_title">Vibrace</string>
     <string name="settings_ringtone_title">Vyzvánění</string>
-    <string name="settings_ringtone_none">Žádný</string>
+    <string name="settings_ringtone_none">Žádné</string>
     <string name="settings_qkreply_title">Rychlá odpověď</string>
     <string name="settings_qkreply_summary">Vyskakovací okno pro nové zprávy</string>
     <string name="settings_qkreply_tap_dismiss_title">Klepnutím zavřít</string>
@@ -251,7 +251,7 @@
         <item quantity="other">Po %d dnech</item>
     </plurals>
     <string name="settings_long_as_mms_title">Odesílat dlouhé zprávy jako MMS</string>
-    <string name="settings_long_as_mms_summary">Nedaří-li se odeslat vaše dlouhé zprávy, nebo jsou-li poslány v nesprávném pořadí, lze je odeslat jako MMS. Mohou být účtovány další poplatky.</string>
+    <string name="settings_long_as_mms_summary">Nedaří-li se odeslat vaše dlouhé zprávy, nebo jsou-li poslány v nesprávném pořadí, lze je odeslat jako MMS. Mohou být účtovány další poplatky</string>
     <string name="settings_mms_size_title">Automaticky komprimovat MMS přílohy</string>
     <string name="settings_sync_title">Synchronizovat zprávy</string>
     <string name="settings_sync_summary">Opětovná synchronizace zpráv s nativní Android SMS databází</string>
@@ -266,8 +266,8 @@
     <string name="blocking_conversations">Blokované konverzace</string>
     <string name="blocking_manager_title">Správce blokování</string>
     <string name="blocking_manager_qksms_summary">Vestavěné blokování v QUIK</string>
-    <string name="blocking_manager_call_blocker_summary">Block spam messages, numbers &amp; unknown calls with blacklist &amp; Schedule</string>
-    <string name="blocking_manager_call_control_summary">Automatické filtrování hovorů a zpráv na jednom místě. Community IQ™ poskytuje ochranu před nevyžádanými zprávami od komunitou označených spammerů.</string>
+    <string name="blocking_manager_call_blocker_summary">Blokujte spamové zprávy, čísla a neznámé hovory pomocí černé listiny a plánování</string>
+    <string name="blocking_manager_call_control_summary">Automatické filtrování hovorů a zpráv na jednom místě. Community IQ™ poskytuje ochranu před nevyžádanými zprávami od komunitou označených spammerů</string>
     <string name="blocking_manager_sia_summary">Automaticky filtrovat zprávy od nevyžádaných čísel pomocí aplikace „Můžu to zvednout?“</string>
     <string name="blocking_manager_copy_title">Kopírovat blokovaná čísla</string>
     <string name="blocking_manager_copy_summary">Pokračovat do %s a zkopírovat stávající zablokovaná čísla</string>
@@ -309,7 +309,7 @@
     <string name="qksms_plus_upgrade_donate">Odemknout + darovat %1$s %2$s</string>
     <string name="qksms_plus_thanks_title">Děkujeme za podporu QUIK!</string>
     <string name="qksms_plus_thanks_summary">Nyní máte přístup ke všem funkcím QUIK+</string>
-    <string name="qksms_plus_error">An error has occurred, please try again</string>
+    <string name="qksms_plus_error">Došlo k chybě, zkuste to prosím znovu</string>
     <string name="qksms_plus_free_title">QUIK + je zdarma pro uživatele F-Droid! Pokud byste chtěli podpořit vývoj, neváhejte přispět.</string>
     <string name="qksms_plus_donate">Darovat pomocí PayPal</string>
     <string name="qksms_plus_coming_soon">Připravujeme</string>
@@ -432,8 +432,8 @@
     <plurals name="dialog_delete_chat">
         <item quantity="one">Jste si jistý/á, že chcete tuto zprávu smazat?</item>
         <item quantity="few">Jste si jisti, že chcete smazat %d zpráv?</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="many">Jste si jisti, že chcete smazat %d zpráv?</item>
+        <item quantity="other">Jste si jisti, že chcete smazat %d zpráv?</item>
     </plurals>
     <plurals name="dialog_send_now">
         <item quantity="one">Jste si jistý/á, že chcete tuto zprávu nyní odeslat?</item>
@@ -462,4 +462,51 @@
     <string name="compose_message_item">Položka zprávy</string>
     <string name="compose_message_attachment">Příloha</string>
     <string name="compose_toast_drag_stt">Přesuňte tlačítko pro převod řeči na text kamkoli chcete</string>
+    <string name="all_conversations_widget_title">Všechny konverzace</string>
+    <string name="button_clear">Vymazat</string>
+    <plurals name="toast_archived">
+        <item quantity="one">Archivovaná konverzace</item>
+        <item quantity="few">Archivováno %d konverzací</item>
+        <item quantity="many">Archivováno %d konverzací</item>
+        <item quantity="other">Archivováno %d konverzací</item>
+    </plurals>
+    <plurals name="toast_unarchived">
+        <item quantity="one">Nearchivovaná konverzace</item>
+        <item quantity="few">Nearchivované %d konverzace</item>
+        <item quantity="many">Nearchivované %d konverzací</item>
+        <item quantity="other">Nearchivované %d konverzací</item>
+    </plurals>
+    <string name="notification_message_failed_action">Znovu odeslat</string>
+    <string name="speak_no_messages">Žádné zprávy</string>
+    <string name="speak_unseen_messages">Čtení neviditelných zpráv</string>
+    <string name="messageLinkHandling_dialog_title">Upozornění na externí odkaz</string>
+    <string name="messageLinkHandling_dialog_body">Některé odkazy mohou být nebezpečné nebo vás mohou nečekaně přesměrovat. Před pokračováním si níže uvedený odkaz prohlédněte:\n\n%1$s\n\nChcete pokračovat?</string>
+    <string name="messageLinkHandling_dialog_positive">Ano, otevřít odkaz</string>
+    <string name="messageLinkHandling_dialog_negative">Žádný</string>
+    <string name="error_stt_toast">Omlouváme se, při načítání poskytovatele převodu řeči na text došlo k chybě.</string>
+    <string name="stt_toast_extra_prompt">Namluvte svou zprávu</string>
+    <string name="messages_text_share_file_error">Jejda! Při sdílení se něco pokazilo</string>
+    <string name="message_body_too_long_to_display">⚠ Zpráva je dlouhá. Zkopírujte nebo uložte pro zobrazení celého textu</string>
+    <string name="clipboard_too_large_to_copy">Velikost dat překračuje limit schránky</string>
+    <string name="clipboard_unable_to_copy_to">Nelze zkopírovat do schránky</string>
+    <string name="scheduled_send_cd">Naplánovat tuto zprávu</string>
+    <string name="attachment_missing">Chybí</string>
+    <string name="settings_system_show_stt_title">Zobrazit tlačítko pro převod řeči na text</string>
+    <string name="settings_notification_previews_summary">Zobrazit jméno a zprávu</string>
+    <string name="settings_notification_silent_title">Tichý, pokud není v kontaktech</string>
+    <string name="settings_notification_silent_summary">Ztlumí oznámení o zprávách, pokud není příjemce v kontaktech</string>
+    <string name="settings_unread_at_top_title">Nepřečtené nahoře</string>
+    <string name="settings_unread_at_top_summary">Zobrazit nepřečtené konverzace nahoře</string>
+    <string name="settings_mms_weblink_title">Zpracování odkazů ve zprávách</string>
+    <string name="settings_disable_screenshots_title">Zakázat snímky obrazovky</string>
+    <string name="settings_diable_screenshots_summary">Zabraňte operačnímu systému a dalším aplikacím v pořizování snímků obrazovky aplikace.</string>
+    <string name="message_content_filters_title">Filtry obsahu zpráv</string>
+    <string name="message_content_filters_empty">Zde se zobrazí filtry obsahu vašich zpráv</string>
+    <string name="message_content_filters_add_cd">Vytvořit nový filtr</string>
+    <string name="message_content_filters_dialog_title">Vynechat zprávy, které odpovídají</string>
+    <string name="message_content_filters_dialog_hint">Slovo, fráze nebo regulární výraz</string>
+    <string name="message_content_filters_dialog_case_switch">Rozlišuje velká a malá písmena</string>
+    <string name="message_content_filters_dialog_regex_switch">Regulární výraz</string>
+    <string name="message_content_filters_dialog_contacts_switch">Zahrnout kontakty</string>
+    <string name="message_content_filters_dialog_create">Vytvořit</string>
 </resources>
