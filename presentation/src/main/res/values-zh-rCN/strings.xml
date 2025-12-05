@@ -93,7 +93,7 @@
     <string name="compose_send_group_summary">收件人和回复将对所有人可见</string>
     <string name="compose_messages_empty">对话从这里开始，说些什么吧！</string>
     <string name="compose_vcard_label">联系人卡片</string>
-    <string name="compose_scheduled_for">计划于</string>
+    <string name="compose_scheduled_for">计划于：</string>
     <string name="compose_scheduled_future">所选时间必须是未来！</string>
     <string name="compose_scheduled_plus">你需要解锁 QUIK+ 才可以使用预约短信</string>
     <string name="compose_scheduled_toast">已添加到预约短信队列</string>
@@ -404,4 +404,25 @@
         <item>啊哈哈哈哈</item>
         <item>好的</item>
     </string-array>
+    <string name="menu_mms_part_share">分享</string>
+    <string name="menu_mms_part_forward">转发</string>
+    <string name="menu_mms_part_open">在第三方应用中打开</string>
+    <string name="main_menu_select_all">全选</string>
+    <string name="main_menu_send_now">立即发送</string>
+    <string name="main_menu_edit_message">编辑短信</string>
+    <string name="main_menu_rename_conversation">对话重命名</string>
+    <string name="main_sender_draft">草稿：%s个</string>
+    <string name="scheduled_menu_send_now">立即发送</string>
+    <string name="scheduled_menu_edit_message">编辑短信</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="other">确定删除所选的%d条短信吗？</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="other">确定发送%d条短信吗？</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">编辑短信</string>
+    <string name="dialog_edit_scheduled_message">编辑此短信，将使其从日程表中移除。\n\n请确保在下一页重新提交，否则短信将会丢失。\n\n确定要继续吗？</string>
+    <string name="dialog_edit_scheduled_message_positive_button">是的，确定编辑</string>
+    <string name="dialog_clear_compose_title">清除短信内容</string>
+    <string name="dialog_clear_compose">确定清除短信内容吗？本操作不可撤回。</string>
 </resources>
