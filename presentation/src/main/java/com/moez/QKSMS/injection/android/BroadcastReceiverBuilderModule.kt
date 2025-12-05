@@ -36,6 +36,7 @@ import dev.octoshrimpy.quik.receiver.SmsProviderChangedReceiver
 import dev.octoshrimpy.quik.receiver.SmsReceivedReceiver
 import dev.octoshrimpy.quik.receiver.MessageMarkReceiver
 import dev.octoshrimpy.quik.receiver.MessageSentReceiver
+import dev.octoshrimpy.quik.receiver.ResendMessageReceiver
 import dev.octoshrimpy.quik.receiver.SendDelayedMessageReceiver
 import dev.octoshrimpy.quik.receiver.SpeakThreadsReceiver
 import dev.octoshrimpy.quik.receiver.StartActivityFromWidgetReceiver
@@ -82,6 +83,10 @@ abstract class BroadcastReceiverBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector
     abstract fun bindRemoteMessagingReceiver(): RemoteMessagingReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    abstract fun bindResendMessageReceiver(): ResendMessageReceiver
 
     @ActivityScope
     @ContributesAndroidInjector
