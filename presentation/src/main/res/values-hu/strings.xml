@@ -447,13 +447,13 @@
     <string name="compose_message_sim">SIM-szám</string>
     <string name="compose_message_item">Üzenetelem</string>
     <string name="compose_message_attachment">Melléklet</string>
-    <string name="compose_toast_drag_stt">Helyezze a szövegfelolvasás gombot tetszőleges helyre</string>
+    <string name="compose_toast_drag_stt">Helyezze a beszédfelismerés gombot tetszőleges helyre</string>
     <string name="message_body_too_long_to_display">⚠ Az üzenet hosszú. Másolja vagy mentse el a teljes szöveget</string>
     <string name="clipboard_too_large_to_copy">Az adatméret meghaladja a vágólap korlátait</string>
     <string name="clipboard_unable_to_copy_to">Nem lehet a vágólapra másolni</string>
     <string name="scheduled_send_cd">Ezen üzenet ütemezése</string>
     <string name="attachment_missing">Hiányzik</string>
-    <string name="settings_system_show_stt_title">Szövegfelolvasás gomb megjelenítése</string>
+    <string name="settings_system_show_stt_title">Beszédfelismerés gomb megjelenítése</string>
     <string name="settings_notification_previews_summary">Név és üzenet megjelenítése</string>
     <string name="settings_notification_silent_title">Néma, ha nincs a névjegyek között</string>
     <string name="settings_notification_silent_summary">Némítja az értesítéseket az olyan üzenetekhez, amelyek címzettje nincs a névjegyei között</string>
@@ -488,7 +488,7 @@
     <string name="messageLinkHandling_dialog_body">Egyes hivatkozások nem biztonságosak, vagy váratlanul átirányíthatnak. Mielőtt továbbhaladna, ellenőrizze az alábbi hivatkozást:\n\n%1$s\n\nSzeretné folytatni?</string>
     <string name="messageLinkHandling_dialog_positive">Igen, hivatkozás megnyitása</string>
     <string name="messageLinkHandling_dialog_negative">Nem</string>
-    <string name="error_stt_toast">Hiba történt a szövegfelolvasás-szolgáltató betöltésekor.</string>
+    <string name="error_stt_toast">Hiba történt a beszédfelismerési szolgáltató betöltésekor.</string>
     <string name="stt_toast_extra_prompt">Mondja el üzenetét</string>
     <string name="messages_text_share_file_error">Valami probléma történt a megosztáskor</string>
 </resources>
