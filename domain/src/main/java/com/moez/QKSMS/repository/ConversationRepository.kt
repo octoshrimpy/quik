@@ -63,18 +63,18 @@ interface ConversationRepository {
 
     fun getRecipient(recipientId: Long): Recipient?
 
-    fun getOrCreateConversation(threadId: Long, sendAsGroup: Boolean = false): Conversation?
+    fun getOrCreateConversation(threadId: Long, sendAsGroup: Boolean = true): Conversation?
 
-    fun createConversation(threadId: Long, sendAsGroup: Boolean = false): Conversation?
+    fun createConversation(threadId: Long, sendAsGroup: Boolean = true): Conversation?
 
     fun getConversation(addresses: Collection<String>): Conversation?
 
     fun getOrCreateConversation(
-        addresses: Collection<String>, sendAsGroup: Boolean = false
+        addresses: Collection<String>, sendAsGroup: Boolean = true
     ): Conversation?
 
     fun createConversation(
-        addresses: Collection<String>, sendAsGroup: Boolean = false
+        addresses: Collection<String>, sendAsGroup: Boolean = true
     ): Conversation?
 
     fun saveDraft(threadId: Long, draft: String)

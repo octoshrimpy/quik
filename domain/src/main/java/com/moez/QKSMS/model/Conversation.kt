@@ -38,7 +38,7 @@ open class Conversation(
 
     var name: String = "", // custom title
 
-    var sendAsGroup: Boolean = false,
+    var sendAsGroup: Boolean = true,
 ) : RealmObject() {
 
     val date: Long get() = lastMessage?.date ?: if (draft.isNotEmpty()) draftDate else 0
