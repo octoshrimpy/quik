@@ -1,0 +1,144 @@
+name: Manual Release Prep
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_component:
+        description: Which part of versionName should be bumped?
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    env:
+      GRADLE_FILE: presentation/build.gradle
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Bump version in Gradle
+        id: bump
+        shell: bash
+        env:
+          BUMP_COMPONENT: ${{ inputs.bump_component }}
+        run: |
+          set -euo pipefail
+
+          python3 <<'PY'
+          import os
+          import pathlib
+          import re
+          import sys
+
+          gradle_file = pathlib.Path(os.environ["GRADLE_FILE"])
+          bump_component = os.environ["BUMP_COMPONENT"]
+
+          content = gradle_file.read_text()
+
+          code_pattern = re.compile(r"(^\s*versionCode\s+)(\d+)", re.MULTILINE)
+          name_pattern = re.compile(r"(^\s*versionName\s+['\"])(\d+\.\d+\.\d+)(['\"])", re.MULTILINE)
+
+          code_match = code_pattern.search(content)
+          name_match = name_pattern.search(content)
+
+          if not code_match or not name_match:
+              sys.stderr.write("Unable to locate versionCode or versionName in Gradle file.\n")
+              sys.exit(1)
+
+          current_code = int(code_match.group(2))
+          major, minor, patch = map(int, name_match.group(2).split("."))
+
+          if bump_component == "major":
+              major, minor, patch = major + 1, 0, 0
+          elif bump_component == "minor":
+              minor, patch = minor + 1, 0
+          elif bump_component == "patch":
+              patch += 1
+          else:
+              sys.stderr.write(f"Unsupported bump component: {bump_component}\n")
+              sys.exit(1)
+
+          new_name = f"{major}.{minor}.{patch}"
+          new_code = current_code + 1
+
+          content, code_count = code_pattern.subn(lambda m: f"{m.group(1)}{new_code}", content, count=1)
+          content, name_count = name_pattern.subn(lambda m: f"{m.group(1)}{new_name}{m.group(3)}", content, count=1)
+
+          if code_count != 1 or name_count != 1:
+              sys.stderr.write("Failed to update version fields uniquely.\n")
+              sys.exit(1)
+
+          gradle_file.write_text(content)
+
+          github_env = pathlib.Path(os.environ["GITHUB_ENV"])
+          with github_env.open("a") as env_file:
+              env_file.write(f"NEW_VERSION_NAME={new_name}\n")
+              env_file.write(f"NEW_VERSION_CODE={new_code}\n")
+          PY
+
+      - name: Generate release notes
+        id: notes
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const newTag = `v${process.env.NEW_VERSION_NAME}`;
+            const {owner, repo} = context.repo;
+
+            const {data: tags} = await github.rest.repos.listTags({
+              owner,
+              repo,
+              per_page: 100,
+            });
+
+            const previousTagEntry = tags.find(tag => /^v\d/.test(tag.name));
+            const previousTag = previousTagEntry ? previousTagEntry.name : undefined;
+
+            const requestPayload = {
+              owner,
+              repo,
+              tag_name: newTag,
+              target_commitish: 'master',
+            };
+
+            if (previousTag) {
+              requestPayload.previous_tag_name = previousTag;
+            }
+
+            const response = await github.request('POST /repos/{owner}/{repo}/releases/generate-notes', requestPayload);
+
+            const notes = response.data.body || '';
+            core.exportVariable('RELEASE_NOTES', notes);
+            core.setOutput('release_notes', notes);
+
+      - name: Open release PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release/v${{ env.NEW_VERSION_NAME }}
+          delete-branch: false
+          commit-message: "chore: release v${{ env.NEW_VERSION_NAME }} (${{ env.NEW_VERSION_CODE }})"
+          title: Release v${{ env.NEW_VERSION_NAME }} (${{ env.NEW_VERSION_CODE }})
+          body: |
+            ## Summary
+            - bump `versionName` to `${{ env.NEW_VERSION_NAME }}`
+            - bump `versionCode` to `${{ env.NEW_VERSION_CODE }}`
+
+            Triggered manually via the Manual Release Prep workflow with **${{ inputs.bump_component }}** bump.
+
+            ## Auto-generated release notes
+            ${{ env.RELEASE_NOTES }}

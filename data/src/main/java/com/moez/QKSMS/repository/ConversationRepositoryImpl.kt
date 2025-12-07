@@ -318,29 +318,31 @@ class ConversationRepositoryImpl @Inject constructor(
             .equalTo("id", recipientId)
             .findFirst()
 
-    override fun getOrCreateConversation(threadId: Long, sendAsGroup: Boolean) =
-        getConversation(threadId) ?: createConversation(threadId, sendAsGroup)
-
     override fun createConversation(threadId: Long, sendAsGroup: Boolean) =
         createConversationFromCp(threadId, sendAsGroup)
 
-    override fun getConversation(addresses: Collection<String>) =
-        Realm.getDefaultInstance().let { realm ->
+
+    override fun getConversation(recipients: Collection<String>): Conversation? =
+        Realm.getDefaultInstance().use { realm ->
             realm.refresh()
             realm.where(Conversation::class.java)
                 .findAll()
-                .filter { conversation -> conversation.recipients.size == addresses.size }
+                .filter { conversation -> conversation.recipients.size == recipients.size }
                 .find { conversation ->
                     conversation.recipients.map { it.address }.all { recipientAddress ->
-                        addresses.any { phoneNumberUtils.compare(it, recipientAddress) }
+                        recipients.any { phoneNumberUtils.compare(it, recipientAddress) }
                     }
                 }
+                ?.let { realm.copyFromRealm(it) }
         }
 
     override fun createConversation(addresses: Collection<String>, sendAsGroup: Boolean) =
         TelephonyCompat.getOrCreateThreadId(context, addresses.toSet())
             .takeIf { it != 0L }
             ?.let { providerThreadId -> createConversationFromCp(providerThreadId, sendAsGroup) }
+
+    override fun getOrCreateConversation(threadId: Long, sendAsGroup: Boolean) =
+        getConversation(threadId) ?: createConversation(threadId, sendAsGroup)
 
     override fun getOrCreateConversation(addresses: Collection<String>, sendAsGroup: Boolean) =
         getConversation(addresses) ?: createConversation(addresses, sendAsGroup)
