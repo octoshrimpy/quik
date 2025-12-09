@@ -1,0 +1,16 @@
+{
+    "emoji_reaction_ios_generic_added": "^(?s)(.+?) reagált erre: „(.+?)”$",
+    "emoji_reaction_ios_generic_removed": "^(?s)(.+?) eltávolítva innen: „(.+?)”$",
+    "emoji_reaction_ios_heart_added": "^(?s)szívecske erre: „(.+?)”$",
+    "emoji_reaction_ios_heart_removed": "^(?s)szívecske eltávolítva erről: „(.+?)”$",
+    "emoji_reaction_ios_like_added": "^(?s)kedveli: „(.+?)”$",
+    "emoji_reaction_ios_like_removed": "^(?s)kedvelés eltávolítva erről: „(.+?)”$",
+    "emoji_reaction_ios_dislike_added": "^(?s)nem kedveli: „(.+?)”$",
+    "emoji_reaction_ios_dislike_removed": "^(?s)nem kedvelés eltávolítva erről: „(.+?)”$",
+    "emoji_reaction_ios_laugh_added": "^(?s)nevetett rajta: „(.+?)”$",
+    "emoji_reaction_ios_laugh_removed": "^(?s)nevetés eltávolítva erről: „(.+?)”$",
+    "emoji_reaction_ios_exclamation_added": "^(?s)kiemelte: „(.+?)”$",
+    "emoji_reaction_ios_exclamation_removed": "^(?s)kiemelés eltávolítva erről: „(.+?)”$",
+    "emoji_reaction_ios_question_mark_added": "^(?s)kérdezte: „(.+?)”$",
+    "emoji_reaction_ios_question_mark_removed": "^(?s)kérdőjel eltávolítva erről: „(.+?)”$"
+}
