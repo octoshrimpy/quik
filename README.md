@@ -2,7 +2,7 @@
 
 # QUIK
 
-[![Build and Release](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/octoshrimpy/quik/actions/workflows/build-and-release.yml)
+[![Manual Release](https://github.com/octoshrimpy/quik/actions/workflows/manual-release.yml/badge.svg)](https://github.com/octoshrimpy/quik/actions/workflows/manual-release.yml)
 <a href="https://hosted.weblate.org/engage/quik/">
 <img src="https://hosted.weblate.org/widget/quik/svg-badge.svg" alt="Translation status" />
 </a>
