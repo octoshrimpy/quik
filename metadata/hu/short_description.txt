@@ -1,0 +1,1 @@
+Nyílt forráskódú alternatíva az Android alapértelmezett SMS-alkalmazása helyett. A QKSMS újjáéledése.

@@ -76,7 +76,7 @@
     <string name="rate_dismiss">ОТКЛОНИТЬ</string>
     <string name="dialog_delete_title">Удалить</string>
     <plurals name="dialog_delete_message">
-        <item quantity="one">Уверены, что хотите удалить эту беседу?</item>
+        <item quantity="one">Уверены, что хотите удалить %d беседу?</item>
         <item quantity="few">Уверены, что хотите удалить %d беседы?</item>
         <item quantity="many">Уверены, что хотите удалить %d бесед?</item>
         <item quantity="other">Уверены, что хотите удалить %d бесед?</item>
@@ -130,7 +130,7 @@
     <string name="compose_send_cd">Отправить сообщение</string>
     <string name="message_status_sending">Отправка…</string>
     <string name="message_status_delivered">Доставлено %s</string>
-    <string name="message_status_failed">Не удалось отправить. Нажмите, чтобы попробовать ещё раз.</string>
+    <string name="message_status_failed">Не удалось отправить. Нажмите, чтобы попробовать ещё раз</string>
     <string name="info_title">Подробности</string>
     <string name="info_copied_address">Адрес скопирован</string>
     <string name="info_name">Название разговора</string>
@@ -178,7 +178,7 @@
     <string name="scheduled_empty_description">Автоматически отправить сообщение когда пожелаете</string>
     <string name="scheduled_empty_message_1">Привет! Когда у вас был день рождения?</string>
     <string name="scheduled_empty_message_2">Он был 23 декабря</string>
-    <string name="scheduled_empty_message_3">С днём рождения! Посмотрите, какой я отличный друг, помнящий о вашем дне рождения!</string>
+    <string name="scheduled_empty_message_3">С днём рождения! Посмотрите, какой я отличный друг, помнящий о вашем дне рождения</string>
     <!--&#x200A; is a special character required at the end of this string to fix it's formatting in the app -->
     <string name="scheduled_empty_message_3_timestamp">Отправка 23 декабря </string>
     <string name="scheduled_compose_cd">Запланировать сообщение</string>
@@ -245,13 +245,13 @@
     <string name="settings_auto_delete_warning">Удалить старые сообщения автоматически?</string>
     <string name="settings_auto_delete_warning_message">Если продолжить, будет удалено сообщений: %1$d</string>
     <plurals name="settings_auto_delete_summary">
-        <item quantity="one">Через день</item>
+        <item quantity="one">Через %d день</item>
         <item quantity="few">Через %d дня</item>
         <item quantity="many">Через %d дней</item>
         <item quantity="other">Через %d дней</item>
     </plurals>
     <string name="settings_long_as_mms_title">Отправлять длинные сообщения как MMS</string>
-    <string name="settings_long_as_mms_summary">Если не удаётся отправить длинные текстовые сообщения или они отправляются в неправильном порядке, вы можете отправить их в виде MMS. Может взиматься дополнительная плата.</string>
+    <string name="settings_long_as_mms_summary">Если не удаётся отправить длинные текстовые сообщения или они отправляются в неправильном порядке, вы можете отправить их в виде MMS. Может взиматься дополнительная плата</string>
     <string name="settings_mms_size_title">Автоматически сжимать вложения MMS</string>
     <string name="settings_sync_title">Синхронизация сообщений</string>
     <string name="settings_sync_summary">Принудительная синхронизация сообщений с собственной базой данных SMS Android</string>
@@ -309,7 +309,7 @@
     <string name="qksms_plus_upgrade_donate">Разблокировать + пожертвовать %1$s %2$s</string>
     <string name="qksms_plus_thanks_title">Спасибо за поддержку QUIK!</string>
     <string name="qksms_plus_thanks_summary">Теперь у вас есть доступ ко всем функциям QUIK+</string>
-    <string name="qksms_plus_error">Произошла ошибка. Попробуйте ещё раз.</string>
+    <string name="qksms_plus_error">Произошла ошибка. Попробуйте ещё раз</string>
     <string name="qksms_plus_free_title">QUIK+ является бесплатным для пользователей F-Droid! Если вы хотите поддержать развитие приложения, сделайте пожертвование.</string>
     <string name="qksms_plus_donate">Пожертвовать через PayPal</string>
     <string name="qksms_plus_coming_soon">Скоро</string>
@@ -365,7 +365,7 @@
     <string name="toast_copied">Скопировано</string>
     <string name="toast_qksms_plus">Вы должны разблокировать QUIK+, чтобы использовать</string>
     <plurals name="notification_new_messages">
-        <item quantity="one">Новое сообщение</item>
+        <item quantity="one">%s новое сообщение</item>
         <item quantity="few">%s новых сообщения</item>
         <item quantity="many">%s новых сообщений</item>
         <item quantity="other">%s новых сообщений</item>
@@ -427,16 +427,16 @@
     <string name="scheduled_menu_send_now">Отправить сейчас</string>
     <string name="scheduled_menu_edit_message">Редактировать сообщение</string>
     <plurals name="dialog_delete_chat">
-        <item quantity="one">Вы уверены, что хотите удалить это сообщение?</item>
-        <item quantity="few">Вы уверены, что хотите удалить %d сообщений?</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="one">Вы уверены, что хотите удалить %d сообщение?</item>
+        <item quantity="few">Вы уверены, что хотите удалить %d сообщения?</item>
+        <item quantity="many">Вы уверены, что хотите удалить %d сообщений?</item>
+        <item quantity="other">Вы уверены, что хотите удалить %d сообщений?</item>
     </plurals>
     <plurals name="dialog_send_now">
-        <item quantity="one">Вы уверены, что хотите отправить это сообщение прямо сейчас?</item>
-        <item quantity="few">Вы уверены, что хотите отправить прямо сейчас %d сообщений?</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="one">Вы уверены, что хотите отправить %d сообщение прямо сейчас?</item>
+        <item quantity="few">Вы уверены, что хотите отправить прямо сейчас %d сообщения?</item>
+        <item quantity="many">Вы уверены, что хотите отправить прямо сейчас %d сообщений?</item>
+        <item quantity="other">Вы уверены, что хотите отправить прямо сейчас %d сообщений?</item>
     </plurals>
     <string name="dialog_edit_scheduled_message_title">Редактировать сообщение</string>
     <string name="dialog_edit_scheduled_message">Редактирование этого сообщения удалит его из планировщика.\n\nУбедитесь, что вы повторно отправите его на следующем экране, иначе оно будет потеряно.\n\nХотите продолжить?</string>

@@ -3,7 +3,7 @@ Remplacement open-source de l'application SMS de base sur Android. Une résurrec
 - Messages programmés dans le temps
 - Sauvegarde des messages
 - Dictez vos SMS à la voix et faites lire vos SMS textuels par une voix synthétisée
-- Blocage et Archivage de messages
+- Blocage et archivage de messages
 - Messages vocaux
 - Mettez n'importe quel fichier en pièce jointe
 - Triez vos messages

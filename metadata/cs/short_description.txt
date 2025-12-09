@@ -1,0 +1,1 @@
+Open source náhrada za standardní aplikaci SMS v systému Android. Oživení aplikací QKSMS.

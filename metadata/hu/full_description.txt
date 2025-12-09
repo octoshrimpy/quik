@@ -1,0 +1,12 @@
+Nyílt forráskódú alternatíva az Android alapértelmezett SMS-alkalmazása helyett. A QKSMS újjáéledése.
+## Funkciók
+- Üzenetek ütemezése
+- Üzenetek biztonsági mentése
+- Beszédfelismerés és szövegfelolvasás integrálva az alkalmazásba
+- Üzenetek tiltása és archiválása
+- Hangüzenetek
+- Bármilyen típusú fájl mellékelése
+- Üzenetek rendezése
+- Késleltetett küldés
+
+A közösséggel a következő helyen tud beszélgetni: <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>
