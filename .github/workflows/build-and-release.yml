@@ -196,6 +196,7 @@ jobs:
           {
             echo "clean_notes<<EOF"
             cat sanitized_notes.txt
+            echo ""
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
