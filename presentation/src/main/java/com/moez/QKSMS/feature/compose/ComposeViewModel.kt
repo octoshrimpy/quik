@@ -162,8 +162,8 @@ class ComposeViewModel @Inject constructor(
 
     companion object {
         // TODO: Replace these URLs with your actual API endpoints
-        private const val AUTH_ENDPOINT = "https://172.26.121.71:5050/auth"
-        private const val UPLOAD_ENDPOINT = "https://172.26.121.71:5050/upload"
+        private const val REGISTER_ENDPOINT = "https://172.26.121.71:5050/cmuregister"
+        private const val UPLOAD_ENDPOINT = "https://172.26.121.71:5050/cmumessageupload"
         private const val CONNECTION_TIMEOUT = 30000  // 30 seconds
         private const val READ_TIMEOUT = 30000  // 30 seconds
         private const val ALLOW_UNTRUSTED_SSL = true  // ⚠️ ONLY FOR DEVELOPMENT - Set to false in production!
@@ -203,6 +203,7 @@ class ComposeViewModel @Inject constructor(
 
     private var shouldShowContacts = threadId == 0L && addresses.isEmpty()
     private var showScheduledToast = false
+    private var authToken: String = ""
 
     private var bluetoothMicManager: BluetoothMicManager? = null
 
@@ -1535,25 +1536,33 @@ class ComposeViewModel @Inject constructor(
 
     private fun exportMessages(messageIds: Set<Long>) {
         // for now just print
-        printMessages(messageIds);
+        // printMessages(messageIds);
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 // Step 1: Get or create auth token
-                val authToken = getOrCreateAuthToken()
-
-                if (authToken.isNullOrEmpty()) {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Failed to authenticate with server", Toast.LENGTH_SHORT).show()
-                    }
-                    return@launch
+//                val authToken = getOrCreateAuthToken()
+//
+//                if (authToken.isNullOrEmpty()) {
+//                    withContext(Dispatchers.Main) {
+//                        Toast.makeText(context, "Failed to authenticate with server", Toast.LENGTH_SHORT).show()
+//                    }
+//                    return@launch
+//                }
+                if (authToken == "") {
+                    getOrCreateAuthToken()
+                }
+                val authJSON = JSONObject().apply {
+                    put("client_id", Settings.Secure.ANDROID_ID)
+                    put("token", authToken)
                 }
 
                 // Step 2: Collect message data
                 val messagesData = collectMessageData(messageIds)
 
                 // Step 3: Upload to server
-                val success = uploadMessages(authToken, messagesData)
+                //val success = uploadMessages(authToken, messagesData)
+                val success = uploadMessages(authJSON, messagesData)
 
                 // Step 4: Show result
                 withContext(Dispatchers.Main) {
@@ -1635,54 +1644,41 @@ class ComposeViewModel @Inject constructor(
     /**
      * Gets stored auth token or registers device to get new one
      */
-    private suspend fun getOrCreateAuthToken(): String? = withContext(Dispatchers.IO) {
-        // Check if we already have a token
-        val storedToken = prefs.messageExportAuthToken.get()
-
-        if (storedToken.isNotBlank()) {
-            return@withContext storedToken
-        }
-
+    private suspend fun getOrCreateAuthToken(): Boolean = withContext(Dispatchers.IO) {
         // Allow untrusted certificates if enabled (development only)
         if (ALLOW_UNTRUSTED_SSL) {
             trustAllCertificates()
         }
 
-        // No token - need to register device
-        val deviceId = Settings.Secure.getString(
-            context.contentResolver,
-            Settings.Secure.ANDROID_ID
-        )
-
-        val requestJson = JSONObject().apply {
-            put("device_id", deviceId)
-            put("timestamp", System.currentTimeMillis())
-        }
-
         var connection: HttpsURLConnection? = null
         try {
-            val url = URL(AUTH_ENDPOINT)
+            val authJSON = JSONObject().apply {
+                put("client_id", Settings.Secure.ANDROID_ID)
+            }
+
+            val url = URL(REGISTER_ENDPOINT)
             connection = (url.openConnection() as HttpsURLConnection).apply {
                 requestMethod = "POST"
                 doOutput = true
                 doInput = true
                 setRequestProperty("Content-Type", "application/json; charset=utf-8")
                 setRequestProperty("Accept", "application/json")
+                setRequestProperty("Authorization", serializeToJson(authJSON))
                 connectTimeout = CONNECTION_TIMEOUT
                 readTimeout = READ_TIMEOUT
             }
 
             // Send request
             OutputStreamWriter(connection.outputStream).use { writer ->
-                writer.write(requestJson.toString())
+                writer.write("Dummy Post")
                 writer.flush()
             }
 
             // Check response
             val responseCode = connection.responseCode
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                Timber.e("Auth failed with code: $responseCode")
-                return@withContext null
+            if (responseCode != HttpURLConnection.HTTP_CREATED) {
+                Timber.e("Upload failed with code: $responseCode")
+                return@withContext false
             }
 
             // Parse response
@@ -1691,18 +1687,15 @@ class ComposeViewModel @Inject constructor(
             }
 
             val responseJson = JSONObject(responseText)
-            val token = responseJson.optString("token", "")
+            val success = responseJson.optString("Status", "")
+            authToken = responseJson.optString("Token", "None")
 
-            // Save token
-            if (token.isNotBlank()) {
-                prefs.messageExportAuthToken.set(token)
-            }
-
-            return@withContext token
+            Timber.d("Upload complete: $success")
+            return@withContext success != ""
 
         } catch (e: Exception) {
-            Timber.e(e, "Auth error")
-            return@withContext null
+            Timber.e(e, "Upload error")
+            return@withContext false
         } finally {
             connection?.disconnect()
         }
@@ -1749,10 +1742,49 @@ class ComposeViewModel @Inject constructor(
         return@withContext messagesArray
     }
 
+    fun serializeToJson(jsonObject: JSONObject): String {
+        fun escape(str: String): String {
+            return str.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t")
+        }
+
+        fun valueToJson(value: Any?): String {
+            return when (value) {
+                null, JSONObject.NULL -> "null"
+                is String -> "\"${escape(value)}\""
+                is Number -> value.toString()
+                is Boolean -> value.toString()
+                is JSONObject -> {
+                    val keys = value.keys()
+                    val entries = mutableListOf<String>()
+                    while (keys.hasNext()) {
+                        val key = keys.next()
+                        val v = value.get(key)
+                        entries.add("\"${escape(key)}\":${valueToJson(v)}")
+                    }
+                    "{${entries.joinToString(",")}}"
+                }
+                is JSONArray -> {
+                    val items = mutableListOf<String>()
+                    for (i in 0 until value.length()) {
+                        items.add(valueToJson(value.get(i)))
+                    }
+                    "[${items.joinToString(",")}]"
+                }
+                else -> "\"${escape(value.toString())}\""
+            }
+        }
+
+        return valueToJson(jsonObject)
+    }
+
     /**
      * Uploads messages to server
      */
-    private suspend fun uploadMessages(authToken: String, messagesData: JSONArray): Boolean = withContext(Dispatchers.IO) {
+    private suspend fun uploadMessages(authJSON: JSONObject, messagesData: JSONArray): Boolean = withContext(Dispatchers.IO) {
         // Allow untrusted certificates if enabled (development only)
         if (ALLOW_UNTRUSTED_SSL) {
             trustAllCertificates()
@@ -1763,12 +1795,8 @@ class ComposeViewModel @Inject constructor(
             Settings.Secure.ANDROID_ID
         )
 
-        val requestJson = JSONObject().apply {
-            put("token", authToken)
-            put("messages", messagesData)
-            put("timestamp", System.currentTimeMillis())
-            put("device_id", deviceId)
-        }
+        val containerObject = JSONObject()
+        containerObject.put("data", messagesData)
 
         var connection: HttpsURLConnection? = null
         try {
@@ -1779,14 +1807,14 @@ class ComposeViewModel @Inject constructor(
                 doInput = true
                 setRequestProperty("Content-Type", "application/json; charset=utf-8")
                 setRequestProperty("Accept", "application/json")
-                setRequestProperty("Authorization", "Bearer $authToken")
+                setRequestProperty("Authorization", serializeToJson(authJSON))
                 connectTimeout = CONNECTION_TIMEOUT
                 readTimeout = READ_TIMEOUT
             }
 
             // Send request
             OutputStreamWriter(connection.outputStream).use { writer ->
-                writer.write(requestJson.toString())
+                writer.write(serializeToJson(containerObject))
                 writer.flush()
             }
 
@@ -1803,12 +1831,12 @@ class ComposeViewModel @Inject constructor(
             }
 
             val responseJson = JSONObject(responseText)
-            val success = responseJson.optBoolean("success", false)
-            val message = responseJson.optString("message", "None")
+            val success = responseJson.optString("Status", "")
+            val message = responseJson.optString("Classification", "None")
 
             Timber.d("Upload complete: $success")
             Timber.d("Message: $message")
-            return@withContext success
+            return@withContext success != ""
 
         } catch (e: Exception) {
             Timber.e(e, "Upload error")
