@@ -178,7 +178,6 @@ class ComposeViewModel @Inject constructor(
                     .filter { conversations -> conversations.isLoaded }
                     .mapNotNull { conversationRepo.getConversation(addresses) }
                     .doOnNext { newState { copy(loading = false) } }
-                    .switchMap { conversation -> conversation.asObservable() }
                 }
 
         // Merges two potential conversation sources (constructor threadId and contact selection)
