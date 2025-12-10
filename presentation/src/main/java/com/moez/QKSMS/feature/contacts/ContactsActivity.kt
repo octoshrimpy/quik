@@ -21,6 +21,7 @@ package dev.octoshrimpy.quik.feature.contacts
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProviders
 import com.jakewharton.rxbinding2.view.clicks
@@ -28,6 +29,7 @@ import com.jakewharton.rxbinding2.widget.editorActions
 import com.jakewharton.rxbinding2.widget.textChanges
 import dagger.android.AndroidInjection
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.Navigator
 import dev.octoshrimpy.quik.common.ViewModelFactory
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
@@ -54,6 +56,7 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     @Inject lateinit var contactsAdapter: ComposeItemAdapter
     @Inject lateinit var phoneNumberAdapter: PhoneNumberPickerAdapter
     @Inject lateinit var viewModelFactory: ViewModelFactory
+    @Inject lateinit var navigator: Navigator
 
     override val queryChangedIntent: Observable<CharSequence> by lazy { search.textChanges() }
     override val queryClearedIntent: Observable<*> by lazy { cancel.clicks() }
@@ -85,6 +88,13 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         viewModel.bindView(this)
 
         contacts.adapter = contactsAdapter
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navigator.showMainActivity()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun render(state: ContactsState) {
