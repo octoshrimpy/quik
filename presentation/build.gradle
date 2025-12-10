@@ -72,6 +72,14 @@ android {
             resValue("string", "app_name", "QUIK-Debug")
             signingConfig signingConfigs.debug
         }
+        fdroid {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            matchingFallbacks = ['release']
+            applicationIdSuffix ".fdroid"
+        }
     }
 
     compileOptions {
@@ -105,6 +113,7 @@ androidExtensions {
 configurations {
     debug
     release
+    fdroid
 }
 
 dependencies {
