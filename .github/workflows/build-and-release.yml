@@ -130,10 +130,10 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Build signed release APK
-        run: ./gradlew clean assembleRelease
+        run: ./gradlew clean assembleRelease assembleFdroid
 
       - name: Locate release artifact
-        id: artifact
+        id: release_artifact
         shell: bash
         run: |
           set -euo pipefail
@@ -143,7 +143,20 @@ jobs:
             echo "::error title=APK lookup failed::Expected 1 APK, found ${#files[@]} (${files[*]:-none})."
             exit 1
           fi
-          echo "apk_path=${files[0]}" >> "$GITHUB_OUTPUT"
+          echo "apk_release_path=${files[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Locate f-droid artifact
+        id: fdroid_artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=(presentation/build/outputs/apk/fdroid/QUIK-v*-fdroid.apk)
+          if [[ "${#files[@]}" -ne 1 ]]; then
+            echo "::error title=APK lookup failed::Expected 1 APK, found ${#files[@]} (${files[*]:-none})."
+            exit 1
+          fi
+          echo "apk_fdroid_path=${files[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Generate release notes
         id: notes
@@ -208,7 +221,9 @@ jobs:
           draft: ${{ inputs.publish_release != true }}
           prerelease: ${{ inputs.prerelease }}
           body: ${{ steps.clean_notes.outputs.clean_notes }}
-          files: ${{ steps.artifact.outputs.apk_path }}
+          files: |
+            ${{ steps.release_artifact.outputs.apk_release_path }}
+            ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
