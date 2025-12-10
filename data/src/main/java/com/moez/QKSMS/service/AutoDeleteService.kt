@@ -18,13 +18,13 @@ import javax.inject.Inject
 class AutoDeleteService : JobService() {
 
     companion object {
-        private const val JobId = 8120235
+        private const val JOB_ID = 8120235
 
         @SuppressLint("MissingPermission") // Added in [presentation]'s AndroidManifest.xml
         fun scheduleJob(context: Context) {
             Timber.i("Scheduling job")
             val serviceComponent = ComponentName(context, AutoDeleteService::class.java)
-            val periodicJob = JobInfo.Builder(JobId, serviceComponent)
+            val periodicJob = JobInfo.Builder(JOB_ID, serviceComponent)
                     .setPeriodic(TimeUnit.DAYS.toMillis(1))
                     .setPersisted(true)
                     .build()
@@ -34,7 +34,7 @@ class AutoDeleteService : JobService() {
 
         fun cancelJob(context: Context) {
             Timber.i("Canceling job")
-            context.jobScheduler.cancel(JobId)
+            context.jobScheduler.cancel(JOB_ID)
         }
     }
 

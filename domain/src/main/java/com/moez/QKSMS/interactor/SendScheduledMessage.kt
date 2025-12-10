@@ -33,7 +33,7 @@ class SendScheduledMessage @Inject constructor(
     private val context: Context,
     private val scheduledMessageRepo: ScheduledMessageRepository,
     private val deleteScheduledMessagesInteractor: DeleteScheduledMessages,
-    private val sendMessage: SendMessage
+    private val sendNewMessage: SendNewMessage
 ) : Interactor<Long>() {
 
     override fun buildObservable(params: Long): Flowable<*> {
@@ -49,9 +49,12 @@ class SendScheduledMessage @Inject constructor(
             .map { message ->
                 val threadId = TelephonyCompat.getOrCreateThreadId(context, message.recipients)
                 val attachments = message.attachments.mapNotNull(Uri::parse).map { Attachment(context, it) }
-                SendMessage.Params(message.subId, threadId, message.recipients, message.body, attachments)
+                SendNewMessage.Params(
+                    message.subId, threadId, message.recipients, message.body,
+                    message.sendAsGroup, attachments
+                )
             }
-            .flatMap(sendMessage::buildObservable)
+            .flatMap(sendNewMessage::buildObservable)
             .doOnNext { deleteScheduledMessagesInteractor.execute(listOf(params)) }
     }
 

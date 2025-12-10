@@ -60,7 +60,7 @@ class AvatarView @JvmOverloads constructor(
     }
 
     /**
-     * Use the [contact] information to display the avatar.
+     * Use the contact information to display the avatar.
      */
     fun setRecipient(recipient: Recipient?) {
         lookupKey = recipient?.contact?.lookupKey

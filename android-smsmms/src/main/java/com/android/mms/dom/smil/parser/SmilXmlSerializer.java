@@ -16,13 +16,6 @@
 
 package com.android.mms.dom.smil.parser;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.smil.SMILDocument;
-import org.w3c.dom.smil.SMILElement;
-import timber.log.Timber;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,7 +23,16 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import timber.log.Timber;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.smil.SMILDocument;
+import org.w3c.dom.smil.SMILElement;
+
 public class SmilXmlSerializer {
+    private static final String TAG = "SmilXmlSerializer";
 
     public static void serialize(SMILDocument smilDoc, OutputStream out) {
         try {
@@ -39,9 +41,9 @@ public class SmilXmlSerializer {
             writeElement(writer, smilDoc.getDocumentElement());
             writer.flush();
         } catch (UnsupportedEncodingException e) {
-            Timber.e(e, "exception thrown");
+            Timber.e("exception thrown", e);
         } catch (IOException e) {
-            Timber.e(e, "exception thrown");
+            Timber.e("exception thrown", e);
         }
     }
 

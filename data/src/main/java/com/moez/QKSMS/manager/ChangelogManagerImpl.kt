@@ -36,7 +36,7 @@ class ChangelogManagerImpl @Inject constructor(
     private val prefs: Preferences
 ) : ChangelogManager {
 
-    override fun didUpdate(): Boolean = (prefs.changelogVersion.get() ?: 0) != context.versionCode
+    override fun didUpdate(): Boolean = prefs.changelogVersion.get() != context.versionCode
 
     override suspend fun getChangelog(): ChangelogManager.CumulativeChangelog {
         val listType = Types.newParameterizedType(List::class.java, Changeset::class.java)
@@ -49,7 +49,7 @@ class ChangelogManagerImpl @Inject constructor(
                         .orEmpty()
                         .sortedBy { changelog -> changelog.versionCode }
                         .filter { changelog ->
-                            changelog.versionCode in (prefs.changelogVersion.get() ?: 0).inc()..context.versionCode
+                            changelog.versionCode in prefs.changelogVersion.get().inc()..context.versionCode
                         }
 
                 ChangelogManager.CumulativeChangelog(

@@ -16,9 +16,11 @@
 
 package com.google.android.mms.pdu_alt;
 
+import com.android.mms.util.ExternalLogger;
 import com.google.android.mms.ContentType;
 import com.google.android.mms.InvalidHeaderValueException;
-import timber.log.Timber;
+
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -79,6 +81,8 @@ public class PduParser {
     /**
      * The log tag.
      */
+    private static final String LOG_TAG = "PduParser";
+    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     /**
@@ -146,33 +150,33 @@ public class PduParser {
         switch (messageType) {
             case PduHeaders.MESSAGE_TYPE_SEND_REQ:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_SEND_REQ");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_SEND_REQ");
                 }
                 SendReq sendReq = new SendReq(mHeaders, mBody);
                 return sendReq;
             case PduHeaders.MESSAGE_TYPE_SEND_CONF:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_SEND_CONF");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_SEND_CONF");
                 }
                 SendConf sendConf = new SendConf(mHeaders);
                 return sendConf;
             case PduHeaders.MESSAGE_TYPE_NOTIFICATION_IND:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_NOTIFICATION_IND");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_NOTIFICATION_IND");
                 }
                 NotificationInd notificationInd =
                     new NotificationInd(mHeaders);
                 return notificationInd;
             case PduHeaders.MESSAGE_TYPE_NOTIFYRESP_IND:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_NOTIFYRESP_IND");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_NOTIFYRESP_IND");
                 }
                 NotifyRespInd notifyRespInd =
                     new NotifyRespInd(mHeaders);
                 return notifyRespInd;
             case PduHeaders.MESSAGE_TYPE_RETRIEVE_CONF:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_RETRIEVE_CONF");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_RETRIEVE_CONF");
                 }
                 RetrieveConf retrieveConf =
                     new RetrieveConf(mHeaders, mBody);
@@ -200,33 +204,33 @@ public class PduParser {
                     // multipart/signed
                     return retrieveConf;
                 } else {
-                    Timber.v("Unsupported ContentType: " + ctTypeStr);
+                    ExternalLogger.logMessage(LOG_TAG, "Unsupported ContentType: " + ctTypeStr);
                 }
                 return null;
             case PduHeaders.MESSAGE_TYPE_DELIVERY_IND:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_DELIVERY_IND");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_DELIVERY_IND");
                 }
                 DeliveryInd deliveryInd =
                     new DeliveryInd(mHeaders);
                 return deliveryInd;
             case PduHeaders.MESSAGE_TYPE_ACKNOWLEDGE_IND:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_ACKNOWLEDGE_IND");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_ACKNOWLEDGE_IND");
                 }
                 AcknowledgeInd acknowledgeInd =
                     new AcknowledgeInd(mHeaders);
                 return acknowledgeInd;
             case PduHeaders.MESSAGE_TYPE_READ_ORIG_IND:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_READ_ORIG_IND");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_READ_ORIG_IND");
                 }
                 ReadOrigInd readOrigInd =
                     new ReadOrigInd(mHeaders);
                 return readOrigInd;
             case PduHeaders.MESSAGE_TYPE_READ_REC_IND:
                 if (LOCAL_LOGV) {
-                    Timber.v("parse: MESSAGE_TYPE_READ_REC_IND");
+                    Log.v(LOG_TAG, "parse: MESSAGE_TYPE_READ_REC_IND");
                 }
                 ReadRecInd readRecInd =
                     new ReadRecInd(mHeaders);
@@ -258,7 +262,7 @@ public class PduParser {
                 pduDataStream.reset();
                 byte [] bVal = parseWapString(pduDataStream, TYPE_TEXT_STRING);
                 if (LOCAL_LOGV) {
-                    Timber.v("TextHeader: " + new String(bVal));
+                    Log.v(LOG_TAG, "TextHeader: " + new String(bVal));
                 }
                 /* we should ignore it at the moment */
                 continue;
@@ -268,7 +272,7 @@ public class PduParser {
                 {
                     int messageType = extractByteValue(pduDataStream);
                     if (LOCAL_LOGV) {
-                        Timber.v("parseHeaders: messageType: " + messageType);
+                        Log.v(LOG_TAG, "parseHeaders: messageType: " + messageType);
                     }
                     switch (messageType) {
                         // We don't support these kind of messages now.
@@ -332,7 +336,8 @@ public class PduParser {
                 {
                     int value = extractByteValue(pduDataStream);
                     if (LOCAL_LOGV) {
-                        Timber.v("parseHeaders: byte: " + headerField + " value: " + value);
+                        Log.v(LOG_TAG, "parseHeaders: byte: " + headerField + " value: " +
+                                value);
                     }
 
                     try {
@@ -356,7 +361,7 @@ public class PduParser {
                     try {
                         long value = parseLongInteger(pduDataStream);
                         if (LOCAL_LOGV) {
-                            Timber.v("parseHeaders: longint: " + headerField + " value: " +
+                            Log.v(LOG_TAG, "parseHeaders: longint: " + headerField + " value: " +
                                     value);
                         }
                         headers.setLongInteger(value, headerField);
@@ -375,7 +380,7 @@ public class PduParser {
                     try {
                         long value = parseIntegerValue(pduDataStream);
                         if (LOCAL_LOGV) {
-                            Timber.v("parseHeaders: int: " + headerField + " value: " +
+                            Log.v(LOG_TAG, "parseHeaders: int: " + headerField + " value: " +
                                     value);
                         }
                         headers.setLongInteger(value, headerField);
@@ -411,7 +416,7 @@ public class PduParser {
                     if (null != value) {
                         try {
                             if (LOCAL_LOGV) {
-                                Timber.v("parseHeaders: string: " + headerField + " value: " +
+                                Log.v(LOG_TAG, "parseHeaders: string: " + headerField + " value: " +
                                         new String(value));
                             }
                             headers.setTextString(value, headerField);
@@ -440,7 +445,7 @@ public class PduParser {
                     if (null != value) {
                         try {
                             if (LOCAL_LOGV) {
-                                Timber.v("parseHeaders: encoded string: " + headerField
+                                Log.v(LOG_TAG, "parseHeaders: encoded string: " + headerField
                                         + " value: " + value.getString());
                             }
                             headers.setEncodedStringValue(value, headerField);
@@ -466,7 +471,7 @@ public class PduParser {
                         if (null != address) {
                             String str = new String(address);
                             if (LOCAL_LOGV) {
-                                Timber.v("parseHeaders: (to/cc/bcc) address: " + headerField
+                                Log.v(LOG_TAG, "parseHeaders: (to/cc/bcc) address: " + headerField
                                         + " value: " + str);
                             }
                             int endIndex = str.indexOf("/");
@@ -521,7 +526,7 @@ public class PduParser {
 
                     try {
                         if (LOCAL_LOGV) {
-                            Timber.v("parseHeaders: time value: " + headerField
+                            Log.v(LOG_TAG, "parseHeaders: time value: " + headerField
                                     + " value: " + timeValue);
                         }
                         headers.setLongInteger(timeValue, headerField);
@@ -575,7 +580,7 @@ public class PduParser {
 
                     try {
                         if (LOCAL_LOGV) {
-                            Timber.v("parseHeaders: from address: " + headerField
+                            Log.v(LOG_TAG, "parseHeaders: from address: " + headerField
                                     + " value: " + from.getString());
                         }
                         headers.setEncodedStringValue(from, PduHeaders.FROM);
@@ -593,7 +598,7 @@ public class PduParser {
                     pduDataStream.mark(1);
                     int messageClass = extractByteValue(pduDataStream);
                     if (LOCAL_LOGV) {
-                        Timber.v("parseHeaders: MESSAGE_CLASS: " + headerField
+                        Log.v(LOG_TAG, "parseHeaders: MESSAGE_CLASS: " + headerField
                                 + " value: " + messageClass);
                     }
 
@@ -646,7 +651,7 @@ public class PduParser {
 
                     try {
                         if (LOCAL_LOGV) {
-                            Timber.v("parseHeaders: MMS_VERSION: " + headerField
+                            Log.v(LOG_TAG, "parseHeaders: MMS_VERSION: " + headerField
                                     + " value: " + version);
                         }
                         headers.setOctet(version, PduHeaders.MMS_VERSION);
@@ -681,7 +686,7 @@ public class PduParser {
                     if (null != previouslySentBy) {
                         try {
                             if (LOCAL_LOGV) {
-                                Timber.v("parseHeaders: PREVIOUSLY_SENT_BY: " + headerField
+                                Log.v(LOG_TAG, "parseHeaders: PREVIOUSLY_SENT_BY: " + headerField
                                         + " value: " + previouslySentBy.getString());
                             }
                             headers.setEncodedStringValue(previouslySentBy,
@@ -714,7 +719,7 @@ public class PduParser {
                     try {
                         long perviouslySentDate = parseLongInteger(pduDataStream);
                         if (LOCAL_LOGV) {
-                            Timber.v("parseHeaders: PREVIOUSLY_SENT_DATE: " + headerField
+                            Log.v(LOG_TAG, "parseHeaders: PREVIOUSLY_SENT_DATE: " + headerField
                                     + " value: " + perviouslySentDate);
                         }
                         headers.setLongInteger(perviouslySentDate,
@@ -733,7 +738,7 @@ public class PduParser {
                      * Encoded-string-value
                      */
                     if (LOCAL_LOGV) {
-                        Timber.v("parseHeaders: MM_FLAGS: " + headerField
+                        Log.v(LOG_TAG, "parseHeaders: MM_FLAGS: " + headerField
                                 + " NOT REALLY SUPPORTED");
                     }
 
@@ -757,7 +762,7 @@ public class PduParser {
                 case PduHeaders.MBOX_QUOTAS:
                 {
                     if (LOCAL_LOGV) {
-                        Timber.v("parseHeaders: MBOX_TOTALS: " + headerField);
+                        Log.v(LOG_TAG, "parseHeaders: MBOX_TOTALS: " + headerField);
                     }
                     /* Value-length */
                     parseValueLength(pduDataStream);
@@ -780,7 +785,7 @@ public class PduParser {
 
                 case PduHeaders.ELEMENT_DESCRIPTOR: {
                     if (LOCAL_LOGV) {
-                        Timber.v("parseHeaders: ELEMENT_DESCRIPTOR: " + headerField);
+                        Log.v(LOG_TAG, "parseHeaders: ELEMENT_DESCRIPTOR: " + headerField);
                     }
                     parseContentType(pduDataStream, null);
 
@@ -798,7 +803,8 @@ public class PduParser {
                     if (null != contentType) {
                         try {
                             if (LOCAL_LOGV) {
-                                Timber.v("parseHeaders: CONTENT_TYPE: " + headerField + contentType.toString());
+                                Log.v(LOG_TAG, "parseHeaders: CONTENT_TYPE: " + headerField +
+                                        contentType.toString());
                             }
                             headers.setTextString(contentType, PduHeaders.CONTENT_TYPE);
                         } catch(NullPointerException e) {
@@ -824,7 +830,7 @@ public class PduParser {
                 case PduHeaders.ATTRIBUTES:
                 default: {
                     if (LOCAL_LOGV) {
-                        Timber.v("parseHeaders: Unknown header: " + headerField);
+                        Log.v(LOG_TAG, "parseHeaders: Unknown header: " + headerField);
                     }
                     log("Unknown header");
                 }
@@ -956,7 +962,7 @@ public class PduParser {
      */
     private static void log(String text) {
         if (LOCAL_LOGV) {
-            Timber.v(text);
+            Log.v(LOG_TAG, text);
         }
     }
 
@@ -1470,7 +1476,7 @@ public class PduParser {
                             map.put(PduPart.P_CHARSET, charsetInt);
                         } catch (UnsupportedEncodingException e) {
                             // Not a well-known charset, use "*".
-                            Timber.e(e, Arrays.toString(charsetStr));
+                            Log.e(LOG_TAG, Arrays.toString(charsetStr), e);
                             map.put(PduPart.P_CHARSET, CharacterSets.ANY_CHARSET);
                         }
                     } else {
@@ -1505,10 +1511,10 @@ public class PduParser {
                     break;
                 default:
                     if (LOCAL_LOGV) {
-                        Timber.v("Not supported Content-Type parameter");
+                        Log.v(LOG_TAG, "Not supported Content-Type parameter");
                     }
                 if (-1 == skipWapValue(pduDataStream, lastLen)) {
-                    Timber.e("Corrupt Content-Type");
+                    Log.e(LOG_TAG, "Corrupt Content-Type");
                 } else {
                     lastLen = 0;
                 }
@@ -1517,7 +1523,7 @@ public class PduParser {
         }
 
         if (0 != lastLen) {
-            Timber.e("Corrupt Content-Type");
+            Log.e(LOG_TAG, "Corrupt Content-Type");
         }
     }
 
@@ -1567,7 +1573,7 @@ public class PduParser {
                     contentType = parseWapString(pduDataStream, TYPE_TEXT_STRING);
                 }
             } else {
-                Timber.e("Corrupt content-type");
+                Log.e(LOG_TAG, "Corrupt content-type");
                 return (PduContentTypes.contentTypes[0]).getBytes(); //"*/*"
             }
 
@@ -1578,7 +1584,7 @@ public class PduParser {
             }
 
             if (parameterLen < 0) {
-                Timber.e("Corrupt MMS message");
+                Log.e(LOG_TAG, "Corrupt MMS message");
                 return (PduContentTypes.contentTypes[0]).getBytes(); //"*/*"
             }
         } else if (cur <= TEXT_MAX) {
@@ -1717,10 +1723,10 @@ public class PduParser {
                         break;
                     default:
                         if (LOCAL_LOGV) {
-                            Timber.v("Not supported Part headers: " + header);
+                            Log.v(LOG_TAG, "Not supported Part headers: " + header);
                         }
                     if (-1 == skipWapValue(pduDataStream, lastLen)) {
-                        Timber.e("Corrupt Part headers");
+                        Log.e(LOG_TAG, "Corrupt Part headers");
                         return false;
                     }
                     lastLen = 0;
@@ -1741,11 +1747,11 @@ public class PduParser {
                 lastLen = length - (startPos - tempPos);
             } else {
                 if (LOCAL_LOGV) {
-                    Timber.v("Not supported Part headers: " + header);
+                    Log.v(LOG_TAG, "Not supported Part headers: " + header);
                 }
                 // Skip all headers of this part.
                 if (-1 == skipWapValue(pduDataStream, lastLen)) {
-                    Timber.e("Corrupt Part headers");
+                    Log.e(LOG_TAG, "Corrupt Part headers");
                     return false;
                 }
                 lastLen = 0;
@@ -1753,7 +1759,7 @@ public class PduParser {
         }
 
         if (0 != lastLen) {
-            Timber.e("Corrupt Part headers");
+            Log.e(LOG_TAG, "Corrupt Part headers");
             return false;
         }
 

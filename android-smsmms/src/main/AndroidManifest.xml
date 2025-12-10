@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.klinker.android.send_message"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application>
 
         <provider android:name=".MmsFileProvider"
@@ -9,6 +10,8 @@
                   android:enabled="true"
                   android:grantUriPermissions="true"
                   android:exported="false" />
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
     </application>
 </manifest>

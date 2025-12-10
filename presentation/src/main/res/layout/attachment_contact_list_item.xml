@@ -40,7 +40,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_person_black_24dp"
-            android:tint="?android:attr/textColorSecondary"
+            app:tint="?android:attr/textColorSecondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -88,6 +88,6 @@
         android:background="@drawable/circle"
         android:backgroundTint="?attr/bubbleColor"
         android:src="@drawable/ic_cancel_black_24dp"
-        android:tint="?android:attr/textColorSecondary" />
+        app:tint="?android:attr/textColorSecondary" />
 
 </FrameLayout>

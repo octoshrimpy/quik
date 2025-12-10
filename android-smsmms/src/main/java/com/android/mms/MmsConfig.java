@@ -16,21 +16,27 @@
 
 package com.android.mms;
 
-import android.content.Context;
-import android.content.res.XmlResourceParser;
+import java.io.IOException;
+
 import com.klinker.android.send_message.R;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+
+import android.content.Context;
+import android.content.res.XmlResourceParser;
 import timber.log.Timber;
 
-import java.io.IOException;
-
 public class MmsConfig {
+    private static final String TAG = "MmsConfig";
     private static final boolean DEBUG = true;
-    private static final boolean LOCAL_LOGV = false;
+    private static final boolean LOCAL_LOGV = true;
 
     public static final String DEFAULT_HTTP_KEY_X_WAP_PROFILE = "x-wap-profile";
     public static final String DEFAULT_USER_AGENT = "Android-Mms/2.0";
+
+    private static final String MMS_APP_PACKAGE = "com.android.mms";
+
+    private static final String SMS_PROMO_DISMISSED_KEY = "sms_promo_dismissed_key";
 
     private static final int MAX_IMAGE_HEIGHT = 480;
     private static final int MAX_IMAGE_WIDTH = 640;
@@ -296,11 +302,11 @@ public class MmsConfig {
                 }
             }
         } catch (XmlPullParserException e) {
-            Timber.e(e, "loadMmsSettings caught ");
+            Timber.e("loadMmsSettings caught ", e);
         } catch (NumberFormatException e) {
-            Timber.e(e, "loadMmsSettings caught ");
+            Timber.e("loadMmsSettings caught ", e);
         } catch (IOException e) {
-            Timber.e(e, "loadMmsSettings caught ");
+            Timber.e("loadMmsSettings caught ", e);
         } finally {
             parser.close();
         }

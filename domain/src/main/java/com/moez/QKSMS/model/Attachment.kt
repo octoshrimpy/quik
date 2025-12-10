@@ -18,7 +18,6 @@
  */
 package dev.octoshrimpy.quik.model
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -36,7 +35,6 @@ import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.extensions.isVCard
 
 
-@SuppressLint("Range")
 class Attachment (
     context: Context,
     var uri: Uri = Uri.EMPTY,

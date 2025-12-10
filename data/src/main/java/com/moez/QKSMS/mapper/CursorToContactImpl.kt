@@ -32,7 +32,7 @@ class CursorToContactImpl @Inject constructor(
 ) : CursorToContact {
 
     companion object {
-        val URI = Phone.CONTENT_URI
+        val URI = Phone.CONTENT_URI!!
         val PROJECTION = arrayOf(
                 Phone._ID,
                 Phone.LOOKUP_KEY,

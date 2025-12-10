@@ -16,10 +16,16 @@
 
 package com.google.android.mms.pdu_alt;
 
-import com.google.android.mms.InvalidHeaderValueException;
+import android.content.Context;
+import android.text.TextUtils;
+
 import timber.log.Timber;
 
+import com.google.android.mms.InvalidHeaderValueException;
+import com.klinker.android.send_message.Utils;
+
 public class SendReq extends MultimediaMessagePdu {
+    private static final String TAG = "SendReq";
 
     public SendReq() {
         super();
@@ -34,7 +40,7 @@ public class SendReq extends MultimediaMessagePdu {
             setTransactionId(generateTransactionId());
         } catch (InvalidHeaderValueException e) {
             // Impossible to reach here since all headers we set above are valid.
-            Timber.e(e, "Unexpected InvalidHeaderValueException.");
+            Timber.e("Unexpected InvalidHeaderValueException.", e);
             throw new RuntimeException(e);
         }
     }
@@ -289,6 +295,22 @@ public class SendReq extends MultimediaMessagePdu {
      */
     public void setTransactionId(byte[] value) {
         mPduHeaders.setTextString(value, PduHeaders.TRANSACTION_ID);
+    }
+
+    /**
+     * prepares and sets from address info in the request.
+     *
+     * @param context context
+     * @param fromAddress from address info from client
+     * @param subscriptionId subscription id to use
+     */
+    public void prepareFromAddress(Context context, String fromAddress, int subscriptionId) {
+        String phoneNumber = Utils.getMyPhoneNumberFromSubscription(context, subscriptionId);
+        if (!TextUtils.isEmpty(phoneNumber)) {
+            setFrom(new EncodedStringValue(phoneNumber));
+        } else if (!TextUtils.isEmpty(fromAddress)) {
+            setFrom(new EncodedStringValue(fromAddress));
+        }
     }
 
     /*

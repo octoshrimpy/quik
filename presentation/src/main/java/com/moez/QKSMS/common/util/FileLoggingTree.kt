@@ -83,7 +83,7 @@ class FileLoggingTree @Inject constructor(
                     }.log"
 
                     val (uri, e) = FileUtils.create(
-                        FileUtils.Companion.Location.Downloads,
+                        FileUtils.Location.Downloads,
                         context,
                         filename,
                         "text/plain"

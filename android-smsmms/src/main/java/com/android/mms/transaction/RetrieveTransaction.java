@@ -16,15 +16,20 @@
 
 package com.android.mms.transaction;
 
+import java.io.IOException;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.Telephony.Mms;
 import android.provider.Telephony.Mms.Inbox;
 import android.text.TextUtils;
+import timber.log.Timber;
 
+import com.android.mms.logs.LogTag;
 import com.android.mms.MmsConfig;
 import com.android.mms.util.DownloadManager;
 import com.google.android.mms.MmsException;
@@ -35,11 +40,8 @@ import com.google.android.mms.pdu_alt.PduHeaders;
 import com.google.android.mms.pdu_alt.PduParser;
 import com.google.android.mms.pdu_alt.PduPersister;
 import com.google.android.mms.pdu_alt.RetrieveConf;
+import com.klinker.android.send_message.Settings;
 import com.klinker.android.send_message.Utils;
-
-import java.io.IOException;
-
-import timber.log.Timber;
 
 /**
  * The RetrieveTransaction is responsible for retrieving multimedia
@@ -55,7 +57,9 @@ import timber.log.Timber;
  * </ul>
  */
 public class RetrieveTransaction extends Transaction implements Runnable {
-    private static final boolean LOCAL_LOGV = false;
+    private static final String TAG = LogTag.TAG;
+    private static final boolean DEBUG = false;
+    private static final boolean LOCAL_LOGV = true;
 
     private final Uri mUri;
     private final String mContentLocation;
@@ -124,6 +128,11 @@ public class RetrieveTransaction extends Transaction implements Runnable {
     }
 
     public void run() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            DownloadRequest request = new DownloadRequest(mContentLocation, mUri, null, null, null);
+//            MmsNetworkManager manager = new MmsNetworkManager(mContext);
+//            request.execute(mContext, manager);
+//        } else {
             try {
                 // Change the downloading state of the M-Notification.ind.
                 DownloadManager.init(mContext.getApplicationContext());
@@ -146,19 +155,31 @@ public class RetrieveTransaction extends Transaction implements Runnable {
                     mTransactionState.setState(TransactionState.FAILED);
                     mTransactionState.setContentUri(mUri);
                 } else {
+                    boolean group;
+                    int subId = Settings.DEFAULT_SUBSCRIPTION_ID;
+
+                    try {
+                        group = com.klinker.android.send_message.Transaction.settings.getGroup();
+                        subId = com.klinker.android.send_message.Transaction.settings.getSubscriptionId();
+                    } catch (Exception e) {
+                        group = PreferenceManager.getDefaultSharedPreferences(mContext).getBoolean("group_message", true);
+                    }
+
                     // Store M-Retrieve.conf into Inbox
                     PduPersister persister = PduPersister.getPduPersister(mContext);
-                    msgUri = persister.persist(retrieveConf, Inbox.CONTENT_URI,
-                            PduPersister.DUMMY_THREAD_ID, true, true, null);
+                    msgUri = persister.persist(retrieveConf, Inbox.CONTENT_URI, true,
+                            group, null, subId);
 
                     // Use local time instead of PDU time
-                    ContentValues values = new ContentValues(3);
+                    ContentValues values = new ContentValues();
                     values.put(Mms.DATE, System.currentTimeMillis() / 1000L);
-                    try {
-                        values.put(Mms.DATE_SENT, retrieveConf.getDate());
-                    } catch (Exception ignored) {
-                    }
                     values.put(Mms.MESSAGE_SIZE, resp.length);
+                    try {
+                        // Store PDU time as sent time for received message
+                        values.put(Mms.DATE_SENT, retrieveConf.getDate());
+                    } catch (Exception e) {
+                    }
+
                     SqliteWrapper.update(mContext, mContext.getContentResolver(),
                             msgUri, values, null, null);
 
@@ -181,7 +202,7 @@ public class RetrieveTransaction extends Transaction implements Runnable {
                 // Don't mark the transaction as failed if we failed to send it.
                 sendAcknowledgeInd(retrieveConf);
             } catch (Throwable t) {
-                Timber.e(t, "error");
+                Timber.e("error", t);
                 if ("HTTP error: Not Found".equals(t.getMessage())) {
                     // Delete the expired M-Notification.ind.
                     SqliteWrapper.delete(mContext, mContext.getContentResolver(),

@@ -26,20 +26,18 @@ import dev.octoshrimpy.quik.receiver.BlockThreadReceiver
 import dev.octoshrimpy.quik.receiver.BootReceiver
 import dev.octoshrimpy.quik.receiver.DefaultSmsChangedReceiver
 import dev.octoshrimpy.quik.receiver.DeleteMessagesReceiver
-import dev.octoshrimpy.quik.receiver.MarkArchivedReceiver
-import dev.octoshrimpy.quik.receiver.MarkReadReceiver
-import dev.octoshrimpy.quik.receiver.MarkSeenReceiver
 import dev.octoshrimpy.quik.receiver.MmsReceivedReceiver
-import dev.octoshrimpy.quik.receiver.MmsReceiver
-import dev.octoshrimpy.quik.receiver.MmsSentReceiver
-import dev.octoshrimpy.quik.receiver.MmsUpdatedReceiver
+import dev.octoshrimpy.quik.receiver.MmsWapPushReceiver
 import dev.octoshrimpy.quik.receiver.NightModeReceiver
 import dev.octoshrimpy.quik.receiver.RemoteMessagingReceiver
 import dev.octoshrimpy.quik.receiver.SendScheduledMessageReceiver
-import dev.octoshrimpy.quik.receiver.SmsDeliveredReceiver
+import dev.octoshrimpy.quik.receiver.MessageDeliveredReceiver
 import dev.octoshrimpy.quik.receiver.SmsProviderChangedReceiver
-import dev.octoshrimpy.quik.receiver.SmsReceiver
-import dev.octoshrimpy.quik.receiver.SmsSentReceiver
+import dev.octoshrimpy.quik.receiver.SmsReceivedReceiver
+import dev.octoshrimpy.quik.receiver.MessageMarkReceiver
+import dev.octoshrimpy.quik.receiver.MessageSentReceiver
+import dev.octoshrimpy.quik.receiver.ResendMessageReceiver
+import dev.octoshrimpy.quik.receiver.SendDelayedMessageReceiver
 import dev.octoshrimpy.quik.receiver.SpeakThreadsReceiver
 import dev.octoshrimpy.quik.receiver.StartActivityFromWidgetReceiver
 
@@ -47,87 +45,79 @@ import dev.octoshrimpy.quik.receiver.StartActivityFromWidgetReceiver
 abstract class BroadcastReceiverBuilderModule {
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindBlockThreadReceiver(): BlockThreadReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindBootReceiver(): BootReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindDefaultSmsChangedReceiver(): DefaultSmsChangedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindDeleteMessagesReceiver(): DeleteMessagesReceiver
 
     @ActivityScope
     @ContributesAndroidInjector
-    abstract fun bindMarkArchivedReceiver(): MarkArchivedReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindMarkReadReceiver(): MarkReadReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
     abstract fun bindSpeakThreadsReceiver(): SpeakThreadsReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindStartActivityFromWidgetReceiver(): StartActivityFromWidgetReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindMarkSeenReceiver(): MarkSeenReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindMmsReceivedReceiver(): MmsReceivedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindMmsReceiver(): MmsReceiver
+    @ContributesAndroidInjector
+    abstract fun bindMmsWapPushReceiver(): MmsWapPushReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindMmsSentReceiver(): MmsSentReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindMmsUpdatedReceiver(): MmsUpdatedReceiver
-
-    @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindNightModeReceiver(): NightModeReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract fun bindRemoteMessagingReceiver(): RemoteMessagingReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
+    abstract fun bindResendMessageReceiver(): ResendMessageReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector
     abstract fun bindSendScheduledMessageReceiver(): SendScheduledMessageReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindSmsDeliveredReceiver(): SmsDeliveredReceiver
+    @ContributesAndroidInjector
+    abstract fun bindSendDelayedMessageReceiver(): SendDelayedMessageReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
+    abstract fun bindMessageDeliveredReceiver(): MessageDeliveredReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector
     abstract fun bindSmsProviderChangedReceiver(): SmsProviderChangedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindSmsReceiver(): SmsReceiver
+    @ContributesAndroidInjector
+    abstract fun bindSmsReceivedReceiver(): SmsReceivedReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
-    abstract fun bindSmsSentReceiver(): SmsSentReceiver
+    @ContributesAndroidInjector
+    abstract fun bindMessageSentReceiver(): MessageSentReceiver
 
     @ActivityScope
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
+    abstract fun bindMessageMarkReceiver(): MessageMarkReceiver
+
+    @ActivityScope
+    @ContributesAndroidInjector
     abstract fun bindWidgetProvider(): WidgetProvider
 
 }

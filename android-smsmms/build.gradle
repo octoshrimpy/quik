@@ -27,7 +27,6 @@ android {
         targetSdkVersion 33
     }
 
-
     useLibrary 'org.apache.http.legacy'
     lint {
         abortOnError false

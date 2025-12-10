@@ -18,10 +18,11 @@ package com.android.mms.service_alt;
 
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import timber.log.Timber;
+
 import com.android.i18n.phonenumbers.NumberParseException;
 import com.android.i18n.phonenumbers.PhoneNumberUtil;
 import com.android.i18n.phonenumbers.Phonenumber;
-import timber.log.Timber;
 
 import java.lang.reflect.Method;
 import java.util.Locale;
@@ -30,6 +31,8 @@ import java.util.Locale;
  * Utility to handle phone numbers.
  */
 public class PhoneUtils {
+
+    private static final String TAG = "PhoneUtils";
 
     /**
      * Get a canonical national format phone number. If parsing fails, just return the
