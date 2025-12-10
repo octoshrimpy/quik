@@ -158,6 +158,13 @@ jobs:
           fi
           echo "apk_fdroid_path=${files[0]}" >> "$GITHUB_OUTPUT"
 
+      - name: Generate checksum
+        id: checksums
+        shell: bash
+        run: |
+          find . -name '*.apk' -type f -exec sha256sum {} \; > checksums.txt
+          echo "checksums_path=checksums.txt" >> "$GITHUB_OUTPUT"
+
       - name: Generate release notes
         id: notes
         uses: actions/github-script@v7
@@ -224,6 +231,7 @@ jobs:
           files: |
             ${{ steps.release_artifact.outputs.apk_release_path }}
             ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
+            ${{ steps.checksums.outputs.checksums_path }}
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
