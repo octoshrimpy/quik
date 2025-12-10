@@ -13,7 +13,7 @@ jobs:
   vvm:
     runs-on: ubuntu-latest
     env:
-      APKEEP_VERSION: 0.9.0
+      APKEEP_VERSION: 0.18.0
       
     steps:
       - name: Checkout repository
@@ -54,15 +54,20 @@ jobs:
           sudo apt-get install -y --no-install-recommends aapt apktool unzip
           
       - name: Download Messaging APK 
-        run: apkeep -a com.google.android.apps.messaging -o device=walleye /home/runner/work/quik/quik
+        run: apkeep -a com.google.android.apps.messaging /home/runner/work/quik/quik
 
       - name: List files in directory
         run: ls /home/runner/work/quik/quik
 
       - name: Unzip the Messaging APK from XAPK
+        shell: bash
         run: |
-          unzip /home/runner/work/quik/quik/com.google.android.apps.messaging.xapk -d /home/runner/work/quik/quik
-                
+          if [ -f /home/runner/work/quik/quik/com.google.android.apps.messaging.xapk ]; then
+            unzip /home/runner/work/quik/quik/com.google.android.apps.messaging.xapk -d /home/runner/work/quik/quik
+          else
+            echo "XAPK file not found, skipping unzip."
+          fi
+
       - name: Decompile Messaging using apktool
         run: apktool d com.google.android.apps.messaging.apk -o dump
         
@@ -81,8 +86,9 @@ jobs:
           find android-smsmms/src/main/res/xml-mcc* -name '*_config_override.xml' -print -delete
 
       - name: Remove Duplicate MMS Config Files
+        shell: bash
         run: |
-          #!/bin/bash
+          set -euo pipefail
           declare -A seen
           for file in android-smsmms/src/main/res/xml-mcc*/mms_config.xml; do
             dir_name=$(dirname "$file")
@@ -107,7 +113,7 @@ jobs:
           title: "Update MMS configs"
           body: |
             This pull request updates the MMS configurations to the latest version. 
-              - Updated by [Auto-Update MMS configs] [Auto-Update MMS configs](./.github%2Fworkflows%2Fauto-update-mms-configs.yml)
+              - Updated by [Auto-Update MMS configs](./.github%2Fworkflows%2Fauto-update-mms-configs.yml)
           add-paths: android-smsmms/src/main/res/xml-mcc*
           branch: ${{ env.NEW_BRANCH }}
           base: master
