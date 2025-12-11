@@ -359,6 +359,7 @@
     <string name="toast_qksms_plus">È necessario sbloccare QUIK+ per utilizzare questo</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nuovo messaggio</item>
+        <item quantity="many">Nuovi messaggi</item>
         <item quantity="other">%s nuovi messaggi</item>
     </plurals>
     <string name="notification_message_failed_title">Messaggi non inviati</string>
@@ -453,7 +454,7 @@
     <string name="main_menu_rename_conversation">Rinomina conversazione</string>
     <plurals name="toast_unarchived">
         <item quantity="one">Conversazione non archiviata</item>
-        <item quantity="many"/>
+        <item quantity="many">Conversazioni non archiviate</item>
         <item quantity="other">%d conversazioni non archiviate</item>
     </plurals>
     <string name="compose_attach_file_cd">Allega qualsiasi file</string>
@@ -474,4 +475,23 @@
     <string name="message_content_filters_add_cd">Crea un nuovo filtro</string>
     <string name="stt_toast_extra_prompt">Pronuncia il tuo messaggio</string>
     <string name="message_content_filters_dialog_title">Elimina i messaggi corrispondenti</string>
+    <string name="dialog_edit_scheduled_message">Modificando questo messaggio, verrà rimosso dalla pianificazione.\n\nAssicurati di inviarlo nuovamente nella schermata successiva, altrimenti andrà perso.\n\nVuoi continuare?</string>
+    <string name="messageLinkHandling_dialog_body">Alcuni link potrebbero essere non sicuri o reindirizzarti in modo imprevisto. Controlla il link qui sotto prima di procedere:\n\n%1$s\n\nVuoi continuare?</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Sei sicuro di voler eliminare questo messaggio?</item>
+        <item quantity="many">Sei sicuro di voler eliminare questi messaggi?</item>
+        <item quantity="other">Sei sicuro di voler eliminare %d messaggi?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Sei sicuro di voler inviare questo messaggio adesso?</item>
+        <item quantity="many">Sei sicuro di voler inviare questi messaggi adesso?</item>
+        <item quantity="other">Sei sicuro di voler inviare %d messaggi adesso?</item>
+    </plurals>
+    <string name="compose_record_audio_msg_abort_cd">Cancella il messaggio audio</string>
+    <string name="scheduled_send_cd">Pianifica questo messaggio</string>
+    <string name="compose_schedule_cancel_cd">Annulla messaggio pianificato</string>
+    <string name="compose_scheduled_view">Messaggi pianifici per questa conversazione</string>
+    <string name="compose_toast_drag_stt">Sposta il pulsante di dettatura vocale dove preferisci</string>
+    <string name="settings_system_show_stt_title">Mostra il pulsante di dettatura vocale</string>
+    <string name="error_stt_toast">Spiacenti, si è verificato un errore durante il caricamento del provider di dettatura vocale.</string>
 </resources>
