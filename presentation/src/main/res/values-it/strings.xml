@@ -494,4 +494,8 @@
     <string name="compose_toast_drag_stt">Sposta il pulsante di dettatura vocale dove preferisci</string>
     <string name="settings_system_show_stt_title">Mostra il pulsante di dettatura vocale</string>
     <string name="error_stt_toast">Spiacenti, si è verificato un errore durante il caricamento del provider di dettatura vocale.</string>
+    <string name="compose_send_group_summary_on">I destinatari e le risposte saranno visibili a tutti</string>
+    <string name="compose_send_group_summary_off">I messaggi verranno inviati separatamente a tutti i destinatari</string>
+    <string name="settings_notification_silent_summary">Disattiva le notifiche per i messaggi senza destinatari presenti nei tuoi contatti</string>
+    <string name="notification_foreground_worker_text">Messaggio in arrivo</string>
 </resources>
