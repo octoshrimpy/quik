@@ -42,7 +42,6 @@ import dev.octoshrimpy.quik.interactor.SpeakThreads
 import dev.octoshrimpy.quik.manager.BillingManager
 import dev.octoshrimpy.quik.manager.ReferralManager
 import dev.octoshrimpy.quik.migration.QkMigration
-import dev.octoshrimpy.quik.migration.QkRealmMigration
 import dev.octoshrimpy.quik.realm.RealmConfig
 import dev.octoshrimpy.quik.util.NightModeManager
 import dev.octoshrimpy.quik.worker.HousekeepingWorker
@@ -68,7 +67,6 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
     @Inject lateinit var dispatchingServiceInjector: DispatchingAndroidInjector<Service>
     @Inject lateinit var fileLoggingTree: FileLoggingTree
     @Inject lateinit var nightModeManager: NightModeManager
-    @Inject lateinit var realmMigration: QkRealmMigration
     @Inject lateinit var referralManager: ReferralManager
     @Inject lateinit var workerFactory: WorkerFactory
 
