@@ -491,4 +491,7 @@
     <string name="error_stt_toast">Leider ist beim Laden des Sprache-zu-Text-Anbieters ein Fehler aufgetreten.</string>
     <string name="stt_toast_extra_prompt">Sprich deine Nachricht</string>
     <string name="messages_text_share_file_error">Ups! Beim Teilen ist etwas schief gelaufen</string>
+    <string name="compose_send_group_summary_on">Empfänger und Antworten sind für alle sichtbar</string>
+    <string name="compose_send_group_summary_off">Die Nachrichten werden separat an alle Empfänger gesendet</string>
+    <string name="notification_foreground_worker_text">Empfange Nachricht</string>
 </resources>
