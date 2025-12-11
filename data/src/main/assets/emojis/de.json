@@ -1,1 +1,3 @@
-{}
+{
+    "emoji_reaction_ios_generic_removed": "^(?s)Entfernte (.+?) aus „(.+?)”$"
+}
