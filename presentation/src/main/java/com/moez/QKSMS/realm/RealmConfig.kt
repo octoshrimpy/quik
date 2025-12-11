@@ -7,16 +7,21 @@ import dev.octoshrimpy.quik.repository.migrations.AppRealmMigration
 
 object RealmConfig {
 
-    private val config: RealmConfiguration by lazy {
-        RealmConfiguration.Builder()
-            .compactOnLaunch()
-            .schemaVersion(AppRealmMigration.SCHEMA_VERSION)
-            .migration(AppRealmMigration())
-            .build()
+    @Volatile
+    private var config: RealmConfiguration? = null
+
+    private fun getConfig(): RealmConfiguration {
+        return config ?: synchronized(this) {
+            config ?: RealmConfiguration.Builder()
+                .compactOnLaunch()
+                .schemaVersion(AppRealmMigration.SCHEMA_VERSION)
+                .migration(AppRealmMigration())
+                .build().also { config = it }
+        }
     }
 
     fun init(context: Context) {
         Realm.init(context)
-        Realm.setDefaultConfiguration(config)
+        Realm.setDefaultConfiguration(getConfig())
     }
 }
