@@ -174,25 +174,10 @@ jobs:
             const tagName = 'v${{ steps.version.outputs.version_name }}';
             const {owner, repo} = context.repo;
 
-            const {data: tags} = await github.rest.repos.listTags({
-              owner,
-              repo,
-              per_page: 100,
-            });
-
-            const previousTag = tags.find(tag => /^v\d/.test(tag.name) && tag.name !== tagName)?.name;
-
-            const payload = {
-              owner,
-              repo,
-              tag_name: tagName,
-              target_commitish: '${{ env.RELEASE_REF }}',
-            };
-
-            if (previousTag) {
-              payload.previous_tag_name = previousTag;
-            }
-
+            const {data: releases} = await github.rest.repos.listReleases({ owner, repo, per_page: 100 });
+            const previousRelease = releases.find(r => r.tag_name && /^v\d/.test(r.tag_name) && r.tag_name !== tagName);
+            const payload = { owner, repo, tag_name: tagName, target_commitish: '${{ env.RELEASE_REF }}' };
+            if (previousRelease) { payload.previous_tag_name = previousRelease.tag_name; }
             const response = await github.request('POST /repos/{owner}/{repo}/releases/generate-notes', payload);
             const notes = response.data.body || '';
             core.setOutput('release_notes', notes);
