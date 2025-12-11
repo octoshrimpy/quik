@@ -9,6 +9,7 @@ object RealmConfig {
 
     private val config: RealmConfiguration by lazy {
         RealmConfiguration.Builder()
+            .compactOnLaunch()
             .schemaVersion(AppRealmMigration.SCHEMA_VERSION)
             .migration(AppRealmMigration())
             .build()

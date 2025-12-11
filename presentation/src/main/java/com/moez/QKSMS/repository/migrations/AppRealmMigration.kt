@@ -23,6 +23,9 @@ class AppRealmMigration : RealmMigration {
 
             realm.schema.get("Message")
                 ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+                ?.transform { obj ->
+                    obj.setBoolean("sendAsGroup", false)
+                }
 
             version = 11L
         }
