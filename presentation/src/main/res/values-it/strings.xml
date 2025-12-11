@@ -498,4 +498,6 @@
     <string name="compose_send_group_summary_off">I messaggi verranno inviati separatamente a tutti i destinatari</string>
     <string name="settings_notification_silent_summary">Disattiva le notifiche per i messaggi senza destinatari presenti nei tuoi contatti</string>
     <string name="notification_foreground_worker_text">Messaggio in arrivo</string>
+    <string name="dialog_clear_compose_title">Pulisci messaggio</string>
+    <string name="button_clear">Pulisci</string>
 </resources>
