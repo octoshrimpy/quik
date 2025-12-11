@@ -99,15 +99,13 @@ jobs:
             const newTag = `v${process.env.NEW_VERSION_NAME}`;
             const {owner, repo} = context.repo;
 
-            const {data: tags} = await github.rest.repos.listTags({
+            const {data: releases} = await github.rest.repos.listReleases({
               owner,
               repo,
               per_page: 100,
             });
 
-            const previousTagEntry = tags.find(tag => /^v\d/.test(tag.name));
-            const previousTag = previousTagEntry ? previousTagEntry.name : undefined;
-
+            const previousRelease = releases.find(r => r.tag_name && /^v\d/.test(r.tag_name) && r.tag_name !== newTag);
             const requestPayload = {
               owner,
               repo,
@@ -115,8 +113,8 @@ jobs:
               target_commitish: 'master',
             };
 
-            if (previousTag) {
-              requestPayload.previous_tag_name = previousTag;
+            if (previousRelease) {
+              requestPayload.previous_tag_name = previousRelease.tag_name;
             }
 
             const response = await github.request('POST /repos/{owner}/{repo}/releases/generate-notes', requestPayload);
