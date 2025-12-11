@@ -33,6 +33,9 @@ class AppRealmMigration : RealmMigration {
         if (version < 12L) {
             realm.schema.get("Conversation")
                 ?.addField("draftDate", Long::class.java, FieldAttribute.REQUIRED)
+                ?.transform { obj ->
+                    obj.setLong("draftDate", 0L)
+                }
 
             version = 12L
         }
@@ -56,7 +59,9 @@ class AppRealmMigration : RealmMigration {
             realm.schema.create("EmojiSyncNeeded")
                 .addField("createdAt", Long::class.java, FieldAttribute.REQUIRED)
 
-            realm.createObject("EmojiSyncNeeded")
+            realm.createObject("EmojiSyncNeeded").apply {
+                setLong("createdAt", System.currentTimeMillis())
+            }
 
             version = 13L
         }
