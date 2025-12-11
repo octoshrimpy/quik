@@ -70,14 +70,14 @@
     <string name="drawer_help">راهنما اود بازخورد</string>
     <string name="drawer_invite">نِوِستن دوستان</string>
     <string name="drawer_plus_banner_summary">ویژگی های شگفت‌انگیز نو را گشوده اود از پیشرفت برنامه پشتیبانی کنید</string>
-    <string name="rate_title">از QUIK خرسند‌اید؟</string>
+    <string name="rate_title">از QUIK خرسند‌ید؟</string>
     <string name="rate_summary">مهرورزی نمایید اود برایمان در گیت‌هاب ستاره‌ای بگذارید!</string>
     <string name="rate_okay">باشد!</string>
     <string name="rate_dismiss">رد کردن</string>
     <string name="dialog_delete_title">سِتُردن</string>
     <plurals name="dialog_delete_message">
-        <item quantity="one">آیا آسوده‌دل هستید که می خواهید این گفتگو را بسِتُردانید؟</item>
-        <item quantity="other">آیا آسوده‌دل هستید که می خواهید %d گفتگو را بسِتُردانید؟</item>
+        <item quantity="one">آیا اُستیگان هستید که می خواهید این گفتگو را بسِتُردانید؟</item>
+        <item quantity="other">آیا اُستیگان هستید که می خواهید %d گفتگو را بسِتُردانید؟</item>
     </plurals>
     <string-array name="message_options">
         <item>کپی متن</item>
@@ -162,7 +162,7 @@
     <string name="backup_selected_backup_details_title">گوکان پشتیبان</string>
     <string name="backup_restore_dialog_title">پشتیبان‌ها</string>
     <string name="backup_restore_dialog_empty">پشتیبانی یافت نشد</string>
-    <string name="backup_disclaimer">اووامیک، تنها پشتیبان‌گیری و بازگردانی پیامک پشتیبانی می شود. پشتیبان‌گیری و برنامه‌ریزی برای پشتیبان‌گیری از MMS به زودی خواهد آمد!</string>
+    <string name="backup_disclaimer">هم اینک، تنها پشتیبان‌گیری و بازگردانی پیامک پشتیبانی می شود. پشتیبان‌گیری و برنامه‌ریزی برای پشتیبان‌گیری از MMS به‌زودی خواهد آمد!</string>
     <string name="backup_now">اکنون پشتیبان‌گیری کن</string>
     <string name="backup_progress_parsing">تجزیه پشتیبان…</string>
     <string name="backup_progress_running">%d/%d پیام</string>
@@ -251,8 +251,8 @@
     <string name="settings_sync_summary">همگام‌سازی دوباره پیام‌ها با پایگاه‌داده بومی پیامک اندروید</string>
     <string name="settings_about_title">درباره QUIK</string>
     <string name="settings_version">نگارش %s</string>
-    <string name="settings_logging_enabled">گزارش‌گیری اشکال‌زدایی کارا است</string>
-    <string name="settings_logging_disabled">گزارش‌گیری اشکال‌زدایی ناکارا است</string>
+    <string name="settings_logging_enabled">گزارش‌گیری آک‌زدایی کارا است</string>
+    <string name="settings_logging_disabled">گزارش‌گیری آک‌زدایی ناکارا است</string>
     <string name="settings_delay_duration_hint">درهنا را اندرون نشانید (دمک)</string>
     <string name="blocking_title">‏بژکم کردن</string>
     <string name="blocking_drop_title">پیام‌ها را دور بینداز</string>
@@ -280,7 +280,7 @@
         <item quantity="other">به %s ادامه ده اود این شماره‌ها را بژکم کن</item>
     </plurals>
     <plurals name="blocking_unblock_external">
-        <item quantity="one">به %s ادامه ده اود این شماره را اجازه بِهِل</item>
+        <item quantity="one">به %s ادامه ده اود این شماره را بِهِل</item>
         <item quantity="other">به %s ادامه ده اود این شماره‌ها را بِهِل</item>
     </plurals>
     <string name="about_title">درباره</string>
@@ -409,12 +409,12 @@
     </string-array>
     <string name="menu_mms_part_share">همرسانی</string>
     <plurals name="dialog_delete_chat">
-        <item quantity="one">آیا آسوده‌دل هستید که می خواهید این پیام را بسِتُردانید؟</item>
-        <item quantity="other">آیا آسوده‌دل هستید که می خواهید %d پیام را بسِتُردانید؟</item>
+        <item quantity="one">آیا اُستیگان هستید که می خواهید این پیام را بسِتُردانید؟</item>
+        <item quantity="other">آیا اُستیگان هستید که می خواهید %d پیام را بسِتُردانید؟</item>
     </plurals>
     <plurals name="dialog_send_now">
-        <item quantity="one">آیا آسوده‌دل هستید که می خواهید این پیام را بفرستید؟</item>
-        <item quantity="other">آیا آسوده‌دل هستید که می خواهید %d پیام را بفرستید؟</item>
+        <item quantity="one">آیا اُستیگان هستید که می خواهید این پیام را بفرستید؟</item>
+        <item quantity="other">آیا اُستیگان هستید که می خواهید %d پیام را بفرستید؟</item>
     </plurals>
     <string name="dialog_edit_scheduled_message_title">ویرایش پیام</string>
     <string name="dialog_edit_scheduled_message_positive_button">آری، پیام را ویرایش کنید</string>
@@ -446,7 +446,7 @@
     <string name="main_menu_edit_message">ویرایش پیام</string>
     <string name="scheduled_menu_send_now">اکنون بفرست</string>
     <string name="scheduled_menu_edit_message">ویرایش پیام</string>
-    <string name="dialog_edit_scheduled_message">ویرایش این پیام آن را از زمان‌بندی می‌سترداند.\n\nآسوده‌دل شوید که آن را دوباره در برگه پسین بفرستید، وگرنه از دست خواهد رفت.\n\nآیا می‌خواهید ادامه دهید؟</string>
+    <string name="dialog_edit_scheduled_message">ویرایش این پیام آن را از زمان‌بندی می‌سترداند.\n\nاُستیگان شوید که آن را دوباره در برگه پسین بفرستید، وگرنه از دست خواهد رفت.\n\nآیا می‌خواهید ادامه دهید؟</string>
     <string name="main_menu_rename_conversation">بازنامیدن گفتگو</string>
     <string name="main_sender_draft">پیش‌نویش: %s</string>
     <string name="compose_no_valid_recipients">نمی‌توان آن را به دیگر هَنبازان فرستاد</string>
@@ -478,12 +478,12 @@
     <string name="clipboard_unable_to_copy_to">نمی‌توان به بُریده‌‏دان پچین کرد</string>
     <string name="settings_notification_previews_summary">نمایش نام اود پیام</string>
     <string name="settings_notification_silent_summary">آگاهنده‌ها را برای پیام‌هایی که از همدرنگان شما نیستند، بی‌صدا می‌کند</string>
-    <string name="settings_disable_screenshots_title">ناکار کردن نماگرفت‌ها</string>
-    <string name="settings_diable_screenshots_summary">سامانه‌عامل اود دیگر برنامه‌هارا ازنماگرفتن از برنامه بازدارید.</string>
+    <string name="settings_disable_screenshots_title">ناکارا کردن نماگرفت‌ها</string>
+    <string name="settings_diable_screenshots_summary">سامانه‌عامل اود دیگر برنامه‌ها را از نماگرفتن از برنامه بازدارید.</string>
     <string name="compose_message_item">تاگ پیام</string>
     <string name="message_content_filters_title">پالایه‌های اوبَریشن پیام</string>
     <string name="message_content_filters_empty">پالایه‌های اوبَریشن پیام شما اینجا نمایان می‌شوند</string>
-    <string name="message_content_filters_add_cd">ساخنن پالایه‌ای نو</string>
+    <string name="message_content_filters_add_cd">ساختن پالایه‌ای نو</string>
     <string name="message_content_filters_dialog_hint">واژه، گزاره یا واج‌بندی داتمند</string>
     <string name="message_content_filters_dialog_case_switch">سُهنده به واج‌های بزرگ اود کوچک</string>
     <string name="message_content_filters_dialog_regex_switch">واج‌بندی داتمند</string>
