@@ -767,6 +767,20 @@ open class MessageRepositoryImpl @Inject constructor(
         return message
     }
 
+    override fun markAsSendingNow(messageId: Long) =
+        Realm.getDefaultInstance().use { realm ->
+            realm.refresh()
+            realm.where(Message::class.java)
+                .equalTo("id", messageId)
+                .findFirst()
+                ?.let { message ->
+                    realm.executeTransaction {
+                        message.date = System.currentTimeMillis()
+                    }
+                }
+            Unit
+        }
+
     /**
      * Marks the message as sending, in case we need to retry sending it
      */
