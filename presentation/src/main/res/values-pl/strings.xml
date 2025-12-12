@@ -527,4 +527,7 @@
     </plurals>
     <string name="notification_message_failed_action">Wyślij ponownie</string>
     <string name="messages_text_share_file_error">Ups! Coś poszło nie tak podczas udostępniania</string>
+    <string name="compose_send_group_summary_on">Odbiorcy i odpowiedzi będą widoczne dla wszystkich</string>
+    <string name="compose_send_group_summary_off">Wiadomości zostaną wysłane osobno do wszystkich odbiorców</string>
+    <string name="notification_foreground_worker_text">Odbieranie wiadomości</string>
 </resources>
