@@ -37,7 +37,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SCHEMA_VERSION: Long = 14
+        const val SCHEMA_VERSION: Long = 15
     }
 
     @SuppressLint("ApplySharedPref")
@@ -247,19 +247,6 @@ class QkRealmMigration @Inject constructor(
                 .addField("isRegex", Boolean::class.java, FieldAttribute.REQUIRED)
                 .addField("includeContacts", Boolean::class.java, FieldAttribute.REQUIRED)
 
-            realm.schema.get("Conversation")
-                ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
-                ?.transform { conversation ->
-                    conversation.setBoolean(
-                        "sendAsGroup",
-                        (conversation.getList("recipients").size > 1)
-                    )
-                }
-
-            realm.schema.get("Message")
-                ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
-
-
             version++
         }
 
@@ -292,6 +279,23 @@ class QkRealmMigration @Inject constructor(
             realm.createObject("EmojiSyncNeeded")
 
             version++
+        }
+
+        if (version == 14L) {
+            if (realm.schema.get("Conversation")?.hasField("sendAsGroup") == false) {
+                realm.schema.get("Conversation")
+                    ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+                    ?.transform { conversation ->
+                        conversation.setBoolean(
+                            "sendAsGroup",
+                            (conversation.getList("recipients").size > 1)
+                        )
+                    }
+            }
+            if (realm.schema.get("Message")?.hasField("sendAsGroup") == false) {
+                realm.schema.get("Message")
+                    ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
+            }
         }
 
         check(version >= SCHEMA_VERSION) {
