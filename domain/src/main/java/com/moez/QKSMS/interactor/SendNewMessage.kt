@@ -24,6 +24,7 @@ import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.repository.ConversationRepository
 import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -70,11 +71,14 @@ class SendNewMessage @Inject constructor(
             conversationRepo.updateConversations(threadIds)
             conversationRepo.markUnarchived(threadIds)
 
-            threadIds.forEach { threadId -> shortcutManager.reportShortcutUsed(threadId) }
+            AndroidSchedulers.mainThread().scheduleDirect {
+                threadIds.forEach { shortcutManager.reportShortcutUsed(it) }
+            }
 
             // delete attachment local files, if any, because they're saved to mms db by now
             params.attachments.forEach { it.removeCacheFile() }
         }
+        .observeOn(AndroidSchedulers.mainThread())
         .flatMap { updateBadge.buildObservable(Unit) } // Update the widget
 
 }
