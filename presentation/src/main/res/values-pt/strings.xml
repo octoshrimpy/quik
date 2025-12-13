@@ -143,8 +143,8 @@
     <string name="gallery_error">Não foi possível carregar os dados</string>
     <string name="gallery_toast_saved">Guardada na galeria</string>
     <string name="backup_title">Backup e restauro</string>
-    <string name="backup_backing_up">Backup de mensagens</string>
-    <string name="backup_restoring">Restaurar do backup</string>
+    <string name="backup_backing_up">A criar backup</string>
+    <string name="backup_restoring">A restaurar backup</string>
     <string name="backup_loading">A carregar…</string>
     <string name="backup_never">Nunca</string>
     <string name="backup_location_title">Localização do backup</string>
@@ -174,7 +174,7 @@
     <string name="backup_progress_finished">Terminado!</string>
     <string name="backup_notification_channel_name">Backup e restauro</string>
     <string name="scheduled_title">Agendada</string>
-    <string name="scheduled_empty_description">Enviar automaticamente uma mensagem à hora especificada</string>
+    <string name="scheduled_empty_description">Enviar automaticamente uma mensagem no momento especificado</string>
     <string name="scheduled_empty_message_1">Olá! Quando é que é mesmo o teu aniversário?</string>
     <string name="scheduled_empty_message_2">É no dia 23 de dezembro</string>
     <string name="scheduled_empty_message_3">Feliz aniversário! Já viste o tipo de amigo que sou, até me lembro do teu aniversário</string>
@@ -230,40 +230,41 @@
         <item>Marcar como não lida</item>
     </string-array>
     <string name="settings_delivery_title">Confirmações de entrega</string>
-    <string name="settings_delivery_summary">Confirma se as mensagens foram enviadas com sucesso</string>
+    <string name="settings_delivery_summary">Confirmação de mensagens enviadas com sucesso</string>
     <string name="settings_signature_title">Assinatura</string>
     <string name="settings_signature_summary">Adicionar uma assinatura às mensagens</string>
     <string name="settings_unicode_title">Remover acentos</string>
     <string name="settings_unicode_summary">Remover acentos dos caracteres nas mensagens enviadas</string>
     <string name="settings_mobile_title">Apenas números de telemóvel</string>
     <string name="settings_mobile_summary">Ao escrever uma mensagem, mostrar apenas os números móveis</string>
-    <string name="settings_auto_delete">Apagar mensagens antigas automaticamente</string>
+    <string name="settings_auto_delete">Eliminar antigas automaticamente</string>
     <string name="settings_auto_delete_dialog_message">As mensagens serão eliminadas após o número de dias especificado</string>
     <string name="settings_auto_delete_dialog_hint">Número de dias</string>
     <string name="settings_auto_delete_never">Nunca</string>
-    <string name="settings_auto_delete_warning">Apagar mensagens antigas automaticamente?</string>
+    <string name="settings_auto_delete_warning">Eliminar mensagens antigas automaticamente?</string>
     <string name="settings_auto_delete_warning_message">Se continuar, %1$d mensagens serão eliminadas</string>
     <plurals name="settings_auto_delete_summary">
         <item quantity="one">Após 1 dia</item>
+        <item quantity="many">Após %d dias</item>
         <item quantity="other">Após %d dias</item>
     </plurals>
     <string name="settings_long_as_mms_title">Enviar mensagens longas como MMS</string>
     <string name="settings_long_as_mms_summary">Se as mensagens longas não estiverem a ser enviadas ou estão a ser enviadas pela ordem errada, pode tentar enviar como MMS. Podem ser aplicados custos adicionais.</string>
     <string name="settings_mms_size_title">Comprimir anexos MMS automaticamente</string>
     <string name="settings_sync_title">Sincronizar mensagens</string>
-    <string name="settings_sync_summary">Sincronizar as mensagens com a base de dados nativa do Android</string>
-    <string name="settings_about_title">Acerca do QUIK</string>
+    <string name="settings_sync_summary">Sincronizar mensagens com a base de dados nativa do Android</string>
+    <string name="settings_about_title">Acerca de QUIK</string>
     <string name="settings_version">Versão %s</string>
     <string name="settings_logging_enabled">Depuração ativada</string>
     <string name="settings_logging_disabled">Depuração desativada</string>
     <string name="settings_delay_duration_hint">Digite a duração (segundos)</string>
     <string name="blocking_title">Bloqueio</string>
     <string name="blocking_drop_title">Descartar mensagens</string>
-    <string name="blocking_drop_summary">As mensagens enviadas pelos remetentes bloqueados serão descartadas e não ocultadas</string>
+    <string name="blocking_drop_summary">Descartar mensagens enviadas pelos remetentes bloqueados em vez de as ocultar</string>
     <string name="blocking_conversations">Conversas bloqueadas</string>
     <string name="blocking_manager_title">Gestor de bloqueios</string>
     <string name="blocking_manager_qksms_summary">Funcionalidade de bloqueio, nativa no QUIK</string>
-    <string name="blocking_manager_call_blocker_summary">Bloquear mensagens de spam, números e chamadas desconhecidas com lista negra e agendamento.</string>
+    <string name="blocking_manager_call_blocker_summary">Bloquear spam, números e chamadas desconhecidas com lista negra e agendamento</string>
     <string name="blocking_manager_call_control_summary">Filtrar automaticamente as chamadas e as mensagens com a aplicação Community IQ™, com a qual pode descartar as mensagens que forem enviadas pelo \'spammers\' reconhecidos na comunidade</string>
     <string name="blocking_manager_sia_summary">Filtrar automaticamente as mensagens de números utilizando a aplicação \"Should I Answer\"</string>
     <string name="blocking_manager_copy_title">Copiar números bloqueados</string>
@@ -280,10 +281,12 @@
     <string name="blocking_unblock_title">Desbloquear</string>
     <plurals name="blocking_block_external">
         <item quantity="one">Continuar para %s e bloquear este número</item>
+        <item quantity="many">Continuar para %s e bloquear estes números</item>
         <item quantity="other">Continuar para %s e bloquear estes números</item>
     </plurals>
     <plurals name="blocking_unblock_external">
         <item quantity="one">Continuar para %s e permitir este número</item>
+        <item quantity="many">Continuar para %s e permitir estes números</item>
         <item quantity="other">Continuar para %s e permitir estes números</item>
     </plurals>
     <string name="about_title">Acerca</string>
@@ -295,7 +298,7 @@
     <string name="about_license_title">Licença</string>
     <string name="about_copyright_title">Copyright</string>
     <string name="qksms_plus_description_title">Apoiar o desenvolvimento, desbloquear tudo</string>
-    <string name="qksms_plus_description_summary">Pode ajudar um programador com apenas %s</string>
+    <string name="qksms_plus_description_summary">Pode ajudar o programador com apenas %s</string>
     <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
     <string name="qksms_plus_upgrade">Atualização vitalícia para %1$s %2$s</string>
     <!-- Substitutions are for price and currency. Ex: Unlock + donate for $4.99 USD -->
@@ -317,7 +320,7 @@
     <string name="qksms_plus_delayed_title">Atraso de envio</string>
     <string name="qksms_plus_delayed_summary">Esperar alguns segundos antes de enviar a mensagem</string>
     <string name="qksms_plus_night_title">Modo noturno automático</string>
-    <string name="qksms_plus_night_summary">Ativar o modo noturno tendo por base a hora</string>
+    <string name="qksms_plus_night_summary">Ativar modo noturno tendo por base a hora do dia</string>
     <string name="qksms_plus_blacklist_title">Bloqueio avançado</string>
     <string name="qksms_plus_blacklist_summary">Bloquear mensagens através de palavras-chave ou padrões</string>
     <string name="qksms_plus_forward_title">Reencaminhamento automático</string>
@@ -330,7 +333,7 @@
     <string name="widget_more">Ver mais conversas</string>
     <string name="qkreply_menu_read">Marcar como lida</string>
     <string name="qkreply_menu_call">Ligar</string>
-    <string name="qkreply_menu_delete">Apagar</string>
+    <string name="qkreply_menu_delete">Eliminar</string>
     <string name="qkreply_menu_expand">Mostrar mais</string>
     <string name="qkreply_menu_collapse">Mostrar menos</string>
     <string name="qkreply_menu_view">Abrir conversa</string>
@@ -349,16 +352,17 @@
     <string name="button_yes">Sim</string>
     <string name="button_continue">Continuar</string>
     <string name="button_cancel">Cancelar</string>
-    <string name="button_delete">Apagar</string>
+    <string name="button_delete">Eliminar</string>
     <string name="button_save">Guardar</string>
     <string name="button_stop">Parar</string>
     <string name="button_more">Mais</string>
     <string name="button_set">Definir</string>
     <string name="button_undo">Anular</string>
     <string name="toast_copied">Copiada</string>
-    <string name="toast_qksms_plus">Tem que ter o QUIK+ para esta função</string>
+    <string name="toast_qksms_plus">Tem que ter QUIK+ para esta funcionalidade</string>
     <plurals name="notification_new_messages">
         <item quantity="one">1 nova mensagem</item>
+        <item quantity="many">%s novas mensagens</item>
         <item quantity="other">%s novas mensagens</item>
     </plurals>
     <string name="notification_message_failed_title">Mensagem não enviada</string>
@@ -487,11 +491,17 @@
         <item quantity="many">%d conversas desarquivadas</item>
         <item quantity="other">%d conversas desarquivadas</item>
     </plurals>
-    <string name="notification_foreground_worker_text">Mensagem recebida</string>
+    <string name="notification_foreground_worker_text">Em Android 12 ou anterior, é necessária uma notificação para que o serviço em segundo plano possa permitir a receção de mensagens.</string>
     <string name="notification_message_failed_action">Reenviar</string>
     <string name="speak_no_messages">Não existem mensagens</string>
     <string name="messageLinkHandling_dialog_title">Aviso de ligação externa</string>
     <string name="messageLinkHandling_dialog_positive">Sim, abrir ligação</string>
     <string name="messageLinkHandling_dialog_negative">Não</string>
     <string name="error_stt_toast">Desculpe mas ocorreu um erro ao carregar o serviço \"Áudio para texto\".</string>
+    <string name="settings_notification_silent_summary">Não notificar se os remetentes das mensagens não forem um dos seus contactos</string>
+    <string name="notification_foreground_worker_title">Mensagem recebida</string>
+    <string name="speak_unseen_messages">Ouvir mensagens não lidas</string>
+    <string name="messageLinkHandling_dialog_body">Algumas ligações podem ser perigosas ou até mesmo reencaminharem para serviços indesejados. Analise a ligação antes de continuar:\n\n%1$s\n\nDeseja continuar?</string>
+    <string name="stt_toast_extra_prompt">Diga a sua mensagem</string>
+    <string name="messages_text_share_file_error">Bolas! Ocorreu um erro ao partilhar.</string>
 </resources>
