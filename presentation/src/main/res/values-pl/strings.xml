@@ -529,5 +529,6 @@
     <string name="messages_text_share_file_error">Ups! Coś poszło nie tak podczas udostępniania</string>
     <string name="compose_send_group_summary_on">Odbiorcy i odpowiedzi będą widoczne dla wszystkich</string>
     <string name="compose_send_group_summary_off">Wiadomości zostaną wysłane osobno do wszystkich odbiorców</string>
-    <string name="notification_foreground_worker_text">Odbieranie wiadomości</string>
+    <string name="notification_foreground_worker_text">W systemie Android 12 i starszych wymagane jest powiadomienie o pracy w tle, która umożliwia odbieranie wiadomości.</string>
+    <string name="notification_foreground_worker_title">Odbieranie wiadomości</string>
 </resources>
