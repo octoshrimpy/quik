@@ -64,7 +64,7 @@
     <string name="drawer_inbox">دریافتی</string>
     <string name="drawer_archived">بایگانی شده</string>
     <string name="drawer_scheduled">زمان‌بندی شده</string>
-    <string name="drawer_blocking">بژکم می‌کند</string>
+    <string name="drawer_blocking">بژکم کردن</string>
     <string name="drawer_more">بيشتر</string>
     <string name="drawer_settings">پیکربندی</string>
     <string name="drawer_help">راهنما اود بازخورد</string>
@@ -491,4 +491,8 @@
     <string name="message_content_filters_dialog_create">بساز</string>
     <string name="messageLinkHandling_dialog_title">هشدار پیوند‌های بیرونی</string>
     <string name="message_content_filters_dialog_title">دور انداختن پیام‌های هم خوان</string>
+    <string name="compose_send_group_summary_off">پیام، جداگانه برای هر دریافت‌کننده فرستاده خواهد شد</string>
+    <string name="notification_foreground_worker_title">دریافت پیام</string>
+    <string name="notification_foreground_worker_text">در اندروید ۱۲ اود پس از آن، آگاهنده‌ای برای دریافت پیام در پس‌زمینه نیاز است.</string>
+    <string name="compose_send_group_summary_on">دریافت‌کننده‌ها اود پاسخ‌ها برای همه نمایان خواهند بود</string>
 </resources>
