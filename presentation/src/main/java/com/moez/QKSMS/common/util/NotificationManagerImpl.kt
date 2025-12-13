@@ -91,9 +91,11 @@ class NotificationManagerImpl @Inject constructor(
         createNotificationChannel()
     }
 
+    // Required for running workers on Android 12 and older
     override fun getForegroundNotificationForWorkersOnOlderAndroids() =
         NotificationCompat.Builder(context, DEFAULT_CHANNEL_ID)
-            .setContentTitle(context.getString(R.string.notification_foreground_worker_text))
+            .setContentTitle(context.getString(R.string.notification_foreground_worker_title))
+            .setContentText(context.getString(R.string.notification_foreground_worker_text))
             .setShowWhen(false)
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.ic_notification)
