@@ -1,0 +1,1 @@
+Open-Source-Ersatz für die Standard-SMS-App auf Android. Eine Neuauflage von QKSMS.

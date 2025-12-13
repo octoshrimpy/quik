@@ -509,4 +509,7 @@
     <string name="error_stt_toast">Извините, произошла ошибка при загрузке провайдера Speech-To-Text.</string>
     <string name="stt_toast_extra_prompt">Произнесите своё сообщение</string>
     <string name="messages_text_share_file_error">Упс! Что-то пошло не так во время обмена</string>
+    <string name="compose_send_group_summary_on">Получатели и ответы будут видны всем</string>
+    <string name="compose_send_group_summary_off">Сообщения будут отправлены отдельно всем получателям</string>
+    <string name="notification_foreground_worker_text">Получение сообщения</string>
 </resources>
