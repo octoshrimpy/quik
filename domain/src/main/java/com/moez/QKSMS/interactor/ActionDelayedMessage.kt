@@ -51,6 +51,7 @@ class ActionDelayedMessage @Inject constructor(
                     }
 
                     Action.Send -> {
+                        messageRepo.markAsSendingNow(message.id)
                         updateConversations.addAll(
                             messageRepo.sendMessage(message).map { it.threadId }
                         )

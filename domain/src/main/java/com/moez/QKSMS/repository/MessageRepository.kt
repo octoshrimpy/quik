@@ -88,4 +88,5 @@ interface MessageRepository {
 
     fun deleteOldMessages(maxAgeDays: Int)
 
+    fun markAsSendingNow(messageId: Long)
 }
