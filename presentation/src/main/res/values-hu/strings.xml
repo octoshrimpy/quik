@@ -493,5 +493,6 @@
     <string name="messages_text_share_file_error">Valami probléma történt a megosztáskor</string>
     <string name="compose_send_group_summary_on">A címzettek és a válaszok mindenki számára láthatóak lesznek</string>
     <string name="compose_send_group_summary_off">Az üzenetek külön-külön lesznek elküldve minden címzettnek</string>
-    <string name="notification_foreground_worker_text">Üzenet fogadása</string>
+    <string name="notification_foreground_worker_text">Android 12 és régebbi verziók esetén értesítés szükséges a háttérmunkához, amely lehetővé teszi az üzenetek fogadását.</string>
+    <string name="notification_foreground_worker_title">Üzenet fogadása</string>
 </resources>
