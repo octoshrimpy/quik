@@ -126,7 +126,7 @@
     <string name="compose_sim_changed_toast">سیم‌کارت %1$d (%2$s) گزیده شد</string>
     <string name="compose_sim_cd">%s گزیده شد، سیم‌کارت را بورتانید</string>
     <string name="compose_send_cd">فرستادن پیام</string>
-    <string name="message_status_sending">در حال فرستادن…</string>
+    <string name="message_status_sending">فرستاده می‌شود…</string>
     <string name="message_status_delivered">رسیده %s</string>
     <string name="message_status_failed">فرستاده نشد. برای تلاش دوباره بِپَرماسید</string>
     <string name="info_title">گوکان</string>
