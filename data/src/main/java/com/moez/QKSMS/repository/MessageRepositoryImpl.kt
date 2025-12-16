@@ -738,12 +738,6 @@ open class MessageRepositoryImpl @Inject constructor(
             var managedMessage: Message? = null
             realm.executeTransaction { managedMessage = realm.copyToRealmOrUpdate(message) }
 
-            context.contentResolver.insert(Sms.Inbox.CONTENT_URI, values)
-                ?.lastPathSegment?.toLong()?.let { id ->
-                    // Update contentId after the message has been inserted to the content provider
-                    realm.executeTransaction { managedMessage?.contentId = id }
-                }
-
             managedMessage?.let { savedMessage ->
                 val parsedReaction = reactions.parseEmojiReaction(body)
                 if (parsedReaction != null) {
