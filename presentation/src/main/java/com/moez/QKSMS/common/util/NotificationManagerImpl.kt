@@ -103,6 +103,7 @@ class NotificationManagerImpl @Inject constructor(
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setOngoing(true)
+            .setSilent(true)
             .build()
 
     /**
