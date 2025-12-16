@@ -24,7 +24,6 @@ import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.anyOf
 import dev.octoshrimpy.quik.extensions.asObservable
 import dev.octoshrimpy.quik.extensions.map
-import dev.octoshrimpy.quik.extensions.removeAccents
 import dev.octoshrimpy.quik.filter.ConversationFilter
 import dev.octoshrimpy.quik.mapper.CursorToConversation
 import dev.octoshrimpy.quik.mapper.CursorToRecipient
@@ -143,7 +142,7 @@ class ConversationRepositoryImpl @Inject constructor(
     override fun searchConversations(query: CharSequence): List<SearchResult> {
         val realm = Realm.getDefaultInstance()
 
-        val normalizedQuery = query.removeAccents()
+        val searchQuery = query.toString()
         val conversations = realm.copyFromRealm(realm
             .where(Conversation::class.java)
             .notEqualTo("id", 0L)
@@ -156,24 +155,24 @@ class ConversationRepositoryImpl @Inject constructor(
         val messagesByConversation = realm.copyFromRealm(realm
             .where(Message::class.java)
             .beginGroup()
-            .contains("body", normalizedQuery, Case.INSENSITIVE)
+            .contains("body", searchQuery, Case.INSENSITIVE)
             .or()
-            .contains("parts.text", normalizedQuery, Case.INSENSITIVE)
+            .contains("parts.text", searchQuery, Case.INSENSITIVE)
             .endGroup()
             .findAll())
             .groupBy { message -> message.threadId }
             .filter { (threadId, _) -> conversations.firstOrNull { it.id == threadId } != null }
             .map { (threadId, messages) -> Pair(conversations.first { it.id == threadId }, messages.size) }
-            .map { (conversation, messages) -> SearchResult(normalizedQuery, conversation, messages) }
+            .map { (conversation, messages) -> SearchResult(searchQuery, conversation, messages) }
             .sortedByDescending { result -> result.messages }
             .toList()
 
         realm.close()
 
         return conversations
-            .filter { conversation -> conversationFilter.filter(conversation, normalizedQuery) }
+            .filter { conversation -> conversationFilter.filter(conversation, searchQuery) }
             .map {
-                    conversation -> SearchResult(normalizedQuery, conversation, 0)
+                    conversation -> SearchResult(searchQuery, conversation, 0)
             } + messagesByConversation
     }
 
