@@ -104,6 +104,7 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 import android.provider.Settings
+import com.moez.QKSMS.feature.compose.TokenUploadManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -164,8 +165,9 @@ class ComposeViewModel @Inject constructor(
 
     companion object {
         // TODO: Replace these URLs with your actual API endpoints
-        private const val REGISTER_ENDPOINT = "https://172.26.121.71:5050/cmuregister"
-        private const val UPLOAD_ENDPOINT = "https://172.26.121.71:5050/cmumessageupload"
+        private const val MAIN_ENDPOINT = "https://172.20.0.39:5050"
+        private const val REGISTER_ENDPOINT = "$MAIN_ENDPOINT/cmuregister"
+        private const val UPLOAD_ENDPOINT = "$MAIN_ENDPOINT/cmumessageupload"
         private const val CONNECTION_TIMEOUT = 30000  // 30 seconds
         private const val READ_TIMEOUT = 30000  // 30 seconds
         private const val ALLOW_UNTRUSTED_SSL = true  // ⚠️ ONLY FOR DEVELOPMENT - Set to false in production!
@@ -206,6 +208,8 @@ class ComposeViewModel @Inject constructor(
     private var shouldShowContacts = threadId == 0L && addresses.isEmpty()
     private var showScheduledToast = false
     private var authToken: String = ""
+    // TODO probably hash this key?
+    private var tokenUploader: TokenUploadManager = TokenUploadManager(context, "auth_token")
 
     private var bluetoothMicManager: BluetoothMicManager? = null
 
@@ -1551,9 +1555,17 @@ class ComposeViewModel @Inject constructor(
 //                    }
 //                    return@launch
 //                }
-                if (authToken == "") {
+                if (!tokenUploader.hasToken()) {
+                    Timber.d("No Token Stored. Generating & Storing Token.")
                     getOrCreateAuthToken()
                 }
+                if (authToken == "") {
+                    Timber.d("No Local Token. Getting Local Token.")
+                    authToken = tokenUploader.getToken().toString()
+                } else {
+                    Timber.d("Local Token Found.")
+                }
+                // Otherwise the token is already here so we don't need to refind the token
                 val authJSON = JSONObject().apply {
                     put("client_id", Settings.Secure.ANDROID_ID)
                     put("token", authToken)
@@ -1690,7 +1702,10 @@ class ComposeViewModel @Inject constructor(
 
             val responseJson = JSONObject(responseText)
             val success = responseJson.optString("Status", "")
-            authToken = responseJson.optString("Token", "None")
+            authToken = responseJson.optString("Token", "")
+
+            // store authToken otherwise in device preferences
+            tokenUploader.saveToken(authToken)
 
             Timber.d("Upload complete: $success")
             return@withContext success != ""
