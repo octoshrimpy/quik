@@ -61,6 +61,7 @@
     <string name="main_menu_edit_message">Edit message</string>
     <string name="main_menu_rename_conversation">Rename conversation</string>
     <string name="main_syncing">Syncing messages…</string>
+    <string name="main_sync_emojis">Parsing emoji reactions…</string>
     <string name="main_sender_you">You: %s</string>
     <string name="main_sender_draft">Draft: %s</string>
     <string name="main_message_results_title">Results in messages</string>
