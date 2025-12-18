@@ -159,6 +159,20 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         return null
     }
 
+    private fun parseTruncatedMessages(originalMessageText: String): Regex {
+        val reactionText = originalMessageText.trim()
+
+        val delimiter = "\u2026"
+        val index = reactionText.lastIndexOf(delimiter)
+        val regexPattern = if (index == -1) {
+            Regex.escape(reactionText)
+        } else {
+            val before = reactionText.take(index)
+            Regex.escape(before) + ".*"
+        }
+        return Regex("^$regexPattern$", RegexOption.DOT_MATCHES_ALL)
+    }
+
     /**
      * Search for messages in the same thread with matching text content
      * We'll search recent messages first
@@ -176,8 +190,9 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         val endTime = System.currentTimeMillis()
         Timber.d("Found ${messages.size} messages as potential emoji targets in ${endTime - startTime}ms")
 
+        val originalMessageRegex = parseTruncatedMessages(originalMessageText)
         val match = messages.find { message ->
-            message.getText(false).trim() == originalMessageText.trim()
+            originalMessageRegex.matches(message.getText(false).trim())
         }
         if (match != null) {
             Timber.d("Found match for reaction target: message ID ${match.id}")
