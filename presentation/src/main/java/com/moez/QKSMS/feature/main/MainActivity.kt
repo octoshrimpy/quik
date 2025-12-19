@@ -337,6 +337,17 @@ class MainActivity : QkThemedActivity(), MainView {
                 syncingProgress.isIndeterminate = state.syncing.indeterminate
                 snackbar.isVisible = false
             }
+
+            is SyncRepository.SyncProgress.ParsingEmojis -> {
+                syncing.isVisible = true
+                syncingLabel.setText(getString(R.string.main_sync_emojis))
+                syncingProgress.max = state.syncing.max
+                progressAnimator.apply {
+                    setIntValues(syncingProgress.progress, state.syncing.progress)
+                }.start()
+                syncingProgress.isIndeterminate = state.syncing.indeterminate
+                snackbar.isVisible = false
+            }
         }
 
         when {

@@ -229,10 +229,14 @@ class SyncRepositoryImpl @Inject constructor(
                     }
                 }
 
-                syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
+                syncProgress.onNext(SyncRepository.SyncProgress.ParsingEmojis(0, 0, true))
 
                 // Now that we have all the messages, we can scan for emoji reactions
-                reactions.deleteAndReparseAllEmojiReactions(realm)
+                reactions.deleteAndReparseAllEmojiReactions(
+                    realm,
+                    onProgress = { progress ->
+                        syncProgress.onNext(progress)
+                    })
 
                 realm.insert(SyncLog())
             }, {

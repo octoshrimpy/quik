@@ -128,7 +128,7 @@ class MainViewModel @Inject constructor(
         Realm.getDefaultInstance().executeTransactionAsync { realm ->
             val emojiSyncNeeded = realm.where(EmojiSyncNeeded::class.java).findFirst()
             if (emojiSyncNeeded != null) {
-                reactions.deleteAndReparseAllEmojiReactions(realm)
+                reactions.deleteAndReparseAllEmojiReactions(realm) { /* No progress ui needed here */ }
                 emojiSyncNeeded.deleteFromRealm()
             }
         }

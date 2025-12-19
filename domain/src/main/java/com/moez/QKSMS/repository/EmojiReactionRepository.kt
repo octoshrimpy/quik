@@ -35,5 +35,8 @@ interface EmojiReactionRepository {
         realm: Realm,
     )
 
-    fun deleteAndReparseAllEmojiReactions(realm: Realm)
+    fun deleteAndReparseAllEmojiReactions(
+        realm: Realm,
+        onProgress: (SyncRepository.SyncProgress) -> Unit
+    )
 }

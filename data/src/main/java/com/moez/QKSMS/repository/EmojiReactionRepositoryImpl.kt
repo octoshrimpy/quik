@@ -247,7 +247,7 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun deleteAndReparseAllEmojiReactions(realm: Realm) {
+    override fun deleteAndReparseAllEmojiReactions(realm: Realm, onProgress: (SyncRepository.SyncProgress) -> Unit) {
         val startTime = System.currentTimeMillis()
 
         realm.delete(EmojiReaction::class.java)
@@ -271,6 +271,9 @@ class EmojiReactionRepositoryImpl @Inject constructor(
             .sort("date", Sort.ASCENDING) // parse oldest to newest to handle reactions & removals properly
             .findAll()
 
+        val max = allMessages?.count() ?: 0
+        var progress = 0
+
         allMessages.forEach { message ->
             val text = message.getText(false)
             val parsedReaction = parseEmojiReaction(text)
@@ -286,6 +289,18 @@ class EmojiReactionRepositoryImpl @Inject constructor(
                     targetMessage,
                     realm,
                 )
+                progress++
+                // Update the progress every 25 messages, and then at completion
+                // that way we don't spam the UI
+                if (progress % 25 == 0 || progress == max) {
+                    onProgress(
+                        SyncRepository.SyncProgress.ParsingEmojis(
+                            max = max,
+                            progress = progress,
+                            indeterminate = false
+                        )
+                    )
+                }
             }
         }
 
