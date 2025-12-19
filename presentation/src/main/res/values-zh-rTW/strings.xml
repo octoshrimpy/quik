@@ -485,4 +485,8 @@
     <string name="error_stt_toast">抱歉，載入語音轉文字提供者時發生錯誤。</string>
     <string name="stt_toast_extra_prompt">朗讀你的訊息</string>
     <string name="messages_text_share_file_error">糟糕！分享時發生錯誤</string>
+    <string name="compose_send_group_summary_on">收件者與回覆內容將對所有人可見</string>
+    <string name="compose_send_group_summary_off">訊息將分別傳送給所有收件者</string>
+    <string name="notification_foreground_worker_title">正在接收訊息</string>
+    <string name="notification_foreground_worker_text">在 Android 12 及以下版本中，啟用接收訊息的背景作業需要顯示通知。</string>
 </resources>
