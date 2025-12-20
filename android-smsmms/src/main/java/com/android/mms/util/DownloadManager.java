@@ -27,8 +27,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Telephony.Mms;
 
-import com.android.mms.logs.LogTag;
-import timber.log.Timber; import android.util.Log;
+import timber.log.Timber;
 import android.widget.Toast;
 
 import com.android.internal.telephony.TelephonyProperties;
@@ -40,7 +39,6 @@ import com.google.android.mms.pdu_alt.PduPersister;
 import com.klinker.android.send_message.R;
 
 public class DownloadManager {
-    private static final String TAG = LogTag.TAG;
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = true;
 
@@ -125,7 +123,7 @@ public class DownloadManager {
         String roaming = SystemPropertiesProxy.get(context,
                 TelephonyProperties.PROPERTY_OPERATOR_ISROAMING, null);
         if (LOCAL_LOGV) {
-            Timber.v("roaming ------> " + roaming);
+            Timber.v("roaming ------> %s", roaming);
         }
         return "true".equals(roaming);
     }
@@ -147,7 +145,7 @@ public class DownloadManager {
                 return;
             }
         } catch(MmsException e) {
-            Timber.e(e.getMessage(), e);
+            Timber.e(e);
             return;
         }
 
@@ -159,7 +157,7 @@ public class DownloadManager {
                         Toast.makeText(mContext, getMessage(uri),
                                 Toast.LENGTH_LONG).show();
                     } catch (MmsException e) {
-                        Timber.e(e.getMessage(), e);
+                        Timber.e(e);
                     }
                 }
             });
@@ -182,7 +180,7 @@ public class DownloadManager {
                 try {
                     Toast.makeText(mContext, errStr, Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
-                    Log.e(TAG,"Caught an exception in showErrorCodeToast");
+                    Timber.e("Caught an exception in showErrorCodeToast");
                 }
             }
         });

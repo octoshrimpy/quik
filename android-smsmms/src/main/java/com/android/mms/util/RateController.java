@@ -29,8 +29,6 @@ import com.android.mms.logs.LogTag;
 import timber.log.Timber;
 
 public class RateController {
-    private static final String TAG = LogTag.TAG;
-    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private static final int RATE_LIMIT = 100;

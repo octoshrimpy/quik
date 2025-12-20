@@ -62,8 +62,6 @@ import java.util.*;
  * @author Jake Klinker
  */
 public class Transaction {
-
-    private static final String TAG = "Transaction";
     public static Settings settings;
     private Context context;
 
@@ -349,7 +347,7 @@ public class Transaction {
                         } catch (Exception e) {
                             // whoops...
                             Timber.v("send_transaction", "error sending message");
-                            Timber.e("exception thrown", e);
+                            Timber.e(e, "exception thrown");
 
                             try {
                                 ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content).post(new Runnable() {
@@ -385,7 +383,7 @@ public class Transaction {
                     try {
                         smsManager.sendMultipartTextMessage(address, null, parts, sPI, dPI);
                     } catch (Exception e) {
-                        Timber.e("exception thrown", e);
+                        Timber.e(e, "exception thrown");
                     }
                 } else {
                     Timber.v("send_transaction", "message not sent after delay, no longer exists");
@@ -498,7 +496,7 @@ public class Transaction {
 
                 context.registerReceiver(receiver, filter);
             } catch (Throwable e) {
-                Timber.e("exception thrown", e);
+                Timber.e(e, "exception thrown");
             }
         } else {
             Timber.v("using lollipop method for sending sms");
@@ -516,7 +514,7 @@ public class Transaction {
                     MmsNetworkManager manager = new MmsNetworkManager(context, Utils.getDefaultSubscriptionId());
                     request.execute(context, manager);
                 } catch (Exception e) {
-                    Timber.e("error sending mms", e);
+                    Timber.e(e, "error sending mms");
                 }
             }
         }
@@ -545,7 +543,7 @@ public class Transaction {
         try {
             sendRequest.prepareFromAddress(context, fromAddress, settings.getSubscriptionId());
         } catch (Exception e) {
-            Timber.e("error getting from address", e);
+            Timber.e(e, "error getting from address");
         }
 
         final PduBody pduBody = new PduBody();
@@ -620,7 +618,7 @@ public class Transaction {
                 info.location = persister.persist(sendRequest, Uri.parse("content://mms/outbox"), true, settings.getGroup(), null, settings.getSubscriptionId());
             } catch (Exception e) {
                 Timber.v("sending_mms_library", "error saving mms message");
-                Timber.e("exception thrown", e);
+                Timber.e(e, "exception thrown");
 
                 // use the old way if something goes wrong with the persister
                 insert(context, recipients, parts, subject);
@@ -637,7 +635,7 @@ public class Transaction {
                 info.token = 4444L;
             }
         } catch (Exception e) {
-            Timber.e("exception thrown", e);
+            Timber.e(e, "exception thrown");
             info.token = 4444L;
         }
 
@@ -697,7 +695,7 @@ public class Transaction {
                 writer.write(new PduComposer(context, sendReq).make());
                 contentUri = writerUri;
             } catch (final IOException e) {
-                Timber.e("Error writing send file", e);
+                Timber.e(e, "Error writing send file");
             } finally {
                 if (writer != null) {
                     try {
@@ -723,11 +721,11 @@ public class Transaction {
                 try {
                     pendingIntent.send(SmsManager.MMS_ERROR_IO_ERROR);
                 } catch (PendingIntent.CanceledException ex) {
-                    Timber.e("Mms pending intent cancelled?", ex);
+                    Timber.e(ex, "Mms pending intent cancelled?");
                 }
             }
         } catch (Exception e) {
-            Timber.e("error using system sending method", e);
+            Timber.e(e, "error using system sending method");
         }
     }
 
@@ -903,7 +901,7 @@ public class Transaction {
             return res;
         } catch (Exception e) {
             Timber.v("sending_mms_library", "still an error saving... :(");
-            Timber.e("exception thrown", e);
+            Timber.e(e, "exception thrown");
         }
 
         return null;

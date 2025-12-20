@@ -28,7 +28,6 @@ import org.w3c.dom.events.EventTarget;
 import timber.log.Timber;
 
 public class EventTargetImpl implements EventTarget {
-    private static final String TAG = LogTag.TAG;
     private ArrayList<EventListenerEntry> mListenerEntries;
     private EventTarget mNodeTarget;
 
@@ -100,7 +99,7 @@ public class EventTargetImpl implements EventTarget {
                     catch (Exception e) {
                         // Any exceptions thrown inside an EventListener will
                         // not stop propagation of the event
-                        Timber.w("Catched EventListener exception", e);
+                        Timber.w(e, "Catched EventListener exception");
                     }
                 }
             }

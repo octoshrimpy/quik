@@ -349,7 +349,7 @@ object QkTransaction {
                 address, null, parts, sPI, dPI.ifEmpty { null }
             )
         } catch (e: Exception) {
-            Timber.e("send sms exception", e)
+            Timber.e(e, "send sms exception")
         }
 
         return true
@@ -374,7 +374,7 @@ object QkTransaction {
                 null, subscriptionId
             )
         } catch (e: Exception) {
-            Timber.e("failed to create mms message", e)
+            Timber.e(e, "failed to create mms message")
         }
 
         return Uri.EMPTY
@@ -390,7 +390,7 @@ object QkTransaction {
         try {
             pdu = PduPersister.getPduPersister(context).load(messageUri)
         } catch (e: MmsException) {
-            Timber.e("load pdu from provider failed", e)
+            Timber.e(e, "load pdu from provider failed")
             return retVal
         }
 
@@ -439,7 +439,7 @@ object QkTransaction {
                     )
                 )
             } catch (e: Exception) {
-                Timber.e("failed creating provider mms message", e)
+                Timber.e(e, "failed creating provider mms message")
             }
         }
 
@@ -488,7 +488,7 @@ object QkTransaction {
             val sendPdu = try {
                 PduPersister.getPduPersister(context).load(messageUri)
             } catch (e: MmsException) {
-                Timber.e("pdu from provider db failed", e)
+                Timber.e(e, "pdu from provider db failed")
                 return false
             }
 
@@ -507,7 +507,7 @@ object QkTransaction {
                     .scheme(ContentResolver.SCHEME_CONTENT)
                     .build()
             } catch (e: IOException) {
-                Timber.e("error writing send file", e)
+                Timber.e(e, "error writing send file")
                 return false
             }
 
@@ -529,7 +529,7 @@ object QkTransaction {
                 pendingIntent
             )
         } catch (e: Exception) {
-            Timber.e("failed sending mms", e)
+            Timber.e(e, "failed sending mms")
             return false
         }
 

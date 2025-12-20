@@ -32,8 +32,6 @@ import java.nio.charset.Charset;
  * @hide
  */
 public class VpnProfile implements Cloneable, Parcelable {
-    private static final String TAG = "VpnProfile";
-
     // Match these constants with R.array.vpn_types.
     public static final int TYPE_PPTP = 0;
     public static final int TYPE_L2TP_IPSEC_PSK = 1;
@@ -178,7 +176,7 @@ public class VpnProfile implements Cloneable, Parcelable {
             return true;
 
         } catch (IllegalArgumentException e) {
-            Timber.w("Invalid address", e);
+            Timber.w(e, "Invalid address");
             return false;
         }
     }

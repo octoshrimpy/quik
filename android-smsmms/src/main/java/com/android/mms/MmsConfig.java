@@ -27,7 +27,6 @@ import android.content.res.XmlResourceParser;
 import timber.log.Timber;
 
 public class MmsConfig {
-    private static final String TAG = "MmsConfig";
     private static final boolean DEBUG = true;
     private static final boolean LOCAL_LOGV = true;
 
@@ -302,11 +301,11 @@ public class MmsConfig {
                 }
             }
         } catch (XmlPullParserException e) {
-            Timber.e("loadMmsSettings caught ", e);
+            Timber.e(e, "loadMmsSettings caught ");
         } catch (NumberFormatException e) {
-            Timber.e("loadMmsSettings caught ", e);
+            Timber.e(e, "loadMmsSettings caught ");
         } catch (IOException e) {
-            Timber.e("loadMmsSettings caught ", e);
+            Timber.e(e, "loadMmsSettings caught ");
         } finally {
             parser.close();
         }

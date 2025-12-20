@@ -21,9 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ApnUtils {
-
-    private static final String TAG = "ApnUtils";
-
     public static void initDefaultApns(final Context context, final OnApnFinishedListener listener) {
         loadMmsSettings(context);
         final ArrayList<APN> apns = loadApns(context);
@@ -148,11 +145,11 @@ public class ApnUtils {
                 }
             }
         } catch (XmlPullParserException e) {
-            Timber.e("loadMmsSettings caught ", e);
+            Timber.e(e, "loadMmsSettings caught ");
         } catch (NumberFormatException e) {
-            Timber.e("loadMmsSettings caught ", e);
+            Timber.e(e, "loadMmsSettings caught ");
         } catch (IOException e) {
-            Timber.e("loadMmsSettings caught ", e);
+            Timber.e(e, "loadMmsSettings caught ");
         } finally {
             parser.close();
         }
@@ -301,11 +298,11 @@ public class ApnUtils {
                 }
             }
         } catch (XmlPullParserException e) {
-            Timber.e("loadApns caught ", e);
+            Timber.e(e, "loadApns caught ");
         } catch (NumberFormatException e) {
-            Timber.e("loadApns caught ", e);
+            Timber.e(e, "loadApns caught ");
         } catch (IOException e) {
-            Timber.e("loadApns caught ", e);
+            Timber.e(e, "loadApns caught ");
         } finally {
             parser.close();
         }

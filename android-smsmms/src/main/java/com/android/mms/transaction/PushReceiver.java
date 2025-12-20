@@ -72,7 +72,7 @@ import static com.google.android.mms.pdu_alt.PduHeaders.MESSAGE_TYPE_READ_ORIG_I
  * TransactionService by passing the push-data to it.
  */
 public class PushReceiver extends BroadcastReceiver {
-    private static final String TAG = LogTag.TAG;
+
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = true;
 
@@ -258,9 +258,9 @@ public class PushReceiver extends BroadcastReceiver {
                         Timber.e("Received unrecognized PDU.");
                 }
             } catch (MmsException e) {
-                Timber.e("Failed to save the data from PUSH: type=" + type, e);
+                Timber.e(e, "Failed to save the data from PUSH: type=%s", type);
             } catch (RuntimeException e) {
-                Timber.e("Unexpected RuntimeException.", e);
+                Timber.e(e, "Unexpected RuntimeException.");
             }
 
             if (LOCAL_LOGV) {
