@@ -164,6 +164,7 @@ class NotificationManagerImpl @Inject constructor(
                 .setSmallIcon(R.drawable.ic_notification)
                 .setNumber(messages.size)
                 .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
                 .setContentIntent(contentPI)
                 .setDeleteIntent(seenPI)
                 .setLights(Color.WHITE, 500, 2000)
