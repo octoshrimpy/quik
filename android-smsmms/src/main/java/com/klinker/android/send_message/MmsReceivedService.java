@@ -41,7 +41,6 @@ import static com.klinker.android.send_message.MmsReceivedReceiver.EXTRA_TRIGGER
 import static com.klinker.android.send_message.MmsReceivedReceiver.EXTRA_URI;
 
 public class MmsReceivedService extends IntentService {
-    private static final String TAG = "MmsReceivedService";
 
     private static final String LOCATION_SELECTION =
             Telephony.Mms.MESSAGE_TYPE + "=? AND " + Telephony.Mms.CONTENT_LOCATION + " =?";
@@ -81,15 +80,15 @@ public class MmsReceivedService extends IntentService {
             Timber.v("response length: " + response.length);
             mDownloadFile.delete();
         } catch (FileNotFoundException e) {
-            Timber.e("MMS received, file not found exception", e);
+            Timber.e(e, "MMS received, file not found exception");
         } catch (IOException e) {
-            Timber.e("MMS received, io exception", e);
+            Timber.e(e, "MMS received, io exception");
         } finally {
             if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    Timber.e("MMS received, io exception", e);
+                    Timber.e(e, "MMS received, io exception");
                 }
             }
 
@@ -234,7 +233,7 @@ public class MmsReceivedService extends IntentService {
                     sendPdu(new PduComposer(mContext, notifyRespInd).make());
                 }
             } catch (MmsException e) {
-                Timber.e("error", e);
+                Timber.e(e, "error");
             }
         }
     }
@@ -271,9 +270,9 @@ public class MmsReceivedService extends IntentService {
                         sendPdu(new PduComposer(mContext, acknowledgeInd).make());
                     }
                 } catch (InvalidHeaderValueException e) {
-                    Timber.e("error", e);
+                    Timber.e(e, "error");
                 } catch (MmsException e) {
-                    Timber.e("error", e);
+                    Timber.e(e, "error");
                 }
             }
         }
@@ -301,7 +300,7 @@ public class MmsReceivedService extends IntentService {
                 return new AcknowledgeIndTask(context, ind, transactionSettings, (RetrieveConf) pdu);
             }
         } catch (MmsException e) {
-            Timber.e("error", e);
+            Timber.e(e, "error");
             return null;
         }
     }
@@ -315,7 +314,7 @@ public class MmsReceivedService extends IntentService {
             // need retry ?
             task.run();
         } catch (IOException e) {
-            Timber.e("MMS send received notification, io exception", e);
+            Timber.e(e, "MMS send received notification, io exception");
             throw e;
         }
     }

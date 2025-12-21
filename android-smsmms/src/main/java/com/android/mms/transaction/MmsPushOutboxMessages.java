@@ -31,7 +31,6 @@ import timber.log.Timber; import android.util.Log; import static com.klinker.and
  */
 public class MmsPushOutboxMessages extends BroadcastReceiver {
     private static final String INTENT_MMS_SEND_OUTBOX_MSG = "android.intent.action.MMS_SEND_OUTBOX_MSG";
-    private static final String TAG = LogTag.TAG;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -40,7 +39,7 @@ public class MmsPushOutboxMessages extends BroadcastReceiver {
         }
         String action = intent.getAction();
         if(action.equalsIgnoreCase(INTENT_MMS_SEND_OUTBOX_MSG)){
-            Log.d(TAG,"Now waking up the MMS service");
+            Timber.d("Now waking up the MMS service");
             context.startService(new Intent(context, TransactionService.class));
         }
     }

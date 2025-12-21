@@ -26,7 +26,6 @@ import timber.log.Timber;
  * Default retry scheme, based on specs.
  */
 public class DefaultRetryScheme extends AbstractRetryScheme {
-    private static final String TAG = LogTag.TAG;
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = DEBUG ? Config.LOGD : Config.LOGV;
 

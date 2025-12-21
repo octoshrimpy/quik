@@ -43,8 +43,6 @@ import com.klinker.android.send_message.Utils;
  * </ul>
  */
 public class ReadRecTransaction extends Transaction implements Runnable{
-    private static final String TAG = LogTag.TAG;
-    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private Thread mThread;
@@ -92,15 +90,15 @@ public class ReadRecTransaction extends Transaction implements Runnable{
             mTransactionState.setContentUri(uri);
         } catch (IOException e) {
             if (LOCAL_LOGV) {
-                Timber.v("Failed to send M-Read-Rec.Ind.", e);
+                Timber.v(e, "Failed to send M-Read-Rec.Ind.");
             }
         } catch (MmsException e) {
             if (LOCAL_LOGV) {
-                Timber.v("Failed to load message from Outbox.", e);
+                Timber.v(e, "Failed to load message from Outbox.");
             }
         } catch (RuntimeException e) {
             if (LOCAL_LOGV) {
-                Timber.e("Unexpected RuntimeException.", e);
+                Timber.e(e, "Unexpected RuntimeException.");
             }
         } finally {
             if (mTransactionState.getState() != TransactionState.SUCCESS) {

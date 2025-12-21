@@ -28,6 +28,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import timber.log.Timber;
+
 public class PduParser {
     /**
      *  The next are WAP values defined in WSP specification.
@@ -686,7 +688,7 @@ public class PduParser {
                     if (null != previouslySentBy) {
                         try {
                             if (LOCAL_LOGV) {
-                                Log.v(LOG_TAG, "parseHeaders: PREVIOUSLY_SENT_BY: " + headerField
+                                Timber.v("parseHeaders: PREVIOUSLY_SENT_BY: " + headerField
                                         + " value: " + previouslySentBy.getString());
                             }
                             headers.setEncodedStringValue(previouslySentBy,
@@ -719,7 +721,7 @@ public class PduParser {
                     try {
                         long perviouslySentDate = parseLongInteger(pduDataStream);
                         if (LOCAL_LOGV) {
-                            Log.v(LOG_TAG, "parseHeaders: PREVIOUSLY_SENT_DATE: " + headerField
+                            Timber.v("parseHeaders: PREVIOUSLY_SENT_DATE: " + headerField
                                     + " value: " + perviouslySentDate);
                         }
                         headers.setLongInteger(perviouslySentDate,
@@ -738,7 +740,7 @@ public class PduParser {
                      * Encoded-string-value
                      */
                     if (LOCAL_LOGV) {
-                        Log.v(LOG_TAG, "parseHeaders: MM_FLAGS: " + headerField
+                        Timber.v("parseHeaders: MM_FLAGS: " + headerField
                                 + " NOT REALLY SUPPORTED");
                     }
 
@@ -762,7 +764,7 @@ public class PduParser {
                 case PduHeaders.MBOX_QUOTAS:
                 {
                     if (LOCAL_LOGV) {
-                        Log.v(LOG_TAG, "parseHeaders: MBOX_TOTALS: " + headerField);
+                        Timber.v("parseHeaders: MBOX_TOTALS: " + headerField);
                     }
                     /* Value-length */
                     parseValueLength(pduDataStream);
@@ -785,7 +787,7 @@ public class PduParser {
 
                 case PduHeaders.ELEMENT_DESCRIPTOR: {
                     if (LOCAL_LOGV) {
-                        Log.v(LOG_TAG, "parseHeaders: ELEMENT_DESCRIPTOR: " + headerField);
+                        Timber.v("parseHeaders: ELEMENT_DESCRIPTOR: " + headerField);
                     }
                     parseContentType(pduDataStream, null);
 
@@ -803,7 +805,7 @@ public class PduParser {
                     if (null != contentType) {
                         try {
                             if (LOCAL_LOGV) {
-                                Log.v(LOG_TAG, "parseHeaders: CONTENT_TYPE: " + headerField +
+                                Timber.v("parseHeaders: CONTENT_TYPE: " + headerField +
                                         contentType.toString());
                             }
                             headers.setTextString(contentType, PduHeaders.CONTENT_TYPE);
@@ -830,7 +832,7 @@ public class PduParser {
                 case PduHeaders.ATTRIBUTES:
                 default: {
                     if (LOCAL_LOGV) {
-                        Log.v(LOG_TAG, "parseHeaders: Unknown header: " + headerField);
+                        Timber.v("parseHeaders: Unknown header: " + headerField);
                     }
                     log("Unknown header");
                 }
@@ -1476,7 +1478,7 @@ public class PduParser {
                             map.put(PduPart.P_CHARSET, charsetInt);
                         } catch (UnsupportedEncodingException e) {
                             // Not a well-known charset, use "*".
-                            Log.e(LOG_TAG, Arrays.toString(charsetStr), e);
+                            Timber.e(e, Arrays.toString(charsetStr));
                             map.put(PduPart.P_CHARSET, CharacterSets.ANY_CHARSET);
                         }
                     } else {
@@ -1523,7 +1525,7 @@ public class PduParser {
         }
 
         if (0 != lastLen) {
-            Log.e(LOG_TAG, "Corrupt Content-Type");
+            Timber.e("Corrupt Content-Type");
         }
     }
 
@@ -1573,7 +1575,7 @@ public class PduParser {
                     contentType = parseWapString(pduDataStream, TYPE_TEXT_STRING);
                 }
             } else {
-                Log.e(LOG_TAG, "Corrupt content-type");
+                Timber.e("Corrupt content-type");
                 return (PduContentTypes.contentTypes[0]).getBytes(); //"*/*"
             }
 
@@ -1584,7 +1586,7 @@ public class PduParser {
             }
 
             if (parameterLen < 0) {
-                Log.e(LOG_TAG, "Corrupt MMS message");
+                Timber.e("Corrupt MMS message");
                 return (PduContentTypes.contentTypes[0]).getBytes(); //"*/*"
             }
         } else if (cur <= TEXT_MAX) {

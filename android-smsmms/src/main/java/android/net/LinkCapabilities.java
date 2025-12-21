@@ -32,7 +32,6 @@ import java.util.Set;
  * @hide
  */
 public class LinkCapabilities implements Parcelable {
-    private static final String TAG = "LinkCapabilities";
     private static final boolean DBG = false;
 
     /**

@@ -42,8 +42,6 @@ import com.google.android.mms.util_alt.SqliteWrapper;
 import com.klinker.android.send_message.Settings;
 
 public class MmsMessageSender implements MessageSender {
-    private static final String TAG = LogTag.TAG;
-
     private final Context mContext;
     private final Uri mMessageUri;
     private final long mMessageSize;
@@ -181,9 +179,9 @@ public class MmsMessageSender implements MessageSender {
                     group, null, subId);
             context.startService(new Intent(context, TransactionService.class));
         } catch (InvalidHeaderValueException e) {
-            Timber.e("Invalide header value", e);
+            Timber.e(e, "Invalide header value");
         } catch (MmsException e) {
-            Timber.e("Persist message failed", e);
+            Timber.e(e, "Persist message failed");
         }
     }
 }

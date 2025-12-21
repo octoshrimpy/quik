@@ -32,7 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * We should manage to call SMSManager.downloadMultimediaMessage().
  */
 public class DownloadManager {
-    private static final String TAG = "DownloadManager";
     private static DownloadManager ourInstance = new DownloadManager();
     private static final ConcurrentHashMap<String, MmsDownloadReceiver> mMap = new ConcurrentHashMap<>();
 

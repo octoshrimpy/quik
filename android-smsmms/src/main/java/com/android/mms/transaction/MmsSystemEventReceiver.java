@@ -39,7 +39,6 @@ import com.klinker.android.send_message.Utils;
  * </ul>
  */
 public class MmsSystemEventReceiver extends BroadcastReceiver {
-    private static final String TAG = LogTag.TAG;
     private static ConnectivityManager mConnMgr = null;
 
     public static void wakeUpService(Context context) {

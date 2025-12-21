@@ -32,8 +32,6 @@ import java.util.Locale;
  */
 public class PhoneUtils {
 
-    private static final String TAG = "PhoneUtils";
-
     /**
      * Get a canonical national format phone number. If parsing fails, just return the
      * original number.

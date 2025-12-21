@@ -44,8 +44,6 @@ import com.klinker.android.send_message.Transaction;
  * Request to download an MMS
  */
 public class DownloadRequest extends MmsRequest {
-    private static final String TAG = "DownloadRequest";
-
     private static final String LOCATION_SELECTION =
             Telephony.Mms.MESSAGE_TYPE + "=? AND " + Telephony.Mms.CONTENT_LOCATION + " =?";
 
@@ -235,11 +233,11 @@ public class DownloadRequest extends MmsRequest {
 
             return messageUri;
         } catch (MmsException e) {
-            Timber.e("DownloadRequest.persistIfRequired: can not persist message", e);
+            Timber.e(e, "DownloadRequest.persistIfRequired: can not persist message");
         } catch (SQLiteException e) {
-            Timber.e("DownloadRequest.persistIfRequired: can not update message", e);
+            Timber.e(e, "DownloadRequest.persistIfRequired: can not update message");
         } catch (RuntimeException e) {
-            Timber.e("DownloadRequest.persistIfRequired: can not parse response", e);
+            Timber.e(e, "DownloadRequest.persistIfRequired: can not parse response");
         } finally {
             Binder.restoreCallingIdentity(identity);
         }

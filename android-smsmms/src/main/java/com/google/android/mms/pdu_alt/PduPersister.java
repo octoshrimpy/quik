@@ -69,8 +69,6 @@ import java.util.Set;
  * This class is the high-level manager of PDU storage.
  */
 public class PduPersister {
-    private static final String TAG = "PduPersister";
-    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private static final long DUMMY_THREAD_ID = Long.MAX_VALUE;
@@ -458,7 +456,7 @@ public class PduPersister {
                                 len = is.read(buffer);
                             }
                         } catch (IOException e) {
-                            Timber.e("Failed to load part data", e);
+                            Timber.e(e, "Failed to load part data");
                             c.close();
                             throw new MmsException(e);
                         } finally {
@@ -466,7 +464,7 @@ public class PduPersister {
                                 try {
                                     is.close();
                                 } catch (IOException e) {
-                                    Timber.e("Failed to close stream", e);
+                                    Timber.e(e, "Failed to close stream");
                                 } // Ignore
                             }
                         }
@@ -542,7 +540,7 @@ public class PduPersister {
                     try {
                         PDU_CACHE_INSTANCE.wait();
                     } catch (InterruptedException e) {
-                        Timber.e("load: ", e);
+                        Timber.e(e, "load: ");
                     }
                 }
 
@@ -863,7 +861,7 @@ public class PduPersister {
                                 return;
                             }
                         } catch (Exception e) {
-                            Timber.e("Can't get file info for: " + part.getDataUri(), e);
+                            Timber.e(e, "Can't get file info for: %s", part.getDataUri());
                         }
                     }
                     // We haven't converted the file yet, start the conversion
@@ -892,7 +890,7 @@ public class PduPersister {
                     }
 
                     if (LOCAL_LOGV) {
-                        Timber.v("Saving data to: " + uri);
+                        Timber.v("Saving data to: %s", uri);
                     }
 
                     byte[] buffer = new byte[8192];
@@ -910,7 +908,7 @@ public class PduPersister {
                     }
                 } else {
                     if (LOCAL_LOGV) {
-                        Timber.v("Saving data to: " + uri);
+                        Timber.v("Saving data to: %s", uri);
                     }
                     if (!isDrm) {
                         os.write(data);
@@ -926,24 +924,24 @@ public class PduPersister {
                 }
             }
         } catch (FileNotFoundException e) {
-            Timber.e("Failed to open Input/Output stream.", e);
+            Timber.e(e, "Failed to open Input/Output stream.");
             throw new MmsException(e);
         } catch (IOException e) {
-            Timber.e("Failed to read/write data.", e);
+            Timber.e(e, "Failed to read/write data.");
             throw new MmsException(e);
         } finally {
             if (os != null) {
                 try {
                     os.close();
                 } catch (IOException e) {
-                    Timber.e("IOException while closing: " + os, e);
+                    Timber.e(e, "IOException while closing: %s", os);
                 } // Ignore
             }
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    Timber.e("IOException while closing: " + is, e);
+                    Timber.e(e, "IOException while closing: %s", is);
                 } // Ignore
             }
             if (drmConvertSession != null) {
@@ -1035,7 +1033,7 @@ public class PduPersister {
                 try {
                     PDU_CACHE_INSTANCE.wait();
                 } catch (InterruptedException e) {
-                    Timber.e("updateHeaders: ", e);
+                    Timber.e(e, "updateHeaders: ");
                 }
             }
         }
@@ -1203,7 +1201,7 @@ public class PduPersister {
                     try {
                         PDU_CACHE_INSTANCE.wait();
                     } catch (InterruptedException e) {
-                        Timber.e("updateParts: ", e);
+                        Timber.e(e, "updateParts: ");
                     }
                     cacheEntry = PDU_CACHE_INSTANCE.get(uri);
                     if (cacheEntry != null) {
@@ -1313,7 +1311,7 @@ public class PduPersister {
                 try {
                     PDU_CACHE_INSTANCE.wait();
                 } catch (InterruptedException e) {
-                    Timber.e("persist1: ", e);
+                    Timber.e(e, "persist1: ");
                 }
             }
         }
@@ -1585,7 +1583,7 @@ public class PduPersister {
             return new String(bytes, CharacterSets.MIMENAME_ISO_8859_1);
         } catch (UnsupportedEncodingException e) {
             // Impossible to reach here!
-            Timber.e("ISO_8859_1 must be supported!", e);
+            Timber.e(e, "ISO_8859_1 must be supported!");
             return "";
         }
     }
@@ -1598,7 +1596,7 @@ public class PduPersister {
             return data.getBytes(CharacterSets.MIMENAME_ISO_8859_1);
         } catch (UnsupportedEncodingException e) {
             // Impossible to reach here!
-            Timber.e("ISO_8859_1 must be supported!", e);
+            Timber.e(e, "ISO_8859_1 must be supported!");
             return new byte[0];
         }
     }

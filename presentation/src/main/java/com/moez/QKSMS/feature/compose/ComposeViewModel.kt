@@ -471,7 +471,7 @@ class ComposeViewModel @Inject constructor(
                         context.getString(R.string.messages_text_share_file_error),
                         Toast.LENGTH_LONG
                     ).show().also {
-                        Timber.e("Error writing to messages text cache file", e)
+                        Timber.e(e, "Error writing to messages text cache file")
                     }
                 else
                     Timber.d("Created and shared messages text file: $filename")

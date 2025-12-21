@@ -30,9 +30,6 @@ import java.util.Collection;
  * {@hide}
  */
 public class NetworkUtilsHelper {
-
-    private static final String TAG = "NetworkUtils";
-
     /**
      * Bring the named network interface up.
      */

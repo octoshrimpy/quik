@@ -207,14 +207,14 @@ public class MmsHttpClient {
             return responseBody;
         } catch (MalformedURLException e) {
             final String redactedUrl = redactUrlForNonVerbose(urlString);
-            Timber.e("HTTP: invalid URL " + redactedUrl, e);
+            Timber.e(e, "HTTP: invalid URL %s", redactedUrl);
             throw new MmsHttpException(0/*statusCode*/, "Invalid URL " + redactedUrl, e);
         } catch (ProtocolException e) {
             final String redactedUrl = redactUrlForNonVerbose(urlString);
-            Timber.e("HTTP: invalid URL protocol " + redactedUrl, e);
+            Timber.e(e, "HTTP: invalid URL protocol %s", redactedUrl);
             throw new MmsHttpException(0/*statusCode*/, "Invalid URL protocol " + redactedUrl, e);
         } catch (IOException e) {
-            Timber.e("HTTP: IO failure", e);
+            Timber.e(e, "HTTP: IO failure");
             throw new MmsHttpException(0/*statusCode*/, e);
         } finally {
             if (connection != null) {

@@ -28,9 +28,6 @@ import timber.log.Timber;
 import java.io.File;
 
 public class MmsSentReceiver extends StatusUpdatedReceiver {
-
-    private static final String TAG = "MmsSentReceiver";
-
     public static final String MMS_SENT = "com.klinker.android.messaging.MMS_SENT";
     public static final String EXTRA_CONTENT_URI = "content_uri";
     public static final String EXTRA_FILE_PATH = "file_path";

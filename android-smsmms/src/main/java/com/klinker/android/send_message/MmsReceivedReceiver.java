@@ -58,8 +58,6 @@ import timber.log.Timber;
 import static com.google.android.mms.pdu_alt.PduHeaders.STATUS_RETRIEVED;
 
 public abstract class MmsReceivedReceiver extends BroadcastReceiver {
-    private static final String TAG = "MmsReceivedReceiver";
-
     public static final String MMS_RECEIVED = "com.klinker.android.messaging.MMS_RECEIVED";
     public static final String EXTRA_FILE_PATH = "file_path";
     public static final String EXTRA_LOCATION_URL = "location_url";
@@ -125,17 +123,17 @@ public abstract class MmsReceivedReceiver extends BroadcastReceiver {
                     }
                 } catch (FileNotFoundException e) {
                     errorMessage = "MMS received, file not found exception";
-                    Timber.e(errorMessage, e);
+                    Timber.e(e);
                 } catch (IOException e) {
                     errorMessage = "MMS received, io exception";
-                    Timber.e(errorMessage, e);
+                    Timber.e(e);
                 } finally {
                     if (reader != null) {
                         try {
                             reader.close();
                         } catch (IOException e) {
                             errorMessage = "MMS received, io exception";
-                            Timber.e("MMS received, io exception", e);
+                            Timber.e(e, "MMS received, io exception");
                         }
                     }
                 }
@@ -281,9 +279,9 @@ public abstract class MmsReceivedReceiver extends BroadcastReceiver {
                     sendPdu(new PduComposer(mContext, notifyRespInd).make());
                 }
             } catch (MmsException e) {
-                Timber.e("error", e);
+                Timber.e(e, "error");
             } catch (IOException e) {
-                Timber.e("error", e);
+                Timber.e(e, "error");
             }
             return null;
         }
@@ -328,11 +326,11 @@ public abstract class MmsReceivedReceiver extends BroadcastReceiver {
                         sendPdu(new PduComposer(mContext, acknowledgeInd).make());
                     }
                 } catch (InvalidHeaderValueException e) {
-                    Timber.e("error", e);
+                    Timber.e(e, "error");
                 } catch (MmsException e) {
-                    Timber.e("error", e);
+                    Timber.e(e, "error");
                 } catch (IOException e) {
-                    Timber.e("error", e);
+                    Timber.e(e, "error");
                 }
             }
             return null;
@@ -369,7 +367,7 @@ public abstract class MmsReceivedReceiver extends BroadcastReceiver {
 
             return responseTasks;
         } catch (MmsException e) {
-            Timber.e("error", e);
+            Timber.e(e, "error");
             return null;
         }
     }

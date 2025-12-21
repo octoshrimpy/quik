@@ -43,8 +43,6 @@ import com.google.android.mms.util_alt.SqliteWrapper;
  * Request to send an MMS
  */
 public class SendRequest extends MmsRequest {
-    private static final String TAG = "SendRequest";
-
     private final Uri mPduUri;
     private byte[] mPduData;
     private final String mLocationUrl;
@@ -162,7 +160,7 @@ public class SendRequest extends MmsRequest {
 //        } catch (MmsException e) {
 //            Timber.e("SendRequest.persistIfRequired: can not persist message", e);
         } catch (RuntimeException e) {
-            Timber.e("SendRequest.persistIfRequired: unexpected parsing failure", e);
+            Timber.e(e, "SendRequest.persistIfRequired: unexpected parsing failure");
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
@@ -225,7 +223,7 @@ public class SendRequest extends MmsRequest {
         try {
             context.revokeUriPermission(mPduUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } catch (NullPointerException e) {
-            Timber.e("error revoking permissions", e);
+            Timber.e(e, "error revoking permissions");
         }
     }
 }

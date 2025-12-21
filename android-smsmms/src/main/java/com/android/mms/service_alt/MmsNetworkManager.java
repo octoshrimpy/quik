@@ -35,7 +35,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
-    private static final String TAG = "MmsNetworkManager";
     // Timeout used to call ConnectivityManager.requestNetwork
     private static final int NETWORK_REQUEST_TIMEOUT_MILLIS = 60 * 1000;
     // Wait timeout for this class, a little bit longer than the above timeout
@@ -155,7 +154,7 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
         synchronized (this) {
             if (mMmsRequestCount > 0) {
                 mMmsRequestCount -= 1;
-                Timber.d("MmsNetworkManager: release, count=" + mMmsRequestCount);
+                Timber.d("MmsNetworkManager: release, count=%s", mMmsRequestCount);
                 if (mMmsRequestCount < 1) {
                     releaseRequestLocked(mNetworkCallback);
                 }
@@ -173,7 +172,7 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
             @Override
             public void onAvailable(Network network) {
                 super.onAvailable(network);
-                Timber.d("NetworkCallbackListener.onAvailable: network=" + network);
+                Timber.d("NetworkCallbackListener.onAvailable: network=%s", network);
                 synchronized (MmsNetworkManager.this) {
                     mNetwork = network;
                     MmsNetworkManager.this.notifyAll();
@@ -183,7 +182,7 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
             @Override
             public void onLost(Network network) {
                 super.onLost(network);
-                Timber.d("NetworkCallbackListener.onLost: network=" + network);
+                Timber.d("NetworkCallbackListener.onLost: network=%s", network);
                 synchronized (MmsNetworkManager.this) {
                     releaseRequestLocked(this);
                     MmsNetworkManager.this.notifyAll();
@@ -205,7 +204,7 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
             connectivityManager.requestNetwork(
                     mNetworkRequest, mNetworkCallback);
         } catch (SecurityException e) {
-            Timber.e("permission exception... skipping it for testing purposes", e);
+            Timber.e(e, "permission exception... skipping it for testing purposes");
             permissionError = true;
         }
     }
@@ -222,7 +221,7 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
             try {
                 connectivityManager.unregisterNetworkCallback(callback);
             } catch (Exception e) {
-                Timber.e("couldn't unregister", e);
+                Timber.e(e, "couldn't unregister");
             }
         }
         resetLocked();
@@ -322,7 +321,7 @@ public class MmsNetworkManager implements com.squareup.okhttp.internal.Network {
         if (mmsNetworkInfo != null) {
             apnName = mmsNetworkInfo.getExtraInfo();
         }
-        Timber.d("MmsNetworkManager: getApnName: " + apnName);
+        Timber.d("MmsNetworkManager: getApnName: %s", apnName);
         return apnName;
     }
 

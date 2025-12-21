@@ -29,8 +29,6 @@ import org.w3c.dom.smil.TimeList;
 import timber.log.Timber;
 
 public abstract class ElementTimeImpl implements ElementTime {
-    private static final String TAG = LogTag.TAG;
-
     private static final String FILL_REMOVE_ATTRIBUTE = "remove";
     private static final String FILL_FREEZE_ATTRIBUTE = "freeze";
     private static final String FILL_HOLD_ATTRIBUTE = "hold";
@@ -133,7 +131,7 @@ public abstract class ElementTimeImpl implements ElementTime {
                             getEndConstraints()));
                 } catch (IllegalArgumentException e) {
                     // Ignore badly formatted times
-                    Timber.e("Malformed time value.", e);
+                    Timber.e(e, "Malformed time value.");
                 }
             }
         }

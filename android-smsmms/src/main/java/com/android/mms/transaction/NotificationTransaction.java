@@ -73,8 +73,6 @@ import static com.google.android.mms.pdu_alt.PduHeaders.STATUS_UNRECOGNIZED;
  * in case the client is in immediate retrieve mode.
  */
 public class NotificationTransaction extends Transaction implements Runnable {
-    private static final String TAG = LogTag.TAG;
-    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private Uri mUri;
@@ -92,7 +90,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
             mNotificationInd = (NotificationInd)
                     PduPersister.getPduPersister(context).load(mUri);
         } catch (MmsException e) {
-            Timber.e("Failed to load NotificationInd from: " + uriString, e);
+            Timber.e(e, "Failed to load NotificationInd from: %s", uriString);
             throw new IllegalArgumentException();
         }
 
@@ -127,7 +125,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
                         ind, Inbox.CONTENT_URI, !allowAutoDownload(mContext),
                         group, null, subId);
         } catch (MmsException e) {
-            Timber.e("Failed to save NotificationInd in constructor.", e);
+            Timber.e(e, "Failed to save NotificationInd in constructor.");
             throw new IllegalArgumentException();
         }
 
@@ -159,7 +157,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
         boolean autoDownload = allowAutoDownload(mContext);
         try {
             if (LOCAL_LOGV) {
-                Timber.v("Notification transaction launched: " + this);
+                Timber.v("Notification transaction launched: %s", this);
             }
 
             // By default, we set status to STATUS_DEFERRED because we
@@ -176,7 +174,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
             downloadManager.markState(mUri, DownloadManager.STATE_DOWNLOADING);
 
             if (LOCAL_LOGV) {
-                Timber.v("Content-Location: " + mContentLocation);
+                Timber.v("Content-Location: %s", mContentLocation);
             }
 
             byte[] retrieveConfData = null;
@@ -191,8 +189,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
             if (retrieveConfData != null) {
                 GenericPdu pdu = new PduParser(retrieveConfData).parse();
                 if ((pdu == null) || (pdu.getMessageType() != MESSAGE_TYPE_RETRIEVE_CONF)) {
-                    Timber.e("Invalid M-RETRIEVE.CONF PDU. " +
-                            (pdu != null ? "message type: " + pdu.getMessageType() : "null pdu"));
+                    Timber.e("Invalid M-RETRIEVE.CONF PDU. %s", (pdu != null ? "message type: " + pdu.getMessageType() : "null pdu"));
                     mTransactionState.setState(FAILED);
                     status = STATUS_UNRECOGNIZED;
                 } else {
@@ -219,7 +216,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
                     // M-NotifyResp.ind from Inbox.
                     SqliteWrapper.delete(mContext, mContext.getContentResolver(),
                                          mUri, null, null);
-                    Timber.v("NotificationTransaction received new mms message: " + uri);
+                    Timber.v("NotificationTransaction received new mms message: %s", uri);
                     // Delete obsolete threads
                     SqliteWrapper.delete(mContext, mContext.getContentResolver(),
                             Threads.OBSOLETE_THREADS_URI, null, null);
@@ -235,7 +232,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
             }
 
             if (LOCAL_LOGV) {
-                Timber.v("status=0x" + Integer.toHexString(status));
+                Timber.v("status=0x%s", Integer.toHexString(status));
             }
 
             // Check the status and update the result state of this Transaction.
@@ -253,7 +250,7 @@ public class NotificationTransaction extends Transaction implements Runnable {
 
             sendNotifyRespInd(status);
         } catch (Throwable t) {
-            Timber.e("error", t);
+            Timber.e(t, "error");
         } finally {
             mTransactionState.setContentUri(mUri);
             if (!autoDownload) {

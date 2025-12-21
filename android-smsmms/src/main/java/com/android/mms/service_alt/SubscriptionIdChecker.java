@@ -11,8 +11,6 @@ import timber.log.Timber;
 import com.google.android.mms.util_alt.SqliteWrapper;
 
 public class SubscriptionIdChecker {
-    private static final String TAG = "SubscriptionIdChecker";
-
     private static SubscriptionIdChecker sInstance;
     private boolean mCanUseSubscriptionId = false;
 

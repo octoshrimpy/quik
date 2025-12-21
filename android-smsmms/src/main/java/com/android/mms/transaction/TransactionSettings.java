@@ -34,10 +34,6 @@ import com.android.mms.logs.LogTag;
  * settings or of the MMS Client.
  */
 public class TransactionSettings {
-    private static final String TAG = LogTag.TAG;
-    private static final boolean DEBUG = true;
-    private static final boolean LOCAL_LOGV = false;
-
     private String mServiceCenter;
     private String mProxyAddress;
     private int mProxyPort = -1;
@@ -113,7 +109,7 @@ public class TransactionSettings {
             try {
                 mProxyPort = Integer.parseInt(Transaction.settings.getPort());
             } catch (NumberFormatException e) {
-                Timber.e("could not get proxy: " + Transaction.settings.getPort(), e);
+                Timber.e(e, "could not get proxy: %s", Transaction.settings.getPort());
             }
         }
 //        }

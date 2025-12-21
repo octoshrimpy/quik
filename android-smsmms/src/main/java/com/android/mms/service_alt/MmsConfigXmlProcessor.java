@@ -28,8 +28,6 @@ import java.io.IOException;
  * XML processor for mms_config.xml
  */
 public class MmsConfigXmlProcessor {
-    private static final String TAG = "MmsConfigXmlProcessor";
-
     public interface MmsConfigHandler {
         public void process(String key, String value, String type);
     }
@@ -93,9 +91,9 @@ public class MmsConfigXmlProcessor {
                 processMmsConfig();
             }
         } catch (IOException e) {
-            Timber.e("MmsConfigXmlProcessor: I/O failure " + e, e);
+            Timber.e(e, "MmsConfigXmlProcessor: I/O failure ");
         } catch (XmlPullParserException e) {
-            Timber.e("MmsConfigXmlProcessor: parsing failure " + e, e);
+            Timber.e(e, "MmsConfigXmlProcessor: parsing failure");
         }
     }
 
@@ -133,7 +131,7 @@ public class MmsConfigXmlProcessor {
                 }
                 return mLogStringBuilder.toString();
             } catch (XmlPullParserException e) {
-                Timber.e("xmlParserDebugContext: " + e, e);
+                Timber.e(e, "xmlParserDebugContext: ");
             }
         }
         return "Unknown";
