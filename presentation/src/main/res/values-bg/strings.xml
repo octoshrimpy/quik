@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="shortcut_compose_long_label">Нов разговор</string>
+    <string name="shortcut_compose_short_label">Писане</string>
 </resources>
