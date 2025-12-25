@@ -1,3 +1,38 @@
+# Known limitations and edge cases (RCS → SMS shadow duplication)
+
+This feature works reliably for the primary flow (duplicate an RCS group into an SMS/MMS “shadow” group and mirror outgoing messages). However, the following limitations currently apply:
+
+1. Participants must have prior message activity to be resolved
+
+    - Some RCS participants will not be included in the duplicated SMS/MMS group unless they have previously sent at least one message in the original RCS thread.
+
+    - In practice, this is because on some devices the app cannot always resolve every participant’s phone number from the RCS thread metadata alone, and falls back to identifiers that only become available after message activity exists.
+
+    - Result: If a participant has not yet messaged in the RCS group, they may be missing from the duplicated group and will not receive mirrored messages via SMS/MMS.
+
+2. Sender view differs between original RCS group and duplicated SMS/MMS group
+
+    - The Quik user may not see their own outgoing messages reflected in the original RCS group UI.
+
+    - Instead, those outgoing messages will appear in the duplicated SMS/MMS (“shadow”) conversation for the Quik user.
+
+    - Other participants in the original RCS group should still see the message in the original group (via the mirroring path).
+
+3. Device / OS variability in where messages appear
+
+    - Depending on the device vendor and OS build (e.g., different OEM messaging stacks / Telephony provider behavior), a mirrored message may sometimes appear in:
+
+      - only the duplicated SMS/MMS group, or
+
+      - both the duplicated group and the original RCS group, or
+
+      - a slightly different/extra thread grouping.
+
+    - This behavior is device dependent and has not been fully normalized yet.
+
+Testing note: Currently the app works fine on iOS.
+
+
 ![octoshrimpy/QUIK](.github/octoshrimpy_quik.jpg)
 
 # QUIK
