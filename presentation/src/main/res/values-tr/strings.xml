@@ -306,7 +306,7 @@
     <string name="qksms_plus_donate">Paypal ile satın al</string>
     <string name="qksms_plus_coming_soon">Yakında</string>
     <string name="qksms_plus_themes_title">Ücretli Temalar</string>
-    <string name="qksms_plus_themes_summary">Malzeme tasarım paleti üzerinde bulunmayan güzel tema renkleri aç</string>
+    <string name="qksms_plus_themes_summary">Malzeme Tasarım paleti üzerinde bulunmayan güzel tema renkleri aç</string>
     <string name="qksms_plus_emoji_title">Özel otomatik ifadeler</string>
     <string name="qksms_plus_emoji_summary">Özel otomatik ifadeler kısayolları oluştur</string>
     <string name="qksms_plus_backup_title">İleti yedekleme</string>
@@ -354,7 +354,7 @@
     <string name="button_more">Daha fazla</string>
     <string name="button_set">Ayarla</string>
     <string name="button_undo">Geri al</string>
-    <string name="toast_copied">Kopyalandı.</string>
+    <string name="toast_copied">Kopyalandı</string>
     <string name="toast_qksms_plus">Bunu kullanmak için QUIK+ kilidi gerekir</string>
     <plurals name="notification_new_messages">
         <item quantity="one">%s Yeni ileti</item>
@@ -491,4 +491,8 @@
     <string name="error_stt_toast">Özür dileriz. Konuşmadan Metne sağlayıcısını yüklemede hata oluştu.</string>
     <string name="stt_toast_extra_prompt">İletinizi konuşun</string>
     <string name="messages_text_share_file_error">Hay aksi! Paylaşırken bir şeyler ters gitti</string>
+    <string name="compose_send_group_summary_on">Alıcılar ve yanıtlar herkes tarafından görülebilecektir</string>
+    <string name="compose_send_group_summary_off">İletiler tüm alıcılara ayrı ayrı gönderilecektir</string>
+    <string name="notification_foreground_worker_title">İleti alma</string>
+    <string name="notification_foreground_worker_text">Android 12 ve daha eski sürümlerde, ileti almayı sağlayan arka plan çalışması için bir bildirim gereklidir.</string>
 </resources>
