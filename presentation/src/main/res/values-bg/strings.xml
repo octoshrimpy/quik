@@ -132,4 +132,18 @@
     <string name="compose_audio_message_cd">Записване на гласово съобщение</string>
     <string name="compose_camera_cd">Снимане</string>
     <string name="compose_schedule_cd">Планиране на съобщение</string>
+    <string name="compose_schedule_cancel_cd">Без планиране на съобщението</string>
+    <string name="compose_contact_cd">Прикачане на контакт</string>
+    <string name="compose_contact_error">Грешка при четене на контакт</string>
+    <string name="compose_sim_changed_toast">Избрана е SIM-карта %1$d (%2$s)</string>
+    <string name="compose_sim_cd">Избрана %s, смяна на SIM-карта</string>
+    <string name="compose_send_cd">Изпращане на съобщение</string>
+    <string name="compose_record_audio_msg_cd">Записване на гласово съобщение</string>
+    <string name="compose_record_audio_msg_abort_cd">Отказ на гласово съобщение</string>
+    <string name="compose_record_audio_msg_attach_cd">Прикачане на гласово съобщение</string>
+    <string name="compose_record_audio_msg_play_pause_cd">Възпроизвеждане или пауза на гласовото съобщение</string>
+    <string name="compose_message_cancel">Отказ</string>
+    <string name="compose_message_sim">Номер на SIM-картата</string>
+    <string name="compose_message_item">Елемент на съобщението</string>
+    <string name="compose_message_attachment">Прикачен файл</string>
 </resources>
