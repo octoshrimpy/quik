@@ -543,4 +543,7 @@
         <item quantity="other">%d conversations désarchivées</item>
     </plurals>
     <string name="notification_message_failed_action">Réenvoyer</string>
+    <string name="compose_send_group_summary_on">Les destinataires et les réponses seront visibles par tous</string>
+    <string name="compose_send_group_summary_off">Les messages seront envoyés séparément à tous les destinataires</string>
+    <string name="notification_foreground_worker_text">Sous Android 12 et les versions antérieures, une notification est requise pour le fonctionnement en arrière-plan qui permet de recevoir des messages.</string>
 </resources>
