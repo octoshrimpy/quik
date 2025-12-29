@@ -19,7 +19,11 @@
 package dev.octoshrimpy.quik.repository
 
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
+import android.os.Build
+import android.telephony.SubscriptionManager
+import android.telephony.TelephonyManager
 import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.anyOf
 import dev.octoshrimpy.quik.extensions.asObservable
@@ -31,9 +35,9 @@ import dev.octoshrimpy.quik.mapper.CursorToRecipient
 import dev.octoshrimpy.quik.model.Contact
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.Message
+import dev.octoshrimpy.quik.model.PhoneNumber
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.SearchResult
-import dev.octoshrimpy.quik.model.PhoneNumber
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.reactivex.Completable
@@ -42,16 +46,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.realm.Case
 import io.realm.Realm
-import io.realm.RealmResults
 import io.realm.RealmList
-import timber.log.Timber
+import io.realm.RealmResults
 import io.realm.Sort
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import android.telephony.TelephonyManager
-import android.telephony.SubscriptionManager
-import android.os.Build
 import android.telephony.PhoneNumberUtils as AndroidPhoneNumberUtils
+
+import android.provider.Telephony
 
 
 class ConversationRepositoryImpl @Inject constructor(
@@ -61,6 +64,13 @@ class ConversationRepositoryImpl @Inject constructor(
     private val cursorToRecipient: CursorToRecipient,
     private val phoneNumberUtils: PhoneNumberUtils
 ) : ConversationRepository {
+
+    // Simple in-memory map for RCS→SMS shadow links (non-persistent, safe no-op if never used).
+    private val shadowLinkMap = mutableMapOf<Long, Long>()
+
+    // ============================================================
+    // Helpers for RCS → SMS participant resolution
+    // ============================================================
 
     @Suppress("Range")
     private fun resolvePhoneNumbersForRcsParticipants(
@@ -75,7 +85,7 @@ class ConversationRepositoryImpl @Inject constructor(
             val rawAddr = rcsRecipient.address ?: continue
 
             // If it already looks like a phone number, use it
-            if (android.telephony.PhoneNumberUtils.isGlobalPhoneNumber(rawAddr)) {
+            if (AndroidPhoneNumberUtils.isGlobalPhoneNumber(rawAddr)) {
                 resolvedNumbers.add(rawAddr)
                 continue
             }
@@ -102,6 +112,115 @@ class ConversationRepositoryImpl @Inject constructor(
         return resolvedNumbers.distinct()
     }
 
+    /**
+     * Try to discover all phone numbers that belong to *this* device (SIMs),
+     * and use that to filter "self" out of a recipients list.
+     */
+    private fun filterOutSelfNumbers(numbers: Set<String>): List<String> {
+        val telephonyManager =
+            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+
+        val selfRaw = mutableSetOf<String>()
+
+        // Newer Android: get numbers from active subscriptions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            val subMgr = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
+            val subs = try {
+                subMgr.activeSubscriptionInfoList
+            } catch (_: SecurityException) {
+                null
+            }
+
+            subs?.forEach { info ->
+                info.number
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { selfRaw.add(it) }
+            }
+        }
+
+        // Fallback: line1Number (guarded for missing permission)
+        val lineNumber = try {
+            telephonyManager.line1Number
+        } catch (e: SecurityException) {
+            Timber.w(e, "filterOutSelfNumbers: unable to read line1Number (missing permission?)")
+            null
+        }
+
+        lineNumber
+            ?.takeIf { it.isNotBlank() }
+            ?.let { selfRaw.add(it) }
+
+        if (selfRaw.isEmpty()) {
+            // We don't know our own MSISDN -> just return original list
+            Timber.w("filterOutSelfNumbers: no self numbers detected, leaving list as-is")
+            return numbers.toList()
+        }
+
+        // Use the same comparison logic as the rest of the app (libphonenumber-backed)
+        val filtered = numbers.filter { candidate ->
+            // keep candidate only if it DOES NOT match any of our own numbers
+            !selfRaw.any { selfNum ->
+                phoneNumberUtils.compare(selfNum, candidate)
+            }
+        }
+
+        Timber.d(
+            "filterOutSelfNumbers: in=%s self=%s out=%s",
+            numbers,
+            selfRaw,
+            filtered
+        )
+
+        return filtered
+    }
+
+
+    /**
+     * Pull all phone numbers we can from a Contact's RealmList<PhoneNumber>,
+     * without relying on the exact field name.
+     * (Currently unused, but kept for future refinements.)
+     */
+    private fun extractPhonesFromContact(contact: Contact?): List<String> {
+        if (contact == null) return emptyList()
+
+        val out = mutableListOf<String>()
+
+        contact.javaClass.declaredFields.forEach { field ->
+            if (RealmList::class.java.isAssignableFrom(field.type)) {
+                field.isAccessible = true
+                val value = field.get(contact)
+                if (value is RealmList<*>) {
+                    value.filterIsInstance<PhoneNumber>().forEach { phone ->
+                        val addr = phone.address
+                        if (!addr.isNullOrBlank()) {
+                            out += addr
+                        }
+                    }
+                }
+            }
+        }
+
+        return out
+    }
+
+    /**
+     * Very forgiving "does this look like a phone number?" check.
+     * (Not currently used, but harmless to keep.)
+     */
+    private fun isSmsLike(raw: String): Boolean {
+        if (raw.isBlank()) return false
+
+        // libphonenumber-style check via your PhoneNumberUtils
+        if (phoneNumberUtils.isPossibleNumber(raw)) return true
+
+        // Strip everything except + and digits and try again
+        val normalized = raw.filter { it == '+' || it.isDigit() }
+        return normalized.isNotBlank() && phoneNumberUtils.isPossibleNumber(normalized)
+    }
+
+    // ============================================================
+    // Shadow / duplication logic
+    // ============================================================
 
     override fun duplicateOrShadowConversation(
         addresses: List<String>,
@@ -170,122 +289,17 @@ class ConversationRepositoryImpl @Inject constructor(
                     )
                 )
             }
-            // 🔹 Strip out any numbers that belong to this device (self),
-            // so Telephony sees only "other people" as recipients.
+
+            // Finally: strip out any numbers that belong to this device (self)
             filterOutSelfNumbers(candidateNumbers)
         } finally {
             realm.close()
-
         }
-
     }
 
-    /**
-     * Try to discover all phone numbers that belong to *this* device (SIMs),
-     * normalize them, and use that to filter "self" out of a recipients list.
-     */
-    private fun filterOutSelfNumbers(numbers: Set<String>): List<String> {
-        val telephonyManager =
-            context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-
-        val selfRaw = mutableSetOf<String>()
-
-        // Newer Android: get numbers from active subscriptions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            val subMgr = context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE) as SubscriptionManager
-            val subs = try { subMgr.activeSubscriptionInfoList } catch (_: SecurityException) { null }
-
-            subs?.forEach { info ->
-                info.number
-                    ?.takeIf { it.isNotBlank() }
-                    ?.let { selfRaw.add(it) }
-            }
-        }
-
-        // Fallback: line1Number (guarded for missing permission)
-        val lineNumber = try {
-            telephonyManager.line1Number
-        } catch (e: SecurityException) {
-            Timber.w(e, "filterOutSelfNumbers: unable to read line1Number (missing permission?)")
-            null
-        }
-
-        lineNumber
-            ?.takeIf { it.isNotBlank() }
-            ?.let { selfRaw.add(it) }
-
-        if (selfRaw.isEmpty()) {
-            // We don't know our own MSISDN -> just return original list
-            Timber.w("filterOutSelfNumbers: no self numbers detected, leaving list as-is")
-            return numbers.toList()
-        }
-
-        fun norm(s: String): String =
-            AndroidPhoneNumberUtils.normalizeNumber(s) ?: s
-
-        val selfNorm = selfRaw.map(::norm).toSet()
-
-        val filtered = numbers.filter { norm(it) !in selfNorm }
-
-        Timber.d(
-            "filterOutSelfNumbers: in=%s self=%s out=%s",
-            numbers,
-            selfNorm,
-            filtered
-        )
-
-        return filtered
-    }
-
-
-    /**
-     * Pull all phone numbers we can from a Contact's RealmList<PhoneNumber>,
-     * without relying on the exact field name.
-     */
-    private fun extractPhonesFromContact(contact: Contact?): List<String> {
-        if (contact == null) return emptyList()
-
-        val out = mutableListOf<String>()
-
-        contact.javaClass.declaredFields.forEach { field ->
-            if (RealmList::class.java.isAssignableFrom(field.type)) {
-                field.isAccessible = true
-                val value = field.get(contact)
-                if (value is RealmList<*>) {
-                    value.filterIsInstance<PhoneNumber>().forEach { phone ->
-                        val addr = phone.address
-                        if (!addr.isNullOrBlank()) {
-                            out += addr
-                        }
-                    }
-                }
-            }
-        }
-
-        return out
-    }
-
-    /**
-     * Very forgiving "does this look like a phone number?" check.
-     */
-    private fun isSmsLike(raw: String): Boolean {
-        if (raw.isBlank()) return false
-
-        // libphonenumber-style check via your PhoneNumberUtils
-        if (phoneNumberUtils.isPossibleNumber(raw)) return true
-
-        // Strip everything except + and digits and try again
-        val normalized = raw.filter { it == '+' || it.isDigit() }
-        return normalized.isNotBlank() && phoneNumberUtils.isPossibleNumber(normalized)
-    }
-
-
-
-
-
-
-
-
+    // ============================================================
+    // ConversationRepository implementation
+    // ============================================================
 
     override fun getConversations(unreadAtTop: Boolean, archived: Boolean): RealmResults<Conversation> {
         val sortOrder: MutableList<String> = arrayListOf("pinned", "draft", "lastMessage.date")
@@ -356,49 +370,54 @@ class ConversationRepositoryImpl @Inject constructor(
                 .isNotEmpty("recipients")
                 .findAll()
                 .let(realm::copyFromRealm)
-                .sortedWith(compareByDescending<Conversation> { conversation -> conversation.pinned }
-                    .thenByDescending { conversation ->
-                        realm.where(Message::class.java)
-                            .equalTo("threadId", conversation.id)
-                            .greaterThan("date", System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7))
-                            .count()
+                .sortedWith(
+                    compareByDescending<Conversation> { conversation -> conversation.pinned }
+                        .thenByDescending { conversation ->
+                            realm.where(Message::class.java)
+                                .equalTo("threadId", conversation.id)
+                                .greaterThan("date", System.currentTimeMillis() - TimeUnit.DAYS.toMillis(7))
+                                .count()
                         }
                 )
         }
 
-        override fun setConversationName(id: Long, name: String) =
-            Completable.fromAction {
-                Realm.getDefaultInstance().use { realm ->
-                    realm.executeTransaction {
-                        realm.where(Conversation::class.java)
-                            .equalTo("id", id)
-                            .findFirst()
-                            ?.name = name
-                    }
+    override fun setConversationName(id: Long, name: String) =
+        Completable.fromAction {
+            Realm.getDefaultInstance().use { realm ->
+                realm.executeTransaction {
+                    realm.where(Conversation::class.java)
+                        .equalTo("id", id)
+                        .findFirst()
+                        ?.name = name
                 }
-            }.subscribeOn(Schedulers.io()) // Ensure the operation is performed on a background thread
+            }
+        }.subscribeOn(Schedulers.io())
 
     override fun searchConversations(query: CharSequence): List<SearchResult> {
         val realm = Realm.getDefaultInstance()
 
         val normalizedQuery = query.removeAccents()
-        val conversations = realm.copyFromRealm(realm
-            .where(Conversation::class.java)
-            .notEqualTo("id", 0L)
-            .isNotNull("lastMessage")
-            .equalTo("blocked", false)
-            .isNotEmpty("recipients")
-            .sort("pinned", Sort.DESCENDING, "lastMessage.date", Sort.DESCENDING)
-            .findAll())
+        val conversations = realm.copyFromRealm(
+            realm
+                .where(Conversation::class.java)
+                .notEqualTo("id", 0L)
+                .isNotNull("lastMessage")
+                .equalTo("blocked", false)
+                .isNotEmpty("recipients")
+                .sort("pinned", Sort.DESCENDING, "lastMessage.date", Sort.DESCENDING)
+                .findAll()
+        )
 
-        val messagesByConversation = realm.copyFromRealm(realm
-            .where(Message::class.java)
-            .beginGroup()
-            .contains("body", normalizedQuery, Case.INSENSITIVE)
-            .or()
-            .contains("parts.text", normalizedQuery, Case.INSENSITIVE)
-            .endGroup()
-            .findAll())
+        val messagesByConversation = realm.copyFromRealm(
+            realm
+                .where(Message::class.java)
+                .beginGroup()
+                .contains("body", normalizedQuery, Case.INSENSITIVE)
+                .or()
+                .contains("parts.text", normalizedQuery, Case.INSENSITIVE)
+                .endGroup()
+                .findAll()
+        )
             .asSequence()
             .groupBy { message -> message.threadId }
             .filter { (threadId, _) -> conversations.firstOrNull { it.id == threadId } != null }
@@ -411,9 +430,7 @@ class ConversationRepositoryImpl @Inject constructor(
 
         return conversations
             .filter { conversation -> conversationFilter.filter(conversation, normalizedQuery) }
-            .map {
-                conversation -> SearchResult(normalizedQuery, conversation, 0)
-            } + messagesByConversation
+            .map { conversation -> SearchResult(normalizedQuery, conversation, 0) } + messagesByConversation
     }
 
     override fun getBlockedConversations(): RealmResults<Conversation> =
@@ -465,7 +482,6 @@ class ConversationRepositoryImpl @Inject constructor(
                 .forEach { conversation -> add(conversation.id) }
         }
 
-
     override fun getUnreadIds(archived: Boolean) =
         ArrayList<Long>().apply {
             Realm.getDefaultInstance()
@@ -503,7 +519,7 @@ class ConversationRepositoryImpl @Inject constructor(
             .findAll()
 
     override fun getUnmanagedConversations(): Observable<List<Conversation>> =
-        Realm.getDefaultInstance().let { realm->
+        Realm.getDefaultInstance().let { realm ->
             realm.where(Conversation::class.java)
                 .sort("lastMessage.date", Sort.DESCENDING)
                 .notEqualTo("id", 0L)
@@ -524,7 +540,7 @@ class ConversationRepositoryImpl @Inject constructor(
     override fun getRecipients(): RealmResults<Recipient> =
         Realm.getDefaultInstance()
             .where(Recipient::class.java)
-                .findAll()
+            .findAll()
 
     override fun getUnmanagedRecipients(): Observable<List<Recipient>> =
         Realm.getDefaultInstance().let { realm ->
@@ -592,9 +608,9 @@ class ConversationRepositoryImpl @Inject constructor(
         }
 
     override fun getOrCreateThreadId(addresses: List<String>): Long {
+        // We intentionally keep this synchronous and simple; call it from a background thread.
         return TelephonyCompat.getOrCreateThreadId(context, addresses.toSet())
     }
-
 
     override fun updateConversations(vararg threadIds: Long) =
         Realm.getDefaultInstance().use { realm ->
@@ -704,6 +720,24 @@ class ConversationRepositoryImpl @Inject constructor(
                 null,
                 null
             )
+        }
+    }
+
+    override fun ensureMmsConversation(threadId: Long, addresses: List<String>) {
+        // Disabled — provider is read-only on modern Android (A12+)
+        Timber.w("ensureMmsConversation: disabled (provider read-only), threadId=%d", threadId)
+    }
+
+
+    override fun saveShadowLink(rcsThreadId: Long, smsThreadId: Long) {
+        synchronized(shadowLinkMap) {
+            shadowLinkMap[rcsThreadId] = smsThreadId
+        }
+    }
+
+    override fun findShadowSmsThread(rcsThreadId: Long): Long? {
+        synchronized(shadowLinkMap) {
+            return shadowLinkMap[rcsThreadId]
         }
     }
 

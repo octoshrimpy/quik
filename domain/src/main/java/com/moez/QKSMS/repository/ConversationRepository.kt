@@ -71,13 +71,48 @@ interface ConversationRepository {
 
     fun deleteConversations(vararg threadIds: Long)
 
-    // NEW CLEAN METHOD — NO context reference here
+    /**
+     * Convenience helper to get or create a Telephony thread id for a set of
+     * addresses, without leaking `Context` out of the data layer.
+     */
     fun getOrCreateThreadId(addresses: List<String>): Long
 
-    // 🆕 New helper for duplication / shadow RCS
+    /**
+     * Used when the user chooses to "duplicate" an RCS group as an SMS/MMS group.
+     *
+     * Given the raw addresses from the UI and (optionally) the original RCS
+     * thread id, this method should:
+     *
+     *  - Resolve / normalize / deduplicate SMS-capable phone numbers.
+     *  - Optionally persist any metadata about the relationship to the
+     *    original thread.
+     *
+     * Returns the final list of SMS-ready addresses to use for Telephony.
+     */
     fun duplicateOrShadowConversation(
         addresses: List<String>,
         originalThreadId: Long?
     ): List<String>
-}
 
+    /**
+     * Ensures that the specified thread behaves like a *group MMS* thread
+     * rather than a mass-SMS fanout. Implementation will typically touch
+     * the Telephony provider's MMS/SMS conversation rows.
+     */
+    fun ensureMmsConversation(threadId: Long, addresses: List<String>)
+
+    /**
+     * Persist a mapping from an RCS thread id to its SMS/MMS "shadow" thread id,
+     * so we can later recognize that an SMS group is a duplicate of an RCS group.
+     */
+    fun saveShadowLink(
+        rcsThreadId: Long,
+        smsThreadId: Long
+    )
+
+    /**
+     * Optional helper to look up an existing SMS/MMS shadow thread for
+     * a given RCS thread, if it was previously created.
+     */
+    fun findShadowSmsThread(rcsThreadId: Long): Long?
+}

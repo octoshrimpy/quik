@@ -37,19 +37,19 @@ android {
 
     signingConfigs {
         debug // Uses the default debug keystore.
-        release {
-            def keystoreProps = new Properties()
-            def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
-            storeFile file('./my-release-key.keystore')
-            keyAlias 'quik_release'
-            if (keystorePropsFile.exists()) {
-                keystoreProps.load(new FileInputStream(keystorePropsFile))
-            } else {
-                // do nothing
-            }
-            storePassword keystoreProps['storePassword']
-            keyPassword keystoreProps['keyPassword']
-        }
+//        release {
+//            def keystoreProps = new Properties()
+//            def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
+//            storeFile file('./my-release-key.keystore')
+//            keyAlias 'quik_release'
+//            if (keystorePropsFile.exists()) {
+//                keystoreProps.load(new FileInputStream(keystorePropsFile))
+//            } else {
+//                // do nothing
+//            }
+//            storePassword keystoreProps['storePassword']
+//            keyPassword keystoreProps['keyPassword']
+//        }
     }
 
     dependenciesInfo {
@@ -61,10 +61,15 @@ android {
     
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+//            minifyEnabled true
+//            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
+            buildConfigField "boolean", "LOGCAT_ENABLED", "true"
+
         }
         debug {
             applicationIdSuffix ".debug"
@@ -209,11 +214,11 @@ dependencies {
 
 }
 // Check to make sure that the keystore file is present when building a release
-gradle.taskGraph.whenReady { taskGraph ->
-    if ((taskGraph.hasTask(':assembleRelease') ||
-            taskGraph.allTasks.any { it.name == 'assembleRelease' }) &&
-            !file('./.gradle/.gradlerc').exists() &&
-            System.getenv("CI") != "true") {
-        throw new GradleException("Keystore properties file not found")
-    }
-}
+//gradle.taskGraph.whenReady { taskGraph ->
+//    if ((taskGraph.hasTask(':assembleRelease') ||
+//            taskGraph.allTasks.any { it.name == 'assembleRelease' }) &&
+//            !file('./.gradle/.gradlerc').exists() &&
+//            System.getenv("CI") != "true") {
+//        throw new GradleException("Keystore properties file not found")
+//    }
+//}

@@ -62,6 +62,7 @@ import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
 import io.realm.Case
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.RealmResults
 import io.realm.Sort
 import timber.log.Timber
@@ -69,6 +70,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.sqrt
+import dev.octoshrimpy.quik.model.ShadowGroupLink
+
 
 @Singleton
 open class MessageRepositoryImpl @Inject constructor(
@@ -432,8 +435,79 @@ open class MessageRepositoryImpl @Inject constructor(
                     addresses.first(),
                     strippedBody, now()
                 )
+                mirrorToLinkedRcsThreadIfAny(message)
                 sendSms(message)
             }
+
+            // --- MMS (Group Message) Path ---
+//            // --- MMS (Group Message) Path ---
+//        } else {
+//            val mmsParts = arrayListOf<MMSPart>()
+//
+//            // 1. Add text part
+//            signedBody.takeIf { it.isNotEmpty() }?.toByteArray()?.let { bytes ->
+//                mmsParts += MMSPart("text", ContentType.TEXT_PLAIN, bytes)
+//            }
+//
+//            // 2. Add attachments
+//            attachments
+//                .filter { it.uri.resourceExists(context) }
+//                .forEach { attachment ->
+//                    val data = attachment.getResourceBytes(context)
+//                    val contentType =
+//                        if (attachment.isImage(context)) ContentType.IMAGE_JPEG
+//                        else attachment.getType(context)
+//
+//                    mmsParts += MMSPart(
+//                        attachment.getName(context),
+//                        contentType,
+//                        data
+//                    )
+//
+//                    attachment.releaseResourceBytes()
+//                }
+//
+//            // 3. Create a local OUTBOX message in Realm (so UI updates)
+//            val message = Message().apply {
+//                id = messageIds.newId()
+//                this.threadId = threadId
+//
+//                // ✅ Proper RealmList init
+//                this.addresses = RealmList<String>().apply {
+//                    addAll(addresses)
+//                }
+//
+//                this.body = signedBody
+//                this.date = System.currentTimeMillis()
+//                this.subId = subId
+//                type = "mms"
+//                boxId = Mms.MESSAGE_BOX_OUTBOX
+//                read = true
+//                seen = true
+//            }
+//
+//            Realm.getDefaultInstance().use { realm ->
+//                realm.executeTransaction { realm.copyToRealmOrUpdate(message) }
+//            }
+//
+//            // ✅ Mirror this MMS into the original RCS thread
+//            mirrorToLinkedRcsThreadIfAny(message)
+//
+//            // 4. Send MMS via Klinker Transaction
+//            val recipients = addresses.map(phoneNumberUtils::normalizeNumber)
+//
+//            Transaction(context).sendNewMessage(
+//                subId,
+//                threadId,
+//                recipients,
+//                mmsParts,
+//                null,
+//                null
+//            )
+//        }
+
+
+
         } else { // MMS
             val parts = arrayListOf<MMSPart>()
 
@@ -575,6 +649,82 @@ open class MessageRepositoryImpl @Inject constructor(
             )
         }
     }
+    private fun sanitizeRecipients(src: Collection<String>): List<String> =
+        src.mapNotNull { raw ->
+            val trimmed = raw.trim()
+            if (trimmed.contains("@rcs.google.com")) null
+            else phoneNumberUtils.normalizeNumber(trimmed)?.takeIf { it.isNotBlank() }
+        }
+
+    private fun forceThreadId(addresses: List<String>, existing: Long): Long =
+        try {
+            if (existing != 0L) existing
+            else TelephonyCompat.getOrCreateThreadId(context, addresses)
+        } catch (e: Exception) {
+            Timber.e(e, "forceThreadId(): fallback to new id")
+            TelephonyCompat.getOrCreateThreadId(context, addresses)
+        }
+
+    private fun insertPlaceholderMms(context: Context, threadId: Long, recipients: List<String>): Uri? =
+        try {
+            val values = contentValuesOf(
+                Telephony.Mms.THREAD_ID to threadId,
+                Telephony.Mms.MESSAGE_BOX to Telephony.Mms.MESSAGE_BOX_OUTBOX,
+                Telephony.Mms.READ to 1,
+                Telephony.Mms.SEEN to 1,
+                Telephony.Mms.DATE to (System.currentTimeMillis() / 1000)
+            )
+
+            val uri = context.contentResolver.insert(Telephony.Mms.Outbox.CONTENT_URI, values)
+
+            uri?.let {
+                recipients.forEach { addr ->
+                    val addrValues = contentValuesOf(
+                        Telephony.Mms.Addr.ADDRESS to addr,
+                        Telephony.Mms.Addr.TYPE to 151,   // <-- THIS IS TYPE_TO
+                        Telephony.Mms.Addr.CHARSET to 106 // UTF-8
+                    )
+                    context.contentResolver.insert(Uri.withAppendedPath(uri, "addr"), addrValues)
+                }
+            }
+
+            uri
+        } catch (e: Exception) {
+            Timber.w(e, "insertPlaceholderMms(): failed")
+            null
+        }
+
+
+    private fun buildMmsParts(
+        context: Context,
+        body: String,
+        attachments: Collection<Attachment>,
+        prefs: Preferences,
+        smsManager: SmsManager
+    ): ArrayList<MMSPart> {
+        val parts = arrayListOf<MMSPart>()
+        if (body.isNotEmpty()) parts += MMSPart("text", ContentType.TEXT_PLAIN, body.toByteArray())
+
+        val maxWidth = smsManager.carrierConfigValues
+            .getInt(SmsManager.MMS_CONFIG_MAX_IMAGE_WIDTH)
+            .takeIf { prefs.mmsSize.get() == -1 } ?: Int.MAX_VALUE
+        val maxHeight = smsManager.carrierConfigValues
+            .getInt(SmsManager.MMS_CONFIG_MAX_IMAGE_HEIGHT)
+            .takeIf { prefs.mmsSize.get() == -1 } ?: Int.MAX_VALUE
+
+        // reuse your original compression logic exactly here
+        attachments.filter { it.isImage(context) && it.uri.resourceExists(context) }.forEach { att ->
+            val bytes = if (att.getType(context) == "image/gif")
+                ImageUtils.getScaledGif(context, att.uri, maxWidth, maxHeight)
+            else
+                ImageUtils.getScaledImage(context, att.uri, maxWidth, maxHeight)
+            val type = if (att.getType(context) == "image/gif") ContentType.IMAGE_GIF else ContentType.IMAGE_JPEG
+            parts += MMSPart(att.getName(context), type, bytes)
+        }
+
+        return parts
+    }
+
 
     override fun sendSms(message: Message) {
         val smsManager = message.subId.takeIf { it != -1 }
@@ -783,6 +933,8 @@ open class MessageRepositoryImpl @Inject constructor(
                 }
             }
         }
+        // ✅ Mirror any incoming SMS for the shadow group into the RCS thread
+        mirrorToLinkedRcsThreadIfAny(message)
 
         return message
     }
@@ -978,4 +1130,57 @@ open class MessageRepositoryImpl @Inject constructor(
                 uri -> context.contentResolver.delete(uri, null, null)
             }
         }
+    private fun findRcsThreadForSmsThreadId(smsThreadId: Long): Long? {
+        Realm.getDefaultInstance().use { realm ->
+            val link = realm.where(ShadowGroupLink::class.java)
+                .equalTo("smsThreadId", smsThreadId)
+                .findFirst()
+            return link?.rcsThreadId
+        }
+    }
+
+    private fun findSmsThreadForRcsThreadId(rcsThreadId: Long): Long? {
+        Realm.getDefaultInstance().use { realm ->
+            val link = realm.where(ShadowGroupLink::class.java)
+                .equalTo("rcsThreadId", rcsThreadId)
+                .findFirst()
+            return link?.smsThreadId
+        }
+    }
+
+    private fun mirrorToLinkedRcsThreadIfAny(source: Message) {
+        val targetThreadId = findRcsThreadForSmsThreadId(source.threadId) ?: return
+
+        Realm.getDefaultInstance().use { realm ->
+            realm.executeTransaction { tx ->
+                val mirrored = Message().apply {
+                    id = messageIds.newId()
+                    threadId = targetThreadId
+
+                    // Copy addressing info
+                    address = source.address
+                    addresses = RealmList<String>().apply {
+                        addAll(source.addresses)
+                    }
+
+                    // Copy message content + metadata
+                    body = source.body
+                    date = source.date
+                    subId = source.subId
+
+                    type = source.type
+                    boxId = source.boxId
+                    read = source.read
+                    seen = source.seen
+
+                    isEmojiReaction = source.isEmojiReaction
+                    // If you mirror reactions later, also copy emojiReactions
+                }
+
+                tx.copyToRealmOrUpdate(mirrored)
+            }
+        }
+    }
+
+
 }
