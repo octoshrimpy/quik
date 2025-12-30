@@ -242,4 +242,34 @@
     <string name="settings_qkreply_summary">Изскачащ прозорец за ново съобщение</string>
     <string name="settings_qkreply_tap_dismiss_title">Докоснете за отказ</string>
     <string name="settings_qkreply_tap_dismiss_summary">Докосване извън прозореца за затваряне</string>
+    <string name="settings_delayed_title">Изчакване преди изпращане</string>
+    <string name="settings_swipe_actions">Действия с жестове</string>
+    <string name="settings_delay_duration_hint">Въведете продължителност (в секунди)</string>
+    <string name="qksms_plus_delayed_title">Изчакване преди изпращане</string>
+    <string name="qksms_plus_delayed_summary">Изчакване от няколко секунди преди изпращане на съобщението</string>
+    <string name="compose_menu_previous">Назад</string>
+    <string name="compose_menu_next">Напред</string>
+    <string name="settings_swipe_actions_summary">Настройка на действия с жестове в разговорите</string>
+    <string name="settings_swipe_actions_right">Плъзване на дясно</string>
+    <string name="settings_swipe_actions_left">Плъзване на ляво</string>
+    <string name="settings_delivery_title">Обратна разписка</string>
+    <string name="settings_delivery_summary">Потвърждаване на успешното изпращане на съобщението</string>
+    <string name="settings_unread_at_top_title">Непрочетените първи</string>
+    <string name="settings_unread_at_top_summary">Показване на непрочетените разговори най-горе</string>
+    <string name="settings_signature_title">Подпис</string>
+    <string name="settings_signature_summary">Добавяне на подпис в края на съобщението</string>
+    <string name="settings_unicode_title">Премахване на ударенията</string>
+    <string name="settings_unicode_summary">Премахване на ударенията от знаците на изходящите SMS-съобщения</string>
+    <string name="settings_mobile_title">Само мобилни номера</string>
+    <string name="settings_mobile_summary">При съставяне на съобщение се показват само мобилни номера</string>
+    <string name="settings_auto_delete">Премахване на стари съобщения</string>
+    <string name="settings_auto_delete_dialog_message">Съобщенията ще бъдат премахвани след определен брой дни</string>
+    <string name="settings_auto_delete_dialog_hint">Брой дни</string>
+    <string name="settings_auto_delete_warning">Автоматично премахване на старите съобщения?</string>
+    <string name="settings_auto_delete_warning_message">Ако продължите %1$d съобщения ще бъдат премахнати сега</string>
+    <plurals name="settings_auto_delete_summary">
+        <item quantity="one">След един ден</item>
+        <item quantity="other">След %d дена</item>
+    </plurals>
+    <string name="settings_long_as_mms_title">Изпращане на дългите съобщения като MMS</string>
 </resources>
