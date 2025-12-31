@@ -296,6 +296,8 @@ class QkRealmMigration @Inject constructor(
                 realm.schema.get("Message")
                     ?.addField("sendAsGroup", Boolean::class.java, FieldAttribute.REQUIRED)
             }
+
+            version ++
         }
 
         check(version >= SCHEMA_VERSION) {
