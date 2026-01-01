@@ -171,6 +171,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            npm install semver
+            
+            const semver = require('semver');
             const tagName = 'v${{ steps.version.outputs.version_name }}';
             const {owner, repo} = context.repo;
 
@@ -180,7 +183,12 @@ jobs:
               per_page: 100,
             });
 
-            const previousTag = tags.find(tag => /^v\d/.test(tag.name) && tag.name !== tagName)?.name;
+            const currentVersion = semver.parse(tagName);
+            
+            const previousTag = tags
+              .map(t => t.name)
+              .filter(name => semver.valid(name) && semver.lt(name, currentVersion))
+              .sort(semver.rcompare)[0];
 
             const payload = {
               owner,
