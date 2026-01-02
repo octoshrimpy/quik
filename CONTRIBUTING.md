@@ -44,5 +44,7 @@ To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshr
 ## Helpful Tips
 ### Getting Your Pull Request Merged
 When submitting a pull request, please be as detailed as possible in your reasoning for the change, what you changed and how you tested it. In addition, please try to keep pull requests atomic and singularly focused. Submitting large pull requests that have multiple changes or touch multiple code paths are much more difficult to review.
+### Open Draft Pull Requests
+If you are stuck or in the middle of a larger code change, go ahead and open up a draft pull request. That way you can receive help and suggestions while you are developing. And if you are stuck on something specific open up that draft PR, or hop on over to [matrix](https://matrix.to/#/#quik-sms:matrix.org) for suggestions.
 ### Set Java Version
 When building QUIK, make sure to download JDK 17 and specify an installation path for it. In Android Studio, you can do that in Settings > Build, Execution, Deployment > Build Tools > Gradle.
