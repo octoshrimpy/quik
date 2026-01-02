@@ -42,5 +42,7 @@ To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshr
 6. Submit a pull request with your change.
 **We have a build action on each pull request, if this build fails, please edit the pull request in order to make the build succeed.**
 ## Helpful Tips
+### Getting Your Pull Request Merged
+When submitting a pull request, please be as detailed as possible in your reasoning for the change, what you changed and how you tested it. In addition, please try to keep pull requests atomic and singularly focused. Submitting large pull requests that have multiple changes or touch multiple code paths are much more difficult to review.
 ### Set Java Version
 When building QUIK, make sure to download JDK 17 and specify an installation path for it. In Android Studio, you can do that in Settings > Build, Execution, Deployment > Build Tools > Gradle.
