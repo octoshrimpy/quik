@@ -54,5 +54,9 @@ data class ComposeState(
     val saveDraft: Boolean = true,
     val selectedTexts: Set<Long> = emptySet(),
     val isSelectionMode: Boolean = false,
-    val isDuplicatedConversation: Boolean = false
+    val isDuplicatedConversation: Boolean = false,
+    val classificationLabel: String = "",
+    val classificationReasoning: String = "",
+    val classificationAdvice: List<String> = emptyList(),
+    val showClassificationDialog: Boolean = false
 )

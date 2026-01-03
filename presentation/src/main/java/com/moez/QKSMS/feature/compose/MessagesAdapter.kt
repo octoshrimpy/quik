@@ -115,6 +115,8 @@ class MessagesAdapter @Inject constructor(
         private const val MAX_MESSAGE_DISPLAY_LENGTH = 5000
     }
 
+    var classificationBanner: View? = null
+
     // click events passed back to compose view model
     val partClicks: Subject<Long> = PublishSubject.create()
     val messageLinkClicks: Subject<Uri> = PublishSubject.create()

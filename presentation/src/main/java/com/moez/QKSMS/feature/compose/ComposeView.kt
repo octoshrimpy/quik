@@ -118,5 +118,5 @@ interface ComposeView : QkView<ComposeState> {
     fun startSpeechRecognition()
     fun focusMessage()
     fun showDuplicateConversationDialog(threadId: Long, recipients: List<Recipient>)
-
+    fun showClassificationDialog(label: String, reasoning: String, advice: List<String>)
 }

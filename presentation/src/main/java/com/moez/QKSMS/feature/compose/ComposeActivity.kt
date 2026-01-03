@@ -43,7 +43,11 @@ import android.view.DragEvent.ACTION_DROP
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.SeekBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintSet
@@ -144,6 +148,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import android.widget.ImageView
 
 
 class ComposeActivity : QkThemedActivity(), ComposeView {
@@ -254,6 +259,24 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     messageSelectedIntent.onNext(selectedIds.lastOrNull() ?: 0L)
                 }
             }
+
+        // Handle "Select All Messages" menu item
+        optionsItemIntent
+            .filter { it == R.id.select_all_messages }
+            .autoDisposable(scope())
+            .subscribe { selectAllMessagesIntent.onNext(Unit) }
+
+        // Handle "Clear Selection" menu item
+        optionsItemIntent
+            .filter { it == R.id.clear_selection }
+            .autoDisposable(scope())
+            .subscribe { clearMessageSelectionIntent.onNext(Unit) }
+
+        // Handle "Export Messages" menu item
+        optionsItemIntent
+            .filter { it == R.id.export_messages }
+            .autoDisposable(scope())
+            .subscribe { exportSelectedMessagesIntent.onNext(Unit) }
 
         contentView.layoutTransition = LayoutTransition().apply {
             disableTransitionType(LayoutTransition.CHANGING)
@@ -921,4 +944,145 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override fun focusMessage() {
         message.requestFocus()
     }
+
+    override fun showClassificationDialog(label: String, reasoning: String, advice: List<String>) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_classification_result, null)
+
+        val titleText = dialogView.findViewById<TextView>(R.id.titleText)
+        val reasoningFull = dialogView.findViewById<TextView>(R.id.reasoningFull)
+        val learnMoreButton = dialogView.findViewById<TextView>(R.id.learnMoreButton)
+        val adviceContainer = dialogView.findViewById<LinearLayout>(R.id.adviceContainer)
+        val reportBlockButton = dialogView.findViewById<Button>(R.id.reportBlockButton)
+        val dismissButton = dialogView.findViewById<ImageButton>(R.id.dismissButton)
+        val warningIcon = dialogView.findViewById<ImageView>(R.id.warningIcon)
+        val bannerBackground = dialogView.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.bannerBackground)
+
+        // Determine colors and text based on classification type
+        val (backgroundColor, accentColor, iconRes, titlePrefix) = when (label.lowercase()) {
+            "scam" -> Quadruple(
+                R.color.scam_background,
+                R.color.scam_red,
+                android.R.drawable.ic_dialog_alert,
+                "This is likely a scam."
+            )
+            "phishing" -> Quadruple(
+                R.color.phishing_background,
+                R.color.phishing_orange,
+                android.R.drawable.ic_dialog_alert,
+                "This is likely phishing."
+            )
+            "spam" -> Quadruple(
+                R.color.spam_background,
+                R.color.spam_yellow,
+                android.R.drawable.ic_dialog_info,
+                "This is likely spam."
+            )
+            "benign", "safe", "legitimate" -> Quadruple(
+                R.color.benign_background,
+                R.color.benign_green,
+                android.R.drawable.ic_dialog_info,
+                "This message appears safe."
+            )
+            "error", "unknown" -> Quadruple(
+                R.color.error_background,
+                R.color.error_gray,
+                android.R.drawable.ic_dialog_info,
+                "Unable to classify message."
+            )
+            else -> Quadruple(
+                R.color.error_background,
+                R.color.error_gray,
+                android.R.drawable.ic_dialog_info,
+                "Classification: ${label.capitalize()}"
+            )
+        }
+
+        // Apply colors
+        bannerBackground.setBackgroundColor(ContextCompat.getColor(this, backgroundColor))
+        warningIcon.setImageResource(iconRes)
+        warningIcon.setColorFilter(ContextCompat.getColor(this, accentColor))
+        learnMoreButton.setTextColor(ContextCompat.getColor(this, accentColor))
+
+        // Update button appearance based on type
+        if (label.lowercase() in listOf("benign", "safe", "legitimate")) {
+            reportBlockButton.text = "Dismiss"
+            reportBlockButton.background = ContextCompat.getDrawable(this, R.drawable.button_benign_green)
+        } else {
+            reportBlockButton.text = "Report & Block"
+            reportBlockButton.background = when (label.lowercase()) {
+                "phishing" -> ContextCompat.getDrawable(this, R.drawable.button_phishing_orange)
+                "spam" -> ContextCompat.getDrawable(this, R.drawable.button_spam_red)
+                else -> ContextCompat.getDrawable(this, R.drawable.button_spam_red)
+            }
+        }
+
+        // Set content
+        titleText.text = titlePrefix
+        reasoningFull.text = reasoning
+
+        // Populate advice items
+        adviceContainer.removeAllViews()
+        advice.forEachIndexed { index, adviceItem ->
+            val adviceItemView = layoutInflater.inflate(
+                R.layout.item_advice_bullet,
+                adviceContainer,
+                false
+            )
+
+            val bulletText = adviceItemView.findViewById<TextView>(R.id.adviceBulletText)
+            bulletText.text = adviceItem
+
+            adviceContainer.addView(adviceItemView)
+        }
+
+        // Handle expand/collapse
+        learnMoreButton.setOnClickListener {
+            val expandableSection = findViewById<LinearLayout>(R.id.expandableSection)
+            if (expandableSection.visibility == View.GONE) {
+                expandableSection.visibility = View.VISIBLE
+                learnMoreButton.text = "Show Less ▲"
+            } else {
+                expandableSection.visibility = View.GONE
+                learnMoreButton.text = "Learn More ▼"
+            }
+        }
+
+        // Get the root contentView using findViewById
+        val rootContentView = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.contentView)
+
+        // Remove any existing banner first
+        rootContentView.findViewById<View>(R.id.classificationBanner)?.let {
+            rootContentView.removeView(it)
+        }
+
+        // Set layout params to position it below toolbar
+        dialogView.id = R.id.classificationBanner
+        val params = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams(
+            androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.MATCH_PARENT,
+            androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            topToBottom = R.id.toolbar
+            startToStart = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            endToEnd = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            topMargin = 8
+        }
+        dialogView.layoutParams = params
+        dialogView.elevation = 8f
+
+        // Add to contentView
+        rootContentView.addView(dialogView)
+
+        // Handle dismiss
+        dismissButton.setOnClickListener {
+            rootContentView.removeView(dialogView)
+        }
+
+        reportBlockButton.setOnClickListener {
+            rootContentView.removeView(dialogView)
+            // TODO: Implement your report/block logic here
+        }
+    }
+
+    // Helper data class for colors
+    private data class Quadruple<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
 }

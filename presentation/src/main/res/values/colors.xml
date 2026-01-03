@@ -322,4 +322,21 @@
         <item>#263238</item>
     </array>
 
+    <color name="scam_red">#8B1E1E</color>
+    <color name="scam_background">#FFE5E5</color>
+
+    <color name="phishing_orange">#D97706</color>
+    <color name="phishing_background">#FEF3C7</color>
+
+    <color name="spam_yellow">#CA8A04</color>
+    <color name="spam_background">#FEF9C3</color>
+
+    <color name="benign_green">#059669</color>
+    <color name="benign_background">#D1FAE5</color>
+
+    <color name="error_gray">#6B7280</color>
+    <color name="error_background">#F3F4F6</color>
+
+    <color name="divider_color">#E0E0E0</color>
+
 </resources>

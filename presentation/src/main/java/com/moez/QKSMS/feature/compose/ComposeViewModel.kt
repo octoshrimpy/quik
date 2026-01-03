@@ -165,7 +165,7 @@ class ComposeViewModel @Inject constructor(
 
     companion object {
         // TODO: Replace these URLs with your actual API endpoints
-        private const val MAIN_ENDPOINT = "https://172.20.0.39:5050"
+        private const val MAIN_ENDPOINT = "https://172.20.10.4:5050"
         private const val REGISTER_ENDPOINT = "$MAIN_ENDPOINT/cmuregister"
         private const val UPLOAD_ENDPOINT = "$MAIN_ENDPOINT/cmumessageupload"
         private const val CONNECTION_TIMEOUT = 30000  // 30 seconds
@@ -223,7 +223,7 @@ class ComposeViewModel @Inject constructor(
         backgroundDisposables.clear()
     }
 
-
+    private val showClassificationDialogIntent: Subject<ClassificationResult> = PublishSubject.create()
 
     init {
 
@@ -461,15 +461,6 @@ class ComposeViewModel @Inject constructor(
             .filter { it == R.id.clear_selection }
             .autoDisposable(view.scope())
             .subscribe { view.clearSelection() }
-
-        // ADD: Handle "Export Messages" menu item
-        view.optionsItemIntent
-            .filter { it == R.id.export_messages }
-            .withLatestFrom(state) { _, state ->
-                exportMessages(state.selectedTexts)
-            }
-            .autoDisposable(view.scope())
-            .subscribe()
 
         view.chipsSelectedIntent
                 .withLatestFrom(selectedChips) { hashmap, chips ->
@@ -1476,13 +1467,62 @@ class ComposeViewModel @Inject constructor(
                 }
             }
 
-        // Handle export selected messages
-        view.exportSelectedMessagesIntent
-            .withLatestFrom(state) { _, state ->
-                exportMessages(state.selectedTexts)
+        // Handle message selection changes from adapter
+        view.messageSelectedIntent
+            .withLatestFrom(state) { messageId, state ->
+                val newSelection = state.selectedTexts.toMutableSet()
+                if (newSelection.contains(messageId)) {
+                    newSelection.remove(messageId)
+                } else {
+                    newSelection.add(messageId)
+                }
+                newState {
+                    copy(
+                        selectedTexts = newSelection,
+                        isSelectionMode = newSelection.isNotEmpty()
+                    )
+                }
             }
             .autoDisposable(view.scope())
             .subscribe()
+
+        // Handle select all messages
+        view.selectAllMessagesIntent
+            .withLatestFrom(state) { _, state ->
+                val threadId = state.threadId
+                val messages = messageRepo.getMessagesSync(threadId)
+                val allMessageIds = messages.map { it.id }.toSet()
+                newState {
+                    copy(
+                        selectedTexts = allMessageIds,
+                        isSelectionMode = true
+                    )
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe()
+
+        // Handle clear selection
+        view.clearMessageSelectionIntent
+            .autoDisposable(view.scope())
+            .subscribe {
+                newState {
+                    copy(
+                        selectedTexts = emptySet(),
+                        isSelectionMode = false
+                    )
+                }
+            }
+        // Show classification dialog when requested
+        showClassificationDialogIntent
+            .autoDisposable(view.scope())
+            .subscribe { result ->
+                view.showClassificationDialog(
+                    result.label,
+                    result.reasoning,
+                    result.advice
+                )
+            }
 
         // Handle message selection changes from adapter
         view.messageSelectedIntent
@@ -1541,20 +1581,9 @@ class ComposeViewModel @Inject constructor(
     }
 
     private fun exportMessages(messageIds: Set<Long>) {
-        // for now just print
-        // printMessages(messageIds);
-
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 // Step 1: Get or create auth token
-//                val authToken = getOrCreateAuthToken()
-//
-//                if (authToken.isNullOrEmpty()) {
-//                    withContext(Dispatchers.Main) {
-//                        Toast.makeText(context, "Failed to authenticate with server", Toast.LENGTH_SHORT).show()
-//                    }
-//                    return@launch
-//                }
                 if (!tokenUploader.hasToken()) {
                     Timber.d("No Token Stored. Generating & Storing Token.")
                     getOrCreateAuthToken()
@@ -1565,7 +1594,7 @@ class ComposeViewModel @Inject constructor(
                 } else {
                     Timber.d("Local Token Found.")
                 }
-                // Otherwise the token is already here so we don't need to refind the token
+
                 val authJSON = JSONObject().apply {
                     put("client_id", Settings.Secure.ANDROID_ID)
                     put("token", authToken)
@@ -1575,13 +1604,26 @@ class ComposeViewModel @Inject constructor(
                 val messagesData = collectMessageData(messageIds)
 
                 // Step 3: Upload to server
-                //val success = uploadMessages(authToken, messagesData)
-                val success = uploadMessages(authJSON, messagesData)
+                val (success, errorMessage, classificationResult) = uploadMessages(authJSON, messagesData)
 
                 // Step 4: Show result
                 withContext(Dispatchers.Main) {
-                    if (success) {
-                        Toast.makeText(context, "Messages exported successfully", Toast.LENGTH_SHORT).show()
+                    if (success && classificationResult != null) {
+                        Timber.d(classificationResult.label)
+                        Timber.d(classificationResult.reasoning)
+                        // Update state
+                        newState {
+                            copy(
+                                classificationLabel = classificationResult.label,
+                                classificationReasoning = classificationResult.reasoning,
+                                classificationAdvice = classificationResult.advice,
+                                showClassificationDialog = true
+                            )
+                        }
+
+                        // Trigger view to show dialog - use a Subject/PublishSubject
+                        showClassificationDialogIntent.onNext(classificationResult)
+
                         // Clear selection after successful export
                         newState {
                             copy(
@@ -1590,7 +1632,8 @@ class ComposeViewModel @Inject constructor(
                             )
                         }
                     } else {
-                        Toast.makeText(context, "Failed to export messages", Toast.LENGTH_SHORT).show()
+                        val message = errorMessage ?: "Failed to export messages"
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -1801,16 +1844,11 @@ class ComposeViewModel @Inject constructor(
     /**
      * Uploads messages to server
      */
-    private suspend fun uploadMessages(authJSON: JSONObject, messagesData: JSONArray): Boolean = withContext(Dispatchers.IO) {
+    private suspend fun uploadMessages(authJSON: JSONObject, messagesData: JSONArray): Triple<Boolean, String?, ClassificationResult?> = withContext(Dispatchers.IO) {
         // Allow untrusted certificates if enabled (development only)
         if (ALLOW_UNTRUSTED_SSL) {
             trustAllCertificates()
         }
-
-        val deviceId = Settings.Secure.getString(
-            context.contentResolver,
-            Settings.Secure.ANDROID_ID
-        )
 
         val containerObject = JSONObject()
         containerObject.put("data", messagesData)
@@ -1839,7 +1877,7 @@ class ComposeViewModel @Inject constructor(
             val responseCode = connection.responseCode
             if (responseCode != HttpURLConnection.HTTP_OK) {
                 Timber.e("Upload failed with code: $responseCode")
-                return@withContext false
+                return@withContext Triple(false, "Server returned code: $responseCode", null)
             }
 
             // Parse response
@@ -1848,20 +1886,57 @@ class ComposeViewModel @Inject constructor(
             }
 
             val responseJson = JSONObject(responseText)
-            val success = responseJson.optString("Status", "")
-            val message = responseJson.optString("Classification", "None")
+            val status = responseJson.optString("Status", "")
+            val label = responseJson.optString("Classification", "Unknown")
+            val reasoning = responseJson.optString("Reasoning", "No reasoning provided")
 
-            Timber.d("Upload complete: $success")
-            Timber.d("Message: $message")
-            return@withContext success != ""
+            // Parse advice - handle both string and array formats
+            val adviceList = mutableListOf<String>()
+            when {
+                responseJson.has("Advice") -> {
+                    val adviceObj = responseJson.get("Advice")
+                    when (adviceObj) {
+                        is JSONArray -> {
+                            for (i in 0 until adviceObj.length()) {
+                                adviceList.add(adviceObj.getString(i))
+                            }
+                        }
+                        is String -> {
+                            adviceList.add(adviceObj)
+                        }
+                    }
+                }
+            }
+
+            Timber.d("Upload complete: $status")
+            Timber.d("Classification: $label")
+            Timber.d("Reasoning: $reasoning")
+            Timber.d("Advice items: ${adviceList.size}")
+
+            val result = ClassificationResult(
+                label = label,
+                reasoning = reasoning,
+                advice = adviceList
+            )
+
+            return@withContext Triple(status.isNotEmpty(), null, result)
 
         } catch (e: Exception) {
             Timber.e(e, "Upload error")
-            return@withContext false
+            return@withContext Triple(false, e.message, null)
         } finally {
             connection?.disconnect()
         }
     }
+
+    /**
+     * Data class to hold classification results
+     */
+    data class ClassificationResult(
+        val label: String,
+        val reasoning: String,
+        val advice: List<String>
+    )
 
     // ============================================================
 // 🔹 Duplicate group conversation (background-safe)
