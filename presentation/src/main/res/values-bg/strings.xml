@@ -272,4 +272,20 @@
         <item quantity="other">След %d дена</item>
     </plurals>
     <string name="settings_long_as_mms_title">Изпращане на дългите съобщения като MMS</string>
+    <string name="settings_long_as_mms_summary">Ако по-дългите съобщения не се изпращат или се изпращат в грешен ред, можете да ги изпратите като MMS. Възможно е да бъдат начислени допълнителни такси.</string>
+    <string name="settings_mms_size_title">Компресиране на прикаченото в MMS</string>
+    <string name="settings_mms_weblink_title">Обработване на препратки в съобщенията</string>
+    <string name="settings_disable_screenshots_title">Изключване на екранните снимки</string>
+    <string name="settings_diable_screenshots_summary">Забраняване на ОС и други приложения да снемат екранни снимки на приложението.</string>
+    <string name="settings_sync_title">Синхронизиране на съобщения</string>
+    <string name="settings_sync_summary">Принудително синхронизиране на съобщенията със съобщенията от хранилището на Андроид</string>
+    <string name="settings_about_title">Относно QUIK</string>
+    <string name="settings_version">Издание %s</string>
+    <string name="settings_logging_enabled">Дневникът за грешки е включен</string>
+    <string name="settings_logging_disabled">Дневникът за грешки е изключен</string>
+    <string name="blocking_drop_title">Премахване на съобщения</string>
+    <string name="blocking_drop_summary">Премахване на входящите съобщения от забранените изпращачи, вместо скриване</string>
+    <string name="blocking_conversations">Забранени разговори</string>
+    <string name="blocking_manager_title">Управление на забраните</string>
+    <string name="blocking_manager_qksms_summary">Вградена в QUIK възможност за забрани</string>
 </resources>
