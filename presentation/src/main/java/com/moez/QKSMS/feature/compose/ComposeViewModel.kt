@@ -92,11 +92,6 @@ import io.reactivex.subjects.Subject
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import dev.octoshrimpy.quik.compat.TelephonyCompat
-
-import io.realm.Realm
-import io.reactivex.rxkotlin.withLatestFrom
-//import io.reactivex.android.schedulers.AndroidSchedulers
-//import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -408,7 +403,17 @@ class ComposeViewModel @Inject constructor(
             newState { copy(scheduling = true) }
     }
 
-    private fun checkIfDuplicated(threadId: Long): Boolean = true
+    /**
+     * Returns whether this conversation is a "duplicate/shadow" SMS copy
+     * of some RCS group. For now we default to `false` until we wire this
+     * up to a proper persisted mapping.
+     */
+    private fun checkIfDuplicated(threadId: Long): Boolean {
+        // TODO: later we can hook this into conversationRepo if we persist
+        // a ShadowGroupLink or similar metadata.
+        return false
+    }
+
 
     @SuppressLint("StringFormatInvalid")
     override fun bindView(view: ComposeView) {
@@ -1941,23 +1946,23 @@ class ComposeViewModel @Inject constructor(
     )
 
     // ============================================================
-// 🔹 Duplicate group conversation (background-safe)
-// ============================================================
+    // 🔹 Duplicate group conversation (background-safe)
+    // ============================================================
     fun onDuplicateConfirmed(recipients: List<Recipient>) {
         Timber.d(
             "onDuplicateConfirmed() called with recipients=%s",
             recipients.map { it.address }
         )
 
-        // Best-effort original thread id
+        // Best-effort original thread id (the RCS thread we're shadowing)
         val oldThreadId =
             try { conversation.blockingFirst()?.id }
             catch (_: Throwable) { threadId }
 
-        val rawAddresses = recipients.map { it.address }
+        val rawAddresses = recipients.mapNotNull { it.address }
 
         val disposable = Single.fromCallable {
-            // OFF the UI thread: just resolve SMS numbers
+            // OFF the UI thread: resolve SMS-able numbers from RCS participants
             conversationRepo.duplicateOrShadowConversation(
                 addresses = rawAddresses,
                 originalThreadId = oldThreadId
@@ -1984,19 +1989,43 @@ class ComposeViewModel @Inject constructor(
                     smsAddresses
                 )
 
-                // 🔴 CHANGE IS HERE – create a real system thread, then open it
-                val smsThreadId = TelephonyCompat.getOrCreateThreadId(
+                // ✅ Create (or reuse) the real system SMS/MMS thread
+                val mmsThreadId = TelephonyCompat.getOrCreateThreadId(
                     context,
                     smsAddresses
                 )
 
-                Timber.d(
-                    "onDuplicateConfirmed(): created/loaded SMS threadId=%d",
-                    smsThreadId
-                )
+                // ✅ Ensure it's treated as a true MMS group (not individual fanout)
+                try {
+                    conversationRepo.ensureMmsConversation(mmsThreadId, smsAddresses)
+                } catch (e: Exception) {
+                    Timber.e(
+                        e,
+                        "onDuplicateConfirmed(): ensureMmsConversation failed for threadId=$mmsThreadId"
+                    )
+                }
 
-                // Open it like any normal conversation
-                navigator.showConversation(smsThreadId)
+                // ✅ Persist mapping RCS thread -> SMS/MMS shadow thread
+                if (oldThreadId != null && oldThreadId > 0) {
+                    try {
+                        conversationRepo.saveShadowLink(
+                            rcsThreadId = oldThreadId,
+                            smsThreadId = mmsThreadId
+                        )
+                        Timber.d(
+                            "onDuplicateConfirmed(): saved shadow link rcs=%d -> sms=%d",
+                            oldThreadId,
+                            mmsThreadId
+                        )
+                    } catch (e: Exception) {
+                        Timber.e(e, "onDuplicateConfirmed(): failed to save shadow link")
+                    }
+                } else {
+                    Timber.w("onDuplicateConfirmed(): oldThreadId is null or invalid, not saving shadow link")
+                }
+
+                // ✅ Open it like any normal conversation
+                navigator.showConversation(mmsThreadId)
 
             }, { error ->
                 Timber.e(error, "onDuplicateConfirmed() error")
@@ -2050,4 +2079,5 @@ class ComposeViewModel @Inject constructor(
                 }
             )
     }
+
 }

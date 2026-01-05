@@ -43,32 +43,54 @@ class SendMessage @Inject constructor(
         val delay: Int = 0
     )
 
-    override fun buildObservable(params: Params): Flowable<*> = Flowable.just(Unit)
-        .filter { params.addresses.isNotEmpty() }
-        .doOnNext {
-            // If a threadId isn't provided, try to obtain one
-            val threadId = when (params.threadId) {
-                0L -> conversationRepo.getOrCreateConversation(params.addresses)?.id ?: 0
-                else -> params.threadId
+    override fun buildObservable(params: Params): Flowable<*> =
+        Flowable.just(Unit)
+            .filter { params.addresses.isNotEmpty() }
+            .doOnNext {
+                // Resolve the effective threadId to send on.
+                val effectiveThreadId = when (params.threadId) {
+                    0L -> {
+                        // New: use the clean threadId helper first
+                        val rawThreadId = conversationRepo.getOrCreateThreadId(params.addresses)
+
+                        if (rawThreadId != 0L) {
+                            // Best-effort: make sure we have a local Conversation object in Realm
+                            conversationRepo.getOrCreateConversation(rawThreadId)
+                        }
+
+                        rawThreadId
+                    }
+
+                    else -> params.threadId
+                }
+
+                // If we still couldn't get a valid threadId, bail out
+                if (effectiveThreadId == 0L) {
+                    return@doOnNext
+                }
+
+                // Actually send the message
+                params.apply {
+                    messageRepo.sendMessage(
+                        subId,
+                        effectiveThreadId,
+                        addresses,
+                        body,
+                        attachments,
+                        delay
+                    )
+                }
+
+                // Update conversation metadata + unarchive, same as before
+                conversationRepo.updateConversations(effectiveThreadId)
+                conversationRepo.markUnarchived(effectiveThreadId)
+
+                // Update shortcuts
+                shortcutManager.reportShortcutUsed(effectiveThreadId)
+
+                // Delete attachment local files, if any, because they're saved to MMS DB by now
+                params.attachments.forEach { it.removeCacheFile() }
             }
-
-            // if unable to find or create a conversation (and/or underlying threadId), fail
-            if (threadId == 0L)
-                return@doOnNext
-
-            params.apply {
-                messageRepo.sendMessage(subId, threadId, addresses, body, attachments, delay)
-            }
-
-            conversationRepo.updateConversations(threadId)
-
-            conversationRepo.markUnarchived(threadId)
-
-            shortcutManager.reportShortcutUsed(threadId)
-
-            // delete attachment local files, if any, because they're saved to mms db by now
-            params.attachments.forEach { it.removeCacheFile() }
-        }
-        .flatMap { updateBadge.buildObservable(Unit) } // Update the widget
-
+            // Update the widget badge
+            .flatMap { updateBadge.buildObservable(Unit) }
 }

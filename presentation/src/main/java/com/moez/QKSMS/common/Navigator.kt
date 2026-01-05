@@ -367,17 +367,18 @@ class Navigator @Inject constructor(
     }
 
     fun openShadowConversation(conversation: Conversation) {
+        val participantSummary = conversation.recipients
+            ?.joinToString { it.address ?: "?" }
+            ?: "none"
+
         Timber.d(
             "Navigator.openShadowConversation id=%d participants=%s",
             conversation.id,
-            conversation.participants
+            participantSummary
         )
 
-        // 👇 THIS is the correct navigation call.
+        // 👇 This is still the correct navigation call: treat this as a normal SMS/MMS thread.
         showConversation(threadId = conversation.id)
     }
-
-
-
 
 }
