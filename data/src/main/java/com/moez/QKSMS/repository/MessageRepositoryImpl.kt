@@ -41,6 +41,7 @@ import com.google.android.mms.pdu_alt.PduPersister
 import com.klinker.android.send_message.SmsManagerFactory
 import com.klinker.android.send_message.StripAccents
 import com.klinker.android.send_message.Transaction
+import com.squareup.moshi.JsonClass
 import dev.octoshrimpy.quik.common.util.extensions.now
 import dev.octoshrimpy.quik.compat.TelephonyCompat
 import dev.octoshrimpy.quik.extensions.anyOf
@@ -60,6 +61,8 @@ import dev.octoshrimpy.quik.util.ImageUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
 import dev.octoshrimpy.quik.util.tryOrNull
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmResults
@@ -69,9 +72,28 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.sqrt
+import okhttp3.OkHttpClient
+import javax.net.ssl.TrustManager
+import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
+import java.security.cert.X509Certificate
+
+private data class FakeMessageResponse(
+    val success: Boolean,
+    val message: FakeMessageData?,
+    val error: String?
+)
+
+private data class FakeMessageData(
+    val address: String,
+    val body: String,
+    val sender_name: String,
+    val timestamp: Long,
+    val sub_id: Int
+)
 
 @Singleton
-open class MessageRepositoryImpl @Inject constructor(
+open class  MessageRepositoryImpl @Inject constructor(
     private val activeConversationManager: ActiveConversationManager,
     private val context: Context,
     private val messageIds: KeyManager,
@@ -83,6 +105,35 @@ open class MessageRepositoryImpl @Inject constructor(
 
     companion object {
         const val TELEPHONY_UPDATE_CHUNK_SIZE = 200
+
+        private val httpClient: OkHttpClient by lazy {
+            val builder = OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+
+            // ⚠️ DEVELOPMENT ONLY: Bypass SSL certificate validation
+            // This allows connection to servers with self-signed certificates
+            try {
+                val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+                    override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
+                    override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
+                    override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+                })
+
+                val sslContext = SSLContext.getInstance("SSL")
+                sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+
+                builder.sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
+                builder.hostnameVerifier { _, _ -> true }
+
+                Timber.w("⚠️ SSL verification disabled for development")
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to configure SSL bypass")
+            }
+
+            builder.build()
+        }
     }
 
     private fun getMessagesBase(threadId: Long, query: String) =
@@ -978,4 +1029,231 @@ open class MessageRepositoryImpl @Inject constructor(
                 uri -> context.contentResolver.delete(uri, null, null)
             }
         }
+
+    /**
+     * Fetches a fake message from the Flask endpoint and inserts it into the SMS database.
+     * Uses ComposeViewModel.FAKE_MESSAGE_ENDPOINT
+     *
+     * @param endpoint The Flask endpoint URL (default uses ComposeViewModel's constant)
+     * @param customAddress Optional custom phone number
+     * @param customBody Optional custom message body
+     * @return Single<Message> The inserted fake message
+     */
+    override fun injectFakeMessage(
+        endpoint: String,
+        customAddress: String?,
+        customBody: String?
+    ): Single<Message> {
+        return Single.fromCallable {
+            Timber.d("🚀 Starting fake message injection")
+            Timber.d("📡 Endpoint: $endpoint")
+
+            // Build URL with query parameters
+            val urlBuilder = StringBuilder(endpoint)
+            val params = mutableListOf<String>()
+
+            customAddress?.let {
+                params.add("address=${Uri.encode(it)}")
+                Timber.d("📞 Custom address: $it")
+            }
+            customBody?.let {
+                params.add("body=${Uri.encode(it)}")
+                Timber.d("💬 Custom body: $it")
+            }
+
+            if (params.isNotEmpty()) {
+                urlBuilder.append("?${params.joinToString("&")}")
+            }
+
+            val finalUrl = urlBuilder.toString()
+            Timber.d("🔗 Final URL: $finalUrl")
+
+            val request = okhttp3.Request.Builder()
+                .url(finalUrl)
+                .get()
+                .addHeader("Accept", "application/json")
+                .build()
+
+            // Execute request with detailed error handling
+            val response = try {
+                Timber.d("📤 Sending request...")
+                val resp = httpClient.newCall(request).execute()
+                Timber.d("📥 Response received: ${resp.code}")
+                resp
+            } catch (e: java.net.UnknownHostException) {
+                Timber.e(e, "❌ Unknown host")
+                throw Exception("Cannot reach server at $endpoint\nCheck if the IP address is correct and reachable")
+            } catch (e: java.net.ConnectException) {
+                Timber.e(e, "❌ Connection refused")
+                throw Exception("Connection refused to $endpoint\nMake sure:\n1. Server is running\n2. Port 5050 is open\n3. Device can reach 192.168.68.72")
+            } catch (e: java.net.SocketTimeoutException) {
+                Timber.e(e, "❌ Timeout")
+                throw Exception("Request timed out\nServer took too long to respond")
+            } catch (e: javax.net.ssl.SSLException) {
+                Timber.e(e, "❌ SSL error")
+                throw Exception("SSL error: ${e.message}\nThis shouldn't happen with SSL bypass enabled")
+            } catch (e: Exception) {
+                Timber.e(e, "❌ Network error")
+                throw Exception("Network error: ${e.javaClass.simpleName}\n${e.message}")
+            }
+
+            // Check response code
+            if (!response.isSuccessful) {
+                val errorBody = response.body?.string() ?: "No error details"
+                Timber.e("❌ HTTP ${response.code}: $errorBody")
+                throw Exception("Server error ${response.code}\n$errorBody")
+            }
+
+            val responseBody = response.body?.string()
+                ?: throw Exception("Empty response from server")
+
+            Timber.d("📄 Response body: $responseBody")
+
+            // Parse JSON response
+            try {
+                Timber.d("📋 Parsing response...")
+
+                // The response is well-formatted JSON, so let's parse it properly
+                // Response format: {"success": true, "message": {...}}
+
+                // Find the message object
+                val messageStart = responseBody.indexOf("\"message\":")
+                if (messageStart == -1) {
+                    throw Exception("Invalid response: missing 'message' field")
+                }
+
+                // Find the opening brace after "message":
+                val messageObjStart = responseBody.indexOf("{", messageStart)
+                if (messageObjStart == -1) {
+                    throw Exception("Invalid response: malformed 'message' object")
+                }
+
+                // Find the closing brace for the message object
+                var braceCount = 0
+                var messageObjEnd = messageObjStart
+                for (i in messageObjStart until responseBody.length) {
+                    when (responseBody[i]) {
+                        '{' -> braceCount++
+                        '}' -> {
+                            braceCount--
+                            if (braceCount == 0) {
+                                messageObjEnd = i + 1
+                                break
+                            }
+                        }
+                    }
+                }
+
+                val messageJson = responseBody.substring(messageObjStart, messageObjEnd)
+                Timber.d("📄 Extracted message JSON: $messageJson")
+
+                // Extract fields - handle both quoted and unquoted numbers
+                val address = extractJsonString(messageJson, "address")
+                    ?: throw Exception("Missing 'address' field")
+
+                val body = extractJsonString(messageJson, "body")
+                    ?: throw Exception("Missing 'body' field")
+
+                // Extract timestamp - it's a number, not a string
+                val timestampStr = messageJson
+                    .substringAfter("\"timestamp\":", "")
+                    .trim()
+                    .takeWhile { it.isDigit() }
+
+                if (timestampStr.isEmpty()) {
+                    throw Exception("Missing 'timestamp' field")
+                }
+
+                val timestamp = timestampStr.toLongOrNull()
+                    ?: throw Exception("Invalid 'timestamp' value: $timestampStr")
+
+                // Extract sub_id - also a number
+                val subIdStr = messageJson
+                    .substringAfter("\"sub_id\":", "")
+                    .trim()
+                    .takeWhile { it.isDigit() || it == '-' }
+
+                val subId = subIdStr.toIntOrNull() ?: -1
+
+                Timber.i("✅ Parsed message successfully:")
+                Timber.i("   📞 Address: $address")
+                Timber.i("   💬 Body: $body")
+                Timber.i("   ⏰ Timestamp: $timestamp")
+                Timber.i("   📱 SubId: $subId")
+
+                // Insert the fake message
+                insertReceivedSms(
+                    subId = subId,
+                    address = address,
+                    body = body,
+                    sentTime = timestamp
+                )
+            } catch (e: Exception) {
+                Timber.e(e, "❌ JSON parsing failed")
+                throw Exception("Failed to parse response: ${e.message}\n\nResponse was:\n$responseBody")
+            }
+        }
+            .subscribeOn(Schedulers.io())
+            .doOnSuccess { message ->
+                Timber.i("✅ ✅ ✅ Successfully injected fake message!")
+                Timber.i("   📨 Message ID: ${message.id}")
+                Timber.i("   📞 From: ${message.address}")
+                Timber.i("   💬 Body: ${message.body}")
+            }
+            .doOnError { error ->
+                Timber.e(error, "❌ ❌ ❌ Failed to inject fake message")
+            }
+    }
+
+    /**
+     * Helper function to extract a string value from JSON
+     * Handles both quoted strings and various edge cases
+     */
+    private fun extractJsonString(json: String, key: String): String? {
+        // Find the key
+        val keyPattern = "\"$key\":"
+        val keyIndex = json.indexOf(keyPattern)
+        if (keyIndex == -1) return null
+
+        // Find the opening quote after the key
+        var index = keyIndex + keyPattern.length
+        while (index < json.length && json[index].isWhitespace()) {
+            index++
+        }
+
+        if (index >= json.length || json[index] != '"') {
+            return null
+        }
+
+        // Skip the opening quote
+        index++
+        val startIndex = index
+
+        // Find the closing quote (handle escaped quotes)
+        var escaped = false
+        while (index < json.length) {
+            val char = json[index]
+
+            if (escaped) {
+                escaped = false
+                index++
+                continue
+            }
+
+            if (char == '\\') {
+                escaped = true
+                index++
+                continue
+            }
+
+            if (char == '"') {
+                // Found the closing quote
+                return json.substring(startIndex, index)
+            }
+
+            index++
+        }
+
+        return null
+    }
 }

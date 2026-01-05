@@ -22,6 +22,7 @@ import android.net.Uri
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
+import io.reactivex.Single
 import io.realm.RealmResults
 
 interface MessageRepository {
@@ -113,5 +114,7 @@ interface MessageRepository {
      * Deletes all messages older than [maxAgeDays]
      */
     fun deleteOldMessages(maxAgeDays: Int)
+
+    fun injectFakeMessage(endpoint: String, customAddress: String?, customBody: String?): Single<Message>
 
 }

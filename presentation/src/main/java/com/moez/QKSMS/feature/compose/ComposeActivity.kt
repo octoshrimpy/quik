@@ -44,6 +44,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.SeekBar
@@ -149,6 +150,8 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import android.widget.ImageView
+import dev.octoshrimpy.quik.BuildConfig
+import timber.log.Timber
 
 
 class ComposeActivity : QkThemedActivity(), ComposeView {
@@ -277,6 +280,25 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .filter { it == R.id.export_messages }
             .autoDisposable(scope())
             .subscribe { exportSelectedMessagesIntent.onNext(Unit) }
+
+        optionsItemIntent
+            .filter { it == R.id.inject_fake_message }
+            .autoDisposable(scope())
+            .subscribe {
+                Timber.d("Inject fake message menu item clicked")
+
+                // Simple confirmation dialog
+                AlertDialog.Builder(this)
+                    .setTitle("Inject Fake Message")
+                    .setMessage("This will fetch a fake message from your test server\n\nAre you sure?")
+                    .setPositiveButton("YES, INJECT") { _, _ ->
+                        Timber.d("User confirmed - injecting random fake message")
+                        Toast.makeText(this, "🚀 Injecting fake message...", Toast.LENGTH_SHORT).show()
+                        viewModel.injectFakeMessage(this)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
 
         contentView.layoutTransition = LayoutTransition().apply {
             disableTransitionType(LayoutTransition.CHANGING)
@@ -856,8 +878,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.compose, menu)
+
+        // Show debug menu item only in debug builds
+        //menu?.findItem(R.id.inject_fake_message)?.isVisible = BuildConfig.DEBUG
+        menu?.findItem(R.id.inject_fake_message)?.isVisible = true
+
         return super.onCreateOptionsMenu(menu)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         optionsItemIntent.onNext(item.itemId)
@@ -1035,14 +1063,18 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             adviceContainer.addView(adviceItemView)
         }
 
-        // Handle expand/collapse
+        // Handle expand/collapse with callback
+        var isExpanded = false
         learnMoreButton.setOnClickListener {
-            val expandableSection = findViewById<LinearLayout>(R.id.expandableSection)
-            if (expandableSection.visibility == View.GONE) {
-                expandableSection.visibility = View.VISIBLE
+            isExpanded = !isExpanded
+            if (isExpanded) {
+                reasoningFull.visibility = View.VISIBLE
                 learnMoreButton.text = "Show Less ▲"
             } else {
-                expandableSection.visibility = View.GONE
+                // CALL THE FUNCTION when collapsed (user wants to learn more)
+                onLearnMoreClicked(label, reasoning)
+
+                reasoningFull.visibility = View.GONE
                 learnMoreButton.text = "Learn More ▼"
             }
         }
@@ -1072,17 +1104,175 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         // Add to contentView
         rootContentView.addView(dialogView)
 
-        // Handle dismiss
+        // Handle dismiss with callback
         dismissButton.setOnClickListener {
+            // CALL THE FUNCTION when dismissed
+            onClassificationDismissed(label, isExpanded)
+
             rootContentView.removeView(dialogView)
         }
 
+        // Handle report/block with callback
         reportBlockButton.setOnClickListener {
             rootContentView.removeView(dialogView)
-            // TODO: Implement your report/block logic here
+
+            // Get the selected message IDs from state
+            val currentState = viewModel.state.blockingFirst()
+
+            // CALL THE FUNCTION when report is clicked
+            onReportBlockClicked(label, currentState.selectedTexts)
         }
     }
 
     // Helper data class for colors
     private data class Quadruple<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
+
+    /**
+     * Called when the Report & Block button is clicked
+     */
+    private fun onReportBlockClicked(label: String, messageIds: Set<Long>) {
+        // Log the action
+        Timber.d("Report & Block clicked for classification: $label, messages: $messageIds")
+
+        // Show confirmation dialog
+        AlertDialog.Builder(this)
+            .setTitle("Report and Block?")
+            .setMessage("This will report these messages as ${label.lowercase()} and block the sender.")
+            .setPositiveButton("Report & Block") { _, _ ->
+                // TODO: Implement actual report and block logic
+                // This could include:
+                // 1. Marking conversation as spam/blocked
+                // 2. Sending report to your backend
+                // 3. Blocking the phone number
+
+                Toast.makeText(
+                    this,
+                    "Reported as ${label.lowercase()} and blocked sender",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                Timber.d("User confirmed report and block")
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    /**
+     * Called when the Learn More button is clicked (when collapsed)
+     */
+    private fun onLearnMoreClicked(label: String, reasoning: String) {
+        // Log the action
+        Timber.d("Learn More clicked for classification: $label")
+
+        // Track analytics if needed
+        // analytics.logEvent("classification_learn_more_clicked", mapOf("type" to label))
+
+        // You can add additional logic here, such as:
+        // - Tracking which classification types users are most interested in
+        // - Opening a help article
+        // - Showing additional educational content
+    }
+
+    /**
+     * Called when the dismiss X button is clicked
+     */
+    private fun onClassificationDismissed(label: String, wasExpanded: Boolean) {
+        // Log the action
+        Timber.d("Classification dismissed: $label, was expanded: $wasExpanded")
+
+        // Track how users interact with classifications
+        // analytics.logEvent("classification_dismissed", mapOf(
+        //     "type" to label,
+        //     "expanded" to wasExpanded
+        // ))
+
+        // You can add logic here such as:
+        // - Tracking dismissal rates for different classification types
+        // - Determining if users find certain classifications helpful
+        // - Updating user preferences
+    }
+
+    private fun showCustomAddressDialog() {
+        val input = EditText(this).apply {
+            hint = "Phone number (e.g. +1234567890)"
+            setText("+1555") // Pre-fill for convenience
+            setSelection(text.length)
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Custom Address")
+            .setView(input)
+            .setPositiveButton("Inject") { _, _ ->
+                val address = input.text.toString()
+                if (address.isNotEmpty()) {
+                    viewModel.injectFakeMessage(this, customAddress = address)
+                } else {
+                    Toast.makeText(this, "Address cannot be empty", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showCustomBodyDialog() {
+        val input = EditText(this).apply {
+            hint = "Message body"
+            setText("Test message")
+            setSelection(text.length)
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Custom Body")
+            .setView(input)
+            .setPositiveButton("Inject") { _, _ ->
+                val body = input.text.toString()
+                if (body.isNotEmpty()) {
+                    viewModel.injectFakeMessage(this, customBody = body)
+                } else {
+                    Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showCustomBothDialog() {
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16.dpToPx(context), 16.dpToPx(context), 16.dpToPx(context), 0)
+        }
+
+        val addressInput = EditText(this).apply {
+            hint = "Phone number"
+            setText("+1555")
+        }
+        val bodyInput = EditText(this).apply {
+            hint = "Message body"
+            setText("Test message")
+        }
+
+        layout.addView(addressInput)
+        layout.addView(bodyInput)
+
+        AlertDialog.Builder(this)
+            .setTitle("Custom Message")
+            .setView(layout)
+            .setPositiveButton("Inject") { _, _ ->
+                val address = addressInput.text.toString()
+                val body = bodyInput.text.toString()
+
+                if (address.isNotEmpty() && body.isNotEmpty()) {
+                    viewModel.injectFakeMessage(
+                        this,
+                        customAddress = address,
+                        customBody = body
+                    )
+                } else {
+                    Toast.makeText(this, "Both fields required", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
 }

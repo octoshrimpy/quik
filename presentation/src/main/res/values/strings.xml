@@ -606,4 +606,9 @@
     <string name="menu_export_messages">Export selected</string>
     <string name="messages_selected">%d selected</string>
 
+    <string name="debug_inject_fake_message">Inject Fake Message (Debug)</string>
+    <string name="debug_injecting_message">Injecting fake message…</string>
+    <string name="debug_inject_success">Fake message received from %s</string>
+    <string name="debug_inject_failed">Failed to inject fake message: %s</string>
+
 </resources>

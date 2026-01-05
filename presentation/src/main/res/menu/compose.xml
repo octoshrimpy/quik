@@ -132,4 +132,10 @@
         android:title="@string/menu_export_messages"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/inject_fake_message"
+        android:title="Debug: Inject Fake Message"
+        android:visible="false"
+        app:showAsAction="never" />
+
 </menu>

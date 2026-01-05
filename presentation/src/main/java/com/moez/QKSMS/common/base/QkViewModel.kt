@@ -32,7 +32,7 @@ import io.reactivex.subjects.Subject
 abstract class QkViewModel<in View : QkView<State>, State>(initialState: State) : ViewModel() {
 
     protected val disposables = CompositeDisposable()
-    protected val state: Subject<State> = BehaviorSubject.createDefault(initialState)
+    val state: Subject<State> = BehaviorSubject.createDefault(initialState)
 
     private val stateReducer: Subject<State.() -> State> = PublishSubject.create()
 

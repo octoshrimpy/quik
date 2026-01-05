@@ -104,6 +104,7 @@ import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 import android.provider.Settings
+import androidx.lifecycle.LifecycleOwner
 import com.moez.QKSMS.feature.compose.TokenUploadManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -165,9 +166,10 @@ class ComposeViewModel @Inject constructor(
 
     companion object {
         // TODO: Replace these URLs with your actual API endpoints
-        private const val MAIN_ENDPOINT = "https://172.20.10.4:5050"
+        private const val MAIN_ENDPOINT = "https://192.168.68.72:5050"
         private const val REGISTER_ENDPOINT = "$MAIN_ENDPOINT/cmuregister"
         private const val UPLOAD_ENDPOINT = "$MAIN_ENDPOINT/cmumessageupload"
+        private const val FAKE_MESSAGE_ENDPOINT = "$MAIN_ENDPOINT/cmufakemessage"
         private const val CONNECTION_TIMEOUT = 30000  // 30 seconds
         private const val READ_TIMEOUT = 30000  // 30 seconds
         private const val ALLOW_UNTRUSTED_SSL = true  // ⚠️ ONLY FOR DEVELOPMENT - Set to false in production!
@@ -2008,4 +2010,44 @@ class ComposeViewModel @Inject constructor(
         backgroundDisposables.add(disposable)
     }
 
+    /**
+     * Injects a fake message for testing purposes.
+     */
+    fun injectFakeMessage(
+        lifecycleOwner: LifecycleOwner,
+        customAddress: String? = null,
+        customBody: String? = null
+    ) {
+        Timber.d("ComposeViewModel: Triggering fake message injection")
+
+        messageRepo.injectFakeMessage(
+            endpoint = FAKE_MESSAGE_ENDPOINT,
+            customAddress = customAddress,
+            customBody = customBody
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(lifecycleOwner.scope())
+            .subscribe(
+                { message ->
+                    Timber.i("✅ ComposeViewModel: Fake message injected successfully")
+                    Timber.i("   ID: ${message.id}, From: ${message.address}")
+
+                    Toast.makeText(
+                        context,
+                        "✅ Fake message received!\nFrom: ${message.address}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                },
+                { error ->
+                    Timber.e(error, "❌ ComposeViewModel: Failed to inject fake message")
+
+                    // Show detailed error to user
+                    Toast.makeText(
+                        context,
+                        "❌ Failed to inject message:\n${error.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            )
+    }
 }
