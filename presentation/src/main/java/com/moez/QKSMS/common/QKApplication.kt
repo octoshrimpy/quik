@@ -89,6 +89,7 @@ class QKApplication : Application(), HasActivityInjector, HasBroadcastReceiverIn
                 .compactOnLaunch()
                 .migration(realmMigration)
                 .schemaVersion(QkRealmMigration.SchemaVersion)
+                .deleteRealmIfMigrationNeeded()
                 .build())
 
         qkMigration.performMigration()

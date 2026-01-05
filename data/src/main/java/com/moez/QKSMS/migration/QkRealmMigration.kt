@@ -36,7 +36,7 @@ class QkRealmMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SchemaVersion: Long = 14
+        const val SchemaVersion: Long = 15
     }
 
     @SuppressLint("ApplySharedPref")
