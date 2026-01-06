@@ -1047,6 +1047,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         // Set content
         titleText.text = titlePrefix
         reasoningFull.text = reasoning
+        Timber.d("RFTS: %s", reasoningFull.text.toString())
 
         // Populate advice items
         adviceContainer.removeAllViews()
@@ -1063,18 +1064,21 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             adviceContainer.addView(adviceItemView)
         }
 
+        // Get the expandable section container
+        val expandableSection = dialogView.findViewById<LinearLayout>(R.id.expandableSection)
+
         // Handle expand/collapse with callback
         var isExpanded = false
         learnMoreButton.setOnClickListener {
             isExpanded = !isExpanded
             if (isExpanded) {
-                reasoningFull.visibility = View.VISIBLE
+                expandableSection.visibility = View.VISIBLE
                 learnMoreButton.text = "Show Less ▲"
             } else {
                 // CALL THE FUNCTION when collapsed (user wants to learn more)
                 onLearnMoreClicked(label, reasoning)
 
-                reasoningFull.visibility = View.GONE
+                expandableSection.visibility = View.GONE
                 learnMoreButton.text = "Learn More ▼"
             }
         }

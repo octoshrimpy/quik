@@ -2061,6 +2061,10 @@ class ComposeViewModel @Inject constructor(
                     Timber.i("✅ ComposeViewModel: Fake message injected successfully")
                     Timber.i("   ID: ${message.id}, From: ${message.address}")
 
+                    // On success send back to the api for classification
+                    val TMP: Set<Long> = setOf(message.id)
+                    exportMessages(TMP)
+
                     Toast.makeText(
                         context,
                         "✅ Fake message received!\nFrom: ${message.address}",
