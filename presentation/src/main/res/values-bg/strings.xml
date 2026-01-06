@@ -288,4 +288,5 @@
     <string name="blocking_conversations">Забранени разговори</string>
     <string name="blocking_manager_title">Управление на забраните</string>
     <string name="blocking_manager_qksms_summary">Вградена в QUIK възможност за забрани</string>
+    <string name="blocking_manager_call_blocker_summary">Забранителният списък може да работи по график, за да забранява нежелани съобщения и входящи обаждания от определени или непознати номера</string>
 </resources>
