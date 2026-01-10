@@ -62,7 +62,11 @@ import dev.octoshrimpy.quik.receiver.SendDelayedMessageReceiver.Companion.MESSAG
 import dev.octoshrimpy.quik.util.ImageUtils
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
+import dev.octoshrimpy.quik.util.sha256
 import dev.octoshrimpy.quik.util.tryOrNull
+import io.reactivex.Flowable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
 import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmList
@@ -86,6 +90,9 @@ open class MessageRepositoryImpl @Inject constructor(
     private val cursorToMessage: CursorToMessage,
     private val cursorToPart: CursorToPart,
 ) : MessageRepository {
+
+    override val deduplicationProgress: Subject<MessageRepository.DeduplicationProgress> =
+        BehaviorSubject.createDefault(MessageRepository.DeduplicationProgress.Idle)
 
     companion object {
         const val TELEPHONY_UPDATE_CHUNK_SIZE = 200
@@ -1025,5 +1032,61 @@ open class MessageRepositoryImpl @Inject constructor(
                 uri -> context.contentResolver.delete(uri, null, null)
             }
         }
-}
 
+    override fun deduplicateMessages(): Flowable<MessageRepository.DeduplicationResult> =
+        Flowable.fromCallable {
+            val duplicateIds = findDuplicateMessages()
+            if (duplicateIds.isEmpty()) {
+                MessageRepository.DeduplicationResult.NoDuplicates
+            } else {
+                deduplicationProgress.onNext(MessageRepository.DeduplicationProgress.Running(0, 0, true))
+                deleteMessages(duplicateIds)
+                MessageRepository.DeduplicationResult.Success
+            }
+        }
+        .onErrorReturn { MessageRepository.DeduplicationResult.Failure(it) }
+        .doFinally {
+            deduplicationProgress.onNext(MessageRepository.DeduplicationProgress.Idle)
+        }
+
+    private fun findDuplicateMessages(): List<Long> {
+        val seenSignatures = HashSet<String>()
+        val duplicateIds = ArrayList<Long>()
+
+        Realm.getDefaultInstance().use { realm ->
+            val allMessages = realm.where(Message::class.java)
+                .sort("id", Sort.ASCENDING)
+                .findAll()
+
+            val max = allMessages.size
+            var progress = 0
+
+            allMessages.forEach { message ->
+                ++progress
+                tryOrNull {
+                    if (progress % 100 == 0 || progress == max) {
+                        deduplicationProgress.onNext(
+                            MessageRepository.DeduplicationProgress.Running(max, progress, false)
+                        )
+                    }
+                    val signature = messageHash(message)
+                    if (!seenSignatures.add(signature)) {
+                        duplicateIds.add(message.id)
+                    }
+                }
+            }
+        }
+        return duplicateIds
+    }
+
+    private fun messageHash(message: Message): String {
+        val signatureString= buildString {
+            append(message.address).append('|')
+            append(message.dateSent).append('|')
+            append(message.boxId).append('|')
+            append(message.body).append('|')
+            append(message.attachmentTypeString)
+        }
+        return sha256(signatureString)
+    }
+}

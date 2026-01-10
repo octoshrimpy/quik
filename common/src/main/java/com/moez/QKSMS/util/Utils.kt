@@ -19,6 +19,13 @@
 package dev.octoshrimpy.quik.util
 
 import timber.log.Timber
+import java.security.MessageDigest
+
+private val sha256Digest = object : ThreadLocal<MessageDigest>() {
+    override fun initialValue(): MessageDigest {
+        return MessageDigest.getInstance("SHA-256")
+    }
+}
 
 fun <T> tryOrNull(logOnError: Boolean = true, body: () -> T?): T? {
     return try {
@@ -35,4 +42,12 @@ fun <T> tryOrNull(logOnError: Boolean = true, body: () -> T?): T? {
 fun nonDebugPackageName(packageName: String): String {
     return if (packageName.endsWith(".debug")) packageName.removeSuffix(".debug")
     else packageName
+}
+
+fun sha256(input: String): String {
+    val digest = sha256Digest.get()
+    digest!!.reset()
+
+    val hashBytes = digest.digest(input.toByteArray(Charsets.UTF_8))
+    return hashBytes.joinToString("") { String.format("%02x", it) }
 }

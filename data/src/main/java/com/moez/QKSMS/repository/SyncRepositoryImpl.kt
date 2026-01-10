@@ -45,8 +45,10 @@ import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.model.PhoneNumber
 import dev.octoshrimpy.quik.model.Recipient
 import dev.octoshrimpy.quik.model.SyncLog
+import dev.octoshrimpy.quik.interactor.DeduplicateMessages
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.tryOrNull
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import io.realm.Realm
@@ -54,6 +56,7 @@ import io.realm.RealmList
 import io.realm.Sort
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
@@ -69,6 +72,7 @@ class SyncRepositoryImpl @Inject constructor(
     private val cursorToContactGroupMember: CursorToContactGroupMember,
     private val keys: KeyManager,
     private val phoneNumberUtils: PhoneNumberUtils,
+    private val messageRepo: Provider<MessageRepository>,
     private val rxPrefs: RxSharedPreferences,
     private val reactions: EmojiReactionRepository,
 ) : SyncRepository {
@@ -233,6 +237,25 @@ class SyncRepositoryImpl @Inject constructor(
 
                 // Now that we have all the messages, we can scan for emoji reactions
                 reactions.deleteAndReparseAllEmojiReactions(realm)
+
+                if (rxPrefs.getBoolean("autoDeduplicateMessages").get()) {
+                    DeduplicateMessages(messageRepo.get())
+                        .buildObservable(Unit)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { result ->
+                            when (result) {
+                                is MessageRepository.DeduplicationResult.NoDuplicates -> {
+                                    Timber.i("No duplicate messages found.")
+                                }
+                                is MessageRepository.DeduplicationResult.Success -> {
+                                    Timber.i("Deleted duplicate messages")
+                                }
+                                is MessageRepository.DeduplicationResult.Failure -> {
+                                    Timber.e(result.error, "Deduplication failed")
+                                }
+                            }
+                        }
+                }
 
                 realm.insert(SyncLog())
             }, {
