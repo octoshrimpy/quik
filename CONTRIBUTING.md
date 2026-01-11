@@ -37,7 +37,8 @@ To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshr
 
 ## Fix Bugs 
 1. Find a bug that needs fixing. 
-2. Check the issues tab. If the bug isn't reported, please do so before fixing it.
+2. Check for duplicates / resolved issues within the issues tab.
+    - Create new issue only if not already existing.
 3. Fork the repository.
 4. Create a new branch, named according to issue you are fixing.
 5. Make your change.
@@ -49,7 +50,8 @@ To update the wiki, simply navigate to the [wiki tab](https://github.com/octoshr
 
 
 ## Add Features 
-1. Submit a feature request to the issues tab, or search through issues for an existing feature request.
+1. Check for duplicates / resolved within issues tab.
+    - Submit the feature request only if not already existing.
 2. Fork the repository.
 3. Create a new branch, named according to the request you are implementing.
 4. Make your change. 
