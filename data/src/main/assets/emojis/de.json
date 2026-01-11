@@ -1,0 +1,16 @@
+{
+    "emoji_reaction_ios_generic_removed": "^(?s)(.+?) aus „(.+?)“ entfernt$",
+    "emoji_reaction_ios_generic_added": "^(?s)Hat mit (.+?) auf „(.+?)“ reagiert$",
+    "emoji_reaction_ios_heart_added": "^(?s)„(.+?)“ ein Herz hinzugefügt$",
+    "emoji_reaction_ios_heart_removed": "^(?s)Herz von „(.+?)“ entfernt$",
+    "emoji_reaction_ios_like_added": "^(?s)Gefällt: „(.+?)“$",
+    "emoji_reaction_ios_like_removed": "^(?s)„Gefällt mir“ von „(.+?)“ entfernt$",
+    "emoji_reaction_ios_dislike_added": "^(?s)Gefällt nicht: „(.+?)“$",
+    "emoji_reaction_ios_dislike_removed": "^(?s)„Gefällt mir nicht“ von „(.+?)“ entfernt$",
+    "emoji_reaction_ios_laugh_added": "^(?s)„(.+?)“ ein Lachen hinzugefügt$",
+    "emoji_reaction_ios_laugh_removed": "^(?s)Lachen von „(.+?)“ entfernt$",
+    "emoji_reaction_ios_exclamation_added": "^(?s)„(.+?)“ ein Ausrufezeichen hinzugefügt$",
+    "emoji_reaction_ios_exclamation_removed": "^(?s)Ausrufezeichen von „(.+?)“ entfernt$",
+    "emoji_reaction_ios_question_mark_added": "^(?s)„(.+?)“ ein Fragezeichen hinzugefügt$",
+    "emoji_reaction_ios_question_mark_removed": "^(?s)Fragezeichen von „(.+?)“ entfernt$"
+}
