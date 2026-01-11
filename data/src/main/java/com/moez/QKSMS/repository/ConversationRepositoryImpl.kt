@@ -338,7 +338,10 @@ class ConversationRepositoryImpl @Inject constructor(
     override fun createConversation(addresses: Collection<String>, sendAsGroup: Boolean) =
         TelephonyCompat.getOrCreateThreadId(context, addresses.toSet())
             .takeIf { it != 0L }
-            ?.let { providerThreadId -> createConversationFromCp(providerThreadId, sendAsGroup) }
+            ?.let { providerThreadId ->
+                createConversationFromCp(providerThreadId, sendAsGroup) ?:
+                    createEmptyConversation(providerThreadId, addresses, sendAsGroup)
+            }
 
     override fun getOrCreateConversation(threadId: Long, sendAsGroup: Boolean) =
         getConversation(threadId) ?: createConversation(threadId, sendAsGroup)
@@ -510,6 +513,7 @@ class ConversationRepositoryImpl @Inject constructor(
                                             phoneNumberUtils.compare(it.address, address)
                                         }
                                     }
+                                    ?.let { realm.copyFromRealm(it) }
                                 }
                             }
 
@@ -531,5 +535,39 @@ class ConversationRepositoryImpl @Inject constructor(
                     }
                 }
         }
+
+    /**
+     * In some cases [createConversationFromCp] will return null if there are no messages present in the convo.
+     * In order to allow the conversation to be accessed
+     * we need to create an empty conversation in Realm to match the conversation created in the content provider.
+     *
+     * This is a bit of a hack, but is necessary on devices running HyperOS or variants.
+     */
+    private fun createEmptyConversation(threadId: Long, addresses: Collection<String>, sendAsGroup: Boolean): Conversation {
+        Realm.getDefaultInstance().use { realm ->
+            val realmContacts = realm.where(Contact::class.java).findAll()
+            val matchedRecipients = addresses.map { address ->
+                Recipient().apply {
+                    this.address = address
+                    contact = realmContacts.firstOrNull { realmContact ->
+                            realmContact.numbers.any {
+                                phoneNumberUtils.compare(it.address, address)
+                            }
+                        }
+                        ?.let { realm.copyFromRealm(it) }
+                }
+            }
+            val conversation = Conversation().apply {
+                id = threadId
+                recipients.clear()
+                recipients.addAll(matchedRecipients)
+                this.sendAsGroup =
+                    if (recipients.size <= 1) false
+                    else sendAsGroup
+            }
+            realm.executeTransaction { it.copyToRealmOrUpdate(conversation) }
+            return conversation
+        }
+    }
 
 }
