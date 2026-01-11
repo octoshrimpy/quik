@@ -19,7 +19,6 @@
 package dev.octoshrimpy.quik.manager
 
 import android.content.Context
-import android.util.Log
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
@@ -28,6 +27,7 @@ import dev.octoshrimpy.quik.common.util.extensions.versionCode
 import dev.octoshrimpy.quik.util.Preferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 class ChangelogManagerImpl @Inject constructor(
@@ -60,7 +60,7 @@ class ChangelogManagerImpl @Inject constructor(
                 )
 
             } catch (e: Exception) {
-                Log.e("ChangelogManager", "Error parsing changelog JSON", e)
+                Timber.e(e, "Error parsing changelog JSON")
                 ChangelogManager.CumulativeChangelog(emptyList(), emptyList(), emptyList(), emptyList())
             }
         }

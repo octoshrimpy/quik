@@ -36,8 +36,6 @@ import java.net.URISyntaxException;
  * APN settings used for MMS transactions
  */
 public class ApnSettings {
-    private static final String TAG = "ApnSettings";
-
     // MMSC URL
     private final String mServiceCenter;
     // MMSC proxy address

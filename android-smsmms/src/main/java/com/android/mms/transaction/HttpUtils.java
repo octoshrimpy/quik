@@ -46,8 +46,6 @@ import com.android.mms.logs.LogTag;
 import com.android.mms.MmsConfig;
 
 public class HttpUtils {
-    private static final String TAG = LogTag.TRANSACTION;
-
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = DEBUG ? Config.LOGD : Config.LOGV;
 

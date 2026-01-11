@@ -25,8 +25,6 @@ import com.google.android.mms.InvalidHeaderValueException;
 import com.klinker.android.send_message.Utils;
 
 public class SendReq extends MultimediaMessagePdu {
-    private static final String TAG = "SendReq";
-
     public SendReq() {
         super();
 
@@ -40,7 +38,7 @@ public class SendReq extends MultimediaMessagePdu {
             setTransactionId(generateTransactionId());
         } catch (InvalidHeaderValueException e) {
             // Impossible to reach here since all headers we set above are valid.
-            Timber.e("Unexpected InvalidHeaderValueException.", e);
+            Timber.e(e, "Unexpected InvalidHeaderValueException.");
             throw new RuntimeException(e);
         }
     }

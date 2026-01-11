@@ -44,7 +44,6 @@ public class Utils {
      * characters to compare against when checking for 160 character sending compatibility
      */
     public static final String GSM_CHARACTERS_REGEX = "^[A-Za-z0-9 \\r\\n@Ł$ĽčéůěňÇŘřĹĺ\u0394_\u03A6\u0393\u039B\u03A9\u03A0\u03A8\u03A3\u0398\u039EĆćßÉ!\"#$%&'()*+,\\-./:;<=>?ĄÄÖŃÜ§żäöńüŕ^{}\\\\\\[~\\]|\u20AC]*$";
-    private static final String TAG = "Utils";
     public static final int DEFAULT_SUBSCRIPTION_ID = 1;
 
     /**
@@ -155,7 +154,7 @@ public class Utils {
                     throw new IOException("Cannot establish route to proxy " + inetAddr);
                 }
             } catch (Exception e) {
-                Timber.e("Cannot establishh route to proxy " + inetAddr, e);
+                Timber.e(e, "Cannot establishh route to proxy %s", inetAddr);
             }
         } else {
             Uri uri = Uri.parse(url);
@@ -170,7 +169,7 @@ public class Utils {
                     throw new IOException("Cannot establish route to proxy " + inetAddr);
                 }
             } catch (Exception e) {
-                Timber.e("Cannot establishh route to proxy " + inetAddr + " for " + url, e);
+                Timber.e(e, "Cannot establish route to proxy " + inetAddr + " for " + url);
             }
         }
     }
@@ -190,7 +189,7 @@ public class Utils {
             m.setAccessible(true);
             return (Boolean) m.invoke(cm);
         } catch (Exception e) {
-            Timber.e("exception thrown", e);
+            Timber.e(e, "exception thrown");
             return null;
         }
     }
@@ -206,7 +205,7 @@ public class Utils {
             Method m = c.getMethod("getDataEnabled");
             return (boolean) m.invoke(telephonyManager);
         } catch (Exception e) {
-            Timber.e("exception thrown", e);
+            Timber.e(e, "exception thrown");
             return true;
         }
     }
@@ -223,7 +222,7 @@ public class Utils {
             Method m = c.getMethod("getDataEnabled", int.class);
             return (boolean) m.invoke(telephonyManager, subId);
         } catch (Exception e) {
-            Timber.e("exception thrown", e);
+            Timber.e(e, "exception thrown");
             return isDataEnabled(telephonyManager);
         }
     }
@@ -249,7 +248,7 @@ public class Utils {
 
                 setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
             } catch (Exception e) {
-                Timber.e("exception thrown", e);
+                Timber.e(e, "exception thrown");
             }
         } else {
             // TODO find a better way to do this on lollipop!
@@ -267,7 +266,7 @@ public class Utils {
                 m.setAccessible(true);
                 m.invoke(telephonyService, enabled);
             } catch (Exception e) {
-                Timber.e("error enabling data on lollipop", e);
+                Timber.e(e, "error enabling data on lollipop");
             }
         }
 

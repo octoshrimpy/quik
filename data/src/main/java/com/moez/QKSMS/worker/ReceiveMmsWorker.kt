@@ -285,7 +285,7 @@ class ReceiveMmsWorker(appContext: Context, workerParams: WorkerParameters)
             }
             Timber.v("notify send file $fileName")
         } catch (e: Exception) {
-            Timber.e("error writing notify send file", e)
+            Timber.e(e, "error writing notify send file")
         }
 
         val useWapMmsc = com.android.mms.MmsConfig.getNotifyWapMMSC()
@@ -329,7 +329,7 @@ class ReceiveMmsWorker(appContext: Context, workerParams: WorkerParameters)
                 sendResponsePdu(context, subscriptionId, notificationInd.contentLocation, pdu)
             }
         } catch (e: Exception) {
-            Timber.e("error creating m-acknowledge.ind", e)
+            Timber.e(e, "error creating m-acknowledge.ind")
         }
     }
 
@@ -352,7 +352,7 @@ class ReceiveMmsWorker(appContext: Context, workerParams: WorkerParameters)
                 sendResponsePdu(context, subscriptionId, notificationInd.contentLocation, pdu)
             }
         } catch (e: Exception) {
-            Timber.e("error creating m-notifyresp.ind", e)
+            Timber.e(e, "error creating m-notifyresp.ind")
         }
     }
 

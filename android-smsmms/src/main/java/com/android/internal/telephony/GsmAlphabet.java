@@ -34,8 +34,6 @@ import java.util.List;
  * {@hide}
  */
 public class GsmAlphabet {
-    private static final String TAG = "GSM";
-
     private GsmAlphabet() {
     }
 

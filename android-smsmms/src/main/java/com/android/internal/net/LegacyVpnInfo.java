@@ -29,7 +29,6 @@ import timber.log.Timber;
  * @hide
  */
 public class LegacyVpnInfo implements Parcelable {
-    private static final String TAG = "LegacyVpnInfo";
 
     public static final int STATE_DISCONNECTED = 0;
     public static final int STATE_INITIALIZING = 1;

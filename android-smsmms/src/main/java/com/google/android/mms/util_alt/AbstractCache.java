@@ -21,8 +21,6 @@ import timber.log.Timber; import android.util.Log; import static com.klinker.and
 import java.util.HashMap;
 
 public abstract class AbstractCache<K, V> {
-    private static final String TAG = "AbstractCache";
-    private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = false;
 
     private static final int MAX_CACHED_ITEMS  = 500;

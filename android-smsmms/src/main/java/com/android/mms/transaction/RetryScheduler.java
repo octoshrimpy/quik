@@ -41,7 +41,7 @@ import com.klinker.android.send_message.BroadcastUtils;
 import com.klinker.android.send_message.R;
 
 public class RetryScheduler implements Observer {
-    private static final String TAG = LogTag.TAG;
+
     private static final boolean DEBUG = false;
     private static final boolean LOCAL_LOGV = true;
 

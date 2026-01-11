@@ -94,8 +94,6 @@ import java.util.ArrayList;
  * </ul>
  */
 public class TransactionService extends Service implements Observer {
-    private static final String TAG = LogTag.TAG;
-
     /**
      * Used to identify notification intents broadcasted by the
      * TransactionService when a Transaction is completed.
@@ -1022,7 +1020,7 @@ public class TransactionService extends Service implements Observer {
                         stopSelf(serviceId);
                     }
                 } catch (IOException e) {
-                    Timber.w(e.getMessage(), e);
+                    Timber.w(e);
                 }
             } else {
                 if (numProcessTransaction == 0) {
