@@ -214,6 +214,13 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
                 progressAnimator.apply { setIntValues(syncingProgress.progress, state.syncProgress.progress) }.start()
                 syncingProgress.isIndeterminate = state.syncProgress.indeterminate
             }
+
+            is SyncRepository.SyncProgress.ParsingEmojis -> {
+                syncingProgress.isVisible = true
+                syncingProgress.max = state.syncProgress.max
+                progressAnimator.apply { setIntValues(syncingProgress.progress, state.syncProgress.progress) }.start()
+                syncingProgress.isIndeterminate = state.syncProgress.indeterminate
+            }
         }
     }
 
