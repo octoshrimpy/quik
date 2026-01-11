@@ -20,7 +20,6 @@ package dev.octoshrimpy.quik.repository
 
 import android.content.Context
 import com.squareup.moshi.Moshi
-import dev.octoshrimpy.quik.extensions.insertOrUpdate
 import dev.octoshrimpy.quik.manager.KeyManager
 import dev.octoshrimpy.quik.model.EmojiReaction
 import dev.octoshrimpy.quik.model.Message
@@ -39,12 +38,20 @@ class EmojiReactionRepositoryImpl @Inject constructor(
     private val reactionPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?> = linkedMapOf(
         Regex( // Google Messages
             "(?s)^\u200a[^\u200b\u200a]*\u200b([^\u200b]*)\u200b[^\u200b\u200a]*\u200a(.*)\u200a[^\u200b\u200a]*\u200a\\Z"
-        ) to { match -> ParsedEmojiReaction(match.groupValues[1], match.groupValues[2]) }
+        ) to { match ->
+            ParsedEmojiReaction(
+            match.groupValues[1], match.groupValues[2]
+            )
+        }
     )
     private val removalPatterns: LinkedHashMap<Regex, (MatchResult) -> ParsedEmojiReaction?> = linkedMapOf(
         Regex( // Google Messages
             "(?s)^\u200a[^\u200c\u200a]*\u200c([^\u200c]*)\u200c[^\u200c\u200a]*\u200a(.*)\u200a[^\u200c\u200a]*\u200a\\Z"
-        ) to { match -> ParsedEmojiReaction(match.groupValues[1], match.groupValues[2], isRemoval = true) }
+        ) to { match ->
+            ParsedEmojiReaction(
+                match.groupValues[1], match.groupValues[2], isRemoval = true
+            )
+        }
     )
 
     init {
@@ -107,7 +114,10 @@ class EmojiReactionRepositoryImpl @Inject constructor(
             .mapNotNull { filename ->
                 val localeTag = filename.removeSuffix(".json")
                 try {
-                    val json = context.assets.open("$dir/$filename").bufferedReader().use { it.readText() }
+                    val json = context.assets.open("$dir/$filename")
+                        .bufferedReader().use {
+                            it.readText()
+                        }
                     val data = parseEmojiPatternsJson(json)
                     localeTag to data
                 } catch (e: Exception) {
@@ -127,11 +137,8 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         if (removal != null) return removal
 
         for ((pattern, parser) in reactionPatterns) {
-            val match = pattern.find(body)
-            if (match == null) continue;
-
-            val result = parser(match)
-            if (result == null) continue
+            val match = pattern.find(body) ?: continue
+            val result = parser(match) ?: continue
 
             Timber.d("Reaction found with ${result.emoji}")
             return result
@@ -142,17 +149,28 @@ class EmojiReactionRepositoryImpl @Inject constructor(
 
     private fun parseRemoval(body: String): ParsedEmojiReaction? {
         for ((pattern, parser) in removalPatterns) {
-            val match = pattern.find(body)
-            if (match == null) continue;
-
-            val result = parser(match)
-            if (result == null) continue
+            val match = pattern.find(body) ?: continue
+            val result = parser(match) ?: continue
 
             Timber.d("Removal found with ${result.emoji}")
             return result
         }
 
         return null
+    }
+
+    private fun parseTruncatedMessages(originalMessageText: String): Regex {
+        val reactionText = originalMessageText.trim()
+
+        val delimiter = "\u2026"
+        val index = reactionText.lastIndexOf(delimiter)
+        val regexPattern = if (index == -1) {
+            Regex.escape(reactionText)
+        } else {
+            val before = reactionText.take(index)
+            Regex.escape(before) + ".*"
+        }
+        return Regex("^$regexPattern$", RegexOption.DOT_MATCHES_ALL)
     }
 
     /**
@@ -172,8 +190,9 @@ class EmojiReactionRepositoryImpl @Inject constructor(
         val endTime = System.currentTimeMillis()
         Timber.d("Found ${messages.size} messages as potential emoji targets in ${endTime - startTime}ms")
 
+        val originalMessageRegex = parseTruncatedMessages(originalMessageText)
         val match = messages.find { message ->
-            message.getText(false).trim() == originalMessageText.trim()
+            originalMessageRegex.matches(message.getText(false).trim())
         }
         if (match != null) {
             Timber.d("Found match for reaction target: message ID ${match.id}")
