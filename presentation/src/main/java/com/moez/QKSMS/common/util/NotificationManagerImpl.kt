@@ -98,11 +98,12 @@ class NotificationManagerImpl @Inject constructor(
             .setContentText(context.getString(R.string.notification_foreground_worker_text))
             .setShowWhen(false)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.ic_notification)
+            .setSmallIcon(R.drawable.ic_notification_worker)
             .setColor(colors.theme().theme)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setOngoing(true)
+            .setSilent(true)
             .build()
 
     /**
@@ -163,6 +164,7 @@ class NotificationManagerImpl @Inject constructor(
                 .setSmallIcon(R.drawable.ic_notification)
                 .setNumber(messages.size)
                 .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
                 .setContentIntent(contentPI)
                 .setDeleteIntent(seenPI)
                 .setLights(Color.WHITE, 500, 2000)
