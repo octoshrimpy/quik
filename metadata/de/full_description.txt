@@ -1,0 +1,12 @@
+Open-Source-Ersatz für die Standard-SMS-App auf Android. Eine Neuauflage von QKSMS.
+## Funktionen
+- Geplante Nachrichten
+- Nachrichten-Backup
+- Sprach-zu-Text- und Text-zu-Sprache-Funktion in die App integriert
+- Nachrichten blockieren und archivieren
+- Sprachnachrichten
+- Anhänge aller Dateitypen
+- Nachrichten sortieren
+- Verzögertes Senden
+
+Du kannst mit der Community unter <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a> chatten.
