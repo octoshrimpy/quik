@@ -763,21 +763,15 @@ class ComposeViewModel @Inject constructor(
         view.reactionClickIntent
             .mapNotNull { messageId -> messageRepo.getMessage(messageId) }
             .withLatestFrom(conversation) { message, conv ->
-                val reactions = message.emojiReactions
-                    .groupBy { it.emoji }
-                    .map { (emoji, emojiReactions) ->
-                        val contactNames = emojiReactions.map { reaction ->
-                            conv.recipients
-                                .firstOrNull { recipient ->
-                                    phoneNumberUtils.compare(recipient.address, reaction.senderAddress)
-                                }
-                                ?.getDisplayName()
-                                ?: reaction.senderAddress
+                message.emojiReactions.map { reaction ->
+                    val contactName = conv.recipients
+                        .firstOrNull { recipient ->
+                            phoneNumberUtils.compare(recipient.address, reaction.senderAddress)
                         }
-                        emoji to contactNames
-                    }
-                    .sortedByDescending { it.second.size }
-                reactions
+                        ?.getDisplayName()
+                        ?: reaction.senderAddress
+                    "${reaction.emoji} $contactName"
+                }
             }
             .autoDisposable(view.scope())
             .subscribe { reactions -> view.showReactionsDialog(reactions) }

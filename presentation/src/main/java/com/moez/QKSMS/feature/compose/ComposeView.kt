@@ -112,7 +112,7 @@ interface ComposeView : QkView<ComposeState> {
     fun showQksmsPlusSnackbar(@StringRes message: Int)
     fun showDeleteDialog( messages: List<Long>)
     fun showClearCurrentMessageDialog()
-    fun showReactionsDialog(reactions: List<Pair<String, List<String>>>)
+    fun showReactionsDialog(reactions: List<String>)
     fun startSpeechRecognition()
     fun focusMessage()
 }

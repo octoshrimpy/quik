@@ -758,14 +758,10 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .show()
     }
 
-    override fun showReactionsDialog(reactions: List<Pair<String, List<String>>>) {
-        val message = reactions.flatMap { (emoji, contacts) ->
-            contacts.map { "$emoji $it" }
-        }.joinToString("\n")
-
+    override fun showReactionsDialog(reactions: List<String>) {
         AlertDialog.Builder(this)
             .setTitle(R.string.compose_reactions_title)
-            .setMessage(message)
+            .setMessage(reactions.joinToString("\n"))
             .setPositiveButton(R.string.button_ok, null)
             .show()
     }
