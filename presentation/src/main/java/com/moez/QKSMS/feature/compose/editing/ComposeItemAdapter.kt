@@ -24,7 +24,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
 import dev.octoshrimpy.quik.common.util.extensions.setTint
@@ -44,7 +44,7 @@ import javax.inject.Inject
 class ComposeItemAdapter @Inject constructor(
     private val colors: Colors,
     private val conversationRepo: ConversationRepository
-) : QkAdapter<ComposeItem, QkViewHolder>() {
+) : QkAdapter<ComposeItem, QkBindingViewHolder<ContactListItemBinding>>() {
 
     val clicks: Subject<ComposeItem> = PublishSubject.create()
     val longClicks: Subject<ComposeItem> = PublishSubject.create()
@@ -58,7 +58,7 @@ class ComposeItemAdapter @Inject constructor(
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<ContactListItemBinding> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ContactListItemBinding.inflate(layoutInflater, parent, false)
 
@@ -68,7 +68,7 @@ class ComposeItemAdapter @Inject constructor(
         binding.numbers.adapter = PhoneNumberAdapter()
         binding.numbers.forwardTouches(binding.root)
 
-        return QkViewHolder(binding.root).apply {
+        return QkBindingViewHolder(binding).apply {
             binding.root.setOnClickListener {
                 val item = getItem(adapterPosition)
                 clicks.onNext(item)
@@ -81,8 +81,8 @@ class ComposeItemAdapter @Inject constructor(
         }
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
-        val binding = ContactListItemBinding.bind(holder.itemView)
+    override fun onBindViewHolder(holder: QkBindingViewHolder<ContactListItemBinding>, position: Int) {
+        val binding = holder.binding
         val prevItem = if (position > 0) getItem(position - 1) else null
         when (val item = getItem(position)) {
             is ComposeItem.New -> bindNew(binding, item.value)

@@ -24,8 +24,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import dev.octoshrimpy.quik.R
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.common.base.QkRealmAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.resolveThemeColor
 import dev.octoshrimpy.quik.databinding.BlockedListItemBinding
@@ -37,11 +37,11 @@ import javax.inject.Inject
 class BlockedMessagesAdapter @Inject constructor(
     private val context: Context,
     private val dateFormatter: DateFormatter
-) : QkRealmAdapter<Conversation, QkViewHolder>() {
+) : QkRealmAdapter<Conversation, QkBindingViewHolder<BlockedListItemBinding>>() {
 
     val clicks: PublishSubject<Long> = PublishSubject.create()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<BlockedListItemBinding> {
         val binding = BlockedListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         if (viewType == 0) {
@@ -50,7 +50,7 @@ class BlockedMessagesAdapter @Inject constructor(
             binding.date.setTextColor(binding.root.context.resolveThemeColor(android.R.attr.textColorPrimary))
         }
 
-        return QkViewHolder(binding.root).apply {
+        return QkBindingViewHolder(binding).apply {
             binding.root.setOnClickListener {
                 val conversation = getItem(adapterPosition) ?: return@setOnClickListener
                 when (toggleSelection(conversation.id, false)) {
@@ -67,9 +67,9 @@ class BlockedMessagesAdapter @Inject constructor(
         }
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<BlockedListItemBinding>, position: Int) {
         val conversation = getItem(position) ?: return
-        val binding = BlockedListItemBinding.bind(holder.itemView)
+        val binding = holder.binding
 
         holder.itemView.isActivated = isSelected(conversation.id)
 

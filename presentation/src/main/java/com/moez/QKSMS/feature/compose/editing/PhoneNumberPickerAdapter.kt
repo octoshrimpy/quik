@@ -23,7 +23,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
 import dev.octoshrimpy.quik.databinding.PhoneNumberListItemBinding
 import dev.octoshrimpy.quik.extensions.Optional
@@ -34,7 +34,7 @@ import javax.inject.Inject
 
 class PhoneNumberPickerAdapter @Inject constructor(
     private val context: Context
-) : QkAdapter<PhoneNumber, QkViewHolder>() {
+) : QkAdapter<PhoneNumber, QkBindingViewHolder<PhoneNumberListItemBinding>>() {
 
     val selectedItemChanges: Subject<Optional<Long>> = BehaviorSubject.create()
 
@@ -46,10 +46,10 @@ class PhoneNumberPickerAdapter @Inject constructor(
             selectedItemChanges.onNext(Optional(value))
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<PhoneNumberListItemBinding> {
         val inflater = LayoutInflater.from(parent.context)
         val binding = PhoneNumberListItemBinding.inflate(inflater, parent, false)
-        return QkViewHolder(binding.root).apply {
+        return QkBindingViewHolder(binding).apply {
             binding.number.radioButton.forwardTouches(itemView)
 
             binding.root.setOnClickListener {
@@ -59,8 +59,8 @@ class PhoneNumberPickerAdapter @Inject constructor(
         }
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
-        val binding = PhoneNumberListItemBinding.bind(holder.itemView)
+    override fun onBindViewHolder(holder: QkBindingViewHolder<PhoneNumberListItemBinding>, position: Int) {
+        val binding = holder.binding
         val phoneNumber = getItem(position)
 
         binding.number.radioButton.isChecked = phoneNumber.id == selectedItem

@@ -26,7 +26,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
 import dev.octoshrimpy.quik.common.base.QkAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
@@ -41,7 +41,7 @@ import javax.inject.Inject
 class ThemeAdapter @Inject constructor(
     private val context: Context,
     private val colors: Colors
-) : QkAdapter<List<Int>, QkViewHolder>() {
+) : QkAdapter<List<Int>, QkBindingViewHolder<ThemePaletteListItemBinding>>() {
 
     val colorSelected: Subject<Int> = PublishSubject.create()
 
@@ -59,17 +59,17 @@ class ThemeAdapter @Inject constructor(
 
     private var iconTint = 0
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<ThemePaletteListItemBinding> {
         val binding = ThemePaletteListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.palette.flexWrap = FlexWrap.WRAP
         binding.palette.flexDirection = FlexDirection.ROW
 
-        return QkViewHolder(binding.root)
+        return QkBindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<ThemePaletteListItemBinding>, position: Int) {
         val palette = getItem(position)
-        val binding = ThemePaletteListItemBinding.bind(holder.itemView)
+        val binding = holder.binding
 
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels
         val minPadding = (16 * 6).dpToPx(context)
