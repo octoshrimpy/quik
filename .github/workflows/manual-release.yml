@@ -18,6 +18,10 @@ jobs:
     env:
       GRADLE_FILE: presentation/build.gradle
 
+    outputs:
+      new_version_name: ${{ steps.bump.outputs.new_version_name }}
+      new_version_code: ${{ steps.bump.outputs.new_version_code }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -90,55 +94,37 @@ jobs:
               env_file.write(f"NEW_VERSION_CODE={new_code}\n")
           PY
 
-      - name: Generate release notes
-        id: notes
-        uses: actions/github-script@v7
+  generate_release_notes:
+    needs: bump-version
+    uses: ./.github/workflows/generate-release-notes.yml
+    with:
+      version_name: ${{ needs.bump-version.outputs.new_version_name }}
+
+  open_release_pr:
+    needs: [bump-version, generate_release_notes]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const newTag = `v${process.env.NEW_VERSION_NAME}`;
-            const {owner, repo} = context.repo;
-
-            const {data: tags} = await github.rest.repos.listTags({
-              owner,
-              repo,
-              per_page: 100,
-            });
-
-            const previousTagEntry = tags.find(tag => /^v\d/.test(tag.name));
-            const previousTag = previousTagEntry ? previousTagEntry.name : undefined;
-
-            const requestPayload = {
-              owner,
-              repo,
-              tag_name: newTag,
-              target_commitish: 'master',
-            };
-
-            if (previousTag) {
-              requestPayload.previous_tag_name = previousTag;
-            }
-
-            const response = await github.request('POST /repos/{owner}/{repo}/releases/generate-notes', requestPayload);
-
-            const notes = response.data.body || '';
-            core.exportVariable('RELEASE_NOTES', notes);
-            core.setOutput('release_notes', notes);
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Open release PR
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: release/v${{ env.NEW_VERSION_NAME }}
+          branch: release/v${{ needs.bump-version.outputs.new_version_name }}
           delete-branch: false
-          commit-message: "chore: release v${{ env.NEW_VERSION_NAME }} (${{ env.NEW_VERSION_CODE }})"
-          title: Release v${{ env.NEW_VERSION_NAME }} (${{ env.NEW_VERSION_CODE }})
+          commit-message: "chore: release v${{ needs.bump-version.outputs.new_version_name }} (${{ needs.bump-version.outputs.new_version_code }})"
+          title: Release v${{ needs.bump-version.outputs.new_version_name }} (${{ needs.bump-version.outputs.new_version_code }})
           body: |
             ## Summary
-            - bump `versionName` to `${{ env.NEW_VERSION_NAME }}`
-            - bump `versionCode` to `${{ env.NEW_VERSION_CODE }}`
+            - bump `versionName` to `${{ needs.bump-version.outputs.new_version_name }}`
+            - bump `versionCode` to `${{ needs.bump-version.outputs.new_version_code }}`
 
             Triggered manually via the Manual Release Prep workflow with **${{ inputs.bump_component }}** bump.
 
             ## Auto-generated release notes
-            ${{ env.RELEASE_NOTES }}
+            ${{ needs.generate_release_notes.outputs.release_notes }}
