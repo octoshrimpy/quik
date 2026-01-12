@@ -99,6 +99,7 @@ class MainActivity : QkThemedActivity(), MainView {
                 backup.clicks().map { NavItem.BACKUP },
                 scheduled.clicks().map { NavItem.SCHEDULED },
                 blocking.clicks().map { NavItem.BLOCKING },
+                messageUtils.clicks().map { NavItem.MESSAGE_UTILS },
                 settings.clicks().map { NavItem.SETTINGS },
 //                plus.clicks().map { NavItem.PLUS },
 //                help.clicks().map { NavItem.HELP },

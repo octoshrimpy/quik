@@ -22,9 +22,24 @@ import android.net.Uri
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.realm.RealmResults
 
 interface MessageRepository {
+    sealed class DeduplicationProgress {
+        object Idle : DeduplicationProgress()
+        data class Running(val max: Int, val progress: Int, val indeterminate: Boolean) : DeduplicationProgress()
+    }
+
+    sealed class DeduplicationResult {
+        object Success : DeduplicationResult()
+        object NoDuplicates : DeduplicationResult()
+        data class Failure(val error: Throwable) : DeduplicationResult()
+    }
+
+    val deduplicationProgress: Observable<DeduplicationProgress>
+
     fun getMessages(threadId: Long, query: String = ""): RealmResults<Message>
 
     fun getMessagesSync(threadId: Long, query: String = ""): RealmResults<Message>
@@ -87,6 +102,8 @@ interface MessageRepository {
     fun getOldMessageCounts(maxAgeDays: Int): Map<Long, Int>
 
     fun deleteOldMessages(maxAgeDays: Int)
+
+    fun deduplicateMessages(): Flowable<DeduplicationResult>
 
     fun markAsSendingNow(messageId: Long)
 }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2019 Moez Bhatti <moez.bhatti@gmail.com>
+  ~
+  ~ This file is part of QKSMS.
+  ~
+  ~ QKSMS is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ QKSMS is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/contentView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
+
+    <LinearLayout
+        android:id="@+id/parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            style="@style/PreferenceCategory"
+            android:text="@string/deduplicate_messages_category" />
+
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/deduplicateMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/delete_sweep"
+            app:summary="@string/deduplicate_messages_summary"
+            app:title="@string/deduplicate_messages_title" />
+
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            android:id="@+id/deduplicationProgressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textColor="?android:attr/textColorTertiary"
+            app:textSize="secondary"
+            android:paddingStart="72dp" />
+
+        <ProgressBar
+            android:id="@+id/deduplicationProgress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="72dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/autoDeduplicate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/auto_delete"
+            app:summary="@string/auto_deduplicate_messages_summary"
+            app:title="@string/auto_deduplicate_messages_title"
+            app:widget="@layout/settings_switch_widget" />
+
+    </LinearLayout>
+
+</ScrollView>

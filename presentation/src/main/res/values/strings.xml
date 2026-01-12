@@ -87,6 +87,7 @@
     <string name="drawer_scheduled">Scheduled</string>
     <string name="drawer_blocking">Blocking</string>
     <string name="drawer_more">More</string>
+    <string name="message_management_title">Message Management</string>
     <string name="drawer_settings">Settings</string>
     <string name="drawer_plus" translatable="false">DEPRECATED - drawer_plus</string>
     <string name="drawer_help">Help &amp; feedback</string>
@@ -387,6 +388,16 @@
         <item quantity="one">Continue to %s and allow this number</item>
         <item quantity="other">Continue to %s and allow these numbers</item>
     </plurals>
+
+    <string name="deduplicate_messages_category">Deduplicate Messages</string>
+    <string name="deduplicate_messages_title">Remove Duplicate Messages</string>
+    <string name="deduplicate_messages_summary">Scans through message database and deletes all messages that exactly match original messages</string>
+    <string name="deduplicate_message_confirmation_dialog_message">Your message database will be scanned for duplicates, and then those duplicates will be removed.\nThis will automatically delete messages, only proceed if you understand the consequences.</string>
+    <string name="auto_deduplicate_messages_title">Automatically Deduplicate Messages</string>
+    <string name="auto_deduplicate_messages_summary">Deduplication will be performed during sync. Please note, this will automatically delete messages, and while the chance of there being a false duplicate is very low, it is still possible.\nPlease exercise caution.</string>
+    <string name="deduplicating_messages_finished">Finished deduplicating messages!</string>
+    <string name="deduplicating_messages_no_messages">No duplicate messages found.</string>
+    <string name="deduplicating_messages_failed">Deduplicating messages failed, please try again</string>
 
     <string name="about_title">About</string>
     <string name="about_version_title">Version</string>

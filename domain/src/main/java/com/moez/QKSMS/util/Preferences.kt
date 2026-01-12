@@ -136,6 +136,8 @@ class Preferences @Inject constructor(
     val logging = rxPrefs.getBoolean("logging", false)
     val unreadAtTop = rxPrefs.getBoolean("unreadAtTop", false)
 
+    val autoDeduplicate = rxPrefs.getBoolean("autoDeduplicateMessages", false)
+
     init {
         // Migrate from old night mode preference to new one, now that we support android Q night mode
         val nightModeSummary = rxPrefs.getInteger("nightModeSummary")
