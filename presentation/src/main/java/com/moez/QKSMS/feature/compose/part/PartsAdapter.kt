@@ -24,6 +24,8 @@ import android.view.ViewGroup
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.widget.QkContextMenuRecyclerView
+import dev.octoshrimpy.quik.databinding.MessageListItemInBinding
+import dev.octoshrimpy.quik.databinding.MessageListItemOutBinding
 import dev.octoshrimpy.quik.extensions.isSmil
 import dev.octoshrimpy.quik.extensions.isText
 import dev.octoshrimpy.quik.feature.compose.BubbleUtils.canGroup
@@ -31,7 +33,6 @@ import dev.octoshrimpy.quik.feature.compose.MessagesAdapter
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.message_list_item_in.*
 import javax.inject.Inject
 
 
@@ -69,7 +70,12 @@ class PartsAdapter @Inject constructor(
         this.message = message
         this.previous = previous
         this.next = next
-        this.bodyVisible = holder.body.visibility == View.VISIBLE
+        // Get body visibility from appropriate binding based on message type
+        this.bodyVisible = if (message.isMe()) {
+            MessageListItemOutBinding.bind(holder.itemView).body.visibility == View.VISIBLE
+        } else {
+            MessageListItemInBinding.bind(holder.itemView).body.visibility == View.VISIBLE
+        }
         this.data = message.parts.filter { !it.isSmil() && !it.isText() }
         this.audioState = audioState
     }

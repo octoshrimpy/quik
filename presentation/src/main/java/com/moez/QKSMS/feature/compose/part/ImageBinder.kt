@@ -24,13 +24,13 @@ import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.widget.BubbleImageView
+import dev.octoshrimpy.quik.databinding.MmsImagePreviewListItemBinding
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.extensions.isVideo
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.MmsPart
 import dev.octoshrimpy.quik.util.GlideApp
 import dev.octoshrimpy.quik.util.tryOrNull
-import kotlinx.android.synthetic.main.mms_image_preview_list_item.*
 import javax.inject.Inject
 
 class ImageBinder @Inject constructor(colors: Colors, private val context: Context) : PartBinder() {
@@ -47,10 +47,11 @@ class ImageBinder @Inject constructor(colors: Colors, private val context: Conte
         canGroupWithPrevious: Boolean,
         canGroupWithNext: Boolean
     ) {
-        holder.video.setVisible(part.isVideo())
-        holder.containerView.setOnClickListener { clicks.onNext(part.id) }
+        val binding = MmsImagePreviewListItemBinding.bind(holder.itemView)
+        binding.video.setVisible(part.isVideo())
+        holder.itemView.setOnClickListener { clicks.onNext(part.id) }
 
-        holder.thumbnail.bubbleStyle = when {
+        binding.thumbnail.bubbleStyle = when {
             !canGroupWithPrevious && canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_FIRST else BubbleImageView.Style.IN_FIRST
             canGroupWithPrevious && canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_MIDDLE else BubbleImageView.Style.IN_MIDDLE
             canGroupWithPrevious && !canGroupWithNext -> if (message.isMe()) BubbleImageView.Style.OUT_LAST else BubbleImageView.Style.IN_LAST
@@ -58,7 +59,7 @@ class ImageBinder @Inject constructor(colors: Colors, private val context: Conte
         }
 
         tryOrNull(true) {
-            GlideApp.with(context).load(part.getUri()).fitCenter().into(holder.thumbnail)
+            GlideApp.with(context).load(part.getUri()).fitCenter().into(binding.thumbnail)
         }
     }
 

@@ -35,6 +35,7 @@ import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.hideKeyboard
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.QkDialog
+import dev.octoshrimpy.quik.databinding.ContactsActivityBinding
 import dev.octoshrimpy.quik.extensions.Optional
 import dev.octoshrimpy.quik.feature.compose.editing.ComposeItem
 import dev.octoshrimpy.quik.feature.compose.editing.ComposeItemAdapter
@@ -43,7 +44,6 @@ import dev.octoshrimpy.quik.feature.compose.editing.PhoneNumberPickerAdapter
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.contacts_activity.*
 import javax.inject.Inject
 
 class ContactsActivity : QkThemedActivity(), ContactsContract {
@@ -53,14 +53,16 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
         const val CHIPS_KEY = "chips"
     }
 
+    private lateinit var binding: ContactsActivityBinding
+
     @Inject lateinit var contactsAdapter: ComposeItemAdapter
     @Inject lateinit var phoneNumberAdapter: PhoneNumberPickerAdapter
     @Inject lateinit var viewModelFactory: ViewModelFactory
     @Inject lateinit var navigator: Navigator
 
-    override val queryChangedIntent: Observable<CharSequence> by lazy { search.textChanges() }
-    override val queryClearedIntent: Observable<*> by lazy { cancel.clicks() }
-    override val queryEditorActionIntent: Observable<Int> by lazy { search.editorActions() }
+    override val queryChangedIntent: Observable<CharSequence> by lazy { binding.search.textChanges() }
+    override val queryClearedIntent: Observable<*> by lazy { binding.cancel.clicks() }
+    override val queryEditorActionIntent: Observable<Int> by lazy { binding.search.editorActions() }
     override val composeItemPressedIntent: Subject<ComposeItem> by lazy { contactsAdapter.clicks }
     override val composeItemLongPressedIntent: Subject<ComposeItem> by lazy { contactsAdapter.longClicks }
     override val phoneNumberSelectedIntent: Subject<Optional<Long>> by lazy { phoneNumberAdapter.selectedItemChanges }
@@ -83,11 +85,12 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.contacts_activity)
+        binding = ContactsActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         showBackButton(true)
         viewModel.bindView(this)
 
-        contacts.adapter = contactsAdapter
+        binding.contacts.adapter = contactsAdapter
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -98,7 +101,7 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     }
 
     override fun render(state: ContactsState) {
-        cancel.isVisible = state.query.length > 1
+        binding.cancel.isVisible = state.query.length > 1
 
         contactsAdapter.data = state.composeItems
 
@@ -112,17 +115,17 @@ class ContactsActivity : QkThemedActivity(), ContactsContract {
     }
 
     override fun clearQuery() {
-        search.text = null
+        binding.search.text = null
     }
 
     override fun openKeyboard() {
-        search.postDelayed({
-            search.showKeyboard()
+        binding.search.postDelayed({
+            binding.search.showKeyboard()
         }, 200)
     }
 
     override fun finish(result: HashMap<String, String?>) {
-        search.hideKeyboard()
+        binding.search.hideKeyboard()
         val intent = Intent().putExtra(CHIPS_KEY, result)
         setResult(Activity.RESULT_OK, intent)
         finish()

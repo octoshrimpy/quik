@@ -32,15 +32,14 @@ import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.widget.PreferenceView
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.model.MessageContentFilterData
+import dev.octoshrimpy.quik.databinding.MessageContentFiltersControllerBinding
+import dev.octoshrimpy.quik.databinding.MessageContentFiltersAddDialogBinding
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.message_content_filters_add_dialog.view.*
-import kotlinx.android.synthetic.main.message_content_filters_controller.*
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import javax.inject.Inject
 
-class MessageContentFiltersController : QkController<MessageContentFiltersView, MessageContentFiltersState,
+class MessageContentFiltersController : QkController<MessageContentFiltersControllerBinding, MessageContentFiltersView, MessageContentFiltersState,
         MessageContentFiltersPresenter>(), MessageContentFiltersView {
 
     @Inject override lateinit var presenter: MessageContentFiltersPresenter
@@ -52,8 +51,10 @@ class MessageContentFiltersController : QkController<MessageContentFiltersView, 
     init {
         appComponent.inject(this)
         retainViewMode = RetainViewMode.RETAIN_DETACH
-        layoutRes = R.layout.message_content_filters_controller
     }
+
+    override fun inflateBinding(inflater: android.view.LayoutInflater, container: android.view.ViewGroup): MessageContentFiltersControllerBinding =
+        MessageContentFiltersControllerBinding.inflate(inflater, container, false)
 
     override fun onAttach(view: View) {
         super.onAttach(view)
@@ -64,10 +65,10 @@ class MessageContentFiltersController : QkController<MessageContentFiltersView, 
 
     override fun onViewCreated() {
         super.onViewCreated()
-        add.setBackgroundTint(colors.theme().theme)
-        add.setTint(colors.theme().textPrimary)
-        adapter.emptyView = empty
-        filters.adapter = adapter
+        binding.add.setBackgroundTint(colors.theme().theme)
+        binding.add.setTint(colors.theme().textPrimary)
+        adapter.emptyView = binding.empty
+        binding.filters.adapter = adapter
     }
 
     override fun render(state: MessageContentFiltersState) {
@@ -75,35 +76,37 @@ class MessageContentFiltersController : QkController<MessageContentFiltersView, 
     }
 
     override fun removeFilter(): Observable<Long> = adapter.removeMessageContentFilter
-    override fun addFilter(): Observable<*> = add.clicks()
+    override fun addFilter(): Observable<*> = binding.add.clicks()
     override fun saveFilter(): Observable<MessageContentFilterData> = saveFilterSubject
 
     override fun showAddDialog() {
-        val layout = LayoutInflater.from(activity).inflate(R.layout.message_content_filters_add_dialog, null)
+        val layout = MessageContentFiltersAddDialogBinding.inflate(LayoutInflater.from(activity))
 
-        (0 until layout.add_dialog.childCount)
-            .map { index -> layout.add_dialog.getChildAt(index) }
+        (0 until layout.addDialog.childCount)
+            .map { index -> layout.addDialog.getChildAt(index) }
             .mapNotNull { view -> view as? PreferenceView }
             .map { preference -> preference.clicks().map { preference } }
             .let { Observable.merge(it) }
             .autoDisposable(scope())
-            .subscribe {
-                it.checkbox.isChecked = !it.checkbox.isChecked
-                layout.caseSensitivity.isEnabled = !layout.regexp.checkbox.isChecked
+            .subscribe { pref ->
+                pref.checkbox?.let { it.isChecked = !it.isChecked }
+                val regexChecked = layout.regexp.checkbox?.isChecked ?: false
+                layout.caseSensitivity.isEnabled = !regexChecked
             }
 
         val dialog = AlertDialog.Builder(activity!!)
-                .setView(layout)
+                .setView(layout.root)
                 .setPositiveButton(R.string.message_content_filters_dialog_create) { _, _ ->
                     var text = layout.input.text.toString();
                     if (!text.isBlank()) {
-                        if (!layout.regexp.checkbox.isChecked) text = text.trim()
+                        val regexChecked = layout.regexp.checkbox?.isChecked ?: false
+                        if (!regexChecked) text = text.trim()
                         saveFilterSubject.onNext(
                             MessageContentFilterData(
                                 text,
-                                layout.caseSensitivity.checkbox.isChecked && !layout.regexp.checkbox.isChecked,
-                                layout.regexp.checkbox.isChecked,
-                                layout.contacts.checkbox.isChecked
+                                (layout.caseSensitivity.checkbox?.isChecked == true) && !regexChecked,
+                                regexChecked,
+                                layout.contacts.checkbox?.isChecked == true
                             )
                         )
                     }

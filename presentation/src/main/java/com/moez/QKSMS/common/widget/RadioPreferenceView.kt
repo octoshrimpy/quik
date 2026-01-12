@@ -69,6 +69,10 @@ class RadioPreferenceView @JvmOverloads constructor(
             }
         }
 
+    val radioButton get() = layout.radioButton
+    val titleView get() = layout.titleView
+    val summaryView get() = layout.summaryView
+
     init {
         if (!isInEditMode) {
             appComponent.inject(this)
