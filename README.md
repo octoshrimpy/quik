@@ -22,7 +22,7 @@ QUIK is an open source replacement to the [stock messaging app](https://github.c
 - Delayed sending
 - Quick reply from notifications
 - Swipe actions
-- RCS reaction handling
+- Emoji reaction handling
 - and much, much more
 
 ## Download
