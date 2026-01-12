@@ -16,26 +16,25 @@ import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.repository.MessageRepository
 import io.reactivex.Single
 import javax.inject.Inject
-class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState, MessageUtilsPresenter>(), MessageUtilsView {
+
+class MessageUtilsController : QkController<MessageUtilsControllerBinding, MessageUtilsView, MessageUtilsState, MessageUtilsPresenter>(), MessageUtilsView {
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup): MessageUtilsControllerBinding =
+        MessageUtilsControllerBinding.inflate(inflater, container, false)
+
     @Inject override lateinit var presenter: MessageUtilsPresenter
-    private var binding: MessageUtilsControllerBinding? = null
-    override val autoDeduplicateClickIntent by lazy { binding!!.autoDeduplicate.clicks() }
-    override val deduplicateClickIntent by lazy { binding!!.deduplicateMessages.clicks() }
+    override val autoDeduplicateClickIntent by lazy { binding.autoDeduplicate.clicks() }
+    override val deduplicateClickIntent by lazy { binding.deduplicateMessages.clicks() }
 
     init {
         appComponent.inject(this)
         retainViewMode = RetainViewMode.RETAIN_DETACH
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = MessageUtilsControllerBinding.inflate(inflater, container, false)
-        return binding!!.root
-    }
-
     override fun onViewCreated() {
         super.onViewCreated()
-        (binding?.root as? ViewGroup)?.postDelayed({
-            binding?.parent?.animateLayoutChanges = true
+        binding.root.postDelayed({
+            binding.parent.animateLayoutChanges = true
         }, 100)
     }
 
@@ -46,17 +45,12 @@ class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState,
         presenter.bindIntents(this)
     }
 
-    override fun onDestroyView(view: View) {
-        super.onDestroyView(view)
-        binding = null
-    }
-
     override fun render(state: MessageUtilsState) {
-        binding?.autoDeduplicate
-            ?.findViewById<QkSwitch>(R.id.checkbox)
+        binding.autoDeduplicate
+            .findViewById<QkSwitch>(R.id.checkbox)
             ?.isChecked = state.autoDeduplicateMessages
 
-        val deduplicationProgress = binding!!.deduplicationProgress
+        val deduplicationProgress = binding.deduplicationProgress
         val progressAnimator = ObjectAnimator.ofInt(deduplicationProgress, "progress", 0, 0)
 
         when (state.deduplicationProgress) {
@@ -92,7 +86,7 @@ class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState,
     }
 
     override fun handleResult(resIdString: Int) {
-        binding?.deduplicationProgressText?.isVisible = true
-        binding?.deduplicationProgressText?.setText(resIdString)
+        binding.deduplicationProgressText.isVisible = true
+        binding.deduplicationProgressText.setText(resIdString)
     }
 }

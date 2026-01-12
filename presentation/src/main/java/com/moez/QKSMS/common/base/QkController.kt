@@ -21,15 +21,14 @@ package dev.octoshrimpy.quik.common.base
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
+import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
 import com.bluelinelabs.conductor.archlifecycle.LifecycleController
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.*
-import kotlinx.android.synthetic.main.toolbar.view.*
+import dev.octoshrimpy.quik.R
 
-abstract class QkController<ViewContract : QkViewContract<State>, State, Presenter : QkPresenter<ViewContract, State>> : LifecycleController(), LayoutContainer {
+abstract class QkController<VB : ViewBinding, ViewContract : QkViewContract<State>, State, Presenter : QkPresenter<ViewContract, State>> : LifecycleController() {
 
     abstract var presenter: Presenter
 
@@ -39,16 +38,16 @@ abstract class QkController<ViewContract : QkViewContract<State>, State, Present
     protected val themedActivity: QkThemedActivity?
         get() = activity as? QkThemedActivity
 
-    override var containerView: View? = null
+    private var _binding: VB? = null
+    protected val binding: VB
+        get() = requireNotNull(_binding)
 
-    @LayoutRes
-    var layoutRes: Int = 0
+    protected abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup): VB
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        return inflater.inflate(layoutRes, container, false).also {
-            containerView = it
-            onViewCreated()
-        }
+        val vb = inflateBinding(inflater, container)
+        _binding = vb
+        return vb.root.also { onViewCreated() }
     }
 
     open fun onViewCreated() {
@@ -60,7 +59,7 @@ abstract class QkController<ViewContract : QkViewContract<State>, State, Present
 
     fun setTitle(title: CharSequence?) {
         activity?.title = title
-        view?.toolbarTitle?.text = title
+        view?.findViewById<TextView>(R.id.toolbarTitle)?.text = title
     }
 
     fun showBackButton(show: Boolean) {
@@ -68,8 +67,8 @@ abstract class QkController<ViewContract : QkViewContract<State>, State, Present
     }
 
     override fun onDestroyView(view: View) {
-        containerView = null
-        clearFindViewByIdCache()
+        super.onDestroyView(view)
+        _binding = null
     }
 
     override fun onDestroy() {

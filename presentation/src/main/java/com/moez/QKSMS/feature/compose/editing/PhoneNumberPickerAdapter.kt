@@ -25,13 +25,11 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
 import dev.octoshrimpy.quik.common.base.QkViewHolder
 import dev.octoshrimpy.quik.common.util.extensions.forwardTouches
+import dev.octoshrimpy.quik.databinding.PhoneNumberListItemBinding
 import dev.octoshrimpy.quik.extensions.Optional
 import dev.octoshrimpy.quik.model.PhoneNumber
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.phone_number_list_item.*
-import kotlinx.android.synthetic.main.radio_preference_view.*
-import kotlinx.android.synthetic.main.radio_preference_view.view.*
 import javax.inject.Inject
 
 class PhoneNumberPickerAdapter @Inject constructor(
@@ -50,11 +48,11 @@ class PhoneNumberPickerAdapter @Inject constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.phone_number_list_item, parent, false)
-        return QkViewHolder(view).apply {
-            radioButton.forwardTouches(itemView)
+        val binding = PhoneNumberListItemBinding.inflate(inflater, parent, false)
+        return QkViewHolder(binding.root).apply {
+            binding.number.radioButton.forwardTouches(itemView)
 
-            view.setOnClickListener {
+            binding.root.setOnClickListener {
                 val phoneNumber = getItem(adapterPosition)
                 selectedItem = phoneNumber.id
             }
@@ -62,11 +60,12 @@ class PhoneNumberPickerAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+        val binding = PhoneNumberListItemBinding.bind(holder.itemView)
         val phoneNumber = getItem(position)
 
-        holder.number.radioButton.isChecked = phoneNumber.id == selectedItem
-        holder.number.titleView.text = phoneNumber.address
-        holder.number.summaryView.text = when (phoneNumber.isDefault) {
+        binding.number.radioButton.isChecked = phoneNumber.id == selectedItem
+        binding.number.titleView.text = phoneNumber.address
+        binding.number.summaryView.text = when (phoneNumber.isDefault) {
             true -> context.getString(R.string.compose_number_picker_default, phoneNumber.type)
             false -> phoneNumber.type
         }
