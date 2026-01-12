@@ -45,7 +45,6 @@ import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.widget.PreferenceView
-import dev.octoshrimpy.quik.common.widget.QkSwitch
 import dev.octoshrimpy.quik.common.widget.TextInputDialog
 import dev.octoshrimpy.quik.databinding.SettingsControllerBinding
 import dev.octoshrimpy.quik.feature.settings.about.AboutController
@@ -165,16 +164,16 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
         binding.nightEnd.summary = state.nightEnd
 
         binding.black.setVisible(state.nightModeId != Preferences.NIGHT_MODE_OFF)
-        binding.black.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.black
+        binding.black.checkbox?.isChecked = state.black
 
-        binding.autoEmoji.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.autoEmojiEnabled
+        binding.autoEmoji.checkbox?.isChecked = state.autoEmojiEnabled
 
         binding.delayed.summary = state.sendDelaySummary
         sendDelayDialog.adapter.selectedItem = state.sendDelayId
 
-        binding.delivery.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.deliveryEnabled
+        binding.delivery.checkbox?.isChecked = state.deliveryEnabled
 
-        binding.unreadAtTop.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.unreadAtTopEnabled
+        binding.unreadAtTop.checkbox?.isChecked = state.unreadAtTopEnabled
 
         binding.signature.summary = state.signature.takeIf { it.isNotBlank() }
                 ?: context.getString(R.string.settings_signature_summary)
@@ -182,14 +181,14 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
         binding.textSize.summary = state.textSizeSummary
         textSizeDialog.adapter.selectedItem = state.textSizeId
 
-        binding.autoColor.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.autoColor
+        binding.autoColor.checkbox?.isChecked = state.autoColor
 
-        binding.systemFont.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.systemFontEnabled
+        binding.systemFont.checkbox?.isChecked = state.systemFontEnabled
 
-        binding.showStt.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.showStt
+        binding.showStt.checkbox?.isChecked = state.showStt
 
-        binding.unicode.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.stripUnicodeEnabled
-        binding.mobileOnly.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.mobileOnly
+        binding.unicode.checkbox?.isChecked = state.stripUnicodeEnabled
+        binding.mobileOnly.checkbox?.isChecked = state.mobileOnly
 
         binding.autoDelete.summary = when (state.autoDelete) {
             0 -> context.getString(R.string.settings_auto_delete_never)
@@ -197,7 +196,7 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
                     R.plurals.settings_auto_delete_summary, state.autoDelete, state.autoDelete)
         }
 
-        binding.longAsMms.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.longAsMms
+        binding.longAsMms.checkbox?.isChecked = state.longAsMms
 
         binding.mmsSize.summary = state.maxMmsSizeSummary
         mmsSizeDialog.adapter.selectedItem = state.maxMmsSizeId
@@ -205,7 +204,7 @@ class SettingsController : QkController<SettingsControllerBinding, SettingsView,
         binding.messsageLinkHandling.summary = state.messageLinkHandlingSummary
         messageLinkHandlingDialog.adapter.selectedItem = state.messageLinkHandlingId
 
-        binding.disableScreenshots.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.disableScreenshotsEnabled
+        binding.disableScreenshots.checkbox?.isChecked = state.disableScreenshotsEnabled
 
         when (state.syncProgress) {
             is SyncRepository.SyncProgress.Idle -> binding.syncingProgress.isVisible = false

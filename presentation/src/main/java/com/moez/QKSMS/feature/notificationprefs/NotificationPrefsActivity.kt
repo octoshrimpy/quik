@@ -37,7 +37,6 @@ import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.widget.PreferenceView
-import dev.octoshrimpy.quik.common.widget.QkSwitch
 import dev.octoshrimpy.quik.databinding.NotificationPrefsActivityBinding
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -98,13 +97,13 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
             title = state.conversationTitle
         }
 
-        binding.notifications.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.notificationsEnabled
+        binding.notifications.checkbox?.isChecked = state.notificationsEnabled
         binding.previews.summary = state.previewSummary
         previewModeDialog.adapter.selectedItem = state.previewId
-        binding.wake.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.wakeEnabled
-        binding.silentNotContact.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.silentNotContact
+        binding.wake.checkbox?.isChecked = state.wakeEnabled
+        binding.silentNotContact.checkbox?.isChecked = state.silentNotContact
         binding.silentNotContact.isVisible = state.threadId == 0L
-        binding.vibration.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.vibrationEnabled
+        binding.vibration.checkbox?.isChecked = state.vibrationEnabled
         binding.ringtone.summary = state.ringtoneName
 
         binding.actionsDivider.isVisible = state.threadId == 0L
@@ -118,11 +117,11 @@ class NotificationPrefsActivity : QkThemedActivity(), NotificationPrefsView {
 
         binding.qkreplyDivider.isVisible = state.threadId == 0L
         binding.qkreplyTitle.isVisible = state.threadId == 0L
-        binding.qkreply.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.qkReplyEnabled
+        binding.qkreply.checkbox?.isChecked = state.qkReplyEnabled
         binding.qkreply.isVisible = state.threadId == 0L
         binding.qkreplyTapDismiss.isVisible = state.threadId == 0L
         binding.qkreplyTapDismiss.isEnabled = state.qkReplyEnabled
-        binding.qkreplyTapDismiss.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.qkReplyTapDismiss
+        binding.qkreplyTapDismiss.checkbox?.isChecked = state.qkReplyTapDismiss
     }
 
     override fun showPreviewModeDialog() = previewModeDialog.show(this)

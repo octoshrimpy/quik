@@ -40,6 +40,12 @@ class PreferenceView @JvmOverloads constructor(
 
     val titleView: TextView get() = layout.titleView
 
+    /** Returns the widget view inflated into the widget frame, if any */
+    val widget: View? get() = layout.widgetFrame.getChildAt(0)
+
+    /** Returns the checkbox widget if this preference has one */
+    val checkbox: QkSwitch? get() = widget as? QkSwitch
+
     var title: String? = null
         set(value) {
             field = value

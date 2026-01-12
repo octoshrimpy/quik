@@ -34,7 +34,6 @@ import dev.octoshrimpy.quik.feature.blocking.numbers.BlockedNumbersController
 import dev.octoshrimpy.quik.feature.blocking.filters.MessageContentFiltersController
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.databinding.BlockingControllerBinding
-import dev.octoshrimpy.quik.common.widget.QkSwitch
 import javax.inject.Inject
 
 class BlockingController : QkController<BlockingControllerBinding, BlockingView, BlockingState, BlockingPresenter>(), BlockingView {
@@ -70,7 +69,7 @@ class BlockingController : QkController<BlockingControllerBinding, BlockingView,
 
     override fun render(state: BlockingState) {
         binding.blockingManager.summary = state.blockingManager
-        binding.drop.findViewById<QkSwitch>(R.id.checkbox)?.isChecked = state.dropEnabled
+        binding.drop.checkbox?.isChecked = state.dropEnabled
         binding.blockedMessages.isEnabled = !state.dropEnabled
     }
 

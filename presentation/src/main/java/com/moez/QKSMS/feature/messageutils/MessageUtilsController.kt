@@ -10,7 +10,6 @@ import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
-import dev.octoshrimpy.quik.common.widget.QkSwitch
 import dev.octoshrimpy.quik.databinding.MessageUtilsControllerBinding
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.repository.MessageRepository
@@ -46,9 +45,7 @@ class MessageUtilsController : QkController<MessageUtilsControllerBinding, Messa
     }
 
     override fun render(state: MessageUtilsState) {
-        binding.autoDeduplicate
-            .findViewById<QkSwitch>(R.id.checkbox)
-            ?.isChecked = state.autoDeduplicateMessages
+        binding.autoDeduplicate.checkbox?.isChecked = state.autoDeduplicateMessages
 
         val deduplicationProgress = binding.deduplicationProgress
         val progressAnimator = ObjectAnimator.ofInt(deduplicationProgress, "progress", 0, 0)

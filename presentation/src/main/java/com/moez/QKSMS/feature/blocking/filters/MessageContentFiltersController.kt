@@ -34,7 +34,6 @@ import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.model.MessageContentFilterData
 import dev.octoshrimpy.quik.databinding.MessageContentFiltersControllerBinding
 import dev.octoshrimpy.quik.databinding.MessageContentFiltersAddDialogBinding
-import dev.octoshrimpy.quik.common.widget.QkSwitch
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -90,9 +89,8 @@ class MessageContentFiltersController : QkController<MessageContentFiltersContro
             .let { Observable.merge(it) }
             .autoDisposable(scope())
             .subscribe { pref ->
-                val checkbox = pref.findViewById<QkSwitch>(R.id.checkbox)
-                checkbox?.isChecked = !(checkbox?.isChecked ?: false)
-                val regexChecked = layout.regexp.findViewById<QkSwitch>(R.id.checkbox)?.isChecked ?: false
+                pref.checkbox?.let { it.isChecked = !it.isChecked }
+                val regexChecked = layout.regexp.checkbox?.isChecked ?: false
                 layout.caseSensitivity.isEnabled = !regexChecked
             }
 
@@ -101,14 +99,14 @@ class MessageContentFiltersController : QkController<MessageContentFiltersContro
                 .setPositiveButton(R.string.message_content_filters_dialog_create) { _, _ ->
                     var text = layout.input.text.toString();
                     if (!text.isBlank()) {
-                        val regexChecked = layout.regexp.findViewById<QkSwitch>(R.id.checkbox)?.isChecked ?: false
+                        val regexChecked = layout.regexp.checkbox?.isChecked ?: false
                         if (!regexChecked) text = text.trim()
                         saveFilterSubject.onNext(
                             MessageContentFilterData(
                                 text,
-                                (layout.caseSensitivity.findViewById<QkSwitch>(R.id.checkbox)?.isChecked == true) && !regexChecked,
+                                (layout.caseSensitivity.checkbox?.isChecked == true) && !regexChecked,
                                 regexChecked,
-                                layout.contacts.findViewById<QkSwitch>(R.id.checkbox)?.isChecked == true
+                                layout.contacts.checkbox?.isChecked == true
                             )
                         )
                     }
