@@ -119,6 +119,7 @@ class MessagesAdapter @Inject constructor(
     val sendNowClicks: Subject<Long> = PublishSubject.create()
     val resendClicks: Subject<Long> = PublishSubject.create()
     val partContextMenuRegistrar: Subject<View> = PublishSubject.create()
+    val reactionClicks: Subject<Long> = PublishSubject.create()
 
     var data: Pair<Conversation, RealmResults<Message>>? = null
         set(value) {
@@ -417,10 +418,12 @@ class MessagesAdapter @Inject constructor(
                 }
 
                 holder.reactionText?.text = reactionText
+                holder.reactionText?.setOnClickListener { reactionClicks.onNext(message.id) }
                 reactionsContainer.setVisible(true)
                 makeRoomForEmojis(holder)
             } else {
                 reactionsContainer.setVisible(false)
+                holder.reactionText?.setOnClickListener(null)
             }
         }
     }

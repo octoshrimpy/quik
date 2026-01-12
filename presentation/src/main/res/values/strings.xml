@@ -154,6 +154,7 @@
     <string name="compose_menu_next">Next</string>
     <string name="compose_menu_clear">Clear</string>
     <string name="compose_details_title">Message details</string>
+    <string name="compose_reactions_title">Reactions</string>
     <string name="compose_details_type">Type: %s</string>
     <string name="compose_details_from">From: %s</string>
     <string name="compose_details_to">To: %s</string>
@@ -488,6 +489,7 @@
     </string-array>
 
     <string name="button_yes">Yes</string>
+    <string name="button_ok">OK</string>
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>
