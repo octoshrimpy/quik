@@ -59,7 +59,7 @@
     <string name="main_permission_required">Yêu cầu quyền truy cập</string>
     <string name="main_permission_sms">QUIK cần cấp quyền để gửi và xem tin nhắn SMS</string>
     <string name="main_permission_contacts">QUIK cần cấp quyền để xem danh bạ</string>
-    <string name="main_permission_notifications">QUIK needs permission to display notifications</string>
+    <string name="main_permission_notifications">QUIK cần cấp quyền để hiển thị thông báo</string>
     <string name="main_permission_allow">Cho phép</string>
     <string name="drawer_inbox">Trò chuyện</string>
     <string name="drawer_archived">Lưu trữ</string>
@@ -93,7 +93,7 @@
     <string name="compose_send_group_summary">Người nhận và các câu trả lời sẽ được hiển thị với mọi người</string>
     <string name="compose_messages_empty">Đây là sự khởi đầu của một cuộc trò chuyện. Hãy nói điều gì đó tốt đẹp nhé!</string>
     <string name="compose_vcard_label">Thẻ danh thiếp</string>
-    <string name="compose_scheduled_for">Hẹn giờ cho</string>
+    <string name="compose_scheduled_for">Thời gian dự kiến:</string>
     <string name="compose_scheduled_future">Thời gian chọn phải trong tương lai!</string>
     <string name="compose_scheduled_plus">Bạn phải mở khoá QUIK+ để dùng tính năng hẹn giờ</string>
     <string name="compose_scheduled_toast">Đã hẹn giờ cho tin nhắn</string>
@@ -145,8 +145,8 @@
     <string name="backup_restoring">Đang khôi phục từ bản sao lưu</string>
     <string name="backup_loading">Đang tải…</string>
     <string name="backup_never">Chưa bao giờ</string>
-    <string name="backup_location_title">Backup location</string>
-    <string name="backup_location_summary">Set folder</string>
+    <string name="backup_location_title">Vị trí sao lưu</string>
+    <string name="backup_location_summary">Chọn thư mục</string>
     <string name="backup_restore_title">Khôi phục</string>
     <string name="backup_restore_summary">Chọn một bản sao lưu</string>
     <string name="backup_restore_error_plus">Vui lòng mở khoá QUIK+ để dùng tính năng sao lưu và khôi phục</string>
@@ -155,12 +155,12 @@
     <string name="backup_restore_confirm_title">Khôi phục từ bản sao lưu này</string>
     <string name="backup_restore_stop_title">Dừng khôi phục</string>
     <string name="backup_restore_stop_message">Tin nhắn đã được khôi phục sẽ vẫn còn trên thiết bị của bạn</string>
-    <string name="backup_select_location_rationale_title">Select backup location</string>
-    <string name="backup_select_location_rationale_message">Please select a folder to save your backups to</string>
+    <string name="backup_select_location_rationale_title">Chọn vị trí sao lưu</string>
+    <string name="backup_select_location_rationale_message">Vui lòng chọn thư mục để lưu bản sao lưu</string>
     <string name="backup_details">%1$s\n%2$d messages</string>
-    <string name="backup_selected_backup_error_title">Error</string>
-    <string name="backup_selected_backup_error_message">Couldn\'t read backup file</string>
-    <string name="backup_selected_backup_details_title">Backup details</string>
+    <string name="backup_selected_backup_error_title">Lỗi</string>
+    <string name="backup_selected_backup_error_message">Không thể đọc tệp sao lưu</string>
+    <string name="backup_selected_backup_details_title">Thông tin bản sao lưu</string>
     <string name="backup_restore_dialog_title">Các bản sao lưu</string>
     <string name="backup_restore_dialog_empty">Không tìm thấy bản sao lưu nào</string>
     <string name="backup_disclaimer">Hiện tại, tính năng sao lưu và khôi phục chỉ hỗ trợ SMS. Việc hỗ trợ MMS và tính năng sao lưu định kì sẽ có sớm!</string>
@@ -349,7 +349,7 @@
     <string name="button_stop">Dừng</string>
     <string name="button_more">Xem thêm</string>
     <string name="button_set">Chọn</string>
-    <string name="button_undo">Undo</string>
+    <string name="button_undo">Hoàn tác</string>
     <string name="toast_copied">Đã sao chép</string>
     <string name="toast_qksms_plus">Bạn phải mở khóa QUIK+ để sử dụng chức năng này</string>
     <plurals name="notification_new_messages">
@@ -404,4 +404,24 @@
         <item>LOL</item>
         <item>Không sao đâu</item>
     </string-array>
+    <string name="menu_mms_part_share">Chia sẻ</string>
+    <string name="menu_mms_part_forward">Chuyển tiếp</string>
+    <string name="main_menu_select_all">Chọn tất cả</string>
+    <string name="main_menu_edit_message">Chỉnh sửa tin nhắn</string>
+    <string name="main_menu_rename_conversation">Đổi tên cuộc trò chuyện</string>
+    <string name="dialog_edit_scheduled_message_title">Chỉnh sửa tin nhắn</string>
+    <string name="dialog_clear_compose_title">Xóa nội dung</string>
+    <string name="scheduled_send_cd">Hẹn giờ tin nhắn này</string>
+    <string name="settings_system_show_stt_title">Hiển thị nút chuyển đổi văn bản thành giọng nói</string>
+    <string name="settings_notification_previews_summary">Hiện tên và tin nhắn</string>
+    <string name="menu_mms_part_open">Mở bằng ứng dụng khác</string>
+    <string name="main_menu_send_now">Gửi ngay</string>
+    <string name="main_sender_draft">Bản nháp: %s</string>
+    <string name="scheduled_menu_send_now">Gửi ngay</string>
+    <string name="scheduled_menu_edit_message">Chỉnh sửa tin nhắn</string>
+    <string name="dialog_edit_scheduled_message">Chỉnh sửa sẽ xóa tin nhắn khỏi lịch hẹn.\n\nHãy gửi lại ở màn hình tiếp theo, nếu không tin nhắn sẽ mất.\n\nBạn có muốn tiếp tục không?</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Tiếp tục chỉnh sửa</string>
+    <string name="dialog_clear_compose">Xóa nội dung? Thao tác này không thể phục hồi.</string>
+    <string name="compose_scheduled_view">Hẹn giờ tin nhắn cho cuộc trò chuyện này</string>
+    <string name="compose_no_valid_recipients">Không thể gửi đến người nhận</string>
 </resources>
