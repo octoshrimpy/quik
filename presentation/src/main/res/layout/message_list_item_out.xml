@@ -148,12 +148,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="18dp"
+                    android:clipChildren="false"
                     android:clipToPadding="false"
-                    android:clipChildren="false">
+                    android:orientation="vertical">
 
                     <dev.octoshrimpy.quik.common.widget.TightTextView
                         android:id="@+id/body"
@@ -171,9 +172,8 @@
                         android:id="@+id/reactions"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|start"
                         android:layout_marginStart="-16dp"
-                        android:layout_marginBottom="-20dp"
+                        android:layout_marginTop="-10dp"
                         android:orientation="horizontal"
                         android:visibility="gone"
                         tools:visibility="visible">
@@ -196,7 +196,7 @@
 
                     </LinearLayout>
 
-                </FrameLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <ImageView

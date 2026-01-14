@@ -759,6 +759,23 @@ class ComposeViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe { view.showMessageLinkAskDialog(it) }
 
+        // Show reaction details popup
+        view.reactionClickIntent
+            .mapNotNull { messageId -> messageRepo.getMessage(messageId) }
+            .withLatestFrom(conversation) { message, conv ->
+                message.emojiReactions.map { reaction ->
+                    val contactName = conv.recipients
+                        .firstOrNull { recipient ->
+                            phoneNumberUtils.compare(recipient.address, reaction.senderAddress)
+                        }
+                        ?.getDisplayName()
+                        ?: reaction.senderAddress
+                    "${reaction.emoji} $contactName"
+                }
+            }
+            .autoDisposable(view.scope())
+            .subscribe { reactions -> view.showReactionsDialog(reactions) }
+
         // Set the current conversation
         Observables
                 .combineLatest(
