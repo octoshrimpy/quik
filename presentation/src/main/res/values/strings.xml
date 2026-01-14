@@ -489,7 +489,6 @@
     </string-array>
 
     <string name="button_yes">Yes</string>
-    <string name="button_ok">OK</string>
     <string name="button_continue">Continue</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_delete">Delete</string>

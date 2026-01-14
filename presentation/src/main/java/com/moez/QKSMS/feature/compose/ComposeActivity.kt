@@ -762,7 +762,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         AlertDialog.Builder(this)
             .setTitle(R.string.compose_reactions_title)
             .setMessage(reactions.joinToString("\n"))
-            .setPositiveButton(R.string.button_ok, null)
             .show()
     }
 
