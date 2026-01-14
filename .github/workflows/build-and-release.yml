@@ -162,7 +162,7 @@ jobs:
         id: checksums
         shell: bash
         run: |
-          find . -name '*.apk' -type f -exec sha256sum {} \; > checksums.txt
+          find . -name '*.apk' -type f -exec bash -c 'sha256sum "$1" | awk -v bn="$(basename $1)" "{print \$1, bn}"' _ {} \; > checksums.txt
           echo "checksums_path=checksums.txt" >> "$GITHUB_OUTPUT"
 
       - name: Generate release notes
