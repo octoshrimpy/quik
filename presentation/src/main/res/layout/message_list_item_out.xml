@@ -152,6 +152,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="18dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     android:orientation="vertical">
 
                     <dev.octoshrimpy.quik.common.widget.TightTextView
@@ -171,7 +173,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="-16dp"
-                        android:layout_marginTop="-16dp"
+                        android:layout_marginTop="-10dp"
                         android:orientation="horizontal"
                         android:visibility="gone"
                         tools:visibility="visible">
