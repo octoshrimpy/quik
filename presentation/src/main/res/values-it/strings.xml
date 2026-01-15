@@ -500,4 +500,5 @@
     <string name="notification_foreground_worker_text">Messaggio in arrivo</string>
     <string name="dialog_clear_compose_title">Pulisci messaggio</string>
     <string name="button_clear">Pulisci</string>
+    <string name="notification_foreground_worker_title">Ricezione messaggio</string>
 </resources>

@@ -37,7 +37,7 @@
     <string name="menu_mms_part_share">Partager</string>
     <string name="menu_mms_part_forward">Transférer</string>
     <string name="menu_mms_part_open">Ouvrir en dehors de l\'appli</string>
-    <string name="main_drawer_open_cd">Ouvrir le tiroir de navigation</string>
+    <string name="main_drawer_open_cd">Ouvrir le panneau de navigation</string>
     <string name="main_title_selected">%d sélectionnée</string>
     <string name="main_menu_clear">Effacer</string>
     <string name="main_menu_select_all">Sélectionner tout</string>
@@ -129,7 +129,7 @@
     <string name="compose_hint">Écrire un message…</string>
     <string name="compose_no_valid_recipients">Impossible d’envoyer aux autres participants</string>
     <string name="compose_menu_copy">Copier le texte</string>
-    <string name="compose_menu_share">Partager</string>
+    <string name="compose_menu_share">Partager le texte</string>
     <string name="compose_menu_forward">Transférer</string>
     <string name="compose_menu_show_status">Afficher l’état</string>
     <string name="compose_menu_delete">Supprimer</string>
@@ -299,7 +299,7 @@
         <item quantity="other">Après %d jours</item>
     </plurals>
     <string name="settings_long_as_mms_title">Envoyer les messages longs en MMS</string>
-    <string name="settings_long_as_mms_summary">Si vos messages texte plus longs ne parviennent pas à être envoyés, ou s’ils sont envoyés dans le désordre, vous pouvez les envoyer sous forme de messages MMS à la place. Des frais supplémentaires peuvent s’appliquer.</string>
+    <string name="settings_long_as_mms_summary">Si vos messages texte plus longs ne parviennent pas à être envoyés ou s’ils sont envoyés dans le désordre, vous pouvez les envoyer sous forme de messages MMS à la place. Des frais supplémentaires peuvent s’appliquer.</string>
     <string name="settings_mms_size_title">Compresser automatiquement les pièces jointes des MMS</string>
     <string name="settings_mms_weblink_title">Gestion des liens dans les messages</string>
     <string name="settings_disable_screenshots_title">Désactiver les captures d’écran</string>
@@ -443,6 +443,7 @@
     <string name="toast_qksms_plus">Vous devez déverrouiller QUIK+ pour utiliser cela</string>
     <plurals name="notification_new_messages">
         <item quantity="one">Nouveau message</item>
+        <item quantity="many">%s nouveaux messages</item>
         <item quantity="other">%s nouveaux messages</item>
     </plurals>
     <string name="notification_message_failed_title">Message non envoyé</string>
@@ -543,7 +544,8 @@
         <item quantity="other">%d conversations désarchivées</item>
     </plurals>
     <string name="notification_message_failed_action">Réenvoyer</string>
-    <string name="compose_send_group_summary_on">Les destinataires et les réponses seront visibles par tous</string>
+    <string name="compose_send_group_summary_on">Les destinataires et les réponses seront visibles de tous</string>
     <string name="compose_send_group_summary_off">Les messages seront envoyés séparément à tous les destinataires</string>
     <string name="notification_foreground_worker_text">Sous Android 12 et les versions antérieures, une notification est requise pour le fonctionnement en arrière-plan qui permet de recevoir des messages.</string>
+    <string name="notification_foreground_worker_title">Réception du message</string>
 </resources>

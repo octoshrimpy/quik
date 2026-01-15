@@ -489,4 +489,15 @@
     <string name="compose_send_group_summary_off">訊息將分別傳送給所有收件者</string>
     <string name="notification_foreground_worker_title">正在接收訊息</string>
     <string name="notification_foreground_worker_text">在 Android 12 及以下版本中，啟用接收訊息的背景作業需要顯示通知。</string>
+    <string name="main_sync_emojis">解析表情符號反應…</string>
+    <string name="message_management_title">訊息管理</string>
+    <string name="deduplicate_messages_category">訊息去重</string>
+    <string name="deduplicate_messages_title">移除重複訊息</string>
+    <string name="deduplicate_messages_summary">掃描訊息資料庫並刪除所有完全符合原始訊息的訊息</string>
+    <string name="deduplicate_message_confirmation_dialog_message">你的訊息資料庫會被掃描是否有重複的，然後這些重複的就會被移除。\n這會自動刪除訊息，只有在你了解後果後才繼續進行。</string>
+    <string name="auto_deduplicate_messages_title">自動去重訊息</string>
+    <string name="auto_deduplicate_messages_summary">同步時會進行重複刪除。請注意，這會自動刪除訊息，雖然出現虛假重複的機率很低，但仍有可能。\n請多加小心。</string>
+    <string name="deduplicating_messages_finished">訊息去重已完成！</string>
+    <string name="deduplicating_messages_no_messages">未發現重複訊息。</string>
+    <string name="deduplicating_messages_failed">訊息去重失敗，請再試一次</string>
 </resources>
