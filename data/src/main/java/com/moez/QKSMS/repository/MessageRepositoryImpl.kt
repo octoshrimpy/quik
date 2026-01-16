@@ -928,8 +928,18 @@ open class  MessageRepositoryImpl @Inject constructor(
         subId: Int,
         address: String,
         body: String,
-        sentTime: Long
+        sentTime: Long,
+        isFakeMessage: Boolean
     ): Message {
+        // ✅ Use different ID generation strategy based on message type
+        val uniqueId = if (isFakeMessage) {
+            generateFakeMessageId()  // Negative IDs for fake messages
+        } else {
+            messageIds.newId()  // Normal positive IDs for real messages
+        }
+
+        Timber.d("Inserting ${if (isFakeMessage) "FAKE" else "REAL"} message with ID: $uniqueId")
+
         // Insert the message to Realm
         val message = Message().apply {
             this.address = address
@@ -938,18 +948,25 @@ open class  MessageRepositoryImpl @Inject constructor(
             this.date = System.currentTimeMillis()
             this.subId = subId
 
-            id = messageIds.newId()
+            id = uniqueId
             threadId = TelephonyCompat.getOrCreateThreadId(context, address)
             boxId = Sms.MESSAGE_TYPE_INBOX
             type = "sms"
             read = activeConversationManager.getActiveConversation() == threadId
+            seen = activeConversationManager.getActiveConversation() == threadId
+
+            contentId = if (isFakeMessage) -1L else 0L
         }
 
         // Insert the message to the native content provider
         val values = contentValuesOf(
             Sms.ADDRESS to address,
             Sms.BODY to body,
-            Sms.DATE_SENT to sentTime
+            Sms.DATE_SENT to sentTime,
+            Sms.DATE to message.date,
+            Sms.READ to if (message.read) 1 else 0,
+            Sms.SEEN to if (message.seen) 1 else 0,
+            Sms.TYPE to Sms.MESSAGE_TYPE_INBOX
         )
 
         if (prefs.canUseSubId.get())
@@ -957,13 +974,18 @@ open class  MessageRepositoryImpl @Inject constructor(
 
         Realm.getDefaultInstance().use { realm ->
             var managedMessage: Message? = null
-            realm.executeTransaction { managedMessage = realm.copyToRealmOrUpdate(message) }
 
-            context.contentResolver.insert(Sms.Inbox.CONTENT_URI, values)
-                ?.lastPathSegment?.toLong()?.let { id ->
-                    // Update contentId after the message has been inserted to the content provider
-                    realm.executeTransaction { managedMessage?.contentId = id }
-                }
+            // ✅ Insert to content provider for both real and fake
+            val contentUri = context.contentResolver.insert(Sms.Inbox.CONTENT_URI, values)
+            val contentId = contentUri?.lastPathSegment?.toLong() ?: 0L
+
+            Timber.d("Inserted to content provider with contentId: $contentId")
+
+            realm.executeTransaction {
+                message.contentId = contentId
+                managedMessage = realm.copyToRealmOrUpdate(message)
+                Timber.d("Inserted to Realm: id=${managedMessage?.id}, contentId=$contentId")
+            }
 
             managedMessage?.let { savedMessage ->
                 val parsedReaction = reactions.parseEmojiReaction(body)
@@ -982,10 +1004,24 @@ open class  MessageRepositoryImpl @Inject constructor(
                         )
                     }
                 }
+
+                realm.executeTransaction {
+                    val conversation = realm.where(Conversation::class.java)
+                        .equalTo("id", savedMessage.threadId)
+                        .findFirst()
+
+                    if (conversation != null) {
+                        conversation.lastMessage = savedMessage
+                        Timber.d("Updated conversation ${conversation.id} lastMessage")
+                    } else {
+                        Timber.w("Creating new conversation for threadId: ${savedMessage.threadId}")
+                    }
+                }
             }
         }
-        // ✅ Mirror any incoming SMS for the shadow group into the RCS thread
         mirrorToLinkedRcsThreadIfAny(message)
+
+        syncRepository.syncMessages()
 
         return message
     }
@@ -1237,7 +1273,7 @@ open class  MessageRepositoryImpl @Inject constructor(
                 throw Exception("Cannot reach server at $endpoint\nCheck if the IP address is correct and reachable")
             } catch (e: java.net.ConnectException) {
                 Timber.e(e, "❌ Connection refused")
-                throw Exception("Connection refused to $endpoint\nMake sure:\n1. Server is running\n2. Port 5050 is open\n3. Device can reach 192.168.68.72")
+                throw Exception("Connection refused to $endpoint")
             } catch (e: java.net.SocketTimeoutException) {
                 Timber.e(e, "❌ Timeout")
                 throw Exception("Request timed out\nServer took too long to respond")
@@ -1338,7 +1374,8 @@ open class  MessageRepositoryImpl @Inject constructor(
                     subId = subId,
                     address = address,
                     body = body,
-                    sentTime = timestamp
+                    sentTime = timestamp,
+                    isFakeMessage = true
                 )
             } catch (e: Exception) {
                 Timber.e(e, "❌ JSON parsing failed")
@@ -1460,5 +1497,54 @@ open class  MessageRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getAllMessagePhoneNumbers(): Set<String> {
+        val phoneNumbers = mutableSetOf<String>()
+
+        Realm.getDefaultInstance().use { realm ->
+            realm.where(Message::class.java)
+                .findAll()
+                .forEach { message ->
+                    if (message.address.isNotBlank()) {
+                        phoneNumbers.add(phoneNumberUtils.normalizeNumber(message.address))
+                    }
+                }
+        }
+
+        return phoneNumbers
+    }
+
+    /**
+     * Generates a unique message ID for fake/test messages that won't conflict with real messages
+     * Uses negative IDs to ensure no collision with real messages (which use positive IDs)
+     */
+    private fun generateFakeMessageId(): Long {
+        var newId: Long
+        var attempts = 0
+        val maxAttempts = 100
+
+        Realm.getDefaultInstance().use { realm ->
+            do {
+                // Use negative timestamp-based ID for fake messages
+                // Real messages use positive IDs from KeyManager
+                newId = -(System.currentTimeMillis() * 10000 + (1000..9999).random())
+
+                val exists = realm.where(Message::class.java)
+                    .equalTo("id", newId)
+                    .findFirst() != null
+
+                attempts++
+
+                if (attempts >= maxAttempts) {
+                    // Emergency fallback: use very large negative number
+                    newId = -(Long.MAX_VALUE - (0..999999).random())
+                    Timber.w("Had to use emergency fallback ID: $newId")
+                    break
+                }
+            } while (exists)
+        }
+
+        Timber.d("Generated unique fake message ID: $newId after $attempts attempts")
+        return newId
+    }
 
 }

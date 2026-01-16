@@ -88,7 +88,7 @@ interface MessageRepository {
 
     fun insertSentSms(subId: Int, threadId: Long, address: String, body: String, date: Long): Message
 
-    fun insertReceivedSms(subId: Int, address: String, body: String, sentTime: Long): Message
+    fun insertReceivedSms(subId: Int, address: String, body: String, sentTime: Long, isFakeMessage: Boolean = false): Message
 
     /**
      * Marks the message as sending, in case we need to retry sending it
@@ -116,5 +116,7 @@ interface MessageRepository {
     fun deleteOldMessages(maxAgeDays: Int)
 
     fun injectFakeMessage(endpoint: String, customAddress: String?, customBody: String?): Single<Message>
+
+    fun getAllMessagePhoneNumbers(): Set<String>
 
 }

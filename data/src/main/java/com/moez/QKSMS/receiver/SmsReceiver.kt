@@ -52,7 +52,8 @@ class SmsReceiver : BroadcastReceiver() {
                         intent.extras?.getInt("subscription", -1) ?: -1,
                         messages[0].displayOriginatingAddress,
                         messages.mapNotNull { it.displayMessageBody }.reduce { body, new -> body + new },
-                        messages[0].timestampMillis
+                        messages[0].timestampMillis,
+                        false
                     ).id
                 }
                 .blockingGet()

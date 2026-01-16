@@ -294,7 +294,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                     .setPositiveButton("YES, INJECT") { _, _ ->
                         Timber.d("User confirmed - injecting random fake message")
                         Toast.makeText(this, "🚀 Injecting fake message...", Toast.LENGTH_SHORT).show()
-                        viewModel.injectFakeMessage(this)
+                        viewModel.injectFakeMessageWithUniqueNumber(this@ComposeActivity)
                     }
                     .setNegativeButton("Cancel", null)
                     .show()
@@ -1196,87 +1196,87 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         // - Updating user preferences
     }
 
-    private fun showCustomAddressDialog() {
-        val input = EditText(this).apply {
-            hint = "Phone number (e.g. +1234567890)"
-            setText("+1555") // Pre-fill for convenience
-            setSelection(text.length)
-        }
-
-        AlertDialog.Builder(this)
-            .setTitle("Custom Address")
-            .setView(input)
-            .setPositiveButton("Inject") { _, _ ->
-                val address = input.text.toString()
-                if (address.isNotEmpty()) {
-                    viewModel.injectFakeMessage(this, customAddress = address)
-                } else {
-                    Toast.makeText(this, "Address cannot be empty", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun showCustomBodyDialog() {
-        val input = EditText(this).apply {
-            hint = "Message body"
-            setText("Test message")
-            setSelection(text.length)
-        }
-
-        AlertDialog.Builder(this)
-            .setTitle("Custom Body")
-            .setView(input)
-            .setPositiveButton("Inject") { _, _ ->
-                val body = input.text.toString()
-                if (body.isNotEmpty()) {
-                    viewModel.injectFakeMessage(this, customBody = body)
-                } else {
-                    Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun showCustomBothDialog() {
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(16.dpToPx(context), 16.dpToPx(context), 16.dpToPx(context), 0)
-        }
-
-        val addressInput = EditText(this).apply {
-            hint = "Phone number"
-            setText("+1555")
-        }
-        val bodyInput = EditText(this).apply {
-            hint = "Message body"
-            setText("Test message")
-        }
-
-        layout.addView(addressInput)
-        layout.addView(bodyInput)
-
-        AlertDialog.Builder(this)
-            .setTitle("Custom Message")
-            .setView(layout)
-            .setPositiveButton("Inject") { _, _ ->
-                val address = addressInput.text.toString()
-                val body = bodyInput.text.toString()
-
-                if (address.isNotEmpty() && body.isNotEmpty()) {
-                    viewModel.injectFakeMessage(
-                        this,
-                        customAddress = address,
-                        customBody = body
-                    )
-                } else {
-                    Toast.makeText(this, "Both fields required", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
+//    private fun showCustomAddressDialog() {
+//        val input = EditText(this).apply {
+//            hint = "Phone number (e.g. +1234567890)"
+//            setText("+1555") // Pre-fill for convenience
+//            setSelection(text.length)
+//        }
+//
+//        AlertDialog.Builder(this)
+//            .setTitle("Custom Address")
+//            .setView(input)
+//            .setPositiveButton("Inject") { _, _ ->
+//                val address = input.text.toString()
+//                if (address.isNotEmpty()) {
+//                    viewModel.injectFakeMessage(this, customAddress = address)
+//                } else {
+//                    Toast.makeText(this, "Address cannot be empty", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            .setNegativeButton("Cancel", null)
+//            .show()
+//    }
+//
+//    private fun showCustomBodyDialog() {
+//        val input = EditText(this).apply {
+//            hint = "Message body"
+//            setText("Test message")
+//            setSelection(text.length)
+//        }
+//
+//        AlertDialog.Builder(this)
+//            .setTitle("Custom Body")
+//            .setView(input)
+//            .setPositiveButton("Inject") { _, _ ->
+//                val body = input.text.toString()
+//                if (body.isNotEmpty()) {
+//                    viewModel.injectFakeMessage(this, customBody = body)
+//                } else {
+//                    Toast.makeText(this, "Body cannot be empty", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            .setNegativeButton("Cancel", null)
+//            .show()
+//    }
+//
+//    private fun showCustomBothDialog() {
+//        val layout = LinearLayout(this).apply {
+//            orientation = LinearLayout.VERTICAL
+//            setPadding(16.dpToPx(context), 16.dpToPx(context), 16.dpToPx(context), 0)
+//        }
+//
+//        val addressInput = EditText(this).apply {
+//            hint = "Phone number"
+//            setText("+1555")
+//        }
+//        val bodyInput = EditText(this).apply {
+//            hint = "Message body"
+//            setText("Test message")
+//        }
+//
+//        layout.addView(addressInput)
+//        layout.addView(bodyInput)
+//
+//        AlertDialog.Builder(this)
+//            .setTitle("Custom Message")
+//            .setView(layout)
+//            .setPositiveButton("Inject") { _, _ ->
+//                val address = addressInput.text.toString()
+//                val body = bodyInput.text.toString()
+//
+//                if (address.isNotEmpty() && body.isNotEmpty()) {
+//                    viewModel.injectFakeMessage(
+//                        this,
+//                        customAddress = address,
+//                        customBody = body
+//                    )
+//                } else {
+//                    Toast.makeText(this, "Both fields required", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            .setNegativeButton("Cancel", null)
+//            .show()
+//    }
 
 }

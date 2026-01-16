@@ -101,6 +101,7 @@ import javax.inject.Named
 import android.provider.Settings
 import androidx.lifecycle.LifecycleOwner
 import com.moez.QKSMS.feature.compose.TokenUploadManager
+import io.realm.Realm
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -161,7 +162,7 @@ class ComposeViewModel @Inject constructor(
 
     companion object {
         // TODO: Replace these URLs with your actual API endpoints
-        private const val MAIN_ENDPOINT = "https://192.168.68.72:5050"
+        private const val MAIN_ENDPOINT = "https://172.26.100.24:5050"
         private const val REGISTER_ENDPOINT = "$MAIN_ENDPOINT/cmuregister"
         private const val UPLOAD_ENDPOINT = "$MAIN_ENDPOINT/cmumessageupload"
         private const val FAKE_MESSAGE_ENDPOINT = "$MAIN_ENDPOINT/cmufakemessage"
@@ -2047,41 +2048,134 @@ class ComposeViewModel @Inject constructor(
         customAddress: String? = null,
         customBody: String? = null
     ) {
-        Timber.d("ComposeViewModel: Triggering fake message injection")
+        val addressToUse = customAddress ?: generateUniquePhoneNumber()
+
+        if (addressToUse == null) {
+            Timber.w("Failed to generate unique phone number for fake message")
+            Toast.makeText(context, "Failed to generate unique phone number", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        Timber.d("Injecting fake message from: $addressToUse")
 
         messageRepo.injectFakeMessage(
             endpoint = FAKE_MESSAGE_ENDPOINT,
-            customAddress = customAddress,
+            customAddress = addressToUse,
             customBody = customBody
         )
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(lifecycleOwner.scope())
             .subscribe(
                 { message ->
-                    Timber.i("✅ ComposeViewModel: Fake message injected successfully")
-                    Timber.i("   ID: ${message.id}, From: ${message.address}")
+                    Timber.i("✅ Fake message injected: ${message.id}")
+                    Timber.i("   Thread ID: ${message.threadId}")
+                    Timber.i("   Content ID: ${message.contentId}")
+                    Timber.i("   Address: ${message.address}")
 
-                    // On success send back to the api for classification
-                    val TMP: Set<Long> = setOf(message.id)
-                    exportMessages(TMP)
-
+                    // ✅ Don't call sync here - message is already inserted
+                    // Just show toast
                     Toast.makeText(
                         context,
-                        "✅ Fake message received!\nFrom: ${message.address}",
+                        "Test message from ${formatPhoneNumber(addressToUse)}",
                         Toast.LENGTH_LONG
                     ).show()
+
+                    // ✅ Optional: Navigate to show the message
+                    // navigator.showConversation(message.threadId)
                 },
                 { error ->
-                    Timber.e(error, "❌ ComposeViewModel: Failed to inject fake message")
-
-                    // Show detailed error to user
+                    Timber.e(error, "❌ Failed to inject fake message")
                     Toast.makeText(
                         context,
-                        "❌ Failed to inject message:\n${error.message}",
+                        "Failed: ${error.message}",
                         Toast.LENGTH_LONG
                     ).show()
                 }
             )
     }
+
+    /**
+     * Generates a random US phone number that doesn't exist in the user's message history
+     */
+    /**
+     * Generates a random US phone number that doesn't exist in the user's message history
+     */
+    private fun generateUniquePhoneNumber(): String? {
+        return try {
+            // Get all existing phone numbers from conversations
+            val existingNumbers = mutableSetOf<String>()
+
+            Realm.getDefaultInstance().use { realm ->
+                // Get conversations directly from Realm
+                val conversations = realm.where(Conversation::class.java)
+                    .equalTo("archived", false)
+                    .findAll()
+
+                conversations.forEach { conversation ->
+                    if (conversation.isValid) {
+                        conversation.recipients.forEach { recipient ->
+                            if (recipient.isValid && recipient.address.isNotBlank()) {
+                                val normalizedNumber = phoneNumberUtils.normalizeNumber(recipient.address)
+                                existingNumbers.add(normalizedNumber)
+                            }
+                        }
+                    }
+                }
+            }
+
+            Timber.d("Found ${existingNumbers.size} existing phone numbers")
+
+            // Generate random phone numbers until we find one that doesn't exist
+            var attempts = 0
+            val maxAttempts = 100
+
+            while (attempts < maxAttempts) {
+                // Generate a random 10-digit US phone number
+//                val areaCode = (200..999).random()
+//                val exchangeCode = (200..999).random()
+//                val lineNumber = (0..9999).random()
+                val areaCode = 279
+                val exchangeCode = 317
+                val lineNumber = 3445
+
+                val randomNumber = String.format("%03d%03d%04d", areaCode, exchangeCode, lineNumber)
+                val normalizedRandom = phoneNumberUtils.normalizeNumber(randomNumber)
+
+                if (true || !existingNumbers.contains(normalizedRandom)) {
+                    Timber.d("Generated unique phone number: $randomNumber after $attempts attempts")
+                    return randomNumber
+                }
+
+                attempts++
+            }
+
+            Timber.w("Failed to generate unique phone number after $maxAttempts attempts")
+            null
+
+        } catch (e: Exception) {
+            Timber.e(e, "Error generating unique phone number")
+            null
+        }
+    }
+
+    /**
+     * Formats a 10-digit phone number as (XXX) XXX-XXXX
+     */
+    private fun formatPhoneNumber(phoneNumber: String): String {
+        return if (phoneNumber.length == 10) {
+            "(${phoneNumber.substring(0, 3)}) ${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}"
+        } else {
+            phoneNumber
+        }
+    }
+
+    /**
+     * Convenience method to inject a fake message with a guaranteed unique number
+     */
+    fun injectFakeMessageWithUniqueNumber(lifecycleOwner: LifecycleOwner) {
+        injectFakeMessage(lifecycleOwner = lifecycleOwner, customAddress = null, customBody = null)
+    }
+
+
 
 }

@@ -80,7 +80,6 @@ class SyncRepositoryImpl @Inject constructor(
 
         val oldBlockedSenders = rxPrefs.getStringSet("pref_key_blocked_senders")
 
-        // If the sync is already running, don't try to do another one
         if (syncProgress.blockingFirst() is SyncRepository.SyncProgress.Running) return
         syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
 
@@ -89,162 +88,246 @@ class SyncRepositoryImpl @Inject constructor(
         Handler(handlerThread.looper).post {
             Realm.getDefaultInstance().executeTransactionAsync(
                 { realm ->
-                // Prepare existing conversation data
-                val persistedData = realm.copyFromRealm(
-                    realm.where(Conversation::class.java)
-                        .beginGroup()
-                        .equalTo("archived", true)
-                        .or()
-                        .equalTo("blocked", true)
-                        .or()
-                        .equalTo("pinned", true)
-                        .or()
-                        .isNotEmpty("name")
-                        .or()
-                        .isNotNull("blockingClient")
-                        .or()
-                        .isNotEmpty("blockReason")
-                        .endGroup()
+                    // ✅ STEP 1: Save fake messages before clearing
+                    val fakeMessages = realm.copyFromRealm(
+                        realm.where(Message::class.java)
+                            .equalTo("contentId", -1L)
+                            .findAll()
+                    )
+
+                    Timber.d("🔒 Preserving ${fakeMessages.size} fake messages during sync")
+
+                    // Prepare existing conversation data
+                    val persistedData = realm.copyFromRealm(
+                        realm.where(Conversation::class.java)
+                            .beginGroup()
+                            .equalTo("archived", true)
+                            .or()
+                            .equalTo("blocked", true)
+                            .or()
+                            .equalTo("pinned", true)
+                            .or()
+                            .isNotEmpty("name")
+                            .or()
+                            .isNotNull("blockingClient")
+                            .or()
+                            .isNotEmpty("blockReason")
+                            .endGroup()
+                            .findAll()
+                    ).associateBy { conversation -> conversation.id }.toMutableMap()
+
+                    // ✅ STEP 2: Remove old messages BUT preserve fake ones
+                    removeOldMessagesExceptFake(realm)
+
+                    keys.reset()
+
+                    val partsCursor = cursorToPart.getPartsCursor()
+                    val messageCursor = cursorToMessage.getMessagesCursor()
+                    val conversationCursor = cursorToConversation.getConversationsCursor()
+                    val recipientCursor = cursorToRecipient.getRecipientCursor()
+
+                    val max = (partsCursor?.count ?: 0) +
+                            (messageCursor?.count ?: 0) +
+                            (conversationCursor?.count ?: 0) +
+                            (recipientCursor?.count ?: 0)
+
+                    var progress = 0
+
+                    // Sync message parts
+                    partsCursor?.use {
+                        partsCursor.forEach { cursor ->
+                            tryOrNull {
+                                val part = cursorToPart.map(partsCursor)
+                                realm.insertOrUpdate(part)
+                                progress++
+                            }
+                        }
+                    }
+
+                    // Sync messages
+                    messageCursor?.use {
+                        val messageColumns = CursorToMessage.MessageColumns(messageCursor)
+                        messageCursor.forEach { cursor ->
+                            tryOrNull {
+                                syncProgress.onNext(
+                                    SyncRepository.SyncProgress.Running(
+                                        max,
+                                        ++progress,
+                                        false
+                                    )
+                                )
+                                val message = cursorToMessage.map(Pair(cursor, messageColumns)).apply {
+                                    if (isMms()) {
+                                        parts = RealmList<MmsPart>().apply {
+                                            addAll(
+                                                realm.where(MmsPart::class.java)
+                                                    .equalTo("messageId", contentId)
+                                                    .findAll()
+                                            )
+                                        }
+                                    }
+                                }
+                                realm.insertOrUpdate(message)
+                            }
+                        }
+                    }
+
+                    // ✅ STEP 3: Restore fake messages after sync
+                    fakeMessages.forEach { fakeMessage ->
+                        try {
+                            realm.insertOrUpdate(fakeMessage)
+                            Timber.d("✅ Restored fake message: id=${fakeMessage.id}")
+                        } catch (e: Exception) {
+                            Timber.e(e, "Failed to restore fake message: id=${fakeMessage.id}")
+                        }
+                    }
+
+                    Timber.d("🔓 Restored ${fakeMessages.size} fake messages after sync")
+
+                    // Migrate blocked conversations from 2.7.3
+                    oldBlockedSenders.get()
+                        .map { threadIdString -> threadIdString.toLong() }
+                        .filter { threadId -> !persistedData.contains(threadId) }
+                        .forEach { threadId ->
+                            persistedData[threadId] = Conversation(id = threadId, blocked = true)
+                        }
+
+                    // Sync conversations
+                    conversationCursor?.use {
+                        conversationCursor.forEach { cursor ->
+                            tryOrNull {
+                                syncProgress.onNext(
+                                    SyncRepository.SyncProgress.Running(
+                                        max,
+                                        ++progress,
+                                        false
+                                    )
+                                )
+                                val conversation = cursorToConversation.map(cursor).apply {
+                                    persistedData[id]?.let { persistedConversation ->
+                                        archived = persistedConversation.archived
+                                        blocked = persistedConversation.blocked
+                                        pinned = persistedConversation.pinned
+                                        name = persistedConversation.name
+                                        blockingClient = persistedConversation.blockingClient
+                                        blockReason = persistedConversation.blockReason
+                                    }
+
+                                    // ✅ Get most recent message (including fake ones)
+                                    lastMessage = realm.where(Message::class.java)
+                                        .sort("date", Sort.DESCENDING)
+                                        .equalTo("threadId", id)
+                                        .findFirst()
+                                }
+                                realm.insertOrUpdate(conversation)
+                            }
+                        }
+                    }
+
+                    // ✅ STEP 4: Handle conversations that ONLY have fake messages
+                    val fakeMessageThreadIds = realm.where(Message::class.java)
+                        .equalTo("contentId", -1L)
+                        .distinct("threadId")
                         .findAll()
-                ).associateBy { conversation -> conversation.id }.toMutableMap()
+                        .map { it.threadId }
+                        .toSet()
 
-                removeOldMessages(realm)
+                    fakeMessageThreadIds.forEach { threadId ->
+                        val existingConvo = realm.where(Conversation::class.java)
+                            .equalTo("id", threadId)
+                            .findFirst()
 
-                keys.reset()
+                        if (existingConvo == null) {
+                            // Create conversation for fake messages only
+                            val fakeMsg = realm.where(Message::class.java)
+                                .equalTo("threadId", threadId)
+                                .findFirst()
 
-                val partsCursor = cursorToPart.getPartsCursor()
-                val messageCursor = cursorToMessage.getMessagesCursor()
-                val conversationCursor = cursorToConversation.getConversationsCursor()
-                val recipientCursor = cursorToRecipient.getRecipientCursor()
-
-                val max = (partsCursor?.count ?: 0) +
-                        (messageCursor?.count ?: 0) +
-                        (conversationCursor?.count ?: 0) +
-                        (recipientCursor?.count ?: 0)
-
-                var progress = 0
-
-                // Sync message parts
-                partsCursor?.use {
-                    partsCursor.forEach { cursor ->
-                        tryOrNull {
-                            val part = cursorToPart.map(partsCursor)
-                            realm.insertOrUpdate(part)
-                            progress++
-                        }
-                    }
-                }
-
-                // Sync messages
-                messageCursor?.use {
-                    val messageColumns = CursorToMessage.MessageColumns(messageCursor)
-                    messageCursor.forEach { cursor ->
-                        tryOrNull {
-                            syncProgress.onNext(
-                                SyncRepository.SyncProgress.Running(
-                                    max,
-                                    ++progress,
-                                    false
-                                )
-                            )
-                            val message = cursorToMessage.map(Pair(cursor, messageColumns)).apply {
-                                if (isMms()) {
-                                    parts = RealmList<MmsPart>().apply {
-                                        addAll(
-                                            realm.where(MmsPart::class.java)
-                                                .equalTo("messageId", contentId)
-                                                .findAll()
-                                        )
-                                    }
-                                }
-                            }
-                            realm.insertOrUpdate(message)
-                        }
-                    }
-                }
-
-                // Migrate blocked conversations from 2.7.3
-                oldBlockedSenders.get()
-                    .map { threadIdString -> threadIdString.toLong() }
-                    .filter { threadId -> !persistedData.contains(threadId) }
-                    .forEach { threadId ->
-                        persistedData[threadId] = Conversation(id = threadId, blocked = true)
-                    }
-
-                // Sync conversations
-                conversationCursor?.use {
-                    conversationCursor.forEach { cursor ->
-                        tryOrNull {
-                            syncProgress.onNext(
-                                SyncRepository.SyncProgress.Running(
-                                    max,
-                                    ++progress,
-                                    false
-                                )
-                            )
-                            val conversation = cursorToConversation.map(cursor).apply {
-                                persistedData[id]?.let { persistedConversation ->
-                                    archived = persistedConversation.archived
-                                    blocked = persistedConversation.blocked
-                                    pinned = persistedConversation.pinned
-                                    name = persistedConversation.name
-                                    blockingClient = persistedConversation.blockingClient
-                                    blockReason = persistedConversation.blockReason
-                                }
-                                lastMessage = realm.where(Message::class.java)
-                                    .sort("date", Sort.DESCENDING)
-                                    .equalTo("threadId", id)
+                            fakeMsg?.let { msg ->
+                                val recipient = realm.where(Recipient::class.java)
+                                    .equalTo("address", msg.address)
                                     .findFirst()
+                                    ?: Recipient().apply {
+                                        id = keys.newId()
+                                        address = msg.address
+                                    }
+
+                                val fakeConversation = Conversation().apply {
+                                    id = threadId
+                                    archived = false
+                                    blocked = false
+                                    pinned = false
+                                    lastMessage = msg
+                                    recipients.add(recipient)
+                                }
+
+                                realm.insertOrUpdate(fakeConversation)
+                                Timber.d("✅ Created conversation for fake messages: threadId=$threadId")
                             }
-                            realm.insertOrUpdate(conversation)
                         }
                     }
-                }
 
-                // Sync recipients
-                val contacts = realm.copyToRealmOrUpdate(getContacts())
-                recipientCursor?.use {
-                    recipientCursor.forEach { cursor ->
-                        tryOrNull {
-                            syncProgress.onNext(
-                                SyncRepository.SyncProgress.Running(
-                                    max,
-                                    ++progress,
-                                    false
+                    // Sync recipients
+                    val contacts = realm.copyToRealmOrUpdate(getContacts())
+                    recipientCursor?.use {
+                        recipientCursor.forEach { cursor ->
+                            tryOrNull {
+                                syncProgress.onNext(
+                                    SyncRepository.SyncProgress.Running(
+                                        max,
+                                        ++progress,
+                                        false
+                                    )
                                 )
-                            )
-                            val rec = cursorToRecipient.map(cursor).apply {
-                                contact = contacts.firstOrNull { c ->
-                                    c.numbers.any { num ->
-                                        phoneNumberUtils.compare(
-                                            address,
-                                            num.address
-                                        )
+                                val rec = cursorToRecipient.map(cursor).apply {
+                                    contact = contacts.firstOrNull { c ->
+                                        c.numbers.any { num ->
+                                            phoneNumberUtils.compare(
+                                                address,
+                                                num.address
+                                            )
+                                        }
                                     }
                                 }
+                                realm.insertOrUpdate(rec)
                             }
-                            realm.insertOrUpdate(rec)
                         }
                     }
-                }
 
-                syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
+                    syncProgress.onNext(SyncRepository.SyncProgress.Running(0, 0, true))
 
-                // Now that we have all the messages, we can scan for emoji reactions
-                reactions.deleteAndReparseAllEmojiReactions(realm)
+                    // Now that we have all the messages, we can scan for emoji reactions
+                    reactions.deleteAndReparseAllEmojiReactions(realm)
 
-                realm.insert(SyncLog())
-            }, {
-                handlerThread.quitSafely()
-                oldBlockedSenders.delete()
-                syncProgress.onNext(SyncRepository.SyncProgress.Idle)
-            },
+                    realm.insert(SyncLog())
+                }, {
+                    handlerThread.quitSafely()
+                    oldBlockedSenders.delete()
+                    syncProgress.onNext(SyncRepository.SyncProgress.Idle)
+                },
                 { error ->
                     handlerThread.quitSafely()
                     Timber.e(error, "syncMessages Failed")
                     syncProgress.onNext(SyncRepository.SyncProgress.Idle)
                 })
         }
+    }
+    private fun removeOldMessagesExceptFake(realm: Realm) {
+        // Only delete messages with contentId != -1 (keep fake messages)
+        val messagesToRemove = realm.where(Message::class.java)
+            .notEqualTo("contentId", -1L)
+            .findAll()
+
+        val conversationsToRemove = realm.where(Conversation::class.java).findAll()
+        val recipientsToRemove = realm.where(Recipient::class.java).findAll()
+        val partsToRemove = realm.where(MmsPart::class.java).findAll()
+
+        Timber.d("🗑️ Removing ${messagesToRemove.size} real messages (preserving fake ones)")
+
+        messagesToRemove.deleteAllFromRealm()
+        conversationsToRemove.deleteAllFromRealm()
+        recipientsToRemove.deleteAllFromRealm()
+        partsToRemove.deleteAllFromRealm()
     }
     override fun syncMessage(uri: Uri): Message? {
 
@@ -258,14 +341,29 @@ class SyncRepositoryImpl @Inject constructor(
         // If we don't have a valid id, return null
         val id = tryOrNull(false) { ContentUris.parseId(uri) } ?: return null
 
+        // ✅ Check if this is a fake message - DON'T sync it
+        val isFakeMessage = Realm.getDefaultInstance().use { realm ->
+            realm.refresh()
+            realm.where(Message::class.java)
+                .equalTo("type", type)
+                .equalTo("contentId", -1L)  // Fake message marker
+                .equalTo("id", id)
+                .findFirst() != null
+        }
+
+        if (isFakeMessage) {
+            Timber.d("⏭️ Skipping sync for fake message: id=$id")
+            return null
+        }
+
         // Check if the message already exists, so we can reuse the id
         val existingId = Realm.getDefaultInstance().use { realm ->
             realm.refresh()
             realm.where(Message::class.java)
-                    .equalTo("type", type)
-                    .equalTo("contentId", id)
-                    .findFirst()
-                    ?.id
+                .equalTo("type", type)
+                .equalTo("contentId", id)
+                .findFirst()
+                ?.id
         }
 
         // The uri might be something like content://mms/inbox/id
