@@ -2,6 +2,7 @@ package dev.octoshrimpy.quik.feature.messageutils
 
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +13,30 @@ import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
 import dev.octoshrimpy.quik.common.widget.QkSwitch
 import dev.octoshrimpy.quik.databinding.MessageUtilsControllerBinding
+import dev.octoshrimpy.quik.feature.settings.autodelete.AutoDeleteDialog
 import dev.octoshrimpy.quik.injection.appComponent
 import dev.octoshrimpy.quik.repository.MessageRepository
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.resume
+
 class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState, MessageUtilsPresenter>(), MessageUtilsView {
+    @Inject lateinit var context: Context
     @Inject override lateinit var presenter: MessageUtilsPresenter
+    private val autoDeleteDialog: AutoDeleteDialog by lazy {
+        AutoDeleteDialog(activity!!, autoDeleteSubject::onNext)
+    }
+    private val autoDeleteSubject: Subject<Int> = PublishSubject.create()
     private var binding: MessageUtilsControllerBinding? = null
     override val autoDeduplicateClickIntent by lazy { binding!!.autoDeduplicate.clicks() }
     override val deduplicateClickIntent by lazy { binding!!.deduplicateMessages.clicks() }
+    override val autoDeleteClickIntent by lazy { binding!!.autoDelete.clicks() }
 
     init {
         appComponent.inject(this)
@@ -79,6 +95,12 @@ class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState,
                     state.deduplicationProgress.indeterminate
             }
         }
+
+        binding!!.autoDelete.summary = when (state.autoDelete) {
+            0 -> context.getString(R.string.settings_auto_delete_never)
+            else -> context.resources.getQuantityString(
+                R.plurals.settings_auto_delete_summary, state.autoDelete, state.autoDelete)
+        }
     }
 
     override fun showDeduplicationConfirmationDialog(): Single<Boolean> = Single.create { emitter ->
@@ -94,5 +116,21 @@ class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState,
     override fun handleResult(resIdString: Int) {
         binding?.deduplicationProgressText?.isVisible = true
         binding?.deduplicationProgressText?.setText(resIdString)
+    }
+
+    override fun autoDeleteChanged(): Observable<Int> = autoDeleteSubject
+
+    override fun showAutoDeleteDialog(days: Int) = autoDeleteDialog.setExpiry(days).show()
+
+    override suspend fun showAutoDeleteWarningDialog(messages: Int): Boolean = withContext(Dispatchers.Main) {
+        suspendCancellableCoroutine { cont ->
+            androidx.appcompat.app.AlertDialog.Builder(activity!!)
+                .setTitle(R.string.settings_auto_delete_warning)
+                .setMessage(context.resources.getString(R.string.settings_auto_delete_warning_message, messages))
+                .setOnCancelListener { cont.resume(false) }
+                .setNegativeButton(R.string.button_cancel) { _, _ -> cont.resume(false) }
+                .setPositiveButton(R.string.button_yes) { _, _ -> cont.resume(true) }
+                .show()
+        }
     }
 }

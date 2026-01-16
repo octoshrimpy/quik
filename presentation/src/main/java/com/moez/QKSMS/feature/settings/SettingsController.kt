@@ -24,7 +24,6 @@ import android.content.Context
 import android.os.Build
 import android.text.format.DateFormat
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import com.bluelinelabs.conductor.RouterTransaction
 import com.google.android.material.snackbar.Snackbar
@@ -45,7 +44,6 @@ import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.widget.PreferenceView
 import dev.octoshrimpy.quik.common.widget.TextInputDialog
 import dev.octoshrimpy.quik.feature.settings.about.AboutController
-import dev.octoshrimpy.quik.feature.settings.autodelete.AutoDeleteDialog
 import dev.octoshrimpy.quik.feature.settings.swipe.SwipeActionsController
 import dev.octoshrimpy.quik.feature.themepicker.ThemePickerController
 import dev.octoshrimpy.quik.injection.appComponent
@@ -58,11 +56,7 @@ import kotlinx.android.synthetic.main.settings_controller.*
 import kotlinx.android.synthetic.main.settings_controller.view.*
 import kotlinx.android.synthetic.main.settings_switch_widget.view.*
 import kotlinx.android.synthetic.main.settings_theme_widget.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.coroutines.resume
 
 class SettingsController : QkController<SettingsView, SettingsState, SettingsPresenter>(), SettingsView {
 
@@ -79,15 +73,11 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     private val signatureDialog: TextInputDialog by lazy {
         TextInputDialog(activity!!, context.getString(R.string.settings_signature_title), signatureSubject::onNext)
     }
-    private val autoDeleteDialog: AutoDeleteDialog by lazy {
-        AutoDeleteDialog(activity!!, autoDeleteSubject::onNext)
-    }
 
     private val viewQksmsPlusSubject: Subject<Unit> = PublishSubject.create()
     private val startTimeSelectedSubject: Subject<Pair<Int, Int>> = PublishSubject.create()
     private val endTimeSelectedSubject: Subject<Pair<Int, Int>> = PublishSubject.create()
     private val signatureSubject: Subject<String> = PublishSubject.create()
-    private val autoDeleteSubject: Subject<Int> = PublishSubject.create()
 
     private val progressAnimator by lazy { ObjectAnimator.ofInt(syncingProgress, "progress", 0, 0) }
 
@@ -147,8 +137,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
     override fun signatureChanged(): Observable<String> = signatureSubject
 
-    override fun autoDeleteChanged(): Observable<Int> = autoDeleteSubject
-
     override fun mmsSizeSelected(): Observable<Int> = mmsSizeDialog.adapter.menuItemClicks
 
     override fun messageLinkHandlingSelected(): Observable<Int> = messageLinkHandlingDialog.adapter.menuItemClicks
@@ -188,12 +176,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
 
         unicode.checkbox.isChecked = state.stripUnicodeEnabled
         mobileOnly.checkbox.isChecked = state.mobileOnly
-
-        autoDelete.summary = when (state.autoDelete) {
-            0 -> context.getString(R.string.settings_auto_delete_never)
-            else -> context.resources.getQuantityString(
-                    R.plurals.settings_auto_delete_summary, state.autoDelete, state.autoDelete)
-        }
 
         longAsMms.checkbox.isChecked = state.longAsMms
 
@@ -254,20 +236,6 @@ class SettingsController : QkController<SettingsView, SettingsState, SettingsPre
     override fun showDelayDurationDialog() = sendDelayDialog.show(activity!!)
 
     override fun showSignatureDialog(signature: String) = signatureDialog.setText(signature).show()
-
-    override fun showAutoDeleteDialog(days: Int) = autoDeleteDialog.setExpiry(days).show()
-
-    override suspend fun showAutoDeleteWarningDialog(messages: Int): Boolean = withContext(Dispatchers.Main) {
-        suspendCancellableCoroutine { cont ->
-            AlertDialog.Builder(activity!!)
-                    .setTitle(R.string.settings_auto_delete_warning)
-                    .setMessage(context.resources.getString(R.string.settings_auto_delete_warning_message, messages))
-                    .setOnCancelListener { cont.resume(false) }
-                    .setNegativeButton(R.string.button_cancel) { _, _ -> cont.resume(false) }
-                    .setPositiveButton(R.string.button_yes) { _, _ -> cont.resume(true) }
-                    .show()
-        }
-    }
 
     override fun showMmsSizePicker() = mmsSizeDialog.show(activity!!)
 
