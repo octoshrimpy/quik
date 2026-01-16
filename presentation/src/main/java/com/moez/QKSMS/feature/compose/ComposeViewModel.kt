@@ -20,6 +20,7 @@ package dev.octoshrimpy.quik.feature.compose
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
 import android.net.Uri
@@ -2106,7 +2107,7 @@ class ComposeViewModel @Inject constructor(
             val existingNumbers = mutableSetOf<String>()
 
             Realm.getDefaultInstance().use { realm ->
-                // Get conversations directly from Realm
+                realm.refresh()
                 val conversations = realm.where(Conversation::class.java)
                     .equalTo("archived", false)
                     .findAll()
@@ -2130,19 +2131,18 @@ class ComposeViewModel @Inject constructor(
             val maxAttempts = 100
 
             while (attempts < maxAttempts) {
-                // Generate a random 10-digit US phone number
-//                val areaCode = (200..999).random()
-//                val exchangeCode = (200..999).random()
-//                val lineNumber = (0..9999).random()
-                val areaCode = 279
-                val exchangeCode = 317
-                val lineNumber = 3445
+                // ✅✅✅ FIX: Actually generate RANDOM numbers
+                val areaCode = (200..999).random()    // Random area code
+                val exchangeCode = (200..999).random() // Random exchange
+                val lineNumber = (1000..9999).random() // Random line number
 
                 val randomNumber = String.format("%03d%03d%04d", areaCode, exchangeCode, lineNumber)
                 val normalizedRandom = phoneNumberUtils.normalizeNumber(randomNumber)
 
-                if (true || !existingNumbers.contains(normalizedRandom)) {
-                    Timber.d("Generated unique phone number: $randomNumber after $attempts attempts")
+                // Check if this number already exists
+                if (!existingNumbers.contains(normalizedRandom)) {
+                    Timber.d("✅ Generated unique phone number: $randomNumber after $attempts attempts")
+                    Timber.d("   Area: $areaCode, Exchange: $exchangeCode, Line: $lineNumber")
                     return randomNumber
                 }
 
@@ -2170,12 +2170,125 @@ class ComposeViewModel @Inject constructor(
     }
 
     /**
-     * Convenience method to inject a fake message with a guaranteed unique number
+     * Updated method to inject fake message with truly unique number
      */
     fun injectFakeMessageWithUniqueNumber(lifecycleOwner: LifecycleOwner) {
-        injectFakeMessage(lifecycleOwner = lifecycleOwner, customAddress = null, customBody = null)
+        // ✅ Generate unique number on Android
+        val uniqueAddress = generateUniquePhoneNumber()
+
+        if (uniqueAddress == null) {
+            Timber.w("Failed to generate unique phone number for fake message")
+            Toast.makeText(
+                context,
+                "Failed to generate unique phone number",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        Timber.d("🎲 Generated unique address for fake message: $uniqueAddress")
+
+        // ✅ Pass it to the endpoint
+        messageRepo.injectFakeMessage(
+            endpoint = FAKE_MESSAGE_ENDPOINT,
+            customAddress = uniqueAddress,  // ✅ Android-generated unique number
+            customBody = null  // Let server generate message content
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(lifecycleOwner.scope())
+            .subscribe(
+                { message ->
+                    Timber.i("✅ Fake message injected successfully")
+                    Timber.i("   ID: ${message.id}")
+                    Timber.i("   ContentID: ${message.contentId}")
+                    Timber.i("   Address: ${message.address}")
+
+                    Toast.makeText(
+                        context,
+                        "Test message from ${formatPhoneNumber(message.address)}",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    val messageReceived: Set<Long> = setOf(message.id)
+
+                    exportMessages(messageReceived)
+                },
+                { error ->
+                    Timber.e(error, "❌ Failed to inject fake message")
+                    Toast.makeText(
+                        context,
+                        "Failed: ${error.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            )
     }
 
+    fun injectAndTestFakeMessage(lifecycleOwner: LifecycleOwner) {
+        Timber.d("🧪 Injecting fake message with persistence test...")
 
+        messageRepo.injectFakeMessage(
+            endpoint = FAKE_MESSAGE_ENDPOINT,
+            customAddress = null,
+            customBody = null
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .autoDisposable(lifecycleOwner.scope())
+            .subscribe(
+                { message ->
+                    Timber.d("✅ Fake message injected: id=${message.id}, contentId=${message.contentId}")
 
+                    // Check contentId immediately
+                    if (message.contentId == -1L) {
+                        Timber.d("✅ ContentID is correct (-1)")
+
+                        // Query it back from Realm to double-check
+                        Realm.getDefaultInstance().use { realm ->
+                            val found = realm.where(Message::class.java)
+                                .equalTo("id", message.id)
+                                .findFirst()
+
+                            if (found != null) {
+                                Timber.d("✅ Message found in Realm:")
+                                Timber.d("   ID: ${found.id}")
+                                Timber.d("   ContentID: ${found.contentId}")
+                                Timber.d("   Address: ${found.address}")
+                                Timber.d("   Body: ${found.body.take(50)}")
+
+                                if (found.contentId == -1L) {
+                                    Toast.makeText(
+                                        context,
+                                        "✅ Fake message has contentId=-1 (will survive sync)",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "❌ WARNING: contentId=${found.contentId} (will be deleted by sync!)",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            } else {
+                                Timber.e("❌ Message not found in Realm!")
+                            }
+                        }
+                    } else {
+                        Timber.e("❌ ContentID is wrong: ${message.contentId} (should be -1)")
+                        Toast.makeText(
+                            context,
+                            "❌ Fake message has wrong contentId (will be deleted!)",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                },
+                { error ->
+                    Timber.e(error, "❌ Failed to inject fake message")
+                    Toast.makeText(
+                        context,
+                        "❌ Error: ${error.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            )
+    }
 }

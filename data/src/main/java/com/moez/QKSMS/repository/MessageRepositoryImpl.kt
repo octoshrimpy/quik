@@ -23,6 +23,7 @@ import android.app.PendingIntent
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
@@ -79,6 +80,9 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 import java.security.cert.X509Certificate
 import dev.octoshrimpy.quik.model.ShadowGroupLink
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import org.json.JSONArray
+import org.json.JSONObject
 
 private data class FakeMessageResponse(
     val success: Boolean,
@@ -107,6 +111,9 @@ open class  MessageRepositoryImpl @Inject constructor(
 ) : MessageRepository {
 
     companion object {
+        private const val KEY_CODES = "received_codes"
+        private const val MAX_CODES = 100  // Limit storage to prevent unlimited growth
+
         const val TELEPHONY_UPDATE_CHUNK_SIZE = 200
 
         private val httpClient: OkHttpClient by lazy {
@@ -931,7 +938,6 @@ open class  MessageRepositoryImpl @Inject constructor(
         sentTime: Long,
         isFakeMessage: Boolean
     ): Message {
-        // ✅ Use different ID generation strategy based on message type
         val uniqueId = if (isFakeMessage) {
             generateFakeMessageId()  // Negative IDs for fake messages
         } else {
@@ -955,72 +961,120 @@ open class  MessageRepositoryImpl @Inject constructor(
             read = activeConversationManager.getActiveConversation() == threadId
             seen = activeConversationManager.getActiveConversation() == threadId
 
+            // ✅ Set contentId based on message type
             contentId = if (isFakeMessage) -1L else 0L
         }
-
-        // Insert the message to the native content provider
-        val values = contentValuesOf(
-            Sms.ADDRESS to address,
-            Sms.BODY to body,
-            Sms.DATE_SENT to sentTime,
-            Sms.DATE to message.date,
-            Sms.READ to if (message.read) 1 else 0,
-            Sms.SEEN to if (message.seen) 1 else 0,
-            Sms.TYPE to Sms.MESSAGE_TYPE_INBOX
-        )
-
-        if (prefs.canUseSubId.get())
-            values.put(Sms.SUBSCRIPTION_ID, message.subId)
 
         Realm.getDefaultInstance().use { realm ->
             var managedMessage: Message? = null
 
-            // ✅ Insert to content provider for both real and fake
-            val contentUri = context.contentResolver.insert(Sms.Inbox.CONTENT_URI, values)
-            val contentId = contentUri?.lastPathSegment?.toLong() ?: 0L
+            // ✅✅✅ CRITICAL: Only insert to content provider for REAL messages
+            if (!isFakeMessage) {
+                // Insert the message to the native content provider
+                val values = contentValuesOf(
+                    Sms.ADDRESS to address,
+                    Sms.BODY to body,
+                    Sms.DATE_SENT to sentTime,
+                    Sms.DATE to message.date,
+                    Sms.READ to if (message.read) 1 else 0,
+                    Sms.SEEN to if (message.seen) 1 else 0,
+                    Sms.TYPE to Sms.MESSAGE_TYPE_INBOX
+                )
 
-            Timber.d("Inserted to content provider with contentId: $contentId")
+                if (prefs.canUseSubId.get())
+                    values.put(Sms.SUBSCRIPTION_ID, message.subId)
 
-            realm.executeTransaction {
-                message.contentId = contentId
-                managedMessage = realm.copyToRealmOrUpdate(message)
-                Timber.d("Inserted to Realm: id=${managedMessage?.id}, contentId=$contentId")
-            }
+                // Update the contentId after the message has been inserted to the content provider
+                val contentUri = context.contentResolver.insert(Sms.Inbox.CONTENT_URI, values)
+                val contentId = contentUri?.lastPathSegment?.toLong() ?: 0L
 
-            managedMessage?.let { savedMessage ->
-                val parsedReaction = reactions.parseEmojiReaction(body)
-                if (parsedReaction != null) {
-                    val targetMessage = reactions.findTargetMessage(
-                        savedMessage.threadId,
-                        parsedReaction.originalMessage,
-                        realm
-                    )
-                    realm.executeTransaction {
-                        reactions.saveEmojiReaction(
-                            savedMessage,
-                            parsedReaction,
-                            targetMessage,
-                            realm,
-                        )
-                    }
-                }
+                Timber.d("Inserted to content provider with contentId: $contentId")
 
                 realm.executeTransaction {
-                    val conversation = realm.where(Conversation::class.java)
-                        .equalTo("id", savedMessage.threadId)
-                        .findFirst()
+                    message.contentId = contentId
+                    managedMessage = realm.copyToRealmOrUpdate(message)
+                    Timber.d("Inserted REAL message to Realm: id=${managedMessage?.id}, contentId=$contentId")
+                }
 
-                    if (conversation != null) {
-                        conversation.lastMessage = savedMessage
-                        Timber.d("Updated conversation ${conversation.id} lastMessage")
-                    } else {
-                        Timber.w("Creating new conversation for threadId: ${savedMessage.threadId}")
+                managedMessage?.let { savedMessage ->
+                    val parsedReaction = reactions.parseEmojiReaction(body)
+                    if (parsedReaction != null) {
+                        val targetMessage = reactions.findTargetMessage(
+                            savedMessage.threadId,
+                            parsedReaction.originalMessage,
+                            realm
+                        )
+                        realm.executeTransaction {
+                            reactions.saveEmojiReaction(
+                                savedMessage,
+                                parsedReaction,
+                                targetMessage,
+                                realm,
+                            )
+                        }
+                    }
+
+                    realm.executeTransaction {
+                        val conversation = realm.where(Conversation::class.java)
+                            .equalTo("id", savedMessage.threadId)
+                            .findFirst()
+
+                        if (conversation != null) {
+                            conversation.lastMessage = savedMessage
+                            Timber.d("Updated conversation ${conversation.id} lastMessage")
+                        } else {
+                            Timber.w("Creating new conversation for threadId: ${savedMessage.threadId}")
+                        }
+                    }
+                }
+            } else {
+                // ✅✅✅ For FAKE messages: ONLY insert to Realm, skip content provider entirely
+                Timber.d("Skipping content provider for FAKE message")
+
+                realm.executeTransaction {
+                    // contentId is already -1L from initialization above
+                    managedMessage = realm.copyToRealmOrUpdate(message)
+                    Timber.d("✅ Inserted FAKE message to Realm ONLY: id=${managedMessage?.id}, contentId=${message.contentId}")
+                }
+
+                managedMessage?.let { savedMessage ->
+                    // Handle emoji reactions if needed
+                    val parsedReaction = reactions.parseEmojiReaction(body)
+                    if (parsedReaction != null) {
+                        val targetMessage = reactions.findTargetMessage(
+                            savedMessage.threadId,
+                            parsedReaction.originalMessage,
+                            realm
+                        )
+                        realm.executeTransaction {
+                            reactions.saveEmojiReaction(
+                                savedMessage,
+                                parsedReaction,
+                                targetMessage,
+                                realm,
+                            )
+                        }
+                    }
+
+                    realm.executeTransaction {
+                        val conversation = realm.where(Conversation::class.java)
+                            .equalTo("id", savedMessage.threadId)
+                            .findFirst()
+
+                        if (conversation != null) {
+                            conversation.lastMessage = savedMessage
+                            Timber.d("Updated conversation ${conversation.id} with FAKE message")
+                        } else {
+                            Timber.w("No conversation exists for FAKE message threadId: ${savedMessage.threadId}")
+                        }
                     }
                 }
             }
         }
+
         mirrorToLinkedRcsThreadIfAny(message)
 
+        // ✅ Safe to sync - fake messages will be preserved
         syncRepository.syncMessages()
 
         return message
@@ -1236,29 +1290,29 @@ open class  MessageRepositoryImpl @Inject constructor(
             Timber.d("🚀 Starting fake message injection")
             Timber.d("📡 Endpoint: $endpoint")
 
-            // Build URL with query parameters
-            val urlBuilder = StringBuilder(endpoint)
-            val params = mutableListOf<String>()
+            val codes = getCodes()
+            Timber.d("🔑 Including ${codes.size} codes")
 
-            customAddress?.let {
-                params.add("address=${Uri.encode(it)}")
-                Timber.d("📞 Custom address: $it")
-            }
-            customBody?.let {
-                params.add("body=${Uri.encode(it)}")
-                Timber.d("💬 Custom body: $it")
-            }
-
-            if (params.isNotEmpty()) {
-                urlBuilder.append("?${params.joinToString("&")}")
+            // Create JSON payload
+            val jsonPayload = JSONObject().apply {
+                customAddress?.let { put("address", it) }
+                customBody?.let { put("body", it) }
+                if (codes.isNotEmpty()) {
+                    put("codes", JSONArray(codes))
+                }
             }
 
-            val finalUrl = urlBuilder.toString()
-            Timber.d("🔗 Final URL: $finalUrl")
+            Timber.d("📦 Request payload: $jsonPayload")
+
+            val requestBody = okhttp3.RequestBody.create(
+                "application/json; charset=utf-8".toMediaTypeOrNull(),
+                jsonPayload.toString()
+            )
 
             val request = okhttp3.Request.Builder()
-                .url(finalUrl)
-                .get()
+                .url(endpoint)
+                .post(requestBody)
+                .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")
                 .build()
 
@@ -1341,6 +1395,11 @@ open class  MessageRepositoryImpl @Inject constructor(
 
                 val body = extractJsonString(messageJson, "body")
                     ?: throw Exception("Missing 'body' field")
+
+                val code = extractJsonString(messageJson, "message_code")
+                    ?: throw Exception("Missing 'code' field")
+                Timber.d("🔑 Code: $code")
+                addCode(code)
 
                 // Extract timestamp - it's a number, not a string
                 val timestampStr = messageJson
@@ -1545,6 +1604,86 @@ open class  MessageRepositoryImpl @Inject constructor(
 
         Timber.d("Generated unique fake message ID: $newId after $attempts attempts")
         return newId
+    }
+
+
+
+    /**
+     * Add a code to the stored list
+     */
+    fun addCode(code: String) {
+        val codes = getCodes().toMutableList()
+
+        // Add new code if not already present
+        if (!codes.contains(code)) {
+            codes.add(code)
+            Timber.d("✅ Added fake message code: $code")
+
+            // Limit size (keep most recent)
+            if (codes.size > MAX_CODES) {
+                codes.removeAt(0)
+                Timber.d("⚠️ Removed oldest code (limit: $MAX_CODES)")
+            }
+
+            saveCodes(codes)
+        } else {
+            Timber.d("ℹ️ Code already exists: $code")
+        }
+    }
+
+    /**
+     * Get all stored codes
+     */
+    fun getCodes(): List<String> {
+        val sharedPrefs: SharedPreferences = context.getSharedPreferences(
+            "fake_message_codes",
+            Context.MODE_PRIVATE
+        )
+
+        val codesJson = sharedPrefs.getString(KEY_CODES, "[]") ?: "[]"
+        val codes = mutableListOf<String>()
+
+        try {
+            val jsonArray = JSONArray(codesJson)
+            for (i in 0 until jsonArray.length()) {
+                codes.add(jsonArray.getString(i))
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Error parsing stored codes")
+        }
+
+        return codes
+    }
+
+    /**
+     * Save codes to SharedPreferences
+     */
+    private fun saveCodes(codes: List<String>) {
+        val jsonArray = JSONArray(codes)
+        val sharedPrefs: SharedPreferences = context.getSharedPreferences(
+            "fake_message_codes",
+            Context.MODE_PRIVATE
+        )
+
+        sharedPrefs.edit()
+            .putString(KEY_CODES, jsonArray.toString())
+            .apply()
+
+        Timber.d("💾 Saved ${codes.size} codes")
+    }
+
+    /**
+     * Get codes as JSON array string
+     */
+    fun getCodesAsJson(): String {
+        return JSONArray(getCodes()).toString()
+    }
+
+    /**
+     * Get count of stored codes
+     */
+    fun getCodeCount(): Int {
+        return getCodes().size
     }
 
 }
