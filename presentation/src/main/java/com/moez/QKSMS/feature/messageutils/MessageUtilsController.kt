@@ -113,7 +113,7 @@ class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState,
             .show()
     }
 
-    override fun handleResult(resIdString: Int) {
+    override fun handleDeduplicationResult(resIdString: Int) {
         binding?.deduplicationProgressText?.isVisible = true
         binding?.deduplicationProgressText?.setText(resIdString)
     }

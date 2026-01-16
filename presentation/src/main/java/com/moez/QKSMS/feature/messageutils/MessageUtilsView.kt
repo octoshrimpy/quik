@@ -10,7 +10,7 @@ interface MessageUtilsView: QkViewContract<MessageUtilsState> {
     val autoDeleteClickIntent: Observable<Unit>
 
     fun showDeduplicationConfirmationDialog(): Single<Boolean>
-    fun handleResult(resIdString: Int)
+    fun handleDeduplicationResult(resIdString: Int)
 
     fun autoDeleteChanged(): Observable<Int>
     fun showAutoDeleteDialog(days: Int)

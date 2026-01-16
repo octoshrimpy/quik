@@ -52,16 +52,16 @@ class MessageUtilsPresenter @Inject constructor(
                     .subscribe { result ->
                         when (result) {
                             is MessageRepository.DeduplicationResult.Success -> {
-                                view.handleResult(R.string.deduplicating_messages_finished)
+                                view.handleDeduplicationResult(R.string.deduplicating_messages_finished)
                             }
 
                             is MessageRepository.DeduplicationResult.NoDuplicates -> {
-                                view.handleResult(R.string.deduplicating_messages_no_messages)
+                                view.handleDeduplicationResult(R.string.deduplicating_messages_no_messages)
                             }
 
                             is MessageRepository.DeduplicationResult.Failure -> {
-                                view.handleResult(R.string.deduplicating_messages_failed)
-                                Timber.e("Error: ${result.error.localizedMessage}")
+                                view.handleDeduplicationResult(R.string.deduplicating_messages_failed)
+                                Timber.e("Error while deduplicating messages: ${result.error}")
                             }
                         }
                     }
