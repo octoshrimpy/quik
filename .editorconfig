@@ -1,0 +1,19 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{kt,kts}]
+indent_size = 4
+ktlint_standard = enabled
+ktlint_experimental = enabled
+ktlint_code_style = intellij_idea
+ktlint_standard_comment-spacing = disabled
+ktlint_standard_package-name = disabled
+ktlint_experimental_package-naming = enabled
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ktlint_standard_backing-property-naming = disabled
