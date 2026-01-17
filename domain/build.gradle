@@ -21,6 +21,7 @@ apply plugin: 'realm-android' // Realm needs to be before Kotlin or the build wi
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.diffplug.spotless'
 
 android {
     compileSdk 34
@@ -35,6 +36,12 @@ android {
         targetSdkVersion 33
     }
     namespace 'dev.octoshrimpy.quik.domain'
+}
+
+spotless {
+    kotlin {
+        ktlint()
+    }
 }
 
 dependencies {
