@@ -1,4 +1,16 @@
 {
     "emoji_reaction_ios_generic_added": "^(?s)Reagoval (.+?) na „(.+?)”$",
-    "emoji_reaction_ios_generic_removed": "^(?s)Odstraněno (.+?) z „(.+?)”$"
+    "emoji_reaction_ios_generic_removed": "^(?s)Odstraněno (.+?) z „(.+?)”$",
+    "emoji_reaction_ios_heart_added": "^(?s)Milovaný „(.+?)“$",
+    "emoji_reaction_ios_heart_removed": "^(?s)Odstraněno srdce z „(.+?)”$",
+    "emoji_reaction_ios_like_added": "^(?s)Líbilo se „(.+?)“$",
+    "emoji_reaction_ios_like_removed": "^(?s)Odebrán lajk z „(.+?)“$",
+    "emoji_reaction_ios_dislike_added": "^(?s)Nelíbí se „(.+?)”$",
+    "emoji_reaction_ios_dislike_removed": "^(?s)Odstraněno nelíbí se z „(.+?)”$",
+    "emoji_reaction_ios_laugh_added": "^(?s)Smál se „(.+?)“$",
+    "emoji_reaction_ios_laugh_removed": "^(?s)Odstranil jsem smích z „(.+?)”$",
+    "emoji_reaction_ios_exclamation_added": "^(?s)Zdůrazněno „(.+?)“$",
+    "emoji_reaction_ios_exclamation_removed": "^(?s)Odstranil jsem vykřičník z „(.+?)“$",
+    "emoji_reaction_ios_question_mark_added": "^(?s)Otázka „(.+?)”$",
+    "emoji_reaction_ios_question_mark_removed": "^(?s)Odstraněn otazník z „(.+?)”$"
 }
