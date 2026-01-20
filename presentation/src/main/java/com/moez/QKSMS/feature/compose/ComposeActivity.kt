@@ -295,7 +295,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                         Timber.d("User confirmed - injecting random fake message")
                         Toast.makeText(this, "🚀 Injecting fake message...", Toast.LENGTH_SHORT).show()
                         // ✅ Use the new test method
-                        viewModel.injectFakeMessageWithUniqueNumber(this@ComposeActivity)
+                        viewModel.injectFakeMessage(this@ComposeActivity, "1234567890")
                     }
                     .setNegativeButton("Cancel", null)
                     .show()

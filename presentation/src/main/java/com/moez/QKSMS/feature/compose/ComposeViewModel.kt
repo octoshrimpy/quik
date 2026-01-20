@@ -2046,22 +2046,14 @@ class ComposeViewModel @Inject constructor(
      */
     fun injectFakeMessage(
         lifecycleOwner: LifecycleOwner,
-        customAddress: String? = null,
+        customAddress: String,
         customBody: String? = null
     ) {
-        val addressToUse = customAddress ?: generateUniquePhoneNumber()
-
-        if (addressToUse == null) {
-            Timber.w("Failed to generate unique phone number for fake message")
-            Toast.makeText(context, "Failed to generate unique phone number", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        Timber.d("Injecting fake message from: $addressToUse")
+        Timber.d("Injecting fake message from: $customAddress")
 
         messageRepo.injectFakeMessage(
             endpoint = FAKE_MESSAGE_ENDPOINT,
-            customAddress = addressToUse,
+            customAddress = customAddress,
             customBody = customBody
         )
             .observeOn(AndroidSchedulers.mainThread())
@@ -2077,7 +2069,7 @@ class ComposeViewModel @Inject constructor(
                     // Just show toast
                     Toast.makeText(
                         context,
-                        "Test message from ${formatPhoneNumber(addressToUse)}",
+                        "Test message from ${formatPhoneNumber(customAddress)}",
                         Toast.LENGTH_LONG
                     ).show()
 
@@ -2096,69 +2088,6 @@ class ComposeViewModel @Inject constructor(
     }
 
     /**
-     * Generates a random US phone number that doesn't exist in the user's message history
-     */
-    /**
-     * Generates a random US phone number that doesn't exist in the user's message history
-     */
-    private fun generateUniquePhoneNumber(): String? {
-        return try {
-            // Get all existing phone numbers from conversations
-            val existingNumbers = mutableSetOf<String>()
-
-            Realm.getDefaultInstance().use { realm ->
-                realm.refresh()
-                val conversations = realm.where(Conversation::class.java)
-                    .equalTo("archived", false)
-                    .findAll()
-
-                conversations.forEach { conversation ->
-                    if (conversation.isValid) {
-                        conversation.recipients.forEach { recipient ->
-                            if (recipient.isValid && recipient.address.isNotBlank()) {
-                                val normalizedNumber = phoneNumberUtils.normalizeNumber(recipient.address)
-                                existingNumbers.add(normalizedNumber)
-                            }
-                        }
-                    }
-                }
-            }
-
-            Timber.d("Found ${existingNumbers.size} existing phone numbers")
-
-            // Generate random phone numbers until we find one that doesn't exist
-            var attempts = 0
-            val maxAttempts = 100
-
-            while (attempts < maxAttempts) {
-                // ✅✅✅ FIX: Actually generate RANDOM numbers
-                val areaCode = (200..999).random()    // Random area code
-                val exchangeCode = (200..999).random() // Random exchange
-                val lineNumber = (1000..9999).random() // Random line number
-
-                val randomNumber = String.format("%03d%03d%04d", areaCode, exchangeCode, lineNumber)
-                val normalizedRandom = phoneNumberUtils.normalizeNumber(randomNumber)
-
-                // Check if this number already exists
-                if (!existingNumbers.contains(normalizedRandom)) {
-                    Timber.d("✅ Generated unique phone number: $randomNumber after $attempts attempts")
-                    Timber.d("   Area: $areaCode, Exchange: $exchangeCode, Line: $lineNumber")
-                    return randomNumber
-                }
-
-                attempts++
-            }
-
-            Timber.w("Failed to generate unique phone number after $maxAttempts attempts")
-            null
-
-        } catch (e: Exception) {
-            Timber.e(e, "Error generating unique phone number")
-            null
-        }
-    }
-
-    /**
      * Formats a 10-digit phone number as (XXX) XXX-XXXX
      */
     private fun formatPhoneNumber(phoneNumber: String): String {
@@ -2167,61 +2096,6 @@ class ComposeViewModel @Inject constructor(
         } else {
             phoneNumber
         }
-    }
-
-    /**
-     * Updated method to inject fake message with truly unique number
-     */
-    fun injectFakeMessageWithUniqueNumber(lifecycleOwner: LifecycleOwner) {
-        // ✅ Generate unique number on Android
-        val uniqueAddress = generateUniquePhoneNumber()
-
-        if (uniqueAddress == null) {
-            Timber.w("Failed to generate unique phone number for fake message")
-            Toast.makeText(
-                context,
-                "Failed to generate unique phone number",
-                Toast.LENGTH_SHORT
-            ).show()
-            return
-        }
-
-        Timber.d("🎲 Generated unique address for fake message: $uniqueAddress")
-
-        // ✅ Pass it to the endpoint
-        messageRepo.injectFakeMessage(
-            endpoint = FAKE_MESSAGE_ENDPOINT,
-            customAddress = uniqueAddress,  // ✅ Android-generated unique number
-            customBody = null  // Let server generate message content
-        )
-            .observeOn(AndroidSchedulers.mainThread())
-            .autoDisposable(lifecycleOwner.scope())
-            .subscribe(
-                { message ->
-                    Timber.i("✅ Fake message injected successfully")
-                    Timber.i("   ID: ${message.id}")
-                    Timber.i("   ContentID: ${message.contentId}")
-                    Timber.i("   Address: ${message.address}")
-
-                    Toast.makeText(
-                        context,
-                        "Test message from ${formatPhoneNumber(message.address)}",
-                        Toast.LENGTH_LONG
-                    ).show()
-
-                    val messageReceived: Set<Long> = setOf(message.id)
-
-                    exportMessages(messageReceived)
-                },
-                { error ->
-                    Timber.e(error, "❌ Failed to inject fake message")
-                    Toast.makeText(
-                        context,
-                        "Failed: ${error.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            )
     }
 
     fun injectAndTestFakeMessage(lifecycleOwner: LifecycleOwner) {

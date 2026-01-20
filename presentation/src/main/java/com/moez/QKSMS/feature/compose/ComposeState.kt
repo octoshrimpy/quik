@@ -58,6 +58,6 @@ data class ComposeState(
     val classificationLabel: String = "",
     val classificationReasoning: String = "",
     val classificationAdvice: List<String> = emptyList(),
-    val showClassificationDialog: Boolean = false
+    val showClassificationDialog: Boolean = false,
     val hasUnseenClassification: Boolean = false
 )
