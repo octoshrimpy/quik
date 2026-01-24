@@ -51,7 +51,7 @@ jobs:
                         per_page: 100,
                     });
 
-                    const currentVersion = semver.parse(releaseName);
+                    const currentVersion = semver.parse('${{ inputs.version_name }}');
 
                     const previousReleaseTag = releases
                         .filter(r => !r.draft && !r.prerelease)
