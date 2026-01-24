@@ -495,4 +495,5 @@
     <string name="compose_send_group_summary_off">Die Nachrichten werden separat an alle Empfänger gesendet</string>
     <string name="notification_foreground_worker_text">Unter Android 12 und älteren Versionen ist eine Benachrichtigung für die Hintergrundarbeit erforderlich, die den Empfang von Nachrichten ermöglicht.</string>
     <string name="notification_foreground_worker_title">Empfange Nachricht</string>
+    <string name="message_management_title">Nachrichtenverwaltung</string>
 </resources>
