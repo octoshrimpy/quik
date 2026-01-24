@@ -26,8 +26,6 @@ import javax.inject.Inject
 class DeduplicateMessages @Inject constructor(
     private val messageRepo: MessageRepository
 ) : Interactor<Unit>() {
-
     override fun buildObservable(params: Unit): Flowable<MessageRepository.DeduplicationResult> =
-    messageRepo.deduplicateMessages()
-    .subscribeOn(Schedulers.io())
+    messageRepo.deduplicateMessages().subscribeOn(Schedulers.io())
 }
