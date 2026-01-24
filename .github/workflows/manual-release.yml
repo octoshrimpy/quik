@@ -88,10 +88,10 @@ jobs:
 
           gradle_file.write_text(content)
 
-          github_env = pathlib.Path(os.environ["GITHUB_ENV"])
-          with github_env.open("a") as env_file:
-              env_file.write(f"NEW_VERSION_NAME={new_name}\n")
-              env_file.write(f"NEW_VERSION_CODE={new_code}\n")
+          github_output = pathlib.Path(os.environ["GITHUB_OUTPUT"])
+          with github_output.open("a") as output_file:
+              output_file.write(f"new_version_name={new_name}\n")
+              output_file.write(f"new_version_code={new_code}\n")
           PY
 
   generate_release_notes:
