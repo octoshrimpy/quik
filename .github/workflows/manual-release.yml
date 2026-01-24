@@ -94,6 +94,12 @@ jobs:
               output_file.write(f"new_version_code={new_code}\n")
           PY
 
+      - name: Upload modified Gradle file
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-bump-artifact
+          path: presentation/build.gradle
+
   generate_release_notes:
     needs: bump-version
     uses: ./.github/workflows/generate-release-notes.yml
@@ -110,6 +116,12 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
+
+      - name: Download modified Gradle file
+        uses: actions/download-artifact@v4
+        with:
+          name: version-bump-artifact
+          path: presentation/
 
       - name: Open release PR
         uses: peter-evans/create-pull-request@v7
