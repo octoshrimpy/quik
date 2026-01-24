@@ -53,7 +53,7 @@
     <string name="inbox_search_empty_text">Keine Ergebnisse</string>
     <string name="archived_empty_text">Archivierte Unterhaltungen werden hier angezeigt</string>
     <string name="main_fab_cd">Neue Unterhaltung starten</string>
-    <string name="main_default_sms_title">Liebe es, wieder SMS zu schreiben</string>
+    <string name="main_default_sms_title">Liebe es,wieder, SMS zu schreiben</string>
     <string name="main_default_sms_message">QUIK als Standard-SMS-App festlegen</string>
     <string name="main_default_sms_change">Ändern</string>
     <string name="main_permission_required">Berechtigung erforderlich</string>
@@ -352,7 +352,7 @@
     <string name="button_save">Speichern</string>
     <string name="button_stop">Stop</string>
     <string name="button_more">Mehr</string>
-    <string name="button_set">OK</string>
+    <string name="button_set">Einstellen</string>
     <string name="button_undo">Rückgängig</string>
     <string name="toast_copied">Kopiert</string>
     <string name="toast_qksms_plus">Für diese Funktion muss QUIK+ freigeschalten werden</string>
@@ -496,4 +496,14 @@
     <string name="notification_foreground_worker_text">Unter Android 12 und älteren Versionen ist eine Benachrichtigung für die Hintergrundarbeit erforderlich, die den Empfang von Nachrichten ermöglicht.</string>
     <string name="notification_foreground_worker_title">Empfange Nachricht</string>
     <string name="message_management_title">Nachrichtenverwaltung</string>
+    <string name="main_sync_emojis">Emoji-Reaktionen analysieren…</string>
+    <string name="deduplicate_messages_category">Nachrichten deduplizieren</string>
+    <string name="deduplicate_messages_title">Doppelte Nachrichten entfernen</string>
+    <string name="deduplicate_messages_summary">Durchsucht die Nachrichtendatenbank und löscht alle Nachrichten, die genau mit den Originalnachrichten übereinstimmen</string>
+    <string name="deduplicate_message_confirmation_dialog_message">Deine Nachrichtendatenbank wird auf Duplikate überprüft, die anschließend entfernt werden.\nDadurch werden Nachrichten automatisch gelöscht. Fahre nur fort, wenn du dir über die Folgen im Klaren bist.</string>
+    <string name="auto_deduplicate_messages_title">Nachrichten automatisch deduplizieren</string>
+    <string name="auto_deduplicate_messages_summary">Die Deduplizierung wird während der Synchronisierung durchgeführt. Bitte beachte, dass dabei Nachrichten automatisch gelöscht werden. Die Wahrscheinlichkeit, dass es zu falschen Duplikaten kommt, ist zwar sehr gering, aber dennoch möglich.\nBitte sei vorsichtig.</string>
+    <string name="deduplicating_messages_finished">Die Deduplizierung der Nachrichten ist abgeschlossen!</string>
+    <string name="deduplicating_messages_no_messages">Keine doppelten Nachrichten gefunden.</string>
+    <string name="deduplicating_messages_failed">Die Deduplizierung der Nachrichten ist fehlgeschlagen. Bitte versuche es erneut</string>
 </resources>
