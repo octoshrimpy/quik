@@ -29,8 +29,8 @@ android {
         applicationId 'dev.octoshrimpy.quik'
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 2235
-        versionName '4.3.3'
+        versionCode 2236
+        versionName '4.3.4'
         setProperty("archivesBaseName", "QUIK-v${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
