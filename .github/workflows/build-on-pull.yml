@@ -24,16 +24,19 @@ jobs:
         java-version: '17'
         cache: gradle
 
-    - name: Build with Gradle
-      run: ./gradlew assembleDebug
+    - name: Check Kotlin code style
+      run: ./gradlew spotlessCheck
 
     - name: Run Android Lint
       run: ./gradlew lint
 
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug
+
     - name: Run Tests
       run: ./gradlew test
 
-    - name: List APK Output Directory 
+    - name: List APK Output Directory
       run: ls -R presentation/build/outputs/apk/debug
 
     - name: Rename APK

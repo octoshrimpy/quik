@@ -21,6 +21,7 @@ apply plugin: 'realm-android' // Realm needs to be before Kotlin or the build wi
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.diffplug.spotless'
 
 android {
     compileSdk 34
@@ -58,7 +59,7 @@ android {
         // Disables dependency metadata when building Android App Bundles.
         includeInBundle = false
     }
-    
+
     buildTypes {
         release {
             minifyEnabled true
@@ -104,6 +105,12 @@ android {
         signingConfigs.release.storePassword = System.getenv("keystore_password")
         signingConfigs.release.keyAlias = System.getenv("key_alias")
         signingConfigs.release.keyPassword = System.getenv("key_password")
+    }
+}
+
+spotless {
+    kotlin {
+        ktlint()
     }
 }
 
