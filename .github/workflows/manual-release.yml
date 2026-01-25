@@ -94,13 +94,19 @@ jobs:
               output_file.write(f"new_version_code={new_code}\n")
           PY
 
+      - name: Upload modified build.gradle
+        uses: actions/upload-artifact@v4
+        with:
+          name: version-bump-artifact
+          path: presentation/build.gradle
+
   generate_release_notes:
     needs: bump-version
     uses: ./.github/workflows/generate-release-notes.yml
     with:
       version_name: ${{ needs.bump-version.outputs.new_version_name }}
 
-  open_release_pr:
+  generate_app_changelog:
     needs: [bump-version, generate_release_notes]
     runs-on: ubuntu-latest
 
@@ -110,6 +116,102 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
+
+      - name: Prepare release notes
+        id: prepare_notes
+        env:
+          NOTES: ${{ needs.generate_release_notes.outputs.release_notes }}
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          import os, re, pathlib
+          notes = os.environ.get("NOTES", "")
+          clean = re.sub(
+              r'(?im)^\s*by\s+\S+\s+in\s+.*$',
+              '',
+              re.sub(r'(?im)^\s*["\']?\*\*Full\s+Changelog\*\*\s*:\s*.*$', '', notes)
+          ).rstrip()
+
+          pathlib.Path("sanitized_notes.txt").write_text(clean)
+          PY
+          {
+            echo "clean_notes<<EOF"
+            cat sanitized_notes.txt
+            echo ""
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Add to changelog.json
+        env:
+          VERSION_NAME: ${{ needs.bump-version.outputs.new_version_name }}
+          VERSION_CODE: ${{ needs.bump-version.outputs.new_version_code }}
+          CLEAN_NOTES: ${{ steps.prepare_notes.outputs.clean_notes }}
+        run: |
+          set -euo pipefail
+
+          python3 <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          changelog_path = Path("data/src/main/assets/changelog.json")
+
+          version_name = os.environ["VERSION_NAME"]
+          version_code = int(os.environ["VERSION_CODE"])
+          notes_raw = os.environ.get("CLEAN_NOTES", "")
+
+          notes = [
+              line.strip()
+              for line in notes_raw.splitlines()
+              if line.strip()
+          ]
+
+          if changelog_path.exists():
+              changelog = json.loads(changelog_path.read_text())
+          else:
+              changelog = []
+
+          new_entry = {
+              "versionCode": version_code,
+              "versionName": version_name,
+              "fixed": notes
+          }
+
+          changelog.insert(0, new_entry)
+
+          changelog_path.write_text(
+              json.dumps(changelog, indent=2, ensure_ascii=False) + "\n"
+          )
+          PY
+
+      - name: Upload changelog.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog-json-artifact
+          path: data/src/main/assets/changelog.json
+
+  open_release_pr:
+    needs: [bump-version, generate_release_notes,   generate_app_changelog]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Download modified build.gradle
+        uses: actions/download-artifact@v4
+        with:
+          name: version-bump-artifact
+          path: presentation/
+
+      - name: Download modified changelog
+        uses: actions/download-artifact@v4
+        with:
+          name: changelog-json-artifact
+          path: data/src/main/assets/
 
       - name: Open release PR
         uses: peter-evans/create-pull-request@v7
