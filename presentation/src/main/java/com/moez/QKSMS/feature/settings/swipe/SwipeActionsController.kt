@@ -18,7 +18,9 @@
  */
 package dev.octoshrimpy.quik.feature.settings.swipe
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.lifecycle.scope
@@ -30,14 +32,17 @@ import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.databinding.SwipeActionsControllerBinding
 import dev.octoshrimpy.quik.injection.appComponent
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.swipe_actions_controller.*
 import javax.inject.Inject
 
-class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState, SwipeActionsPresenter>(), SwipeActionsView {
+class SwipeActionsController : QkController<SwipeActionsControllerBinding, SwipeActionsView, SwipeActionsState, SwipeActionsPresenter>(), SwipeActionsView {
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup): SwipeActionsControllerBinding =
+        SwipeActionsControllerBinding.inflate(inflater, container, false)
 
     @Inject override lateinit var presenter: SwipeActionsPresenter
     @Inject lateinit var actionsDialog: QkDialog
@@ -50,25 +55,24 @@ class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState,
 
     init {
         appComponent.inject(this)
-        layoutRes = R.layout.swipe_actions_controller
 
         actionsDialog.adapter.setData(R.array.settings_swipe_actions)
     }
 
     override fun onViewCreated() {
         colors.theme().let { theme ->
-            rightIcon.setBackgroundTint(theme.theme)
-            rightIcon.setTint(theme.textPrimary)
-            leftIcon.setBackgroundTint(theme.theme)
-            leftIcon.setTint(theme.textPrimary)
+            binding.rightIcon.setBackgroundTint(theme.theme)
+            binding.rightIcon.setTint(theme.textPrimary)
+            binding.leftIcon.setBackgroundTint(theme.theme)
+            binding.leftIcon.setTint(theme.textPrimary)
         }
 
-        right.postDelayed({ right?.animateLayoutChanges = true }, 100)
-        left.postDelayed({ left?.animateLayoutChanges = true }, 100)
+        binding.right.postDelayed({ binding.right.animateLayoutChanges = true }, 100)
+        binding.left.postDelayed({ binding.left.animateLayoutChanges = true }, 100)
 
         Observable.merge(
-                right.clicks().map { SwipeActionsView.Action.RIGHT },
-                left.clicks().map { SwipeActionsView.Action.LEFT })
+                binding.right.clicks().map { SwipeActionsView.Action.RIGHT },
+                binding.left.clicks().map { SwipeActionsView.Action.LEFT })
                 .autoDisposable(scope())
                 .subscribe(actionClicks)
     }
@@ -90,13 +94,13 @@ class SwipeActionsController : QkController<SwipeActionsView, SwipeActionsState,
     }
 
     override fun render(state: SwipeActionsState) {
-        rightIcon.isVisible = state.rightIcon != 0
-        rightIcon.setImageResource(state.rightIcon)
-        rightLabel.text = state.rightLabel
+        binding.rightIcon.isVisible = state.rightIcon != 0
+        binding.rightIcon.setImageResource(state.rightIcon)
+        binding.rightLabel.text = state.rightLabel
 
-        leftIcon.isVisible = state.leftIcon != 0
-        leftIcon.setImageResource(state.leftIcon)
-        leftLabel.text = state.leftLabel
+        binding.leftIcon.isVisible = state.leftIcon != 0
+        binding.leftIcon.setImageResource(state.leftIcon)
+        binding.leftLabel.text = state.leftLabel
     }
 
 }

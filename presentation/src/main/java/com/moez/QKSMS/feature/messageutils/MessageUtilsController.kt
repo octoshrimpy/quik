@@ -11,7 +11,6 @@ import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.util.extensions.animateLayoutChanges
-import dev.octoshrimpy.quik.common.widget.QkSwitch
 import dev.octoshrimpy.quik.databinding.MessageUtilsControllerBinding
 import dev.octoshrimpy.quik.feature.settings.autodelete.AutoDeleteDialog
 import dev.octoshrimpy.quik.injection.appComponent
@@ -26,32 +25,30 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState, MessageUtilsPresenter>(), MessageUtilsView {
+class MessageUtilsController : QkController<MessageUtilsControllerBinding, MessageUtilsView, MessageUtilsState, MessageUtilsPresenter>(), MessageUtilsView {
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup): MessageUtilsControllerBinding =
+        MessageUtilsControllerBinding.inflate(inflater, container, false)
+
     @Inject lateinit var context: Context
     @Inject override lateinit var presenter: MessageUtilsPresenter
     private val autoDeleteDialog: AutoDeleteDialog by lazy {
         AutoDeleteDialog(activity!!, autoDeleteSubject::onNext)
     }
     private val autoDeleteSubject: Subject<Int> = PublishSubject.create()
-    private var binding: MessageUtilsControllerBinding? = null
-    override val autoDeduplicateClickIntent by lazy { binding!!.autoDeduplicate.clicks() }
-    override val deduplicateClickIntent by lazy { binding!!.deduplicateMessages.clicks() }
-    override val autoDeleteClickIntent by lazy { binding!!.autoDelete.clicks() }
+    override val autoDeduplicateClickIntent by lazy { binding.autoDeduplicate.clicks() }
+    override val deduplicateClickIntent by lazy { binding.deduplicateMessages.clicks() }
+    override val autoDeleteClickIntent by lazy { binding.autoDelete.clicks() }
 
     init {
         appComponent.inject(this)
         retainViewMode = RetainViewMode.RETAIN_DETACH
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        binding = MessageUtilsControllerBinding.inflate(inflater, container, false)
-        return binding!!.root
-    }
-
     override fun onViewCreated() {
         super.onViewCreated()
-        (binding?.root as? ViewGroup)?.postDelayed({
-            binding?.parent?.animateLayoutChanges = true
+        binding.root.postDelayed({
+            binding.parent.animateLayoutChanges = true
         }, 100)
     }
 
@@ -62,17 +59,10 @@ class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState,
         presenter.bindIntents(this)
     }
 
-    override fun onDestroyView(view: View) {
-        super.onDestroyView(view)
-        binding = null
-    }
-
     override fun render(state: MessageUtilsState) {
-        binding?.autoDeduplicate
-            ?.findViewById<QkSwitch>(R.id.checkbox)
-            ?.isChecked = state.autoDeduplicateMessages
+        binding.autoDeduplicate.checkbox?.isChecked = state.autoDeduplicateMessages
 
-        val deduplicationProgress = binding!!.deduplicationProgress
+        val deduplicationProgress = binding.deduplicationProgress
         val progressAnimator = ObjectAnimator.ofInt(deduplicationProgress, "progress", 0, 0)
 
         when (state.deduplicationProgress) {
@@ -114,8 +104,8 @@ class MessageUtilsController : QkController<MessageUtilsView, MessageUtilsState,
     }
 
     override fun handleDeduplicationResult(resIdString: Int) {
-        binding?.deduplicationProgressText?.isVisible = true
-        binding?.deduplicationProgressText?.setText(resIdString)
+        binding.deduplicationProgressText.isVisible = true
+        binding.deduplicationProgressText.setText(resIdString)
     }
 
     override fun autoDeleteChanged(): Observable<Int> = autoDeleteSubject

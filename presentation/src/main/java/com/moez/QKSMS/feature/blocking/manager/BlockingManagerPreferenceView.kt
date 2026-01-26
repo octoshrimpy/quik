@@ -39,6 +39,8 @@ class BlockingManagerPreferenceView @JvmOverloads constructor(
     private val binding: BlockingManagerPreferenceViewBinding =
         BlockingManagerPreferenceViewBinding.inflate(LayoutInflater.from(context), this)
 
+    val actionView: ImageView get() = binding.widgetFrame.findViewById(R.id.action)
+
     var icon: Drawable? = null
         set(value) {
             field = value
