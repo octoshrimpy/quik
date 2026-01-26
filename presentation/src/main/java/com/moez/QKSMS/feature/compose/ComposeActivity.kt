@@ -140,6 +140,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val confirmDeleteIntent: Subject<List<Long>> = PublishSubject.create()
     override val clearCurrentMessageIntent: Subject<Boolean> = PublishSubject.create()
     override val messageLinkAskIntent: Subject<Uri> by lazy { messageAdapter.messageLinkClicks }
+    override val reactionClickIntent: Subject<Long> by lazy { messageAdapter.reactionClicks }
     override val speechRecogniserIntent by lazy { binding.speechToTextIcon.clicks() }
     override val shadeIntent by lazy { binding.shadeBackground.clicks() }
     override val recordAudioStartStopRecording: Subject<Boolean> = PublishSubject.create()
@@ -705,6 +706,13 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
                 clearCurrentMessageIntent.onNext(true)
             }
             .setNegativeButton(R.string.button_cancel, null)
+            .show()
+    }
+
+    override fun showReactionsDialog(reactions: List<String>) {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.compose_reactions_title)
+            .setMessage(reactions.joinToString("\n"))
             .show()
     }
 

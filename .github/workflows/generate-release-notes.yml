@@ -1,0 +1,80 @@
+name: Generate Release Notes
+
+on:
+    workflow_dispatch:
+        inputs: &note_inputs
+            release_ref:
+                description: Branch or tag to build from
+                required: false
+                default: master
+                type: string
+            version_name:
+                required: true
+                type: string
+    workflow_call:
+        inputs: *note_inputs
+        outputs:
+            release_notes:
+                description: Generated release notes
+                value: ${{ jobs.Generate.outputs.release_notes }}
+
+jobs:
+    Generate:
+        outputs:
+            release_notes: ${{ steps.notes.outputs.release_notes }}
+        runs-on: ubuntu-latest
+        env:
+            RELEASE_REF: ${{ inputs.release_ref || 'master' }}
+        steps:
+            - name: Checkout source
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+                ref: ${{ env.RELEASE_REF }}
+
+            - name: Install Dependencies
+              run: npm install semver@7
+
+            - name: Generate Release Notes
+              id: notes
+              uses: actions/github-script@v7
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    const semver = require('semver');
+                    const releaseName = 'v${{ inputs.version_name }}';
+                    const { owner, repo } = context.repo;
+
+                    const { data: releases } = await github.rest.repos.listReleases({
+                        owner,
+                        repo,
+                        per_page: 100,
+                    });
+
+                    const currentVersion = semver.parse('${{ inputs.version_name }}');
+
+                    const previousReleaseTag = releases
+                        .filter(r => !r.draft && !r.prerelease)
+                        .map(r => r.tag_name)
+                        .filter(tag => semver.valid(tag) && semver.lt(tag, currentVersion))
+                        .sort(semver.rcompare)[0];
+
+                    const payload = {
+                        owner,
+                        repo,
+                        tag_name: releaseName,
+                        target_commitish: '${{ env.RELEASE_REF }}',
+                    };
+
+                    if (previousReleaseTag) {
+                        payload.previous_tag_name = previousReleaseTag;
+                    }
+
+                    const response = await github.request(
+                        'POST /repos/{owner}/{repo}/releases/generate-notes',
+                        payload
+                    );
+
+                    const notes = response.data.body || '';
+                    core.exportVariable('RELEASE_NOTES', notes);
+                    core.setOutput('release_notes', notes);

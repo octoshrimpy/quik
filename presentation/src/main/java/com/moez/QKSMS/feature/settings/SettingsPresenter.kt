@@ -27,17 +27,12 @@ import dev.octoshrimpy.quik.common.base.QkPresenter
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.DateFormatter
 import dev.octoshrimpy.quik.common.util.extensions.makeToast
-import dev.octoshrimpy.quik.interactor.DeleteOldMessages
 import dev.octoshrimpy.quik.interactor.SyncMessages
 import dev.octoshrimpy.quik.manager.BillingManager
-import dev.octoshrimpy.quik.repository.MessageRepository
 import dev.octoshrimpy.quik.repository.SyncRepository
-import dev.octoshrimpy.quik.service.AutoDeleteService
 import dev.octoshrimpy.quik.util.NightModeManager
 import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
@@ -49,8 +44,6 @@ class SettingsPresenter @Inject constructor(
     private val context: Context,
     private val billingManager: BillingManager,
     private val dateFormatter: DateFormatter,
-    private val deleteOldMessages: DeleteOldMessages,
-    private val messageRepo: MessageRepository,
     private val navigator: Navigator,
     private val nightModeManager: NightModeManager,
     private val prefs: Preferences,
@@ -123,9 +116,6 @@ class SettingsPresenter @Inject constructor(
 
         disposables += prefs.mobileOnly.asObservable()
                 .subscribe { enabled -> newState { copy(mobileOnly = enabled) } }
-
-        disposables += prefs.autoDelete.asObservable()
-                .subscribe { autoDelete -> newState { copy(autoDelete = autoDelete) } }
 
         disposables += prefs.longAsMms.asObservable()
                 .subscribe { enabled -> newState { copy(longAsMms = enabled) } }
@@ -218,8 +208,6 @@ class SettingsPresenter @Inject constructor(
 
                         R.id.mobileOnly -> prefs.mobileOnly.set(!prefs.mobileOnly.get())
 
-                        R.id.autoDelete -> view.showAutoDeleteDialog(prefs.autoDelete.get())
-
                         R.id.longAsMms -> prefs.longAsMms.set(!prefs.longAsMms.get())
 
                         R.id.mmsSize -> view.showMmsSizePicker()
@@ -285,33 +273,6 @@ class SettingsPresenter @Inject constructor(
 
         view.signatureChanged()
                 .doOnNext(prefs.signature::set)
-                .autoDisposable(view.scope())
-                .subscribe()
-
-        view.autoDeleteChanged()
-                .observeOn(Schedulers.io())
-                .filter { maxAge ->
-                    if (maxAge == 0) {
-                        return@filter true
-                    }
-
-                    val counts = messageRepo.getOldMessageCounts(maxAge)
-                    if (counts.values.sum() == 0) {
-                        return@filter true
-                    }
-
-                    runBlocking { view.showAutoDeleteWarningDialog(counts.values.sum()) }
-                }
-                .doOnNext { maxAge ->
-                    when (maxAge == 0) {
-                        true -> AutoDeleteService.cancelJob(context)
-                        false -> {
-                            AutoDeleteService.scheduleJob(context)
-                            deleteOldMessages.execute(Unit)
-                        }
-                    }
-                }
-                .doOnNext(prefs.autoDelete::set)
                 .autoDisposable(view.scope())
                 .subscribe()
 

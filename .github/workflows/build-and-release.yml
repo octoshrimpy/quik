@@ -24,13 +24,21 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     env:
       RELEASE_REF: ${{ inputs.release_ref || 'master' }}
+
+    outputs:
+      version_name: ${{ steps.version.outputs.version_name }}
+      version_code: ${{ steps.version.outputs.version_code }}
+      tag_name: ${{ steps.version.outputs.tag_name }}
+      apk_release_path: ${{ steps.release_artifact.outputs.apk_release_path }}
+      apk_fdroid_path: ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
+      checksums_path: ${{ steps.checksums.outputs.checksums_path }}
 
     steps:
       - name: Checkout source
@@ -113,17 +121,18 @@ jobs:
         run: |
           set -euo pipefail
           python3 <<'PY'
-          import os
-          import pathlib
-          import re
-
+          import os, pathlib, re
           gradle = pathlib.Path("presentation/build.gradle").read_text()
           code_match = re.search(r"^\s*versionCode\s+(\d+)", gradle, re.MULTILINE)
           name_match = re.search(r"^\s*versionName\s+['\"]([\d\.]+)['\"]", gradle, re.MULTILINE)
           if not code_match or not name_match:
               raise SystemExit("Unable to read versionCode/versionName from presentation/build.gradle")
           out = pathlib.Path(os.environ["GITHUB_OUTPUT"])
-          out.write_text(f"version_code={code_match.group(1)}\nversion_name={name_match.group(1)}\ntag_name=v{name_match.group(1)}\n")
+          out.write_text(
+              f"version_code={code_match.group(1)}\n"
+              f"version_name={name_match.group(1)}\n"
+              f"tag_name=v{name_match.group(1)}\n"
+          )
           PY
 
       - name: Validate Gradle Wrapper
@@ -165,58 +174,35 @@ jobs:
           find . -name '*.apk' -type f -exec sha256sum {} \; > checksums.txt
           echo "checksums_path=checksums.txt" >> "$GITHUB_OUTPUT"
 
-      - name: Generate release notes
-        id: notes
-        uses: actions/github-script@v7
+      - name: Upload all build outputs
+        uses: actions/upload-artifact@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            npm install semver
-            
-            const semver = require('semver');
-            const tagName = 'v${{ steps.version.outputs.version_name }}';
-            const {owner, repo} = context.repo;
+          name: build-artifacts
+          path: |
+            ${{ steps.release_artifact.outputs.apk_release_path }}
+            ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
+            ${{ steps.checksums.outputs.checksums_path }}
 
-            const {data: tags} = await github.rest.repos.listTags({
-              owner,
-              repo,
-              per_page: 100,
-            });
+  generate_release_notes:
+    needs: build
+    uses: ./.github/workflows/generate-release-notes.yml
+    with:
+      release_ref: ${{ inputs.release_ref || 'master' }}
+      version_name: ${{ needs.build.outputs.version_name }}
 
-            const currentVersion = semver.parse(tagName);
-            
-            const previousTag = tags
-              .map(t => t.name)
-              .filter(name => semver.valid(name) && semver.lt(name, currentVersion))
-              .sort(semver.rcompare)[0];
+  publish:
+    needs: [build, generate_release_notes]
+    runs-on: ubuntu-latest
 
-            const payload = {
-              owner,
-              repo,
-              tag_name: tagName,
-              target_commitish: '${{ env.RELEASE_REF }}',
-            };
-
-            if (previousTag) {
-              payload.previous_tag_name = previousTag;
-            }
-
-            const response = await github.request('POST /repos/{owner}/{repo}/releases/generate-notes', payload);
-            const notes = response.data.body || '';
-            core.setOutput('release_notes', notes);
-
+    steps:
       - name: Sanitize release notes
         id: clean_notes
-        shell: bash
         env:
-          NOTES: ${{ steps.notes.outputs.release_notes }}
+          NOTES: ${{ needs.generate_release_notes.outputs.release_notes }}
         run: |
           set -euo pipefail
           python3 <<'PY'
-          import os
-          import pathlib
-          import re
-
+          import os, re, pathlib
           notes = os.environ.get("NOTES", "")
           clean = re.sub(r'(?<!\w)@([A-Za-z0-9][A-Za-z0-9-]*)', r'\1', notes)
           pathlib.Path("sanitized_notes.txt").write_text(clean)
@@ -228,18 +214,23 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: downloaded/
+
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.tag_name }}
-          name: QUIK v${{ steps.version.outputs.version_name }}
+          tag_name: ${{ needs.build.outputs.tag_name }}
+          name: QUIK v${{ needs.build.outputs.version_name }}
           draft: ${{ inputs.publish_release != true }}
           prerelease: ${{ inputs.prerelease }}
           body: ${{ steps.clean_notes.outputs.clean_notes }}
           files: |
-            ${{ steps.release_artifact.outputs.apk_release_path }}
-            ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
-            ${{ steps.checksums.outputs.checksums_path }}
+            downloaded/**/*.apk
+            downloaded/*.txt
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -251,16 +242,14 @@ jobs:
 
       - name: Update F-Droid repo contents
         env:
-          APK_PATH: ${{ steps.artifact.outputs.apk_path }}
-          VERSION_NAME: ${{ steps.version.outputs.version_name }}
-          VERSION_CODE: ${{ steps.version.outputs.version_code }}
+          APK_PATH: ${{ needs.build.outputs.apk_release_path }}
+          VERSION_NAME: ${{ needs.build.outputs.version_name }}
+          VERSION_CODE: ${{ needs.build.outputs.version_code }}
         run: |
           set -euo pipefail
-
           mkdir -p repo
           target_apk="repo/dev.octoshrimpy.quik_${VERSION_CODE}.apk"
           cp "$APK_PATH" "$target_apk"
-
           fdroid update --config config.yml --pretty
 
       - name: Publish F-Droid repo to GitHub Pages
