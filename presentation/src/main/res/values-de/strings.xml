@@ -53,7 +53,7 @@
     <string name="inbox_search_empty_text">Keine Ergebnisse</string>
     <string name="archived_empty_text">Archivierte Unterhaltungen werden hier angezeigt</string>
     <string name="main_fab_cd">Neue Unterhaltung starten</string>
-    <string name="main_default_sms_title">Liebe es,wieder, SMS zu schreiben</string>
+    <string name="main_default_sms_title">Liebe es, wieder SMS zu schreiben</string>
     <string name="main_default_sms_message">QUIK als Standard-SMS-App festlegen</string>
     <string name="main_default_sms_change">Ändern</string>
     <string name="main_permission_required">Berechtigung erforderlich</string>
@@ -506,4 +506,5 @@
     <string name="deduplicating_messages_finished">Die Deduplizierung der Nachrichten ist abgeschlossen!</string>
     <string name="deduplicating_messages_no_messages">Keine doppelten Nachrichten gefunden.</string>
     <string name="deduplicating_messages_failed">Die Deduplizierung der Nachrichten ist fehlgeschlagen. Bitte versuche es erneut</string>
+    <string name="compose_reactions_title">Reaktionen</string>
 </resources>
