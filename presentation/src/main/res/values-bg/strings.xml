@@ -252,7 +252,7 @@
     <string name="settings_swipe_actions_summary">Настройване на действията с жестове в разговорите</string>
     <string name="settings_swipe_actions_right">Плъзване на дясно</string>
     <string name="settings_swipe_actions_left">Плъзване на ляво</string>
-    <string name="settings_delivery_title">Обратна разписка</string>
+    <string name="settings_delivery_title">Потвърждаване при изпращане</string>
     <string name="settings_delivery_summary">Потвърждаване на успешното изпращане на съобщението</string>
     <string name="settings_unread_at_top_title">Непрочетените първи</string>
     <string name="settings_unread_at_top_summary">Показване на непрочетените разговори най-горе</string>
@@ -284,9 +284,9 @@
     <string name="settings_logging_enabled">Дневникът за грешки е включен</string>
     <string name="settings_logging_disabled">Дневникът за грешки е изключен</string>
     <string name="blocking_drop_title">Премахване на съобщения</string>
-    <string name="blocking_drop_summary">Премахване на входящите съобщения от забранените изпращачи, вместо скриване</string>
+    <string name="blocking_drop_summary">Премахване, а не скриване, на входящите съобщения от забранените изпращачи</string>
     <string name="blocking_conversations">Забранени разговори</string>
     <string name="blocking_manager_title">Управление на забраните</string>
-    <string name="blocking_manager_qksms_summary">Вградена в QUIK възможност за забрани</string>
-    <string name="blocking_manager_call_blocker_summary">Забранителният списък може да работи по график, за да забранява нежелани съобщения и входящи обаждания от определени или непознати номера</string>
+    <string name="blocking_manager_qksms_summary">Вградена в QUIK възможност за забраняване</string>
+    <string name="blocking_manager_call_blocker_summary">Забранителният списък може да работи по график, за да предотвратява нежелани съобщения и входящи обаждания от определени или непознати номера</string>
 </resources>
