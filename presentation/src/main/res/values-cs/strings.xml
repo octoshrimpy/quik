@@ -513,4 +513,15 @@
     <string name="compose_send_group_summary_off">Zprávy budou odeslány samostatně všem příjemcům</string>
     <string name="notification_foreground_worker_title">Příjem zprávy</string>
     <string name="notification_foreground_worker_text">V systému Android 12 a starších verzích je pro práci na pozadí, která umožňuje příjem zpráv, vyžadováno oznámení.</string>
+    <string name="main_sync_emojis">Analýza reakcí pomocí emodži…</string>
+    <string name="message_management_title">Správa zpráv</string>
+    <string name="deduplicate_messages_category">Odstranění duplicitních zpráv</string>
+    <string name="deduplicate_messages_title">Odebrat duplicitní zprávy</string>
+    <string name="deduplicate_messages_summary">Prohledá databázi zpráv a odstraní všechny zprávy, které přesně odpovídají původním zprávám</string>
+    <string name="deduplicate_message_confirmation_dialog_message">Vaše databáze zpráv bude prohledána na duplicity a tyto duplicity budou odstraněny.\nTím dojde k automatickému smazání zpráv. Pokračujte pouze v případě, že rozumíte důsledkům.</string>
+    <string name="auto_deduplicate_messages_title">Automatické odstraňování duplicitních zpráv</string>
+    <string name="auto_deduplicate_messages_summary">Během synchronizace bude provedena deduplikace. Upozorňujeme, že tím dojde k automatickému smazání zpráv a i když je pravděpodobnost výskytu falešných duplikátů velmi nízká, stále je to možné.\nBuďte prosím opatrní.</string>
+    <string name="deduplicating_messages_finished">Dokončeno deduplikování zpráv!</string>
+    <string name="deduplicating_messages_no_messages">Nebyly nalezeny žádné duplicitní zprávy.</string>
+    <string name="deduplicating_messages_failed">Deduplikace zpráv se nezdařila, zkuste to znovu</string>
 </resources>

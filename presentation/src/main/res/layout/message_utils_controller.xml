@@ -19,6 +19,7 @@
   -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contentView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -71,6 +72,18 @@
             app:summary="@string/auto_deduplicate_messages_summary"
             app:title="@string/auto_deduplicate_messages_title"
             app:widget="@layout/settings_switch_widget" />
+
+        <dev.octoshrimpy.quik.common.widget.QkTextView
+            style="@style/PreferenceCategory"
+            android:text="@string/settings_category_general" />
+
+        <dev.octoshrimpy.quik.common.widget.PreferenceView
+            android:id="@+id/autoDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_baseline_history_toggle_off_24"
+            app:title="@string/settings_auto_delete"
+            tools:summary="Never" />
 
     </LinearLayout>
 

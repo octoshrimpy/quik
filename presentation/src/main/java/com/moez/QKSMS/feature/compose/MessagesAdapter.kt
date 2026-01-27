@@ -119,6 +119,7 @@ class MessagesAdapter @Inject constructor(
     val sendNowClicks: Subject<Long> = PublishSubject.create()
     val resendClicks: Subject<Long> = PublishSubject.create()
     val partContextMenuRegistrar: Subject<View> = PublishSubject.create()
+    val reactionClicks: Subject<Long> = PublishSubject.create()
 
     var data: Pair<Conversation, RealmResults<Message>>? = null
         set(value) {
@@ -402,39 +403,23 @@ class MessagesAdapter @Inject constructor(
             val hasReactions = reactions.isNotEmpty()
 
             if (hasReactions) {
-                val reactionCounts = reactions.groupBy { it.emoji }
-                    .mapValues { it.value.size }
-                    .toList()
-                    .sortedByDescending { it.second } // Sort by count, most reactions first
+                val uniqueEmojis = reactions.map { it.emoji }.distinct()
+                val totalCount = reactions.size
 
-                // For now, show just the first (most popular) reaction
-                val topReaction = reactionCounts.first()
-                val reactionText = if (topReaction.second == 1) {
-                    topReaction.first
+                // Show unique emojis followed by total count
+                val reactionText = if (totalCount == 1) {
+                    uniqueEmojis.first()
                 } else {
-                    // Use a non-breaking space to keep the emoji and count together
-                    "${topReaction.first}\u00A0${topReaction.second}"
+                    "${uniqueEmojis.joinToString("")}\u00A0$totalCount"
                 }
 
                 holder.reactionText?.text = reactionText
+                holder.reactionText?.setOnClickListener { reactionClicks.onNext(message.id) }
                 reactionsContainer.setVisible(true)
-                makeRoomForEmojis(holder)
             } else {
                 reactionsContainer.setVisible(false)
+                holder.reactionText?.setOnClickListener(null)
             }
-        }
-    }
-
-    private fun makeRoomForEmojis(holder: QkViewHolder) {
-        val paddingBottom = 25.dpToPx(context)
-
-        (holder.reactions?.parent?.parent as? ViewGroup)?.let { parent ->
-            parent.setPadding(
-                parent.paddingLeft,
-                parent.paddingTop,
-                parent.paddingRight,
-                paddingBottom
-            )
         }
     }
 

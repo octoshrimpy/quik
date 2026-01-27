@@ -495,4 +495,15 @@
     <string name="compose_send_group_summary_off">Az üzenetek külön-külön lesznek elküldve minden címzettnek</string>
     <string name="notification_foreground_worker_text">Android 12 és régebbi verziók esetén értesítés szükséges a háttérmunkához, amely lehetővé teszi az üzenetek fogadását.</string>
     <string name="notification_foreground_worker_title">Üzenet fogadása</string>
+    <string name="main_sync_emojis">Emodzsi reakciók elemzése…</string>
+    <string name="message_management_title">Üzenetkezelés</string>
+    <string name="deduplicate_messages_category">Ismétlődő üzenetek kiszűrése</string>
+    <string name="deduplicate_messages_title">Ismétlődő üzenetek eltávolítása</string>
+    <string name="deduplicate_messages_summary">Átvizsgálja az üzenetadatbázist, és törli az összes olyan üzenetet, amely pontosan megegyezik az eredeti üzenetekkel</string>
+    <string name="deduplicate_message_confirmation_dialog_message">Az üzenetadatbázis át lesz vizsgálva az ismétlődő üzenetek felkutatása érdekében, majd ezek el lesznek távolítva.\nEz a művelet automatikusan töröl üzeneteket, ezért csak akkor folytassa, ha tisztában van a következményekkel.</string>
+    <string name="auto_deduplicate_messages_title">Ismétlődő üzenetek automatikus kiszűrése</string>
+    <string name="auto_deduplicate_messages_summary">Az ismétlődések kiszűrése a szinkronizálás során történik. Fontos tudni, hogy a művelet automatikusan töröl üzeneteket, és bár a téves ismétlődés felismerésének esélye nagyon alacsony, nem zárható ki teljesen.\nKellő körültekintéssel járjon el.</string>
+    <string name="deduplicating_messages_finished">Az ismétlődő üzenetek eltávolítása befejeződött!</string>
+    <string name="deduplicating_messages_no_messages">Nem találhatók ismétlődő üzenetek.</string>
+    <string name="deduplicating_messages_failed">Az ismétlődések kiszűrése sikertelen, próbálja meg újra</string>
 </resources>
