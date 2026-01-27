@@ -39,6 +39,7 @@ jobs:
       apk_release_path: ${{ steps.release_artifact.outputs.apk_release_path }}
       apk_fdroid_path: ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
       checksums_path: ${{ steps.checksums.outputs.checksums_path }}
+      signature_path: ${{ steps.signature.outputs.signature_path }}
 
     steps:
       - name: Checkout source
@@ -184,10 +185,12 @@ jobs:
           PGP_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
 
       - name: Sign checksums file
+        id: signature
         shell: bash
         run: |
           set -euo pipefail
           gpg --detach-sign --armor --batch --yes --passphrase "$PGP_PASSPHRASE" --output checksums.txt.sig checksums.txt
+          echo "signature_path=checksums.txt.sig" >> "$GITHUB_OUTPUT"
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
 
@@ -205,6 +208,7 @@ jobs:
             ${{ steps.release_artifact.outputs.apk_release_path }}
             ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
             ${{ steps.checksums.outputs.checksums_path }}
+            ${{ steps.signature.outputs.signature_path }}
 
   generate_release_notes:
     needs: build
