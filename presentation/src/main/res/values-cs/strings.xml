@@ -524,4 +524,5 @@
     <string name="deduplicating_messages_finished">Dokončeno deduplikování zpráv!</string>
     <string name="deduplicating_messages_no_messages">Nebyly nalezeny žádné duplicitní zprávy.</string>
     <string name="deduplicating_messages_failed">Deduplikace zpráv se nezdařila, zkuste to znovu</string>
+    <string name="compose_reactions_title">Reakce</string>
 </resources>
