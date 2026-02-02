@@ -441,4 +441,7 @@
     <string name="attachment_missing">Mangler</string>
     <string name="scheduled_send_cd">Planlegg denne meldingen</string>
     <string name="settings_notification_previews_summary">Vis navn og melding</string>
+    <string name="message_content_filters_dialog_hint">Ord, frase eller regulært uttrykk</string>
+    <string name="message_content_filters_dialog_regex_switch">Regulært uttrykk</string>
+    <string name="message_content_filters_dialog_contacts_switch">Inkluder kontakter</string>
 </resources>
