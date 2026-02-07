@@ -290,6 +290,12 @@ jobs:
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
 
-      - name: Cleanup signing key
+      - name: Cleanup signing keys
         if: always()
-        run: rm -f presentation/my-release-key.keystore
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f presentation/my-release-key.keystore
+          gpg --batch --yes --delete-secret-keys ${{ secrets.PGP_FINGERPRINT }}
+        env:
+          PGP_FINGERPRINT: ${{ secrets.PGP_FINGERPRINT }}
