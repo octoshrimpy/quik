@@ -296,6 +296,6 @@ jobs:
         run: |
           set -euo pipefail
           rm -f presentation/my-release-key.keystore
-          gpg --batch --yes --delete-secret-keys $"PGP_FINGERPRINT"
+          gpg --batch --yes --delete-secret-keys "$PGP_FINGERPRINT"
         env:
           PGP_FINGERPRINT: ${{ secrets.PGP_FINGERPRINT }}
