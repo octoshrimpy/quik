@@ -39,6 +39,7 @@ jobs:
       apk_release_path: ${{ steps.release_artifact.outputs.apk_release_path }}
       apk_fdroid_path: ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
       checksums_path: ${{ steps.checksums.outputs.checksums_path }}
+      signature_path: ${{ steps.signature.outputs.signature_path }}
 
     steps:
       - name: Checkout source
@@ -171,8 +172,33 @@ jobs:
         id: checksums
         shell: bash
         run: |
-          find . -name '*.apk' -type f -exec sha256sum {} \; > checksums.txt
+          set -euo pipefail
+          find . -name '*.apk' -type f -exec bash -c 'sha256sum "$1" | awk -v bn="$(basename $1)" "{print \$1, bn}"' _ {} \; > checksums.txt
           echo "checksums_path=checksums.txt" >> "$GITHUB_OUTPUT"
+
+      - name: Import PGP key
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "$PGP_PRIVATE_KEY" | gpg --import --batch --yes
+        env:
+          PGP_PRIVATE_KEY: ${{ secrets.PGP_PRIVATE_KEY }}
+
+      - name: Sign checksums file
+        id: signature
+        shell: bash
+        run: |
+          set -euo pipefail
+          gpg --detach-sign --armor --batch --yes --passphrase "$PGP_PASSPHRASE" --output checksums.txt.sig checksums.txt
+          echo "signature_path=checksums.txt.sig" >> "$GITHUB_OUTPUT"
+        env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+
+      - name: Verify checksums signature
+        shell: bash
+        run: |
+          set -euo pipefail
+          gpg --verify checksums.txt.sig checksums.txt
 
       - name: Upload all build outputs
         uses: actions/upload-artifact@v4
@@ -182,6 +208,7 @@ jobs:
             ${{ steps.release_artifact.outputs.apk_release_path }}
             ${{ steps.fdroid_artifact.outputs.apk_fdroid_path }}
             ${{ steps.checksums.outputs.checksums_path }}
+            ${{ steps.signature.outputs.signature_path }}
 
   generate_release_notes:
     needs: build
@@ -231,6 +258,7 @@ jobs:
           files: |
             downloaded/**/*.apk
             downloaded/*.txt
+            downloaded/*.sig
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -262,7 +290,12 @@ jobs:
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
 
-      - name: Cleanup signing key
+      - name: Cleanup signing keys
         if: always()
-        run: rm -f presentation/my-release-key.keystore
-
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f presentation/my-release-key.keystore
+          gpg --batch --yes --delete-secret-keys "$PGP_FINGERPRINT"
+        env:
+          PGP_FINGERPRINT: ${{ secrets.PGP_FINGERPRINT }}
