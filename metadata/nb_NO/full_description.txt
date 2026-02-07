@@ -1,0 +1,12 @@
+Open-source-erstatning for den innebygde SMS-appen på Android. En gjenoppliving av QKSMS.
+## Funksjoner
+- Planlagte meldinger
+- Backup av meldinger
+- Tale-til-tekst og tekst-til-tale integrert i appen
+- Blokkering og arkivering av meldinger
+- Talemeldinger
+- Vedlegg av alle filtyper
+- Sortering av meldinger
+- Forsinket sending
+
+Du kan chatte med communityet under <a href="https://matrix.to/#/#quik-sms:matrix.org">#quik-sms:matrix.org</a>

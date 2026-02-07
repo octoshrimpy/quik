@@ -500,4 +500,5 @@
     <string name="deduplicating_messages_finished">訊息去重已完成！</string>
     <string name="deduplicating_messages_no_messages">未發現重複訊息。</string>
     <string name="deduplicating_messages_failed">訊息去重失敗，請再試一次</string>
+    <string name="compose_reactions_title">反應</string>
 </resources>

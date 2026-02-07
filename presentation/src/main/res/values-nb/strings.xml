@@ -94,7 +94,7 @@
     <string name="compose_send_group_summary">Mottakere og svar er synlig for alle</string>
     <string name="compose_messages_empty">Nå starter samtalen. Si noe hyggelig!</string>
     <string name="compose_vcard_label">Kontakt</string>
-    <string name="compose_scheduled_for">Planlagt for</string>
+    <string name="compose_scheduled_for">Planlagt tid:</string>
     <string name="compose_scheduled_future">Valgt tid må være i fremtid.</string>
     <string name="compose_scheduled_plus">Du må ha QUIK+ for å kunne bruke planlagte meldinger</string>
     <string name="compose_scheduled_toast">Lagt til planlagte meldinger</string>
@@ -409,4 +409,39 @@
         <item>LOL</item>
         <item>Det er greit</item>
     </string-array>
+    <string name="menu_mms_part_share">Del</string>
+    <string name="menu_mms_part_forward">Videresend</string>
+    <string name="menu_mms_part_open">Åpne eksternt</string>
+    <string name="main_menu_select_all">Velg alle</string>
+    <string name="main_menu_send_now">Send nå</string>
+    <string name="main_menu_edit_message">Rediger melding</string>
+    <string name="main_menu_rename_conversation">Omkall samtale</string>
+    <string name="main_sender_draft">Utkast: %s</string>
+    <string name="scheduled_menu_send_now">Send nå</string>
+    <string name="scheduled_menu_edit_message">Rediger melding</string>
+    <plurals name="dialog_delete_chat">
+        <item quantity="one">Er du sikker på at du vil slette meldingen?</item>
+        <item quantity="other">Er du sikker på at du vil slette %d meldinger?</item>
+    </plurals>
+    <plurals name="dialog_send_now">
+        <item quantity="one">Er du sikker på at du vil sende meldingen nå?</item>
+        <item quantity="other">Er du sikker på at du vil sende %d meldinger nå?</item>
+    </plurals>
+    <string name="dialog_edit_scheduled_message_title">Rediger melding</string>
+    <string name="dialog_edit_scheduled_message_positive_button">Ja, rediger melding</string>
+    <string name="compose_send_group_summary_on">Mottakere og svar vil være synlige for alle</string>
+    <string name="dialog_clear_compose_title">Slett melding</string>
+    <string name="compose_reactions_title">Reaksjoner</string>
+    <string name="compose_record_audio_msg_cd">Ta opp lydmelding</string>
+    <string name="compose_record_audio_msg_abort_cd">Avbryt lydmelding</string>
+    <string name="compose_message_cancel">Avbryt</string>
+    <string name="compose_message_send_now">Send nå</string>
+    <string name="compose_message_sim">SIM-nummer</string>
+    <string name="compose_message_attachment">Vedlegg</string>
+    <string name="attachment_missing">Mangler</string>
+    <string name="scheduled_send_cd">Planlegg denne meldingen</string>
+    <string name="settings_notification_previews_summary">Vis navn og melding</string>
+    <string name="message_content_filters_dialog_hint">Ord, frase eller regulært uttrykk</string>
+    <string name="message_content_filters_dialog_regex_switch">Regulært uttrykk</string>
+    <string name="message_content_filters_dialog_contacts_switch">Inkluder kontakter</string>
 </resources>

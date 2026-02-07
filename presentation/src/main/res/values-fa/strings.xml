@@ -291,7 +291,7 @@
     <string name="about_contact_title">پیوند گرفتن</string>
     <string name="about_license_title">پروانه</string>
     <string name="about_copyright_title">هوده‌ی پچین</string>
-    <string name="qksms_plus_description_title">پشتیبانی از سازنده،گشودن همه چیز</string>
+    <string name="qksms_plus_description_title">پشتیبانی از پیشرفت،گشودن همه چیز</string>
     <string name="qksms_plus_description_summary">شما می‌توانید تنها با %s یک برنامه‌نویس گرسنه را ببوختانید</string>
     <!-- Substitutions are for price and currency. Ex: Lifetime upgrade for $1.99 USD -->
     <string name="qksms_plus_upgrade">اَهرافتن همیشگی به‌ازای %1$s%2$s</string>
@@ -495,4 +495,8 @@
     <string name="notification_foreground_worker_title">دریافت پیام</string>
     <string name="notification_foreground_worker_text">در اندروید ۱۲ اود پس از آن، آگاهنده‌ای برای دریافت پیام در پس‌زمینه نیاز است.</string>
     <string name="compose_send_group_summary_on">دریافت‌کننده‌ها اود پاسخ‌ها برای همه نمایان خواهند بود</string>
+    <string name="main_sync_emojis">تجزیه واکنش دیمگ‌ها…</string>
+    <string name="compose_reactions_title">واکنش‌ها</string>
+    <string name="deduplicate_messages_category">پیام‌های دو باره</string>
+    <string name="deduplicate_messages_title">سِتُردن پیام‌های همسان</string>
 </resources>

@@ -506,4 +506,5 @@
     <string name="deduplicating_messages_finished">Az ismétlődő üzenetek eltávolítása befejeződött!</string>
     <string name="deduplicating_messages_no_messages">Nem találhatók ismétlődő üzenetek.</string>
     <string name="deduplicating_messages_failed">Az ismétlődések kiszűrése sikertelen, próbálja meg újra</string>
+    <string name="compose_reactions_title">Reakciók</string>
 </resources>
