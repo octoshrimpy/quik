@@ -83,7 +83,7 @@ class PlusActivity : QkThemedActivity(), PlusView {
         // Make the list titles bold
         binding.linearLayout.children
             .mapNotNull { it as? PreferenceView }
-            .map { it.titleTextView }
+            .map { it.titleView }
             .forEach { it.setTypeface(it.typeface, Typeface.BOLD) }
 
         val textPrimary = resolveThemeColor(android.R.attr.textColorPrimary)

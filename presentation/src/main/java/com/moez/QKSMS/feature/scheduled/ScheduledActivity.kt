@@ -31,20 +31,21 @@ import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkThemedActivity
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
+import dev.octoshrimpy.quik.databinding.ScheduledActivityBinding
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.main_activity.toolbar
-import kotlinx.android.synthetic.main.scheduled_activity.*
 import javax.inject.Inject
 
 
 class ScheduledActivity : QkThemedActivity(), ScheduledView {
 
+    private lateinit var binding: ScheduledActivityBinding
+
     @Inject lateinit var scheduledMessageAdapter: ScheduledMessageAdapter
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override val composeIntent by lazy { compose.clicks() }
-    override val upgradeIntent by lazy { upgrade.clicks() }
+    override val composeIntent by lazy { binding.compose.clicks() }
+    override val upgradeIntent by lazy { binding.upgrade.clicks() }
     override val messagesSelectedIntent by lazy { scheduledMessageAdapter.selectionChanges }
     override val optionsItemIntent: Subject<Int> = PublishSubject.create()
     override val deleteScheduledMessages: Subject<List<Long>> = PublishSubject.create()
@@ -59,22 +60,23 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.scheduled_activity)
+        binding = ScheduledActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setTitle(R.string.scheduled_title)
         showBackButton(true)
         viewModel.bindView(this)
 
-        scheduledMessageAdapter.emptyView = empty
-        messages.adapter = scheduledMessageAdapter
+        scheduledMessageAdapter.emptyView = binding.empty
+        binding.messages.adapter = scheduledMessageAdapter
 
         colors.theme().let { theme ->
-            sampleMessage.setBackgroundTint(theme.theme)
-            sampleMessage.setTextColor(theme.textPrimary)
-            compose.setTint(theme.textPrimary)
-            compose.setBackgroundTint(theme.theme)
-            upgrade.setBackgroundTint(theme.theme)
-            upgradeIcon.setTint(theme.textPrimary)
-            upgradeLabel.setTextColor(theme.textPrimary)
+            binding.sampleMessage.setBackgroundTint(theme.theme)
+            binding.sampleMessage.setTextColor(theme.textPrimary)
+            binding.compose.setTint(theme.textPrimary)
+            binding.compose.setBackgroundTint(theme.theme)
+            binding.upgrade.setBackgroundTint(theme.theme)
+            binding.upgradeIcon.setTint(theme.textPrimary)
+            binding.upgradeLabel.setTextColor(theme.textPrimary)
         }
     }
 
@@ -88,20 +90,20 @@ class ScheduledActivity : QkThemedActivity(), ScheduledView {
         })
 
         // show/hide menu items
-        toolbar.menu.findItem(R.id.select_all)?.isVisible =
+        toolbar?.menu?.findItem(R.id.select_all)?.isVisible =
             ((scheduledMessageAdapter.itemCount > 1) && (state.selectedMessages != 0))
-        toolbar.menu.findItem(R.id.delete)?.isVisible =
+        toolbar?.menu?.findItem(R.id.delete)?.isVisible =
             ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages != 0))
-        toolbar.menu.findItem(R.id.copy)?.isVisible =
+        toolbar?.menu?.findItem(R.id.copy)?.isVisible =
             ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages != 0))
-        toolbar.menu.findItem(R.id.send_now)?.isVisible =
+        toolbar?.menu?.findItem(R.id.send_now)?.isVisible =
             ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages != 0))
-        toolbar.menu.findItem(R.id.edit_message)?.isVisible =
+        toolbar?.menu?.findItem(R.id.edit_message)?.isVisible =
             ((scheduledMessageAdapter.itemCount != 0) && (state.selectedMessages == 1))
 
         // show compose button
-        compose.isVisible = state.upgraded && (state.conversationId == null)
-        upgrade.isVisible = !state.upgraded
+        binding.compose.isVisible = state.upgraded && (state.conversationId == null)
+        binding.upgrade.isVisible = !state.upgraded
     }
 
     override fun onBackPressed() = backPressedIntent.onNext(Unit)

@@ -38,7 +38,11 @@ class PreferenceView @JvmOverloads constructor(
 
     private var layout: PreferenceViewBinding
 
-    val titleTextView: TextView get() = layout.titleView
+    val titleView: TextView get() = layout.titleView
+
+    val widget: View? get() = layout.widgetFrame.getChildAt(0)
+
+    val checkbox: QkSwitch? get() = widget as? QkSwitch
 
     var title: String? = null
         set(value) {

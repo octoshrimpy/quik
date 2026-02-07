@@ -37,6 +37,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.net.toUri
 import com.jakewharton.rxbinding2.view.clicks
 import com.moez.QKSMS.common.QkMediaPlayer
@@ -65,24 +66,14 @@ import dev.octoshrimpy.quik.feature.extensions.isEmojiOnly
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.model.Message
 import dev.octoshrimpy.quik.model.Recipient
+import dev.octoshrimpy.quik.databinding.MessageListItemInBinding
+import dev.octoshrimpy.quik.databinding.MessageListItemOutBinding
 import dev.octoshrimpy.quik.util.PhoneNumberUtils
 import dev.octoshrimpy.quik.util.Preferences
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import io.realm.RealmResults
-import kotlinx.android.synthetic.main.message_list_item_in.*
-import kotlinx.android.synthetic.main.message_list_item_in.body
-import kotlinx.android.synthetic.main.message_list_item_in.reactionText
-import kotlinx.android.synthetic.main.message_list_item_in.parts
-import kotlinx.android.synthetic.main.message_list_item_in.reactions
-import kotlinx.android.synthetic.main.message_list_item_in.sim
-import kotlinx.android.synthetic.main.message_list_item_in.simIndex
-import kotlinx.android.synthetic.main.message_list_item_in.status
-import kotlinx.android.synthetic.main.message_list_item_in.timestamp
-import kotlinx.android.synthetic.main.message_list_item_in.view.*
-import kotlinx.android.synthetic.main.message_list_item_out.*
-import kotlinx.android.synthetic.main.message_list_item_out.view.cancel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -149,20 +140,33 @@ class MessagesAdapter @Inject constructor(
         // Use the parent's context to inflate the layout, otherwise link clicks will crash the app
         val inflater = LayoutInflater.from(parent.context)
 
-        val view = if (viewType == VIEW_TYPE_MESSAGE_OUT) {
-            inflater.inflate(R.layout.message_list_item_out, parent,false).apply {
-                findViewById<ImageView>(R.id.cancelIcon).setTint(theme.theme)
-                findViewById<ProgressBar>(R.id.cancel).setTint(theme.theme)
-                findViewById<ImageView>(R.id.sendNowIcon).setTint(theme.theme)
-                findViewById<ImageView>(R.id.resendIcon).setTint(theme.theme)
-            }
-        } else
-            inflater.inflate(R.layout.message_list_item_in, parent, false)
+        val view: View
+        val body: TextView
+        val parts: View
+        val status: View
 
-        view.body.hyphenationFrequency = Layout.HYPHENATION_FREQUENCY_NONE
+        if (viewType == VIEW_TYPE_MESSAGE_OUT) {
+            val binding = MessageListItemOutBinding.inflate(inflater, parent, false)
+            view = binding.root
+            body = binding.body
+            parts = binding.parts
+            status = binding.status
+            binding.cancelIcon.setTint(theme.theme)
+            binding.cancel.setTint(theme.theme)
+            binding.sendNowIcon.setTint(theme.theme)
+            binding.resendIcon.setTint(theme.theme)
+        } else {
+            val binding = MessageListItemInBinding.inflate(inflater, parent, false)
+            view = binding.root
+            body = binding.body
+            parts = binding.parts
+            status = binding.status
+        }
+
+        body.hyphenationFrequency = Layout.HYPHENATION_FREQUENCY_NONE
 
         // register recycler view with compose activity for context menus
-        partContextMenuRegistrar.onNext(view.parts)
+        partContextMenuRegistrar.onNext(parts)
 
         return QkViewHolder(view).apply {
             view.setOnClickListener {
@@ -170,7 +174,7 @@ class MessagesAdapter @Inject constructor(
                     when (toggleSelection(it.id, false)) {
                         true -> view.isActivated = isSelected(it.id)
                         false -> {
-                            expanded[it.id] = view.status.visibility != View.VISIBLE
+                            expanded[it.id] = status.visibility != View.VISIBLE
                             notifyItemChanged(adapterPosition)
                         }
                     }
@@ -197,55 +201,108 @@ class MessagesAdapter @Inject constructor(
         }
 
         // Update the selected state
-        holder.containerView.isActivated = isSelected(message.id) || highlight == message.id
+        holder.itemView.isActivated = isSelected(message.id) || highlight == message.id
 
-        // bind the cancelFrame (cancel button) and send now button
-        holder.cancelFrame?.let { cancelFrame ->
-            holder.sendNowIcon?.let { sendNowIcon ->
-                val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
+        // Get views based on message type
+        val isOutgoing = message.isMe()
+        val timestamp: TextView
+        val simIndex: TextView
+        val sim: ImageView
+        val body: TextView
+        val parts: androidx.recyclerview.widget.RecyclerView
+        val reactions: View
+        val reactionText: TextView
+        val status: TextView
 
-                if (isCancellable) {
-                    cancelFrame.visibility = View.VISIBLE
-                    sendNowIcon.visibility = View.VISIBLE
+        if (isOutgoing) {
+            val binding = MessageListItemOutBinding.bind(holder.itemView)
+            timestamp = binding.timestamp
+            simIndex = binding.simIndex
+            sim = binding.sim
+            body = binding.body
+            parts = binding.parts
+            reactions = binding.reactions
+            reactionText = binding.reactionText
+            status = binding.status
 
-                    cancelFrame.setOnClickListener { cancelSendingClicks.onNext(message.id) }
-                    sendNowIcon.setOnClickListener {  sendNowClicks.onNext(message.id) }
+            // bind the cancelFrame (cancel button) and send now button
+            val isCancellable = message.isSending() && message.date > System.currentTimeMillis()
 
-                    cancelFrame.cancel.progress = 2
+            if (isCancellable) {
+                binding.cancelFrame.visibility = View.VISIBLE
+                binding.sendNowIcon.visibility = View.VISIBLE
 
-                    val delay = when (prefs.sendDelay.get()) {
-                        Preferences.SEND_DELAY_SHORT -> 3000
-                        Preferences.SEND_DELAY_MEDIUM -> 5000
-                        Preferences.SEND_DELAY_LONG -> 10000
-                        else -> 0
-                    }
-                    val progress =
-                        (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
+                binding.cancelFrame.setOnClickListener { cancelSendingClicks.onNext(message.id) }
+                binding.sendNowIcon.setOnClickListener { sendNowClicks.onNext(message.id) }
 
-                    ObjectAnimator.ofInt(cancelFrame.cancel, "progress", progress.toInt(), 100)
-                        .setDuration(message.date - System.currentTimeMillis())
-                        .start()
+                binding.cancel.progress = 2
+
+                val delay = when (prefs.sendDelay.get()) {
+                    Preferences.SEND_DELAY_SHORT -> 3000
+                    Preferences.SEND_DELAY_MEDIUM -> 5000
+                    Preferences.SEND_DELAY_LONG -> 10000
+                    else -> 0
                 }
-                else {
-                    cancelFrame.visibility = View.GONE
-                    sendNowIcon.visibility = View.GONE
+                val progress =
+                    (1 - (message.date - System.currentTimeMillis()) / delay.toFloat()) * 100
 
-                    cancelFrame.setOnClickListener(null)
-                    sendNowIcon.setOnClickListener(null)
+                ObjectAnimator.ofInt(binding.cancel, "progress", progress.toInt(), 100)
+                    .setDuration(message.date - System.currentTimeMillis())
+                    .start()
+            } else {
+                binding.cancelFrame.visibility = View.GONE
+                binding.sendNowIcon.visibility = View.GONE
+
+                binding.cancelFrame.setOnClickListener(null)
+                binding.sendNowIcon.setOnClickListener(null)
+            }
+
+            // bind the resend icon view
+            if (message.isFailedMessage()) {
+                binding.resendIcon.visibility = View.VISIBLE
+                binding.resendIcon.clicks().subscribe {
+                    resendClicks.onNext(message.id)
+                    binding.resendIcon.visibility = View.GONE
+                }
+            } else {
+                binding.resendIcon.visibility = View.GONE
+            }
+
+            body.apply {
+                highlightColor = theme.theme.withAlpha(0x5d)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    textSelectHandle?.setTint(theme.theme.withAlpha(0xad))
+                    textSelectHandleLeft?.setTint(theme.theme.withAlpha(0xad))
+                    textSelectHandleRight?.setTint(theme.theme.withAlpha(0xad))
                 }
             }
-        }
+        } else {
+            val binding = MessageListItemInBinding.bind(holder.itemView)
+            timestamp = binding.timestamp
+            simIndex = binding.simIndex
+            sim = binding.sim
+            body = binding.body
+            parts = binding.parts
+            reactions = binding.reactions
+            reactionText = binding.reactionText
+            status = binding.status
 
-        // bind the resend icon view
-        holder.resendIcon?.let { resendIcon ->
-            if (message.isFailedMessage()) {
-                resendIcon.visibility = View.VISIBLE
-                resendIcon.clicks().subscribe {
-                    resendClicks.onNext(message.id)
-                    resendIcon.visibility = View.GONE
+            // Bind the avatar and bubble colour
+            binding.avatar.apply {
+                setRecipient(contactCache[message.address])
+                setVisible(!canGroup(message, next), View.INVISIBLE)
+            }
+
+            body.apply {
+                setTextColor(theme.textPrimary)
+                setBackgroundTint(theme.theme)
+                highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                    textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
+                    textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
                 }
-            } else
-                resendIcon.visibility = View.GONE
+            }
         }
 
         val subject = message.getCleansedSubject()
@@ -271,12 +328,12 @@ class MessagesAdapter @Inject constructor(
         }
 
         // Bind the message status
-        bindStatus(holder, isMsgTextTruncated, message, next)
+        bindStatus(status, isMsgTextTruncated, message, next)
 
         // Bind the timestamp
         val subscription = subs.find { it.subscriptionId == message.subId }
 
-        holder.timestamp.apply {
+        timestamp.apply {
             text = dateFormatter.getMessageTimestamp(message.date)
             setVisible(
                     ((message.date - (previous?.date ?: 0))
@@ -286,49 +343,22 @@ class MessagesAdapter @Inject constructor(
             )
         }
 
-        holder.simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
+        simIndex.text = subscription?.simSlotIndex?.plus(1)?.toString()
 
         ((message.subId != previous?.subId) && (subscription != null) && (subs.size > 1)).also {
-            holder.sim.setVisible(it)
-            holder.simIndex.setVisible(it)
+            sim.setVisible(it)
+            simIndex.setVisible(it)
         }
 
         // Bind the grouping
-        holder.containerView.setPadding(
+        holder.itemView.setPadding(
             bottom = if (canGroup(message, next)) 0 else 16.dpToPx(context)
         )
-
-        // Bind the avatar and bubble colour
-        if (!message.isMe()) {
-            holder.avatar.apply {
-                setRecipient(contactCache[message.address])
-                setVisible(!canGroup(message, next), View.INVISIBLE)
-            }
-
-            holder.body.apply {
-                setTextColor(theme.textPrimary)
-                setBackgroundTint(theme.theme)
-                highlightColor = R.attr.bubbleColor.withAlpha(0x5d)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    textSelectHandle?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                    textSelectHandleLeft?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                    textSelectHandleRight?.setTint(R.attr.bubbleColor.withAlpha(0x7d))
-                }
-            }
-        } else
-            holder.body.apply {
-                highlightColor = theme.theme.withAlpha(0x5d)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    textSelectHandle?.setTint(theme.theme.withAlpha(0xad))
-                    textSelectHandleLeft?.setTint(theme.theme.withAlpha(0xad))
-                    textSelectHandleRight?.setTint(theme.theme.withAlpha(0xad))
-                }
-            }
 
         // Bind the body text
         val emojiOnly = displayText.isEmojiOnly()
         textViewStyler.setTextSize(
-            holder.body,
+            body,
             when (emojiOnly) {
                 true -> TextViewStyler.SIZE_EMOJI
                 false -> TextViewStyler.SIZE_PRIMARY
@@ -338,10 +368,10 @@ class MessagesAdapter @Inject constructor(
         val spanString = SpannableStringBuilder(displayText)
 
         when (prefs.messageLinkHandling.get()) {
-            Preferences.MESSAGE_LINK_HANDLING_BLOCK -> holder.body.autoLinkMask = 0
+            Preferences.MESSAGE_LINK_HANDLING_BLOCK -> body.autoLinkMask = 0
             Preferences.MESSAGE_LINK_HANDLING_ASK -> {
                 //  manually handle link clicks if user has set to ask before opening links
-                holder.body.apply {
+                body.apply {
                     isClickable = false
                     linksClickable = false
                     movementMethod = LinkMovementMethod.getInstance()
@@ -368,10 +398,10 @@ class MessagesAdapter @Inject constructor(
                     }
                 }
             }
-            else -> holder.body.movementMethod = LinkMovementMethod.getInstance()
+            else -> body.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        holder.body.apply {
+        body.apply {
             text = spanString
             setVisible(message.isSms() || spanString.isNotBlank())
 
@@ -387,49 +417,48 @@ class MessagesAdapter @Inject constructor(
         }
 
         // Bind the parts
-        holder.parts.adapter = partsAdapterProvider.get().apply {
+        parts.adapter = partsAdapterProvider.get().apply {
             this.theme = theme
             setData(message, previous, next, holder, audioState)
             contextMenuValue = message.id
             clicks.subscribe(partClicks)    // part clicks gets passed back to compose view model
         }
 
-        showEmojiReactions(holder, message)
+        showEmojiReactions(reactions, reactionText, message)
     }
 
-    private fun showEmojiReactions(holder: QkViewHolder, message: Message) {
-        holder.reactions?.let { reactionsContainer ->
-            val reactions = message.emojiReactions
-            val hasReactions = reactions.isNotEmpty()
+    private fun showEmojiReactions(reactionsContainer: View, reactionTextView: TextView, message: Message) {
+        val reactions = message.emojiReactions
+        val hasReactions = reactions.isNotEmpty()
 
-            if (hasReactions) {
-                val uniqueEmojis = reactions.map { it.emoji }.distinct()
-                val totalCount = reactions.size
+        if (hasReactions) {
+            val uniqueEmojis = reactions.map { it.emoji }.distinct()
+            val totalCount = reactions.size
 
-                // Show unique emojis followed by total count
-                val reactionText = if (totalCount == 1) {
-                    uniqueEmojis.first()
-                } else {
-                    "${uniqueEmojis.joinToString("")}\u00A0$totalCount"
-                }
-
-                holder.reactionText?.text = reactionText
-                holder.reactionText?.setOnClickListener { reactionClicks.onNext(message.id) }
-                reactionsContainer.setVisible(true)
+            // Show unique emojis followed by total count
+            val reactionText = if (totalCount == 1) {
+                uniqueEmojis.first()
             } else {
-                reactionsContainer.setVisible(false)
-                holder.reactionText?.setOnClickListener(null)
+                "${uniqueEmojis.joinToString("")}\u00A0$totalCount"
             }
+
+            reactionTextView.text = reactionText
+            reactionTextView.setOnClickListener { reactionClicks.onNext(message.id) }
+            reactionsContainer.setVisible(true)
+        } else {
+            reactionsContainer.setVisible(false)
+            reactionTextView.setOnClickListener(null)
         }
     }
 
+
     private fun bindStatus(
-        holder: QkViewHolder,
+        statusView: TextView,
         bodyTextTruncated: Boolean,
         message: Message,
         next: Message?
     ) {
-        holder.status.apply {
+        statusView.apply {
             text = when {
                 message.isSending() -> context.getString(R.string.message_status_sending)
                 message.isDelivered() -> context.getString(

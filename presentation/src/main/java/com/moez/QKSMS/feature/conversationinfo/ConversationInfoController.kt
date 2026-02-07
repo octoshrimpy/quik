@@ -18,7 +18,9 @@
  */
 package dev.octoshrimpy.quik.feature.conversationinfo
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bluelinelabs.conductor.RouterTransaction
@@ -30,6 +32,7 @@ import dev.octoshrimpy.quik.common.QkChangeHandler
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.util.extensions.scrapViews
 import dev.octoshrimpy.quik.common.widget.TextInputDialog
+import dev.octoshrimpy.quik.databinding.ConversationInfoControllerBinding
 import dev.octoshrimpy.quik.feature.blocking.BlockingDialog
 import dev.octoshrimpy.quik.feature.conversationinfo.injection.ConversationInfoModule
 import dev.octoshrimpy.quik.feature.themepicker.ThemePickerController
@@ -37,12 +40,14 @@ import dev.octoshrimpy.quik.injection.appComponent
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.conversation_info_controller.*
 import javax.inject.Inject
 
 class ConversationInfoController(
     val threadId: Long = 0
-) : QkController<ConversationInfoView, ConversationInfoState, ConversationInfoPresenter>(), ConversationInfoView {
+) : QkController<ConversationInfoControllerBinding, ConversationInfoView, ConversationInfoState, ConversationInfoPresenter>(), ConversationInfoView {
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup): ConversationInfoControllerBinding =
+        ConversationInfoControllerBinding.inflate(inflater, container, false)
 
     @Inject override lateinit var presenter: ConversationInfoPresenter
     @Inject lateinit var blockingDialog: BlockingDialog
@@ -62,14 +67,12 @@ class ConversationInfoController(
                 .conversationInfoModule(ConversationInfoModule(this))
                 .build()
                 .inject(this)
-
-        layoutRes = R.layout.conversation_info_controller
     }
 
     override fun onViewCreated() {
-        recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(GridSpacingItemDecoration(adapter, activity!!))
-        recyclerView.layoutManager = GridLayoutManager(activity, 3).apply {
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(GridSpacingItemDecoration(adapter, activity!!))
+        binding.recyclerView.layoutManager = GridLayoutManager(activity, 3).apply {
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int = if (adapter.getItemViewType(position) == 2) 1 else 3
             }
@@ -77,7 +80,7 @@ class ConversationInfoController(
 
         themedActivity?.theme
                 ?.autoDisposable(scope())
-                ?.subscribe { recyclerView.scrapViews() }
+                ?.subscribe { binding.recyclerView.scrapViews() }
     }
 
     override fun onAttach(view: View) {

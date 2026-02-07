@@ -25,25 +25,23 @@ import android.view.ViewGroup
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayout
-import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkAdapter
-import dev.octoshrimpy.quik.common.base.QkViewHolder
+import dev.octoshrimpy.quik.common.base.QkBindingViewHolder
 import dev.octoshrimpy.quik.common.util.Colors
 import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.common.util.extensions.setBackgroundTint
 import dev.octoshrimpy.quik.common.util.extensions.setTint
 import dev.octoshrimpy.quik.common.util.extensions.setVisible
+import dev.octoshrimpy.quik.databinding.ThemeListItemBinding
+import dev.octoshrimpy.quik.databinding.ThemePaletteListItemBinding
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.theme_list_item.view.*
-import kotlinx.android.synthetic.main.theme_palette_list_item.*
-import kotlinx.android.synthetic.main.theme_palette_list_item.view.*
 import javax.inject.Inject
 
 class ThemeAdapter @Inject constructor(
     private val context: Context,
     private val colors: Colors
-) : QkAdapter<List<Int>, QkViewHolder>() {
+) : QkAdapter<List<Int>, QkBindingViewHolder<ThemePaletteListItemBinding>>() {
 
     val colorSelected: Subject<Int> = PublishSubject.create()
 
@@ -61,16 +59,17 @@ class ThemeAdapter @Inject constructor(
 
     private var iconTint = 0
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.theme_palette_list_item, parent, false)
-        view.palette.flexWrap = FlexWrap.WRAP
-        view.palette.flexDirection = FlexDirection.ROW
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QkBindingViewHolder<ThemePaletteListItemBinding> {
+        val binding = ThemePaletteListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding.palette.flexWrap = FlexWrap.WRAP
+        binding.palette.flexDirection = FlexDirection.ROW
 
-        return QkViewHolder(view)
+        return QkBindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: QkViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: QkBindingViewHolder<ThemePaletteListItemBinding>, position: Int) {
         val palette = getItem(position)
+        val binding = holder.binding
 
         val screenWidth = Resources.getSystem().displayMetrics.widthPixels
         val minPadding = (16 * 6).dpToPx(context)
@@ -81,33 +80,34 @@ class ThemeAdapter @Inject constructor(
         }
         val swatchPadding = (screenWidth - size * 5) / 12
 
-        holder.palette.removeAllViews()
-        holder.palette.setPadding(swatchPadding, swatchPadding, swatchPadding, swatchPadding)
+        binding.palette.removeAllViews()
+        binding.palette.setPadding(swatchPadding, swatchPadding, swatchPadding, swatchPadding)
 
         (palette.subList(0, 5) + palette.subList(5, 10).reversed())
                 .mapIndexed { index, color ->
-                    LayoutInflater.from(context).inflate(R.layout.theme_list_item, holder.palette, false).apply {
+                    val itemBinding = ThemeListItemBinding.inflate(LayoutInflater.from(context), binding.palette, false)
 
-                        // Send clicks to the selected subject
-                        setOnClickListener { colorSelected.onNext(color) }
+                    // Send clicks to the selected subject
+                    itemBinding.root.setOnClickListener { colorSelected.onNext(color) }
 
-                        // Apply the color to the view
-                        theme.setBackgroundTint(color)
+                    // Apply the color to the view
+                    itemBinding.theme.setBackgroundTint(color)
 
-                        // Control the check visibility and tint
-                        check.setVisible(color == selectedColor)
-                        check.setTint(iconTint)
+                    // Control the check visibility and tint
+                    itemBinding.check.setVisible(color == selectedColor)
+                    itemBinding.check.setTint(iconTint)
 
-                        // Update the size so that the spacing is perfectly even
-                        layoutParams = (layoutParams as FlexboxLayout.LayoutParams).apply {
-                            height = size
-                            width = size
-                            isWrapBefore = index % 5 == 0
-                            setMargins(swatchPadding, swatchPadding, swatchPadding, swatchPadding)
-                        }
+                    // Update the size so that the spacing is perfectly even
+                    itemBinding.root.layoutParams = (itemBinding.root.layoutParams as FlexboxLayout.LayoutParams).apply {
+                        height = size
+                        width = size
+                        isWrapBefore = index % 5 == 0
+                        setMargins(swatchPadding, swatchPadding, swatchPadding, swatchPadding)
                     }
+
+                    itemBinding.root
                 }
-                .forEach { theme -> holder.palette.addView(theme) }
+                .forEach { theme -> binding.palette.addView(theme) }
     }
 
 }

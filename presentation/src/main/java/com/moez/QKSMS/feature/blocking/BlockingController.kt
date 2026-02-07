@@ -18,7 +18,9 @@
  */
 package dev.octoshrimpy.quik.feature.blocking
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.bluelinelabs.conductor.RouterTransaction
 import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.R
@@ -31,17 +33,19 @@ import dev.octoshrimpy.quik.feature.blocking.messages.BlockedMessagesController
 import dev.octoshrimpy.quik.feature.blocking.numbers.BlockedNumbersController
 import dev.octoshrimpy.quik.feature.blocking.filters.MessageContentFiltersController
 import dev.octoshrimpy.quik.injection.appComponent
-import kotlinx.android.synthetic.main.blocking_controller.*
-import kotlinx.android.synthetic.main.settings_switch_widget.view.*
+import dev.octoshrimpy.quik.databinding.BlockingControllerBinding
 import javax.inject.Inject
 
-class BlockingController : QkController<BlockingView, BlockingState, BlockingPresenter>(), BlockingView {
+class BlockingController : QkController<BlockingControllerBinding, BlockingView, BlockingState, BlockingPresenter>(), BlockingView {
 
-    override val blockingManagerIntent by lazy { blockingManager.clicks() }
-    override val blockedNumbersIntent by lazy { blockedNumbers.clicks() }
-    override val messageContentFiltersIntent by lazy { messageContentFilters.clicks() }
-    override val blockedMessagesIntent by lazy { blockedMessages.clicks() }
-    override val dropClickedIntent by lazy { drop.clicks() }
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup): BlockingControllerBinding =
+        BlockingControllerBinding.inflate(inflater, container, false)
+
+    override val blockingManagerIntent get() = binding.blockingManager.clicks()
+    override val blockedNumbersIntent get() = binding.blockedNumbers.clicks()
+    override val messageContentFiltersIntent get() = binding.messageContentFilters.clicks()
+    override val blockedMessagesIntent get() = binding.blockedMessages.clicks()
+    override val dropClickedIntent get() = binding.drop.clicks()
 
     @Inject lateinit var colors: Colors
     @Inject override lateinit var presenter: BlockingPresenter
@@ -49,12 +53,11 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
     init {
         appComponent.inject(this)
         retainViewMode = RetainViewMode.RETAIN_DETACH
-        layoutRes = R.layout.blocking_controller
     }
 
     override fun onViewCreated() {
         super.onViewCreated()
-        parent.postDelayed({ parent?.animateLayoutChanges = true }, 100)
+        binding.parent.postDelayed({ binding.parent.animateLayoutChanges = true }, 100)
     }
 
     override fun onAttach(view: View) {
@@ -65,9 +68,9 @@ class BlockingController : QkController<BlockingView, BlockingState, BlockingPre
     }
 
     override fun render(state: BlockingState) {
-        blockingManager.summary = state.blockingManager
-        drop.checkbox.isChecked = state.dropEnabled
-        blockedMessages.isEnabled = !state.dropEnabled
+        binding.blockingManager.summary = state.blockingManager
+        binding.drop.checkbox?.isChecked = state.dropEnabled
+        binding.blockedMessages.isEnabled = !state.dropEnabled
     }
 
     override fun openBlockedNumbers() {

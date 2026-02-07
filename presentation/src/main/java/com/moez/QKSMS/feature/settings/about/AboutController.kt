@@ -18,28 +18,32 @@
  */
 package dev.octoshrimpy.quik.feature.settings.about
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
 import dev.octoshrimpy.quik.BuildConfig
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.base.QkController
 import dev.octoshrimpy.quik.common.widget.PreferenceView
+import dev.octoshrimpy.quik.databinding.AboutControllerBinding
 import dev.octoshrimpy.quik.injection.appComponent
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.about_controller.*
 import javax.inject.Inject
 
-class AboutController : QkController<AboutView, Unit, AboutPresenter>(), AboutView {
+class AboutController : QkController<AboutControllerBinding, AboutView, Unit, AboutPresenter>(), AboutView {
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup): AboutControllerBinding =
+        AboutControllerBinding.inflate(inflater, container, false)
 
     @Inject override lateinit var presenter: AboutPresenter
 
     init {
         appComponent.inject(this)
-        layoutRes = R.layout.about_controller
     }
 
     override fun onViewCreated() {
-        version.summary = BuildConfig.VERSION_NAME
+        binding.version.summary = BuildConfig.VERSION_NAME
     }
 
     override fun onAttach(view: View) {
@@ -49,8 +53,8 @@ class AboutController : QkController<AboutView, Unit, AboutPresenter>(), AboutVi
         showBackButton(true)
     }
 
-    override fun preferenceClicks(): Observable<PreferenceView> = (0 until preferences.childCount)
-            .map { index -> preferences.getChildAt(index) }
+    override fun preferenceClicks(): Observable<PreferenceView> = (0 until binding.preferences.childCount)
+            .map { index -> binding.preferences.getChildAt(index) }
             .mapNotNull { view -> view as? PreferenceView }
             .map { preference -> preference.clicks().map { preference } }
             .let { preferences -> Observable.merge(preferences) }
