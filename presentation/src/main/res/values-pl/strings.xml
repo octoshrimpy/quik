@@ -126,7 +126,7 @@
     <string name="compose_scheduled_plus">Musisz odblokować QUIK+, aby móc używac planowanych widomości</string>
     <string name="compose_scheduled_toast">Dodano do zaplanowanych wiadomości</string>
     <string name="compose_hint">Napisz wiadomość…</string>
-    <string name="compose_no_valid_recipients">Nie można wysłać do innych uczestników</string>
+    <string name="compose_no_valid_recipients">Nie można wysyłać do innych uczestników</string>
     <string name="compose_menu_copy">Kopiuj tekst</string>
     <string name="compose_menu_forward">Przekaż</string>
     <string name="compose_menu_show_status">Pokaż stan</string>
