@@ -212,6 +212,7 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
     implementation "me.leolin:ShortcutBadger:1.1.22"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.nanohttpd:nanohttpd:2.3.1"
     implementation project(":android-smsmms")
     implementation project(":common")
     implementation project(':data')
