@@ -266,7 +266,7 @@
     <string name="blocking_conversations">Заблокированные беседы</string>
     <string name="blocking_manager_title">Управление блокировкой</string>
     <string name="blocking_manager_qksms_summary">Встроенная функция блокировки QUIK</string>
-    <string name="blocking_manager_call_blocker_summary">Чёрный список с возможность работы по расписанию для блокировки сообщений со спамом, звонков с определённых и неизвестных номеров</string>
+    <string name="blocking_manager_call_blocker_summary">Чёрный список с возможностью работы по расписанию для блокировки сообщений со спамом, звонков с определённых и неизвестных номеров</string>
     <string name="blocking_manager_call_control_summary">Автоматическая фильтрация звонков и сообщений в одном удобном месте! Community IQ™ позволяет предотвратить получение нежелательных сообщений от известных сообществу спаммеров</string>
     <string name="blocking_manager_sia_summary">Автоматически фильтровать сообщения от нежелательных номеров, используя приложение «Should I Answer»</string>
     <string name="blocking_manager_copy_title">Скопировать заблокированные номера</string>
@@ -479,8 +479,8 @@
     <string name="message_content_filters_title">Фильтры содержимого сообщений</string>
     <string name="message_content_filters_empty">Здесь появятся ваши фильтры содержимого сообщений</string>
     <string name="message_content_filters_add_cd">Создать новый фильтр</string>
-    <string name="message_content_filters_dialog_title">Пропуск соответствующих сообщений,</string>
-    <string name="message_content_filters_dialog_hint">Словао, фраза или регулярное выражение</string>
+    <string name="message_content_filters_dialog_title">Отбросить соответствующие сообщения</string>
+    <string name="message_content_filters_dialog_hint">Слово, фраза или регулярное выражение</string>
     <string name="message_content_filters_dialog_case_switch">С учётом регистра</string>
     <string name="message_content_filters_dialog_regex_switch">Регулярное выражение</string>
     <string name="message_content_filters_dialog_contacts_switch">Включить контакты</string>
