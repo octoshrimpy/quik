@@ -1,0 +1,16 @@
+{
+    "emoji_reaction_ios_generic_added": "^(?s)Zareagował (.+?) na “(.+?)”$",
+    "emoji_reaction_ios_generic_removed": "^(?s) Usunął (.+?) z “(.+?)”$",
+    "emoji_reaction_ios_heart_added": "^(?s)Pokochał “(.+?)”$",
+    "emoji_reaction_ios_heart_removed": "^(?s)Usunął serce z “(.+?)”$",
+    "emoji_reaction_ios_like_added": "^(?s)Polubił “(.+?)”$",
+    "emoji_reaction_ios_like_removed": "^(?s) Usunął polubienie z “(.+?)”$",
+    "emoji_reaction_ios_dislike_added": "^(?s)Znielubił “(.+?)”$",
+    "emoji_reaction_ios_dislike_removed": "^(?s)Usunął znielubienie z “(.+?)”$",
+    "emoji_reaction_ios_laugh_added": "^(?s)Zaśmiał się z “(.+?)”$",
+    "emoji_reaction_ios_laugh_removed": "^(?s)Usunął śmiech z “(.+?)”$",
+    "emoji_reaction_ios_exclamation_added": "^(?s)Podkreślił “(.+?)”$",
+    "emoji_reaction_ios_exclamation_removed": "^(?s) Usunął okrzyk z “(.+?)”$",
+    "emoji_reaction_ios_question_mark_added": "^(?s)Zakwestionował “(.+?)”$",
+    "emoji_reaction_ios_question_mark_removed": "^(?s) Usunął znak zapytania z “(.+?)”$"
+}

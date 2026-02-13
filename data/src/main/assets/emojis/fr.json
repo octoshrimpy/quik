@@ -1,0 +1,4 @@
+{
+    "emoji_reaction_ios_generic_added": "^(?s)A réagi avec (.+?) à “(.+?)”$",
+    "emoji_reaction_ios_generic_removed": "^(?s)A retiré (.+?) de “(.+?)”$"
+}
