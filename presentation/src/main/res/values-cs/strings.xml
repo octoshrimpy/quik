@@ -482,7 +482,7 @@
     <string name="messageLinkHandling_dialog_title">Upozornění na externí odkaz</string>
     <string name="messageLinkHandling_dialog_body">Některé odkazy mohou být nebezpečné nebo vás mohou nečekaně přesměrovat. Před pokračováním si níže uvedený odkaz prohlédněte:\n\n%1$s\n\nChcete pokračovat?</string>
     <string name="messageLinkHandling_dialog_positive">Ano, otevřít odkaz</string>
-    <string name="messageLinkHandling_dialog_negative">Žádný</string>
+    <string name="messageLinkHandling_dialog_negative">Zrušit</string>
     <string name="error_stt_toast">Omlouváme se, při načítání poskytovatele převodu řeči na text došlo k chybě.</string>
     <string name="stt_toast_extra_prompt">Namluvte svou zprávu</string>
     <string name="messages_text_share_file_error">Jejda! Při sdílení se něco pokazilo</string>
