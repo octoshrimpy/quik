@@ -59,7 +59,7 @@
     <string name="inbox_search_empty_text">Brak wyników</string>
     <string name="archived_empty_text">Miejsce dla twoich zarchiwizowanych rozmów</string>
     <string name="main_fab_cd">Rozpocznij nową rozmowę</string>
-    <string name="main_default_sms_title">Pokochaj SMSowanie na nowo</string>
+    <string name="main_default_sms_title">Pokochaj SMS-owanie na nowo</string>
     <string name="main_default_sms_message">Ustaw QUIK jako domyślną aplikację do SMSów i MMSów</string>
     <string name="main_default_sms_change">Zmień</string>
     <string name="main_permission_required">Wymagane uprawnienie</string>
@@ -126,7 +126,7 @@
     <string name="compose_scheduled_plus">Musisz odblokować QUIK+, aby móc używac planowanych widomości</string>
     <string name="compose_scheduled_toast">Dodano do zaplanowanych wiadomości</string>
     <string name="compose_hint">Napisz wiadomość…</string>
-    <string name="compose_no_valid_recipients">Nie można wysłać do innych uczestników</string>
+    <string name="compose_no_valid_recipients">Nie można wysyłać do innych uczestników</string>
     <string name="compose_menu_copy">Kopiuj tekst</string>
     <string name="compose_menu_forward">Przekaż</string>
     <string name="compose_menu_show_status">Pokaż stan</string>
@@ -337,7 +337,7 @@
         <item quantity="many">Kontynuuj do %s i odblokuj te numery</item>
         <item quantity="other">Kontynuuj do %s i odblokuj te numery</item>
     </plurals>
-    <string name="about_title">QUIK</string>
+    <string name="about_title">O QUIK</string>
     <string name="about_version_title">Wersja</string>
     <string name="about_developer_title">Programista</string>
     <string name="about_source_title">Kod źródłowy</string>
@@ -531,4 +531,16 @@
     <string name="compose_send_group_summary_off">Wiadomości zostaną wysłane osobno do wszystkich odbiorców</string>
     <string name="notification_foreground_worker_text">W systemie Android 12 i starszych wymagane jest powiadomienie o pracy w tle, która umożliwia odbieranie wiadomości.</string>
     <string name="notification_foreground_worker_title">Odbieranie wiadomości</string>
+    <string name="main_sync_emojis">Analizuję reakcje emoji…</string>
+    <string name="message_management_title">Zarządzanie wiadomościami</string>
+    <string name="compose_reactions_title">Reakcje</string>
+    <string name="deduplicate_messages_category">Deduplikuj wiadomości</string>
+    <string name="deduplicate_messages_title">Usuń zduplikowane wiadomości</string>
+    <string name="deduplicate_messages_summary">Skanuje bazę danych wiadomości i usuwa wszystkie wiadomości, które dokładnie pasują do wiadomości oryginalnych</string>
+    <string name="deduplicate_message_confirmation_dialog_message">Twoja baza danych wiadomości zostanie przeskanowana w poszukiwaniu duplikatów, a następnie te duplikaty zostaną usunięte.\nSpowoduje to automatyczne usunięcie wiadomości. Kontynuuj tylko wtedy, gdy rozumiesz konsekwencje.</string>
+    <string name="auto_deduplicate_messages_title">Automatycznie deduplikuj wiadomości</string>
+    <string name="auto_deduplicate_messages_summary">Podczas synchronizacji zostanie przeprowadzona deduplikacja. Pamiętaj, że spowoduje to automatyczne usunięcie wiadomości i choć ryzyko powstania fałszywego duplikatu jest bardzo niskie, nadal jest to możliwe.\nProsimy o zachowanie ostrożności.</string>
+    <string name="deduplicating_messages_finished">Zakończono deduplikację wiadomości!</string>
+    <string name="deduplicating_messages_no_messages">Nie znaleziono zduplikowanych wiadomości.</string>
+    <string name="deduplicating_messages_failed">Deduplikacja wiadomości nie powiodła się. Spróbuj ponownie</string>
 </resources>

@@ -421,12 +421,12 @@
     <string name="scheduled_menu_edit_message">Editar mensaje</string>
     <plurals name="dialog_delete_chat">
         <item quantity="one">¿Estás seguro que quieres eliminar el mensaje?</item>
-        <item quantity="many"></item>
+        <item quantity="many"/>
         <item quantity="other">¿Estás seguro que quieres %d mensajes?</item>
     </plurals>
     <plurals name="dialog_send_now">
         <item quantity="one">¿Estás seguro que quieres enviar el mensaje?</item>
-        <item quantity="many"></item>
+        <item quantity="many"/>
         <item quantity="other">¿Estás seguro que quieres enviar %d mensajes?</item>
     </plurals>
     <string name="dialog_edit_scheduled_message_title">Editar mensaje</string>
@@ -479,12 +479,12 @@
     <string name="button_clear">Borrar</string>
     <plurals name="toast_archived">
         <item quantity="one">Conversación archivada</item>
-        <item quantity="many"></item>
+        <item quantity="many"/>
         <item quantity="other">%d conversaciones archivadas</item>
     </plurals>
     <plurals name="toast_unarchived">
         <item quantity="one">Conversación desarchivada</item>
-        <item quantity="many"></item>
+        <item quantity="many"/>
         <item quantity="other">%d conversaciones desarchivadas</item>
     </plurals>
     <string name="notification_foreground_worker_title">Recibiendo mensaje</string>
@@ -499,4 +499,16 @@
     <string name="error_stt_toast">Lo sentimos, se produjo un error al cargar el proveedor de voz a texto.</string>
     <string name="stt_toast_extra_prompt">Leer tu mensaje</string>
     <string name="messages_text_share_file_error">¡Ups! Algo salió mal al compartir.</string>
+    <string name="main_sync_emojis">Obteniendo las reacciones de emoji…</string>
+    <string name="message_management_title">Gestión de mensajes</string>
+    <string name="compose_reactions_title">Reacciones</string>
+    <string name="deduplicate_messages_category">Desduplicar mensajes</string>
+    <string name="deduplicate_messages_title">Eliminar mensajes duplicados</string>
+    <string name="deduplicate_messages_summary">Analiza a través de la base de datos de mensajes y elimina todos los mensajes que coinciden exactamente con los mensajes originales</string>
+    <string name="deduplicate_message_confirmation_dialog_message">Su base de datos de mensajes será escaneada en busca de duplicados, y luego esos duplicados serán eliminados.\nEsto eliminará automáticamente los mensajes, solo proceder si comprende las consecuencias.</string>
+    <string name="auto_deduplicate_messages_title">Desduplicar automáticamente los mensajes</string>
+    <string name="auto_deduplicate_messages_summary">La deduplicación se realizará durante la sincronización. Tenga en cuenta que esto eliminará automáticamente los mensajes, y aunque la posibilidad de que haya un duplicado falso es muy baja, todavía es posible.\nPor favor, tenga precaución.</string>
+    <string name="deduplicating_messages_finished">¡Finalizó la desduplicación de mensajes!</string>
+    <string name="deduplicating_messages_no_messages">No se encontraron mensajes duplicados.</string>
+    <string name="deduplicating_messages_failed">La desduplición de mensajes falló, por favor inténtalo de nuevo</string>
 </resources>
