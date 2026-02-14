@@ -3,7 +3,7 @@
     <string name="shortcut_compose_long_label">Нов разговор</string>
     <string name="shortcut_compose_short_label">Писане</string>
     <string name="shortcut_compose_disabled_message">Бързият достъп е изключен</string>
-    <string name="qksms_plus_emoji_summary">Създаване на бърз достъп до емоции</string>
+    <string name="qksms_plus_emoji_summary">Създаване на бърз достъп до потребителските автом. емоции</string>
     <string name="title_archived">Архив</string>
     <string name="title_settings">Настройки</string>
     <string name="title_notification_prefs">Известия</string>
@@ -246,7 +246,7 @@
     <string name="settings_swipe_actions">Действия с жестове</string>
     <string name="settings_delay_duration_hint">Въведете продължителност (в секунди)</string>
     <string name="qksms_plus_delayed_title">Изчакване преди изпращане</string>
-    <string name="qksms_plus_delayed_summary">Изчакване от няколко секунди преди изпращане на съобщението</string>
+    <string name="qksms_plus_delayed_summary">Изчакване на няколко секунди преди изпращане на съобщението</string>
     <string name="compose_menu_previous">Назад</string>
     <string name="compose_menu_next">Напред</string>
     <string name="settings_swipe_actions_summary">Настройване на действията с жестове в разговорите</string>
@@ -348,6 +348,27 @@
     <string name="qksms_plus_themes_summary">Отключете красиви цветни теми, недостъпни от палитрата на Material Design</string>
     <string name="qksms_plus_emoji_title">Потребителски автом. емоции</string>
     <string name="qksms_plus_backup_title">Резервно копие на съобщения</string>
-    <string name="qksms_plus_backup_summary">Автоматично създаване на резервни копия на съобщенията. Никога вече не се превожете, че ще загубите историята при смяна или изгубване на устройството</string>
+    <string name="qksms_plus_backup_summary">Автоматично създаване на резервни копия на съобщенията. Никога вече не се превожете, че ще загубите историята при смяна или изгуба на устройството</string>
     <string name="qksms_plus_scheduled_title">Съобщения по график</string>
+    <string name="qksms_plus_scheduled_summary">Планиране на съобщения за изпращане в определен ден и час</string>
+    <string name="qksms_plus_night_title">Автоматичен нощен режим</string>
+    <string name="qksms_plus_night_summary">Включване на нощен режим въз основа на часа от деня</string>
+    <string name="qksms_plus_blacklist_title">Разширени забрани</string>
+    <string name="qksms_plus_blacklist_summary">Забраняване на съобщения, съдържащи ключови думи или отговарящи на определени шаблони</string>
+    <string name="qksms_plus_forward_title">Автоматично препращане</string>
+    <string name="qksms_plus_forward_summary">Автоматично препращане на съобщенията от определени изпращачи</string>
+    <string name="qksms_plus_respond_title">Автоматичен отговор</string>
+    <string name="qksms_plus_respond_summary">Автоматичен отговор на съобщения с шаблонен текст</string>
+    <string name="qksms_plus_more_title">Повече</string>
+    <string name="button_more">Повече</string>
+    <string name="qksms_plus_more_summary">Приложението QUIK е в процес на активна разработка и покупката му ще включва и бъдещите възможности на QUIK+!</string>
+    <string name="widget_loading">Затеждане…</string>
+    <string name="widget_more">Преглед на повече разговори</string>
+    <string name="all_conversations_widget_title">Всички разговори</string>
+    <string name="qkreply_menu_read">Прочетено</string>
+    <string name="qkreply_menu_call">Обаждане</string>
+    <string name="qkreply_menu_expand">Повече</string>
+    <string name="qkreply_menu_collapse">По-малко</string>
+    <string name="qkreply_menu_view">Отваряне на разговора</string>
+    <string name="theme_material">Material</string>
 </resources>
